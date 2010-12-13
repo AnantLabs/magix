@@ -9,59 +9,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Main MagicUX samples</title>
-    <script type="text/ecmascript">
-
-function foo() {
-  var el = MUX.$('scr');
-  new MUX.Effect.Generic('scr', {
-    transition: 'Explosive',
-    start: function() {
-      this._beginning = parseInt(MUX.$('scr').style.marginTop, 10) || 0;
-    },
-    loop: function(pos) {
-      var delta = -(pos * 100);
-      el.setStyle('marginTop', this._beginning + delta + 'px');
-    },
-    end: function() {
-      el.setStyle('marginTop', this._beginning - 100 + 'px');
-    },
-    duration: 250
-  });
-}
-
-function foo2() {
-  var el = MUX.$('scr');
-  new MUX.Effect.Generic('scr', {
-    transition: 'Explosive',
-    start: function() {
-      this._beginning = parseInt(MUX.$('scr').style.marginTop, 10) || 0;
-    },
-    loop: function(pos) {
-      var delta = pos * 100;
-      el.setStyle('marginTop', this._beginning + delta + 'px');
-    },
-    end: function() {
-      el.setStyle('marginTop', this._beginning + 100 + 'px');
-    },
-    duration: 250
-  });
-}
-
-    </script>
 </head>
 <body>
     <form id="form1" runat="server">
-        <mux:Label runat="server" ID="lbl" Text="X" style="position:absolute;top:50px;left:500px;">
-            <mux:AspectDraggable runat="server" ID="drg" Bounds="500, 50, 550, 75" />
-        </mux:Label>
-        <input type="button" value="Scroll Down" onclick="foo();" />
-        <input type="button" value="Scroll Up" onclick="foo2();" />
-        <div style="border:solid 1px Black;width:250px;height:200px;position:absolute;top:100px;left:250px;overflow:hidden;">
-            <div id="scr" style="width:1000px;height:1000px;">
-                <iframe style="width:100%;height:100%;" src="http://ra-ajax.org" frameborder="0" scrolling="no">
-                </iframe>
-            </div>
-        </div>
         <div>
             <ul>
                 <li>
