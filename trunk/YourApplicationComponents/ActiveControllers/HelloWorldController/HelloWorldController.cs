@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.UI;
 using Magic.Brix.Loader;
 using Magic.Brix.Types;
+using HelloWorldTypes;
 
 namespace HelloWorldController
 {
@@ -26,5 +27,38 @@ namespace HelloWorldController
                 "dyn",
                 n);
         }
+
+        [ActiveEvent(Name = "Hitchhike")]
+        private void GetNextCounter(object sender, ActiveEventArgs e)
+        {
+            Counter c = Counter.SelectFirst();
+            if (c == null)
+                c = new Counter();
+            c.Value += 1;
+            c.Save();
+            e.Params["Value"].Value = c.Value;
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
