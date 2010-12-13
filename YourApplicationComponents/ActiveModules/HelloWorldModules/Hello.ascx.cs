@@ -16,6 +16,7 @@ namespace HelloWorldModules
     public class Hello : UserControl, IModule
     {
         protected Label lbl;
+        protected Button btn;
 
         public void InitialLoading(Node node)
         {
@@ -25,8 +26,29 @@ namespace HelloWorldModules
                     lbl.Text = node["Message"].Get<string>();
                 };
         }
+
+        protected void btn_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Hitchhike",
+                node);
+            btn.Text = "You've tried " + node["Value"].Get<int>() + " times - and still no success...";
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
