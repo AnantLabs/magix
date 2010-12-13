@@ -18,10 +18,6 @@ namespace Magic.Brix.ApplicationPool
     {
         protected void Page_Init(object sender, EventArgs e)
         {
-            // ORDER COUNTS HERE....!
-            // Since all DLL's are loaded into the AppDomain by the plugin loader
-            // we are unfortunately stuck in a logic where order counts (for now)
-            // TODO: Fix cohesion here ...!
             InitializeViewport();
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -47,11 +43,6 @@ namespace Magic.Brix.ApplicationPool
             string defaultControl = ConfigurationManager.AppSettings["PortalViewDriver"];
             Control ctrl = PluginLoader.Instance.LoadControl(defaultControl);
             Form.Controls.Add(ctrl);
-        }
-
-        [ActiveEvent(Name = "AddAttributeToHtmlTag")]
-        protected void AddAttributeToHtmlTag(object sender, ActiveEventArgs e)
-        {
         }
 
         private PageStatePersister _pageStatePersister;
