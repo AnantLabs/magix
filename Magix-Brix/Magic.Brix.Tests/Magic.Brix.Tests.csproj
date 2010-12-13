@@ -51,10 +51,6 @@
   <ItemGroup>
     <Compile Include="ActiveTypes\ComponentSettingsTest.cs" />
     <Compile Include="Data\BaseTest.cs" />
-    <Compile Include="Data\ClientUserTests.cs" />
-    <Compile Include="Data\VerifyExceptionInChildrenRollbacksTransactionTests.cs" />
-    <Compile Include="Data\VerifySaveInChildrenIsCalledTests.cs" />
-    <Compile Include="Data\DeleteReferenceVerifyDeletedReferencesTests.cs" />
     <Compile Include="Data\CriteriaWithChildValue.cs" />
     <Compile Include="Data\SettingsTest.cs" />
     <Compile Include="Data\VerifyLazyNotRetrievedOnSave.cs" />
@@ -89,10 +85,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WineTasting\ActiveTypes\WineTasting.CoreTypes\WineTasting.CoreTypes.csproj">
-      <Project>{BCD4F231-A915-4EF0-B111-DF353CB78B53}</Project>
-      <Name>WineTasting.CoreTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Magic.Brix.Components\ActiveTypes\Magic.Brix.Components.ActiveTypes.Settings\Magic.Brix.Components.ActiveTypes.Settings.csproj">
       <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
       <Name>Magic.Brix.Components.ActiveTypes.Settings</Name>
@@ -100,10 +92,6 @@
     <ProjectReference Include="..\Magic.Brix.Data.Adapters\MSSQL\Magic.Brix.Data.Adapters.MSSQL.csproj">
       <Project>{853598D1-F9CF-48C2-90DD-354480F34F91}</Project>
       <Name>Magic.Brix.Data.Adapters.MSSQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Magic.Brix.Data.Adapters\XML\Magic.Brix.Data.Adapters.XML.csproj">
-      <Project>{87C08A87-ACE9-4B8C-95A9-73DA83EE1F0A}</Project>
-      <Name>Magic.Brix.Data.Adapters.XML</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magic.Brix.Data\Magic.Brix.Data.csproj">
       <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>

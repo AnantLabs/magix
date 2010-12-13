@@ -2,7 +2,8 @@
     Language="C#" 
     AutoEventWireup="true" 
     ValidateRequest="false"
-    Inherits="Magic.Brix.ApplicationPool.MainWebPage" Codebehind="Default.aspx.cs" %>
+    Inherits="Magic.Brix.ApplicationPool.MainWebPage"
+    CodeFile="Default.aspx.cs" %>
 
 <!DOCTYPE html>
 <html>

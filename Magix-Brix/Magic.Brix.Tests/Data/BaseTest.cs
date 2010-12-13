@@ -22,8 +22,6 @@ namespace Magic.Brix.Tests.Data
         {
             // Stupid reference to make sure assembly gets into AppDomain...!
             Brix.Data.Adapters.MSSQL.MSSQL MSSQL = null;
-            //Brix.Data.Adapters.MySQL.MySQL MySQL = null;
-            Brix.Data.Adapters.XML.XML XML = null;
         }
 
         [TestFixtureTearDown]
