@@ -1,0 +1,203 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Brix", "Brix", "{BC659023-75CD-4A1C-BF08-8B22FA8FD00E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UX", "UX", "{98974FEE-99D5-45FF-8B14-8FE7E7F1FC5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8AB46E20-2FF7-41C6-9261-523191945326}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic-UX", "Magic-UX\Magic-UX.csproj", "{13A3391A-39FC-40BD-8EA0-0353090675C7}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Magic-UX-Samples", "Magic-UX-Samples\", "{9F07B239-903A-4340-9489-4E678A5C41F9}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "2.0"
+		ProjectReferences = "{13A3391A-39FC-40BD-8EA0-0353090675C7}|Magic-UX.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/Magic-UX-Samples"
+		Debug.AspNetCompiler.PhysicalPath = "Magic-UX-Samples\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Magic-UX-Samples\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Magic-UX-Samples"
+		Release.AspNetCompiler.PhysicalPath = "Magic-UX-Samples\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Magic-UX-Samples\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "52489"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Magic.Brix.ApplicationPool", "Magix-Brix\Magic.Brix.ApplicationPool\", "{CA521C5F-7AD9-4B29-A150-D24672CA421E}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "2.0"
+		ProjectReferences = "{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}|Magic.Brix.Data.dll;{853598D1-F9CF-48C2-90DD-354480F34F91}|Magic.Brix.Data.Adapters.MSSQL.dll;{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}|Magic.Brix.Types.dll;{0423B777-2C18-4B0F-B87E-0AD059529167}|Magic.Brix.Loader.dll;{73074A14-F8BE-4831-B02A-A76F8EC126DC}|Magic.Brix.Viewports.dll;{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}|Magix.Brix.Components.ActiveModules.CommonModules.dll;{13A3391A-39FC-40BD-8EA0-0353090675C7}|Magic-UX.dll;{3807790C-726E-4870-89DB-D25D80223C8A}|Magic.Brix.Components.ActiveControllers.Email.dll;{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}|Magic.Brix.Components.ActiveModules.Calendars.dll;{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}|Magic.Brix.Components.ActiveModules.Settings.dll;{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}|Magic.Brix.Components.ActiveModules.Users.dll;{78EE9D9B-691B-4D5C-AD72-9023366BE44F}|Magic.Brix.Components.ActiveTypes.Settings.dll;{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}|Magic.Brix.Components.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/Magic.Brix.ApplicationPool"
+		Debug.AspNetCompiler.PhysicalPath = "Magix-Brix\Magic.Brix.ApplicationPool\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Magic.Brix.ApplicationPool\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Magic.Brix.ApplicationPool"
+		Release.AspNetCompiler.PhysicalPath = "Magix-Brix\Magic.Brix.ApplicationPool\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Magic.Brix.ApplicationPool\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "52516"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Magix.Brix.Data", "Magix.Brix.Data", "{FEF46D16-CBFF-4E64-8077-706681125A83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Magix.Brix.Components", "Magix.Brix.Components", "{87F11C1C-29D9-42FD-854D-EEA734413072}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ActiveModules", "ActiveModules", "{2A2E972C-4B0E-47BE-B1C7-C132A901D933}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ActiveControllers", "ActiveControllers", "{A28922C8-A4CB-420D-BA01-583AA4389D75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ActiveTypes", "ActiveTypes", "{279C3A57-B61C-4F90-B809-A56C2E0E3402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Components.ActiveControllers.Email", "Magix-Brix\Magic.Brix.Components\ActiveControllers\Magic.Brix.Components.ActiveControllers.Email\Magic.Brix.Components.ActiveControllers.Email.csproj", "{3807790C-726E-4870-89DB-D25D80223C8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Components.ActiveModules.Calendars", "Magix-Brix\Magic.Brix.Components\ActiveModules\Magic.Brix.Components.ActiveModules.Calendars\Magic.Brix.Components.ActiveModules.Calendars.csproj", "{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Components.ActiveModules.Settings", "Magix-Brix\Magic.Brix.Components\ActiveModules\Magic.Brix.Components.ActiveModules.Settings\Magic.Brix.Components.ActiveModules.Settings.csproj", "{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Components.ActiveModules.Users", "Magix-Brix\Magic.Brix.Components\ActiveModules\Magic.Brix.Components.ActiveModules.Users\Magic.Brix.Components.ActiveModules.Users.csproj", "{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.CommonModules", "Magix-Brix\Magic.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.CommonModules\Magix.Brix.Components.ActiveModules.CommonModules.csproj", "{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Components.ActiveTypes.Settings", "Magix-Brix\Magic.Brix.Components\ActiveTypes\Magic.Brix.Components.ActiveTypes.Settings\Magic.Brix.Components.ActiveTypes.Settings.csproj", "{78EE9D9B-691B-4D5C-AD72-9023366BE44F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Components.ActiveTypes.ToolTip", "Magix-Brix\Magic.Brix.Components\ActiveTypes\Magic.Brix.Components.ActiveTypes.ToolTip\Magic.Brix.Components.ActiveTypes.ToolTip.csproj", "{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Data", "Magix-Brix\Magic.Brix.Data\Magic.Brix.Data.csproj", "{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Magix.Brix.Data.Adapters", "Magix.Brix.Data.Adapters", "{F3BFEC5D-7957-4575-8DCD-D8D22217F535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Data.Adapters.MSSQL", "Magix-Brix\Magic.Brix.Data.Adapters\MSSQL\Magic.Brix.Data.Adapters.MSSQL.csproj", "{853598D1-F9CF-48C2-90DD-354480F34F91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Loader", "Magix-Brix\Magic.Brix.Loader\Magic.Brix.Loader.csproj", "{0423B777-2C18-4B0F-B87E-0AD059529167}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Types", "Magix-Brix\Magic.Brix.Types\Magic.Brix.Types.csproj", "{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Viewports", "Magix-Brix\Magic.Brix.Viewports\Magic.Brix.Viewports.csproj", "{73074A14-F8BE-4831-B02A-A76F8EC126DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{31B0B5B6-E8D8-4CD8-955C-715E02396B85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Tests", "Magix-Brix\Magic.Brix.Tests\Magic.Brix.Tests.csproj", "{3E847F44-BC2C-4C42-B612-2C9934E8BB38}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{AC34C060-788B-40E7-B51D-5F4B2A304CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.Brix.Components", "Magix-Brix\Magic.Brix.Components\Helpers\Magic.Brix.Components.csproj", "{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13A3391A-39FC-40BD-8EA0-0353090675C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13A3391A-39FC-40BD-8EA0-0353090675C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13A3391A-39FC-40BD-8EA0-0353090675C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13A3391A-39FC-40BD-8EA0-0353090675C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F07B239-903A-4340-9489-4E678A5C41F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F07B239-903A-4340-9489-4E678A5C41F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F07B239-903A-4340-9489-4E678A5C41F9}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F07B239-903A-4340-9489-4E678A5C41F9}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{3807790C-726E-4870-89DB-D25D80223C8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3807790C-726E-4870-89DB-D25D80223C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3807790C-726E-4870-89DB-D25D80223C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3807790C-726E-4870-89DB-D25D80223C8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78EE9D9B-691B-4D5C-AD72-9023366BE44F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78EE9D9B-691B-4D5C-AD72-9023366BE44F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78EE9D9B-691B-4D5C-AD72-9023366BE44F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78EE9D9B-691B-4D5C-AD72-9023366BE44F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{853598D1-F9CF-48C2-90DD-354480F34F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{853598D1-F9CF-48C2-90DD-354480F34F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{853598D1-F9CF-48C2-90DD-354480F34F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{853598D1-F9CF-48C2-90DD-354480F34F91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0423B777-2C18-4B0F-B87E-0AD059529167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0423B777-2C18-4B0F-B87E-0AD059529167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0423B777-2C18-4B0F-B87E-0AD059529167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0423B777-2C18-4B0F-B87E-0AD059529167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73074A14-F8BE-4831-B02A-A76F8EC126DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73074A14-F8BE-4831-B02A-A76F8EC126DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73074A14-F8BE-4831-B02A-A76F8EC126DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73074A14-F8BE-4831-B02A-A76F8EC126DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E847F44-BC2C-4C42-B612-2C9934E8BB38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E847F44-BC2C-4C42-B612-2C9934E8BB38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E847F44-BC2C-4C42-B612-2C9934E8BB38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E847F44-BC2C-4C42-B612-2C9934E8BB38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CA521C5F-7AD9-4B29-A150-D24672CA421E} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{FEF46D16-CBFF-4E64-8077-706681125A83} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{87F11C1C-29D9-42FD-854D-EEA734413072} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{F3BFEC5D-7957-4575-8DCD-D8D22217F535} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{0423B777-2C18-4B0F-B87E-0AD059529167} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{F266D261-5A5F-4BB6-84F6-A71EA2B5090E} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{73074A14-F8BE-4831-B02A-A76F8EC126DC} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{31B0B5B6-E8D8-4CD8-955C-715E02396B85} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{13A3391A-39FC-40BD-8EA0-0353090675C7} = {98974FEE-99D5-45FF-8B14-8FE7E7F1FC5C}
+		{9F07B239-903A-4340-9489-4E678A5C41F9} = {8AB46E20-2FF7-41C6-9261-523191945326}
+		{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0} = {FEF46D16-CBFF-4E64-8077-706681125A83}
+		{2A2E972C-4B0E-47BE-B1C7-C132A901D933} = {87F11C1C-29D9-42FD-854D-EEA734413072}
+		{A28922C8-A4CB-420D-BA01-583AA4389D75} = {87F11C1C-29D9-42FD-854D-EEA734413072}
+		{279C3A57-B61C-4F90-B809-A56C2E0E3402} = {87F11C1C-29D9-42FD-854D-EEA734413072}
+		{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
+		{128EEB4C-DE60-4533-B819-4C53AB4BB2C2} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
+		{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
+		{2C0DF1A7-E048-4236-B66A-CC78C0B3E382} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
+		{AC34C060-788B-40E7-B51D-5F4B2A304CCE} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
+		{3807790C-726E-4870-89DB-D25D80223C8A} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
+		{78EE9D9B-691B-4D5C-AD72-9023366BE44F} = {279C3A57-B61C-4F90-B809-A56C2E0E3402}
+		{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B} = {279C3A57-B61C-4F90-B809-A56C2E0E3402}
+		{853598D1-F9CF-48C2-90DD-354480F34F91} = {F3BFEC5D-7957-4575-8DCD-D8D22217F535}
+		{3E847F44-BC2C-4C42-B612-2C9934E8BB38} = {31B0B5B6-E8D8-4CD8-955C-715E02396B85}
+		{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B} = {AC34C060-788B-40E7-B51D-5F4B2A304CCE}
+	EndGlobalSection
+EndGlobal

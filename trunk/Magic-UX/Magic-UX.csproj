@@ -128,8 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Js\AjaxWait.js" />
-    <EmbeddedResource Include="Js\ResizeHandler.js" />
-    <EmbeddedResource Include="Js\RichEdit.js" />
     <EmbeddedResource Include="Js\Timer.js" />
   </ItemGroup>
   <ItemGroup>
