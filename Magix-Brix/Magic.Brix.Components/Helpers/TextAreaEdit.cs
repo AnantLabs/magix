@@ -11,10 +11,10 @@
 using System;
 using System.ComponentModel;
 
-using Magic.UX.Widgets;
-using Magic.UX.Effects;
+using Magix.UX.Widgets;
+using Magix.UX.Effects;
 
-namespace Magic.Brix.Components
+namespace Magix.Brix.Components
 {
     public class TextAreaEdit : Panel
     {

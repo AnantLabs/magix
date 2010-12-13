@@ -9,9 +9,9 @@ using System.IO;
 using System.Web;
 using System.Reflection;
 using System.Web.Hosting;
-using Magic.Brix.Loader;
+using Magix.Brix.Loader;
 
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     /*
      * The internal implementation of our VirtualFile or VPP (Virtual Path Provider)

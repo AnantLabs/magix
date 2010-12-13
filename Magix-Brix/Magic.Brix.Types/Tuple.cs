@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Magic.Brix.Types
+namespace Magix.Brix.Types
 {
     /**
      * A helper structure to make it possible to create multiple return values or "couple"

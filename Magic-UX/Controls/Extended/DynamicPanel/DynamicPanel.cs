@@ -7,7 +7,7 @@
 using System;
 using System.Web.UI;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Control for making it easier to dynamically instantiate new controls and add 

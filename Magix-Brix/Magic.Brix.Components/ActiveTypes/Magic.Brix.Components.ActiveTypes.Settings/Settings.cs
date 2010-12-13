@@ -8,12 +8,12 @@ using System;
 using System.Configuration;
 using System.Globalization;
 using System.Collections.Generic;
-using Magic.Brix.Data;
+using Magix.Brix.Data;
 
-namespace Magic.Brix.Components.ActiveTypes
+namespace Magix.Brix.Components.ActiveTypes
 {
     /**
-     * Wrapper class for common/global settings within a Magic-Brix application.
+     * Wrapper class for common/global settings within a Magix-Brix application.
      */
     public sealed class Settings
     {

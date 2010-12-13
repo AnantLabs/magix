@@ -7,9 +7,9 @@
 using System;
 using System.Web.UI;
 using System.Collections.Generic;
-using Magic.UX.Widgets;
+using Magix.UX.Widgets;
 
-namespace Magic.UX.Widgets.Core
+namespace Magix.UX.Widgets.Core
 {
     /**
      * Abstract base class for widgets which are supposed to contain only one type

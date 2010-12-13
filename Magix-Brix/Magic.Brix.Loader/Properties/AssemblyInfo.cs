@@ -10,13 +10,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Magic.Brix.Loader")]
-[assembly: AssemblyDescription("Magic-Brix Loader helper for dynamically loading modules in your application")]
+[assembly: AssemblyTitle("Magix.Brix.Loader")]
+[assembly: AssemblyDescription("Magix-Brix Loader helper for dynamically loading modules in your application")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ra-Software, Inc.")]
-[assembly: AssemblyProduct("Magic.Brix.Loader")]
+[assembly: AssemblyProduct("Magix.Brix.Loader")]
 [assembly: AssemblyCopyright("Copyright © Ra-Software, Inc. - 2010")]
-[assembly: AssemblyTrademark("Magic-Brix")]
+[assembly: AssemblyTrademark("Magix-Brix")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

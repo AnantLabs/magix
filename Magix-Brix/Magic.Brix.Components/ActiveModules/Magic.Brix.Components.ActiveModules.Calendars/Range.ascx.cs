@@ -8,12 +8,12 @@ using System;
 using System.Web.UI;
 using System.Collections.Generic;
 using ASP = System.Web.UI.WebControls;
-using Magic.UX.Widgets;
-using Magic.Brix.Types;
-using Magic.Brix.Loader;
-using Magic.Brix.Components;
+using Magix.UX.Widgets;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
+using Magix.Brix.Components;
 
-namespace Magic.Brix.Components.ActiveModules.Calendars
+namespace Magix.Brix.Components.ActiveModules.Calendars
 {
     [ActiveModule]
     public class Range : UserControl, IModule

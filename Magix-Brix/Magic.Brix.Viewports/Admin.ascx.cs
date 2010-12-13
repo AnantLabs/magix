@@ -6,13 +6,13 @@
 
 using System;
 using System.Web.UI;
-using Magic.UX;
-using Magic.UX.Widgets;
-using Magic.Brix.Types;
-using Magic.Brix.Loader;
-using Magic.UX.Effects;
+using Magix.UX;
+using Magix.UX.Widgets;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
+using Magix.UX.Effects;
 
-namespace Magic.Brix.Viewports
+namespace Magix.Brix.Viewports
 {
     [ActiveModule]
     public class Admin : UserControl, IModule

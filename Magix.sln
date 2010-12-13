@@ -7,12 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UX", "UX", "{98974FEE-99D5-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8AB46E20-2FF7-41C6-9261-523191945326}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic-UX", "Magic-UX\Magic-UX.csproj", "{13A3391A-39FC-40BD-8EA0-0353090675C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic.UX", "Magic-UX\Magic.UX.csproj", "{13A3391A-39FC-40BD-8EA0-0353090675C7}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Magic-UX-Samples", "Magic-UX-Samples\", "{9F07B239-903A-4340-9489-4E678A5C41F9}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "2.0"
-		ProjectReferences = "{13A3391A-39FC-40BD-8EA0-0353090675C7}|Magic-UX.dll;"
+		ProjectReferences = "{13A3391A-39FC-40BD-8EA0-0353090675C7}|Magic.UX.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Magic-UX-Samples"
 		Debug.AspNetCompiler.PhysicalPath = "Magic-UX-Samples\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Magic-UX-Samples\"

@@ -7,10 +7,10 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * A 'text widget'. The basic purpose of this widget is purely to display

@@ -11,14 +11,14 @@ using System.Web.UI;
 using System.Reflection;
 using System.Configuration;
 using System.Collections.Generic;
-using Magic.Brix.Data;
-using Magic.Brix.Types;
-using Magic.Brix.Loader;
+using Magix.Brix.Data;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
 
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     /**
-     * Helps load UserControls embedded in resources. Relies on that Magic.Brix.Loader.AssemblyResourceProvider
+     * Helps load UserControls embedded in resources. Relies on that Magix.Brix.Loader.AssemblyResourceProvider
      * is registered as a Virtual Path Provider in e.g. your Global.asax file. Use the Instance method
      * to access the singleton object, then use the LoadControl to load UserControls embedded in resources.
      */
@@ -127,7 +127,7 @@ namespace Magic.Brix.Loader
 
         /**
          * Dynamically load a Control with the given FullName (namespace + type name). This
-         * is the method which is internally used in Magic-Brix to load UserControls from 
+         * is the method which is internally used in Magix-Brix to load UserControls from 
          * embedded resources and also other controls.
          */
         public Control LoadControl(string fullTypeName)
@@ -164,7 +164,7 @@ namespace Magic.Brix.Loader
                 // UserControl plugin type...
                 Control retVal =
                     page.LoadControl(
-                        "~/Magic.Brix.Module/" +
+                        "~/Magix.Brix.Module/" +
                         pluginType.Right.Assembly.ManifestModule.ScopeName +
                         "/" +
                         pluginType.Left);

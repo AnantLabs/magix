@@ -8,11 +8,11 @@ using System;
 using System.Web.UI;
 using System.ComponentModel;
 using System.Collections.Generic;
-using Magic.UX.Widgets;
-using Magic.UX.Builder;
-using Magic.UX.Effects;
+using Magix.UX.Widgets;
+using Magix.UX.Builder;
+using Magix.UX.Effects;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Items within a Menu. A MenuItem can have a Text property in addition to a SubMenu, 

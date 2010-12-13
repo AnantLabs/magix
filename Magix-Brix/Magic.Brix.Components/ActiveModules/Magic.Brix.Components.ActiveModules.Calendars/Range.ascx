@@ -4,7 +4,7 @@
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magic.Brix.Components.ActiveModules.Calendars.Range" %>
+    Inherits="Magix.Brix.Components.ActiveModules.Calendars.Range" %>
 
 <mux:Window 
     runat="server" 

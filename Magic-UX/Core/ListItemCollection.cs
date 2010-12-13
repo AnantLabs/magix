@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Web.UI;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public class ListItemCollection : ICollection, IList<ListItem>, IStateManager
     {

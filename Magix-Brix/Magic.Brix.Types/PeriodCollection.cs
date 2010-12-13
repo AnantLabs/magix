@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Magic.Brix.Types
+namespace Magix.Brix.Types
 {
     /**
      * A collection class of Period types. Contains algebraic methods for 

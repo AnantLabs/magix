@@ -7,8 +7,8 @@
 using System;
 using System.Web;
 using System.Web.UI;
-using Magic.Brix.Loader;
-using Magic.Brix.Types;
+using Magix.Brix.Loader;
+using Magix.Brix.Types;
 using HelloWorldTypes;
 
 namespace HelloWorldController

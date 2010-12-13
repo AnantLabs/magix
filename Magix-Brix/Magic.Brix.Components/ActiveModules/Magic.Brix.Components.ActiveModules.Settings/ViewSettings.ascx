@@ -1,10 +1,10 @@
 ﻿<%@ Assembly 
-    Name="Magic.Brix.Components.ActiveModules.Settings" %>
+    Name="Magix.Brix.Components.ActiveModules.Settings" %>
 
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magic.Brix.Components.ActiveModules.Settings.ViewSettings" %>
+    Inherits="Magix.Brix.Components.ActiveModules.Settings.ViewSettings" %>
 
 <mux:Grid 
     runat="server" 

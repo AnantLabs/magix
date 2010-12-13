@@ -7,16 +7,16 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Widgets;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Menu control. A Menu is basically a collection of MenuItems. Mimicks
      * a Menu the way you're used to seeing them on desktop systems, or at other
-     * web applications. The Magic UX menu have support for any number of child
+     * web applications. The Magix UX menu have support for any number of child
      * menus, and are very customizable in regards to how it looks and behaves.
      */
     public class Menu : ViewCollectionControl<MenuItem>

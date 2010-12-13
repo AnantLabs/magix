@@ -7,11 +7,11 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Widgets;
-using Magic.UX.Aspects;
-using Magic.UX.Builder;
+using Magix.UX.Widgets;
+using Magix.UX.Aspects;
+using Magix.UX.Builder;
 
-namespace Magic.UX.Widgets.Core
+namespace Magix.UX.Widgets.Core
 {
     /**
      * Abstract helper widget for widget developers. Used internally in e.g. Window and

@@ -12,16 +12,16 @@ using System.Configuration;
 using System.Collections.Generic;
 
 /**
- * Namespace mostly used for "internal stuff" in Magic-Brix which are not
+ * Namespace mostly used for "internal stuff" in Magix-Brix which are not
  * needed to fiddle with for most developer only looking to consume 
- * Magic-Brix.
+ * Magix-Brix.
  */
-namespace Magic.Brix.Data
+namespace Magix.Brix.Data
 {
     namespace Internal
     {
         /**
-          * Abstract base class for all Database Adapters in Magic-Brix. If you wish
+          * Abstract base class for all Database Adapters in Magix-Brix. If you wish
           * to build your own data adapter then inherit from this class and implement
           * the abstract methods, add up a reference to the dll and change the 
           * data-configuration line in your configuration file and it should work.

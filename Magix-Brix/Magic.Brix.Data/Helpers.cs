@@ -7,7 +7,7 @@
 using System;
 using System.Reflection;
 
-namespace Magic.Brix.Data.Internal
+namespace Magix.Brix.Data.Internal
 {
     /**
       * Static helper class for data-storage Adapter developers.

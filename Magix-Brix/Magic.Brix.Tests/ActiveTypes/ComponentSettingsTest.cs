@@ -10,13 +10,13 @@ using System.Configuration;
 using System.Collections.Generic;
 using NUnit.Core;
 using NUnit.Framework;
-using Magic.Brix.Data;
-using Magic.Brix.Data.Internal;
-using Magic.Brix.Data.Adapters;
-using Magic.Brix.Components.ActiveTypes;
-using Magic.Brix.Tests.Data;
+using Magix.Brix.Data;
+using Magix.Brix.Data.Internal;
+using Magix.Brix.Data.Adapters;
+using Magix.Brix.Components.ActiveTypes;
+using Magix.Brix.Tests.Data;
 
-namespace Magic.Brix.Tests.ActiveTypes
+namespace Magix.Brix.Tests.ActiveTypes
 {
     [TestFixture]
     public class ComponentSettingsTest : BaseTest

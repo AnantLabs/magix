@@ -8,10 +8,10 @@ using System;
 using System.ComponentModel;
 using System.Web.UI;
 using System.Web;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Hidden field widget. Useful for having state you wish to pass on to the client

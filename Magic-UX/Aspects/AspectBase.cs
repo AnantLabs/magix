@@ -7,13 +7,13 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Widgets;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Aspects
+namespace Magix.UX.Aspects
 {
     /**
-     * Base class for all Aspects in Magic UX. Implements common functionality.
+     * Base class for all Aspects in Magix UX. Implements common functionality.
      */
 	public abstract class AspectBase : BaseControl
 	{

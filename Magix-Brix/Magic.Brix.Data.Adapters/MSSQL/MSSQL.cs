@@ -11,15 +11,15 @@ using System.Reflection;
 using System.Collections;
 using System.Data.SqlClient;
 using System.Collections.Generic;
-using Magic.Brix.Types;
-using Magic.Brix.Data.Internal;
-using Magic.Brix.Loader;
+using Magix.Brix.Types;
+using Magix.Brix.Data.Internal;
+using Magix.Brix.Loader;
 
-namespace Magic.Brix.Data.Adapters.MSSQL
+namespace Magix.Brix.Data.Adapters.MSSQL
 {
     /**
      * Microsoft SQL Server Database Adapter, which probably works with 2005 and later, for
-     * Magic-Brix. Contains all MS SQL specific logic needed to use Magic-Brix 
+     * Magix-Brix. Contains all MS SQL specific logic needed to use Magix-Brix 
      * together with MS SQL.
      */
     public class MSSQL : StdSQLDataAdapter, IPersistViewState
@@ -39,7 +39,7 @@ namespace Magic.Brix.Data.Adapters.MSSQL
         private void InitializeSchema()
         {
             using (Stream stream = Assembly.GetAssembly(GetType())
-                .GetManifestResourceStream("Magic.Brix.Data.Adapters.MSSQL.Schema.sql"))
+                .GetManifestResourceStream("Magix.Brix.Data.Adapters.MSSQL.Schema.sql"))
             {
                 if (stream != null)
                 {
@@ -157,7 +157,7 @@ namespace Magic.Brix.Data.Adapters.MSSQL
                     case "System.Byte[]":
                         break;
                     default:
-                        if (idxProp.Left.PropertyType.FullName.IndexOf("Magic.Brix.Types.LazyList") == 0)
+                        if (idxProp.Left.PropertyType.FullName.IndexOf("Magix.Brix.Types.LazyList") == 0)
                         {
                             // LazyList...
                             Type typeOfList = idxProp.Left.PropertyType;

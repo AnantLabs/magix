@@ -6,9 +6,9 @@
 
 using System;
 using System.ComponentModel;
-using Magic.UX.Builder;
+using Magix.UX.Builder;
 
-namespace Magic.UX.Widgets.Core
+namespace Magix.UX.Widgets.Core
 {
     /**
      * Abstract base class for WebControls which are BaseWebControlFormElement type of

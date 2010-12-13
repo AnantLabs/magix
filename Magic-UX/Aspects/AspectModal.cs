@@ -9,9 +9,9 @@ using System.Web.UI;
 using System.Drawing;
 using System.Globalization;
 using System.ComponentModel;
-using Magic.UX.Helpers;
+using Magix.UX.Helpers;
 
-namespace Magic.UX.Aspects
+namespace Magix.UX.Aspects
 {
     /**
      * Aspect useful for making 'modal' controls. A Modal control will obscur the 

@@ -1,5 +1,5 @@
 ﻿using System;
-using Magic.UX.Widgets;
+using Magix.UX.Widgets;
 
 public partial class CheckBoxSample : System.Web.UI.Page 
 {

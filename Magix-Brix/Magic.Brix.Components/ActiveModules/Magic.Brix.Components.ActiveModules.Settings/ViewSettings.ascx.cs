@@ -1,13 +1,13 @@
 ﻿using System;
-using Magic.Brix.Types;
-using Magic.Brix.Loader;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
 
-namespace Magic.Brix.Components.ActiveModules.Settings
+namespace Magix.Brix.Components.ActiveModules.Settings
 {
     [ActiveModule]
     public class ViewSettings : System.Web.UI.UserControl, IModule
     {
-        protected global::Magic.Brix.Components.Grid grd;
+        protected global::Magix.Brix.Components.Grid grd;
 
         protected void grid_CellEdited(object sender, Grid.GridEditEventArgs e)
         {

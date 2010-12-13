@@ -1,5 +1,5 @@
 ﻿/*
- * Magic-Brix - A Modular-based Framework for building 
+ * Magix-Brix - A Modular-based Framework for building 
  * Web Applications Copyright 2009 - Thomas Hansen 
  * thomas@ra-ajax.org. Unless permission is 
  * explicitly given this code is licensed under the 
@@ -9,10 +9,10 @@
  */
 
 using System.Collections.Generic;
-using Magic.Brix.Data.Internal;
+using Magix.Brix.Data.Internal;
 using System.Data.Common;
 
-namespace Magic.Brix.Data
+namespace Magix.Brix.Data
 {
     public class TransactionalObject
     {

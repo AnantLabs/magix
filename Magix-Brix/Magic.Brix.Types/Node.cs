@@ -9,7 +9,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Magic.Brix.Types
+namespace Magix.Brix.Types
 {
     /**
      * Helper class to pass around data in a "JSON kind of way" without having

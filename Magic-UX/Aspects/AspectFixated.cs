@@ -8,12 +8,12 @@ using System;
 using System.Web.UI;
 using System.Drawing;
 using System.ComponentModel;
-using Magic.UX.Core;
-using Magic.UX.Widgets;
-using Magic.UX.Helpers;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Helpers;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Aspects
+namespace Magix.UX.Aspects
 {
     /**
      */

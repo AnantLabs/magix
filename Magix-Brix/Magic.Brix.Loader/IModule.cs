@@ -4,9 +4,9 @@
  * MagicBrix is licensed as GPLv3.
  */
 
-using Magic.Brix.Types;
+using Magix.Brix.Types;
 
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     /**
      * Optional interface you can mark your Modules with. If you do your Modules will be called the

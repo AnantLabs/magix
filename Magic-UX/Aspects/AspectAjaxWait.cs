@@ -9,9 +9,9 @@ using System.Web.UI;
 using System.Drawing;
 using System.Globalization;
 using System.ComponentModel;
-using Magic.UX.Helpers;
+using Magix.UX.Helpers;
 
-namespace Magic.UX.Aspects
+namespace Magix.UX.Aspects
 {
     /**
      * Ajax Wait Aspect. Use this one whenever you've got an Ajax Control that 
@@ -62,7 +62,7 @@ namespace Magic.UX.Aspects
 
         /**
          * The Element you've attached to this particular Ajax Wait. If none is
-         * given, Magic UX will on the client-side automatically create a black
+         * given, Magix UX will on the client-side automatically create a black
          * DOM element for you which will serve as the obscurer.
          */
         public string Element

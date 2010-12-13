@@ -7,10 +7,10 @@
 using System;
 using System.Globalization;
 using System.ComponentModel;
-using Magic.UX;
-using Magic.UX.Widgets;
+using Magix.UX;
+using Magix.UX.Widgets;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public class AjaxWait : Panel
     {

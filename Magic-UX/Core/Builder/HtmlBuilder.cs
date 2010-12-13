@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Web.UI;
 
-namespace Magic.UX.Builder
+namespace Magix.UX.Builder
 {
     public class HtmlBuilder : IDisposable
     {

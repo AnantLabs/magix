@@ -6,9 +6,9 @@
 
 using System;
 using NUnit.Framework;
-using Magic.Brix.Types;
+using Magix.Brix.Types;
 
-namespace Magic.Brix.Tests.Types
+namespace Magix.Brix.Tests.Types
 {
     [TestFixture]
     public class PeriodCollectionTests

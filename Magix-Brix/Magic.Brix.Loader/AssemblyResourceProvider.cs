@@ -14,7 +14,7 @@ using System.Collections;
  * Namespace containing all the helpers for dynamically loading UserControls 
  * from Embedded Resources.
  */
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     /**
      * Helper class to make it possible to load controls (and more importantly) UserControls
@@ -27,13 +27,13 @@ namespace Magic.Brix.Loader
         {
             string absolutePath = VirtualPathUtility.ToAppRelative(virtualPath);
 
-            // Notice a Virtual Path might be either a path containing Magic.Brix.Module (in which case
+            // Notice a Virtual Path might be either a path containing Magix.Brix.Module (in which case
             // it's a DLL in the bin folder) or be an absolute path in addition to containing
             // a name of a DLL residing on disc (in which case it's a DLL in some other parts of 
             // the file system)
             // And since we want to make it possible to both load everything in the bin older in addition
             // to files in another physical directory, we must check for this...
-            return absolutePath.Contains("/Magic.Brix.Module/") || 
+            return absolutePath.Contains("/Magix.Brix.Module/") || 
                 (absolutePath.Contains(":") && absolutePath.ToLower().Contains(".dll"));
         }
 

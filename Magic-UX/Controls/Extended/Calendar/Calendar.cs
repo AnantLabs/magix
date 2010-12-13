@@ -7,9 +7,9 @@
 using System;
 using System.Web.UI;
 using System.Globalization;
-using Magic.UX.Builder;
+using Magix.UX.Builder;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public class Calendar : Panel
     {

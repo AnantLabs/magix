@@ -11,9 +11,9 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public class StyleCollection
     {

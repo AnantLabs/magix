@@ -5,7 +5,7 @@
  */
 
 using System;
-using Magic.Brix.Data;
+using Magix.Brix.Data;
 
 namespace HelloWorldTypes
 {

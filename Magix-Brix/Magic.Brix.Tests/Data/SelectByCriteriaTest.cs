@@ -9,11 +9,11 @@ using System.Reflection;
 using System.Collections.Generic;
 using NUnit.Core;
 using NUnit.Framework;
-using Magic.Brix.Data;
-using Magic.Brix.Data.Internal;
-using Magic.Brix.Data.Adapters;
+using Magix.Brix.Data;
+using Magix.Brix.Data.Internal;
+using Magix.Brix.Data.Adapters;
 
-namespace Magic.Brix.Tests.Data
+namespace Magix.Brix.Tests.Data
 {
     [TestFixture]
     public class SelectByCriteriaTest : BaseTest

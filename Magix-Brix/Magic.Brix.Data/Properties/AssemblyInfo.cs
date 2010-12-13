@@ -10,13 +10,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Magic.Brix.Data")]
-[assembly: AssemblyDescription("Data abstraction or O/RM library if you wish for Magic-Brix")]
+[assembly: AssemblyTitle("Magix.Brix.Data")]
+[assembly: AssemblyDescription("Data abstraction or O/RM library if you wish for Magix-Brix")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ra-Software, Inc.")]
-[assembly: AssemblyProduct("Magic.Brix.Data")]
+[assembly: AssemblyProduct("Magix.Brix.Data")]
 [assembly: AssemblyCopyright("Copyright © Ra-Software, Inc - 2010")]
-[assembly: AssemblyTrademark("Magic-Brix")]
+[assembly: AssemblyTrademark("Magix-Brix")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

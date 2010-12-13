@@ -8,10 +8,10 @@ using System;
 using System.Web;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * A multiple line type of 'give me some text input' type of widget. It wraps the

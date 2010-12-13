@@ -11,12 +11,12 @@
 using System;
 using System.Web.UI;
 using System.IO;
-using Magic.Brix.Data;
+using Magix.Brix.Data;
 using System.Text;
 using System.Web;
-using Magic.UX;
+using Magix.UX;
 
-namespace Magic.Brix.ApplicationPool
+namespace Magix.Brix.ApplicationPool
 {
     public class RaBrixPageStatePersister : PageStatePersister
     {
@@ -44,7 +44,7 @@ namespace Magic.Brix.ApplicationPool
 
         public override void Load()
         {
-            IPersistViewState state = Magic.Brix.Data.Internal.Adapter.Instance as IPersistViewState;
+            IPersistViewState state = Magix.Brix.Data.Internal.Adapter.Instance as IPersistViewState;
             LosFormatter formatter = new LosFormatter();
             Pair pair = formatter.Deserialize(state.Load(_session.ToString(), Page.Request.Url.ToString())) as Pair;
             ViewState = pair.First;
@@ -53,7 +53,7 @@ namespace Magic.Brix.ApplicationPool
 
         public override void Save()
         {
-            IPersistViewState state = Magic.Brix.Data.Internal.Adapter.Instance as IPersistViewState;
+            IPersistViewState state = Magix.Brix.Data.Internal.Adapter.Instance as IPersistViewState;
             LosFormatter formatter = new LosFormatter();
             StringBuilder builder = new StringBuilder();
             using (StringWriter writer = new StringWriter(builder))

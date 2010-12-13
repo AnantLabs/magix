@@ -1,10 +1,10 @@
 ﻿<%@ Assembly 
-    Name="Magic.Brix.Viewports" %>
+    Name="Magix.Brix.Viewports" %>
 
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magic.Brix.Viewports.Admin" %>
+    Inherits="Magix.Brix.Viewports.Admin" %>
 
 <link href="media/admin.css" rel="stylesheet" type="text/css" />
 

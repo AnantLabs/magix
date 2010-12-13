@@ -8,11 +8,11 @@ using System;
 using System.Web.UI;
 using System.ComponentModel;
 using System.Collections.Generic;
-using Magic.UX.Widgets;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * A strip of TabButtons, used often to trigger changing active view in combination

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Magic.Brix.Data
+namespace Magix.Brix.Data
 {
     /**
      * Used to mark entity objects as serializable. If a property is

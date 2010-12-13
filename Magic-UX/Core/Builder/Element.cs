@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Magic.UX.Builder
+namespace Magix.UX.Builder
 {
     public class Element : DeterministicExecutor
     {

@@ -14,13 +14,13 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Web.UI.HtmlControls;
 using System.Collections.Generic;
-using Magic.UX.Widgets;
-using Magic.Brix.Types;
-using Magic.UX.Effects;
-using Magic.Brix.Loader;
-using Magic.UX;
+using Magix.UX.Widgets;
+using Magix.Brix.Types;
+using Magix.UX.Effects;
+using Magix.Brix.Loader;
+using Magix.UX;
 
-namespace Magic.Brix.Components
+namespace Magix.Brix.Components
 {
     public class Grid : Panel
     {
@@ -430,7 +430,7 @@ namespace Magic.Brix.Components
             _lstWrappers.ReRender();
         }
 
-        private void CreateRows(Magic.UX.Widgets.Core.BaseWebControl table)
+        private void CreateRows(Magix.UX.Widgets.Core.BaseWebControl table)
         {
             Node node = new Node();
             List<Node> tmp = new List<Node>(RowsFiltered);
@@ -708,7 +708,7 @@ namespace Magic.Brix.Components
                                             this,
                                             "GetGridColumnType",
                                             getColType);
-                                        Magic.UX.Widgets.Core.BaseWebControl ctrl = getColType["Control"].Get<Magic.UX.Widgets.Core.BaseWebControl>();
+                                        Magix.UX.Widgets.Core.BaseWebControl ctrl = getColType["Control"].Get<Magix.UX.Widgets.Core.BaseWebControl>();
                                         ctrl.ID = idxRow["ID"].Value + "x" + idxCell.Name.GetHashCode().ToString().Replace("|", "");
                                         ctrl.Info = string.Format("{0}|{1}", idxRow["ID"].Value, idxCell.Name);
                                         if (getColType["ExtraCssClass"].Value != null)
