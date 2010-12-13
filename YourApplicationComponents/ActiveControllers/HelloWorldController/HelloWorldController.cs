@@ -37,6 +37,12 @@ namespace HelloWorldController
             c.Value += 1;
             c.Save();
             e.Params["Value"].Value = c.Value;
+            if ((new Random()).Next(5) == 0)
+            {
+                ActiveEvents.Instance.RaiseLoadControl(
+                    "HelloWorldModules.Oops",
+                    "dyn2");
+            }
         }
     }
 }
