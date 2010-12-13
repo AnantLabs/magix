@@ -8,12 +8,12 @@ using System;
 using System.Web.UI;
 using System.ComponentModel;
 using System.Collections.Generic;
-using Magic.UX.Widgets;
-using Magic.UX.Effects;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Effects;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * A MultiPanel is a collection of MultiPanelViews, often used to create TabControls or

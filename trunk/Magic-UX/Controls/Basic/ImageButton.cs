@@ -7,10 +7,10 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Technically this widget is completely redundant towards the Image Ajax Widget. But

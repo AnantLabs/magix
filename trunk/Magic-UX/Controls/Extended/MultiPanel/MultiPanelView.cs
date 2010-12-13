@@ -6,9 +6,9 @@
 
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Widgets;
+using Magix.UX.Widgets;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Instances of items within a MultiPanel. These are the items a 

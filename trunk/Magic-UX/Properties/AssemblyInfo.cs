@@ -9,13 +9,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Web.UI;
 
-[assembly: AssemblyTitle("Magic-UX")]
+[assembly: AssemblyTitle("Magix.UX")]
 [assembly: AssemblyDescription("An Ajax WebControl library for ASP.NET")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Magic-UX")]
+[assembly: AssemblyProduct("Magix.UX")]
 [assembly: AssemblyCopyright("Copyright © 2010 Ra-Software, Inc.")]
-[assembly: AssemblyTrademark("Magic-UX")]
+[assembly: AssemblyTrademark("Magix.UX")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
@@ -28,7 +28,7 @@ using System.Web.UI;
  * JavaScript inclusion directives for embedded resources...
  */
 
-[assembly: WebResource("Magic_UX.Js.Magic.js", "text/javascript")]
+[assembly: WebResource("Magic_UX.Js.Magix.js", "text/javascript")]
 [assembly: WebResource("Magic_UX.Js.Control.js", "text/javascript")]
 [assembly: WebResource("Magic_UX.Js.Aspects.js", "text/javascript")]
 [assembly: WebResource("Magic_UX.Js.Effects.js", "text/javascript")]

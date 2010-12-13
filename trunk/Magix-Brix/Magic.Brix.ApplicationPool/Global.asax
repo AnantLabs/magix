@@ -10,8 +10,8 @@
 
     void Application_Start(object sender, EventArgs e) 
     {
-        Magic.Brix.Loader.AssemblyResourceProvider sampleProvider = 
-            new Magic.Brix.Loader.AssemblyResourceProvider();
+        Magix.Brix.Loader.AssemblyResourceProvider sampleProvider = 
+            new Magix.Brix.Loader.AssemblyResourceProvider();
         System.Web.Hosting.HostingEnvironment.RegisterVirtualPathProvider(sampleProvider);
     }
     

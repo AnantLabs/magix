@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public enum Styles
     {

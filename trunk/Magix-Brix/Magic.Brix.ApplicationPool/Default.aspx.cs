@@ -7,12 +7,12 @@
 using System;
 using System.Configuration;
 using System.Web.UI;
-using Magic.Brix.Loader;
-using Magic.Brix.Data;
+using Magix.Brix.Loader;
+using Magix.Brix.Data;
 using System.Text;
 using System.IO;
 
-namespace Magic.Brix.ApplicationPool
+namespace Magix.Brix.ApplicationPool
 {
     public partial class MainWebPage : Page
     {
@@ -50,7 +50,7 @@ namespace Magic.Brix.ApplicationPool
         {
             get
             {
-                if (Magic.Brix.Data.Internal.Adapter.Instance is IPersistViewState)
+                if (Magix.Brix.Data.Internal.Adapter.Instance is IPersistViewState)
                 {
                     if (_pageStatePersister == null)
                         _pageStatePersister = new RaBrixPageStatePersister(this);

@@ -5,10 +5,10 @@
  */
 
 /**
- * Namespace for all commonly used API parts of Magic-Brix. Contains most
- * data abstractions in Magic-Brix.
+ * Namespace for all commonly used API parts of Magix-Brix. Contains most
+ * data abstractions in Magix-Brix.
  */
-namespace Magic.Brix.Data
+namespace Magix.Brix.Data
 {
     /**
      * Abstract base class for all data storage retrieval criterias.

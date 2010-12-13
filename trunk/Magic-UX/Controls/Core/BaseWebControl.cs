@@ -7,18 +7,18 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Core;
-using Magic.UX.Aspects;
-using Magic.UX.Builder;
-using Magic.UX.Effects;
-using Magic.UX.Helpers;
+using Magix.UX.Core;
+using Magix.UX.Aspects;
+using Magix.UX.Builder;
+using Magix.UX.Effects;
+using Magix.UX.Helpers;
 
-namespace Magic.UX.Widgets.Core
+namespace Magix.UX.Widgets.Core
 {
     /**
      * MUX WebControl equivalent. Contains a couple of additions to the MuxBaseControl. 
      * Among others a style attribute and a CssClass. Also contains most of all the
-     * DOM event handlers you can possibly handle in Magic UX. In addition to most of
+     * DOM event handlers you can possibly handle in Magix UX. In addition to most of
      * the client-side effects you can possibly run on your MUX controls. Class is 
      * abstract, and hence cannot be instantiated directly but is meant for inheriting
      * from.
@@ -131,7 +131,7 @@ namespace Magic.UX.Widgets.Core
         /**
          * The tooltip of your widget. Will display a tiny box with your text whenever the
          * user is hovering his mouse over your widget. There are other and richer ways to
-         * create more advanced tooltips in Magic UX, but no other ways will demand less 
+         * create more advanced tooltips in Magix UX, but no other ways will demand less 
          * bandwidth and less resources on your user's clients. The HTML attribute 'title'
          * is the value actually sent over to the client when the ToolTip is being used.
          */
@@ -236,7 +236,7 @@ namespace Magic.UX.Widgets.Core
          * The inline styles of your widget. An exhaustive explanation of this
          * property is truly out of scope of this file, pick up any good book
          * on the subject CSS to understand how to use this property. But 
-         * specifically for Magic UX, any style properties added, removed, changed
+         * specifically for Magix UX, any style properties added, removed, changed
          * and so on any times during its life-cycle, will automatically, and extremely 
          * bandwidth efficient be changed/added/removed automagically by the core
          * engine of MUX.

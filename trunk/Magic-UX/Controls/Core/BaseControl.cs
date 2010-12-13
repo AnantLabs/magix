@@ -12,16 +12,16 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Web;
-using Magic.UX.Aspects;
-using Magic.UX.Builder;
+using Magix.UX.Aspects;
+using Magix.UX.Builder;
 using System.Drawing;
-using Magic.UX.Helpers;
+using Magix.UX.Helpers;
 
-namespace Magic.UX.Widgets.Core
+namespace Magix.UX.Widgets.Core
 {
     /**
-     * Abstract base class for mostly all widgets in Magic UX. This is where the Ajax
-     * 'core engine' to a large extent exists within Magic UX. Contains several 
+     * Abstract base class for mostly all widgets in Magix UX. This is where the Ajax
+     * 'core engine' to a large extent exists within Magix UX. Contains several 
      * interesting features, such as for instance the Info property, which can take 
      * any string information and serialize back and forth between server-requests. 
      * If you need to create your own Ajx Control, you should either directly, or most

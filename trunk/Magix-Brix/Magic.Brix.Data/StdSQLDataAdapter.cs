@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Configuration;
 using System.Collections.Generic;
 
-namespace Magic.Brix.Data.Internal
+namespace Magix.Brix.Data.Internal
 {
     /**
       * Common logic for all Database adapters that relies on standard SQL syntax. Wrappers
@@ -222,7 +222,7 @@ namespace Magic.Brix.Data.Internal
                         string propertySqlName = isInnerJoin ? idx.PropertyName.Split('.')[1] : idx.PropertyName;
                         switch (idx.GetType().FullName)
                         {
-                            case "Magic.Brix.Data.Equals":
+                            case "Magix.Brix.Data.Equals":
                                 whereAdd = string.Format(
                                     " and exists(select * from {0} as q{0} where q{0}.Value={1} and {3}=q{0}.FK_Document and q{0}.Name='{2}')",
                                     tableName,
@@ -230,7 +230,7 @@ namespace Magic.Brix.Data.Internal
                                     Helpers.PropertyName(propertySqlName),
                                     docIdReference);
                                 break;
-                            case "Magic.Brix.Data.NotEquals":
+                            case "Magix.Brix.Data.NotEquals":
                                 whereAdd = string.Format(
                                     " and exists(select * from {0} as q{0} where q{0}.Value<>{1} and {3}=q{0}.FK_Document and q{0}.Name='{2}')",
                                     tableName,
@@ -238,7 +238,7 @@ namespace Magic.Brix.Data.Internal
                                     Helpers.PropertyName(propertySqlName),
                                     docIdReference);
                                 break;
-                            case "Magic.Brix.Data.LikeEquals":
+                            case "Magix.Brix.Data.LikeEquals":
                                 whereAdd = string.Format(
                                     " and exists(select * from {0} as q{0} where q{0}.Value like {1} and {3}=q{0}.FK_Document and q{0}.Name='{2}')",
                                     tableName,
@@ -246,7 +246,7 @@ namespace Magic.Brix.Data.Internal
                                     Helpers.PropertyName(propertySqlName),
                                     docIdReference);
                                 break;
-                            case "Magic.Brix.Data.LikeNotEquals":
+                            case "Magix.Brix.Data.LikeNotEquals":
                                 whereAdd = string.Format(
                                     " and exists(select * from {0} as q{0} where q{0}.Value not like {1} and {3}=q{0}.FK_Document and q{0}.Name='{2}')",
                                     tableName,
@@ -254,7 +254,7 @@ namespace Magic.Brix.Data.Internal
                                     Helpers.PropertyName(propertySqlName),
                                     docIdReference);
                                 break;
-                            case "Magic.Brix.Data.LessThen":
+                            case "Magix.Brix.Data.LessThen":
                                 whereAdd = string.Format(
                                     " and exists(select * from {0} as q{0} where q{0}.Value<{1} and {3}=q{0}.FK_Document and q{0}.Name='{2}')",
                                     tableName,
@@ -262,7 +262,7 @@ namespace Magic.Brix.Data.Internal
                                     Helpers.PropertyName(propertySqlName),
                                     docIdReference);
                                 break;
-                            case "Magic.Brix.Data.MoreThen":
+                            case "Magix.Brix.Data.MoreThen":
                                 whereAdd = string.Format(
                                     " and exists(select * from {0} as q{0} where q{0}.Value>{1} and {3}=q{0}.FK_Document and q{0}.Name='{2}')",
                                     tableName,

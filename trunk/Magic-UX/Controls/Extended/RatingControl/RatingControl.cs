@@ -7,13 +7,13 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Widgets;
-using Magic.UX.Aspects;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
-using Magic.UX.Effects;
+using Magix.UX.Widgets;
+using Magix.UX.Aspects;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
+using Magix.UX.Effects;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public class RatingControl : Panel
     {

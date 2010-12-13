@@ -7,12 +7,12 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Widgets;
-using Magic.UX.Aspects;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Aspects;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Window control. Basically an "advanced panel" with support for moving. 

@@ -7,17 +7,17 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * A clickable button. The equivalent of &lt;input type="button". Use when you
      * need a clickable thing to resemble a button. See also the LinkButton for  
-     * an alternative. Also remember that any Widget in Magic UX can be made
+     * an alternative. Also remember that any Widget in Magix UX can be made
      * clickable, so you can also use a Label as your 'clickable thingie' if you wish.
-     * Even though anything can be made clickable in Magic UX, it is often an
+     * Even though anything can be made clickable in Magix UX, it is often an
      * advantage to use buttons or link buttons since these elements will mostly
      * be recognized by screen readers and such, and it is hence more 'polite'
      * to use these specially designed types of 'clickable objects' such as the 

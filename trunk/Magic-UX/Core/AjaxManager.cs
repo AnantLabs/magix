@@ -13,11 +13,11 @@ using System.Reflection;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Magic.UX.Core;
-using Magic.UX.Widgets;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX
+namespace Magix.UX
 {
     public sealed class AjaxManager
     {
@@ -159,7 +159,7 @@ namespace Magic.UX
                 Control ctrlToCallFor = ((Page)HttpContext.Current.CurrentHandler);
                 MethodInfo webMethod = ExtractMethod(functionName, ref ctrlToCallFor);
 
-                if (webMethod == null || webMethod.GetCustomAttributes(typeof(Magic.UX.Core.WebMethod), false).Length == 0)
+                if (webMethod == null || webMethod.GetCustomAttributes(typeof(Magix.UX.Core.WebMethod), false).Length == 0)
                     throw new Exception("Cannot call a method without a WebMethod attribute");
 
                 ParameterInfo[] parameters = webMethod.GetParameters();
@@ -238,7 +238,7 @@ namespace Magic.UX
 
         internal void IncludeMainRaScript()
         {
-			IncludeScriptFromResource("Magic.js");
+			IncludeScriptFromResource("Magix.js");
 		}
 
         internal void IncludeMainControlScripts()

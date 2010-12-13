@@ -6,11 +6,11 @@
 
 using System;
 using System.Web.UI;
-using Magic.UX.Widgets;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Child control of a SlidingMenuItem. Will contain the SlidingMenuItems of a SlidingMenuItem.

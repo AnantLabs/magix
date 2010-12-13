@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Magic.UX.Helpers
+namespace Magix.UX.Helpers
 {
     public static class StringHelper
     {

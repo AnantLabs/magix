@@ -4,7 +4,7 @@
  * MagicBrix is licensed as GPLv3.
  */
 
-namespace Magic.Brix.Data
+namespace Magix.Brix.Data
 {
     public interface IPersistViewState
     {

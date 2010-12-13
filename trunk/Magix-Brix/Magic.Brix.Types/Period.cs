@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Magic.Brix.Types
+namespace Magix.Brix.Types
 {
     /**
      * Helper type for having a "period" which consists not only of a DateTime

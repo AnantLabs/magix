@@ -6,15 +6,15 @@
 
 using System.Net;
 using System.Net.Mail;
-using Magic.Brix.Types;
-using Magic.Brix.Loader;
-using Magic.Brix.Components.ActiveTypes;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
+using Magix.Brix.Components.ActiveTypes;
 using System.IO;
 using System.Net.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Magic.Brix.Components.ActiveControllers.Email
+namespace Magix.Brix.Components.ActiveControllers.Email
 {
     [ActiveController]
     public class SendEmails : ActiveController

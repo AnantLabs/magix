@@ -1,6 +1,6 @@
 ﻿using System;
-using Magic.UX.Widgets;
-using Magic.UX.Effects;
+using Magix.UX.Widgets;
+using Magix.UX.Effects;
 
 public partial class SlidingMenu : System.Web.UI.Page 
 {

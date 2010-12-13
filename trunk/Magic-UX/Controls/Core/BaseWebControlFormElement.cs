@@ -6,11 +6,11 @@
 
 using System;
 using System.ComponentModel;
-using Magic.UX.Builder;
-using Magic.UX.Helpers;
-using Magic.UX.Effects;
+using Magix.UX.Builder;
+using Magix.UX.Helpers;
+using Magix.UX.Effects;
 
-namespace Magic.UX.Widgets.Core
+namespace Magix.UX.Widgets.Core
 {
     /**
      * Abstract base class for widgets which are HTML FORM type of elements. Abstracts

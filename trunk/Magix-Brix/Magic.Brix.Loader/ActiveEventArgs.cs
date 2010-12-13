@@ -5,12 +5,12 @@
  */
 
 using System;
-using Magic.Brix.Types;
+using Magix.Brix.Types;
 
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     /**
-     * EventArgs class that will be passed into your Magic-Brix events - the methods you mark with
+     * EventArgs class that will be passed into your Magix-Brix events - the methods you mark with
      * the ActiveEvent Attribute. The Extra property will contain the "initializationObject" passed into
      * the RaiseEvent.
      */

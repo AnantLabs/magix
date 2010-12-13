@@ -1,5 +1,5 @@
 ﻿using System;
-using Magic.UX.Widgets;
+using Magix.UX.Widgets;
 using System.Drawing;
 
 public partial class AspectModalSample : System.Web.UI.Page 

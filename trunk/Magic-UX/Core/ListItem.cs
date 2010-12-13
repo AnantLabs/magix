@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public class ListItem
     {

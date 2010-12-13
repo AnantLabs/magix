@@ -7,12 +7,12 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Timer widget that will periodically call the server every n'th millisecond. You

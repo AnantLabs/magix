@@ -7,10 +7,10 @@
 using System;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Image Ajax Widget. Useful for showing images that needs Ajax 

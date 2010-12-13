@@ -8,7 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Magic.Brix.Types
+namespace Magix.Brix.Types
 {
     public delegate IEnumerable FunctorGetItems();
 

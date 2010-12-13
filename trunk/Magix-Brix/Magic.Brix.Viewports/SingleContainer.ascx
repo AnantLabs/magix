@@ -1,10 +1,10 @@
 ﻿<%@ Assembly 
-    Name="Magic.Brix.Viewports" %>
+    Name="Magix.Brix.Viewports" %>
 
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magic.Brix.Viewports.SingleContainer" %>
+    Inherits="Magix.Brix.Viewports.SingleContainer" %>
 
 <mux:Panel 
     runat="server" 

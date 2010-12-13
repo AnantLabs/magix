@@ -8,12 +8,12 @@ using System;
 using System.Web.UI;
 using System.ComponentModel;
 using System.Collections.Generic;
-using Magic.UX.Widgets;
-using Magic.UX.Effects;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Effects;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * Child control of a MenuItem. Will contain the SubMenuItems of a MenuItem.

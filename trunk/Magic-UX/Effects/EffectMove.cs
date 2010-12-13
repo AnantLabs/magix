@@ -6,10 +6,10 @@
 
 using System;
 using System.Web.UI;
-using Magic.UX.Widgets;
-using Magic.UX.Widgets.Core;
+using Magix.UX.Widgets;
+using Magix.UX.Widgets.Core;
 
-namespace Magic.UX.Effects
+namespace Magix.UX.Effects
 {
     public class EffectMove : Effect
     {

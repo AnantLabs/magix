@@ -8,11 +8,11 @@ using System;
 using System.Web;
 using System.Web.UI;
 using System.ComponentModel;
-using Magic.UX.Builder;
-using Magic.UX.Widgets.Core;
-using Magic.UX.Helpers;
+using Magix.UX.Builder;
+using Magix.UX.Widgets.Core;
+using Magix.UX.Helpers;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     /**
      * A CheckBox is a 'two state button' which you can turn 'on' and 'off'. Useful

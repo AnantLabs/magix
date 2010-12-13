@@ -5,9 +5,9 @@
  */
 
 using System;
-using Magic.UX.Effects;
+using Magix.UX.Effects;
 
-namespace Magic.UX.Widgets
+namespace Magix.UX.Widgets
 {
     public class InPlaceEdit : Panel
     {

@@ -10,9 +10,9 @@ using System.Web.UI;
 using System.Threading;
 using System.Reflection;
 using System.Collections.Generic;
-using Magic.Brix.Types;
+using Magix.Brix.Types;
 
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     /**
      * Class contains methods for raising events and other helpers, like for instance helpers
@@ -51,7 +51,7 @@ namespace Magic.Brix.Loader
         }
 
         /**
-         * Loads a control with the given name (class name) into the given position (name of Magic.UX.Dynamic in
+         * Loads a control with the given name (class name) into the given position (name of Magix.UX.Dynamic in
          * the Viewport currently used). Use this method to load Modules. Notice
          * that there exists an overload of this method which takes an object parameter that will be 
          * passed into the InitialLoading method when control is loaded.
@@ -62,7 +62,7 @@ namespace Magic.Brix.Loader
         }
 
         /**
-         * Loads a control with the given name (class name) into the given position (name of Magic.UX.Dynamic in
+         * Loads a control with the given name (class name) into the given position (name of Magix.UX.Dynamic in
          * the Viewport currently used). Use this method to load Modules. This overload of the method
          * will pass the "initializingArgument" parameter into the InitialLoading method when control 
          * is loaded.

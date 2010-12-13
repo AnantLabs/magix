@@ -7,9 +7,9 @@
 using System;
 using System.Web.UI;
 using System.Web;
-using Magic.Brix.Types;
+using Magix.Brix.Types;
 
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     public class ActiveController
     {

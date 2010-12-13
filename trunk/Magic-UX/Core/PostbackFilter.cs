@@ -7,7 +7,7 @@
 using System;
 using System.IO;
 
-namespace Magic.UX.Core
+namespace Magix.UX.Core
 {
     internal class PostbackFilter : Stream
     {

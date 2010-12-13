@@ -7,10 +7,10 @@
 using System;
 using System.Web;
 using System.Web.UI;
-using Magic.UX.Builder;
-using Magic.UX.Helpers;
+using Magix.UX.Builder;
+using Magix.UX.Helpers;
 
-namespace Magic.UX.Widgets.Core
+namespace Magix.UX.Widgets.Core
 {
     /**
      * Abstract base class for widgets being BaseWebControlFormElementText type

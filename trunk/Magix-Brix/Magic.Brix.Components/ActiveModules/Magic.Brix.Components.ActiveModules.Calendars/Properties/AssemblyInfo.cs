@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Magic.Brix.Components.ActiveModules.Calendars")]
+[assembly: AssemblyTitle("Magix.Brix.Components.ActiveModules.Calendars")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Magic.Brix.Components.ActiveModules.Calendars")]
+[assembly: AssemblyProduct("Magix.Brix.Components.ActiveModules.Calendars")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

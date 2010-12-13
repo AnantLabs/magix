@@ -6,11 +6,11 @@
 
 using System;
 using System.Web.UI;
-using Magic.UX.Widgets;
-using Magic.Brix.Types;
-using Magic.Brix.Loader;
+using Magix.UX.Widgets;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
 
-namespace Magic.Brix.Components.ActiveModules.Users
+namespace Magix.Brix.Components.ActiveModules.Users
 {
     [ActiveModule]
     public class Login : UserControl, IModule

@@ -191,7 +191,7 @@
   /*
   * Our Element class. 
   * Basically wraps a DOM element and 
-  * gives it some basic functionality needed by Magic UX
+  * gives it some basic functionality needed by Magix UX
   */
   MUX.Element = MUX.klass();
   MUX.Element._evtId = 1;

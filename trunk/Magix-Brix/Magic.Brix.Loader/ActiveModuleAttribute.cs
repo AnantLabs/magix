@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Magic.Brix.Loader
+namespace Magix.Brix.Loader
 {
     /**
      * Mark your Active Modules with this attribute. If you mark your Modules with this attribute

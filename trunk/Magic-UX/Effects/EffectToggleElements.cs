@@ -6,9 +6,9 @@
 
 using System.Web.UI;
 using System.Collections.Generic;
-using Magic.UX.Widgets;
+using Magix.UX.Widgets;
 
-namespace Magic.UX.Effects
+namespace Magix.UX.Effects
 {
     public class EffectToggleElements : Effect
     {

@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using System.Web;
 
-namespace Magic.UX
+namespace Magix.UX
 {
     public static class Selector
     {

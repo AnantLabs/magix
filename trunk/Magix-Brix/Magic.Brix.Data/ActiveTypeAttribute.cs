@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Magic.Brix.Data
+namespace Magix.Brix.Data
 {
     /**
      * Mark your well known types or entity types with this attribute to make them serializable.

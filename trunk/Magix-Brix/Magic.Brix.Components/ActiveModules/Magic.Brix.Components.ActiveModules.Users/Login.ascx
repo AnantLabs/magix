@@ -1,10 +1,10 @@
 ﻿<%@ Assembly 
-    Name="Magic.Brix.Components.ActiveModules.Users" %>
+    Name="Magix.Brix.Components.ActiveModules.Users" %>
 
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magic.Brix.Components.ActiveModules.Users.Login" %>
+    Inherits="Magix.Brix.Components.ActiveModules.Users.Login" %>
 
 <mux:Panel 
     runat="server" 

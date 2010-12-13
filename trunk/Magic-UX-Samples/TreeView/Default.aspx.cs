@@ -1,5 +1,5 @@
 ﻿using System;
-using Magic.UX.Widgets;
+using Magix.UX.Widgets;
 
 public partial class TreeViewSample : System.Web.UI.Page 
 {

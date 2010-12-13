@@ -7,7 +7,7 @@
 using System.Web.UI;
 using System.Collections.Generic;
 
-namespace Magic.UX.Effects
+namespace Magix.UX.Effects
 {
     public class EffectSlide : Effect
     {

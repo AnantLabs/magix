@@ -7,7 +7,7 @@
 using System;
 using System.Web.UI;
 
-namespace Magic.UX.Effects
+namespace Magix.UX.Effects
 {
     public class EffectTimeout : Effect
     {
