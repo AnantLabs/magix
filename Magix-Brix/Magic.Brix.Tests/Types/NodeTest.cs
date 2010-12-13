@@ -1,0 +1,83 @@
+﻿/*
+ * MagicBrix - A Modular-based Framework for building Web Applications 
+ * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
+ * MagicBrix is licensed as GPLv3.
+ */
+
+using NUnit.Framework;
+using Magic.Brix.Types;
+
+namespace Magic.Brix.Tests.Types
+{
+    [TestFixture]
+    public class NodeTest
+    {
+        [Test]
+        public void SimpleContruction()
+        {
+            Node n = new Node("Customers");
+            n["Customer1"].Value = "id1";
+            n["Customer1"]["Name"].Value = "Thomas Hansen";
+            n["Customer1"]["Name"]["First"].Value = "Thomas";
+            n["Customer1"]["Name"]["Last"].Value = "Hansen";
+            n["Customer2"].Value = "id2";
+            n["Customer2"]["Name"].Value = "Kariem Ali";
+            n["Customer2"]["Name"]["First"].Value = "Kariem";
+            n["Customer2"]["Name"]["Last"].Value = "Ali";
+
+            Assert.AreEqual("Customers", n.Name);
+            Assert.AreEqual(null, n.Value);
+            Assert.AreEqual("", n.DNA);
+
+            Assert.AreEqual("id1", n["Customer1"].Value);
+            Assert.AreEqual("id2", n["Customer2"].Value);
+
+            Assert.AreEqual("000", n["Customer1"].DNA);
+            Assert.AreEqual("001", n["Customer2"].DNA);
+
+            Assert.AreEqual("Thomas Hansen", n["Customer1"]["Name"].Value);
+            Assert.AreEqual("Kariem Ali", n["Customer2"]["Name"].Value);
+
+            Assert.AreEqual("000-000", n["Customer1"]["Name"].DNA);
+            Assert.AreEqual("001-000", n["Customer2"]["Name"].DNA);
+
+            Assert.AreEqual("Thomas", n["Customer1"]["Name"]["First"].Value);
+            Assert.AreEqual("Kariem", n["Customer2"]["Name"]["First"].Value);
+
+            Assert.AreEqual("Hansen", n["Customer1"]["Name"]["Last"].Value);
+            Assert.AreEqual("Ali", n["Customer2"]["Name"]["Last"].Value);
+
+            Assert.AreEqual("000-000-000", n["Customer1"]["Name"]["First"].DNA);
+            Assert.AreEqual("001-000-000", n["Customer2"]["Name"]["First"].DNA);
+
+            Assert.AreEqual("000-000-001", n["Customer1"]["Name"]["Last"].DNA);
+            Assert.AreEqual("001-000-001", n["Customer2"]["Name"]["Last"].DNA);
+
+            // Verifying that inserted node now gets correct DNA
+            Assert.AreEqual("001-000-002", n["Customer2"]["Name"]["LastINTENTIONAL_SPELLING_ERROR"].DNA);
+
+            // Verifying we can reach our node from a given dna...
+            Node kariemLastName = n.Find("001-000-001");
+            Assert.AreEqual("Ali", kariemLastName.Value);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
