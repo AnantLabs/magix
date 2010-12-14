@@ -53,15 +53,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Magic-UX\Magic.UX.csproj">
+    <ProjectReference Include="..\..\..\Magix-UX\Magix.UX.csproj">
       <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
       <Name>Magic.UX</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Magix-Brix\Magic.Brix.Loader\Magic.Brix.Loader.csproj">
+    <ProjectReference Include="..\..\..\Magix-Brix\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
       <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
       <Name>Magic.Brix.Loader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Magix-Brix\Magic.Brix.Types\Magic.Brix.Types.csproj">
+    <ProjectReference Include="..\..\..\Magix-Brix\Magix.Brix.Types\Magix.Brix.Types.csproj">
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
       <Name>Magic.Brix.Types</Name>
     </ProjectReference>
