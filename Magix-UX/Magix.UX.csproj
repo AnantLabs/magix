@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{13A3391A-39FC-40BD-8EA0-0353090675C7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Magic.UX</RootNamespace>
+    <AssemblyName>Magic.UX</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aspects\AspectBase.cs" />
+    <Compile Include="Aspects\AspectDraggable.cs" />
+    <Compile Include="Aspects\AspectModal.cs" />
+    <Compile Include="Aspects\AspectAjaxWait.cs" />
+    <Compile Include="Aspects\AspectFixated.cs" />
+    <Compile Include="Aspects\AspectScreenSaver.cs" />
+    <Compile Include="Controls\Core\CompositeControl.cs" />
+    <Compile Include="Controls\Core\CompositeViewCollectionControl.cs" />
+    <Compile Include="Controls\Core\BaseWebControlFormElementText.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\Core\ViewCollectionControl.cs" />
+    <Compile Include="Controls\Extended\Accordion\Accordion.cs" />
+    <Compile Include="Controls\Extended\Accordion\AccordionView.cs" />
+    <Compile Include="Controls\Extended\AjaxWait\GlobalUpdater.cs" />
+    <Compile Include="Controls\Extended\Calendar\Calendar.cs" />
+    <Compile Include="Controls\Extended\Carousel\Carousel.cs" />
+    <Compile Include="Controls\Extended\InPlaceTextAreaEdit\InPlaceTextAreaEdit.cs" />
+    <Compile Include="Controls\Extended\InPlaceEdit\InPlaceEdit.cs" />
+    <Compile Include="Controls\Extended\Menu\Menu.cs" />
+    <Compile Include="Controls\Extended\Menu\MenuItem.cs" />
+    <Compile Include="Controls\Extended\Menu\SubMenu.cs" />
+    <Compile Include="Controls\Extended\MultiPanel\TabStrip.cs" />
+    <Compile Include="Controls\Extended\MultiPanel\TabButton.cs" />
+    <Compile Include="Controls\Extended\MultiPanel\MultiPanel.cs" />
+    <Compile Include="Controls\Extended\MultiPanel\MultiPanelView.cs" />
+    <Compile Include="Controls\Extended\RatingControl\RatingControl.cs" />
+    <Compile Include="Controls\Extended\SlidingMenu\SlidingMenu.cs" />
+    <Compile Include="Controls\Extended\SlidingMenu\SlidingMenuItem.cs" />
+    <Compile Include="Controls\Extended\SlidingMenu\SlidingMenuLevel.cs" />
+    <Compile Include="Controls\Extended\Timer\Timer.cs" />
+    <Compile Include="Controls\Extended\TreeView\TreeItem.cs" />
+    <Compile Include="Controls\Extended\TreeView\TreeView.cs" />
+    <Compile Include="Controls\Extended\Window\Window.cs" />
+    <Compile Include="Core\Selector\Selector.cs" />
+    <Compile Include="Effects\EffectScrollBrowser.cs" />
+    <Compile Include="Effects\EffectGeneric.cs" />
+    <Compile Include="Effects\Effect.cs" />
+    <Compile Include="Effects\EffectBorder.cs" />
+    <Compile Include="Effects\EffectCssClass.cs" />
+    <Compile Include="Effects\EffectFadeIn.cs" />
+    <Compile Include="Effects\EffectFadeOut.cs" />
+    <Compile Include="Effects\EffectFocusAndSelect.cs" />
+    <Compile Include="Effects\EffectHighlight.cs" />
+    <Compile Include="Effects\EffectMove.cs" />
+    <Compile Include="Effects\EffectRollDown.cs" />
+    <Compile Include="Effects\EffectRollUp.cs" />
+    <Compile Include="Effects\EffectSize.cs" />
+    <Compile Include="Effects\EffectSlide.cs" />
+    <Compile Include="Effects\EffectTimeout.cs" />
+    <Compile Include="Effects\EffectToggle.cs" />
+    <Compile Include="Effects\EffectToggleElements.cs" />
+    <Compile Include="Core\CallbackFilter.cs" />
+    <Compile Include="Core\PostbackFilter.cs" />
+    <Compile Include="Core\AjaxManager.cs" />
+    <Compile Include="Core\Builder\DeterministicExecutor.cs" />
+    <Compile Include="Core\Builder\Element.cs" />
+    <Compile Include="Core\Builder\HtmlBuilder.cs" />
+    <Compile Include="Core\ListItem.cs" />
+    <Compile Include="Core\ListItemCollection.cs" />
+    <Compile Include="Core\StyleCollection.cs" />
+    <Compile Include="Core\StyleCollectionStyles.cs" />
+    <Compile Include="Core\WebMethod.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controls\Basic\Button.cs" />
+    <Compile Include="Controls\Basic\CheckBox.cs" />
+    <Compile Include="Controls\Extended\DynamicPanel\DynamicPanel.cs" />
+    <Compile Include="Controls\Basic\HiddenField.cs" />
+    <Compile Include="Controls\Basic\HyperLink.cs" />
+    <Compile Include="Controls\Basic\Image.cs" />
+    <Compile Include="Controls\Basic\ImageButton.cs" />
+    <Compile Include="Controls\Basic\Label.cs" />
+    <Compile Include="Controls\Basic\LinkButton.cs" />
+    <Compile Include="Controls\Basic\Panel.cs" />
+    <Compile Include="Controls\Core\BaseControl.cs" />
+    <Compile Include="Controls\Basic\RadioButton.cs" />
+    <Compile Include="Controls\Core\BaseWebControlFormElement.cs" />
+    <Compile Include="Controls\Core\BaseWebControl.cs" />
+    <Compile Include="Controls\Core\BaseWebControlFormElementInputText.cs" />
+    <Compile Include="Controls\Basic\SelectList.cs" />
+    <Compile Include="Controls\Basic\TextArea.cs" />
+    <Compile Include="Controls\Basic\TextBox.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Js\Aspects.js" />
+    <EmbeddedResource Include="Js\Control.js" />
+    <EmbeddedResource Include="Js\Effects.js" />
+    <EmbeddedResource Include="Js\Magic.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Js\AjaxWait.js" />
+    <EmbeddedResource Include="Js\Timer.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Js\Calendar.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Js\Carousel.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

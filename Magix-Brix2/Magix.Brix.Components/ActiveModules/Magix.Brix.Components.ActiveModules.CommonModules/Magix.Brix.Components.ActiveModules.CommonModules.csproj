@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{579C99C8-9C38-4138-BB1E-8253CFB66435}</ProjectGuid>
+    <ProjectGuid>{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HelloWorldController</RootNamespace>
-    <AssemblyName>HelloWorldController</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveModules.CommonModules</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveModules.CommonModules</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,26 +37,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HelloWorldController.cs" />
+    <Compile Include="ToolTip.ascx.cs">
+      <DependentUpon>ToolTip.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MessageBox.ascx.cs">
+      <DependentUpon>MessageBox.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Magix-Brix\Magix.Brix.Data\Magix.Brix.Data.csproj">
-      <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
-      <Name>Magic.Brix.Data</Name>
+    <EmbeddedResource Include="MessageBox.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">
+      <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
+      <Name>Magic.UX</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Magix-Brix\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
+    <ProjectReference Include="..\..\..\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
       <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
       <Name>Magic.Brix.Loader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Magix-Brix\Magix.Brix.Types\Magix.Brix.Types.csproj">
+    <ProjectReference Include="..\..\..\Magix.Brix.Types\Magix.Brix.Types.csproj">
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
       <Name>Magic.Brix.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ActiveTypes\HelloWorldTypes\HelloWorldTypes.csproj">
-      <Project>{376BCF8E-C189-4030-B28E-0FA3F604C077}</Project>
-      <Name>HelloWorldTypes</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ToolTip.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
