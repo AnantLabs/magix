@@ -8,8 +8,8 @@
     <ProjectGuid>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Components.ActiveTypes.Settings</RootNamespace>
-    <AssemblyName>Magic.Brix.Components.ActiveTypes.Settings</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveTypes.Settings</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveTypes.Settings</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>

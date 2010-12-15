@@ -8,8 +8,8 @@
     <ProjectGuid>{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Components.ActiveModules.Calendars</RootNamespace>
-    <AssemblyName>Magic.Brix.Components.ActiveModules.Calendars</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveModules.Calendars</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveModules.Calendars</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

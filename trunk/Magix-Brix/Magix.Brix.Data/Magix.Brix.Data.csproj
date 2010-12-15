@@ -8,8 +8,8 @@
     <ProjectGuid>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Data</RootNamespace>
-    <AssemblyName>Magic.Brix.Data</AssemblyName>
+    <RootNamespace>Magix.Brix.Data</RootNamespace>
+    <AssemblyName>Magix.Brix.Data</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

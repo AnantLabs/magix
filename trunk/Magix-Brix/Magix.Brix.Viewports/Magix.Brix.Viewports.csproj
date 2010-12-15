@@ -8,8 +8,8 @@
     <ProjectGuid>{73074A14-F8BE-4831-B02A-A76F8EC126DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Viewports</RootNamespace>
-    <AssemblyName>Magic.Brix.Viewports</AssemblyName>
+    <RootNamespace>Magix.Brix.Viewports</RootNamespace>
+    <AssemblyName>Magix.Brix.Viewports</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>

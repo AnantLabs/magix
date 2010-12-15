@@ -8,8 +8,8 @@
     <ProjectGuid>{3E847F44-BC2C-4C42-B612-2C9934E8BB38}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Tests</RootNamespace>
-    <AssemblyName>Magic.Brix.Tests</AssemblyName>
+    <RootNamespace>Magix.Brix.Tests</RootNamespace>
+    <AssemblyName>Magix.Brix.Tests</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
