@@ -8,8 +8,8 @@
     <ProjectGuid>{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Components.ActiveModules.Settings</RootNamespace>
-    <AssemblyName>Magic.Brix.Components.ActiveModules.Settings</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveModules.Settings</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveModules.Settings</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>

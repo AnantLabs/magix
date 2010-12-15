@@ -8,8 +8,8 @@
     <ProjectGuid>{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Components.ActiveModules.Users</RootNamespace>
-    <AssemblyName>Magic.Brix.Components.ActiveModules.Users</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveModules.Users</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveModules.Users</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

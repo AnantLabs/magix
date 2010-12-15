@@ -8,8 +8,8 @@
     <ProjectGuid>{853598D1-F9CF-48C2-90DD-354480F34F91}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Data.Adapters.MSSQL</RootNamespace>
-    <AssemblyName>Magic.Brix.Data.Adapters.MSSQL</AssemblyName>
+    <RootNamespace>Magix.Brix.Data.Adapters.MSSQL</RootNamespace>
+    <AssemblyName>Magix.Brix.Data.Adapters.MSSQL</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

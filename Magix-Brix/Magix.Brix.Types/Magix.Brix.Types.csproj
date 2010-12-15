@@ -8,8 +8,8 @@
     <ProjectGuid>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Types</RootNamespace>
-    <AssemblyName>Magic.Brix.Types</AssemblyName>
+    <RootNamespace>Magix.Brix.Types</RootNamespace>
+    <AssemblyName>Magix.Brix.Types</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

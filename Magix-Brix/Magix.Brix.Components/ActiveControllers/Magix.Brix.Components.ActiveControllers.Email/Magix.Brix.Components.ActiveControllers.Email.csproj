@@ -8,8 +8,8 @@
     <ProjectGuid>{3807790C-726E-4870-89DB-D25D80223C8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Components.ActiveControllers.Email</RootNamespace>
-    <AssemblyName>Magic.Brix.Components.ActiveControllers.Email</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveControllers.Email</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveControllers.Email</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

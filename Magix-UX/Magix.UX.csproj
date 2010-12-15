@@ -8,8 +8,8 @@
     <ProjectGuid>{13A3391A-39FC-40BD-8EA0-0353090675C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.UX</RootNamespace>
-    <AssemblyName>Magic.UX</AssemblyName>
+    <RootNamespace>Magix.UX</RootNamespace>
+    <AssemblyName>Magix.UX</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

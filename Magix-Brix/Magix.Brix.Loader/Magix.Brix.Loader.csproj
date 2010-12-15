@@ -8,8 +8,8 @@
     <ProjectGuid>{0423B777-2C18-4B0F-B87E-0AD059529167}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Loader</RootNamespace>
-    <AssemblyName>Magic.Brix.Loader</AssemblyName>
+    <RootNamespace>Magix.Brix.Loader</RootNamespace>
+    <AssemblyName>Magix.Brix.Loader</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>

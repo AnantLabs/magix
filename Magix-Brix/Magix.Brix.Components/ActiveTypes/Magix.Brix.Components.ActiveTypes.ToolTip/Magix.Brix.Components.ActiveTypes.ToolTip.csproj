@@ -8,8 +8,8 @@
     <ProjectGuid>{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magic.Brix.Components.ActiveTypes.ToolTip</RootNamespace>
-    <AssemblyName>Magic.Brix.Components.ActiveTypes.ToolTip</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveTypes.ToolTip</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveTypes.ToolTip</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
