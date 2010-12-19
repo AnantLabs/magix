@@ -13,17 +13,13 @@ namespace Magix.Brix.Types
 {
     /**
      * Helper class to pass around data in a "JSON kind of way" without having
-     * to convert to JSON strings. Create a nw instance, and just start appending
+     * to convert to JSON strings. Create a new instance, and just start appending
      * items to it like this;
      * <pre>
      *    Node n = new Node();
      *    n["Customer"]["Name"] = "John Doe";
      *    n["Customer"]["Adr"] = "NY";
      * </pre>
-     * In addition this class uses a concept called "Genetic Trees" which
-     * can be seen at http://geocities.com/polterguy1000 - Use the DNA property
-     * to retrieve a string representing a DNA code. Later use that DNA code to
-     * retrieve the specific Node by using the "Find" method.
      */
     [Serializable]
     public class Node : IList<Node>
@@ -33,9 +29,6 @@ namespace Magix.Brix.Types
 
         // Parent node
         private Node _parent;
-
-        // DNA code size when formatted to string
-        private readonly int _dnaSize;
 
         private string _name;
         private object _value;
@@ -60,6 +53,13 @@ namespace Magix.Brix.Types
         public Node(string name, object value)
             : this(name, value, null)
         { }
+
+        private Node(string name, object value, Node parent)
+        {
+            _name = name;
+            _value = value;
+            _parent = parent;
+        }
 
         public static Node FromJSONString(string json)
         {
@@ -163,28 +163,6 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Creates a new node with the given name and the given value. In addition
-         * it sets the "DNA resolution" to the given size. The DNA resolution
-         * basically defines how wide (ZERO paddings) the DNA code will be
-         * represented by when retrieved. This property is inherited to child nodes
-         * such that always the outer most rooted value will be used and override
-         * and child node's DNA sizes.
-         */
-        public Node(string name, object value, int dnaSize)
-            : this(name, value, null)
-        {
-            _dnaSize = dnaSize;
-        }
-
-        private Node(string name, object value, Node parent)
-        {
-            _name = name;
-            _value = value;
-            _parent = parent;
-            _dnaSize = 3;
-        }
-
-        /**
          * Returns the Parent node of the current node in the hierarchy
          */
         public Node Parent
@@ -228,56 +206,6 @@ namespace Magix.Brix.Types
             if (_value == null)
                 return defaultValue;
             return (T)_value;
-        }
-
-        /**
-         * Returns the DNA code for the object, can later be used to retrieve 
-         * the specific object owning the DNA code by using the "Find" method.
-         */
-        public string DNA
-        {
-            get
-            {
-                Node index = this;
-                List<int> retVal = new List<int>();
-                int dnaSize = 0;
-                while (index != null)
-                {
-                    if (index._parent == null)
-                    {
-                        dnaSize = index._dnaSize;
-                        break;
-                    }
-                    retVal.Insert(0, index._parent.IndexOf(index));
-                    index = index._parent;
-                }
-                string actualRetVal = "";
-                foreach (int idx in retVal)
-                {
-                    if (actualRetVal.Length != 0)
-                    {
-                        actualRetVal += "-";
-                    }
-                    actualRetVal += idx.ToString().PadLeft(dnaSize, '0');
-                }
-                return actualRetVal;
-            }
-        }
-
-        /**
-         * If given a DNA code previously retrieved from the DNA property will
-         * return that same node.
-         */
-        public Node Find(string dna)
-        {
-            string[] dnaEntities = dna.Split('-');
-            int idxChildNo = int.Parse(dnaEntities[0]);
-            if (idxChildNo >= Count)
-                return null;
-            Node child = this[idxChildNo];
-            if (dna.IndexOf("-") == -1)
-                return child;
-            return child.Find(dna.Substring(dna.IndexOf('-') + 1));
         }
 
         /**
@@ -390,9 +318,6 @@ namespace Magix.Brix.Types
             }
         }
 
-        /*
-         * IList members
-         */
         public int IndexOf(Node item)
         {
             return _children.IndexOf(item);

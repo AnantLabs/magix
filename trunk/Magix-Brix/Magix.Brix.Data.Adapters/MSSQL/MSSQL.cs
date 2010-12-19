@@ -116,7 +116,7 @@ namespace Magix.Brix.Data.Adapters.MSSQL
         protected override object SelectObjectByID(Type type, int id)
         {
             // Must "de-reference" PluginLoader first, to make sure we've loaded our types ...
-            object x = PluginLoader.Instance.Types;
+            object x = PluginLoader.Instance;
 
             // Checking to see if object exists...
             if (!ObjectExists(id))
