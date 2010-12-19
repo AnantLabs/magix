@@ -27,6 +27,10 @@ namespace Magix.Brix.Data.Adapters.MSSQL
         private SqlConnection _connection;
         private static bool _hasInitialised;
         private Dictionary<string, Type> _cacheOfTypes;
+        private static Dictionary<string, ConstructorInfo> _ctors = new Dictionary<string, ConstructorInfo>();
+        private static Dictionary<string, MethodInfo> _setIdMethods = new Dictionary<string, MethodInfo>();
+        private static Dictionary<string, List<Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>>>> _props = new Dictionary<string, List<Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>>>>();
+        private static Dictionary<string, MethodInfo> _setMethods = new Dictionary<string, MethodInfo>();
 
         public override void Open(string connectionString)
         {
@@ -71,7 +75,6 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             return (int)cmdExists.ExecuteScalar() != 0;
         }
 
-        private static Dictionary<string, ConstructorInfo> _ctors = new Dictionary<string, ConstructorInfo>();
         private object CreateObject(Type type)
         {
             if (!_ctors.ContainsKey(type.FullName))
@@ -97,7 +100,6 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             return _ctors[type.FullName].Invoke(null);
         }
 
-        private static Dictionary<string, MethodInfo> _setIdMethods = new Dictionary<string, MethodInfo>();
         private void SetObjectID(object retVal, Type type, int id)
         {
             if (!_setIdMethods.ContainsKey(type.FullName))
@@ -136,7 +138,6 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             return retVal;
         }
 
-        private static Dictionary<string, List<Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>>>> _props = new Dictionary<string, List<Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>>>>();
         private void PopulateComposition(Type type, int id, object retVal)
         {
             if (!_props.ContainsKey(type.FullName))
@@ -253,7 +254,6 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             }
         }
 
-        private static Dictionary<string, MethodInfo> _setMethods = new Dictionary<string, MethodInfo>();
         private void PopulateFields(Type type, int id, object retVal)
         {
             // Looping through and getting all properties, which are NOT lists types ...

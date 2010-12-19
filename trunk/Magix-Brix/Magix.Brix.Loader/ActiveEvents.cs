@@ -30,9 +30,9 @@ namespace Magix.Brix.Loader
         { }
 
         /**
-         * This is a "Page Life Cycle Singleton" - which means it will be created
-         * upon the start of the request (or at first de-reference) and live until
-         * the end of the page life cycle.
+         * This is our Singleton to access our only ActiveEvents object. This is
+         * the property you'd use to gain access to the only existing ActiveEvents
+         * object in your application pool.
          */
         public static ActiveEvents Instance
         {
@@ -99,7 +99,59 @@ namespace Magix.Brix.Loader
             RaiseActiveEvent(sender, name, null);
         }
 
-        // TODO: Refactor. WAY too long...!
+        private List<Tuple<MethodInfo, Tuple<object, bool>>> SlurpAllEventHandlers(string eventName)
+        {
+            List<Tuple<MethodInfo, Tuple<object, bool>>> retVal = 
+                new List<Tuple<MethodInfo, Tuple<object, bool>>>();
+
+            // Adding static methods (if any)
+            if (_methods.ContainsKey(eventName))
+            {
+                foreach (Tuple<MethodInfo, Tuple<object, bool>> idx in _methods[eventName])
+                {
+                    retVal.Add(idx);
+                }
+            }
+
+            // Adding instance methods (if any)
+            if (InstanceMethod.ContainsKey(eventName))
+            {
+                foreach (Tuple<MethodInfo, Tuple<object, bool>> idx in InstanceMethod[eventName])
+                {
+                    retVal.Add(idx);
+                }
+            }
+            return retVal;
+        }
+
+        private void ExecuteMethod(
+            MethodInfo method, 
+            object context, 
+            bool async, 
+            object sender, 
+            ActiveEventArgs e)
+        {
+            if (async)
+            {
+                ThreadPool.QueueUserWorkItem(
+                    delegate
+                    {
+                        try
+                        {
+                            method.Invoke(context, new[] { context, e });
+                        }
+                        catch (Exception)
+                        {
+                            // TODO: I have no idea what to do here...
+                        }
+                    });
+            }
+            else
+            {
+                method.Invoke(context, new[] { sender, e });
+            }
+        }
+
         /**
          * Raises an event. This will dispatch control to all the ActiveEvent that are marked with
          * the Name attribute matching the name parameter of this method call.
@@ -118,86 +170,28 @@ namespace Magix.Brix.Loader
                 // this event before we start calling them one by one. But every time in
                 // between calling the next one, we must verify that it still exists within
                 // the collection...
-                List<Tuple<MethodInfo, Tuple<object, bool>>> tmp = 
-                    new List<Tuple<MethodInfo, Tuple<object, bool>>>();
-
-                // Adding static method (if any)
-                if (_methods.ContainsKey(name))
-                {
-                    foreach (Tuple<MethodInfo, Tuple<object, bool>> idx in _methods[name])
-                    {
-                        tmp.Add(idx);
-                    }
-                }
-
-                // Adding instance method (if any)
-                if (InstanceMethod.ContainsKey(name))
-                {
-                    foreach (Tuple<MethodInfo, Tuple<object, bool>> idx in InstanceMethod[name])
-                    {
-                        tmp.Add(idx);
-                    }
-                }
+                List<Tuple<MethodInfo, Tuple<object, bool>>> tmp = SlurpAllEventHandlers(name);
 
                 // Looping through all methods...
                 foreach (Tuple<MethodInfo, Tuple<object, bool>> idx in tmp)
                 {
-                    // Since events might load and clear controls we need to check if the event handler
-                    // still exists after *every* event handler we dispatch control to...
-                    List<Tuple<MethodInfo, Tuple<object, bool>>> recheck = new List<Tuple<MethodInfo, Tuple<object, bool>>>();
-
-                    // Adding static method (if any)
-                    if (_methods.ContainsKey(name))
-                    {
-                        foreach (Tuple<MethodInfo, Tuple<object, bool>> idx2 in _methods[name])
-                        {
-                            recheck.Add(idx);
-                        }
-                    }
-
-                    // Adding instance method (if any)
-                    if (InstanceMethod.ContainsKey(name))
-                    {
-                        foreach (Tuple<MethodInfo, Tuple<object, bool>> idx2 in InstanceMethod[name])
-                        {
-                            recheck.Add(idx);
-                        }
-                    }
+                    // Since events might load and clear controls we need to check if the event 
+                    // handler still exists after *every* event handler we dispatch control to...
+                    List<Tuple<MethodInfo, Tuple<object, bool>>> recheck = SlurpAllEventHandlers(name);
 
                     foreach (Tuple<MethodInfo, Tuple<object, bool>> idx2 in recheck)
                     {
                         if (idx.Equals(idx2))
                         {
-                            MethodInfo method = idx.Left;
-                            object context = idx.Right.Left;
-                            bool async = idx.Right.Right;
-                            if (async)
-                            {
-                                ThreadPool.QueueUserWorkItem(
-                                    delegate
-                                    {
-                                        try
-                                        {
-                                            method.Invoke(context, new[] { sender, e });
-                                        }
-                                        catch(Exception err)
-                                        {
-                                            // TODO: I have no idea what to do here...
-                                        }
-                                    });
-                            }
-                            else
-                            {
-                                method.Invoke(context, new[] { sender, e });
-                            }
-                            break; // Then we break out of the inner loop giving control back to the outer
+                            ExecuteMethod(idx.Left, idx.Right.Left, idx.Right.Right, sender, e);
+                            break;
                         }
                     }
                 }
             }
         }
 
-        // TODO: Remove or make internal somehow...?
+        // TODO: Try to remove or make internal somehow...?
         public void RemoveListener(object context)
         {
             // Removing all event handler with the given context (object instance)
@@ -216,7 +210,7 @@ namespace Magix.Brix.Loader
                 }
             }
 
-            // Remving all list of event handlers that no longer have any events...
+            // Removing all list of event handlers that no longer have any events...
             List<string> toBeRemoved = new List<string>();
             foreach(string idx in InstanceMethod.Keys)
             {
