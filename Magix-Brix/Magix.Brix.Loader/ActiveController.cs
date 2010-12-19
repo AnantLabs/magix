@@ -11,21 +11,66 @@ using Magix.Brix.Types;
 
 namespace Magix.Brix.Loader
 {
-    public class ActiveController
+    /**
+     * Helper class for simplifying some of the common tasks you'd normally
+     * want to use from your controllers, such as Loading Modules etc.
+     */
+    public abstract class ActiveController
     {
-        protected void LoadModule(string name, string container)
+        /**
+         * Loads the given module and puts it into the given container.
+         * Will create a Node object, pass it into the InitialLoading, and return
+         * it back to the caller.
+         */
+        protected Node LoadModule(string name, string container)
         {
-            LoadModule(name, container, null);
+            Node node = new Node();
+            LoadModule(name, container, node);
+            return node;
         }
 
+        /**
+         * Shorthand method for Loading a specific Module and putting it into
+         * the given container.
+         */
         protected void LoadModule(string name, string container, Node node)
         {
             if (string.IsNullOrEmpty(container))
                 throw new ApplicationException("Cannot load a Module without specifying a container");
+            if (string.IsNullOrEmpty(name))
+                throw new ApplicationException("You have to specify which Module you want to load");
             ActiveEvents.Instance.RaiseLoadControl(name, container, node);
         }
 
-        protected Page MainPage
+        /**
+         * Shorthand for raising events. Will return a node, initially created empty, 
+         * but passed onto the Event Handler(s)
+         */
+        protected Node RaiseEvent(string eventName)
+        {
+            Node node = new Node();
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                eventName,
+                node);
+            return node;
+        }
+
+        /**
+         * Shorthand for raising events.
+         */
+        protected void RaiseEvent(string eventName, Node node)
+        {
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                eventName,
+                node);
+        }
+
+        /**
+         * Shorthand for getting access to our "Page" object.
+         */
+        protected Page Page
         {
             get
             {

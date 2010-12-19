@@ -14,15 +14,15 @@ using HelloWorldTypes;
 namespace HelloWorldController
 {
     [ActiveController]
-    public class HelloWorldController
+    public class HelloWorldController : ActiveController
     {
         [ActiveEvent(Name = "Page_Init_InitialLoading")]
         private void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
         {
-            (HttpContext.Current.Handler as Page).Title = "Magix-Brix Hello World";
+            Page.Title = "Magix-Brix Hello World";
             Node n = new Node();
             n["Message"].Value = "I am Marvin, I am your guide through the Universe...";
-            ActiveEvents.Instance.RaiseLoadControl(
+            LoadModule(
                 "HelloWorldModules.Hello",
                 "dyn",
                 n);
@@ -39,7 +39,7 @@ namespace HelloWorldController
             e.Params["Value"].Value = c.Value;
             if ((new Random()).Next(5) == 0)
             {
-                ActiveEvents.Instance.RaiseLoadControl(
+                LoadModule(
                     "HelloWorldModules.Oops",
                     "dyn2");
             }

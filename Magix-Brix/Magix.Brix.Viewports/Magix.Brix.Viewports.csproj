@@ -69,10 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SingleContainer.ascx">
+      <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Admin.ascx">
+      <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
