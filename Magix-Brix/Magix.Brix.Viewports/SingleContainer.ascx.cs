@@ -114,7 +114,7 @@ namespace Magix.Brix.Viewports
         protected void dynamic_LoadControls(object sender, DynamicPanel.ReloadEventArgs e)
         {
             DynamicPanel dynamic = sender as DynamicPanel;
-            Control ctrl = PluginLoader.Instance.LoadControl(e.Key);
+            Control ctrl = PluginLoader.Instance.LoadActiveModule(e.Key);
             if (e.FirstReload)
             {
                 ctrl.Init +=

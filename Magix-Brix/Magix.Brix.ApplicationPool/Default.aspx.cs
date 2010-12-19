@@ -41,7 +41,7 @@ namespace Magix.Brix.ApplicationPool
         private void InitializeViewport()
         {
             string defaultControl = ConfigurationManager.AppSettings["PortalViewDriver"];
-            Control ctrl = PluginLoader.Instance.LoadControl(defaultControl);
+            Control ctrl = PluginLoader.Instance.LoadActiveModule(defaultControl);
             Form.Controls.Add(ctrl);
         }
 

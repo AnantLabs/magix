@@ -12,17 +12,27 @@ namespace Magix.Brix.Types
 {
     public delegate IEnumerable FunctorGetItems();
 
+    /**
+     * Helper class for Lazy Loading of Child ActiveTypes objects. Basically
+     * just a list generic type, that'll not load objects before needed ...
+     */
     public class LazyList<T> : IList<T>, IList
     {
         private List<T> _list;
         private readonly FunctorGetItems _functor;
         private bool _listRetrieved;
 
+        /**
+         * CTOR taking a delegate to use when items should be fetched
+         */
         public LazyList(FunctorGetItems functor)
         {
             _functor = functor;
         }
 
+        /**
+         * Default empty CTOR
+         */
         public LazyList()
         { }
 
@@ -40,17 +50,27 @@ namespace Magix.Brix.Types
             }
         }
 
+        /**
+         * Returns true if list is already populated
+         */
         public bool ListRetrieved
         {
             get { return _listRetrieved; }
         }
 
+        /**
+         * Sorts given a Comparison delegate
+         */
         public void Sort(Comparison<T> functor)
         {
             FillList();
             _list.Sort(functor);
         }
 
+        /**
+         * Traverses the list and returns true if the item you're looking for exists,
+         * as in the predicate returns true
+         */
         public bool Exists(Predicate<T> functor)
         {
             FillList();
@@ -62,6 +82,9 @@ namespace Magix.Brix.Types
             return false;
         }
 
+        /**
+         * Traverses the list and returns the first item matching the predicate
+         */
         public T Find(Predicate<T> functor)
         {
             FillList();
@@ -73,12 +96,18 @@ namespace Magix.Brix.Types
             return default(T);
         }
 
+        /**
+         * Adds a range of new items to the list collection
+         */
         public void AddRange(IEnumerable<T> collection)
         {
             FillList();
             _list.AddRange(collection);
         }
 
+        /**
+         * Removes all items matching the given predicate
+         */
         public void RemoveAll(Predicate<T> functor)
         {
             List<T> toBeRemoved = new List<T>();
@@ -95,24 +124,36 @@ namespace Magix.Brix.Types
             }
         }
 
+        /**
+         * Returns the index of the given item, if it exists in the list
+         */
         public int IndexOf(T item)
         {
             FillList();
             return _list.IndexOf(item);
         }
 
+        /**
+         * Inserts a new item at the given position
+         */
         public void Insert(int index, T item)
         {
             FillList();
             _list.Insert(index, item);
         }
 
+        /**
+         * Removes the item at the given index
+         */
         public void RemoveAt(int index)
         {
             FillList();
             _list.RemoveAt(index);
         }
 
+        /**
+         * Gets or sets the item at the specific index
+         */
         public T this[int index]
         {
             get
@@ -127,30 +168,45 @@ namespace Magix.Brix.Types
             }
         }
 
+        /**
+         * Appends a new item to the list
+         */
         public void Add(T item)
         {
             FillList();
             _list.Add(item);
         }
 
+        /**
+         * Clears the list of all its items
+         */
         public void Clear()
         {
             FillList();
             _list.Clear();
         }
 
+        /**
+         * Returns true if the specific item exists in the list
+         */
         public bool Contains(T item)
         {
             FillList();
             return _list.Contains(item);
         }
 
+        /**
+         * Copies the list to the given array, starting at the given offset
+         */
         public void CopyTo(T[] array, int arrayIndex)
         {
             FillList();
             _list.CopyTo(array, arrayIndex);
         }
 
+        /**
+         * Returns the number of items in our list
+         */
         public int Count
         {
             get
@@ -160,18 +216,25 @@ namespace Magix.Brix.Types
             }
         }
 
+        /**
+         * Will return false, always!
+         */
         public bool IsReadOnly
         {
             get { return false; }
         }
 
+        /**
+         * Removes the specific item from the list, returns true if an item was removed.
+         * Returns false if the item doesn't exist in the list
+         */
         public bool Remove(T item)
         {
             FillList();
             return _list.Remove(item);
         }
 
-        public IEnumerator<T> GetEnumerator()
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             FillList();
             return _list.GetEnumerator();
@@ -183,37 +246,37 @@ namespace Magix.Brix.Types
             return _list.GetEnumerator();
         }
 
-        public int Add(object value)
+        int IList.Add(object value)
         {
             FillList();
             _list.Add((T)value);
-            return IndexOf(value);
+            return ((IList)this).IndexOf(value);
         }
 
-        public bool Contains(object value)
+        bool IList.Contains(object value)
         {
             FillList();
             return _list.Contains((T)value);
         }
 
-        public int IndexOf(object value)
+        int IList.IndexOf(object value)
         {
             FillList();
             return _list.IndexOf((T)value);
         }
 
-        public void Insert(int index, object value)
+        void IList.Insert(int index, object value)
         {
             FillList();
             _list.Insert(index, (T)value);
         }
 
-        public bool IsFixedSize
+        bool IList.IsFixedSize
         {
             get { return false; }
         }
 
-        public void Remove(object value)
+        void IList.Remove(object value)
         {
             _list.Remove((T)value);
         }

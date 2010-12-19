@@ -28,13 +28,9 @@ namespace Magix.Brix.Loader
         private readonly Dictionary<string, Tuple<string, Type>> _loadedPlugins = new Dictionary<string, Tuple<string, Type>>();
         private readonly List<Type> _controllerTypes = new List<Type>();
         private readonly List<Type> _activeTypes = new List<Type>();
+        private static List<Assembly> _assemblies;
 
         private delegate void TypeDelegate(Type type);
-
-        public List<Type> Types
-        {
-            get { return _activeTypes; }
-        }
 
         private PluginLoader()
         {
@@ -130,7 +126,7 @@ namespace Magix.Brix.Loader
          * is the method which is internally used in Magix-Brix to load UserControls from 
          * embedded resources and also other controls.
          */
-        public Control LoadControl(string fullTypeName)
+        public Control LoadActiveModule(string fullTypeName)
         {
             Page page = (HttpContext.Current.Handler as Page);
 
@@ -223,8 +219,7 @@ namespace Magix.Brix.Loader
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
-        private static List<Assembly> _assemblies;
-        public static List<Assembly> PluginAssemblies
+        internal static List<Assembly> PluginAssemblies
         {
             get
             {
@@ -280,7 +275,7 @@ namespace Magix.Brix.Loader
             }
         }
 
-        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs e)
+        static private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs e)
         {
             string name = e.Name;
             if (name.Contains(","))

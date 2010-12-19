@@ -23,6 +23,8 @@ namespace Magix.Brix.Loader
         private readonly Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> _methods =
             new Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>>();
         private static ActiveEvents _instance;
+        private Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> _nonWeb = 
+            new Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>>();
 
         private delegate void AsyncDelegate(object sender, ActiveEventArgs e);
 
@@ -198,7 +200,8 @@ namespace Magix.Brix.Loader
             foreach (string idx in InstanceMethod.Keys)
             {
                 List<Tuple<MethodInfo, Tuple<object, bool>>> idxCur = InstanceMethod[idx];
-                List<Tuple<MethodInfo, Tuple<object, bool>>> toRemove = new List<Tuple<MethodInfo, Tuple<object, bool>>>();
+                List<Tuple<MethodInfo, Tuple<object, bool>>> toRemove = 
+                    new List<Tuple<MethodInfo, Tuple<object, bool>>>();
                 foreach (Tuple<MethodInfo, Tuple<object, bool>> idxObj in idxCur)
                 {
                     if (idxObj.Right.Left == context)
@@ -223,7 +226,6 @@ namespace Magix.Brix.Loader
             }
         }
 
-        private Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> _nonWeb = new Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>>();
         private Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> InstanceMethod
         {
             get
