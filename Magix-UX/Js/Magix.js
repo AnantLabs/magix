@@ -1,7 +1,7 @@
 /*
- * MagicUX - A Managed Ajax Library for ASP.NET
+ * Magix - A Managed Ajax Library for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * MagicUX is licensed as GPLv3.
+ * Magix is licensed as GPLv3.
  */
 
 (function() {
@@ -89,7 +89,7 @@
     new ActiveXObject('Microsoft.XMLHTTP');
   };
 
-  // Basically the OOP JavaScript "heart" of the MagicUX library. Will create a new
+  // Basically the OOP JavaScript "heart" of the Magix library. Will create a new
   // "class". Whenever an object is created, the init function, if it exists, will
   // be called on the instance.
   MUX.klass = function() {
