@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBrix - A Modular-based Framework for building Web Applications 
+ * Magix - A Modular-based Framework for building Web Applications 
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * MagicBrix is licensed as GPLv3.
+ * Magix is licensed as GPLv3.
  */
 
 using Magix.Brix.Types;
