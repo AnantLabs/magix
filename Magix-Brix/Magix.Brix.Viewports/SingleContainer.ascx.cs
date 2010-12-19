@@ -69,8 +69,21 @@ namespace Magix.Brix.Viewports
         {
             if (e.Params["Position"].Get<string>() == "dyn")
             {
-                dyn.ClearControls();
+                ClearControls(dyn);
             }
+            else if (e.Params["Position"].Get<string>() == "dyn2")
+            {
+                ClearControls(dyn2);
+            }
+        }
+
+        private void ClearControls(DynamicPanel dynamic)
+        {
+            foreach (Control idx in dynamic.Controls)
+            {
+                ActiveEvents.Instance.RemoveListener(idx);
+            }
+            dynamic.ClearControls();
         }
 
         [ActiveEvent(Name = "LoadControl")]
@@ -81,10 +94,21 @@ namespace Magix.Brix.Viewports
                 if (true.Equals(e.Params["Parameters"]["Append"].Value))
                     dyn.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 else
+                {
+                    ClearControls(dyn);
                     dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                }
             }
             else if (e.Params["Position"].Get<string>() == "dyn2")
-                dyn2.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+            {
+                if (true.Equals(e.Params["Parameters"]["Append"].Value))
+                    dyn2.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                else
+                {
+                    ClearControls(dyn2);
+                    dyn2.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                }
+            }
         }
 
         protected void dynamic_LoadControls(object sender, DynamicPanel.ReloadEventArgs e)

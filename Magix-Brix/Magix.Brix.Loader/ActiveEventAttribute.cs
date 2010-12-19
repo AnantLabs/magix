@@ -35,7 +35,7 @@ namespace Magix.Brix.Loader
          * Magix-Brix, you cannot even access the database. However, for "fire and forget" event handlers
          * that for instance is supposed to just ping some webservice or something similar, they
          * can be quite useful since you then can asynchronously make those calls, but still
-         * return ASAP to client with response.
+         * return ASAP to the client with response.
          */
         public bool Async;
 

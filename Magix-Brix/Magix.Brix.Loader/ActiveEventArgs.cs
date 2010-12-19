@@ -11,8 +11,8 @@ namespace Magix.Brix.Loader
 {
     /**
      * EventArgs class that will be passed into your Magix-Brix events - the methods you mark with
-     * the ActiveEvent Attribute. The Extra property will contain the "initializationObject" passed into
-     * the RaiseEvent.
+     * the ActiveEvent Attribute. The Extra property will contain the "initializationObject" passed 
+     * into the RaiseEvent.
      */
     public class ActiveEventArgs : EventArgs
     {
@@ -31,7 +31,7 @@ namespace Magix.Brix.Loader
          * than one Event. For cases like this the Name property might be useful to understand
          * which event you're actually handling.
          */
-        internal string Name { get { return _name; } }
+        public string Name { get { return _name; } }
 
         /**
          * This is the "initializationObject" passed into your RaiseEvent call. Use this 
