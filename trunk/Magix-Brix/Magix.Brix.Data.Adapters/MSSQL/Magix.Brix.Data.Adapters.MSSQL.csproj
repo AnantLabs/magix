@@ -46,15 +46,15 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Magix.Brix.Data\Magix.Brix.Data.csproj">
       <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
-      <Name>Magic.Brix.Data</Name>
+      <Name>Magix.Brix.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
       <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
-      <Name>Magic.Brix.Loader</Name>
+      <Name>Magix.Brix.Loader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Magix.Brix.Types\Magix.Brix.Types.csproj">
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
-      <Name>Magic.Brix.Types</Name>
+      <Name>Magix.Brix.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

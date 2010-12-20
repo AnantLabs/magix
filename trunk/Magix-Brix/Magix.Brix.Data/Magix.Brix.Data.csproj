@@ -53,7 +53,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Magix.Brix.Types\Magix.Brix.Types.csproj">
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
-      <Name>Magic.Brix.Types</Name>
+      <Name>Magix.Brix.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
