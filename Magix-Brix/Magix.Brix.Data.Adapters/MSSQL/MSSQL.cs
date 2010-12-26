@@ -629,7 +629,7 @@ select Name, Value from {0} where FK_Document={1}",
                                         .Invoke(valueOfProperty, null);
 
                                     SqlCommand deleteFromD2D = new SqlCommand(
-                                        string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
+                                        string.Format("delete from " + TablePrefix + "Documents2Documents where (Document1ID={0} or Document2ID={0}) and PropertyName='{1}'",
                                             id,
                                             propertyRelationshipName), 
                                         _connection, 
@@ -710,7 +710,7 @@ select Name, Value from {0} where FK_Document={1}",
                                         {
                                             // Delete old relationships whith this documentid and this property name
                                             SqlCommand sqlDeleteRelationRecords = new SqlCommand(
-                                                string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
+                                                string.Format("delete from " + TablePrefix + "Documents2Documents where (Document1ID={0} or Document2ID={0}) and PropertyName='{1}'",
                                                     id,
                                                     idxProp.Name), _connection, transaction);
                                             sqlDeleteRelationRecords.ExecuteNonQuery();
@@ -779,7 +779,7 @@ select Name, Value from {0} where FK_Document={1}",
                                     {
                                         // Delete old relationships whith this documentid and this property name
                                         SqlCommand sqlDeleteRelationRecords = new SqlCommand(
-                                            string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
+                                            string.Format("delete from " + TablePrefix + "Documents2Documents where (Document1ID={0} or Document2ID={0}) and PropertyName='{1}'",
                                                 id,
                                                 idxProp.Name), _connection, transaction);
                                         sqlDeleteRelationRecords.ExecuteNonQuery();
