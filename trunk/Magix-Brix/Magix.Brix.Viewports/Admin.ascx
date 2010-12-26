@@ -40,12 +40,12 @@
                         ID="lev4">
                         <mux:SlidingMenuItem 
                             runat="server" 
-                            Text="View All Menus..."
-                            ID="ViewAllMenus" />
+                            Text="View All Wines..."
+                            ID="ViewAllWines" />
                         <mux:SlidingMenuItem 
                             runat="server" 
-                            Text="Create New..."
-                            ID="CreateNewMenu" />
+                            Text="View All Menus..."
+                            ID="ViewAllMenus" />
                     </mux:SlidingMenuLevel>
                 </mux:SlidingMenuItem>
                 <mux:SlidingMenuItem 

@@ -119,16 +119,10 @@ namespace Magix.Brix.Viewports
                         this,
                         "LoadDashboard");
                     break;
-                case "CreateNewMenu":
-                    Node node = new Node();
-                    node["ClientID"].Value = ClientID;
+                case "ViewAllWines":
                     ActiveEvents.Instance.RaiseActiveEvent(
                         this,
-                        "CreateNewMenu",
-                        node);
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "ViewAllMenus");
+                        "ViewAllWines");
                     break;
                 case "ViewAllMenus":
                     ActiveEvents.Instance.RaiseActiveEvent(
