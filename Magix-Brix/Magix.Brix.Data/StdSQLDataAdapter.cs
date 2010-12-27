@@ -25,21 +25,32 @@ namespace Magix.Brix.Data.Internal
             private readonly int _parentId;
             private readonly Type _type;
             private readonly bool _isOwner;
+            private readonly bool _belongsTo;
             private readonly string _propertyName;
+            private readonly string _relationName;
 
-            public LazyHelper(Type type, int parentId, bool isOwner, string propertyName)
+            public LazyHelper(Type type, int parentId, bool isOwner, bool belongsTo, string propertyName, string relationName)
             {
                 _type = type;
                 _parentId = parentId;
                 _isOwner = isOwner;
                 _propertyName = propertyName;
+                _belongsTo = belongsTo;
+                _relationName = relationName;
             }
 
             public IEnumerable GetItems()
             {
-                return _isOwner ? 
-                    Instance.Select(_type, _propertyName, Criteria.ParentId(_parentId)) : 
-                    Instance.Select(_type, _propertyName, Criteria.ExistsIn(_parentId));
+                if (_belongsTo)
+                {
+                    return Instance.Select(_type, _propertyName, Criteria.ExistsIn(_parentId, true));
+                }
+                else
+                {
+                    return _isOwner ?
+                        Instance.Select(_type, _propertyName, Criteria.ParentId(_parentId)) :
+                        Instance.Select(_type, _propertyName, Criteria.ExistsIn(_parentId));
+                }
             }
         }
 
@@ -152,15 +163,26 @@ namespace Magix.Brix.Data.Internal
                     }
                     else if (idx is ExistsInEquals)
                     {
+                        ExistsInEquals exi = idx as ExistsInEquals;
                         string parentType = "";
                         if (propertyName != null)
                         {
                             parentType = string.Format(" and PropertyName='{0}'", propertyName);
                         }
-                        where += string.Format(
-                            " and exists(select * from " + 
-                            TablePrefix + 
-                            "Documents2Documents d2 where ((d2.Document1ID={0} and d2.Document2ID=d.ID) or (d2.Document2ID={0} and d2.Document1ID=d.ID)){1})", idx.Value, parentType);
+                        if (exi.Reversed)
+                        {
+                            where += string.Format(
+                                " and exists(select * from " +
+                                TablePrefix +
+                                "Documents2Documents d2 where (d2.Document2ID={0} and d2.Document1ID=d.ID){1})", idx.Value, parentType);
+                        }
+                        else
+                        {
+                            where += string.Format(
+                                " and exists(select * from " +
+                                TablePrefix +
+                                "Documents2Documents d2 where (d2.Document1ID={0} and d2.Document2ID=d.ID){1})", idx.Value, parentType);
+                        }
                     }
                     else
                     {

@@ -104,7 +104,15 @@ namespace Magix.Brix.Data
          */
         public static Criteria ExistsIn(int id)
         {
-            return new ExistsInEquals(id);
+            return new ExistsInEquals(id, false);
+        }
+
+        /**
+         * Static constructor to create a criteria of type ExistsInEquals.
+         */
+        public static Criteria ExistsIn(int id, bool reversed)
+        {
+            return new ExistsInEquals(id, reversed);
         }
 
         /**
@@ -178,9 +186,13 @@ namespace Magix.Brix.Data
      */
     public class ExistsInEquals : Criteria
     {
-        public ExistsInEquals(int id)
+        public ExistsInEquals(int id, bool reversed)
             : base(null, id)
-        { }
+        {
+            Reversed = reversed;
+        }
+
+        public bool Reversed { get; set; }
     }
 
     /**
