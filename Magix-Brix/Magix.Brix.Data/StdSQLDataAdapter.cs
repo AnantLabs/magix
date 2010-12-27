@@ -49,7 +49,7 @@ namespace Magix.Brix.Data.Internal
                 {
                     return _isOwner ?
                         Instance.Select(_type, _propertyName, Criteria.ParentId(_parentId)) :
-                        Instance.Select(_type, _propertyName, Criteria.ExistsIn(_parentId));
+                        Instance.Select(_type, _propertyName, Criteria.ExistsIn(_parentId, false));
                 }
             }
         }
