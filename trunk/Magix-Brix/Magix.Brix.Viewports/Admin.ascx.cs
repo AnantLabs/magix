@@ -68,7 +68,7 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {
-            if (e.Params["Position"].Get<string>() == "dynAdmin")
+            if (e.Params["Position"].Get<string>() == "dynAdmin" || string.IsNullOrEmpty(e.Params["Position"].Get<string>()))
             {
                 if (true.Equals(e.Params["Parameters"]["Append"].Value))
                     dynAdmin.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);

@@ -30,13 +30,21 @@ namespace Magix.Brix.Loader
         }
 
         /**
+         * Loads the given module and puts it into your default container.
+         */
+        protected Node LoadModule(string name)
+        {
+            Node node = new Node();
+            LoadModule(name, null, node);
+            return node;
+        }
+
+        /**
          * Shorthand method for Loading a specific Module and putting it into
          * the given container.
          */
         protected void LoadModule(string name, string container, Node node)
         {
-            if (string.IsNullOrEmpty(container))
-                throw new ApplicationException("Cannot load a Module without specifying a container");
             if (string.IsNullOrEmpty(name))
                 throw new ApplicationException("You have to specify which Module you want to load");
             ActiveEvents.Instance.RaiseLoadControl(name, container, node);
