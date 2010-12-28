@@ -63,6 +63,17 @@ namespace Magix.Brix.Loader
                 });
         }
 
+        public IEnumerable<Type> ActiveTypes
+        {
+            get
+            {
+                foreach (Type idx in this._activeTypes)
+                {
+                    yield return idx;
+                }
+            }
+        }
+
         // Helper method that loops through every type in AppDomain and 
         // looks for an attribute of a given type and passes it into a delegate 
         // submitted by the caller...
