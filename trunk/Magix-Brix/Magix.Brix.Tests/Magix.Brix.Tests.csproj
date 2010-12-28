@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ActiveTypes\ComponentSettingsTest.cs" />
     <Compile Include="Data\BaseTest.cs" />
+    <Compile Include="Data\BelongsToTest.cs" />
     <Compile Include="Data\CriteriaWithChildValue.cs" />
     <Compile Include="Data\SettingsTest.cs" />
     <Compile Include="Data\VerifyLazyNotRetrievedOnSave.cs" />
