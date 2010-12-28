@@ -160,74 +160,140 @@ namespace Magix.Brix.Data.Adapters.MSSQL
                     default:
                         if (idxProp.Left.PropertyType.FullName.IndexOf("Magix.Brix.Types.LazyList") == 0)
                         {
-                            // LazyList...
-                            Type typeOfList = idxProp.Left.PropertyType;
-                            Type typeOfListGenericArgument = idxProp.Left.PropertyType.GetGenericArguments()[0];
-                            LazyHelper helper = new LazyHelper(typeOfListGenericArgument, id, idxProp.Right.Left.IsOwner, idxProp.Right.Left.BelongsTo, idxProp.Right.Left.RelationName, idxProp.Left.Name);
-                            FunctorGetItems del = helper.GetItems;
-                            if (!_ctors.ContainsKey(idxProp.Left.PropertyType.FullName))
-                            {
-                                _ctors[idxProp.Left.PropertyType.FullName] = typeOfList.GetConstructors()[0];
-                            }
-                            object tmp = _ctors[idxProp.Left.PropertyType.FullName].Invoke(new object[] { del });
-                            idxProp.Right.Right.Invoke(retVal, new[] { tmp });
+                            PopulateLazyList(id, retVal, idxProp);
                         }
                         else if (idxProp.Left.PropertyType.FullName.IndexOf("System.Collections.Generic.List") == 0)
                         {
-                            // NOT LazyList, but still List...!
-                            Type typeOfListGenericArgument = idxProp.Left.PropertyType.GetGenericArguments()[0];
-                            List<object> tmpValues = idxProp.Right.Left.IsOwner ?
-                                new List<object>(
-                                    Instance.Select(
-                                        typeOfListGenericArgument, 
-                                        idxProp.Left.Name, 
-                                        Criteria.ParentId(id))) :
-                                new List<object>(
-                                    Instance.Select(
-                                        typeOfListGenericArgument, 
-                                        idxProp.Left.Name, 
-                                        Criteria.ExistsIn(id)));
-                            MethodInfo addMethod = idxProp.Left.PropertyType.GetMethod("Add");
-                            object listContent = idxProp.Left.GetGetMethod(true)
-                                .Invoke(retVal, new object[] { });
-                            foreach (object idxTmpValue in tmpValues)
-                            {
-                                addMethod.Invoke(listContent, new[] { idxTmpValue });
-                            }
+                            PopulateActiveList(id, retVal, idxProp);
                         }
                         else
                         {
-                            if (idxProp.Right.Left.BelongsTo)
-                            {
-                                object tmp = SelectFirst(
-                                    idxProp.Left.PropertyType,
-                                    null,
-                                    Criteria.HasChild(id));
-                                idxProp.Right.Right.Invoke(retVal, new[] { tmp });
-                            }
-                            else if (idxProp.Right.Left.IsOwner)
-                            {
-                                object tmp = SelectFirst(
-                                    idxProp.Left.PropertyType,
-                                    idxProp.Left.Name,
-                                    Criteria.ParentId(id));
-                                idxProp.Right.Right.Invoke(retVal, new[] { tmp });
-                            }
-                            else
-                            {
-                                string propertyName = idxProp.Left.Name;
-                                if (!string.IsNullOrEmpty(idxProp.Right.Left.RelationName))
-                                    propertyName = idxProp.Right.Left.RelationName;
-                                object tmp = SelectFirst(
-                                    idxProp.Left.PropertyType, 
-                                    propertyName, 
-                                    Criteria.ExistsIn(id));
-                                idxProp.Right.Right.Invoke(retVal, new[] { tmp });
-                            }
+                            PopulateSingleObject(id, retVal, idxProp);
                         }
                         continue; // Possibly composition
                 }
             }
+        }
+
+        private void PopulateSingleObject(
+            int id, 
+            object retVal, 
+            Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>> idxProp)
+        {
+            object tmp = null;
+            if (idxProp.Right.Left.BelongsTo)
+            {
+                if (string.IsNullOrEmpty(idxProp.Right.Left.RelationName))
+                {
+                    tmp = SelectFirst(
+                        idxProp.Left.PropertyType,
+                        idxProp.Right.Left.RelationName,
+                        Criteria.HasChild(id));
+                }
+                else
+                {
+                    tmp = SelectFirst(
+                        idxProp.Left.PropertyType,
+                        idxProp.Right.Left.RelationName,
+                        Criteria.ExistsIn(id, true));
+                }
+            }
+            else if (idxProp.Right.Left.IsOwner)
+            {
+                tmp = SelectFirst(
+                    idxProp.Left.PropertyType,
+                    idxProp.Left.Name,
+                    Criteria.ParentId(id));
+            }
+            else
+            {
+                string propertyName = idxProp.Left.Name;
+                tmp = SelectFirst(
+                    idxProp.Left.PropertyType,
+                    propertyName,
+                    Criteria.ExistsIn(id));
+            }
+            idxProp.Right.Right.Invoke(retVal, new[] { tmp });
+        }
+
+        private static void PopulateActiveList(
+            int id, 
+            object retVal, 
+            Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>> idxProp)
+        {
+            // NOT LazyList, but still List...!
+            Type typeOfListGenericArgument = 
+                idxProp.Left.PropertyType.GetGenericArguments()[0];
+
+            List<object> tmpValues = null;
+            if (idxProp.Right.Left.BelongsTo)
+            {
+                if (string.IsNullOrEmpty(idxProp.Right.Left.RelationName))
+                {
+                    throw new ApplicationException(
+                        "There's a significant error in your ActiveType class hierarchy. List of children, defined" +
+                        "as BelongsTo, without RelationName indicates several parents, which is logically impossible...");
+                }
+                else
+                {
+                    // Parent owns the relationship, but it's a ManyToX relationship...
+                    tmpValues = new List<object>(
+                        Instance.Select(
+                        typeOfListGenericArgument,
+                        idxProp.Right.Left.RelationName,
+                        Criteria.ExistsIn(id, true)));
+                }
+            }
+            else
+            {
+                if (idxProp.Right.Left.IsOwner)
+                {
+                    tmpValues = new List<object>(
+                        Instance.Select(
+                            typeOfListGenericArgument,
+                            idxProp.Left.Name,
+                            Criteria.ParentId(id)));
+                }
+                else
+                {
+                    tmpValues = new List<object>(
+                        Instance.Select(
+                            typeOfListGenericArgument,
+                            idxProp.Left.Name,
+                            Criteria.ExistsIn(id)));
+                }
+            }
+            MethodInfo addMethod = idxProp.Left.PropertyType.GetMethod("Add");
+            object listContent = idxProp.Left.GetGetMethod(true)
+                .Invoke(retVal, new object[] { });
+            foreach (object idxTmpValue in tmpValues)
+            {
+                addMethod.Invoke(listContent, new[] { idxTmpValue });
+            }
+        }
+
+        private static void PopulateLazyList(
+            int id, 
+            object retVal, 
+            Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>> idxProp)
+        {
+            // LazyList...
+            Type typeOfList = idxProp.Left.PropertyType;
+            Type typeOfListGenericArgument = idxProp.Left.PropertyType.GetGenericArguments()[0];
+            LazyHelper helper = new LazyHelper(
+                typeOfListGenericArgument, 
+                id, 
+                idxProp.Right.Left.IsOwner, 
+                idxProp.Right.Left.BelongsTo, 
+                idxProp.Left.Name,
+                idxProp.Right.Left.RelationName);
+            FunctorGetItems del = helper.GetItems;
+            if (!_ctors.ContainsKey(idxProp.Left.PropertyType.FullName))
+            {
+                _ctors[idxProp.Left.PropertyType.FullName] = typeOfList.GetConstructors()[0];
+            }
+            object tmp = _ctors[idxProp.Left.PropertyType.FullName].Invoke(new object[] { del });
+            idxProp.Right.Right.Invoke(retVal, new[] { tmp });
         }
 
         private static void CacheCompositionMethods(Type type)
@@ -462,6 +528,7 @@ select Name, Value from {0} where FK_Document={1}",
             string parentPropertyName)
         {
             Type type = value.GetType();
+
             int id = (int)type.GetProperty(
                 "ID",
                 BindingFlags.Instance |
@@ -469,12 +536,101 @@ select Name, Value from {0} where FK_Document={1}",
                 BindingFlags.Public)
                 .GetGetMethod()
                 .Invoke(value, null);
+
             bool isUpdate = id != 0;
+
             PropertyInfo[] props =
                     type.GetProperties(
                         BindingFlags.Instance |
                         BindingFlags.Public |
                         BindingFlags.NonPublic);
+
+            id = PrepareForSerialization(
+                value, 
+                transaction, 
+                parentId, 
+                parentPropertyName, 
+                type, 
+                id, 
+                isUpdate);
+
+            List<int> listOfIDsOfChildren = new List<int>();
+            List<string> listOfParentPropertyNamesToNotDelete = new List<string>();
+            foreach (PropertyInfo idxProp in props)
+            {
+                ActiveFieldAttribute[] attrs =
+                    idxProp.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
+                if (attrs != null && attrs.Length > 0)
+                {
+                    string tableName;
+                    object valueOfProperty = idxProp.GetGetMethod(true).Invoke(value, null);
+                    switch (idxProp.PropertyType.FullName)
+                    {
+                        case "System.Boolean":
+                            tableName = "PropertyBools";
+                            break;
+                        case "System.DateTime":
+                            if (((DateTime)valueOfProperty) == DateTime.MinValue)
+                                continue; // "NULL" value...
+                            tableName = "PropertyDates";
+                            break;
+                        case "System.Decimal":
+                            tableName = "PropertyDecimals";
+                            break;
+                        case "System.Int32":
+                            tableName = "PropertyInts";
+                            break;
+                        case "System.String":
+                            tableName = "PropertyStrings";
+                            break;
+                        case "System.Byte[]":
+                            tableName = "PropertyBLOBS";
+                            break;
+                        default:
+                            if (valueOfProperty == null)
+                            {
+                                DeleteNewlyRemovedChildObjects(
+                                    transaction, 
+                                    id, 
+                                    idxProp, 
+                                    attrs);
+                            }
+                            else
+                            {
+                                SerializeComplexChildren(
+                                    transaction, 
+                                    id, 
+                                    listOfIDsOfChildren, 
+                                    listOfParentPropertyNamesToNotDelete, 
+                                    idxProp, 
+                                    attrs, 
+                                    valueOfProperty);
+                            }
+                            continue;
+                    }
+                    if (valueOfProperty != null)
+                    {
+                        string sql = string.Format(
+                             "insert into {0} (FK_Document, Value, Name) values({1}, @value, '{2}')",
+                             tableName,
+                             id,
+                             Helpers.PropertyName(idxProp));
+                        SqlCommand cmd = new SqlCommand(sql, _connection, transaction);
+                        cmd.Parameters.Add(new SqlParameter("@value", valueOfProperty));
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            CleanUpAfterSerializing(
+                transaction, 
+                id, 
+                listOfIDsOfChildren, 
+                listOfParentPropertyNamesToNotDelete);
+            return id;
+        }
+
+        private int PrepareForSerialization(object value, SqlTransaction transaction, int parentId, string parentPropertyName, Type type, int id, bool isUpdate)
+        {
             if (isUpdate)
             {
                 if (parentId == -1)
@@ -501,11 +657,11 @@ select Name, Value from {0} where FK_Document={1}",
             {
                 SqlCommand cmd = new SqlCommand(
                     string.Format(
-                        "insert into " + TablePrefix + "Documents (TypeName, Created, Modified, Parent, ParentPropertyName) values ('doc{0}', getdate(), getdate(), {1}, {2});select @@Identity;", 
+                        "insert into " + TablePrefix + "Documents (TypeName, Created, Modified, Parent, ParentPropertyName) values ('doc{0}', getdate(), getdate(), {1}, {2});select @@Identity;",
                         type.FullName,
                         parentId == -1 ? "NULL" : parentId.ToString(),
-                        parentPropertyName == null ? "null" : "'" + parentPropertyName + "'", _connection, transaction), 
-                    _connection, 
+                        parentPropertyName == null ? "null" : "'" + parentPropertyName + "'", _connection, transaction),
+                    _connection,
                     transaction);
                 id = (int)((decimal)cmd.ExecuteScalar());
                 type.GetProperty(
@@ -526,312 +682,15 @@ select Name, Value from {0} where FK_Document={1}",
                     cmd.ExecuteNonQuery();
                 }
             }
-            List<int> listOfIDsOfChildren = new List<int>();
-            List<string> listOfParentPropertyNamesToNotDelete = new List<string>();
-            foreach (PropertyInfo idxProp in props)
-            {
-                ActiveFieldAttribute[] attrs =
-                    idxProp.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
-                if (attrs != null && attrs.Length > 0)
-                {
-                    string tableName;
-                    object valueOfProperty = idxProp.GetGetMethod(true).Invoke(value, null);
-                    if (valueOfProperty == null)
-                    {
-                        if (!attrs[0].IsOwner)
-                        {
-                            string relationshipName = idxProp.Name;
-                            if (!string.IsNullOrEmpty(attrs[0].RelationName))
-                                relationshipName = attrs[0].RelationName;
-                            string toDeleteRelationShip = string.Format("delete from Documents2Documents where (Document1ID = {0} or Document2ID = {0}) and PropertyName='{1}'",
-                                id,
-                                relationshipName);
-                            SqlCommand cmdDeleteRelationShip = new SqlCommand(toDeleteRelationShip, _connection, transaction);
-                            cmdDeleteRelationShip.ExecuteNonQuery();
-                        }
-                        continue;
-                    }
-                    switch (idxProp.PropertyType.FullName)
-                    {
-                        case "System.Boolean":
-                            tableName = "PropertyBools";
-                            break;
-                        case "System.DateTime":
-                            if (((DateTime)valueOfProperty) == DateTime.MinValue)
-                                continue; // "NULL" value...
-                            tableName = "PropertyDates";
-                            break;
-                        case "System.Decimal":
-                            tableName = "PropertyDecimals";
-                            break;
-                        case "System.Int32":
-                            tableName = "PropertyInts";
-                            break;
-                        case "System.String":
-                            tableName = "PropertyStrings";
-                            break;
-                        case "System.Byte[]":
-                            tableName = "PropertyBLOBS";
-                            break;
-                        default:
-                            IEnumerable enumerable = valueOfProperty as IEnumerable;
-                            if (enumerable == null)
-                            {
-                                if (attrs[0].BelongsTo)
-                                {
-                                    int currentParentId = (int)valueOfProperty.GetType().GetProperty(
-                                        "ID",
-                                        BindingFlags.Instance |
-                                        BindingFlags.NonPublic |
-                                        BindingFlags.Public)
-                                        .GetGetMethod()
-                                        .Invoke(valueOfProperty, null);
+            return id;
+        }
 
-                                    SqlCommand cmdAddAsParent = new SqlCommand(
-                                        string.Format(
-                                        "update " +
-                                        TablePrefix +
-                                        "Documents set Modified=getdate(), Parent={1}, ParentPropertyName='{2}' where ID={0}",
-                                            id,
-                                            currentParentId,
-                                            attrs[0].RelationName), _connection, transaction);
-                                    cmdAddAsParent.ExecuteNonQuery();
-                                }
-                                else if (attrs[0].IsOwner)
-                                {
-                                    TransactionalObject trs = valueOfProperty as TransactionalObject;
-                                    trs.Transaction = transaction;
-                                    trs.ParentDocument = id;
-                                    trs.ParentPropertyName = idxProp.Name;
-                                    try
-                                    {
-                                        trs.Save();
-                                        listOfIDsOfChildren.Add(trs.ID);
-                                    }
-                                    finally
-                                    {
-                                        trs.Reset();
-                                    }
-                                    int childId = trs.ID;
-                                    listOfIDsOfChildren.Add(childId);
-                                }
-                                else
-                                {
-                                    string propertyRelationshipName = idxProp.Name;
-                                    if (!string.IsNullOrEmpty(attrs[0].RelationName))
-                                        propertyRelationshipName = attrs[0].RelationName;
-                                    int childId = (int)valueOfProperty.GetType().GetProperty(
-                                        "ID",
-                                        BindingFlags.Instance |
-                                        BindingFlags.NonPublic |
-                                        BindingFlags.Public)
-                                        .GetGetMethod()
-                                        .Invoke(valueOfProperty, null);
-
-                                    SqlCommand deleteFromD2D = new SqlCommand(
-                                        string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
-                                            id,
-                                            propertyRelationshipName), 
-                                        _connection, 
-                                        transaction);
-                                    deleteFromD2D.ExecuteNonQuery();
-
-                                    SqlCommand cmdContains = new SqlCommand(
-                                        string.Format(
-                                            "insert into " + TablePrefix + "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
-                                            id,
-                                            childId,
-                                            propertyRelationshipName),
-                                        _connection,
-                                        transaction);
-                                    cmdContains.ExecuteNonQuery();
-                                }
-                            }
-                            else
-                            {
-                                PropertyInfo listRetrieved = 
-                                    enumerable.GetType().GetProperty(
-                                        "ListRetrieved", 
-                                        BindingFlags.Instance | 
-                                        BindingFlags.Public | 
-                                        BindingFlags.NonPublic);
-                                if (listRetrieved != null)
-                                {
-                                    // LazyList...
-                                    if (!(bool)listRetrieved.GetGetMethod(true).Invoke(enumerable, null))
-                                    {
-                                        listOfParentPropertyNamesToNotDelete.Add(idxProp.Name);
-                                    }
-                                    else
-                                    {
-                                        if(attrs[0].BelongsTo)
-                                        {
-                                            foreach (object idxChild in enumerable)
-                                            {
-                                                int currentParentId = (int)idxChild.GetType().GetProperty(
-                                                    "ID",
-                                                    BindingFlags.Instance |
-                                                    BindingFlags.NonPublic |
-                                                    BindingFlags.Public)
-                                                    .GetGetMethod()
-                                                    .Invoke(idxChild, null);
-
-                                                SqlCommand cmdAddAsParent = new SqlCommand(
-                                                    string.Format(
-                                                    "update " +
-                                                    TablePrefix +
-                                                    "Documents set Modified=getdate(), Parent={1}, ParentPropertyName='{2}' where ID={0}",
-                                                        id,
-                                                        currentParentId,
-                                                        attrs[0].RelationName), _connection, transaction);
-                                                cmdAddAsParent.ExecuteNonQuery();
-                                            }
-                                        }
-                                        else if (attrs[0].IsOwner)
-                                        {
-                                            foreach (object idxChild in enumerable)
-                                            {
-                                                TransactionalObject trs = idxChild as TransactionalObject;
-                                                trs.Transaction = transaction;
-                                                trs.ParentDocument = id;
-                                                trs.ParentPropertyName = idxProp.Name;
-                                                try
-                                                {
-                                                    trs.Save();
-                                                    listOfIDsOfChildren.Add(trs.ID);
-                                                }
-                                                finally
-                                                {
-                                                    trs.Reset();
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            // Delete old relationships whith this documentid and this property name
-                                            SqlCommand sqlDeleteRelationRecords = new SqlCommand(
-                                                string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
-                                                    id,
-                                                    idxProp.Name), _connection, transaction);
-                                            sqlDeleteRelationRecords.ExecuteNonQuery();
-
-                                            foreach (object idxChild in enumerable)
-                                            {
-                                                // TODO: Should we really save the related document here...?
-                                                // Or should we only save the releationship...?
-                                                // If we only save the relationship, we might get
-                                                // "dangling pointers", and if we save everything
-                                                // we overspend resources, plus that we do save something
-                                                // which is only linked, which might feel unintuitive...?
-                                                TransactionalObject trs = idxChild as TransactionalObject;
-                                                trs.Transaction = transaction;
-                                                trs.ParentDocument = -1;
-                                                trs.ParentPropertyName = idxProp.Name;
-                                                try
-                                                {
-                                                    trs.Save();
-                                                    listOfIDsOfChildren.Add(trs.ID);
-                                                }
-                                                finally
-                                                {
-                                                    trs.Reset();
-                                                }
-                                                int documentId = trs.ID;
-
-                                                SqlCommand cmdContains = new SqlCommand(
-                                                    string.Format(
-                                                        "insert into " + TablePrefix + "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
-                                                        id,
-                                                        documentId,
-                                                        idxProp.Name),
-                                                    _connection,
-                                                    transaction);
-                                                cmdContains.ExecuteNonQuery();
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    // NOT LazyList...
-                                    if (attrs[0].IsOwner)
-                                    {
-                                        foreach (object idxChild in enumerable)
-                                        {
-                                            TransactionalObject trs = idxChild as TransactionalObject;
-                                            trs.Transaction = transaction;
-                                            trs.ParentDocument = id;
-                                            trs.ParentPropertyName = idxProp.Name;
-                                            try
-                                            {
-                                                trs.Save();
-                                                listOfIDsOfChildren.Add(trs.ID);
-                                            }
-                                            finally
-                                            {
-                                                trs.Reset();
-                                            }
-                                            int childId = trs.ID;
-                                            listOfIDsOfChildren.Add(childId);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // Delete old relationships whith this documentid and this property name
-                                        SqlCommand sqlDeleteRelationRecords = new SqlCommand(
-                                            string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
-                                                id,
-                                                idxProp.Name), _connection, transaction);
-                                        sqlDeleteRelationRecords.ExecuteNonQuery();
-
-                                        foreach (object idxChild in enumerable)
-                                        {
-                                            // TODO: Should we really save the related document here...?
-                                            // Or should we only save the releationship...?
-                                            // If we only save the relationship, we might get
-                                            // "dangling pointers", and if we save everything
-                                            // we overspend resources, plus that we do save something
-                                            // which is only linked, which might feel unintuitive...?
-                                            TransactionalObject trs = idxChild as TransactionalObject;
-                                            trs.Transaction = transaction;
-                                            trs.ParentDocument = -1;
-                                            trs.ParentPropertyName = idxProp.Name;
-                                            try
-                                            {
-                                                trs.Save();
-                                                listOfIDsOfChildren.Add(trs.ID);
-                                            }
-                                            finally
-                                            {
-                                                trs.Reset();
-                                            }
-                                            int documentId = trs.ID;
-
-                                            SqlCommand cmdContains = new SqlCommand(
-                                                string.Format(
-                                                    "insert into " + TablePrefix + "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
-                                                    id,
-                                                    documentId,
-                                                    idxProp.Name),
-                                                _connection,
-                                                transaction);
-                                            cmdContains.ExecuteNonQuery();
-                                        }
-                                    }
-                                }
-                            }
-                            continue;
-                    }
-                    string sql = string.Format(
-                         "insert into {0} (FK_Document, Value, Name) values({1}, @value, '{2}')",
-                         tableName,
-                         id,
-                         Helpers.PropertyName(idxProp));
-                    SqlCommand cmd = new SqlCommand(sql, _connection, transaction);
-                    cmd.Parameters.Add(new SqlParameter("@value", valueOfProperty));
-                    cmd.ExecuteNonQuery();
-                }
-            }
+        private void CleanUpAfterSerializing(
+            SqlTransaction transaction, 
+            int id, 
+            List<int> listOfIDsOfChildren, 
+            List<string> listOfParentPropertyNamesToNotDelete)
+        {
             string whereDelete = "";
             bool first = true;
             foreach (int idx in listOfIDsOfChildren)
@@ -841,8 +700,8 @@ select Name, Value from {0} where FK_Document={1}",
                 first = false;
                 whereDelete += idx.ToString();
             }
-            string andNotIn = string.IsNullOrEmpty(whereDelete) ? 
-                "" : 
+            string andNotIn = string.IsNullOrEmpty(whereDelete) ?
+                "" :
                 string.Format(" and ID not in({0})", whereDelete);
             whereDelete = "";
             first = true;
@@ -853,9 +712,9 @@ select Name, Value from {0} where FK_Document={1}",
                 first = false;
                 whereDelete += "'" + idx + "'";
             }
-            string andNotInParentPropertyNames = 
-                string.IsNullOrEmpty(whereDelete) 
-                    ? "" 
+            string andNotInParentPropertyNames =
+                string.IsNullOrEmpty(whereDelete)
+                    ? ""
                     : string.Format(" and ParentPropertyName not in({0})", whereDelete);
             SqlCommand cmdDeleteAllInfants = new SqlCommand(
                 string.Format("select ID from " + TablePrefix + "Documents where Parent={0}{1}{2}", id, andNotIn, andNotInParentPropertyNames),
@@ -877,7 +736,321 @@ select Name, Value from {0} where FK_Document={1}",
             {
                 DeleteObject(idxItemToDelete, transaction);
             }
-            return id;
+        }
+
+        private void SerializeComplexChildren(
+            SqlTransaction transaction, 
+            int id, 
+            List<int> listOfIDsOfChildren, 
+            List<string> listOfParentPropertyNamesToNotDelete, 
+            PropertyInfo idxProp, 
+            ActiveFieldAttribute[] attrs, 
+            object valueOfProperty)
+        {
+            IEnumerable enumerable = valueOfProperty as IEnumerable;
+            if (enumerable == null)
+            {
+                SerializeSingleComplexChild(
+                    transaction, 
+                    id, 
+                    listOfIDsOfChildren, 
+                    idxProp, 
+                    attrs, 
+                    valueOfProperty);
+            }
+            else
+            {
+                SerializeMultipleComplexChildren(
+                    transaction, 
+                    id, 
+                    listOfIDsOfChildren, 
+                    listOfParentPropertyNamesToNotDelete, 
+                    idxProp, 
+                    attrs, 
+                    valueOfProperty, 
+                    enumerable);
+            }
+        }
+
+        private void SerializeMultipleComplexChildren(
+            SqlTransaction transaction, 
+            int id, 
+            List<int> listOfIDsOfChildren, 
+            List<string> listOfParentPropertyNamesToNotDelete, 
+            PropertyInfo idxProp, 
+            ActiveFieldAttribute[] attrs, 
+            object valueOfProperty, 
+            IEnumerable enumerable)
+        {
+            PropertyInfo listRetrieved =
+                enumerable.GetType().GetProperty(
+                    "ListRetrieved",
+                    BindingFlags.Instance |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic);
+            if (listRetrieved != null)
+            {
+                SerializeLazyList(
+                    transaction, 
+                    id, 
+                    listOfIDsOfChildren, 
+                    listOfParentPropertyNamesToNotDelete, 
+                    idxProp, 
+                    attrs, 
+                    valueOfProperty, 
+                    enumerable, 
+                    listRetrieved);
+            }
+            else
+            {
+                SerializeActiveList(
+                    transaction, 
+                    id, 
+                    listOfIDsOfChildren, 
+                    idxProp, 
+                    attrs, 
+                    enumerable);
+            }
+        }
+
+        private void SerializeActiveList(
+            SqlTransaction transaction, 
+            int id, 
+            List<int> listOfIDsOfChildren, 
+            PropertyInfo idxProp, 
+            ActiveFieldAttribute[] attrs, 
+            IEnumerable enumerable)
+        {
+            // NOT LazyList...
+            if (attrs[0].BelongsTo)
+            {
+                // We do nothing here ...!
+                // The other side controls our relationship some how ...
+            }
+            else if (attrs[0].IsOwner)
+            {
+                foreach (object idxChild in enumerable)
+                {
+                    TransactionalObject trs = idxChild as TransactionalObject;
+                    trs.Transaction = transaction;
+                    trs.ParentDocument = id;
+                    trs.ParentPropertyName = idxProp.Name;
+                    try
+                    {
+                        trs.Save();
+                        listOfIDsOfChildren.Add(trs.ID);
+                    }
+                    finally
+                    {
+                        trs.Reset();
+                    }
+                    int childId = trs.ID;
+                    listOfIDsOfChildren.Add(childId);
+                }
+            }
+            else
+            {
+                // Delete old relationships whith this documentid and this property name
+                SqlCommand sqlDeleteRelationRecords = new SqlCommand(
+                    string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
+                        id,
+                        idxProp.Name), _connection, transaction);
+                sqlDeleteRelationRecords.ExecuteNonQuery();
+
+                foreach (object idxChild in enumerable)
+                {
+                    TransactionalObject trs = idxChild as TransactionalObject;
+                    int documentId = trs.ID;
+
+                    SqlCommand cmdContains = new SqlCommand(
+                        string.Format(
+                            "insert into " + TablePrefix + "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
+                            id,
+                            documentId,
+                            idxProp.Name),
+                        _connection,
+                        transaction);
+                    cmdContains.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void SerializeLazyList(
+            SqlTransaction transaction, 
+            int id, 
+            List<int> listOfIDsOfChildren, 
+            List<string> listOfParentPropertyNamesToNotDelete, 
+            PropertyInfo idxProp, 
+            ActiveFieldAttribute[] attrs, 
+            object valueOfProperty, 
+            IEnumerable enumerable, 
+            PropertyInfo listRetrieved)
+        {
+            // LazyList...
+            if (!(bool)listRetrieved.GetGetMethod(true).Invoke(enumerable, null))
+            {
+                // We want to exclude this entire list if it hasn't been retrieved yet in any ways ...!
+                listOfParentPropertyNamesToNotDelete.Add(idxProp.Name);
+            }
+            else
+            {
+                if (attrs[0].BelongsTo)
+                {
+                    // Do nothing here ...
+                    // The other side controls our relationship ...!
+                }
+                else if (attrs[0].IsOwner)
+                {
+                    foreach (object idxChild in enumerable)
+                    {
+                        TransactionalObject trs = idxChild as TransactionalObject;
+                        trs.Transaction = transaction;
+                        trs.ParentDocument = id;
+                        trs.ParentPropertyName = idxProp.Name;
+                        try
+                        {
+                            trs.Save();
+                            listOfIDsOfChildren.Add(trs.ID);
+                        }
+                        finally
+                        {
+                            trs.Reset();
+                        }
+                    }
+                }
+                else
+                {
+                    // Delete old relationships whith this documentid and this property name
+                    SqlCommand sqlDeleteRelationRecords = new SqlCommand(
+                        string.Format("delete from " + TablePrefix +
+                            "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
+                            id,
+                            idxProp.Name), _connection, transaction);
+                    sqlDeleteRelationRecords.ExecuteNonQuery();
+
+                    foreach (object idxChild in enumerable)
+                    {
+                        TransactionalObject trs = idxChild as TransactionalObject;
+                        int documentId = trs.ID;
+
+                        SqlCommand cmdContains = new SqlCommand(
+                            string.Format(
+                                "insert into " + TablePrefix +
+                                "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
+                                id,
+                                documentId,
+                                idxProp.Name),
+                            _connection,
+                            transaction);
+                        cmdContains.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        private void SerializeSingleComplexChild(
+            SqlTransaction transaction, 
+            int id, 
+            List<int> listOfIDsOfChildren, 
+            PropertyInfo idxProp, 
+            ActiveFieldAttribute[] attrs, 
+            object valueOfProperty)
+        {
+            if (attrs[0].BelongsTo)
+            {
+                // Other side controls our relationship, and hence we need not do anything here ...
+            }
+            else if (attrs[0].IsOwner)
+            {
+                TransactionalObject trs = valueOfProperty as TransactionalObject;
+                trs.Transaction = transaction;
+                trs.ParentDocument = id;
+                trs.ParentPropertyName = idxProp.Name;
+                try
+                {
+                    trs.Save();
+                    listOfIDsOfChildren.Add(trs.ID);
+                }
+                finally
+                {
+                    trs.Reset();
+                }
+                int childId = trs.ID;
+                listOfIDsOfChildren.Add(childId);
+            }
+            else // if (!attrs[0].IsOwner && BelongsTo == false)
+            {
+                string propertyRelationshipName = idxProp.Name;
+                int childId = (int)valueOfProperty.GetType().GetProperty(
+                    "ID",
+                    BindingFlags.Instance |
+                    BindingFlags.NonPublic |
+                    BindingFlags.Public)
+                    .GetGetMethod()
+                    .Invoke(valueOfProperty, null);
+
+                SqlCommand deleteFromD2D = new SqlCommand(
+                    string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
+                        id,
+                        propertyRelationshipName),
+                    _connection,
+                    transaction);
+                deleteFromD2D.ExecuteNonQuery();
+
+                SqlCommand cmdContains = new SqlCommand(
+                    string.Format(
+                        "insert into " + TablePrefix + "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
+                        id,
+                        childId,
+                        propertyRelationshipName),
+                    _connection,
+                    transaction);
+                cmdContains.ExecuteNonQuery();
+            }
+        }
+
+        private void DeleteNewlyRemovedChildObjects(
+            SqlTransaction transaction, 
+            int id, 
+            PropertyInfo idxProp, 
+            ActiveFieldAttribute[] attrs)
+        {
+            // Potentially newly lost reference or child...
+            if (attrs[0].BelongsTo && string.IsNullOrEmpty(attrs[0].RelationName))
+            {
+                // Nothing needs to be done, the other side is controlling our relationship...
+            }
+            else if (attrs[0].BelongsTo /*&& hence RelationName is not empty*/)
+            {
+                // Nothing needs to be done, the other side is controlling our relationship...
+                // This is, or should be at least, in fact a child object of the other ...!
+
+                // Here we could theoretically do an update since it requires nothing but removal from
+                // the Documents2Documents table, and hence touches nothing but the relationship itself
+                // but which could be unintuitive since there might exist other references to the controlling
+                // side of the equation where similar things did not occur, but which is serialized
+                // later onwards ...
+            }
+            else if (attrs[0].IsOwner)
+            {
+                string relationshipName = idxProp.Name;
+                string toDeleteRelationShip = 
+                    string.Format("delete from Documents where Parent = {0} and ParentPropertyName='{1}'",
+                    id,
+                    relationshipName);
+                SqlCommand cmdDeleteRelationShip = new SqlCommand(toDeleteRelationShip, _connection, transaction);
+                cmdDeleteRelationShip.ExecuteNonQuery();
+            }
+            else if (!attrs[0].IsOwner)
+            {
+                string relationshipName = idxProp.Name;
+                string toDeleteRelationShip = 
+                    string.Format("delete from Documents2Documents where Document1ID = {0} and PropertyName='{1}'",
+                    id,
+                    relationshipName);
+                SqlCommand cmdDeleteRelationShip = new SqlCommand(toDeleteRelationShip, _connection, transaction);
+                cmdDeleteRelationShip.ExecuteNonQuery();
+            }
         }
 
         public override void Close()
