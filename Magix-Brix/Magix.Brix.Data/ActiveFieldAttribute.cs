@@ -46,6 +46,9 @@ namespace Magix.Brix.Data
 
         /**
          * If true, then the other side of the relationship controls the relationship.
+         * If you in addition supply a RelationName in combination with this property,
+         * it'll assume there's a many2many composition, otherwise it'll assume ownership
+         * from the other side.
          */
         public bool BelongsTo;
     }

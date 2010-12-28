@@ -43,13 +43,37 @@ namespace Magix.Brix.Data.Internal
             {
                 if (_belongsTo)
                 {
-                    return Instance.Select(_type, _propertyName, Criteria.ExistsIn(_parentId, true));
+                    if (string.IsNullOrEmpty(_relationName))
+                    {
+                        return Instance.Select(
+                            _type,
+                            _propertyName,
+                            Criteria.HasChild(_parentId));
+                    }
+                    else
+                    {
+                        return Instance.Select(
+                            _type,
+                            _relationName,
+                            Criteria.ExistsIn(_parentId, true));
+                    }
                 }
                 else
                 {
-                    return _isOwner ?
-                        Instance.Select(_type, _propertyName, Criteria.ParentId(_parentId)) :
-                        Instance.Select(_type, _propertyName, Criteria.ExistsIn(_parentId, false));
+                    if (_isOwner)
+                    {
+                        return Instance.Select(
+                            _type, 
+                            _propertyName, 
+                            Criteria.ParentId(_parentId));
+                    }
+                    else
+                    {
+                        return Instance.Select(
+                            _type, 
+                            _propertyName, 
+                            Criteria.ExistsIn(_parentId, false));
+                    }
                 }
             }
         }
