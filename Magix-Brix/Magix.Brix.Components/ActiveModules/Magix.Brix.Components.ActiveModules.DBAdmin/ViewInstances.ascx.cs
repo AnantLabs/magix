@@ -114,6 +114,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void wnd_Closed(object sender, EventArgs e)
         {
+            ClearControls(child);
         }
 
         private int CurrentIndex
@@ -212,7 +213,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 edit.Text = idxCell["Value"].Value.ToString();
                                 edit.Info =
                                     idxCell.Parent["ID"].Value.ToString() + "|" +
-                                    idxCell["PropertyName"].Value;
+                                    idxCell["PropertyName"].Value + "|" +
+                                    idxCell["FullName"].Get<string>();
                                 edit.TextChanged +=
                                     delegate(object sender, EventArgs e)
                                     {
@@ -221,8 +223,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                         Node node = new Node();
                                         string[] parts = info.Split('|');
                                         node["ID"].Value = int.Parse(parts[0]);
-                                        node["PropertyName"].Value = parts[1];
                                         node["FullName"].Value = FullName;
+                                        node["PropertyName"].Value = parts[1];
                                         node["Value"].Value = ed.Text;
                                         ActiveEvents.Instance.RaiseActiveEvent(
                                             this,
@@ -236,7 +238,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 btn.Info =
                                     idxCell.Parent["ID"].Value.ToString() + "|" +
                                     idxCell["PropertyName"].Value + "|" +
-                                    idxCell["BelongsTo"].Get<bool>().ToString().ToLower();
+                                    idxCell["BelongsTo"].Get<bool>().ToString().ToLower() + "|" +
+                                    idxCell["FullName"].Value.ToString() + "|" +
+                                    idxCell["IsList"].Get<bool>() + "|" +
+                                    idxCell["FullTypeName"].Get<string>();
                                 btn.Text = idxCell["Value"].Value.ToString();
                                 btn.Click +=
                                     delegate(object sender, EventArgs e)
@@ -245,15 +250,29 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                         Node node = new Node();
                                         string[] parts = b.Info.Split('|');
                                         node["IDOfParent"].Value = int.Parse(parts[0]);
-                                        node["ID"].Value = int.Parse(b.Text);
                                         node["PropertyName"].Value = parts[1];
                                         node["BelongsTo"].Value = bool.Parse(parts[2]);
-                                        node["FullName"].Value = FullName;
-
-                                        ActiveEvents.Instance.RaiseActiveEvent(
-                                            this,
-                                            "EditObjectInstance",
-                                            node);
+                                        node["FullName"].Value = parts[3];
+                                        node["FullTypeName"].Value = parts[5];
+                                        node["ParentFullName"].Value = FullName;
+                                        bool isList = bool.Parse(parts[4]);
+                                        if (isList)
+                                        {
+                                            node["ListGenericArgument"].Value = parts[5];
+                                            ActiveEvents.Instance.RaiseActiveEvent(
+                                                this,
+                                                "EditObjectInstances",
+                                                node);
+                                        }
+                                        else
+                                        {
+                                            if (b.Text != "[null]")
+                                                node["ID"].Value = int.Parse(b.Text);
+                                            ActiveEvents.Instance.RaiseActiveEvent(
+                                                this,
+                                                "EditObjectInstance",
+                                                node);
+                                        }
                                     };
                                 cell.Controls.Add(btn);
                                 break;
