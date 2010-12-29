@@ -106,14 +106,17 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                         BindingFlags.Instance |
                         BindingFlags.Public |
                         BindingFlags.NonPublic);
-            Dictionary<string, MethodInfo> getters = new Dictionary<string, MethodInfo>();
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = 
+                new Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>>();
             foreach (PropertyInfo idx in props)
             {
-                ActiveFieldAttribute[] attrs = idx.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
+                ActiveFieldAttribute[] attrs = 
+                    idx.GetCustomAttributes(
+                        typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
                 if (attrs != null && attrs.Length > 0)
                 {
                     // Serializable property...
-                    getters[idx.Name] = idx.GetGetMethod(true);
+                    getters[idx.Name] = new Tuple<MethodInfo,ActiveFieldAttribute>(idx.GetGetMethod(true), attrs[0]);
                 }
             }
             MethodInfo retrieveAllObjects = type.GetMethod(
@@ -149,10 +152,10 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["Objects"]["Object" + id]["ID"].Value = id;
                 foreach (string idxMethodName in getters.Keys)
                 {
-                    object value = getters[idxMethodName].Invoke(idxObj, null);
-                    if (getters[idxMethodName].ReturnType.FullName.IndexOf("Magix.Brix.Types.LazyList") != -1)
+                    object value = getters[idxMethodName].Left.Invoke(idxObj, null);
+                    if (getters[idxMethodName].Left.ReturnType.FullName.IndexOf("Magix.Brix.Types.LazyList") != -1)
                     {
-                        int noItems = (int)getters[idxMethodName].ReturnType.GetProperty(
+                        int noItems = (int)getters[idxMethodName].Left.ReturnType.GetProperty(
                             "Count",
                             BindingFlags.Instance |
                             BindingFlags.FlattenHierarchy |
@@ -162,11 +165,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                             .Invoke(value, null);
                         node["Objects"]["Object" + id][idxMethodName]["Value"].Value = noItems;
                         node["Objects"]["Object" + id][idxMethodName]["Name"].Value = "LazyList&lt;" +
-                            getters[idxMethodName].ReturnType.GetGenericArguments()[0].Name + "&gt;";
+                            getters[idxMethodName].Left.ReturnType.GetGenericArguments()[0].Name + "&gt;";
                     }
-                    else if (getters[idxMethodName].ReturnType.FullName.IndexOf("System.Collections.Generic.List") != -1)
+                    else if (getters[idxMethodName].Left.ReturnType.FullName.IndexOf("System.Collections.Generic.List") != -1)
                     {
-                        int noItems = (int)getters[idxMethodName].ReturnType.GetProperty(
+                        int noItems = (int)getters[idxMethodName].Left.ReturnType.GetProperty(
                             "Count",
                             BindingFlags.Instance |
                             BindingFlags.FlattenHierarchy |
@@ -183,17 +186,19 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                         else
                             node["Objects"]["Object" + id][idxMethodName]["Value"].Value = value.ToString();
                         node["Objects"]["Object" + id][idxMethodName]["Name"].Value =
-                            getters[idxMethodName].ReturnType.Name;
+                            getters[idxMethodName].Left.ReturnType.Name;
                     }
+                    node["Objects"]["Object" + id][idxMethodName]["BelongsTo"].Value = getters[idxMethodName].Right.BelongsTo;
+                    node["Objects"]["Object" + id][idxMethodName]["IsOwner"].Value = getters[idxMethodName].Right.IsOwner;
+                    node["Objects"]["Object" + id][idxMethodName]["RelationName"].Value = getters[idxMethodName].Right.RelationName;
                     node["Objects"]["Object" + id][idxMethodName]["FullName"].Value =
-                        getters[idxMethodName].ReturnType.FullName;
+                        getters[idxMethodName].Left.ReturnType.FullName;
                     node["Objects"]["Object" + id][idxMethodName]["PropertyName"].Value = idxMethodName;
                 }
             }
             node["ActiveTypeFullName"].Value = type.FullName;
             node["GrowX"].Value = 950;
             node["GrowY"].Value = 550;
-            node["Caption"].Value = "Contents of ActiveType: " + type.FullName;
             int noItemsTotal = (int)type.GetProperty(
                 "Count",
                 BindingFlags.Static |
@@ -204,9 +209,74 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 .Invoke(null, null);
             node["TotalCount"].Value = noItemsTotal;
             node["Start"].Value = start;
+            node["Caption"].Value = 
+                string.Format("{1}-{2}/{3} of ActiveType - {0}", 
+                    type.FullName,
+                    start,
+                    start + node["Objects"].Count,
+                    noItemsTotal);
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewInstances",
                 "popup",
+                node);
+        }
+
+        [ActiveEvent(Name = "EditObjectInstance")]
+        protected void EditObjectInstance(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["IDOfParent"].Get<int>();
+            string propertyName = e.Params["PropertyName"].Get<string>();
+            string fullName = e.Params["FullName"].Get<string>();
+            List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
+            Type type = types.Find(
+                delegate(Type idx)
+                {
+                    return idx.FullName == fullName;
+                });
+            object obj = Adapter.Instance.SelectByID(type, id);
+            object objToShow = type.GetProperty(propertyName).GetGetMethod().Invoke(obj, null);
+            OpenNewWindowWithObject(objToShow, e.Params);
+        }
+
+        private void OpenNewWindowWithObject(object obj, Node input)
+        {
+            int id = input["ID"].Get<int>();
+            string propertyName = input["PropertyName"].Get<string>();
+            string fullName = input["FullName"].Get<string>();
+            Node node = new Node();
+            node["Caption"].Value = string.Format(@"Details for {0} with ID:{1}",
+                obj.GetType().Name,
+                id);
+            node["ID"].Value = id;
+            node["IDOfParent"].Value = input["IDOfParent"].Value;
+            foreach (PropertyInfo idx in obj.GetType().GetProperties())
+            {
+                ActiveFieldAttribute[] attrs = 
+                    idx.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
+                if (attrs != null && attrs.Length > 0)
+                {
+                    if (idx.PropertyType.Name.Contains("LazyList"))
+                    {
+                        string lst = "LazyList&lt;";
+                        lst += idx.PropertyType.GetGenericArguments()[0].Name + "&gt;";
+                        node["Object"]["obj" + idx.Name]["TypeName"].Value = lst;
+                        node["Object"]["obj" + idx.Name]["FullTypeName"].Value = idx.PropertyType.FullName;
+                        object lazyList = idx.GetGetMethod(true).Invoke(obj, null);
+                        int count = (int)lazyList.GetType().GetProperty("Count").GetGetMethod(true).Invoke(lazyList, null);
+                        node["Object"]["obj" + idx.Name]["Value"].Value = count.ToString();
+                    }
+                    else
+                    {
+                        node["Object"]["obj" + idx.Name]["Value"].Value = idx.GetGetMethod(true).Invoke(obj, null).ToString();
+                        node["Object"]["obj" + idx.Name]["TypeName"].Value = idx.PropertyType.Name;
+                        node["Object"]["obj" + idx.Name]["FullTypeName"].Value = idx.PropertyType.FullName;
+                    }
+                    node["Object"]["obj" + idx.Name]["PropertyName"].Value = idx.Name;
+                }
+            }
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewObject",
+                "child",
                 node);
         }
 
