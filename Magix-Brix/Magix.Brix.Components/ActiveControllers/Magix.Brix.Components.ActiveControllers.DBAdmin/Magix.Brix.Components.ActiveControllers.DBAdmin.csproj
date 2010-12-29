@@ -52,6 +52,10 @@
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
       <Name>Magix.Brix.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Settings\Magix.Brix.Components.ActiveTypes.Settings.csproj">
+      <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

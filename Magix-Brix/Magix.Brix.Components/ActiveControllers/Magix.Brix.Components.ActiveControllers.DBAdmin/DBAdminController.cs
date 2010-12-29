@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using Magix.Brix.Data;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
+using Magix.Brix.Data.Internal;
+using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 {
@@ -82,6 +84,18 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         protected void ViewAllInstances(object sender, ActiveEventArgs e)
         {
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int start = 0;
+            int end = start + Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50);
+            if (e.Params.Contains("Start"))
+            {
+                start = Math.Max(0, e.Params["Start"].Get<int>());
+                if (e.Params.Contains("End"))
+                    end = e.Params["End"].Get<int>();
+                else
+                {
+                    end = start + Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50);
+                }
+            }
             List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
             Type type = types.Find(
                 delegate(Type idx)
@@ -112,11 +126,18 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 
             Node node = new Node();
 
+            int idxNo = -1;
+
             foreach (object idxObj in 
                 retrieveAllObjects.Invoke(
                     null, 
                     new object[] { pars }) as System.Collections.IEnumerable)
             {
+                idxNo += 1;
+                if (idxNo < start)
+                    continue;
+                if (idxNo >= end)
+                    break;
                 int id = (int)type.GetProperty(
                     "ID",
                     BindingFlags.Instance |
@@ -169,13 +190,43 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     node["Objects"]["Object" + id][idxMethodName]["PropertyName"].Value = idxMethodName;
                 }
             }
+            node["ActiveTypeFullName"].Value = type.FullName;
             node["GrowX"].Value = 950;
             node["GrowY"].Value = 550;
             node["Caption"].Value = "Contents of ActiveType: " + type.FullName;
+            int noItemsTotal = (int)type.GetProperty(
+                "Count",
+                BindingFlags.Static |
+                BindingFlags.FlattenHierarchy |
+                BindingFlags.Public |
+                BindingFlags.NonPublic)
+                .GetGetMethod()
+                .Invoke(null, null);
+            node["TotalCount"].Value = noItemsTotal;
+            node["Start"].Value = start;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewInstances",
                 "popup",
                 node);
+        }
+
+        [ActiveEvent(Name = "ChangeDatabasePropertyValue")]
+        protected void ChangeDatabasePropertyValue(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            string propertyName = e.Params["PropertyName"].Get<string>();
+            string fullName = e.Params["FullName"].Get<string>();
+            string nValue = e.Params["Value"].Get<string>();
+            Type type = new List<Type>(PluginLoader.Instance.ActiveTypes).Find(
+                delegate(Type idx)
+                {
+                    return idx.FullName == fullName;
+                });
+            object tmp = Adapter.Instance.SelectByID(type, id);
+            PropertyInfo prop = type.GetProperty(propertyName);
+            object toInsert = Convert.ChangeType(nValue, prop.PropertyType);
+            prop.GetSetMethod(true).Invoke(tmp, new object[] { toInsert });
+            type.GetMethod("Save").Invoke(tmp, null);
         }
     }
 }
