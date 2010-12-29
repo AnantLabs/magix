@@ -19,6 +19,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel pnl;
         protected Button previous;
         protected Button next;
+        protected Window wnd;
+        protected DynamicPanel child;
 
         void IModule.InitialLoading(Node node)
         {
@@ -35,9 +37,23 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     TotalCount = node["TotalCount"].Get<int>();
                     CurrentIndex = node["Start"].Get<int>();
                     previous.Enabled = CurrentIndex > 0;
-                    previous.Text = previous.Enabled ? string.Format("Previous {0} items", Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50)) : "Previous";
+                    previous.Text = 
+                        previous.Enabled ? 
+                        string.Format(
+                            "Previous {0} items", 
+                            Math.Min(
+                                Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50),
+                                CurrentIndex)) :
+                    "Previous";
                     next.Enabled = CurrentIndex + DataSource.Count < TotalCount;
-                    next.Text = next.Enabled ? string.Format("Next {0} items", Math.Min(Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50), TotalCount - CurrentIndex)) : "Next";
+                    next.Text = 
+                        next.Enabled ? 
+                            string.Format(
+                                "Next {0} items", 
+                                Math.Min(
+                                    Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50), 
+                                    TotalCount - (CurrentIndex + DataSource.Count))) :
+                            "Next";
                 };
         }
 
@@ -46,6 +62,58 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             base.OnLoad(e);
             if (DataSource != null)
                 DataBindObjects();
+        }
+
+        [ActiveEvent(Name = "LoadControl")]
+        protected void LoadControl(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["Position"].Get<string>() == "child" && child.Controls.Count == 0)
+            {
+                wnd.Visible = true;
+                if (e.Params["Parameters"].Contains("Caption"))
+                {
+                    wnd.Caption = e.Params["Parameters"]["Caption"].Get<string>();
+                }
+                if (true.Equals(e.Params["Parameters"].Contains("Append")))
+                    child.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                else
+                {
+                    ClearControls(child);
+                    child.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                }
+            }
+        }
+
+        protected void child_LoadControls(object sender, DynamicPanel.ReloadEventArgs e)
+        {
+            DynamicPanel dynamic = sender as DynamicPanel;
+            System.Web.UI.Control ctrl = PluginLoader.Instance.LoadActiveModule(e.Key);
+            if (e.FirstReload)
+            {
+                ctrl.Init +=
+                    delegate
+                    {
+                        IModule module = ctrl as IModule;
+                        if (module != null)
+                        {
+                            module.InitialLoading(e.Extra as Node);
+                        }
+                    };
+            }
+            dynamic.Controls.Add(ctrl);
+        }
+
+        private void ClearControls(DynamicPanel dynamic)
+        {
+            foreach (System.Web.UI.Control idx in dynamic.Controls)
+            {
+                ActiveEvents.Instance.RemoveListener(idx);
+            }
+            dynamic.ClearControls();
+        }
+
+        protected void wnd_Closed(object sender, EventArgs e)
+        {
         }
 
         private int CurrentIndex
@@ -109,10 +177,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     cell.InnerHtml = "ID";
                 else
                 {
-                    cell.InnerHtml = string.Format(@"<span title=""{1}"">{2} (<span style=""color:#999;"">{0}</span>)</span>",
+                    cell.InnerHtml = string.Format(@"<span title=""{1}"">{2} ( <span style=""color:#999;"">{0}</span> {3} {4} {5})</span>",
                         idxCell["Name"].Value,
                         idxCell["FullName"].Value,
-                        idxCell["PropertyName"].Value);
+                        idxCell["PropertyName"].Value,
+                        idxCell["BelongsTo"].Get<bool>() ? "BelongsTo" : "",
+                        idxCell["IsOwner"].Get<bool>() ? "" : "IsNotOwner",
+                        string.IsNullOrEmpty(idxCell["RelationName"].Get<string>()) ? "" : idxCell["RelationName"].Get<string>());
                 }
                 firstRow.Cells.Add(cell);
             }
@@ -161,7 +232,30 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 cell.Controls.Add(edit);
                                 break;
                             default:
-                                cell.InnerHtml = idxCell["Value"].Value.ToString();
+                                LinkButton btn = new LinkButton();
+                                btn.Info =
+                                    idxCell.Parent["ID"].Value.ToString() + "|" +
+                                    idxCell["PropertyName"].Value + "|" +
+                                    idxCell["BelongsTo"].Get<bool>().ToString().ToLower();
+                                btn.Text = idxCell["Value"].Value.ToString();
+                                btn.Click +=
+                                    delegate(object sender, EventArgs e)
+                                    {
+                                        LinkButton b = sender as LinkButton;
+                                        Node node = new Node();
+                                        string[] parts = b.Info.Split('|');
+                                        node["IDOfParent"].Value = int.Parse(parts[0]);
+                                        node["ID"].Value = int.Parse(b.Text);
+                                        node["PropertyName"].Value = parts[1];
+                                        node["BelongsTo"].Value = bool.Parse(parts[2]);
+                                        node["FullName"].Value = FullName;
+
+                                        ActiveEvents.Instance.RaiseActiveEvent(
+                                            this,
+                                            "EditObjectInstance",
+                                            node);
+                                    };
+                                cell.Controls.Add(btn);
                                 break;
                         }
                     }
