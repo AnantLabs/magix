@@ -249,6 +249,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 id);
             node["ID"].Value = id;
             node["IDOfParent"].Value = input["IDOfParent"].Value;
+            node["FullName"].Value = fullName;
             foreach (PropertyInfo idx in obj.GetType().GetProperties())
             {
                 ActiveFieldAttribute[] attrs = 

@@ -29,7 +29,10 @@
                 <td title='<%#Eval("[FullTypeName].Value").ToString().Replace("'", "\\'") %>'><%#Eval("[TypeName].Value") %></td>
                 <td><%#Eval("[PropertyName].Value")%></td>
                 <td>
-                    <%#Eval("[Value].Value") %>
+                    <mux:Panel
+                        runat="server"
+                        Info='<%#Eval("[Value].Value") + "|" + Eval("[TypeName].Value") + "|" + Eval("[PropertyName].Value") %>'
+                        CssClass="templateField" />
                 </td>
             </tr>
         </ItemTemplate>
