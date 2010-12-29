@@ -37,6 +37,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditList.ascx.cs">
+      <DependentUpon>EditList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="ViewObject.ascx.cs">
       <DependentUpon>ViewObject.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -94,6 +98,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ViewObject.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EditList.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
