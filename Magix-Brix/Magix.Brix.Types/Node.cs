@@ -376,6 +376,15 @@ namespace Magix.Brix.Types
             return _children.Contains(item);
         }
 
+        public bool Contains(string itemName)
+        {
+            return _children.Exists(
+                delegate(Node idx)
+                {
+                    return idx.Name == itemName;
+                });
+        }
+
         public void CopyTo(Node[] array, int arrayIndex)
         {
             foreach (Node idx in _children)
