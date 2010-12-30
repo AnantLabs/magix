@@ -287,20 +287,43 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     if (attrs != null && attrs.Length > 0)
                     {
                         load["Objects"]["Obj" + id][idxProp.Name]["Name"].Value = idxProp.Name;
-                        load["Objects"]["Obj" + id][idxProp.Name]["TypeName"].Value = idxProp.PropertyType.Name;
-                        load["Objects"]["Obj" + id][idxProp.Name]["FullTypeName"].Value = idxProp.PropertyType.FullName;
-                        load["Objects"]["Obj" + id][idxProp.Name]["BelongsTo"].Value = attrs[0].BelongsTo;
-                        load["Objects"]["Obj" + id][idxProp.Name]["IsOwner"].Value = attrs[0].IsOwner;
-                        load["Objects"]["Obj" + id][idxProp.Name]["RelationName"].Value = attrs[0].RelationName;
-                        object value = idxProp.GetGetMethod(true).Invoke(idxObj, null);
-                        if (value == null)
+                        if (idxProp.PropertyType.FullName.Contains("LazyList"))
                         {
-                            load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = null;
+                            string lst = "LazyList&lt;";
+                            lst += idxProp.PropertyType.GetGenericArguments()[0].Name + "&gt;";
+                            load["Objects"]["Obj" + id][idxProp.Name]["TypeName"].Value = lst;
+                            load["Objects"]["Obj" + id][idxProp.Name]["FullTypeName"].Value = lst;
+                            object value = idxProp.GetGetMethod(true).Invoke(idxObj, null);
+                            int count = (int)value.GetType().GetProperty("Count").GetGetMethod().Invoke(value, null);
+                            load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = count.ToString();
+                        }
+                        else if (idxProp.PropertyType.FullName.Contains("List"))
+                        {
+                            string lst = "List&lt;";
+                            lst += idxProp.PropertyType.GetGenericArguments()[0].Name + "&gt;";
+                            load["Objects"]["Obj" + id][idxProp.Name]["TypeName"].Value = lst;
+                            load["Objects"]["Obj" + id][idxProp.Name]["FullTypeName"].Value = lst;
+                            object value = idxProp.GetGetMethod(true).Invoke(idxObj, null);
+                            int count = (int)value.GetType().GetProperty("Count").GetGetMethod().Invoke(value, null);
+                            load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = count.ToString();
                         }
                         else
                         {
-                            load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = value.ToString();
+                            load["Objects"]["Obj" + id][idxProp.Name]["TypeName"].Value = idxProp.PropertyType.FullName;
+                            load["Objects"]["Obj" + id][idxProp.Name]["FullTypeName"].Value = idxProp.PropertyType.FullName;
+                            object value = idxProp.GetGetMethod(true).Invoke(idxObj, null);
+                            if (value == null)
+                            {
+                                load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = null;
+                            }
+                            else
+                            {
+                                load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = value.ToString();
+                            }
                         }
+                        load["Objects"]["Obj" + id][idxProp.Name]["BelongsTo"].Value = attrs[0].BelongsTo;
+                        load["Objects"]["Obj" + id][idxProp.Name]["IsOwner"].Value = attrs[0].IsOwner;
+                        load["Objects"]["Obj" + id][idxProp.Name]["RelationName"].Value = attrs[0].RelationName;
                     }
                 }
             }
@@ -332,12 +355,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             string propertyName = input["PropertyName"].Get<string>();
             string fullName = input["FullName"].Get<string>();
             Node node = new Node();
-            node["Caption"].Value = string.Format(@"Details for {0} with ID:{1}",
-                fullName,
-                id);
+            node["Caption"].Value = string.Format(@"Details for {0} with ID:{1}, belonging to {2}({3}) on {4} property",
+                fullName.Substring(fullName.LastIndexOf(".") + 1),
+                id,
+                input["ParentFullName"].Value.ToString().Substring(input["ParentFullName"].Value.ToString().LastIndexOf(".") + 1),
+                input["IDOfParent"].Value.ToString(),
+                input["PropertyName"].Value.ToString());
             node["ID"].Value = id;
             node["IDOfParent"].Value = input["IDOfParent"].Value;
             node["FullName"].Value = fullName;
+            node["ParentFullTypeName"].Value = input["ParentFullName"].Value;
             List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
             Type type = types.Find(
                 delegate(Type idx)
@@ -355,7 +382,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                         string lst = "LazyList&lt;";
                         lst += idx.PropertyType.GetGenericArguments()[0].Name + "&gt;";
                         node["Object"]["obj" + idx.Name]["TypeName"].Value = lst;
-                        node["Object"]["obj" + idx.Name]["FullTypeName"].Value = idx.PropertyType.FullName;
+                        node["Object"]["obj" + idx.Name]["FullTypeName"].Value = idx.PropertyType.GetGenericArguments()[0];
                         object lazyList = idx.GetGetMethod(true).Invoke(obj, null);
                         int count = (int)lazyList.GetType().GetProperty("Count").GetGetMethod(true).Invoke(lazyList, null);
                         node["Object"]["obj" + idx.Name]["Value"].Value = count.ToString();
