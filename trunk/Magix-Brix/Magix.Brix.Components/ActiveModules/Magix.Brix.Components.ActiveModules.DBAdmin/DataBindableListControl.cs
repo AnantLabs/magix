@@ -124,11 +124,18 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                     DataSource["SelectEventToFire"].Get<string>(),
                                 node);
                             ClearControls(child);
+                            string parId = Parent.ClientID;
                             Node node2 = new Node();
                             node2["ClientID"].Value = this.ClientID;
                             ActiveEvents.Instance.RaiseActiveEvent(
                                 this,
                                 "ClearControlsForSpecificDynamic",
+                                node2);
+                            node2 = new Node();
+                            node2["ClientID"].Value = parId;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                "UpdateSpecificNestedDynamic",
                                 node2);
                             this.Close();
                         };

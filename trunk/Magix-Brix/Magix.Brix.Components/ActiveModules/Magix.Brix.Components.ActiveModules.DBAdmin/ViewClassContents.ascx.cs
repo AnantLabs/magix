@@ -91,6 +91,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
         }
 
+        protected override void ReDataBind()
+        {
+            Node node = new Node();
+            node["Start"].Value = Start;
+            RaiseForwardRewindEvent(node);
+        }
+
         protected override void DataBindObjects()
         {
             HtmlTable table = CreateTable();

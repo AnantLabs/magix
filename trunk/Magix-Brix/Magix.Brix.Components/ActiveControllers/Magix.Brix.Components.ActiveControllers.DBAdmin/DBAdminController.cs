@@ -348,11 +348,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Type typeOfList = GetListType(type, propertyName);
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = GetMethodInfos(GetProps(typeOfList));
             GetNodeList(
-                enumerable, 
-                node, 
-                getters, 
-                typeOfList, 
-                0, 
+                enumerable,
+                node,
+                getters,
+                typeOfList,
+                0,
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
             node["Start"].Value = 0;
             node["IsRemove"].Value = true;
@@ -367,6 +367,38 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewListOfObjects",
                 "child",
                 node);
+        }
+
+        // Called when a List of items should be displayed
+        [ActiveEvent(Name = "DBAdmin.UpdateList")]
+        protected void DBAdmin_UpdateList(object sender, ActiveEventArgs e)
+        {
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string propertyName = e.Params["PropertyName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            Type type = GetType(fullTypeName);
+            object parentObject = GetObject(type, id);
+            System.Collections.IEnumerable enumerable = GetList(parentObject, propertyName, type);
+            Node node = new Node();
+            Type typeOfList = GetListType(type, propertyName);
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = GetMethodInfos(GetProps(typeOfList));
+            GetNodeList(
+                enumerable,
+                node,
+                getters,
+                typeOfList,
+                0,
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
+            node["Start"].Value = 0;
+            node["IsRemove"].Value = true;
+            node["IsAppend"].Value = true;
+            node["ParentPropertyName"].Value = propertyName;
+            node["ParentType"].Value = parentObject.GetType().Name;
+            node["ParentFullType"].Value = parentObject.GetType().FullName;
+            node["ParentID"].Value = id;
+            node["End"].Value = node["Objects"].Count;
+            node["TotalCount"].Value = GetCountFromList(parentObject, propertyName, type);
+            e.Params = node;
         }
 
         private int GetCountFromList(object obj, string listPropName, Type typeOfObj)
@@ -422,6 +454,32 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
                 "child",
                 node);
+        }
+
+        // Called when a List of items should be displayed
+        [ActiveEvent(Name = "DBAdmin.UpdateSingleInstance")]
+        protected void DBAdmin_UpdateSingleInstance(object sender, ActiveEventArgs e)
+        {
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string parentTypeName = e.Params["ParentFullType"].Get<string>();
+            string propertyName = e.Params["ParentPropertyName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            int parentId = e.Params["ParentID"].Get<int>();
+
+            Type type = GetType(fullTypeName);
+            Type parentType = GetType(parentTypeName);
+
+            object parentObject = GetObject(parentType, parentId);
+            object propertyToEdit = GetPropertyObject(parentType, parentObject, propertyName);
+
+            if (propertyToEdit != null)
+            {
+                Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
+                    GetMethodInfos(GetProps(propertyToEdit.GetType()));
+                GetObject(e.Params["Object"], getters, propertyToEdit, id);
+            }
+            e.Params["Object"]["ID"].Value = id;
+            e.Params["TotalCount"].Value = GetCount(type);
         }
 
         // Called when a List of items should be displayed
