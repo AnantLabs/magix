@@ -55,6 +55,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 node);
         }
 
+        protected override void ReDataBind()
+        {
+            // Yup, we're it ...!
+            ClearControls(child);
+            wnd.Visible = false;
+            Node node = new Node();
+            node["ClientID"].Value = ClientID;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "ClearControlsForSpecificDynamic",
+                node);
+        }
+
         protected void remove_Click(object sender, EventArgs e)
         {
             Node node = new Node();
@@ -66,6 +79,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 this,
                 "DBAdmin.RemoveReference",
                 node);
+            Node node2 = new Node();
+            node2["ClientID"].Value = this.ClientID;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "ClearControlsForSpecificDynamic",
+                node2);
         }
 
         protected override void DataBindObjects()

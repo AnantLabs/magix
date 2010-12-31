@@ -119,8 +119,23 @@ namespace Magix.Brix.Components
                 // Yup, we're it ...!
                 ClearControls(child);
                 wnd.Visible = false;
+
+                // Yup, we're it ...!
+                ReDataBind();
             }
         }
+
+        [ActiveEvent(Name = "UpdateSpecificNestedDynamic")]
+        protected void UpdateSpecificNestedDynamic(object sender, ActiveEventArgs e)
+        {
+            if (child.ClientID == e.Params["ClientID"].Get<string>())
+            {
+                // Yup, we're it ...!
+                ReDataBind();
+            }
+        }
+
+        protected abstract void ReDataBind();
 
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)

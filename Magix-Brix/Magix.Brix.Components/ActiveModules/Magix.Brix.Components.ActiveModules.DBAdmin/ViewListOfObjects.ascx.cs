@@ -41,6 +41,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 node);
         }
 
+        protected override void ReDataBind()
+        {
+            DataSource["Objects"].UnTie();
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.UpdateList",
+                DataSource);
+            pnl.Controls.Clear();
+            UpdateCaption();
+            DataBindObjects();
+            pnl.ReRender();
+        }
+
         protected override void DataBindObjects()
         {
             HtmlTable table = CreateTable();
