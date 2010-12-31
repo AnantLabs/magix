@@ -17,7 +17,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     {
         protected TreeView tree;
         protected Window wnd;
-        protected DynamicPanel child;
 
         public void InitialLoading(Node node)
         {

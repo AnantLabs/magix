@@ -11,8 +11,8 @@ namespace Magix.UX.Widgets
 {
     public class InPlaceEdit : Panel
     {
-        private LinkButton _link = new LinkButton();
-        private TextBox _text = new TextBox();
+        private readonly LinkButton _link = new LinkButton();
+        private readonly TextBox _text = new TextBox();
 
         public InPlaceEdit()
         {
@@ -45,6 +45,7 @@ namespace Magix.UX.Widgets
 
         protected override void CreateChildControls()
         {
+            base.CreateChildControls();
             CreateEditControls();
         }
 
@@ -52,7 +53,7 @@ namespace Magix.UX.Widgets
         {
             // Creating LinkButton
             _link.ID = "btn";
-            _link.Click += _link_Click;
+            _link.Click += Link_Click;
             Controls.Add(_link);
 
             // Creating TextBox
@@ -65,7 +66,7 @@ namespace Magix.UX.Widgets
             Controls.Add(_text);
         }
 
-        private void _link_Click(object sender, EventArgs e)
+        private void Link_Click(object sender, EventArgs e)
         {
             if (_link.Text == "[nothing]")
                 _text.Text = "";

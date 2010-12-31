@@ -227,7 +227,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     }
                     else
                     {
-                        InPlaceEdit ed = new InPlaceEdit();
+                        TextAreaEdit ed = new TextAreaEdit();
                         ed.Text = idxProp["Value"].Get<string>();
                         ed.Info =
                             idxProp.Parent.Parent["ID"].Value.ToString() + "|" +
@@ -235,7 +235,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         ed.TextChanged +=
                             delegate(object sender, EventArgs e)
                             {
-                                InPlaceEdit edit = sender as InPlaceEdit;
+                                TextAreaEdit edit = sender as TextAreaEdit;
                                 Node node = new Node();
                                 string[] infos = edit.Info.Split('|');
                                 string parentPropertyName = infos[1];
