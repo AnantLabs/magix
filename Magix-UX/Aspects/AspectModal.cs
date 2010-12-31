@@ -102,13 +102,10 @@ namespace Magix.UX.Aspects
                     options,
                     ",{",
                     ",",
-                    string.Format("opacity:'{0}'", Opacity.ToString(CultureInfo.InvariantCulture)));
+                    string.Format("opacity:{0}", Opacity.ToString(CultureInfo.InvariantCulture)));
             }
-            options = StringHelper.ConditionalAdd(
-                options,
-                "",
-                "}",
-                "");
+            if (!string.IsNullOrEmpty(options))
+                options += "}";
             return string.Format("new MUX.AspectModal('{0}'{1})", this.ClientID, options);
 		}
 

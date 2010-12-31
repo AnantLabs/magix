@@ -111,6 +111,13 @@ namespace Magix.UX.Widgets
                 Dragged(this, new EventArgs());
         }
 
+        public void CloseWindow()
+        {
+            Visible = false;
+            if (Closed != null)
+                Closed(this, new EventArgs());
+        }
+
         private void CloseClick(object sender, EventArgs e)
         {
             Visible = false;

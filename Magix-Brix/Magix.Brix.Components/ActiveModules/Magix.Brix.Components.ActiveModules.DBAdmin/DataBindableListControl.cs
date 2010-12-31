@@ -123,15 +123,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 "DBAdmin." +
                                     DataSource["SelectEventToFire"].Get<string>(),
                                 node);
-                            ClearControls(child);
-                            string parId = Parent.ClientID;
-                            Node node2 = new Node();
-                            node2["ClientID"].Value = this.ClientID;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "ClearControlsForSpecificDynamic",
-                                node2);
-                            this.Close();
+                            (Parent.Parent.Parent as Window).CloseWindow();
                         };
                     cS.Controls.Add(btn);
                     row.Cells.Add(cS);
@@ -255,12 +247,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 }
                 tbl.Rows.Add(row);
             }
-        }
-
-        private void Close()
-        {
-            ClearControls(child);
-            wnd.Visible = false;
         }
     }
 }
