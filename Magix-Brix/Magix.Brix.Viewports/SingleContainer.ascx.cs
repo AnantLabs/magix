@@ -46,11 +46,11 @@ namespace Magix.Brix.Viewports
             {
                 // Window
                 Window w = new Window();
-                w.CssClass = "mux-shaded mux-rounded";
+                w.CssClass = "mux-shaded mux-rounded window-left-buttons";
                 w.Style[Styles.left] = ((idxNo * 25) + 10).ToString() + "px";
                 w.Style[Styles.top] = ((idxNo * 30) + 10).ToString() + "px";
                 w.Style[Styles.position] = "absolute";
-                w.Style[Styles.minWidth] = "450px";
+                w.Style[Styles.minWidth] = "550px";
                 w.Style[Styles.minHeight] = "250px";
                 w.Style[Styles.zIndex] = (1000 + idxNo).ToString();
                 w.Style[Styles.overflow] = "auto";
