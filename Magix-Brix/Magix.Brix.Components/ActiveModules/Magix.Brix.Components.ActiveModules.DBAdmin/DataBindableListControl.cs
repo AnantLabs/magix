@@ -61,6 +61,18 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             HtmlTableRow row = new HtmlTableRow();
             row.Attributes.Add("class", "header");
+            if (DataSource["IsSelect"].Get<bool>())
+            {
+                HtmlTableCell cS = new HtmlTableCell();
+                cS.InnerHtml = "Select";
+                row.Cells.Add(cS);
+            }
+            if (DataSource["IsRemove"].Get<bool>())
+            {
+                HtmlTableCell cS = new HtmlTableCell();
+                cS.InnerHtml = "Remove";
+                row.Cells.Add(cS);
+            }
             HtmlTableCell cId = new HtmlTableCell();
             cId.InnerHtml = "ID";
             row.Cells.Add(cId);
@@ -90,6 +102,63 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             foreach (Node idxObj in DataSource["Objects"])
             {
                 HtmlTableRow row = new HtmlTableRow();
+                if (DataSource["IsSelect"].Get<bool>())
+                {
+                    HtmlTableCell cS = new HtmlTableCell();
+                    LinkButton btn = new LinkButton();
+                    btn.Text = "Select";
+                    btn.Info = idxObj["ID"].Value.ToString();
+                    btn.Click +=
+                        delegate(object sender, EventArgs e)
+                        {
+                            Node node = new Node();
+                            node["IsListAppend"].Value = DataSource["IsListAppend"].Value;
+                            node["ParentID"].Value = ParentID;
+                            node["ParentPropertyName"].Value = ParentPropertyName;
+                            node["ParentType"].Value = ParentType;
+                            node["NewObjectID"].Value = int.Parse((sender as LinkButton).Info);
+                            node["NewObjectType"].Value = DataSource["FullTypeName"].Value;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                "DBAdmin." +
+                                    DataSource["SelectEventToFire"].Get<string>(),
+                                node);
+                            ClearControls(child);
+                            Node node2 = new Node();
+                            node2["ClientID"].Value = this.ClientID;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                "ClearControlsForSpecificDynamic",
+                                node2);
+                            this.Close();
+                        };
+                    cS.Controls.Add(btn);
+                    row.Cells.Add(cS);
+                }
+                if (DataSource["IsRemove"].Get<bool>())
+                {
+                    HtmlTableCell cS = new HtmlTableCell();
+                    LinkButton btn = new LinkButton();
+                    btn.Text = "Remove";
+                    btn.Info = idxObj["ID"].Value.ToString();
+                    btn.Click +=
+                        delegate(object sender, EventArgs e)
+                        {
+                            Node node = new Node();
+                            node["ParentID"].Value = ParentID;
+                            node["ParentPropertyName"].Value = ParentPropertyName;
+                            node["ParentType"].Value = ParentFullType;
+                            node["ObjectToRemoveID"].Value = int.Parse((sender as LinkButton).Info);
+                            node["ObjectToRemoveType"].Value = DataSource["FullTypeName"].Value;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                "DBAdmin.ComplexInstanceRemoved",
+                                node);
+                            this.Close();
+                        };
+                    cS.Controls.Add(btn);
+                    row.Cells.Add(cS);
+                }
                 int id = idxObj["ID"].Get<int>();
                 HtmlTableCell idC = new HtmlTableCell();
                 idC.InnerHtml = id.ToString();
@@ -103,7 +172,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         b.Text = idxProp["Value"].Get<string>();
                         b.Info = 
                             idxProp.Parent.Parent["ID"].Value.ToString() + "|" + 
-                            idxProp["PropertyName"].Get<string>();
+                            idxProp["PropertyName"].Get<string>() + "|" +
+                            idxProp["BelongsTo"].Value;
                         b.Click +=
                             delegate(object sender, EventArgs e)
                             {
@@ -111,11 +181,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 string[] infos = bt.Info.Split('|');
                                 string parentPropertyName = infos[1];
                                 int parentId = int.Parse(infos[0]);
+                                bool belongsTo = bool.Parse(infos[2]);
                                 string parentType = DataSource["FullTypeName"].Get<string>();
                                 Node node = new Node();
                                 node["FullTypeName"].Value = parentType;
                                 node["ID"].Value = parentId;
                                 node["PropertyName"].Value = parentPropertyName;
+                                node["BelongsTo"].Value = belongsTo;
                                 ActiveEvents.Instance.RaiseActiveEvent(
                                     this,
                                     "DBAdmin.ViewList",
@@ -129,7 +201,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         b.Text = idxProp["Value"].Get<string>();
                         b.Info =
                             idxProp.Parent.Parent["ID"].Value.ToString() + "|" +
-                            idxProp["PropertyName"].Get<string>();
+                            idxProp["PropertyName"].Get<string>() + "|" +
+                            idxProp["BelongsTo"].Value;
                         b.Click +=
                             delegate(object sender, EventArgs e)
                             {
@@ -138,10 +211,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 string parentPropertyName = infos[1];
                                 int parentId = int.Parse(infos[0]);
                                 string parentType = DataSource["FullTypeName"].Get<string>();
+                                bool belongsTo = bool.Parse(infos[2]);
                                 Node node = new Node();
                                 node["FullTypeName"].Value = parentType;
                                 node["ID"].Value = parentId;
                                 node["PropertyName"].Value = parentPropertyName;
+                                node["BelongsTo"].Value = belongsTo;
                                 ActiveEvents.Instance.RaiseActiveEvent(
                                     this,
                                     "DBAdmin.ViewSingleInstance",
@@ -179,6 +254,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 }
                 tbl.Rows.Add(row);
             }
+        }
+
+        private void Close()
+        {
+            ClearControls(child);
+            wnd.Visible = false;
         }
     }
 }

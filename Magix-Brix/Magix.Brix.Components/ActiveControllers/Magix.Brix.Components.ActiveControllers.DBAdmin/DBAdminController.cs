@@ -312,12 +312,6 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 GetMethodInfos(GetProps(type));
             System.Collections.IEnumerable enumerable = SelectObjects(type);
             node = GetNodeList(enumerable, node, getters, type, start, end);
-
-            //node["ParentPropertyName"].Value = propertyName;
-            //node["ParentType"].Value = type.Name;
-            //node["ParentFullType"].Value = type.FullName;
-            //node["ParentID"].Value = id;
-
             node["Start"].Value = start;
             node["End"].Value = node["Objects"].Count + start;
             node["TotalCount"].Value = GetCount(type);
@@ -361,6 +355,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 0, 
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
             node["Start"].Value = 0;
+            node["IsRemove"].Value = true;
+            node["IsAppend"].Value = true;
             node["ParentPropertyName"].Value = propertyName;
             node["ParentType"].Value = parentObject.GetType().Name;
             node["ParentFullType"].Value = parentObject.GetType().FullName;
@@ -421,6 +417,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             MethodInfo get = prop.GetGetMethod(true);
             node["FullTypeName"].Value = get.ReturnType.FullName;
             node["TotalCount"].Value = GetCount(get.ReturnType);
+            node["EditingAllowed"].Value = !e.Params["BelongsTo"].Get<bool>();
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
                 "child",
@@ -441,6 +438,165 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             object valueChanged = Convert.ChangeType(value, setter.GetParameters()[0].ParameterType);
             setter.Invoke(parent, new object[] { valueChanged });
             type.GetMethod("Save", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Invoke(parent, null);
+        }
+
+        // Called when in View Single Object one chooses to replace the current object
+        // with another instance.
+        [ActiveEvent(Name = "DBAdmin.ChangeComplexInstance")]
+        protected void DBAdmin_ChangeComplexInstance(object sender, ActiveEventArgs e)
+        {
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentType = e.Params["ParentType"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+
+            Node node = new Node();
+            FillNodeWithViewContents(e, node);
+
+            // Special nodes to signal to the form how it's supposed to do a "selection"
+            // and where to put its "results"...
+            node["IsSelect"].Value = true;
+            node["SelectEventToFire"].Value = "ComplexInstanceChanged";
+            node["IsListAppend"].Value = false;
+            node["ParentID"].Value = parentId;
+            node["ParentPropertyName"].Value = parentPropertyName;
+            node["ParentType"].Value = parentType;
+
+            e.Params = node;
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
+                "child",
+                node);
+        }
+
+        // Called when in View List Of Objects one chooses to append a new object into the list
+        [ActiveEvent(Name = "DBAdmin.AppendComplexInstance")]
+        protected void DBAdmin_AppendComplexInstance(object sender, ActiveEventArgs e)
+        {
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentType = e.Params["ParentType"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+
+            Node node = new Node();
+            FillNodeWithViewContents(e, node);
+
+            // Special nodes to signal to the form how it's supposed to do a "selection"
+            // and where to put its "results"...
+            node["IsSelect"].Value = true;
+            node["SelectEventToFire"].Value = "ComplexObjectAppended";
+            node["IsListAppend"].Value = false;
+            node["ParentID"].Value = parentId;
+            node["ParentPropertyName"].Value = parentPropertyName;
+            node["ParentType"].Value = parentType;
+
+            e.Params = node;
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
+                "child",
+                node);
+        }
+
+        // Called when in View Single Object one chooses to replace the current object
+        // with another instance.
+        [ActiveEvent(Name = "DBAdmin.ComplexInstanceChanged")]
+        protected void DBAdmin_ComplexInstanceChanged(object sender, ActiveEventArgs e)
+        {
+            bool isListAppend = e.Params["IsListAppend"].Get<bool>();
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentTypeName = e.Params["ParentType"].Get<string>();
+            int newObjectID = e.Params["NewObjectID"].Get<int>();
+            string newObjectType = e.Params["NewObjectType"].Get<string>();
+
+            Type parentType = GetType(parentTypeName);
+            Type objectType = GetType(newObjectType);
+            object parentObject = GetObject(parentType, parentId);
+            object newChild = GetObject(objectType, newObjectID);
+            MethodInfo setter = parentType.GetProperty(
+                parentPropertyName,
+                BindingFlags.NonPublic |
+                BindingFlags.Public |
+                BindingFlags.Instance)
+                .GetSetMethod(true);
+            setter.Invoke(parentObject, new object[] { newChild });
+            parentType.GetMethod("Save").Invoke(parentObject, null);
+        }
+
+        [ActiveEvent(Name = "DBAdmin.ComplexObjectAppended")]
+        protected void DBAdmin_ComplexObjectAppended(object sender, ActiveEventArgs e)
+        {
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentTypeName = e.Params["ParentType"].Get<string>();
+            int newObjectID = e.Params["NewObjectID"].Get<int>();
+            string newObjectType = e.Params["NewObjectType"].Get<string>();
+
+            Type parentType = GetType(parentTypeName);
+            Type objectType = GetType(newObjectType);
+            object parentObject = GetObject(parentType, parentId);
+            object newChild = GetObject(objectType, newObjectID);
+            MethodInfo getter = parentType.GetProperty(
+                parentPropertyName,
+                BindingFlags.NonPublic |
+                BindingFlags.Public |
+                BindingFlags.Instance)
+                .GetGetMethod(true);
+            object list = getter.Invoke(parentObject, null);
+            list.GetType().GetMethod("Add").Invoke(list, new object[] { newChild });
+            parentType.GetMethod("Save").Invoke(parentObject, null);
+        }
+
+        // Called when an object wants to nullify one of its complex properties
+        [ActiveEvent(Name = "DBAdmin.RemoveReference")]
+        protected void DBAdmin_RemoveReference(object sender, ActiveEventArgs e)
+        {
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentType = e.Params["ParentType"].Get<string>();
+            Type type = GetType(parentType);
+            object obj = GetObject(type, parentId);
+            MethodInfo method = type.GetProperty(
+                parentPropertyName,
+                BindingFlags.Instance |
+                BindingFlags.NonPublic |
+                BindingFlags.Public)
+                .GetSetMethod(true);
+            method.Invoke(obj, new object[] { null });
+            type.GetMethod("Save").Invoke(obj, null);
+        }
+
+        // Called when in View Single Object one chooses to replace the current object
+        // with another instance.
+        [ActiveEvent(Name = "DBAdmin.ComplexInstanceRemoved")]
+        protected void DBAdmin_ComplexInstanceRemoved(object sender, ActiveEventArgs e)
+        {
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentTypeName = e.Params["ParentType"].Get<string>();
+            int objectToRemove = e.Params["ObjectToRemoveID"].Get<int>();
+            string objectToRemoveType = e.Params["ObjectToRemoveType"].Get<string>();
+
+            Type parentType = GetType(parentTypeName);
+            Type objectType = GetType(objectToRemoveType);
+            object parentObject = GetObject(parentType, parentId);
+            object childToRemove = GetObject(objectType, objectToRemove);
+            MethodInfo getter = parentType.GetProperty(
+                parentPropertyName,
+                BindingFlags.NonPublic |
+                BindingFlags.Public |
+                BindingFlags.Instance)
+                .GetGetMethod(true);
+            object enumerable = getter.Invoke(parentObject, null);
+            Type typeOfEnumerable = enumerable.GetType();
+            typeOfEnumerable.GetMethod(
+                "Remove", 
+                BindingFlags.Public | 
+                BindingFlags.Instance)
+                .Invoke(
+                    enumerable, 
+                    new object[] { childToRemove });
+            parentType.GetMethod("Save").Invoke(parentObject, null);
         }
     }
 }

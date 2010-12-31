@@ -11,3 +11,17 @@
     style="font-size:small;"
     id="pnl">
 </mux:Panel>
+
+<mux:Button
+    runat="server"
+    id="change"
+    OnClick="change_Click"
+    Text="Change..." />
+
+<mux:Button
+    runat="server"
+    id="remove"
+    OnClick="remove_Click"
+    Text="Remove Reference" />
+
+

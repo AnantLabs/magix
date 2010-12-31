@@ -11,3 +11,10 @@
     style="font-size:small;"
     id="pnl">
 </mux:Panel>
+
+
+<mux:Button
+    runat="server"
+    id="append"
+    Text="Append..."
+    OnClick="append_Click" />

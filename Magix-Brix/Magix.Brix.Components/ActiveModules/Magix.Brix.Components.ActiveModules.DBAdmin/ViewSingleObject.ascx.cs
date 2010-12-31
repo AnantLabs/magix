@@ -19,6 +19,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     public class ViewSingleObject : DataBindableSingleInstanceControl, IModule
     {
         protected Panel pnl;
+        protected Button change;
+        protected Button remove;
 
         void IModule.InitialLoading(Node node)
         {
@@ -27,7 +29,43 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 delegate
                 {
                     UpdateCaption();
+                    if (node["EditingAllowed"].Get<bool>())
+                    {
+                        remove.Enabled = true;
+                        change.Enabled = true;
+                    }
+                    else
+                    {
+                        remove.Enabled = false;
+                        change.Enabled = false;
+                    }
                 };
+        }
+
+        protected void change_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["ParentID"].Value = ParentID;
+            node["ParentPropertyName"].Value = ParentPropertyName;
+            node["ParentType"].Value = ParentFullType;
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.ChangeComplexInstance",
+                node);
+        }
+
+        protected void remove_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["ParentID"].Value = ParentID;
+            node["ParentPropertyName"].Value = ParentPropertyName;
+            node["ParentType"].Value = ParentFullType;
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.RemoveReference",
+                node);
         }
 
         protected override void DataBindObjects()
