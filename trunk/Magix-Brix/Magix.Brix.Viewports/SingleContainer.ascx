@@ -28,7 +28,7 @@
 <mux:Window 
     runat="server" 
     CssClass="mux-shaded mux-rounded mux-window wine-window"
-    style="display:none;"
+    style="display:none;z-index:10000;"
     Caption="Message from system"
     Closable="false"
     id="message">
@@ -37,27 +37,5 @@
             runat="server" 
             id="msgLbl" />
     </Content>
-</mux:Window>
-
-<mux:Window 
-    runat="server" 
-    CssClass="mux-shaded mux-rounded"
-    style="left:5px;top:5px;position:absolute;z-index:1000;overflow:auto;min-width:450px;min-height:250px;"
-    Caption="Details..."
-    Visible="false"
-    OnClosed="wnd_Closed"
-    id="wnd">
-    <Content>
-        <mux:DynamicPanel 
-            runat="server" 
-            CssClass="dynamic"
-            OnReload="dynamic_LoadControls"
-            id="child" />
-    </Content>
-    <Control>
-        <mux:AspectModal
-            runat="server"
-            id="modal" />
-    </Control>
 </mux:Window>
 

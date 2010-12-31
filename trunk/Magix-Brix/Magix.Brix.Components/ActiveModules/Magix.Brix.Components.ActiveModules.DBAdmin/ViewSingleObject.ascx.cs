@@ -55,6 +55,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 node);
         }
 
+        protected override void RefreshWindowContent(object sender, ActiveEventArgs e)
+        {
+            (Parent.Parent.Parent as Window).CloseWindow();
+        }
+
         protected override void ReDataBind()
         {
             DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
@@ -71,21 +76,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void remove_Click(object sender, EventArgs e)
         {
-            Node node = new Node();
-            node["ParentID"].Value = ParentID;
-            node["ParentPropertyName"].Value = ParentPropertyName;
-            node["ParentType"].Value = ParentFullType;
-            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
+            DataSource["Object"].UnTie();
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.RemoveReference",
-                node);
-            Node node2 = new Node();
-            node2["ClientID"].Value = this.ClientID;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "ClearControlsForSpecificDynamic",
-                node2);
+                DataSource);
+            pnl.Controls.Clear();
+            UpdateCaption();
+            DataBindObjects();
+            pnl.ReRender();
         }
 
         protected override void DataBindObjects()

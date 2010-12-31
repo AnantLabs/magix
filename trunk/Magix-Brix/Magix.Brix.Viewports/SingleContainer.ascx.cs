@@ -8,9 +8,10 @@ using System;
 using System.Web.UI;
 using Magix.UX;
 using Magix.UX.Widgets;
+using Magix.UX.Effects;
+using Magix.UX.Aspects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
-using Magix.UX.Effects;
 
 namespace Magix.Brix.Viewports
 {
@@ -22,8 +23,59 @@ namespace Magix.Brix.Viewports
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
-        protected Window wnd;
-        protected DynamicPanel child;
+        protected Window[] wnd;
+        protected DynamicPanel[] child;
+
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            EnsureChildControls();
+        }
+
+        protected override void CreateChildControls()
+        {
+            base.CreateChildControls();
+            CreateChildContainers();
+        }
+
+        private void CreateChildContainers()
+        {
+            wnd = new Window[20];
+            child = new DynamicPanel[20];
+            for (int idxNo = 0; idxNo < 20; idxNo++)
+            {
+                // Window
+                Window w = new Window();
+                w.CssClass = "mux-shaded mux-rounded";
+                w.Style[Styles.left] = (idxNo * 25).ToString() + "px";
+                w.Style[Styles.top] = (idxNo * 25).ToString() + "px";
+                w.Style[Styles.position] = "absolute";
+                w.Style[Styles.minWidth] = "450px";
+                w.Style[Styles.minHeight] = "250px";
+                w.Style[Styles.zIndex] = (1000 + idxNo).ToString();
+                w.Style[Styles.overflow] = "auto";
+                w.Visible = false;
+                w.ID = "wd" + idxNo;
+                w.Closed += wnd_Closed;
+                wnd[idxNo] = w;
+
+                // Dynamic Panel
+                DynamicPanel p = new DynamicPanel();
+                p.CssClass = "dynamic";
+                p.Reload += dynamic_LoadControls;
+                p.ID = "dny" + idxNo;
+                child[idxNo] = p;
+                w.Content.Controls.Add(p);
+
+                // Aspect Modal
+                AspectModal m = new AspectModal();
+                m.ID = "md" + idxNo;
+                m.Opacity = 0.2M;
+                w.Controls.Add(m);
+
+                this.Controls.Add(w);
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -79,7 +131,13 @@ namespace Magix.Brix.Viewports
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
-                ClearControls(child);
+                DynamicPanel toEmpty = child[0];
+                foreach (DynamicPanel idxChild in child)
+                {
+                    if (idxChild.Controls.Count > 0)
+                        toEmpty = idxChild;
+                }
+                ClearControls(toEmpty);
             }
         }
 
@@ -116,25 +174,46 @@ namespace Magix.Brix.Viewports
                     dyn2.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
-            else if (e.Params["Position"].Get<string>() == "child" && child.Controls.Count == 0)
+            else if (e.Params["Position"].Get<string>() == "child")
             {
-                wnd.Visible = true;
-                wnd.Style[Styles.display] = "none";
-                new EffectFadeIn(wnd, 500)
+                DynamicPanel toAddInto = null;
+                foreach (DynamicPanel idx in child)
+                {
+                    if (idx.Controls.Count == 0)
+                    {
+                        toAddInto = idx;
+                        break;
+                    }
+                }
+                if (toAddInto == null)
+                    throw new ApplicationException("You cannot open more Windows before you have closed some");
+                Window w = toAddInto.Parent.Parent as Window;
+                w.Visible = true;
+                w.Style[Styles.display] = "none";
+                new EffectFadeIn(w, 500)
                     .Render();
                 if (true.Equals(e.Params["Parameters"]["Append"].Value))
-                    child.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    toAddInto.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 else
                 {
-                    ClearControls(child);
-                    child.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    ClearControls(toAddInto);
+                    toAddInto.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
         }
 
         protected void wnd_Closed(object sender, EventArgs e)
         {
-            ClearControls(child);
+            Window w = sender as Window;
+            ClearControls(w.Content.Controls[0] as DynamicPanel);
+            int closingWindowID = int.Parse(w.ID.Replace("wd", ""));
+            int refreshWindowID = closingWindowID - 1;
+            Node node = new Node();
+            node["ClientID"].Value = w.ClientID.Replace(w.ID, "wd" + refreshWindowID);
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "RefreshWindowContent",
+                node);
         }
 
         protected void dynamic_LoadControls(object sender, DynamicPanel.ReloadEventArgs e)
