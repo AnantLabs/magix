@@ -111,6 +111,17 @@ namespace Magix.Brix.Components
             get { return DataSource["ParentID"].Get<int>(); }
         }
 
+        [ActiveEvent(Name = "ClearControlsForSpecificDynamic")]
+        protected void ClearControlsForSpecificDynamic(object sender, ActiveEventArgs e)
+        {
+            if (child.Controls.Count > 0 && child.Controls[0].ClientID == e.Params["ClientID"].Get<string>())
+            {
+                // Yup, we're it ...!
+                ClearControls(child);
+                wnd.Visible = false;
+            }
+        }
+
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {
@@ -118,7 +129,7 @@ namespace Magix.Brix.Components
             {
                 wnd.Visible = true;
                 wnd.Style[Styles.display] = "none";
-                new EffectFadeIn(wnd, 500)
+                new EffectFadeIn(wnd, 1500)
                     .Render();
                 if (e.Params["Parameters"].Contains("Caption"))
                 {
@@ -153,7 +164,7 @@ namespace Magix.Brix.Components
             dynamic.Controls.Add(ctrl);
         }
 
-        private void ClearControls(DynamicPanel dynamic)
+        protected void ClearControls(DynamicPanel dynamic)
         {
             foreach (System.Web.UI.Control idx in dynamic.Controls)
             {

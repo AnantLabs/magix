@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ViewSingleObject.ascx">
+      <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

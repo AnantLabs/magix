@@ -28,6 +28,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 };
         }
 
+        protected void append_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["ParentID"].Value = ParentID;
+            node["ParentPropertyName"].Value = ParentPropertyName;
+            node["ParentType"].Value = ParentFullType;
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.AppendComplexInstance",
+                node);
+        }
+
         protected override void DataBindObjects()
         {
             HtmlTable table = CreateTable();
