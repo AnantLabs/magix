@@ -613,7 +613,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         {
             int parentId = e.Params["ParentID"].Get<int>();
             string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
-            string parentType = e.Params["ParentType"].Get<string>();
+            string parentType = e.Params["ParentFullType"].Get<string>();
             Type type = GetType(parentType);
             object obj = GetObject(type, parentId);
             MethodInfo method = type.GetProperty(
