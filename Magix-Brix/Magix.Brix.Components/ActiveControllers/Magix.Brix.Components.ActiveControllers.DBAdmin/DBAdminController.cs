@@ -355,8 +355,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 0,
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
             node["Start"].Value = 0;
-            node["IsRemove"].Value = true;
-            node["IsAppend"].Value = true;
+            node["IsRemove"].Value = !e.Params["BelongsTo"].Get<bool>();
+            node["IsAppend"].Value = !e.Params["BelongsTo"].Get<bool>();
             node["ParentPropertyName"].Value = propertyName;
             node["ParentType"].Value = parentObject.GetType().Name;
             node["ParentFullType"].Value = parentObject.GetType().FullName;
