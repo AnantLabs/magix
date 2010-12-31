@@ -17,6 +17,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     public class ViewListOfObjects : DataBindableListControl, IModule
     {
         protected Panel pnl;
+        protected Button append;
 
         void IModule.InitialLoading(Node node)
         {
@@ -25,6 +26,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 delegate
                 {
                     UpdateCaption();
+                    append.Enabled = node["IsAppend"].Get<bool>();
                 };
         }
 

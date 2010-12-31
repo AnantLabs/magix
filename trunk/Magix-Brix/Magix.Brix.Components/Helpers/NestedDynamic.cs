@@ -40,10 +40,16 @@ namespace Magix.Brix.Components
             base.CreateChildControls();
             wnd = new Window();
             wnd.CssClass = "mux-shaded mux-rounded";
-            wnd.Style[Styles.left] = "15px";
-            wnd.Style[Styles.top] = "15px";
-            wnd.Style[Styles.minWidth] = "950px";
-            wnd.Style[Styles.minHeight] = "450px";
+            int noControls = 0;
+            Control idx = this;
+            while (idx != null)
+            {
+                idx = idx.Parent;
+                noControls += 10;
+            }
+            int offset = noControls * 10;
+            wnd.Style[Styles.left] = offset.ToString() + "px";
+            wnd.Style[Styles.top] = offset.ToString() + "px";
             wnd.Style[Styles.position] = "absolute";
             wnd.Style[Styles.zIndex] = "1000";
             wnd.Visible = false;

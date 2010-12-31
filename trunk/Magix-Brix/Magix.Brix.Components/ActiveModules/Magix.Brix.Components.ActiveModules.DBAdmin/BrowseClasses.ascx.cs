@@ -62,10 +62,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 if (idx["IsLeafClass"].Get<bool>())
                 {
                     it.Info = "Leaf:" + idx["FullTypeName"].Get<string>();
+                    it.CssClass += " tree-item-class";
                 }
                 else
                 {
                     it.Info = idx["FullTypeName"].Get<string>();
+                    it.CssClass += " tree-item-namespace";
                 }
                 it.Text = idx["Name"].Get<string>();
                 DataBindTree(idx, it);
