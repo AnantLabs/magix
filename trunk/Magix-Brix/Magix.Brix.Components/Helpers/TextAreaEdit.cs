@@ -17,13 +17,27 @@ namespace Magix.Brix.Components
         private readonly TextArea _text = new TextArea();
         private readonly LinkButton _link = new LinkButton();
 
+        public TextAreaEdit()
+        {
+            CssClass = "mux-in-place-edit";
+        }
+
         public event EventHandler TextChanged;
 
         public string Text
         {
             get { return _text.Text; }
-            set { _text.Text = value;
-                _link.Text = value; }
+            set { _link.Text = EscapeHTML(value); _text.Text = value; }
+        }
+
+        private string EscapeHTML(string value)
+        {
+            return value.Replace("<", "&lt;").Replace(">", "&gt;");
+        }
+
+        private string UnEscapeHTML(string value)
+        {
+            return value.Replace("&lt;", "<").Replace("&gt;", ">");
         }
 
         [DefaultValue(-1)]
@@ -42,74 +56,66 @@ namespace Magix.Brix.Components
             base.OnInit(e);
         }
 
-        protected override void OnPreRender(EventArgs e)
-        {
-            if (string.IsNullOrEmpty(Text))
-                _link.Text = "[null]";
-            base.OnPreRender(e);
-        }
-
         protected override void CreateChildControls()
         {
             base.CreateChildControls();
+            CreateEditControls();
+        }
 
-            _link.ID = "lbl";
+        private void CreateEditControls()
+        {
+            // Creating LinkButton
+            _link.ID = "btn";
             _link.Click += LinkClick;
-            CreateTextForLabel();
             Controls.Add(_link);
 
+            // Creating TextBox
             _text.ID = "txt";
-            _text.Style[Styles.display] = "none";
-            _text.Blur += TextUpdated;
+            _text.Text = UnEscapeHTML(_link.Text);
+            _text.Visible = false;
+			_text.Blur += TextUpdated;
             _text.EscPressed += TextEscPressed;
             Controls.Add(_text);
         }
 
-        private void CreateTextForLabel()
+        private void LinkClick(object sender, EventArgs e)
         {
-            if (TextLength == -1)
-            {
-                _link.Text = Text;
-            }
+            if (_link.Text == "[nothing]")
+                _text.Text = "";
             else
-            {
-                if (TextLength >= Text.Length)
-                {
-                    _link.Text = Text;
-                }
-                else
-                {
-                    _link.Text = Text.Substring(0, TextLength) + "...";
-                }
-            }
+                _text.Text = UnEscapeHTML(_link.Text);
+            _text.Visible = true;
+            _text.Style[Styles.display] = "none";
+            _link.Visible = false;
+            new EffectRollDown(_text, 200)
+                .ChainThese(
+                    new EffectFocusAndSelect(_text))
+                .Render();
         }
 
         void TextEscPressed(object sender, EventArgs e)
         {
-            _text.Style[Styles.display] = "none";
-            _link.Style[Styles.display] = "";
-            _text.Text = _link.Text;
-            new EffectFocusAndSelect(_link).Render();
+            _text.Visible = false;
+            _link.Visible = true;
+            new EffectFocusAndSelect(_link)
+                .Render();
         }
 
         private void TextUpdated(object sender, EventArgs e)
         {
-            CreateTextForLabel();
-            _text.Style[Styles.display] = "none";
-            _link.Style[Styles.display] = "";
+            _link.Text = EscapeHTML(_text.Text);
+            _text.Visible = false;
+            _link.Visible = true;
 
             if (TextChanged != null)
                 TextChanged(this, new EventArgs());
         }
 
-        private void LinkClick(object sender, EventArgs e)
+        protected override void OnPreRender(EventArgs e)
         {
-            _link.Style[Styles.display] = "none";
-            _text.Style[Styles.display] = "none";
-            new EffectRollDown(_text, 200)
-                .ChainThese(
-                    new EffectFocusAndSelect(_text))
-                .Render();
+            if (string.IsNullOrEmpty(_link.Text))
+                _link.Text = "[nothing]";
+            base.OnPreRender(e);
         }
     }
 }

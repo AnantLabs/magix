@@ -19,6 +19,10 @@ namespace HelloWorldController
         [ActiveEvent(Name = "Page_Init_InitialLoading")]
         private void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
         {
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Load");
+            return;
             Page.Title = "Magix-Brix Hello World";
             Node n = new Node();
             n["Message"].Value = "I am Marvin, I am your guide through the Universe...";

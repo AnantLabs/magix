@@ -42,7 +42,7 @@
 <mux:Window 
     runat="server" 
     CssClass="mux-shaded mux-rounded"
-    style="left:5px;top:5px;position:absolute;z-index:1000;overflow:auto;"
+    style="left:5px;top:5px;position:absolute;z-index:1000;overflow:auto;min-width:450px;min-height:250px;"
     Caption="Details..."
     Visible="false"
     OnClosed="wnd_Closed"

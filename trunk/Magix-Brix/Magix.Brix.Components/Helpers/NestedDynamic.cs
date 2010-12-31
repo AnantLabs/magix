@@ -48,6 +48,9 @@ namespace Magix.Brix.Components
                 noControls += 10;
             }
             int offset = noControls * 10;
+            wnd.Style[Styles.minHeight] = "250px";
+            wnd.Style[Styles.minWidth] = "450px";
+            wnd.Style[Styles.top] = offset.ToString() + "px";
             wnd.Style[Styles.left] = offset.ToString() + "px";
             wnd.Style[Styles.top] = offset.ToString() + "px";
             wnd.Style[Styles.position] = "absolute";
