@@ -6,6 +6,7 @@
 
 using System;
 using System.Reflection;
+using System.Globalization;
 using System.Collections.Generic;
 using Magix.Brix.Data;
 using Magix.Brix.Types;
@@ -18,14 +19,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
     [ActiveController]
     public class DBAdminController : ActiveController
     {
-        [ActiveEvent(Name = "LoadDbAdmin")]
-        protected void LoadDbAdmin(object sender, ActiveEventArgs e)
+        // Loads up DBAdmin into the current default container...
+        [ActiveEvent(Name = "DBAdmin.Load")]
+        protected void DBAdmin_Load(object sender, ActiveEventArgs e)
         {
-            LoadModule("Magix.Brix.Components.ActiveModules.DBAdmin.Main");
+            LoadModule("Magix.Brix.Components.ActiveModules.DBAdmin.BrowseClasses");
         }
 
-        [ActiveEvent(Name = "GetDBAdminClasses")]
-        protected void GetDBAdminClasses(object sender, ActiveEventArgs e)
+        // Called by BrowseClasses to fetch the classes for DBAdmin
+        [ActiveEvent(Name = "DBAdmin.BrowseClassHierarchy")]
+        protected void DBAdmin_BrowseClassHierarchy(object sender, ActiveEventArgs e)
         {
             int idxNo = 0;
             foreach (Type idx in PluginLoader.Instance.ActiveTypes)
@@ -53,65 +56,47 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        [ActiveEvent(Name = "ViewClassDetails")]
-        protected void ViewClassDetails(object sender, ActiveEventArgs e)
+        // Returns the starting value, 0 if none given...
+        private int GetStart(Node node)
         {
-            Node node = new Node();
-            List<Type> types= new List<Type>(PluginLoader.Instance.ActiveTypes);
-            Type type = types.Find(
-                delegate(Type idx)
-                {
-                    return idx.FullName == e.Params["ClassName"].Get<string>();
-                });
-            node["Caption"].Value = "Details for ActiveType: " + type.Name;
-            int no = (int)type.GetProperty(
-                "Count",
-                BindingFlags.Static |
-                BindingFlags.FlattenHierarchy |
-                BindingFlags.Public |
-                BindingFlags.NonPublic)
-                .GetGetMethod()
-                .Invoke(null, null);
-            node["Count"].Value = no;
-            node["FullTypeName"].Value = type.FullName;
-            LoadModule(
-                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassDetails",
-                "popup",
-                node);
-        }
-
-        [ActiveEvent(Name = "ViewAllInstances")]
-        protected void ViewAllInstances(object sender, ActiveEventArgs e)
-        {
-            ShowAllInstances(e);
-        }
-
-        private void ShowAllInstances(ActiveEventArgs e)
-        {
-            string fullTypeName = e.Params["FullTypeName"].Get<string>();
             int start = 0;
-            int end = start + Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50);
-            if (e.Params.Contains("Start"))
-            {
-                start = Math.Max(0, e.Params["Start"].Get<int>());
-                if (e.Params.Contains("End"))
-                    end = e.Params["End"].Get<int>();
-                else
-                {
-                    end = start + Settings.Instance.Get("NumberOfItemsInDatabaseManager", 50);
-                }
-            }
-            List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
-            Type type = types.Find(
+            if (node.Contains("Start"))
+                start = node["Start"].Get<int>();
+            return Math.Max(0, start);
+        }
+
+        // Returns the starting value, start + MaxItemsToShow from settings if none given...
+        private int GetEnd(Node node, int start)
+        {
+            int end = start + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50);
+            if (node.Contains("End"))
+                end = Math.Max(start + 1, node["End"].Get<int>());
+            return end;
+        }
+
+        // Returns the Active Type from the full Type Name
+        private Type GetType(string fullTypeName)
+        {
+            Type type = (new List<Type>(PluginLoader.Instance.ActiveTypes)).Find(
                 delegate(Type idx)
                 {
                     return idx.FullName == fullTypeName;
                 });
-            PropertyInfo[] props = type.GetProperties(
-                        BindingFlags.Instance |
-                        BindingFlags.Public |
-                        BindingFlags.NonPublic);
-            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
+            return type;
+        }
+
+        private PropertyInfo[] GetProps(Type type)
+        {
+            return type.GetProperties(
+                BindingFlags.Instance |
+                BindingFlags.Public |
+                BindingFlags.NonPublic);
+        }
+
+        private Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> GetMethodInfos(
+            PropertyInfo[] props)
+        {
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> retVal = 
                 new Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>>();
             foreach (PropertyInfo idx in props)
             {
@@ -121,9 +106,18 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 if (attrs != null && attrs.Length > 0)
                 {
                     // Serializable property...
-                    getters[idx.Name] = new Tuple<MethodInfo, ActiveFieldAttribute>(idx.GetGetMethod(true), attrs[0]);
+                    retVal[idx.Name] = 
+                        new Tuple<MethodInfo, ActiveFieldAttribute>(
+                            idx.GetGetMethod(true), 
+                            attrs[0]);
                 }
             }
+            return retVal;
+        }
+
+        // Returns an IEnumerable running Select towards the given Active Type...
+        private System.Collections.IEnumerable SelectObjects(Type type)
+        {
             MethodInfo retrieveAllObjects = type.GetMethod(
                 "Select",
                 BindingFlags.Static |
@@ -131,296 +125,322 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 BindingFlags.Public |
                 BindingFlags.NonPublic);
             Criteria[] pars = new Criteria[0];
-
-            Node node = new Node();
-
-            int idxNo = -1;
-
-            foreach (object idxObj in
+            System.Collections.IEnumerable enumerable =
                 retrieveAllObjects.Invoke(
                     null,
-                    new object[] { pars }) as System.Collections.IEnumerable)
+                    new object[] { pars }) as System.Collections.IEnumerable;
+            return enumerable;
+        }
+
+        private int GetID(object obj, Type type)
+        {
+            return (int)type.GetProperty("ID").GetGetMethod().Invoke(obj, null);
+        }
+
+        // Creates a list of Nodes according to how it's supposed to look 
+        // like in the Node structure for lists
+        private Node GetNodeList(
+            System.Collections.IEnumerable objects, 
+            Node node,
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters,
+            Type type,
+            int start,
+            int end)
+        {
+            int idxNo = -1;
+            node["TypeName"].Value = type.Name;
+            node["FullTypeName"].Value = type.FullName;
+            foreach (string idxKey in getters.Keys)
+            {
+                Tuple<MethodInfo, ActiveFieldAttribute> tuple = getters[idxKey];
+                string typeName = tuple.Left.ReturnType.FullName;
+                if (typeName.IndexOf("Magix.Brix.Types.LazyList") == 0)
+                {
+                    node["Type"]["Properties"][idxKey]["IsList"].Value = true;
+                    string ls = "LazyList&lt;";
+                    ls += tuple.Left.ReturnType.GetGenericArguments()[0].Name + "&gt;";
+                    node["Type"]["Properties"][idxKey]["TypeName"].Value = ls;
+                }
+                else if (typeName.IndexOf("System.Collections.Generics.List") == 0)
+                {
+                    node["Type"]["Properties"][idxKey]["IsList"].Value = true;
+                    string ls = "List&lt;";
+                    ls += tuple.Left.ReturnType.GetGenericArguments()[0].Name + "&gt;";
+                    node["Type"]["Properties"][idxKey]["TypeName"].Value = ls;
+                }
+                else
+                {
+                    node["Type"]["Properties"][idxKey]["IsList"].Value = false;
+                    node["Type"]["Properties"][idxKey]["TypeName"].Value = tuple.Left.ReturnType.Name;
+                }
+                node["Type"]["Properties"][idxKey]["Name"].Value = tuple.Left.Name.Replace("get_", "");
+                node["Type"]["Properties"][idxKey]["BelongsTo"].Value = tuple.Right.BelongsTo;
+                node["Type"]["Properties"][idxKey]["IsOwner"].Value = tuple.Right.IsOwner;
+                node["Type"]["Properties"][idxKey]["RelationName"].Value = tuple.Right.RelationName;
+            }
+            foreach (object idxObj in objects)
             {
                 idxNo += 1;
                 if (idxNo < start)
                     continue;
                 if (idxNo >= end)
                     break;
-                int id = (int)type.GetProperty(
-                    "ID",
-                    BindingFlags.Instance |
-                    BindingFlags.FlattenHierarchy |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic)
-                    .GetGetMethod(true)
-                    .Invoke(idxObj, null);
-                node["Objects"]["Object" + id]["ID"].Value = id;
-                foreach (string idxMethodName in getters.Keys)
+                int id = GetID(idxObj, type);
+                node["Objects"]["Obj" + id]["ID"].Value = id;
+                GetObject(node["Objects"]["Obj" + id], getters, idxObj, id);
+            }
+            return node;
+        }
+
+        private static void GetObject(Node node, Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters, object idxObj, int id)
+        {
+            foreach (string idxKey in getters.Keys)
+            {
+                Tuple<MethodInfo, ActiveFieldAttribute> tuple = getters[idxKey];
+                object value = tuple.Left.Invoke(idxObj, null);
+                switch (tuple.Left.ReturnType.FullName)
                 {
-                    object value = getters[idxMethodName].Left.Invoke(idxObj, null);
-                    if (getters[idxMethodName].Left.ReturnType.FullName.IndexOf("Magix.Brix.Types.LazyList") != -1)
-                    {
-                        int noItems = (int)getters[idxMethodName].Left.ReturnType.GetProperty(
-                            "Count",
-                            BindingFlags.Instance |
-                            BindingFlags.FlattenHierarchy |
-                            BindingFlags.Public |
-                            BindingFlags.NonPublic)
-                            .GetGetMethod()
-                            .Invoke(value, null);
-                        node["Objects"]["Object" + id][idxMethodName]["Value"].Value = noItems;
-                        node["Objects"]["Object" + id][idxMethodName]["Name"].Value = "LazyList&lt;" +
-                            getters[idxMethodName].Left.ReturnType.GetGenericArguments()[0].Name + "&gt;";
-                        node["Objects"]["Object" + id][idxMethodName]["FullTypeName"].Value = 
-                            getters[idxMethodName].Left.ReturnType.GetGenericArguments()[0].FullName;
-                        node["Objects"]["Object" + id][idxMethodName]["IsList"].Value = true;
-                        node["Objects"]["Object" + id][idxMethodName]["FullName"].Value = 
-                            getters[idxMethodName].Left.ReturnType.GetGenericArguments()[0].FullName;
-                    }
-                    else if (getters[idxMethodName].Left.ReturnType.FullName.IndexOf("System.Collections.Generic.List") != -1)
-                    {
-                        int noItems = (int)getters[idxMethodName].Left.ReturnType.GetProperty(
-                            "Count",
-                            BindingFlags.Instance |
-                            BindingFlags.FlattenHierarchy |
-                            BindingFlags.Public |
-                            BindingFlags.NonPublic)
-                            .GetGetMethod()
-                            .Invoke(value, null);
-                        node["Objects"]["Object" + id][idxMethodName]["Value"].Value = noItems;
-                        node["Objects"]["Object" + id][idxMethodName]["IsList"].Value = true;
-                        node["Objects"]["Object" + id][idxMethodName]["FullName"].Value =
-                            getters[idxMethodName].Left.ReturnType.GetGenericArguments()[0].FullName;
-                    }
-                    else
-                    {
+                    case "System.String":
+                    case "System.Boolean":
+                    case "System.Int32":
+                    case "System.Byte[]": // TODO: Special treatment ...?
                         if (value == null)
-                            node["Objects"]["Object" + id][idxMethodName]["Value"].Value = "[null]";
+                            value = "[null]";
+                        node["Properties"][idxKey]["IsComplex"].Value = false;
+                        node["Properties"][idxKey]["Value"].Value = value.ToString();
+                        node["Properties"][idxKey]["TypeName"].Value = tuple.Left.ReturnType.Name;
+                        break;
+                    case "System.Decimal":
+                        node["Properties"][idxKey]["Value"].Value =
+                            ((decimal)value).ToString(CultureInfo.InvariantCulture);
+                        node["Properties"][idxKey]["IsComplex"].Value = false;
+                        node["Properties"][idxKey]["TypeName"].Value = tuple.Left.ReturnType.Name;
+                        break;
+                    case "System.DateTime":
+                        node["Properties"][idxKey]["Value"].Value =
+                            ((DateTime)value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        node["Properties"][idxKey]["IsComplex"].Value = false;
+                        node["Properties"][idxKey]["TypeName"].Value = tuple.Left.ReturnType.Name;
+                        break;
+                    default:
+                        string typeName = tuple.Left.ReturnType.FullName;
+                        if (typeName.IndexOf("Magix.Brix.Types.LazyList") == 0)
+                        {
+                            node["Properties"][idxKey]["IsComplex"].Value = true;
+                            node["Properties"][idxKey]["IsList"].Value = true;
+                            string valueStr = value == null ? "[null]" : "[#" +
+                                tuple.Left.ReturnType.GetProperty("Count", BindingFlags.Instance | BindingFlags.Public).GetGetMethod(true).Invoke(value, null) + "]";
+                            node["Properties"][idxKey]["Value"].Value = valueStr;
+
+                            node["Properties"][idxKey]["PropertyName"].Value =
+                                tuple.Left.Name.Replace("get_", "");
+                            string ls = "LazyList&lt;";
+                            ls += tuple.Left.ReturnType.GetGenericArguments()[0].Name + "&gt;";
+                            node["Properties"][idxKey]["TypeName"].Value = ls;
+                        }
+                        else if (typeName.IndexOf("System.Collections.Generics.List") == 0)
+                        {
+                            node["Properties"][idxKey]["IsComplex"].Value = true;
+                            node["Properties"][idxKey]["IsList"].Value = true;
+                            string valueStr = value == null ? "[null]" : "[#" +
+                                tuple.Left.ReturnType.GetProperty("Count", BindingFlags.Instance | BindingFlags.Public).GetGetMethod(true).Invoke(value, null) + "]";
+                            node["Properties"][idxKey]["Value"].Value = valueStr;
+
+                            node["Properties"][idxKey]["PropertyName"].Value =
+                                tuple.Left.Name.Replace("get_", "");
+                            string ls = "List&lt;";
+                            ls += tuple.Left.ReturnType.GetGenericArguments()[0].Name + "&gt;";
+                            node["Properties"][idxKey]["TypeName"].Value = ls;
+                        }
                         else
-                            node["Objects"]["Object" + id][idxMethodName]["Value"].Value = value.ToString();
-                        node["Objects"]["Object" + id][idxMethodName]["Name"].Value =
-                            getters[idxMethodName].Left.ReturnType.Name;
-                    }
-                    node["Objects"]["Object" + id][idxMethodName]["BelongsTo"].Value = getters[idxMethodName].Right.BelongsTo;
-                    node["Objects"]["Object" + id][idxMethodName]["IsOwner"].Value = getters[idxMethodName].Right.IsOwner;
-                    node["Objects"]["Object" + id][idxMethodName]["RelationName"].Value = getters[idxMethodName].Right.RelationName;
-                    node["Objects"]["Object" + id][idxMethodName]["FullName"].Value =
-                        getters[idxMethodName].Left.ReturnType.FullName;
-                    node["Objects"]["Object" + id][idxMethodName]["PropertyName"].Value = idxMethodName;
+                        {
+                            node["Properties"][idxKey]["IsComplex"].Value = true;
+                            node["Properties"][idxKey]["IsList"].Value = false;
+                            string valueStr = value == null ? "[null]" : "[@" + value.ToString() + "]";
+                            node["Properties"][idxKey]["Value"].Value = valueStr;
+                            node["Properties"][idxKey]["TypeName"].Value = tuple.Left.ReturnType.Name;
+                        }
+                        node["Properties"][idxKey]["BelongsTo"].Value = tuple.Right.BelongsTo;
+                        node["Properties"][idxKey]["IsOwner"].Value = tuple.Right.IsOwner;
+                        node["Properties"][idxKey]["RelationName"].Value = tuple.Right.RelationName;
+                        break;
                 }
+                node["Properties"][idxKey]["PropertyName"].Value =
+                    tuple.Left.Name.Replace("get_", "");
             }
-            node["ActiveTypeFullName"].Value = type.FullName;
-            node["GrowX"].Value = 950;
-            node["GrowY"].Value = 550;
-            int noItemsTotal = (int)type.GetProperty(
-                "Count",
-                BindingFlags.Static |
-                BindingFlags.FlattenHierarchy |
-                BindingFlags.Public |
-                BindingFlags.NonPublic)
-                .GetGetMethod()
+        }
+
+        private int GetCount(Type type)
+        {
+            return (int)type.GetProperty(
+                "Count", 
+                BindingFlags.FlattenHierarchy | 
+                BindingFlags.Static | 
+                BindingFlags.NonPublic | 
+                BindingFlags.Public)
+                .GetGetMethod(true)
                 .Invoke(null, null);
-            node["TotalCount"].Value = noItemsTotal;
-            node["Start"].Value = start;
-            node["Caption"].Value =
-                string.Format("{1}-{2}/{3} of ActiveType - {0}",
-                    type.FullName,
-                    start,
-                    start + node["Objects"].Count,
-                    noItemsTotal);
-            LoadModule(
-                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewInstances",
-                "popup",
-                node);
         }
 
-        [ActiveEvent(Name = "EditObjectInstances")]
-        protected void EditObjectInstances(object sender, ActiveEventArgs e)
+        // ViewContents Form
+        [ActiveEvent(Name = "DBAdmin.ViewContents")]
+        protected void DBAdmin_ViewContents(object sender, ActiveEventArgs e)
         {
-            int parentId = e.Params["IDOfParent"].Get<int>();
-            string parentFullName = e.Params["ParentFullName"].Get<string>();
-            List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
-            Type type = types.Find(
-                delegate(Type idx)
-                {
-                    return idx.FullName == parentFullName;
-                });
-            object obj = Adapter.Instance.SelectByID(type, parentId);
-            object list = type.GetProperty(e.Params["PropertyName"].Get<string>()).GetGetMethod(true).Invoke(obj, null);
-            OpenNewWindowWithObjects(list as System.Collections.IEnumerable, e.Params);
-        }
-
-        private void OpenNewWindowWithObjects(System.Collections.IEnumerable list, Node node)
-        {
-            string fullTypeName = node["ListGenericArgument"].Get<string>();
-            List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
-            Type type = types.Find(
-                delegate(Type idx)
-                {
-                    return idx.FullName == fullTypeName;
-                });
-            Node load = new Node();
-            load["ParentPropertyName"].Value = node["PropertyName"].Value;
-            load["Caption"].Value = string.Format("Objects of type {1} in {3}({0}) in {2} property)",
-                node["IDOfParent"].Get<int>(),
-                type.Name,
-                node["PropertyName"].Value,
-                node["ParentFullName"].Get<string>().Substring(node["ParentFullName"].Get<string>().LastIndexOf(".") + 1));
-            load["ParentID"].Value = node["IDOfParent"].Value;
-            load["FullTypeName"].Value = type.FullName; ;
-            foreach (object idxObj in list)
-            {
-                int id = (int)type.GetProperty(
-                    "ID",
-                    BindingFlags.Instance |
-                    BindingFlags.FlattenHierarchy |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic)
-                    .GetGetMethod(true)
-                    .Invoke(idxObj, null);
-                load["Objects"]["Obj" + id]["ID"].Value = id;
-                load["Objects"]["Obj" + id]["FullTypeName"].Value = type.FullName;
-                foreach (PropertyInfo idxProp in type.GetProperties())
-                {
-                    ActiveFieldAttribute[] attrs = 
-                        idxProp.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
-                    if (attrs != null && attrs.Length > 0)
-                    {
-                        load["Objects"]["Obj" + id][idxProp.Name]["Name"].Value = idxProp.Name;
-                        if (idxProp.PropertyType.FullName.Contains("LazyList"))
-                        {
-                            string lst = "LazyList&lt;";
-                            lst += idxProp.PropertyType.GetGenericArguments()[0].Name + "&gt;";
-                            load["Objects"]["Obj" + id][idxProp.Name]["TypeName"].Value = lst;
-                            load["Objects"]["Obj" + id][idxProp.Name]["FullTypeName"].Value = lst;
-                            object value = idxProp.GetGetMethod(true).Invoke(idxObj, null);
-                            int count = (int)value.GetType().GetProperty("Count").GetGetMethod().Invoke(value, null);
-                            load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = count.ToString();
-                        }
-                        else if (idxProp.PropertyType.FullName.Contains("List"))
-                        {
-                            string lst = "List&lt;";
-                            lst += idxProp.PropertyType.GetGenericArguments()[0].Name + "&gt;";
-                            load["Objects"]["Obj" + id][idxProp.Name]["TypeName"].Value = lst;
-                            load["Objects"]["Obj" + id][idxProp.Name]["FullTypeName"].Value = lst;
-                            object value = idxProp.GetGetMethod(true).Invoke(idxObj, null);
-                            int count = (int)value.GetType().GetProperty("Count").GetGetMethod().Invoke(value, null);
-                            load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = count.ToString();
-                        }
-                        else
-                        {
-                            load["Objects"]["Obj" + id][idxProp.Name]["TypeName"].Value = idxProp.PropertyType.FullName;
-                            load["Objects"]["Obj" + id][idxProp.Name]["FullTypeName"].Value = idxProp.PropertyType.FullName;
-                            object value = idxProp.GetGetMethod(true).Invoke(idxObj, null);
-                            if (value == null)
-                            {
-                                load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = null;
-                            }
-                            else
-                            {
-                                load["Objects"]["Obj" + id][idxProp.Name]["Value"].Value = value.ToString();
-                            }
-                        }
-                        load["Objects"]["Obj" + id][idxProp.Name]["BelongsTo"].Value = attrs[0].BelongsTo;
-                        load["Objects"]["Obj" + id][idxProp.Name]["IsOwner"].Value = attrs[0].IsOwner;
-                        load["Objects"]["Obj" + id][idxProp.Name]["RelationName"].Value = attrs[0].RelationName;
-                    }
-                }
-            }
-            LoadModule(
-                "Magix.Brix.Components.ActiveModules.DBAdmin.EditList",
-                "child",
-                load);
-        }
-
-        [ActiveEvent(Name = "EditObjectInstance")]
-        protected void EditObjectInstance(object sender, ActiveEventArgs e)
-        {
-            int id = e.Params["ID"].Get<int>();
-            string propertyName = e.Params["PropertyName"].Get<string>();
-            string fullName = e.Params["FullName"].Get<string>();
-            List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
-            Type type = types.Find(
-                delegate(Type idx)
-                {
-                    return idx.FullName == fullName;
-                });
-            object obj = Adapter.Instance.SelectByID(type, id);
-            OpenNewWindowWithObject(obj, e.Params);
-        }
-
-        private void OpenNewWindowWithObject(object obj, Node input)
-        {
-            int id = input["ID"].Get<int>();
-            string propertyName = input["PropertyName"].Get<string>();
-            string fullName = input["FullName"].Get<string>();
             Node node = new Node();
-            node["Caption"].Value = string.Format(@"Details for {0} with ID:{1}, belonging to {2}({3}) on {4} property",
-                fullName.Substring(fullName.LastIndexOf(".") + 1),
-                id,
-                input["ParentFullName"].Value.ToString().Substring(input["ParentFullName"].Value.ToString().LastIndexOf(".") + 1),
-                input["IDOfParent"].Value.ToString(),
-                input["PropertyName"].Value.ToString());
-            node["ID"].Value = id;
-            node["IDOfParent"].Value = input["IDOfParent"].Value;
-            node["FullName"].Value = fullName;
-            node["ParentFullTypeName"].Value = input["ParentFullName"].Value;
-            List<Type> types = new List<Type>(PluginLoader.Instance.ActiveTypes);
-            Type type = types.Find(
-                delegate(Type idx)
-                {
-                    return idx.FullName == fullName;
-                });
-            foreach (PropertyInfo idx in type.GetProperties())
-            {
-                ActiveFieldAttribute[] attrs = 
-                    idx.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
-                if (attrs != null && attrs.Length > 0)
-                {
-                    if (idx.PropertyType.Name.Contains("LazyList"))
-                    {
-                        string lst = "LazyList&lt;";
-                        lst += idx.PropertyType.GetGenericArguments()[0].Name + "&gt;";
-                        node["Object"]["obj" + idx.Name]["TypeName"].Value = lst;
-                        node["Object"]["obj" + idx.Name]["FullTypeName"].Value = idx.PropertyType.GetGenericArguments()[0];
-                        object lazyList = idx.GetGetMethod(true).Invoke(obj, null);
-                        int count = (int)lazyList.GetType().GetProperty("Count").GetGetMethod(true).Invoke(lazyList, null);
-                        node["Object"]["obj" + idx.Name]["Value"].Value = count.ToString();
-                    }
-                    else
-                    {
-                        object value = idx.GetGetMethod(true).Invoke(obj, null);
-                        if (value != null)
-                            node["Object"]["obj" + idx.Name]["Value"].Value = value.ToString();
-                        node["Object"]["obj" + idx.Name]["TypeName"].Value = idx.PropertyType.Name;
-                        node["Object"]["obj" + idx.Name]["FullTypeName"].Value = idx.PropertyType.FullName;
-                    }
-                    node["Object"]["obj" + idx.Name]["PropertyName"].Value = idx.Name;
-                }
-            }
+            FillNodeWithViewContents(e, node);
+            e.Params = node;
             LoadModule(
-                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewObject",
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
                 "child",
                 node);
         }
 
-        [ActiveEvent(Name = "ChangeDatabasePropertyValue")]
-        protected void ChangeDatabasePropertyValue(object sender, ActiveEventArgs e)
+        // UPDATE the ViewContents Form
+        [ActiveEvent(Name = "DBAdmin.UpdateContents")]
+        protected void DBAdmin_UpdateContents(object sender, ActiveEventArgs e)
+        {
+            FillNodeWithViewContents(e, e.Params);
+        }
+
+        // Fill node with contents according to start/end of list view ...
+        private void FillNodeWithViewContents(ActiveEventArgs e, Node node)
+        {
+            int start = GetStart(e.Params);
+            int end = GetEnd(e.Params, start);
+            Type type = GetType(e.Params["FullTypeName"].Get<string>());
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
+                GetMethodInfos(GetProps(type));
+            System.Collections.IEnumerable enumerable = SelectObjects(type);
+            node = GetNodeList(enumerable, node, getters, type, start, end);
+
+            //node["ParentPropertyName"].Value = propertyName;
+            //node["ParentType"].Value = type.Name;
+            //node["ParentFullType"].Value = type.FullName;
+            //node["ParentID"].Value = id;
+
+            node["Start"].Value = start;
+            node["End"].Value = node["Objects"].Count + start;
+            node["TotalCount"].Value = GetCount(type);
+        }
+
+        private object GetObject(Type type, int id)
+        {
+            return
+                type.GetMethod(
+                    "SelectByID",
+                    BindingFlags.Public |
+                    BindingFlags.FlattenHierarchy |
+                    BindingFlags.Static).Invoke(null, new object[] { id });
+        }
+
+        private System.Collections.IEnumerable GetList(object from, string propertyName, Type type)
+        {
+            System.Collections.IEnumerable retVal =
+                type.GetProperty(propertyName).GetGetMethod(true).Invoke(from, null) as System.Collections.IEnumerable;
+            return retVal;
+        }
+
+        // Called when a List of items should be displayed
+        [ActiveEvent(Name = "DBAdmin.ViewList")]
+        protected void DBAdmin_ViewList(object sender, ActiveEventArgs e)
+        {
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string propertyName = e.Params["PropertyName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            Type type = GetType(fullTypeName);
+            object parentObject = GetObject(type, id);
+            System.Collections.IEnumerable enumerable = GetList(parentObject, propertyName, type);
+            Node node = new Node();
+            Type typeOfList = GetListType(type, propertyName);
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = GetMethodInfos(GetProps(typeOfList));
+            GetNodeList(
+                enumerable, 
+                node, 
+                getters, 
+                typeOfList, 
+                0, 
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
+            node["Start"].Value = 0;
+            node["ParentPropertyName"].Value = propertyName;
+            node["ParentType"].Value = parentObject.GetType().Name;
+            node["ParentFullType"].Value = parentObject.GetType().FullName;
+            node["ParentID"].Value = id;
+            node["End"].Value = node["Objects"].Count;
+            node["TotalCount"].Value = GetCountFromList(parentObject, propertyName, type);
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewListOfObjects",
+                "child",
+                node);
+        }
+
+        private int GetCountFromList(object obj, string listPropName, Type typeOfObj)
+        {
+            object tmp = typeOfObj.GetProperty(listPropName).GetGetMethod().Invoke(obj, null);
+            return (int)tmp.GetType().GetProperty("Count").GetGetMethod().Invoke(tmp, null);
+        }
+
+        private Type GetListType(Type type, string propertyName)
+        {
+            return type.GetProperty(propertyName).PropertyType.GetGenericArguments()[0];
+        }
+
+        private object GetPropertyObject(Type type, object parentObject, string propertyName)
+        {
+            PropertyInfo prop = type.GetProperty(
+                propertyName,
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            MethodInfo get = prop.GetGetMethod(true);
+            return get.Invoke(parentObject, null);
+        }
+
+        // Called when a List of items should be displayed
+        [ActiveEvent(Name = "DBAdmin.ViewSingleInstance")]
+        protected void DBAdmin_ViewSingleInstance(object sender, ActiveEventArgs e)
+        {
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string propertyName = e.Params["PropertyName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            Type type = GetType(fullTypeName);
+            object parentObject = GetObject(type, id);
+            object propertyToEdit = GetPropertyObject(type, parentObject, propertyName);
+            Node node = new Node();
+            node["ParentPropertyName"].Value = propertyName;
+            node["ParentType"].Value = type.Name;
+            node["ParentFullType"].Value = type.FullName;
+            node["ParentID"].Value = id;
+            if (propertyToEdit != null)
+            {
+                Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
+                    GetMethodInfos(GetProps(propertyToEdit.GetType()));
+                GetObject(node["Object"], getters, propertyToEdit, id);
+                node["Object"]["ID"].Value = GetID(propertyToEdit, propertyToEdit.GetType());
+            }
+            PropertyInfo prop = type.GetProperty(
+                propertyName,
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            MethodInfo get = prop.GetGetMethod(true);
+            node["FullTypeName"].Value = get.ReturnType.FullName;
+            node["TotalCount"].Value = GetCount(get.ReturnType);
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
+                "child",
+                node);
+        }
+
+        // Called when a List of items should be displayed
+        [ActiveEvent(Name = "DBAdmin.ChangeValue")]
+        protected void DBAdmin_ChangeValue(object sender, ActiveEventArgs e)
         {
             int id = e.Params["ID"].Get<int>();
-            string fullName = e.Params["FullName"].Get<string>();
+            string typeName = e.Params["FullTypeName"].Get<string>();
             string propertyName = e.Params["PropertyName"].Get<string>();
-            string nValue = e.Params["Value"].Get<string>();
-            Type type = new List<Type>(PluginLoader.Instance.ActiveTypes).Find(
-                delegate(Type idx)
-                {
-                    return idx.FullName == fullName;
-                });
-            object tmp = Adapter.Instance.SelectByID(type, id);
-            PropertyInfo prop = type.GetProperty(propertyName);
-            object toInsert = Convert.ChangeType(nValue, prop.PropertyType);
-            prop.GetSetMethod(true).Invoke(tmp, new object[] { toInsert });
-            type.GetMethod("Save").Invoke(tmp, null);
+            string value = e.Params["Value"].Get<string>();
+            Type type = GetType(typeName);
+            MethodInfo setter = type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).GetSetMethod(true);
+            object parent = GetObject(type, id);
+            object valueChanged = Convert.ChangeType(value, setter.GetParameters()[0].ParameterType);
+            setter.Invoke(parent, new object[] { valueChanged });
+            type.GetMethod("Save", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Invoke(parent, null);
         }
     }
 }

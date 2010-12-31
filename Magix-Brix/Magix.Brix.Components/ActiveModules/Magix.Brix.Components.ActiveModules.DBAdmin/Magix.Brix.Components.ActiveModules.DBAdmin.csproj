@@ -37,30 +37,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EditList.ascx.cs">
-      <DependentUpon>EditList.ascx</DependentUpon>
+    <Compile Include="DataBindableSingleInstanceControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ViewObject.ascx.cs">
-      <DependentUpon>ViewObject.ascx</DependentUpon>
+    <Compile Include="DataBindableListControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ViewInstances.ascx.cs">
-      <DependentUpon>ViewInstances.ascx</DependentUpon>
+    <Compile Include="ViewListOfObjects.ascx.cs">
+      <DependentUpon>ViewListOfObjects.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ViewClassDetails.ascx.cs">
-      <DependentUpon>ViewClassDetails.ascx</DependentUpon>
+    <Compile Include="ViewSingleObject.ascx.cs">
+      <DependentUpon>ViewSingleObject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewClassContents.ascx.cs">
+      <DependentUpon>ViewClassContents.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Main.ascx.cs">
-      <DependentUpon>Main.ascx</DependentUpon>
+    <Compile Include="BrowseClasses.ascx.cs">
+      <DependentUpon>BrowseClasses.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Main.ascx">
+    <EmbeddedResource Include="BrowseClasses.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -85,24 +87,22 @@
       <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
+      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
+      <Name>Magix.Brix.Components</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ViewClassDetails.ascx">
+    <EmbeddedResource Include="ViewClassContents.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ViewInstances.ascx">
-      <SubType>ASPXCodeBehind</SubType>
+    <EmbeddedResource Include="ViewSingleObject.ascx">
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ViewObject.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="EditList.ascx">
+    <EmbeddedResource Include="ViewListOfObjects.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

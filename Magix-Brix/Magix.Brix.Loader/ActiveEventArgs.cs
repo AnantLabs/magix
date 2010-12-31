@@ -17,7 +17,7 @@ namespace Magix.Brix.Loader
     public class ActiveEventArgs : EventArgs
     {
         private readonly string _name;
-        private readonly Node _params;
+        private Node _params;
 
         internal ActiveEventArgs(string name, Node pars)
         {
@@ -37,6 +37,6 @@ namespace Magix.Brix.Loader
          * This is the "initializationObject" passed into your RaiseEvent call. Use this 
          * parameter to pass around data between components.
          */
-        public Node Params { get { return _params; } }
+        public Node Params { get { return _params; } set { _params = value; } }
     }
 }
