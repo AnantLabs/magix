@@ -39,3 +39,25 @@
     </Content>
 </mux:Window>
 
+<mux:Window 
+    runat="server" 
+    CssClass="mux-shaded mux-rounded"
+    style="left:5px;top:5px;position:absolute;margin-right:5px;margin-bottom:5px;z-index:1000;overflow:auto;min-width:95%;"
+    Caption="Details..."
+    Visible="false"
+    OnClosed="wnd_Closed"
+    id="wnd">
+    <Content>
+        <mux:DynamicPanel 
+            runat="server" 
+            CssClass="dynamic"
+            OnReload="dynamic_LoadControls"
+            id="child" />
+    </Content>
+    <Control>
+        <mux:AspectModal
+            runat="server"
+            id="modal" />
+    </Control>
+</mux:Window>
+

@@ -1,11 +1,7 @@
 ﻿/*
- * Ra-Brix - A Modular-based Framework for building 
- * Web Applications Copyright 2009 - Thomas Hansen 
- * thomas@ra-ajax.org. Unless permission is 
- * explicitly given this code is licensed under the 
- * GNU Affero GPL version 3 which can be found in the 
- * license.txt file on disc.
- * 
+ * Magix - A Modular-based Framework for building Web Applications 
+ * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
+ * Magix is licensed as GPLv3.
  */
 
 using System;

@@ -22,6 +22,8 @@ namespace Magix.Brix.Viewports
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
+        protected Window wnd;
+        protected DynamicPanel child;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -75,6 +77,10 @@ namespace Magix.Brix.Viewports
             {
                 ClearControls(dyn2);
             }
+            else if (e.Params["Position"].Get<string>() == "child")
+            {
+                ClearControls(child);
+            }
         }
 
         private void ClearControls(DynamicPanel dynamic)
@@ -109,6 +115,25 @@ namespace Magix.Brix.Viewports
                     dyn2.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
+            else if (e.Params["Position"].Get<string>() == "child" && child.Controls.Count == 0)
+            {
+                wnd.Visible = true;
+                wnd.Style[Styles.display] = "none";
+                new EffectFadeIn(wnd, 500)
+                    .Render();
+                if (true.Equals(e.Params["Parameters"]["Append"].Value))
+                    child.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                else
+                {
+                    ClearControls(child);
+                    child.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                }
+            }
+        }
+
+        protected void wnd_Closed(object sender, EventArgs e)
+        {
+            ClearControls(child);
         }
 
         protected void dynamic_LoadControls(object sender, DynamicPanel.ReloadEventArgs e)
