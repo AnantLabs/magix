@@ -131,12 +131,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 this,
                                 "ClearControlsForSpecificDynamic",
                                 node2);
-                            node2 = new Node();
-                            node2["ClientID"].Value = parId;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "UpdateSpecificNestedDynamic",
-                                node2);
                             this.Close();
                         };
                     cS.Controls.Add(btn);
@@ -161,7 +155,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 this,
                                 "DBAdmin.ComplexInstanceRemoved",
                                 node);
-                            this.Close();
+                            ReDataBind();
                         };
                     cS.Controls.Add(btn);
                     row.Cells.Add(cS);
