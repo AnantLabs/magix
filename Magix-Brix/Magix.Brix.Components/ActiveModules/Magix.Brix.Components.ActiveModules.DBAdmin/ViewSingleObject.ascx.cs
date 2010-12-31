@@ -57,15 +57,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void ReDataBind()
         {
-            // Yup, we're it ...!
-            ClearControls(child);
-            wnd.Visible = false;
-            Node node = new Node();
-            node["ClientID"].Value = ClientID;
+            DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
+            DataSource["Object"].UnTie();
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
-                "ClearControlsForSpecificDynamic",
-                node);
+                "DBAdmin.UpdateSingleInstance",
+                DataSource);
+            pnl.Controls.Clear();
+            UpdateCaption();
+            DataBindObjects();
+            pnl.ReRender();
         }
 
         protected void remove_Click(object sender, EventArgs e)

@@ -179,7 +179,7 @@ namespace Magix.Brix.Components
             dynamic.Controls.Add(ctrl);
         }
 
-        protected void ClearControls(DynamicPanel dynamic)
+        protected virtual void ClearControls(DynamicPanel dynamic)
         {
             foreach (System.Web.UI.Control idx in dynamic.Controls)
             {
@@ -191,7 +191,7 @@ namespace Magix.Brix.Components
         protected void wnd_Closed(object sender, EventArgs e)
         {
             ClearControls(child);
+            ReDataBind();
         }
     }
-
 }

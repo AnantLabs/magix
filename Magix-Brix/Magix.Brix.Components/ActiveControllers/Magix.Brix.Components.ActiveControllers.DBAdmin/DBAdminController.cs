@@ -374,13 +374,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         protected void DBAdmin_UpdateList(object sender, ActiveEventArgs e)
         {
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
-            string propertyName = e.Params["PropertyName"].Get<string>();
+            string parentFullType = e.Params["ParentFullType"].Get<string>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
             int id = e.Params["ID"].Get<int>();
+            int parentId = e.Params["ParentID"].Get<int>();
             Type type = GetType(fullTypeName);
-            object parentObject = GetObject(type, id);
-            System.Collections.IEnumerable enumerable = GetList(parentObject, propertyName, type);
-            Node node = new Node();
-            Type typeOfList = GetListType(type, propertyName);
+            Type parentType = GetType(parentFullType);
+            object parentObject = GetObject(parentType, parentId);
+            System.Collections.IEnumerable enumerable = GetList(parentObject, parentPropertyName, parentType);
+            Node node = e.Params;
+            Type typeOfList = GetListType(parentType, parentPropertyName);
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = GetMethodInfos(GetProps(typeOfList));
             GetNodeList(
                 enumerable,
@@ -392,12 +395,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             node["Start"].Value = 0;
             node["IsRemove"].Value = true;
             node["IsAppend"].Value = true;
-            node["ParentPropertyName"].Value = propertyName;
+            node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentType"].Value = parentObject.GetType().Name;
             node["ParentFullType"].Value = parentObject.GetType().FullName;
-            node["ParentID"].Value = id;
             node["End"].Value = node["Objects"].Count;
-            node["TotalCount"].Value = GetCountFromList(parentObject, propertyName, type);
+            node["TotalCount"].Value = GetCountFromList(parentObject, parentPropertyName, parentType);
             e.Params = node;
         }
 
