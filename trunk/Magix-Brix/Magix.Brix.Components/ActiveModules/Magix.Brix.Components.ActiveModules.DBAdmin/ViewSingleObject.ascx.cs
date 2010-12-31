@@ -31,7 +31,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     UpdateCaption();
                     if (node["EditingAllowed"].Get<bool>())
                     {
-                        remove.Enabled = true;
+                        if (DataSource["Object"]["ID"].Get<int>() != 0)
+                            remove.Enabled = true;
+                        else
+                            remove.Enabled = false;
                         change.Enabled = true;
                     }
                     else
@@ -53,11 +56,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 this,
                 "DBAdmin.ChangeComplexInstance",
                 node);
-        }
-
-        protected override void RefreshWindowContent(object sender, ActiveEventArgs e)
-        {
-            (Parent.Parent.Parent as Window).CloseWindow();
         }
 
         protected override void ReDataBind()
@@ -82,10 +80,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 this,
                 "DBAdmin.RemoveReference",
                 DataSource);
-            pnl.Controls.Clear();
-            UpdateCaption();
-            DataBindObjects();
-            pnl.ReRender();
+            (Parent.Parent.Parent as Window).CloseWindow();
         }
 
         protected override void DataBindObjects()
@@ -201,6 +196,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             c1.InnerHtml = "Value";
             row.Cells.Add(c1);
             return row;
+        }
+
+        [ActiveEvent(Name = "DBAdmin.InstanceWasSelected")]
+        protected void DBAdmin_InstanceWasSelected(object sender, ActiveEventArgs e)
+        {
+            string idOfWindow = e.Params["WindowID"].Get<string>();
+            Window th = this.Parent.Parent.Parent as Window;
+            if (th.ID == idOfWindow)
+            {
+                th.CloseWindow();
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes;
 using System.Web.UI.HtmlControls;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
@@ -123,7 +124,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 "DBAdmin." +
                                     DataSource["SelectEventToFire"].Get<string>(),
                                 node);
-                            (Parent.Parent.Parent as Window).CloseWindow();
+                            int closingWindowID = int.Parse((Parent.Parent.Parent as Window).ID.Replace("wd", ""));
+                            if (closingWindowID != 0)
+                            {
+                                int otherClosingWindowID = closingWindowID - 1;
+                                string idOfOtherClosingWindow = 
+                                    (Parent.Parent.Parent as Window).ID.Replace(
+                                        "wd" + closingWindowID, 
+                                        "wd" + otherClosingWindowID);
+                                Node node2 = new Node();
+                                node2["WindowID"].Value = idOfOtherClosingWindow;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "DBAdmin.InstanceWasSelected",
+                                    node2);
+                                (Parent.Parent.Parent as Window).CloseWindow();
+                            }
                         };
                     cS.Controls.Add(btn);
                     row.Cells.Add(cS);

@@ -47,8 +47,8 @@ namespace Magix.Brix.Viewports
                 // Window
                 Window w = new Window();
                 w.CssClass = "mux-shaded mux-rounded";
-                w.Style[Styles.left] = (idxNo * 25).ToString() + "px";
-                w.Style[Styles.top] = (idxNo * 25).ToString() + "px";
+                w.Style[Styles.left] = ((idxNo * 25) + 10).ToString() + "px";
+                w.Style[Styles.top] = ((idxNo * 30) + 10).ToString() + "px";
                 w.Style[Styles.position] = "absolute";
                 w.Style[Styles.minWidth] = "450px";
                 w.Style[Styles.minHeight] = "250px";
@@ -207,13 +207,16 @@ namespace Magix.Brix.Viewports
             Window w = sender as Window;
             ClearControls(w.Content.Controls[0] as DynamicPanel);
             int closingWindowID = int.Parse(w.ID.Replace("wd", ""));
-            int refreshWindowID = closingWindowID - 1;
-            Node node = new Node();
-            node["ClientID"].Value = w.ClientID.Replace(w.ID, "wd" + refreshWindowID);
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "RefreshWindowContent",
-                node);
+            if (closingWindowID != 0)
+            {
+                int refreshWindowID = closingWindowID - 1;
+                Node node = new Node();
+                node["ClientID"].Value = w.ClientID.Replace(w.ID, "wd" + refreshWindowID);
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "RefreshWindowContent",
+                    node);
+            }
         }
 
         protected void dynamic_LoadControls(object sender, DynamicPanel.ReloadEventArgs e)
