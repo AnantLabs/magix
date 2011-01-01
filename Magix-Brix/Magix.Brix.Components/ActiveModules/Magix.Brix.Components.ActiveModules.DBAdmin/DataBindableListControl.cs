@@ -133,6 +133,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 cS.InnerHtml = "Remove";
                 row.Cells.Add(cS);
             }
+            if (DataSource["IsDelete"].Get<bool>())
+            {
+                HtmlTableCell cS = new HtmlTableCell();
+                cS.InnerHtml = "Delete";
+                row.Cells.Add(cS);
+            }
             HtmlTableCell cId = new HtmlTableCell();
             cId.InnerHtml = "ID";
             row.Cells.Add(cId);
@@ -185,33 +191,47 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     btn.Click +=
                         delegate(object sender, EventArgs e)
                         {
-                            Node node = new Node();
-                            node["IsListAppend"].Value = DataSource["IsListAppend"].Value;
-                            node["ParentID"].Value = ParentID;
-                            node["ParentPropertyName"].Value = ParentPropertyName;
-                            node["ParentType"].Value = ParentType;
-                            node["NewObjectID"].Value = int.Parse((sender as LinkButton).Info);
-                            node["NewObjectType"].Value = DataSource["FullTypeName"].Value;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "DBAdmin." +
-                                    DataSource["SelectEventToFire"].Get<string>(),
-                                node);
-                            int closingWindowID = int.Parse((Parent.Parent.Parent as Window).ID.Replace("wd", ""));
-                            if (closingWindowID != 0)
+                            try
                             {
-                                int otherClosingWindowID = closingWindowID - 1;
-                                string idOfOtherClosingWindow = 
-                                    (Parent.Parent.Parent as Window).ID.Replace(
-                                        "wd" + closingWindowID, 
-                                        "wd" + otherClosingWindowID);
-                                Node node2 = new Node();
-                                node2["WindowID"].Value = idOfOtherClosingWindow;
+                                Node node = new Node();
+                                node["IsListAppend"].Value = DataSource["IsListAppend"].Value;
+                                node["ParentID"].Value = ParentID;
+                                node["ParentPropertyName"].Value = ParentPropertyName;
+                                node["ParentType"].Value = ParentType;
+                                node["NewObjectID"].Value = int.Parse((sender as LinkButton).Info);
+                                node["NewObjectType"].Value = DataSource["FullTypeName"].Value;
                                 ActiveEvents.Instance.RaiseActiveEvent(
                                     this,
-                                    "DBAdmin.InstanceWasSelected",
+                                    "DBAdmin." +
+                                        DataSource["SelectEventToFire"].Get<string>(),
+                                    node);
+                                int closingWindowID = int.Parse((Parent.Parent.Parent as Window).ID.Replace("wd", ""));
+                                if (closingWindowID != 0)
+                                {
+                                    int otherClosingWindowID = closingWindowID - 1;
+                                    string idOfOtherClosingWindow =
+                                        (Parent.Parent.Parent as Window).ID.Replace(
+                                            "wd" + closingWindowID,
+                                            "wd" + otherClosingWindowID);
+                                    Node node2 = new Node();
+                                    node2["WindowID"].Value = idOfOtherClosingWindow;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        "DBAdmin.InstanceWasSelected",
+                                        node2);
+                                    (Parent.Parent.Parent as Window).CloseWindow();
+                                }
+                            }
+                            catch (Exception err)
+                            {
+                                Node node2 = new Node();
+                                while (err.InnerException != null)
+                                    err = err.InnerException;
+                                node2["Message"].Value = err.Message;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "ShowMessage",
                                     node2);
-                                (Parent.Parent.Parent as Window).CloseWindow();
                             }
                         };
                     cS.Controls.Add(btn);
@@ -226,17 +246,68 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     btn.Click +=
                         delegate(object sender, EventArgs e)
                         {
-                            Node node = new Node();
-                            node["ParentID"].Value = ParentID;
-                            node["ParentPropertyName"].Value = ParentPropertyName;
-                            node["ParentType"].Value = ParentFullType;
-                            node["ObjectToRemoveID"].Value = int.Parse((sender as LinkButton).Info);
-                            node["ObjectToRemoveType"].Value = DataSource["FullTypeName"].Value;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "DBAdmin.ComplexInstanceRemoved",
-                                node);
-                            ReDataBind();
+                            try
+                            {
+                                Node node = new Node();
+                                node["ParentID"].Value = ParentID;
+                                node["ParentPropertyName"].Value = ParentPropertyName;
+                                node["ParentType"].Value = ParentFullType;
+                                node["ObjectToRemoveID"].Value = int.Parse((sender as LinkButton).Info);
+                                node["ObjectToRemoveType"].Value = DataSource["FullTypeName"].Value;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "DBAdmin.ComplexInstanceRemoved",
+                                    node);
+                                ReDataBind();
+                            }
+                            catch (Exception err)
+                            {
+                                Node node2 = new Node();
+                                while (err.InnerException != null)
+                                    err = err.InnerException;
+                                node2["Message"].Value = err.Message;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "ShowMessage",
+                                    node2);
+                            }
+                        };
+                    cS.Controls.Add(btn);
+                    row.Cells.Add(cS);
+                }
+                if (DataSource["IsDelete"].Get<bool>())
+                {
+                    HtmlTableCell cS = new HtmlTableCell();
+                    LinkButton btn = new LinkButton();
+                    btn.Text = "Delete";
+                    btn.Info = idxObj["ID"].Value.ToString();
+                    btn.Click +=
+                        delegate(object sender, EventArgs e)
+                        {
+                            try
+                            {
+                                Node node = new Node();
+                                node["ObjectToDeleteID"].Value =
+                                    int.Parse((sender as LinkButton).Info);
+                                node["ObjectToDeleteType"].Value = DataSource["FullTypeName"].Value;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "DBAdmin.ComplexInstanceDeleted",
+                                    node);
+                                ReDataBind();
+
+                            }
+                            catch (Exception err)
+                            {
+                                Node node2 = new Node();
+                                while (err.InnerException != null)
+                                    err = err.InnerException;
+                                node2["Message"].Value = err.Message;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "ShowMessage",
+                                    node2);
+                            }
                         };
                     cS.Controls.Add(btn);
                     row.Cells.Add(cS);
@@ -265,21 +336,36 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         b.Click +=
                             delegate(object sender, EventArgs e)
                             {
-                                LinkButton bt = sender as LinkButton;
-                                string[] infos = bt.Info.Split('|');
-                                string parentPropertyName = infos[1];
-                                int parentId = int.Parse(infos[0]);
-                                bool belongsTo = bool.Parse(infos[2]);
-                                string parentType = DataSource["FullTypeName"].Get<string>();
-                                Node node = new Node();
-                                node["FullTypeName"].Value = parentType;
-                                node["ID"].Value = parentId;
-                                node["PropertyName"].Value = parentPropertyName;
-                                node["BelongsTo"].Value = belongsTo;
-                                ActiveEvents.Instance.RaiseActiveEvent(
-                                    this,
-                                    "DBAdmin.ViewList",
-                                    node);
+                                try
+                                {
+                                    LinkButton bt = sender as LinkButton;
+                                    string[] infos = bt.Info.Split('|');
+                                    string parentPropertyName = infos[1];
+                                    int parentId = int.Parse(infos[0]);
+                                    bool belongsTo = bool.Parse(infos[2]);
+                                    string parentType = DataSource["FullTypeName"].Get<string>();
+                                    Node node = new Node();
+                                    node["FullTypeName"].Value = parentType;
+                                    node["ID"].Value = parentId;
+                                    node["PropertyName"].Value = parentPropertyName;
+                                    node["BelongsTo"].Value = belongsTo;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        "DBAdmin.ViewList",
+                                        node);
+
+                                }
+                                catch (Exception err)
+                                {
+                                    Node node2 = new Node();
+                                    while (err.InnerException != null)
+                                        err = err.InnerException;
+                                    node2["Message"].Value = err.Message;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        "ShowMessage",
+                                        node2);
+                                }
                             };
                         c.Controls.Add(b);
                     }
@@ -294,21 +380,36 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         b.Click +=
                             delegate(object sender, EventArgs e)
                             {
-                                LinkButton bt = sender as LinkButton;
-                                string[] infos = bt.Info.Split('|');
-                                string parentPropertyName = infos[1];
-                                int parentId = int.Parse(infos[0]);
-                                string parentType = DataSource["FullTypeName"].Get<string>();
-                                bool belongsTo = bool.Parse(infos[2]);
-                                Node node = new Node();
-                                node["FullTypeName"].Value = parentType;
-                                node["ID"].Value = parentId;
-                                node["PropertyName"].Value = parentPropertyName;
-                                node["BelongsTo"].Value = belongsTo;
-                                ActiveEvents.Instance.RaiseActiveEvent(
-                                    this,
-                                    "DBAdmin.ViewSingleInstance",
-                                    node);
+                                try
+                                {
+                                    LinkButton bt = sender as LinkButton;
+                                    string[] infos = bt.Info.Split('|');
+                                    string parentPropertyName = infos[1];
+                                    int parentId = int.Parse(infos[0]);
+                                    string parentType = DataSource["FullTypeName"].Get<string>();
+                                    bool belongsTo = bool.Parse(infos[2]);
+                                    Node node = new Node();
+                                    node["FullTypeName"].Value = parentType;
+                                    node["ID"].Value = parentId;
+                                    node["PropertyName"].Value = parentPropertyName;
+                                    node["BelongsTo"].Value = belongsTo;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        "DBAdmin.ViewSingleInstance",
+                                        node);
+
+                                }
+                                catch (Exception err)
+                                {
+                                    Node node2 = new Node();
+                                    while (err.InnerException != null)
+                                        err = err.InnerException;
+                                    node2["Message"].Value = err.Message;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        "ShowMessage",
+                                        node2);
+                                }
                             };
                         c.Controls.Add(b);
                     }
@@ -322,19 +423,34 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         ed.TextChanged +=
                             delegate(object sender, EventArgs e)
                             {
-                                TextAreaEdit edit = sender as TextAreaEdit;
-                                Node node = new Node();
-                                string[] infos = edit.Info.Split('|');
-                                string parentPropertyName = infos[1];
-                                int parentId = int.Parse(infos[0]);
-                                node["ID"].Value = parentId;
-                                node["FullTypeName"].Value = FullTypeName;
-                                node["PropertyName"].Value = parentPropertyName;
-                                node["Value"].Value = edit.Text;
-                                ActiveEvents.Instance.RaiseActiveEvent(
-                                    this,
-                                    "DBAdmin.ChangeValue",
-                                    node);
+                                try
+                                {
+                                    TextAreaEdit edit = sender as TextAreaEdit;
+                                    Node node = new Node();
+                                    string[] infos = edit.Info.Split('|');
+                                    string parentPropertyName = infos[1];
+                                    int parentId = int.Parse(infos[0]);
+                                    node["ID"].Value = parentId;
+                                    node["FullTypeName"].Value = FullTypeName;
+                                    node["PropertyName"].Value = parentPropertyName;
+                                    node["Value"].Value = edit.Text;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        "DBAdmin.ChangeValue",
+                                        node);
+
+                                }
+                                catch (Exception err)
+                                {
+                                    Node node2 = new Node();
+                                    while (err.InnerException != null)
+                                        err = err.InnerException;
+                                    node2["Message"].Value = err.Message;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        "ShowMessage",
+                                        node2);
+                                }
                             };
                         c.Controls.Add(ed);
                     }

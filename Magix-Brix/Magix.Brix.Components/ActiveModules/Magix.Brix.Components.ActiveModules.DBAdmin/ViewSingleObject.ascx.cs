@@ -47,40 +47,84 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void change_Click(object sender, EventArgs e)
         {
-            Node node = new Node();
-            node["ParentID"].Value = ParentID;
-            node["ParentPropertyName"].Value = ParentPropertyName;
-            node["ParentType"].Value = ParentFullType;
-            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.ChangeComplexInstance",
-                node);
+            try
+            {
+                Node node = new Node();
+                node["ParentID"].Value = ParentID;
+                node["ParentPropertyName"].Value = ParentPropertyName;
+                node["ParentType"].Value = ParentFullType;
+                node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.ChangeComplexInstance",
+                    node);
+
+            }
+            catch (Exception err)
+            {
+                Node node2 = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                node2["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ShowMessage",
+                    node2);
+            }
         }
 
         protected override void ReDataBind()
         {
-            DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
-            DataSource["Object"].UnTie();
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.UpdateSingleInstance",
-                DataSource);
-            pnl.Controls.Clear();
-            UpdateCaption();
-            DataBindObjects();
-            pnl.ReRender();
+            try
+            {
+                DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
+                DataSource["Object"].UnTie();
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.UpdateSingleInstance",
+                    DataSource);
+                pnl.Controls.Clear();
+                UpdateCaption();
+                DataBindObjects();
+                pnl.ReRender();
+
+            }
+            catch (Exception err)
+            {
+                Node node2 = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                node2["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ShowMessage",
+                    node2);
+            }
         }
 
         protected void remove_Click(object sender, EventArgs e)
         {
-            DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
-            DataSource["Object"].UnTie();
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.RemoveReference",
-                DataSource);
-            (Parent.Parent.Parent as Window).CloseWindow();
+            try
+            {
+                DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
+                DataSource["Object"].UnTie();
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.RemoveReference",
+                    DataSource);
+                (Parent.Parent.Parent as Window).CloseWindow();
+            }
+            catch (Exception err)
+            {
+                Node node2 = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                node2["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ShowMessage",
+                    node2);
+            }
         }
 
         protected override void DataBindObjects()
@@ -118,26 +162,40 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 ed.Click +=
                     delegate(object sender, EventArgs e)
                     {
-                        LinkButton lb = sender as LinkButton;
-                        string propertyName = lb.Info.Split('|')[0];
-                        bool isList = bool.Parse(lb.Info.Split('|')[1]);
-                        Node node = new Node();
-                        node["ID"].Value = ActiveID;
-                        node["FullTypeName"].Value = FullTypeName;
-                        node["PropertyName"].Value = propertyName;
-                        if (isList)
+                        try
                         {
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "DBAdmin.ViewList",
-                                node);
+                            LinkButton lb = sender as LinkButton;
+                            string propertyName = lb.Info.Split('|')[0];
+                            bool isList = bool.Parse(lb.Info.Split('|')[1]);
+                            Node node = new Node();
+                            node["ID"].Value = ActiveID;
+                            node["FullTypeName"].Value = FullTypeName;
+                            node["PropertyName"].Value = propertyName;
+                            if (isList)
+                            {
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "DBAdmin.ViewList",
+                                    node);
+                            }
+                            else
+                            {
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "DBAdmin.ViewSingleInstance",
+                                    node);
+                            }
                         }
-                        else
+                        catch (Exception err)
                         {
+                            Node node2 = new Node();
+                            while (err.InnerException != null)
+                                err = err.InnerException;
+                            node2["Message"].Value = err.Message;
                             ActiveEvents.Instance.RaiseActiveEvent(
                                 this,
-                                "DBAdmin.ViewSingleInstance",
-                                node);
+                                "ShowMessage",
+                                node2);
                         }
                     };
                 c1.Controls.Add(ed);
@@ -150,16 +208,30 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 ed.TextChanged +=
                     delegate(object sender, EventArgs e)
                     {
-                        TextAreaEdit edit = sender as TextAreaEdit;
-                        Node node = new Node();
-                        node["ID"].Value = ActiveID;
-                        node["FullTypeName"].Value = FullTypeName;
-                        node["PropertyName"].Value = edit.Info;
-                        node["Value"].Value = edit.Text;
-                        ActiveEvents.Instance.RaiseActiveEvent(
-                            this,
-                            "DBAdmin.ChangeValue",
-                            node);
+                        try
+                        {
+                            TextAreaEdit edit = sender as TextAreaEdit;
+                            Node node = new Node();
+                            node["ID"].Value = ActiveID;
+                            node["FullTypeName"].Value = FullTypeName;
+                            node["PropertyName"].Value = edit.Info;
+                            node["Value"].Value = edit.Text;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                "DBAdmin.ChangeValue",
+                                node);
+                        }
+                        catch (Exception err)
+                        {
+                            Node node2 = new Node();
+                            while (err.InnerException != null)
+                                err = err.InnerException;
+                            node2["Message"].Value = err.Message;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                "ShowMessage",
+                                node2);
+                        }
                     };
                 c1.Controls.Add(ed);
             }
