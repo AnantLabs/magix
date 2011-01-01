@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Web.UI.HtmlControls;
 using Magix.UX.Widgets;
 using Magix.Brix.Types;
@@ -46,10 +47,21 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected override void ReDataBind()
         {
             DataSource["Objects"].UnTie();
+            Node node = DataSource;
+            List<string> keysToRemove = new List<string>();
+            foreach (string idxKey in ViewState.Keys)
+            {
+                if (idxKey.IndexOf("DBAdmin.VisibleColumns.") == -1)
+                    keysToRemove.Add(idxKey);
+            }
+            foreach (string idxKey in keysToRemove)
+            {
+                ViewState.Remove(idxKey);
+            }
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.UpdateList",
-                DataSource);
+                node);
             pnl.Controls.Clear();
             UpdateCaption();
             DataBindObjects();

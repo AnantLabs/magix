@@ -80,7 +80,7 @@ namespace Magix.Brix.Components
         [ActiveEvent(Name = "RefreshWindowContent")]
         protected virtual void RefreshWindowContent(object sender, ActiveEventArgs e)
         {
-            if (ClientID.IndexOf(e.Params["ClientID"].Get<string>()) == 0)
+            if (this.Parent.Parent.Parent.ClientID ==e.Params["ClientID"].Get<string>())
             {
                 ReDataBind();
             }
