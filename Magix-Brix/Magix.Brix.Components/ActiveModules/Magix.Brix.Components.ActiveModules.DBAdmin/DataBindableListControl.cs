@@ -19,7 +19,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
     public abstract class DataBindableListControl : NestedDynamic, IModule
     {
-        private Window wnd;
         private LinkButton rc;
 
         protected override void OnInit(EventArgs e)
@@ -37,7 +36,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             rc.ID = "rc";
             rc.Click += rc_Click;
             rc.ToolTip = "Configure visible columns...";
-            rc.CssClass = "window-left-buttons window-remove-columns";
             rc.Text = "&nbsp;";
             Controls.Add(rc);
         }
@@ -89,6 +87,29 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected HtmlTable CreateTable()
         {
+            bool green = true;
+            string fullTypeName = FullTypeName;
+            foreach (Node idx in DataSource["Type"]["Properties"])
+            {
+                if (!Settings.Instance.Get(
+                    "DBAdmin.VisibleColumns." +
+                    fullTypeName + ":" + idx["Name"].Value,
+                    true))
+                {
+                    green = false;
+                    break;
+                }
+            }
+            if (green)
+            {
+                rc.CssClass = "window-left-buttons window-remove-columns";
+                rc.ToolTip = "Remove columns";
+            }
+            else
+            {
+                rc.CssClass = "window-left-buttons window-restore-columns";
+                rc.ToolTip = "Add removed columns, or remove more columns";
+            }
             if (DataSource["Objects"].Count == 0)
                 return null;
             HtmlTable table = new HtmlTable();
