@@ -146,6 +146,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
             Label cId = new Label();
             cId.Text = "ID";
+            cId.Tag = "td";
             row.Controls.Add(cId);
             string fullTypeName = DataSource["FullTypeName"].Get<string>();
             foreach (Node idx in DataSource["Type"]["Properties"])
