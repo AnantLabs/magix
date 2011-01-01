@@ -51,7 +51,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             List<string> keysToRemove = new List<string>();
             foreach (string idxKey in ViewState.Keys)
             {
-                if (idxKey.IndexOf("DBAdmin.VisibleColumns.") == -1)
+                if (idxKey.IndexOf("DBAdmin.VisibleColumns.") == 0)
                     keysToRemove.Add(idxKey);
             }
             foreach (string idxKey in keysToRemove)

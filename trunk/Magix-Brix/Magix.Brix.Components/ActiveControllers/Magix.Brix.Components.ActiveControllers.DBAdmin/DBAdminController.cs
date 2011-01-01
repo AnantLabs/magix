@@ -667,7 +667,9 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             node["Caption"].Value = "Configure columns";
             node["Columns"] = e.Params["Columns"];
             node["FullTypeName"].Value = e.Params["FullTypeName"].Value;
-            string fullTypeName = "DBAdmin.VisibleColumns." + e.Params["FullTypeName"].Get<string>();
+            string fullTypeName = 
+                "DBAdmin.VisibleColumns." + 
+                e.Params["FullTypeName"].Get<string>();
             foreach (Node idx in node["Columns"])
             {
                 string idxSettingName = fullTypeName + ":" + idx["Name"].Get<string>();
