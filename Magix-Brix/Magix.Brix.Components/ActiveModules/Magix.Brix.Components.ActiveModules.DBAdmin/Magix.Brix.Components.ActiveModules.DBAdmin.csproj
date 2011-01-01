@@ -37,6 +37,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigureColumns.ascx.cs">
+      <DependentUpon>ConfigureColumns.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="DataBindableSingleInstanceControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -104,6 +108,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ViewListOfObjects.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConfigureColumns.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

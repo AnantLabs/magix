@@ -47,8 +47,8 @@ namespace Magix.Brix.Viewports
                 // Window
                 Window w = new Window();
                 w.CssClass = "mux-shaded mux-rounded window-left-buttons";
-                w.Style[Styles.left] = ((idxNo * 25) + 10).ToString() + "px";
-                w.Style[Styles.top] = ((idxNo * 30) + 10).ToString() + "px";
+                w.Style[Styles.left] = ((idxNo * 25) + 50).ToString() + "px";
+                w.Style[Styles.top] = ((idxNo * 30) + 60).ToString() + "px";
                 w.Style[Styles.position] = "absolute";
                 w.Style[Styles.minWidth] = "550px";
                 w.Style[Styles.minHeight] = "250px";
@@ -153,6 +153,8 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {
+            // Since this is our default container, 
+            // we accept "null" and string.Empty values here ...!
             if (e.Params["Position"].Get<string>() == "dyn" || 
                 string.IsNullOrEmpty(e.Params["Position"].Get<string>()))
             {
@@ -190,8 +192,12 @@ namespace Magix.Brix.Viewports
                 Window w = toAddInto.Parent.Parent as Window;
                 w.Visible = true;
                 w.Style[Styles.display] = "none";
-                new EffectFadeIn(w, 500)
+                new EffectFadeIn(w, 1500)
                     .Render();
+                if (e.Params["Parameters"].Contains("Caption"))
+                {
+                    w.Caption = e.Params["Parameters"]["Caption"].Get<string>();
+                }
                 if (true.Equals(e.Params["Parameters"]["Append"].Value))
                     toAddInto.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 else

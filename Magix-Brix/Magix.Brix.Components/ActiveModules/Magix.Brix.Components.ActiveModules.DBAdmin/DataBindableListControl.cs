@@ -19,6 +19,44 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
     public abstract class DataBindableListControl : NestedDynamic, IModule
     {
+        private Window wnd;
+        private LinkButton rc;
+
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            EnsureChildControls();
+        }
+
+        protected override void CreateChildControls()
+        {
+            base.CreateChildControls();
+
+            // Remove Columns button
+            rc = new LinkButton();
+            rc.ID = "rc";
+            rc.Click += rc_Click;
+            rc.ToolTip = "Configure visible columns...";
+            rc.CssClass = "window-left-buttons window-remove-columns";
+            rc.Text = "&nbsp;";
+            Controls.Add(rc);
+        }
+
+        protected void rc_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            foreach (Node idx in DataSource["Type"]["Properties"])
+            {
+                node["Columns"][idx.Name]["Name"].Value = idx["Name"].Get<string>();
+                node["Columns"][idx.Name]["TypeName"].Value = idx["TypeName"].Get<string>();
+            }
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.ConfigureColumns",
+                node);
+        }
+
         protected int Start
         {
             get { return DataSource["Start"].Get<int>(); }
@@ -77,9 +115,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             HtmlTableCell cId = new HtmlTableCell();
             cId.InnerHtml = "ID";
             row.Cells.Add(cId);
+            string fullTypeName = DataSource["FullTypeName"].Get<string>();
             foreach (Node idx in DataSource["Type"]["Properties"])
             {
                 string propertyName = idx["Name"].Get<string>();
+                string idxSettingVisibility = 
+                    "DBAdmin.VisibleColumns." + fullTypeName + ":" + propertyName;
+                if(!Settings.Instance.Get(idxSettingVisibility, true))
+                    continue;
                 bool isList = idx["IsList"].Get<bool>();
                 string typeName = idx["TypeName"].Get<string>();
                 bool belongsTo = idx["BelongsTo"].Get<bool>();
@@ -172,8 +215,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 HtmlTableCell idC = new HtmlTableCell();
                 idC.InnerHtml = id.ToString();
                 row.Cells.Add(idC);
+                string fullTypeName = DataSource["FullTypeName"].Get<string>();
                 foreach (Node idxProp in idxObj["Properties"])
                 {
+                    string propertyName = idxProp["PropertyName"].Get<string>();
+                    string idxSettingVisibility =
+                        "DBAdmin.VisibleColumns." + fullTypeName + ":" + propertyName;
+                    if(!Settings.Instance.Get(idxSettingVisibility, true))
+                        continue;
                     HtmlTableCell c = new HtmlTableCell();
                     if (idxProp["IsList"].Get<bool>())
                     {
