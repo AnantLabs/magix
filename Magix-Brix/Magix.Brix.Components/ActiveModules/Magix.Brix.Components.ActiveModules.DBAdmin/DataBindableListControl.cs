@@ -121,7 +121,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 string propertyName = idx["Name"].Get<string>();
                 string idxSettingVisibility = 
                     "DBAdmin.VisibleColumns." + fullTypeName + ":" + propertyName;
-                if(!Settings.Instance.Get(idxSettingVisibility, true))
+                if (!GetVisibilityForColumn(idxSettingVisibility))
                     continue;
                 bool isList = idx["IsList"].Get<bool>();
                 string typeName = idx["TypeName"].Get<string>();
@@ -139,6 +139,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 row.Cells.Add(cell);
             }
             return row;
+        }
+
+        private bool GetVisibilityForColumn(string idxSettingVisibility)
+        {
+            if (ViewState[idxSettingVisibility] != null)
+                return (bool)ViewState[idxSettingVisibility];
+            bool value = Settings.Instance.Get(idxSettingVisibility, true);
+            ViewState[idxSettingVisibility] = value;
+            return value;
         }
 
         protected void CreateCells(HtmlTable tbl)
@@ -221,7 +230,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     string propertyName = idxProp["PropertyName"].Get<string>();
                     string idxSettingVisibility =
                         "DBAdmin.VisibleColumns." + fullTypeName + ":" + propertyName;
-                    if(!Settings.Instance.Get(idxSettingVisibility, true))
+                    if (!GetVisibilityForColumn(idxSettingVisibility))
                         continue;
                     HtmlTableCell c = new HtmlTableCell();
                     if (idxProp["IsList"].Get<bool>())

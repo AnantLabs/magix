@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Web.UI.HtmlControls;
 using Magix.UX.Widgets;
 using Magix.UX.Effects;
@@ -95,6 +96,20 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             Node node = new Node();
             node["Start"].Value = Start;
+            Node tmp = DataSource;
+            List<string> keysToRemove = new List<string>();
+            foreach (string idxKey in ViewState.Keys)
+            {
+                if (idxKey.IndexOf("DBAdmin.VisibleColumns.") != -1)
+                    keysToRemove.Add(idxKey);
+            }
+            foreach (string idxKey in keysToRemove)
+            {
+                ViewState.Remove(idxKey);
+            }
+            DataSource = tmp;
+            DataSource["Objects"].UnTie();
+            DataSource["Type"].UnTie();
             RaiseForwardRewindEvent(node);
         }
 
