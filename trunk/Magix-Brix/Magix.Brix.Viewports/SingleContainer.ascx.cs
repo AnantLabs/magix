@@ -50,7 +50,7 @@ namespace Magix.Brix.Viewports
                 w.Style[Styles.left] = ((idxNo * 25) + 50).ToString() + "px";
                 w.Style[Styles.top] = ((idxNo * 30) + 60).ToString() + "px";
                 w.Style[Styles.position] = "absolute";
-                w.Style[Styles.minWidth] = "550px";
+                w.Style[Styles.minWidth] = "650px";
                 w.Style[Styles.minHeight] = "250px";
                 w.Style[Styles.zIndex] = (1000 + idxNo).ToString();
                 w.Style[Styles.overflow] = "auto";
