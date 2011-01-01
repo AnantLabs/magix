@@ -21,4 +21,10 @@
     OnClick="NextItems"
     id="next" />
 
+<mux:Button
+    runat="server"
+    Text="Create new item..."
+    OnClick="CreateItem"
+    id="create" />
+
 

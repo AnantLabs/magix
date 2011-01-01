@@ -21,6 +21,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel pnl;
         protected Button previous;
         protected Button next;
+        protected Button create;
 
         void IModule.InitialLoading(Node node)
         {
@@ -35,6 +36,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         private void SetButtonText()
         {
+            create.Enabled = DataSource["IsCreate"].Get<bool>();
             previous.Enabled = Start > 0;
             previous.Text =
                 previous.Enabled ?
@@ -59,8 +61,38 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             if (Start > 0)
             {
-                Node node = new Node();
+                Node node = DataSource;
                 node["Start"].Value = Start - Count;
+                node["End"].Value = node["Start"].Get<int>() +
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50);
+                node["Objects"].UnTie();
+                node["Type"].UnTie();
+                RaiseForwardRewindEvent(node);
+            }
+        }
+
+        protected void CreateItem(object sender, EventArgs e)
+        {
+            Node node = DataSource;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.CreateNewInstance",
+                node);
+            DataSource["Start"].UnTie();
+            DataSource["End"].UnTie();
+            ReDataBind();
+        }
+
+        protected void NextItems(object sender, EventArgs e)
+        {
+            if (Start + Count < TotalCount)
+            {
+                Node node = DataSource;
+                node["Start"].Value = Start + Count;
+                node["End"].Value = node["Start"].Get<int>() +
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50);
+                node["Objects"].UnTie();
+                node["Type"].UnTie();
                 RaiseForwardRewindEvent(node);
             }
         }
@@ -69,7 +101,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             try
             {
-                node["FullTypeName"].Value = FullTypeName;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.UpdateContents",
@@ -92,16 +123,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     this,
                     "ShowMessage",
                     node2);
-            }
-        }
-
-        protected void NextItems(object sender, EventArgs e)
-        {
-            if (Start + Count < TotalCount)
-            {
-                Node node = new Node();
-                node["Start"].Value = Start + Count;
-                RaiseForwardRewindEvent(node);
             }
         }
 

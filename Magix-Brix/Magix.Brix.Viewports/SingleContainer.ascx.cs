@@ -70,7 +70,7 @@ namespace Magix.Brix.Viewports
                 // Aspect Modal
                 AspectModal m = new AspectModal();
                 m.ID = "md" + idxNo;
-                m.Opacity = 0.2M;
+                m.Opacity = 0.3M;
                 w.Controls.Add(m);
 
                 this.Controls.Add(w);
