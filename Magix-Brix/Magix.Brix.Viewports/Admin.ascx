@@ -8,15 +8,6 @@
 
 <link href="media/admin.css" rel="stylesheet" type="text/css" />
 
-<mux:AjaxWait 
-    runat="server" 
-    CssClass="ajax-wait"
-    MaxOpacity="0.8"
-    id="waiter">
-    <h2>Please wait while Marvin is thinking ...</h2>
-    <img src="media/images/animated_brain.gif" alt="Marvin's brain ..." />
-</mux:AjaxWait>
-
 <div class="mainAdminWhileContent">
     <a runat="server" href="~/" class="adminHeader">&nbsp;</a>
     <div class="menu">

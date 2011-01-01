@@ -85,7 +85,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 TypeName);
         }
 
-        protected HtmlTable CreateTable()
+        protected Label CreateTable()
         {
             bool green = true;
             string fullTypeName = FullTypeName;
@@ -112,36 +112,41 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
             if (DataSource["Objects"].Count == 0)
                 return null;
-            HtmlTable table = new HtmlTable();
-            table.Attributes.Add("class", "viewObjects");
+            Label table = new Label();
+            table.Tag = "table";
+            table.CssClass = "viewObjects";
             return table;
         }
 
-        protected HtmlTableRow CreateHeader(HtmlTable table)
+        protected Label CreateHeader(Control table)
         {
-            HtmlTableRow row = new HtmlTableRow();
-            row.Attributes.Add("class", "header");
+            Label row = new Label();
+            row.Tag = "tr";
+            row.CssClass = "header";
             if (DataSource["IsSelect"].Get<bool>())
             {
-                HtmlTableCell cS = new HtmlTableCell();
-                cS.InnerHtml = "Select";
-                row.Cells.Add(cS);
+                Label cS = new Label();
+                cS.Tag = "td";
+                cS.Text = "Select";
+                row.Controls.Add(cS);
             }
             if (DataSource["IsRemove"].Get<bool>())
             {
-                HtmlTableCell cS = new HtmlTableCell();
-                cS.InnerHtml = "Remove";
-                row.Cells.Add(cS);
+                Label cS = new Label();
+                cS.Tag = "td";
+                cS.Text = "Remove";
+                row.Controls.Add(cS);
             }
             if (DataSource["IsDelete"].Get<bool>())
             {
-                HtmlTableCell cS = new HtmlTableCell();
-                cS.InnerHtml = "Delete";
-                row.Cells.Add(cS);
+                Label cS = new Label();
+                cS.Tag = "td";
+                cS.Text = "Delete";
+                row.Controls.Add(cS);
             }
-            HtmlTableCell cId = new HtmlTableCell();
-            cId.InnerHtml = "ID";
-            row.Cells.Add(cId);
+            Label cId = new Label();
+            cId.Text = "ID";
+            row.Controls.Add(cId);
             string fullTypeName = DataSource["FullTypeName"].Get<string>();
             foreach (Node idx in DataSource["Type"]["Properties"])
             {
@@ -163,7 +168,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     ((!isOwner) ? "IsNotOwner" : ""),
                     (belongsTo ? "BelongsTo" : ""),
                     !string.IsNullOrEmpty(relationName) ? relationName : "");
-                row.Cells.Add(cell);
+                row.Controls.Add(cell);
             }
             return row;
         }
@@ -177,14 +182,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return value;
         }
 
-        protected void CreateCells(HtmlTable tbl)
+        protected void CreateCells(Control tbl)
         {
             foreach (Node idxObj in DataSource["Objects"])
             {
-                HtmlTableRow row = new HtmlTableRow();
+                Label row = new Label();
+                row.Tag = "tr";
                 if (DataSource["IsSelect"].Get<bool>())
                 {
-                    HtmlTableCell cS = new HtmlTableCell();
+                    Label cS = new Label();
+                    cS.Tag = "td";
                     LinkButton btn = new LinkButton();
                     btn.Text = "Select";
                     btn.Info = idxObj["ID"].Value.ToString();
@@ -235,11 +242,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             }
                         };
                     cS.Controls.Add(btn);
-                    row.Cells.Add(cS);
+                    row.Controls.Add(cS);
                 }
                 if (DataSource["IsRemove"].Get<bool>())
                 {
-                    HtmlTableCell cS = new HtmlTableCell();
+                    Label cS = new Label();
+                    cS.Tag = "td";
                     LinkButton btn = new LinkButton();
                     btn.Text = "Remove";
                     btn.Info = idxObj["ID"].Value.ToString();
@@ -273,11 +281,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             }
                         };
                     cS.Controls.Add(btn);
-                    row.Cells.Add(cS);
+                    row.Controls.Add(cS);
                 }
                 if (DataSource["IsDelete"].Get<bool>())
                 {
-                    HtmlTableCell cS = new HtmlTableCell();
+                    Label cS = new Label();
+                    cS.Tag = "td";
                     LinkButton btn = new LinkButton();
                     btn.Text = "Delete";
                     btn.Info = idxObj["ID"].Value.ToString();
@@ -310,12 +319,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             }
                         };
                     cS.Controls.Add(btn);
-                    row.Cells.Add(cS);
+                    row.Controls.Add(cS);
                 }
                 int id = idxObj["ID"].Get<int>();
-                HtmlTableCell idC = new HtmlTableCell();
-                idC.InnerHtml = id.ToString();
-                row.Cells.Add(idC);
+                Label idC = new Label();
+                idC.Tag = "td";
+                idC.Text = id.ToString();
+                row.Controls.Add(idC);
                 string fullTypeName = DataSource["FullTypeName"].Get<string>();
                 foreach (Node idxProp in idxObj["Properties"])
                 {
@@ -324,7 +334,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         "DBAdmin.VisibleColumns." + fullTypeName + ":" + propertyName;
                     if (!GetVisibilityForColumn(idxSettingVisibility))
                         continue;
-                    HtmlTableCell c = new HtmlTableCell();
+                    Label c = new Label();
+                    c.Tag = "td";
                     if (idxProp["IsList"].Get<bool>())
                     {
                         LinkButton b = new LinkButton();
@@ -339,6 +350,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 try
                                 {
                                     LinkButton bt = sender as LinkButton;
+                                    (bt.Parent.Parent as Label).CssClass = "grid-selected";
                                     string[] infos = bt.Info.Split('|');
                                     string parentPropertyName = infos[1];
                                     int parentId = int.Parse(infos[0]);
@@ -383,6 +395,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 try
                                 {
                                     LinkButton bt = sender as LinkButton;
+                                    (bt.Parent.Parent as Label).CssClass = "grid-selected";
                                     string[] infos = bt.Info.Split('|');
                                     string parentPropertyName = infos[1];
                                     int parentId = int.Parse(infos[0]);
@@ -454,9 +467,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             };
                         c.Controls.Add(ed);
                     }
-                    row.Cells.Add(c);
+                    row.Controls.Add(c);
                 }
-                tbl.Rows.Add(row);
+                tbl.Controls.Add(row);
             }
         }
     }

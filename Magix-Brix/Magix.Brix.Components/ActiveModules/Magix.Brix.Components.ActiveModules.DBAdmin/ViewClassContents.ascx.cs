@@ -147,11 +147,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void DataBindObjects()
         {
-            HtmlTable table = CreateTable();
+            System.Web.UI.Control table = CreateTable();
             if (table != null)
             {
-                HtmlTableRow row = CreateHeader(table);
-                table.Rows.Add(row);
+                System.Web.UI.Control row = CreateHeader(table);
+                table.Controls.Add(row);
                 CreateCells(table);
                 pnl.Controls.Add(table);
             }
