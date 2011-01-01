@@ -658,5 +658,36 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     new object[] { childToRemove });
             parentType.GetMethod("Save").Invoke(parentObject, null);
         }
+
+        // UPDATE the ViewContents Form
+        [ActiveEvent(Name = "DBAdmin.ConfigureColumns")]
+        protected void DBAdmin_ConfigureColumns(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+            node["Caption"].Value = "Configure columns";
+            node["Columns"] = e.Params["Columns"];
+            node["FullTypeName"].Value = e.Params["FullTypeName"].Value;
+            string fullTypeName = "DBAdmin.VisibleColumns." + e.Params["FullTypeName"].Get<string>();
+            foreach (Node idx in node["Columns"])
+            {
+                string idxSettingName = fullTypeName + ":" + idx["Name"].Get<string>();
+                idx["Visible"].Value = Settings.Instance.Get(idxSettingName, true);
+            }
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ConfigureColumns",
+                "child",
+                node);
+        }
+
+        // Changes visibility of a columns for all ListView mode views ...
+        [ActiveEvent(Name = "DBAdmin.ChangeVisibilityOfColumns")]
+        protected void DBAdmin_ChangeVisibilityOfColumns(object sender, ActiveEventArgs e)
+        {
+            string columnName = e.Params["ColumnName"].Get<string>();
+            string fullTypeName = "DBAdmin.VisibleColumns." + e.Params["FullTypeName"].Get<string>();
+            bool visible = e.Params["Visible"].Get<bool>();
+            string settingName = fullTypeName + ":" + columnName;
+            Settings.Instance.Set(settingName, visible);
+        }
     }
 }
