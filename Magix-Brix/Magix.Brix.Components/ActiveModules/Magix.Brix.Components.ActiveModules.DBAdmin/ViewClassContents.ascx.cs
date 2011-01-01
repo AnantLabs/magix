@@ -107,8 +107,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void ReDataBind()
         {
-            Node node = new Node();
-            node["Start"].Value = Start;
             Node tmp = DataSource;
             List<string> keysToRemove = new List<string>();
             foreach (string idxKey in ViewState.Keys)
@@ -123,7 +121,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataSource = tmp;
             DataSource["Objects"].UnTie();
             DataSource["Type"].UnTie();
-            RaiseForwardRewindEvent(node);
+            RaiseForwardRewindEvent(DataSource);
         }
 
         protected override void DataBindObjects()

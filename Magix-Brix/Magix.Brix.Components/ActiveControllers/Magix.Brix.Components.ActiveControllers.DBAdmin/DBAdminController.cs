@@ -522,6 +522,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentType"].Value = parentType;
 
+            node["IsDelete"].Value = true;
             e.Params = node;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
@@ -550,6 +551,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentType"].Value = parentType;
 
+            node["IsDelete"].Value = true;
             e.Params = node;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
