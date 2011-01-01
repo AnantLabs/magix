@@ -33,39 +33,69 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void append_Click(object sender, EventArgs e)
         {
-            Node node = new Node();
-            node["ParentID"].Value = ParentID;
-            node["ParentPropertyName"].Value = ParentPropertyName;
-            node["ParentType"].Value = ParentFullType;
-            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.AppendComplexInstance",
-                node);
+            try
+            {
+                Node node = new Node();
+                node["ParentID"].Value = ParentID;
+                node["ParentPropertyName"].Value = ParentPropertyName;
+                node["ParentType"].Value = ParentFullType;
+                node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.AppendComplexInstance",
+                    node);
+
+            }
+            catch (Exception err)
+            {
+                Node node2 = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                node2["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ShowMessage",
+                    node2);
+            }
         }
 
         protected override void ReDataBind()
         {
-            DataSource["Objects"].UnTie();
-            Node node = DataSource;
-            List<string> keysToRemove = new List<string>();
-            foreach (string idxKey in ViewState.Keys)
+            try
             {
-                if (idxKey.IndexOf("DBAdmin.VisibleColumns.") == 0)
-                    keysToRemove.Add(idxKey);
+                DataSource["Objects"].UnTie();
+                Node node = DataSource;
+                List<string> keysToRemove = new List<string>();
+                foreach (string idxKey in ViewState.Keys)
+                {
+                    if (idxKey.IndexOf("DBAdmin.VisibleColumns.") == 0)
+                        keysToRemove.Add(idxKey);
+                }
+                foreach (string idxKey in keysToRemove)
+                {
+                    ViewState.Remove(idxKey);
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.UpdateList",
+                    node);
+                pnl.Controls.Clear();
+                UpdateCaption();
+                DataBindObjects();
+                pnl.ReRender();
+
             }
-            foreach (string idxKey in keysToRemove)
+            catch (Exception err)
             {
-                ViewState.Remove(idxKey);
+                Node node2 = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                node2["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ShowMessage",
+                    node2);
             }
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.UpdateList",
-                node);
-            pnl.Controls.Clear();
-            UpdateCaption();
-            DataBindObjects();
-            pnl.ReRender();
         }
 
         protected override void DataBindObjects()

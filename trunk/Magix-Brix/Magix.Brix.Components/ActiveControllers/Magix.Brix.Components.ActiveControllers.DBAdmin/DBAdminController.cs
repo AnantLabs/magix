@@ -288,6 +288,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         {
             Node node = new Node();
             FillNodeWithViewContents(e, node);
+            node["IsDelete"].Value = true;
             e.Params = node;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
@@ -300,6 +301,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         protected void DBAdmin_UpdateContents(object sender, ActiveEventArgs e)
         {
             FillNodeWithViewContents(e, e.Params);
+            e.Params["IsDelete"].Value = true;
         }
 
         // Fill node with contents according to start/end of list view ...
@@ -393,8 +395,6 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 0,
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
             node["Start"].Value = 0;
-            node["IsRemove"].Value = true;
-            node["IsAppend"].Value = true;
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentType"].Value = parentObject.GetType().Name;
             node["ParentFullType"].Value = parentObject.GetType().FullName;
@@ -650,13 +650,25 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             object enumerable = getter.Invoke(parentObject, null);
             Type typeOfEnumerable = enumerable.GetType();
             typeOfEnumerable.GetMethod(
-                "Remove", 
-                BindingFlags.Public | 
+                "Remove",
+                BindingFlags.Public |
                 BindingFlags.Instance)
                 .Invoke(
-                    enumerable, 
+                    enumerable,
                     new object[] { childToRemove });
             parentType.GetMethod("Save").Invoke(parentObject, null);
+        }
+
+        // Called when in View Contents of Class one chooses to delete an object.
+        [ActiveEvent(Name = "DBAdmin.ComplexInstanceDeleted")]
+        protected void DBAdmin_ComplexInstanceDeleted(object sender, ActiveEventArgs e)
+        {
+            int objectToRemoveID = e.Params["ObjectToDeleteID"].Get<int>();
+            string objectToRemoveType = e.Params["ObjectToDeleteType"].Get<string>();
+
+            Type objectType = GetType(objectToRemoveType);
+            object objectToRemove = GetObject(objectType, objectToRemoveID);
+            objectType.GetMethod("Delete").Invoke(objectToRemove, null);
         }
 
         // UPDATE the ViewContents Form
@@ -682,8 +694,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         // Changes visibility of a columns for all ListView mode views ...
-        [ActiveEvent(Name = "DBAdmin.ChangeVisibilityOfColumns")]
-        protected void DBAdmin_ChangeVisibilityOfColumns(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "DBAdmin.ChangeVisibilityOfColumn")]
+        protected void DBAdmin_ChangeVisibilityOfColumn(object sender, ActiveEventArgs e)
         {
             string columnName = e.Params["ColumnName"].Get<string>();
             string fullTypeName = "DBAdmin.VisibleColumns." + e.Params["FullTypeName"].Get<string>();

@@ -41,7 +41,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             node["Visible"].Value = b.Checked;
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
-                "DBAdmin.ChangeVisibilityOfColumns",
+                "DBAdmin.ChangeVisibilityOfColumn",
                 node);
         }
 

@@ -21,8 +21,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel pnl;
         protected Button previous;
         protected Button next;
-        protected Window wnd;
-        protected DynamicPanel child;
 
         void IModule.InitialLoading(Node node)
         {
@@ -69,17 +67,32 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         private void RaiseForwardRewindEvent(Node node)
         {
-            node["FullTypeName"].Value = FullTypeName;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.UpdateContents",
-                node);
-            pnl.Controls.Clear();
-            DataSource = node;
-            DataBindObjects();
-            pnl.ReRender();
-            SetButtonText();
-            UpdateCaption();
+            try
+            {
+                node["FullTypeName"].Value = FullTypeName;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.UpdateContents",
+                    node);
+                pnl.Controls.Clear();
+                DataSource = node;
+                DataBindObjects();
+                pnl.ReRender();
+                SetButtonText();
+                UpdateCaption();
+
+            }
+            catch (Exception err)
+            {
+                Node node2 = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                node2["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ShowMessage",
+                    node2);
+            }
         }
 
         protected void NextItems(object sender, EventArgs e)

@@ -23,12 +23,26 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
-                    Node tmp = new Node();
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "DBAdmin.BrowseClassHierarchy",
-                        tmp);
-                    DataBase = tmp;
+                    try
+                    {
+                        Node tmp = new Node();
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            "DBAdmin.BrowseClassHierarchy",
+                            tmp);
+                        DataBase = tmp;
+                    }
+                    catch (Exception err)
+                    {
+                        Node node2 = new Node();
+                        while (err.InnerException != null)
+                            err = err.InnerException;
+                        node2["Message"].Value = err.Message;
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            "ShowMessage",
+                            node2);
+                    }
                 };
         }
 
@@ -87,14 +101,28 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             string classFullName = it.Info;
             if (classFullName.IndexOf("Leaf:") == 0)
             {
-                // Class ...!
-                // Showing the ViewContens Form
-                Node node = new Node();
-                node["FullTypeName"].Value = classFullName.Replace("Leaf:", "");
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "DBAdmin.ViewContents",
-                    node);
+                try
+                {
+                    // Class ...!
+                    // Showing the ViewContens Form
+                    Node node = new Node();
+                    node["FullTypeName"].Value = classFullName.Replace("Leaf:", "");
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        "DBAdmin.ViewContents",
+                        node);
+                }
+                catch (Exception err)
+                {
+                    Node node2 = new Node();
+                    while (err.InnerException != null)
+                        err = err.InnerException;
+                    node2["Message"].Value = err.Message;
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        "ShowMessage",
+                        node2);
+                }
             }
         }
     }
