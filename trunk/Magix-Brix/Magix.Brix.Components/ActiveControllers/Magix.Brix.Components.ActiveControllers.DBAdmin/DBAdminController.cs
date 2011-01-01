@@ -289,6 +289,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Node node = new Node();
             FillNodeWithViewContents(e, node);
             node["IsDelete"].Value = true;
+            node["IsCreate"].Value = true;
             e.Params = node;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
@@ -301,6 +302,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         protected void DBAdmin_UpdateContents(object sender, ActiveEventArgs e)
         {
             FillNodeWithViewContents(e, e.Params);
+            e.Params["IsCreate"].Value = true;
             e.Params["IsDelete"].Value = true;
         }
 
@@ -523,6 +525,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             node["ParentType"].Value = parentType;
 
             node["IsDelete"].Value = true;
+            node["IsCreate"].Value = true;
             e.Params = node;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
@@ -552,6 +555,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             node["ParentType"].Value = parentType;
 
             node["IsDelete"].Value = true;
+            node["IsCreate"].Value = true;
             e.Params = node;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
@@ -704,6 +708,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             bool visible = e.Params["Visible"].Get<bool>();
             string settingName = fullTypeName + ":" + columnName;
             Settings.Instance.Set(settingName, visible);
+        }
+
+        // Called when in View List Of Objects one chooses to append a new object into the list
+        [ActiveEvent(Name = "DBAdmin.CreateNewInstance")]
+        protected void DBAdmin_CreateNewInstance(object sender, ActiveEventArgs e)
+        {
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            Type type = GetType(fullTypeName);
+            object o = type.GetConstructor(Type.EmptyTypes).Invoke(null);
+            type.GetMethod("Save").Invoke(o, null);
         }
     }
 }

@@ -239,27 +239,34 @@ namespace Magix.Brix.Data.Internal
                         }
                         string tableName = "";
                         string sqlEscapedValue = "";
+                        if(idx.Value == null)
+                            sqlEscapedValue = "null";
                         switch (propertyFullName)
                         {
                             case "System.Boolean":
                                 tableName = "PropertyBools";
-                                sqlEscapedValue = ((bool)idx.Value) ? "1" : "0";
+                                if (idx.Value != null)
+                                    sqlEscapedValue = ((bool)idx.Value) ? "1" : "0";
                                 break;
                             case "System.DateTime":
                                 tableName = "PropertyDates";
-                                sqlEscapedValue = "'" + ((DateTime)idx.Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture) + "'";
+                                if (idx.Value != null)
+                                    sqlEscapedValue = "'" + ((DateTime)idx.Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture) + "'";
                                 break;
                             case "System.Decimal":
                                 tableName = "PropertyDecimals";
-                                sqlEscapedValue = ((decimal)idx.Value).ToString(CultureInfo.InvariantCulture);
+                                if (idx.Value != null)
+                                    sqlEscapedValue = ((decimal)idx.Value).ToString(CultureInfo.InvariantCulture);
                                 break;
                             case "System.Int32":
                                 tableName = "PropertyInts";
-                                sqlEscapedValue = idx.Value.ToString();
+                                if (idx.Value != null)
+                                    sqlEscapedValue = idx.Value.ToString();
                                 break;
                             case "System.String":
                                 tableName = "PropertyStrings";
-                                sqlEscapedValue = "'" + idx.Value.ToString().Replace("'", "''").Replace("\r", "\\r").Replace("\n", "\\n") + "'";
+                                if (idx.Value != null)
+                                    sqlEscapedValue = "'" + idx.Value.ToString().Replace("'", "''").Replace("\r", "\\r").Replace("\n", "\\n") + "'";
                                 break;
                         }
 
