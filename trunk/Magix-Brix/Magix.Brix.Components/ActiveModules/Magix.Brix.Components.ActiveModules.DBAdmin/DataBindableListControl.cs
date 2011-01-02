@@ -183,12 +183,24 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return value;
         }
 
+        protected int SelectedItem
+        {
+            get { return ViewState["SelectedItem"] == null ? -1 : (int)ViewState["SelectedItem"]; }
+            set { ViewState["SelectedItem"] = value; }
+        }
+
+
         protected void CreateCells(Control tbl)
         {
             foreach (Node idxObj in DataSource["Objects"])
             {
                 Label row = new Label();
                 row.Tag = "tr";
+                if (idxObj["ID"].Get<int>() == SelectedItem)
+                {
+                    row.CssClass = "grid-selected";
+                    row.ID = "selectedColumn";
+                }
                 if (DataSource["IsSelect"].Get<bool>())
                 {
                     Label cS = new Label();
@@ -351,10 +363,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 try
                                 {
                                     LinkButton bt = sender as LinkButton;
-                                    (bt.Parent.Parent as Label).CssClass = "grid-selected";
                                     string[] infos = bt.Info.Split('|');
                                     string parentPropertyName = infos[1];
                                     int parentId = int.Parse(infos[0]);
+                                    Label l = Selector.FindControl<Label>(this, "selectedColumn");
+                                    if (l != null)
+                                        l.CssClass = "";
+                                    (bt.Parent as Label).CssClass = "grid-selected-cell";
+                                    (bt.Parent.Parent as Label).CssClass = "grid-selected";
+                                    SelectedItem = parentId;
                                     bool belongsTo = bool.Parse(infos[2]);
                                     string parentType = DataSource["FullTypeName"].Get<string>();
                                     Node node = new Node();
@@ -396,10 +413,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 try
                                 {
                                     LinkButton bt = sender as LinkButton;
-                                    (bt.Parent.Parent as Label).CssClass = "grid-selected";
                                     string[] infos = bt.Info.Split('|');
                                     string parentPropertyName = infos[1];
                                     int parentId = int.Parse(infos[0]);
+                                    (bt.Parent as Label).CssClass = "grid-selected-cell";
+                                    Label l = Selector.FindControl<Label>(this, "selectedColumn");
+                                    if (l != null)
+                                        l.CssClass = "";
+                                    (bt.Parent.Parent as Label).CssClass = "grid-selected";
+                                    SelectedItem = parentId;
                                     string parentType = DataSource["FullTypeName"].Get<string>();
                                     bool belongsTo = bool.Parse(infos[2]);
                                     Node node = new Node();
