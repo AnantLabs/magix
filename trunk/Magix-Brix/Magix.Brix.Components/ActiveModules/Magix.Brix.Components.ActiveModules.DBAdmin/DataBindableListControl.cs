@@ -199,7 +199,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 if (idxObj["ID"].Get<int>() == SelectedItem)
                 {
                     row.CssClass = "grid-selected";
-                    row.ID = "selectedColumn";
+                    row.Info = "sel";
                 }
                 if (DataSource["IsSelect"].Get<bool>())
                 {
@@ -366,7 +366,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                     string[] infos = bt.Info.Split('|');
                                     string parentPropertyName = infos[1];
                                     int parentId = int.Parse(infos[0]);
-                                    Label l = Selector.FindControl<Label>(this, "selectedColumn");
+                                    Label l = Selector.SelectFirst<Label>(this,
+                                        delegate(Control idx)
+                                        {
+                                            return idx.ID == "sel";
+                                        });
                                     if (l != null)
                                         l.CssClass = "";
                                     (bt.Parent as Label).CssClass = "grid-selected-cell";
@@ -417,7 +421,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                     string parentPropertyName = infos[1];
                                     int parentId = int.Parse(infos[0]);
                                     (bt.Parent as Label).CssClass = "grid-selected-cell";
-                                    Label l = Selector.FindControl<Label>(this, "selectedColumn");
+                                    Label l = Selector.SelectFirst<Label>(this,
+                                        delegate(Control idx)
+                                        {
+                                            return idx.ID == "sel";
+                                        });
                                     if (l != null)
                                         l.CssClass = "";
                                     (bt.Parent.Parent as Label).CssClass = "grid-selected";
