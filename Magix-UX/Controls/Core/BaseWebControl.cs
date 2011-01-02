@@ -33,7 +33,8 @@ namespace Magix.UX.Widgets.Core
             "mouseup",
             "mouseover",
             "mouseout",
-            "keypress"
+            "keypress",
+            "esc"
         };
 
         private StyleCollection _styles;
@@ -44,6 +45,7 @@ namespace Magix.UX.Widgets.Core
         private Effect _mouseDownEffect;
         private Effect _mouseUpEffect;
         private Effect _keyPressEffect;
+        private Effect _escEffect;
 
         /**
          * Event raised when user clicks your widget.
@@ -87,6 +89,11 @@ namespace Magix.UX.Widgets.Core
          * being able to trap typing into e.g. a TextBox or something similar.
          */
         public event EventHandler KeyPress;
+
+        /** 
+         * Event raised when the escape key is pressed
+         */
+        public event EventHandler EscKey;
 
         public BaseWebControl()
         {
@@ -215,6 +222,15 @@ namespace Magix.UX.Widgets.Core
         }
 
         /**
+         * What effect(s) will be ran when the user clicks ESC
+         */
+        public Effect EscKeyEffect
+        {
+            get { return _escEffect; }
+            set { _escEffect = value; }
+        }
+
+        /**
          * Every DOM element on the client-side has a 'tab order' which defines the
          * order widgets will be given focus while the user is tabbing through your
          * web page. The lower this number is, the earlier in the chain the specific
@@ -292,6 +308,10 @@ namespace Magix.UX.Widgets.Core
                     if (KeyPress != null)
                         KeyPress(this, new EventArgs());
                     break;
+                case "esc":
+                    if (EscKey != null)
+                        EscKey(this, new EventArgs());
+                    break;
                 default:
                     throw new ApplicationException("Unknown event fired for control");
             }
@@ -319,7 +339,8 @@ namespace Magix.UX.Widgets.Core
                 MouseUp,
                 MouseOver,
                 MouseOut,
-                KeyPress
+                KeyPress,
+                EscKey
             };
             for (int idx = 0; idx < handlers.Length; idx++)
             {
@@ -348,7 +369,8 @@ namespace Magix.UX.Widgets.Core
                 MouseUpEffect,
                 MouseOverEffect,
                 MouseOutEffect,
-                KeyPressEffect
+                KeyPressEffect,
+                EscKeyEffect
             };
             for (int idx = 0; idx < effects.Length; idx++)
             {

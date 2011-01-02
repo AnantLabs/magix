@@ -55,6 +55,11 @@ namespace Magix.Brix.Viewports
                 w.Style[Styles.zIndex] = (1000 + idxNo).ToString();
                 w.Style[Styles.overflow] = "auto";
                 w.Visible = false;
+                w.EscKey +=
+                    delegate
+                    {
+                        w.CloseWindow();
+                    };
                 w.ID = "wd" + idxNo;
                 w.Closed += wnd_Closed;
                 wnd[idxNo] = w;
