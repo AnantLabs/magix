@@ -76,9 +76,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             if (Start > 0)
             {
                 Node node = DataSource;
-                node["Start"].Value = Start - Count;
-                node["End"].Value = node["Start"].Get<int>() +
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
+                node["Start"].Value = Math.Max(0, Start - Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20));
+                node["End"].Value = Math.Min(
+                    node["Start"].Get<int>() + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20),
+                    TotalCount - node["Start"].Get<int>());
                 node["Objects"].UnTie();
                 node["Type"].UnTie();
                 RaiseForwardRewindEvent(node);
@@ -130,7 +131,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 pnl.ReRender();
                 SetButtonText();
                 UpdateCaption();
-
+                new EffectScrollBrowser(250)
+                    .Render();
             }
             catch (Exception err)
             {

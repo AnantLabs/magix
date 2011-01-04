@@ -84,7 +84,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         private void CreateNormalCriteria()
         {
             Label l = new Label();
-            l.Text = "<p>Specify how you want your criteria to appear</p>";
+            l.Text = "<p>Specify how you want your criteria to appear, empty string removes any existing Criteria...</p>";
             pnl.Controls.Add(l);
 
             SelectList ls = new SelectList();
