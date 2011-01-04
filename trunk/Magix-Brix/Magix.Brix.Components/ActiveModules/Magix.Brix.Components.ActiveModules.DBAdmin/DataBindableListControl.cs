@@ -159,6 +159,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 row.Controls.Add(cS);
             }
             Label cId = new Label();
+            bool isFilterOnId = false;
             if (DataSource["IsFilter"].Get<bool>())
             {
                 LinkButton b = new LinkButton();
@@ -169,7 +170,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     string.IsNullOrEmpty(
                         filterString) ? 
                         "" : 
-                        "filtered";
+                        "filtered overridden";
+                isFilterOnId = !string.IsNullOrEmpty(filterString);
                 b.Click += FilterMethod;
                 b.Info = "ID|Int32";
                 cId.Controls.Add(b);
@@ -211,14 +213,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     string filterString = Settings.Instance.Get(FullTypeName + ":" + propertyName, "");
                     b.Info = propertyName + "|" + typeName;
                     b.Click += FilterMethod;
-                    b.CssClass =
-                        string.IsNullOrEmpty(
+                    bool hasFilter = !string.IsNullOrEmpty(
                             Settings.Instance.Get(
-                                FullTypeName + 
-                                ":" + 
-                                propertyName, "")) ?
-                            "" :
-                            "filtered";
+                                FullTypeName +
+                                ":" +
+                                propertyName, ""));
+                    b.CssClass =
+                        hasFilter ?
+                                (isFilterOnId ? "filteredOverridden" : "filtered") :
+                            "";
                     b.ToolTip = string.Format(
     @" {0} ({1}{2}{3}{4}) ",
                         propertyName,
