@@ -757,11 +757,61 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         protected void DBAdmin_ComplexInstanceDeleted(object sender, ActiveEventArgs e)
         {
             int objectToRemoveID = e.Params["ObjectToDeleteID"].Get<int>();
+            string objectToRemoveFullType = e.Params["ObjectToDeleteFullType"].Get<string>();
+            string objectToRemoveType = e.Params["ObjectToDeleteType"].Get<string>();
+            Node node = new Node();
+            node["Caption"].Value = "Please confirm deletion of " + objectToRemoveType + " with ID of " + objectToRemoveID;
+            node["Text"].Value = @"
+<p>Are you sure you wish to delete this object? 
+Deletion is permanent, and cannot be undone! 
+Deletion of this object <span style=""color:Red;font-weight:bold;"">might also trigger 
+deletion of several other objects</span>, since it may 
+have relationships towards other instances in your database.</p>";
+            node["OK"]["ObjectToDeleteID"].Value = objectToRemoveID;
+            node["OK"]["ObjectToDeleteType"].Value = objectToRemoveFullType;
+            node["OK"]["Event"].Value = "DBAdmin.ComplexInstanceDeletedConfirmed";
+            node["Cancel"]["Event"].Value = "DBAdmin.ComplexInstanceDeletedNotConfirmed";
+            node["Cancel"]["FullTypeName"].Value = objectToRemoveFullType;
+            node["ForcedSize"]["width"].Value = 550;
+            node["ForcedSize"]["height"].Value = 180;
+            node["WindowCssClass"].Value = "mux-shaded mux-rounded window-left-buttons window-left-no-margin";
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        // Called when in View Contents of Class one chooses to delete an object.
+        [ActiveEvent(Name = "DBAdmin.ComplexInstanceDeletedNotConfirmed")]
+        protected void DBAdmin_ComplexInstanceDeletedNotConfirmed(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+            node["Type"].Value = e.Params["FullTypeName"].Value;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.FilterChanged",
+                node);
+            ActiveEvents.Instance.RaiseClearControls("child");
+         }
+
+        // Called when in View Contents of Class one chooses to delete an object.
+        [ActiveEvent(Name = "DBAdmin.ComplexInstanceDeletedConfirmed")]
+        protected void DBAdmin_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
+        {
+            int objectToRemoveID = e.Params["ObjectToDeleteID"].Get<int>();
             string objectToRemoveType = e.Params["ObjectToDeleteType"].Get<string>();
 
             Type objectType = GetType(objectToRemoveType);
             object objectToRemove = GetObject(objectType, objectToRemoveID);
             objectType.GetMethod("Delete").Invoke(objectToRemove, null);
+
+            Node node = new Node();
+            node["Type"].Value = e.Params["FullTypeName"].Value;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.FilterChanged",
+                node);
+            ActiveEvents.Instance.RaiseClearControls("child");
         }
 
         // UPDATE the ViewContents Form

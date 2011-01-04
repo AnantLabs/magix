@@ -386,7 +386,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 Node node = new Node();
                                 node["ObjectToDeleteID"].Value =
                                     int.Parse((sender as LinkButton).Info);
-                                node["ObjectToDeleteType"].Value = DataSource["FullTypeName"].Value;
+                                node["ObjectToDeleteFullType"].Value = DataSource["FullTypeName"].Value;
+                                node["ObjectToDeleteType"].Value = DataSource["TypeName"].Value;
                                 ActiveEvents.Instance.RaiseActiveEvent(
                                     this,
                                     "DBAdmin.ComplexInstanceDeleted",
