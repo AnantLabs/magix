@@ -76,9 +76,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             if (Start > 0)
             {
                 Node node = DataSource;
-                node["Start"].Value = Math.Max(0, Start - Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20));
+                node["Start"].Value = Math.Max(0, Start - Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
                 node["End"].Value = Math.Min(
-                    node["Start"].Get<int>() + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20),
+                    node["Start"].Get<int>() + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10),
                     TotalCount - node["Start"].Get<int>());
                 node["Objects"].UnTie();
                 node["Type"].UnTie();
@@ -105,7 +105,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Node node = DataSource;
                 node["Start"].Value = Start + Count;
                 node["End"].Value = node["Start"].Get<int>() +
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
                 node["Objects"].UnTie();
                 node["Type"].UnTie();
                 RaiseForwardRewindEvent(node);
@@ -118,7 +118,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             if (e.Params["Type"].Get<string>() == FullTypeName)
             {
                 Start = 0;
-                End = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
+                End = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 if (!node.Contains("Start"))
                 {
                     node["Start"].Value = 0;
-                    node["End"].Value = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
+                    node["End"].Value = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
                 }
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
