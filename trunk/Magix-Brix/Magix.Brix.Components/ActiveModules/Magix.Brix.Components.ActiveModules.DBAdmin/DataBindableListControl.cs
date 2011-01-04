@@ -74,7 +74,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected int MaxItems
         {
-            get { return Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20); }
+            get { return Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10); }
         }
 
         protected virtual void UpdateCaption()
@@ -220,24 +220,26 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 propertyName, "")) ?
                             "" :
                             "filtered";
-                    b.Text = string.Format(
+                    b.ToolTip = string.Format(
     @"{0} ({1}{2}{3}{4})",
                         propertyName,
                         typeName,
                         ((!isOwner) ? " IsNotOwner" : ""),
                         (belongsTo ? " BelongsTo" : ""),
                         !string.IsNullOrEmpty(relationName) ? (" " + relationName) : "");
+                    b.Text = propertyName;
                     cell.Controls.Add(b);
                 }
                 else
                 {
-                    cell.InnerHtml = string.Format(
+                    cell.Attributes.Add("title", string.Format(
     @"{0} ({1}{2}{3}{4})",
                         propertyName,
                         typeName,
                         ((!isOwner) ? " IsNotOwner" : ""),
                         (belongsTo ? " BelongsTo" : ""),
-                        !string.IsNullOrEmpty(relationName) ? (" " + relationName) : "");
+                        !string.IsNullOrEmpty(relationName) ? (" " + relationName) : ""));
+                    cell.InnerHtml = propertyName;
                 }
                 row.Controls.Add(cell);
             }

@@ -68,7 +68,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         // Returns the starting value, start + MaxItemsToShow from settings if none given...
         private int GetEnd(Node node, int start)
         {
-            int end = start + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
+            int end = start + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
             if (node.Contains("End"))
                 end = Math.Max(start + 1, node["End"].Get<int>());
             return end;
@@ -443,7 +443,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 getters,
                 typeOfList,
                 0,
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20));
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
             node["Start"].Value = 0;
             node["IsRemove"].Value = !e.Params["BelongsTo"].Get<bool>();
             node["IsAppend"].Value = !e.Params["BelongsTo"].Get<bool>();
@@ -481,7 +481,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 getters,
                 typeOfList,
                 0,
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20));
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
             node["Start"].Value = 0;
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentType"].Value = parentObject.GetType().Name;
