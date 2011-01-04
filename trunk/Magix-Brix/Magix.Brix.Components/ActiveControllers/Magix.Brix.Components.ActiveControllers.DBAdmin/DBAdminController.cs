@@ -833,7 +833,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                node["ForcedSize"]["width"].Value = 400;
+                node["ForcedSize"]["width"].Value = 500;
                 node["ForcedSize"]["height"].Value = 170;
             }
             LoadModule(
