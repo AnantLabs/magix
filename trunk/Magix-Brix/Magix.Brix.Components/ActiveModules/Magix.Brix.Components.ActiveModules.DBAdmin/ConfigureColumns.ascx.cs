@@ -28,6 +28,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource = node;
                     rep.DataSource = DataSource["Columns"];
                     rep.DataBind();
+                    CheckBox ch = Selector.SelectFirst<CheckBox>(rep);
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(ch))
+                        .Render();
                 };
         }
 
