@@ -112,6 +112,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
         }
 
+        [ActiveEvent(Name = "DBAdmin.FilterChanged")]
+        protected void DBAdmin_FilterChanged(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["Type"].Get<string>() == FullTypeName)
+            {
+                Start = 0;
+                End = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
+            }
+        }
+
         private void RaiseForwardRewindEvent(Node node)
         {
             try

@@ -58,11 +58,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected int Start
         {
             get { return DataSource["Start"].Get<int>(); }
+            set { DataSource["Start"].Value = value; ; }
         }
 
         protected int End
         {
             get { return DataSource["End"].Get<int>(); }
+            set { DataSource["End"].Value = value; ; }
         }
 
         protected int Count

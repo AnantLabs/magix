@@ -196,7 +196,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         {
                             int x = int.Parse(idx);
                         }
+                        Node node = new Node();
+                        node["Type"].Value = fullTypeName;
                         Settings.Instance.Set(fullTypeName + ":" + propertyName, filter);
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            "DBAdmin.FilterChanged",
+                            node);
                     }
                     (this.Parent.Parent.Parent as Window).CloseWindow();
                 }
@@ -241,6 +247,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 break;
                         }
                         Settings.Instance.Set(fullTypeName + ":" + propertyName, set + "|" + filter);
+                        Node node = new Node();
+                        node["Type"].Value = fullTypeName;
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            "DBAdmin.FilterChanged",
+                            node);
                     }
                     (this.Parent.Parent.Parent as Window).CloseWindow();
                 }
