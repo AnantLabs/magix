@@ -37,24 +37,38 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         private void SetButtonText()
         {
             create.Enabled = DataSource["IsCreate"].Get<bool>();
-            previous.Enabled = Start > 0;
-            previous.Text =
-                previous.Enabled ?
-                string.Format(
-                    "Previous {0} items",
-                    Math.Min(
-                        MaxItems,
-                        Start)) :
-                "Previous";
-            next.Enabled = Start + Count < TotalCount;
-            next.Text =
-                next.Enabled ?
+            bool filter = 
+                !string.IsNullOrEmpty(Settings.Instance.Get(FullTypeName + ":ID", ""));
+
+            if (filter)
+            {
+                // Filter on ID, and hence always showing EVERYTHING ...!
+                previous.Enabled = false;
+                next.Enabled = false;
+                next.Text = "Next";
+                previous.Text = "Previous";
+            }
+            else
+            {
+                previous.Enabled = Start > 0;
+                previous.Text =
+                    previous.Enabled ?
                     string.Format(
-                        "Next {0} items",
+                        "Previous {0} items",
                         Math.Min(
                             MaxItems,
-                            TotalCount - (Start + Count))) :
-                        "Next";
+                            Start)) :
+                    "Previous";
+                next.Enabled = Start + Count < TotalCount;
+                next.Text =
+                    next.Enabled ?
+                        string.Format(
+                            "Next {0} items",
+                            Math.Min(
+                                MaxItems,
+                                TotalCount - (Start + Count))) :
+                            "Next";
+            }
         }
 
         protected void PreviousItems(object sender, EventArgs e)
@@ -64,7 +78,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Node node = DataSource;
                 node["Start"].Value = Start - Count;
                 node["End"].Value = node["Start"].Get<int>() +
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50);
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
                 node["Objects"].UnTie();
                 node["Type"].UnTie();
                 RaiseForwardRewindEvent(node);
@@ -90,7 +104,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Node node = DataSource;
                 node["Start"].Value = Start + Count;
                 node["End"].Value = node["Start"].Get<int>() +
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50);
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
                 node["Objects"].UnTie();
                 node["Type"].UnTie();
                 RaiseForwardRewindEvent(node);
@@ -101,6 +115,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             try
             {
+                if (!node.Contains("Start"))
+                {
+                    node["Start"].Value = 0;
+                    node["End"].Value = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
+                }
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.UpdateContents",

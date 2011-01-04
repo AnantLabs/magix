@@ -53,7 +53,7 @@ namespace Magix.UX.Widgets
          * a CheckBox or a RadioButton etc. Notice that this property can only be
          * legally set if the Tag property is of type "label", which is NOT the 
          * default value. An exception will be thrown if you attempt at setting this
-         * property without changing the Tag property to "span".
+         * property without changing the Tag property to "span", which is its default value.
          */
         public string For
         {

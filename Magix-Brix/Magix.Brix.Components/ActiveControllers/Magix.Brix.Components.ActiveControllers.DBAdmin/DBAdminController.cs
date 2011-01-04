@@ -68,7 +68,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         // Returns the starting value, start + MaxItemsToShow from settings if none given...
         private int GetEnd(Node node, int start)
         {
-            int end = start + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50);
+            int end = start + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20);
             if (node.Contains("End"))
                 end = Math.Max(start + 1, node["End"].Get<int>());
             return end;
@@ -116,20 +116,101 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         // Returns an IEnumerable running Select towards the given Active Type...
-        private System.Collections.IEnumerable SelectObjects(Type type)
+        private System.Collections.IEnumerable SelectObjects(Type type, Node node)
         {
-            MethodInfo retrieveAllObjects = type.GetMethod(
-                "Select",
-                BindingFlags.Static |
-                BindingFlags.FlattenHierarchy |
-                BindingFlags.Public |
-                BindingFlags.NonPublic);
-            Criteria[] pars = new Criteria[0];
-            System.Collections.IEnumerable enumerable =
-                retrieveAllObjects.Invoke(
-                    null,
-                    new object[] { pars }) as System.Collections.IEnumerable;
-            return enumerable;
+            string idFilter = Settings.Instance.Get(type.FullName + ":ID", "");
+            if (!string.IsNullOrEmpty(idFilter))
+            {
+                MethodInfo retrieveAllObjects = type.GetMethod(
+                    "SelectByIDs",
+                    BindingFlags.Static |
+                    BindingFlags.FlattenHierarchy |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic);
+                List<string> ids = new List<string>(idFilter.Split(','));
+                List<int> ints = new List<int>();
+                foreach (string idxS in ids)
+                {
+                    ints.Add(int.Parse(idxS.Trim()));
+                }
+                System.Collections.IEnumerable enumerable =
+                    retrieveAllObjects.Invoke(
+                        null,
+                        new object[] { ints.ToArray() }) 
+                        as System.Collections.IEnumerable;
+                return enumerable;
+            }
+            else
+            {
+                List<Criteria> pars = new List<Criteria>();
+                Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = 
+                    GetMethodInfos(type.GetProperties());
+                foreach (string idxMethodName in getters.Keys)
+                {
+                    string idxSetting = 
+                        Settings.Instance.Get(
+                            type.FullName + 
+                            ":" + 
+                            idxMethodName, "");
+                    if (string.IsNullOrEmpty(idxSetting))
+                        continue;
+                    node["IsFilter"].Value = true;
+                    string function = idxSetting.Split('|')[0];
+                    string value = idxSetting.Split('|')[1];
+                    switch (function)
+                    {
+                        case "Lt":
+                            pars.Add(
+                                Criteria.Lt(
+                                    idxMethodName, 
+                                    Convert.ChangeType(
+                                        value, getters[idxMethodName].Left.ReturnType)));
+                            break;
+                        case "Gt":
+                            pars.Add(
+                                Criteria.Mt(
+                                    idxMethodName,
+                                    Convert.ChangeType(
+                                        value, getters[idxMethodName].Left.ReturnType)));
+                            break;
+                        case "Eq":
+                            pars.Add(
+                                Criteria.Eq(
+                                    idxMethodName,
+                                    Convert.ChangeType(
+                                        value, getters[idxMethodName].Left.ReturnType)));
+                            break;
+                        case "Like":
+                            pars.Add(
+                                Criteria.Like(
+                                    idxMethodName,
+                                    value));
+                            break;
+                    }
+                }
+                MethodInfo count = type.GetMethod(
+                    "CountWhere",
+                    BindingFlags.Static |
+                    BindingFlags.FlattenHierarchy |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic);
+                int countNo =
+                    (int)count.Invoke(
+                        null,
+                        new object[] { pars.ToArray() });
+                node["TotalCount"].Value = countNo;
+                MethodInfo retrieveAllObjects = type.GetMethod(
+                    "Select",
+                    BindingFlags.Static |
+                    BindingFlags.FlattenHierarchy |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic);
+                System.Collections.IEnumerable enumerable =
+                    retrieveAllObjects.Invoke(
+                        null,
+                        new object[] { pars.ToArray() }) as System.Collections.IEnumerable;
+                return enumerable;
+            }
         }
 
         private int GetID(object obj, Type type)
@@ -180,6 +261,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             foreach (object idxObj in objects)
             {
+                if (idxObj == null)
+                    continue;
                 idxNo += 1;
                 if (idxNo < start)
                     continue;
@@ -290,6 +373,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             FillNodeWithViewContents(e, node);
             node["IsDelete"].Value = true;
             node["IsCreate"].Value = true;
+            node["IsFilter"].Value = true;
             e.Params = node;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
@@ -304,6 +388,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             FillNodeWithViewContents(e, e.Params);
             e.Params["IsCreate"].Value = true;
             e.Params["IsDelete"].Value = true;
+            e.Params["IsFilter"].Value = true;
         }
 
         // Fill node with contents according to start/end of list view ...
@@ -314,11 +399,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Type type = GetType(e.Params["FullTypeName"].Get<string>());
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
                 GetMethodInfos(GetProps(type));
-            System.Collections.IEnumerable enumerable = SelectObjects(type);
+            node["TotalCount"].Value = GetCount(type);
+            System.Collections.IEnumerable enumerable = SelectObjects(type, node);
             node = GetNodeList(enumerable, node, getters, type, start, end);
             node["Start"].Value = start;
             node["End"].Value = node["Objects"].Count + start;
-            node["TotalCount"].Value = GetCount(type);
         }
 
         private object GetObject(Type type, int id)
@@ -357,7 +442,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 getters,
                 typeOfList,
                 0,
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20));
             node["Start"].Value = 0;
             node["IsRemove"].Value = !e.Params["BelongsTo"].Get<bool>();
             node["IsAppend"].Value = !e.Params["BelongsTo"].Get<bool>();
@@ -395,7 +480,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 getters,
                 typeOfList,
                 0,
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50));
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20));
             node["Start"].Value = 0;
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentType"].Value = parentObject.GetType().Name;
@@ -543,6 +628,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
 
             Node node = new Node();
+            node["IsFilter"].Value = true;
             FillNodeWithViewContents(e, node);
 
             // Special nodes to signal to the form how it's supposed to do a "selection"
@@ -718,6 +804,42 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Type type = GetType(fullTypeName);
             object o = type.GetConstructor(Type.EmptyTypes).Invoke(null);
             type.GetMethod("Save").Invoke(o, null);
+        }
+
+        // Called when in View List Of Objects one chooses to append a new object into the list
+        [ActiveEvent(Name = "DBAdmin.GetFilterForColumn")]
+        protected void DBAdmin_GetFilterForColumn(object sender, ActiveEventArgs e)
+        {
+            string parentFullType = e.Params["ParentFullType"].Get<string>();
+            string typeName = e.Params["TypeName"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string propertyName = e.Params["PropertyName"].Get<string>();
+            string propertyTypeName = e.Params["PropertyTypeName"].Get<string>();
+            Node node = new Node();
+            node["PropertyTypeName"].Value = propertyTypeName;
+            node["FullTypeName"].Value = fullTypeName;
+            node["PropertyName"].Value = propertyName;
+            node["ParentFullType"].Value = parentFullType == null ? "" : parentFullType;
+            node["Caption"].Value = 
+                string.Format(
+                    @"Create filter for {0} [{2}] on {1}",
+                    propertyName,
+                    typeName,
+                    propertyTypeName);
+            if (propertyName == "ID")
+            {
+                node["ForcedSize"]["width"].Value = 400;
+                node["ForcedSize"]["height"].Value = 150;
+            }
+            else
+            {
+                node["ForcedSize"]["width"].Value = 400;
+                node["ForcedSize"]["height"].Value = 170;
+            }
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ConfigureFilters",
+                "child",
+                node);
         }
     }
 }

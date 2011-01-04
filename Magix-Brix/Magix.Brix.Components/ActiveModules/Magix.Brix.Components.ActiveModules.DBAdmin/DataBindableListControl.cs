@@ -72,7 +72,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected int MaxItems
         {
-            get { return Settings.Instance.Get("DBAdmin.MaxItemsToShow", 50); }
+            get { return Settings.Instance.Get("DBAdmin.MaxItemsToShow", 20); }
         }
 
         protected virtual void UpdateCaption()
@@ -110,12 +110,24 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 rc.CssClass = "window-left-buttons window-restore-columns";
                 rc.ToolTip = "Add removed columns, or remove more columns";
             }
-            if (DataSource["Objects"].Count == 0)
-                return null;
             Label table = new Label();
             table.Tag = "table";
             table.CssClass = "viewObjects";
             return table;
+        }
+
+        protected void FilterMethod(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["PropertyName"].Value = (sender as LinkButton).Info.Split('|')[0];
+            node["FullTypeName"].Value = FullTypeName;
+            node["PropertyTypeName"].Value = (sender as LinkButton).Info.Split('|')[1];
+            node["ParentFullType"].Value = ParentFullType;
+            node["TypeName"].Value = TypeName;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.GetFilterForColumn",
+                node);
         }
 
         protected Label CreateHeader(Control table)
@@ -145,7 +157,23 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 row.Controls.Add(cS);
             }
             Label cId = new Label();
-            cId.Text = "ID";
+            if (DataSource["IsFilter"].Get<bool>())
+            {
+                LinkButton b = new LinkButton();
+                b.Text = "ID";
+                b.CssClass = 
+                    string.IsNullOrEmpty(
+                        Settings.Instance.Get(FullTypeName + ":ID", "")) ? 
+                        "" : 
+                        "filtered";
+                b.Click += FilterMethod;
+                b.Info = "ID|Int32";
+                cId.Controls.Add(b);
+            }
+            else
+            {
+                cId.Text = "ID";
+            }
             cId.Tag = "td";
             row.Controls.Add(cId);
             string fullTypeName = DataSource["FullTypeName"].Get<string>();
@@ -162,13 +190,38 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 bool isOwner = idx["IsOwner"].Get<bool>();
                 string relationName = idx["RelationName"].Get<string>();
                 HtmlTableCell cell = new HtmlTableCell();
-                cell.InnerHtml = string.Format(
-@"{0} ({1} {2} {3} {4})", 
-                    propertyName, 
-                    typeName,
-                    ((!isOwner) ? "IsNotOwner" : ""),
-                    (belongsTo ? "BelongsTo" : ""),
-                    !string.IsNullOrEmpty(relationName) ? relationName : "");
+                if (DataSource["IsFilter"].Get<bool>())
+                {
+                    LinkButton b = new LinkButton();
+                    b.Info = propertyName + "|" + typeName;
+                    b.Click += FilterMethod;
+                    b.CssClass =
+                        string.IsNullOrEmpty(
+                            Settings.Instance.Get(
+                                FullTypeName + 
+                                ":" + 
+                                propertyName, "")) ?
+                            "" :
+                            "filtered";
+                    b.Text = string.Format(
+    @"{0} ({1}{2}{3}{4})",
+                        propertyName,
+                        typeName,
+                        ((!isOwner) ? " IsNotOwner" : ""),
+                        (belongsTo ? " BelongsTo" : ""),
+                        !string.IsNullOrEmpty(relationName) ? (" " + relationName) : "");
+                    cell.Controls.Add(b);
+                }
+                else
+                {
+                    cell.InnerHtml = string.Format(
+    @"{0} ({1}{2}{3}{4})",
+                        propertyName,
+                        typeName,
+                        ((!isOwner) ? " IsNotOwner" : ""),
+                        (belongsTo ? " BelongsTo" : ""),
+                        !string.IsNullOrEmpty(relationName) ? (" " + relationName) : "");
+                }
                 row.Controls.Add(cell);
             }
             return row;

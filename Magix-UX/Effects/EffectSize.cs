@@ -33,7 +33,7 @@ namespace Magix.UX.Effects
         }
 
         public EffectSize(int width, int height)
-            : this(null, 0, height, width)
+            : this(null, 0, width, height)
         { }
 
         public int Width
