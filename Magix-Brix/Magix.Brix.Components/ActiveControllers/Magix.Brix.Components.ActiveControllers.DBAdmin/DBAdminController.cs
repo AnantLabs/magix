@@ -829,8 +829,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     propertyTypeName);
             if (propertyName == "ID")
             {
-                node["ForcedSize"]["width"].Value = 400;
-                node["ForcedSize"]["height"].Value = 150;
+                node["ForcedSize"]["width"].Value = 450;
+                node["ForcedSize"]["height"].Value = 180;
             }
             else
             {
