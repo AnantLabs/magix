@@ -50,8 +50,6 @@ namespace Magix.Brix.Viewports
                 w.Style[Styles.left] = ((idxNo * 25) + 50).ToString() + "px";
                 w.Style[Styles.top] = ((idxNo * 30) + 60).ToString() + "px";
                 w.Style[Styles.position] = "absolute";
-                w.Style[Styles.minWidth] = "650px";
-                w.Style[Styles.minHeight] = "250px";
                 w.Style[Styles.zIndex] = (1000 + idxNo).ToString();
                 w.Style[Styles.overflow] = "auto";
                 w.Visible = false;
@@ -197,8 +195,24 @@ namespace Magix.Brix.Viewports
                 Window w = toAddInto.Parent.Parent as Window;
                 w.Visible = true;
                 w.Style[Styles.display] = "none";
-                new EffectFadeIn(w, 1500)
-                    .Render();
+                if (e.Params["Parameters"].Contains("ForcedSize"))
+                {
+                    int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
+                    int height = e.Params["Parameters"]["ForcedSize"]["height"].Get<int>();
+                    w.Style[Styles.width] = "900px";
+                    w.Style[Styles.height] = "500px";
+                    new EffectFadeIn(w, 750)
+                        .JoinThese(
+                            new EffectSize(width, height))
+                        .Render();
+                }
+                else
+                {
+                    w.Style[Styles.width] = "auto";
+                    w.Style[Styles.height] = "auto";
+                    new EffectFadeIn(w, 1500)
+                        .Render();
+                }
                 if (e.Params["Parameters"].Contains("Caption"))
                 {
                     w.Caption = e.Params["Parameters"]["Caption"].Get<string>();
