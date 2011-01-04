@@ -163,9 +163,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 LinkButton b = new LinkButton();
                 b.Text = "ID";
+                string filterString = Settings.Instance.Get(FullTypeName + ":ID", "");
+                b.ToolTip = filterString.Replace("|", " on ");
                 b.CssClass = 
                     string.IsNullOrEmpty(
-                        Settings.Instance.Get(FullTypeName + ":ID", "")) ? 
+                        filterString) ? 
                         "" : 
                         "filtered";
                 b.Click += FilterMethod;
@@ -206,6 +208,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 if (shouldAddFilter && DataSource["IsFilter"].Get<bool>())
                 {
                     LinkButton b = new LinkButton();
+                    string filterString = Settings.Instance.Get(FullTypeName + ":" + propertyName, "");
+                    b.ToolTip = filterString.Replace("|", " on ");
                     b.Info = propertyName + "|" + typeName;
                     b.Click += FilterMethod;
                     b.CssClass =
