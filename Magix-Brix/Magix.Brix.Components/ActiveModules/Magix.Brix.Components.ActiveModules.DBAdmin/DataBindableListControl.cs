@@ -80,11 +80,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected virtual void UpdateCaption()
         {
             (Parent.Parent.Parent as Window).Caption = string.Format(
-@"{0}-{1}/{2} of {3}",
+@"{0}-{1}/{2}({4}) of {3}",
                 Start,
                 End,
                 TotalCount,
-                TypeName);
+                TypeName,DataSource["TotalTypeCount"].Get<int>());
         }
 
         protected Label CreateTable()
@@ -192,7 +192,18 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 bool isOwner = idx["IsOwner"].Get<bool>();
                 string relationName = idx["RelationName"].Get<string>();
                 HtmlTableCell cell = new HtmlTableCell();
-                if (DataSource["IsFilter"].Get<bool>())
+                bool shouldAddFilter = false;
+                switch (typeName)
+                {
+                    case "String":
+                    case "Int32":
+                    case "Boolean":
+                    case "Decimal":
+                    case "DateTime":
+                        shouldAddFilter = true;
+                        break;
+                }
+                if (shouldAddFilter && DataSource["IsFilter"].Get<bool>())
                 {
                     LinkButton b = new LinkButton();
                     b.Info = propertyName + "|" + typeName;

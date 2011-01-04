@@ -399,7 +399,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Type type = GetType(e.Params["FullTypeName"].Get<string>());
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
                 GetMethodInfos(GetProps(type));
-            node["TotalCount"].Value = GetCount(type);
+            node["TotalTypeCount"].Value = GetCount(type);
+            node["TotalCount"].Value = node["TotalTypeCount"].Value;
             System.Collections.IEnumerable enumerable = SelectObjects(type, node);
             node = GetNodeList(enumerable, node, getters, type, start, end);
             node["Start"].Value = start;
