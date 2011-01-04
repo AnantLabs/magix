@@ -141,6 +141,7 @@ namespace Magix.Brix.Viewports
                         toEmpty = idxChild;
                 }
                 ClearControls(toEmpty);
+                (toEmpty.Parent.Parent as Window).CloseWindow();
             }
         }
 
@@ -195,6 +196,10 @@ namespace Magix.Brix.Viewports
                 Window w = toAddInto.Parent.Parent as Window;
                 w.Visible = true;
                 w.Style[Styles.display] = "none";
+                if (e.Params["Parameters"].Contains("WindowCssClass"))
+                {
+                    w.CssClass = e.Params["Parameters"]["WindowCssClass"].Get<string>();
+                }
                 if (e.Params["Parameters"].Contains("ForcedSize"))
                 {
                     int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();

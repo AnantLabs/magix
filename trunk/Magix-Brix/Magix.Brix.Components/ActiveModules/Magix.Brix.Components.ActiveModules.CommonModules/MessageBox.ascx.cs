@@ -11,13 +11,13 @@ using ASP = System.Web.UI.WebControls;
 using Magix.UX.Widgets;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
+using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
     [ActiveModule]
     public class MessageBox : UserControl, IModule
     {
-        protected Window wnd;
         protected Label lbl;
         protected Button ok;
         protected Button cancel;
@@ -38,7 +38,6 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         {
             Load += delegate
             {
-                wnd.Caption = node["Caption"].Get<string>();
                 lbl.Text = node["Text"].Get<string>();
                 OkNode = node["OK"].UnTie();
                 CancelNode = node["Cancel"].UnTie();
@@ -47,6 +46,10 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     cancel.Visible = false;
                     ok.CssClass = "cancel";
                 }
+                new EffectTimeout(500)
+                    .ChainThese(
+                        new EffectFocusAndSelect(ok))
+                    .Render();
             };
         }
 
@@ -59,7 +62,6 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     OkNode["Event"].Get<string>(),
                     OkNode);
             }
-            ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
         }
 
         protected void cancel_Click(object sender, EventArgs e)
@@ -71,7 +73,6 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     CancelNode["Event"].Get<string>(),
                     CancelNode);
             }
-            ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
         }
     }
 }
