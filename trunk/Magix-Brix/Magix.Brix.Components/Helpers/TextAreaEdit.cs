@@ -24,6 +24,8 @@ namespace Magix.Brix.Components
 
         public event EventHandler TextChanged;
 
+        public event EventHandler DisplayTextBox;
+
         public string Text
         {
             get { return _text.Text; }
@@ -91,6 +93,8 @@ namespace Magix.Brix.Components
                 .ChainThese(
                     new EffectFocusAndSelect(_text))
                 .Render();
+            if (DisplayTextBox != null)
+                DisplayTextBox(this, new EventArgs());
         }
 
         void TextEscPressed(object sender, EventArgs e)

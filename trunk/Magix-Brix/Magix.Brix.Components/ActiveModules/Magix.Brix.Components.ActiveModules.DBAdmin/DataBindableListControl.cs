@@ -209,7 +209,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 {
                     LinkButton b = new LinkButton();
                     string filterString = Settings.Instance.Get(FullTypeName + ":" + propertyName, "");
-                    b.ToolTip = filterString.Replace("|", " on ");
                     b.Info = propertyName + "|" + typeName;
                     b.Click += FilterMethod;
                     b.CssClass =
@@ -221,21 +220,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             "" :
                             "filtered";
                     b.ToolTip = string.Format(
-    @"{0} ({1}{2}{3}{4})",
+    @" {0} ({1}{2}{3}{4}) ",
                         propertyName,
                         typeName,
                         ((!isOwner) ? " IsNotOwner" : ""),
                         (belongsTo ? " BelongsTo" : ""),
                         !string.IsNullOrEmpty(relationName) ? (" " + relationName) : "");
+                    b.ToolTip += filterString.Replace("|", " on ");
                     b.Text = propertyName;
                     cell.Controls.Add(b);
                 }
                 else
                 {
                     cell.Attributes.Add("title", string.Format(
-    @"{0} ({1}{2}{3}{4})",
+    @"[ActiveType({2}{3}{4})] {1} {0}",
                         propertyName,
-                        typeName,
+                        typeName.Replace("&lt;", "<").Replace("&gt;", ">"),
                         ((!isOwner) ? " IsNotOwner" : ""),
                         (belongsTo ? " BelongsTo" : ""),
                         !string.IsNullOrEmpty(relationName) ? (" " + relationName) : ""));
@@ -441,7 +441,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                     Label l = Selector.SelectFirst<Label>(this,
                                         delegate(Control idx)
                                         {
-                                            return idx.ID == "sel";
+                                            if (!(idx is Magix.UX.Widgets.Core.BaseWebControl))
+                                                return false;
+                                            return (idx as Magix.UX.Widgets.Core.BaseWebControl).CssClass == "grid-selected";
                                         });
                                     if (l != null)
                                         l.CssClass = "";
@@ -492,14 +494,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                     string[] infos = bt.Info.Split('|');
                                     string parentPropertyName = infos[1];
                                     int parentId = int.Parse(infos[0]);
-                                    (bt.Parent as Label).CssClass = "grid-selected-cell";
                                     Label l = Selector.SelectFirst<Label>(this,
                                         delegate(Control idx)
                                         {
-                                            return idx.ID == "sel";
+                                            if (!(idx is Magix.UX.Widgets.Core.BaseWebControl))
+                                                return false;
+                                            return (idx as Magix.UX.Widgets.Core.BaseWebControl).CssClass == "grid-selected";
                                         });
                                     if (l != null)
                                         l.CssClass = "";
+                                    (bt.Parent as Label).CssClass = "grid-selected-cell";
                                     (bt.Parent.Parent as Label).CssClass = "grid-selected";
                                     SelectedItem = parentId;
                                     string parentType = DataSource["FullTypeName"].Get<string>();
@@ -536,6 +540,24 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         ed.Info =
                             idxProp.Parent.Parent["ID"].Value.ToString() + "|" +
                             idxProp["PropertyName"].Get<string>();
+                        ed.DisplayTextBox +=
+                            delegate(object sender, EventArgs e)
+                            {
+                                TextAreaEdit te = sender as TextAreaEdit;
+                                string[] infos = te.Info.Split('|');
+                                string parentPropertyName = infos[1];
+                                int parentId = int.Parse(infos[0]);
+                                Label l = Selector.SelectFirst<Label>(this,
+                                    delegate(Control idx)
+                                    {
+                                        if (!(idx is Magix.UX.Widgets.Core.BaseWebControl))
+                                            return false;
+                                        return (idx as Magix.UX.Widgets.Core.BaseWebControl).CssClass == "grid-selected";
+                                    });
+                                if (l != null)
+                                    l.CssClass = "";
+                                (te.Parent.Parent as Label).CssClass = "grid-selected";
+                            };
                         ed.TextChanged +=
                             delegate(object sender, EventArgs e)
                             {

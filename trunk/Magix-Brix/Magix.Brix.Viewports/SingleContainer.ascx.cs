@@ -210,7 +210,9 @@ namespace Magix.Brix.Viewports
                 {
                     w.Style[Styles.width] = "auto";
                     w.Style[Styles.height] = "auto";
-                    new EffectFadeIn(w, 1500)
+                    new EffectFadeIn(w, 750)
+                        .JoinThese(
+                            new EffectRollDown())
                         .Render();
                 }
                 if (e.Params["Parameters"].Contains("Caption"))
