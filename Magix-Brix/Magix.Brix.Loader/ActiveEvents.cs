@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.UI;
 using System.Threading;
 using System.Reflection;
+using System.Configuration;
 using System.Collections.Generic;
 using Magix.Brix.Types;
 
@@ -163,6 +164,9 @@ namespace Magix.Brix.Loader
             string name, 
             Node pars)
         {
+            string mapped = ConfigurationManager.AppSettings["mapped-" + name];
+            if (!string.IsNullOrEmpty(mapped))
+                name = mapped.Replace("mapped-", "");
             ActiveEventArgs e = new ActiveEventArgs(name, pars);
             if (_methods.ContainsKey(name) || InstanceMethod.ContainsKey(name))
             {
