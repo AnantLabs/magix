@@ -20,14 +20,25 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     {
         protected virtual void UpdateCaption()
         {
-            (Parent.Parent.Parent as Window).Caption = string.Format(
-@"Showing {0}({1}), belongs to {3}({4}) on {5}, total {2}",
-                TypeName,
-                DataSource["Object"]["ID"].Get<int>(),
-                TotalCount,
-                ParentType,
-                ParentID,
-                ParentPropertyName);
+            if (ParentID == 0)
+            {
+                (Parent.Parent.Parent as Window).Caption = string.Format(
+    @"Showing {0}({1}), total {2}",
+                    TypeName,
+                    DataSource["Object"]["ID"].Get<int>(),
+                    TotalCount);
+            }
+            else
+            {
+                (Parent.Parent.Parent as Window).Caption = string.Format(
+    @"Showing {0}({1}), belongs to {3}({4}) on {5}, total {2}",
+                    TypeName,
+                    DataSource["Object"]["ID"].Get<int>(),
+                    TotalCount,
+                    ParentType,
+                    ParentID,
+                    ParentPropertyName);
+            }
         }
 
         protected int ActiveID
