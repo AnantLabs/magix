@@ -471,23 +471,37 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Type type = GetType(fullTypeName);
             Type parentType = GetType(parentFullType);
             object parentObject = GetObject(parentType, parentId);
-            System.Collections.IEnumerable enumerable = GetList(parentObject, parentPropertyName, parentType);
+            System.Collections.IEnumerable enumerable = 
+                GetList(parentObject, parentPropertyName, parentType);
             Node node = e.Params;
-            Type typeOfList = GetListType(parentType, parentPropertyName);
-            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = GetMethodInfos(GetProps(typeOfList));
+            Type typeOfList = 
+                GetListType(parentType, parentPropertyName);
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters = 
+                GetMethodInfos(GetProps(typeOfList));
+            int count = GetCountFromList(parentObject, parentPropertyName, parentType);
+            int start = 0;
+            int end = Math.Min(Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10), count);
+            if (node.Contains("Start"))
+            {
+                start = node["Start"].Get<int>();
+                end = Math.Max(
+                    node["End"].Get<int>(), 
+                    start + Math.Min(Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10), count));
+                end = Math.Max(end, count);
+            }
             GetNodeList(
                 enumerable,
                 node,
                 getters,
                 typeOfList,
-                0,
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                start,
+                end);
             node["Start"].Value = 0;
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentType"].Value = parentObject.GetType().Name;
             node["ParentFullType"].Value = parentObject.GetType().FullName;
             node["End"].Value = node["Objects"].Count;
-            node["TotalCount"].Value = GetCountFromList(parentObject, parentPropertyName, parentType);
+            node["TotalCount"].Value = count;
             e.Params = node;
         }
 
@@ -518,6 +532,12 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             string propertyName = e.Params["PropertyName"].Get<string>();
             int id = e.Params["ID"].Get<int>();
+            bool belongsTo = e.Params["BelongsTo"].Get<bool>();
+            ViewSingleInstance(fullTypeName, propertyName, id, belongsTo);
+        }
+
+        private void ViewSingleInstance(string fullTypeName, string propertyName, int id, bool belongsTo)
+        {
             Type type = GetType(fullTypeName);
             object parentObject = GetObject(type, id);
             object propertyToEdit = GetPropertyObject(type, parentObject, propertyName);
@@ -539,7 +559,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             MethodInfo get = prop.GetGetMethod(true);
             node["FullTypeName"].Value = get.ReturnType.FullName;
             node["TotalCount"].Value = GetCount(get.ReturnType);
-            node["EditingAllowed"].Value = !e.Params["BelongsTo"].Get<bool>();
+            node["EditingAllowed"].Value = !belongsTo;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
                 "child",
@@ -557,16 +577,26 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             int parentId = e.Params["ParentID"].Get<int>();
 
             Type type = GetType(fullTypeName);
-            Type parentType = GetType(parentTypeName);
 
-            object parentObject = GetObject(parentType, parentId);
-            object propertyToEdit = GetPropertyObject(parentType, parentObject, propertyName);
-
-            if (propertyToEdit != null)
+            if (parentId == 0)
             {
+                object objectToEdit = GetObject(type, id);
                 Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
-                    GetMethodInfos(GetProps(propertyToEdit.GetType()));
-                GetObject(e.Params["Object"], getters, propertyToEdit, id);
+                    GetMethodInfos(GetProps(type));
+                GetObject(e.Params["Object"], getters, objectToEdit, id);
+            }
+            else
+            {
+                Type parentType = GetType(parentTypeName);
+                object parentObject = GetObject(parentType, parentId);
+                object propertyToEdit = GetPropertyObject(parentType, parentObject, propertyName);
+
+                if (propertyToEdit != null)
+                {
+                    Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
+                        GetMethodInfos(GetProps(propertyToEdit.GetType()));
+                    GetObject(e.Params["Object"], getters, propertyToEdit, id);
+                }
             }
             e.Params["Object"]["ID"].Value = id;
             e.Params["TotalCount"].Value = GetCount(type);
@@ -855,6 +885,27 @@ have relationships towards other instances in your database.</p>";
             Type type = GetType(fullTypeName);
             object o = type.GetConstructor(Type.EmptyTypes).Invoke(null);
             type.GetMethod("Save").Invoke(o, null);
+
+            int id = (int)type.GetProperty("ID").GetGetMethod(true).Invoke(o, null);
+            ViewSingleInstanceWithoutReference(fullTypeName, id);
+        }
+
+        private void ViewSingleInstanceWithoutReference(string fullTypeName, int id)
+        {
+            Type type = GetType(fullTypeName);
+            object objectToEdit = GetObject(type, id);
+            Node node = new Node();
+
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
+                GetMethodInfos(GetProps(type));
+            GetObject(node["Object"], getters, objectToEdit, id);
+            node["Object"]["ID"].Value = GetID(objectToEdit, type);
+            node["FullTypeName"].Value = type.FullName;
+            node["TotalCount"].Value = this.GetCount(type);
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
+                "child",
+                node);
         }
 
         // Called when in View List Of Objects one chooses to append a new object into the list

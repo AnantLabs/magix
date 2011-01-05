@@ -11,6 +11,7 @@ using Magix.UX.Widgets;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes;
+using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
@@ -19,6 +20,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     {
         protected Panel pnl;
         protected Button append;
+        protected Button previous;
+        protected Button next;
 
         void IModule.InitialLoading(Node node)
         {
@@ -27,6 +30,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 delegate
                 {
                     UpdateCaption();
+                    SetButtonText();
                     append.Enabled = node["IsAppend"].Get<bool>();
                 };
         }
@@ -44,7 +48,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     this,
                     "DBAdmin.AppendComplexInstance",
                     node);
-
             }
             catch (Exception err)
             {
@@ -83,7 +86,92 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 UpdateCaption();
                 DataBindObjects();
                 pnl.ReRender();
+            }
+            catch (Exception err)
+            {
+                Node node2 = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                node2["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ShowMessage",
+                    node2);
+            }
+        }
 
+        protected void PreviousItems(object sender, EventArgs e)
+        {
+            if (Start > 0)
+            {
+                Node node = DataSource;
+                node["Start"].Value = Math.Max(0, Start - Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                node["End"].Value = Math.Min(
+                    node["Start"].Get<int>() + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10),
+                    TotalCount - node["Start"].Get<int>());
+                node["Objects"].UnTie();
+                node["Type"].UnTie();
+                RaiseForwardRewindEvent(node);
+            }
+        }
+
+        protected void NextItems(object sender, EventArgs e)
+        {
+            if (Start + Count < TotalCount)
+            {
+                Node node = DataSource;
+                node["Start"].Value = Start + Count;
+                node["End"].Value = node["Start"].Get<int>() +
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                node["Objects"].UnTie();
+                node["Type"].UnTie();
+                RaiseForwardRewindEvent(node);
+            }
+        }
+
+        private void SetButtonText()
+        {
+            previous.Enabled = Start > 0;
+            previous.Text =
+                previous.Enabled ?
+                string.Format(
+                    "Previous {0} items",
+                    Math.Min(
+                        MaxItems,
+                        Start)) :
+                "Previous";
+            next.Enabled = Start + Count < TotalCount;
+            next.Text =
+                next.Enabled ?
+                    string.Format(
+                        "Next {0} items",
+                        Math.Min(
+                            MaxItems,
+                            TotalCount - (Start + Count))) :
+                        "Next";
+        }
+
+        private void RaiseForwardRewindEvent(Node node)
+        {
+            try
+            {
+                if (!node.Contains("Start"))
+                {
+                    node["Start"].Value = 0;
+                    node["End"].Value = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.UpdateContents",
+                    node);
+                pnl.Controls.Clear();
+                DataSource = node;
+                DataBindObjects();
+                pnl.ReRender();
+                SetButtonText();
+                UpdateCaption();
+                new EffectScrollBrowser(250)
+                    .Render();
             }
             catch (Exception err)
             {
