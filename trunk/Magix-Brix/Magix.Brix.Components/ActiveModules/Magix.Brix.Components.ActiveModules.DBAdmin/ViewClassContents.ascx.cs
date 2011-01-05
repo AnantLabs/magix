@@ -93,8 +93,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 this,
                 "DBAdmin.CreateNewInstance",
                 node);
-            DataSource["Start"].UnTie();
-            DataSource["End"].UnTie();
+            DataSource["Start"].Value = Math.Max(0, (TotalCount - Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10)) + 1);
+            DataSource["End"].Value = TotalCount + 1;
             ReDataBind();
         }
 

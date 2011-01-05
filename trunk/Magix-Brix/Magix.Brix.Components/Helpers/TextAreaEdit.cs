@@ -29,7 +29,22 @@ namespace Magix.Brix.Components
         public string Text
         {
             get { return _text.Text; }
-            set { _link.Text = EscapeHTML(value); _text.Text = value; }
+            set { _link.Text = ReduceText(EscapeHTML(value)); _link.Info = value; _text.Text = value; }
+        }
+
+        public int TextLength
+        {
+            get { return ViewState["TextLength"] == null ? 50 : (int)ViewState["TextLength"]; }
+            set { ViewState["TextLength"] = value; }
+        }
+
+        private string ReduceText(string value)
+        {
+            if (Text == null)
+                return null;
+            if (value.Length > TextLength)
+                return value.Substring(0, TextLength - 3) + "..." + value.Length;
+            return value;
         }
 
         private string EscapeHTML(string value)
@@ -40,16 +55,6 @@ namespace Magix.Brix.Components
         private string UnEscapeHTML(string value)
         {
             return value.Replace("&lt;", "<").Replace("&gt;", ">");
-        }
-
-        [DefaultValue(-1)]
-        public int TextLength
-        {
-            get
-            {
-                return ViewState["TextLength"] == null ? -1 : (int)ViewState["TextLength"];
-            }
-            set { ViewState["TextLength"] = value; }
         }
 
         protected override void OnInit(EventArgs e)
@@ -73,7 +78,7 @@ namespace Magix.Brix.Components
 
             // Creating TextBox
             _text.ID = "txt";
-            _text.Text = UnEscapeHTML(_link.Text);
+            _text.Text = _link.Info;
             _text.Visible = false;
 			_text.Blur += TextUpdated;
             _text.EscPressed += TextEscPressed;
@@ -85,7 +90,7 @@ namespace Magix.Brix.Components
             if (_link.Text == "[nothing]")
                 _text.Text = "";
             else
-                _text.Text = UnEscapeHTML(_link.Text);
+                _text.Text = _link.Info;
             _text.Visible = true;
             _text.Style[Styles.display] = "none";
             _link.Visible = false;
@@ -107,7 +112,8 @@ namespace Magix.Brix.Components
 
         private void TextUpdated(object sender, EventArgs e)
         {
-            _link.Text = EscapeHTML(_text.Text);
+            _link.Text = EscapeHTML(ReduceText(_text.Text));
+            _link.Info = _text.Text;
             _text.Visible = false;
             _link.Visible = true;
 

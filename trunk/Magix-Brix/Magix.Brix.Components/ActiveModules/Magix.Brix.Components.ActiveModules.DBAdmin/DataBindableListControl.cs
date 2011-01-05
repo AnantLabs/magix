@@ -541,6 +541,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         TextAreaEdit ed = new TextAreaEdit();
                         ed.Text = idxProp["Value"].Get<string>();
+                        ed.TextLength = Settings.Instance.Get("DBAdmin.TextArea_TextLength", 50);
                         ed.Info =
                             idxProp.Parent.Parent["ID"].Value.ToString() + "|" +
                             idxProp["PropertyName"].Get<string>();
