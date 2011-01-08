@@ -47,7 +47,7 @@ namespace Magix.Brix.Viewports
                 // Window
                 Window w = new Window();
                 w.CssClass = "mux-shaded mux-rounded window-left-buttons";
-                w.Style[Styles.left] = ((idxNo * 25) + 50).ToString() + "px";
+                w.Style[Styles.left] = ((idxNo * 15) + 50).ToString() + "px";
                 w.Style[Styles.top] = ((idxNo * 30) + 60).ToString() + "px";
                 w.Style[Styles.position] = "absolute";
                 w.Style[Styles.zIndex] = (1000 + idxNo).ToString();

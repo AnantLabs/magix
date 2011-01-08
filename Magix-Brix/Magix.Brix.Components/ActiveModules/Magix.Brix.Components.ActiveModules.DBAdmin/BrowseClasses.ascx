@@ -13,11 +13,13 @@
     style="position:absolute;top:20px;left:25px;z-index:500;color:Black;min-width:750px;min-height:450px;" 
     CssClass="mux-shaded mux-rounded transparent-window" 
     id="wnd">
-    <mux:TreeView
-        runat="server"
-        id="tree"
-        OnSelectedItemChanged="tree_SelectedItemChanged">
-    </mux:TreeView>
+    <Content>
+        <mux:TreeView
+            runat="server"
+            id="tree"
+            OnSelectedItemChanged="tree_SelectedItemChanged">
+        </mux:TreeView>
+    </Content>
 </mux:Window>
 
 

@@ -16,17 +16,17 @@ using System.Web.UI.HtmlControls;
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
     [ActiveModule]
-    public class ConfigureColumns : System.Web.UI.UserControl, IModule
+    public class ConfigureColumns : Module, IModule
     {
         protected System.Web.UI.WebControls.Repeater rep;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
             Load +=
                 delegate
                 {
-                    DataSource = node;
-                    rep.DataSource = DataSource["Columns"];
+                    rep.DataSource = DataSource["Type"]["Properties"];
                     rep.DataBind();
                     CheckBox ch = Selector.SelectFirst<CheckBox>(rep);
                     new EffectTimeout(500)
@@ -44,16 +44,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             node["ColumnName"].Value = columnName;
             node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
             node["Visible"].Value = b.Checked;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.ChangeVisibilityOfColumn",
+            RaiseSafeEvent(
+                "DBAdmin.Data.ChangeVisibilityOfColumn",
                 node);
         }
 
-        protected Node DataSource
+        protected override void ReDataBind()
         {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
         }
     }
 }

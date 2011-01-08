@@ -22,13 +22,13 @@
     <ItemTemplate>
         <tr>
             <td>
-                <%#Eval("[Name].Value") %>
+                <%#Eval("Name") %>
             </td>
             <td>
                 <mux:CheckBox
                     runat="server"
                     OnCheckedChanged="CheckedChange"
-                    Info='<%#Eval("[Name].Value") %>'
+                    Info='<%#Eval("Name") %>'
                     Checked='<%#Eval("[Visible].Value") %>' />
             </td>
         </tr>

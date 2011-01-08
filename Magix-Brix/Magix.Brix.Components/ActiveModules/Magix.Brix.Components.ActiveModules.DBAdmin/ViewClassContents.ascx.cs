@@ -16,179 +16,122 @@ using Magix.Brix.Components.ActiveTypes;
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
     [ActiveModule]
-    public class ViewClassContents : DataBindableListControl, IModule
+    public class ViewClassContents : ListModule, IModule
     {
         protected Panel pnl;
         protected Button previous;
         protected Button next;
         protected Button create;
 
-        void IModule.InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
             Load +=
                 delegate
                 {
-                    SetButtonText();
-                    UpdateCaption();
                 };
-        }
-
-        private void SetButtonText()
-        {
-            create.Enabled = DataSource["IsCreate"].Get<bool>();
-            bool filter = 
-                !string.IsNullOrEmpty(Settings.Instance.Get(FullTypeName + ":ID", ""));
-
-            if (filter)
-            {
-                // Filter on ID, and hence always showing EVERYTHING ...!
-                previous.Enabled = false;
-                next.Enabled = false;
-                next.Text = "Next";
-                previous.Text = "Previous";
-            }
-            else
-            {
-                previous.Enabled = Start > 0;
-                previous.Text =
-                    previous.Enabled ?
-                    string.Format(
-                        "Previous {0} items",
-                        Math.Min(
-                            MaxItems,
-                            Start)) :
-                    "Previous";
-                next.Enabled = Start + Count < TotalCount;
-                next.Text =
-                    next.Enabled ?
-                        string.Format(
-                            "Next {0} items",
-                            Math.Min(
-                                MaxItems,
-                                TotalCount - (Start + Count))) :
-                            "Next";
-            }
         }
 
         protected void PreviousItems(object sender, EventArgs e)
         {
-            if (Start > 0)
-            {
-                Node node = DataSource;
-                node["Start"].Value = Math.Max(0, Start - Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
-                node["End"].Value = Math.Min(
-                    node["Start"].Get<int>() + Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10),
-                    TotalCount - node["Start"].Get<int>());
-                node["Objects"].UnTie();
-                node["Type"].UnTie();
-                RaiseForwardRewindEvent(node);
-            }
-        }
-
-        protected void CreateItem(object sender, EventArgs e)
-        {
-            Node node = DataSource;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.CreateNewInstance",
-                node);
-
-            // Setting the newly created item to selected ...
-            SelectedItem = -1;
-            DataSource["Start"].Value = Math.Max(0, (TotalCount - Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10)) + 1);
-            DataSource["End"].Value = TotalCount + 1;
+            DataSource["Start"].Value = 
+                Math.Max(
+                    0, 
+                    DataSource["Start"].Get<int>() - 
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+            DataSource["End"].Value =
+                Math.Min(
+                    DataSource["SetCount"].Get<int>(), 
+                    DataSource["Start"].Get<int>() + 
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
             ReDataBind();
         }
 
         protected void NextItems(object sender, EventArgs e)
         {
-            if (Start + Count < TotalCount)
+            DataSource["Start"].Value =
+                    Math.Min(
+                        DataSource["SetCount"].Get<int>() - 1,
+                        DataSource["Start"].Get<int>() + 
+                            DataSource["Objects"].Count);
+            DataSource["End"].Value =
+                Math.Min(
+                    DataSource["SetCount"].Get<int>(),
+                    DataSource["Start"].Get<int>() +
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+            ReDataBind();
+        }
+
+        protected void CreateItem(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            RaiseSafeEvent(
+                "DBAdmin.Common.CreateObject",
+                node);
+        }
+
+        protected override System.Web.UI.Control TableParent
+        {
+            get { return pnl; }
+        }
+
+        protected override void DataBindDone()
+        {
+            (Parent.Parent.Parent as Window).Caption = string.Format(
+                "{0} {1}-{2}/{3}",
+                DataSource["TypeName"].Get<string>(),
+                ((int)DataSource["Start"].Value) + 1,
+                DataSource["End"].Get<int>(),
+                DataSource["SetCount"].Get<int>());
+            string previousText = "Previous";
+            if (DataSource["Start"].Get<int>() > 0)
             {
-                Node node = DataSource;
-                node["Start"].Value = Start + Count;
-                node["End"].Value = node["Start"].Get<int>() +
+                previous.Enabled = true;
+            }
+            else
+            {
+                previous.Enabled = false;
+            }
+            previous.Text = previousText;
+            string nextText = "Next";
+            if (DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>())
+            {
+                next.Enabled = true;
+            }
+            else
+            {
+                next.Enabled = false;
+            }
+            next.Text = nextText;
+        }
+
+        protected override void RefreshWindowContent(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
+            {
+                DataSource["Start"].Value = 0;
+                DataSource["End"].Value =
+                    DataSource["Start"].Get<int>(0) +
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-                node["Objects"].UnTie();
-                node["Type"].UnTie();
-                RaiseForwardRewindEvent(node);
-            }
-        }
-
-        [ActiveEvent(Name = "DBAdmin.FilterChanged")]
-        protected void DBAdmin_FilterChanged(object sender, ActiveEventArgs e)
-        {
-            if (e.Params["Type"].Get<string>() == FullTypeName)
-            {
-                Start = 0;
-                End = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-            }
-        }
-
-        private void RaiseForwardRewindEvent(Node node)
-        {
-            try
-            {
-                if (!node.Contains("Start"))
-                {
-                    node["Start"].Value = 0;
-                    node["End"].Value = Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-                }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "DBAdmin.UpdateContents",
-                    node);
-                pnl.Controls.Clear();
-                DataSource = node;
-                DataBindObjects();
-                pnl.ReRender();
-                SetButtonText();
-                UpdateCaption();
-                new EffectScrollBrowser(250)
-                    .Render();
-            }
-            catch (Exception err)
-            {
-                Node node2 = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                node2["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "ShowMessage",
-                    node2);
+                ReDataBind();
             }
         }
 
         protected override void ReDataBind()
         {
-            Node tmp = DataSource;
-            List<string> keysToRemove = new List<string>();
-            foreach (string idxKey in ViewState.Keys)
-            {
-                if (idxKey.IndexOf("DBAdmin.VisibleColumns.") != -1)
-                    keysToRemove.Add(idxKey);
-            }
-            foreach (string idxKey in keysToRemove)
-            {
-                ViewState.Remove(idxKey);
-            }
-            DataSource = tmp;
+            ResetColumnsVisibility();
             DataSource["Objects"].UnTie();
             DataSource["Type"].UnTie();
-            RaiseForwardRewindEvent(DataSource);
-        }
-
-        protected override void DataBindObjects()
-        {
-            System.Web.UI.Control table = CreateTable();
-            if (table != null)
+            if (RaiseSafeEvent(
+                "DBAdmin.Data.GetContentsOfClass",
+                DataSource))
             {
-                System.Web.UI.Control row = CreateHeader(table);
-                table.Controls.Add(row);
-                CreateCells(table);
-                pnl.Controls.Add(table);
+                pnl.Controls.Clear();
+                DataBindGrid();
+                pnl.ReRender();
             }
+            FlashPanel(pnl);
         }
     }
 }

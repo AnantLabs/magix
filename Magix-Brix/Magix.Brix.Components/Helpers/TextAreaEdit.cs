@@ -40,7 +40,7 @@ namespace Magix.Brix.Components
 
         private string ReduceText(string value)
         {
-            if (Text == null)
+            if (value == null)
                 return null;
             if (value.Length > TextLength)
                 return value.Substring(0, TextLength - 3) + "..." + value.Length;
@@ -49,12 +49,12 @@ namespace Magix.Brix.Components
 
         private string EscapeHTML(string value)
         {
-            return value.Replace("<", "&lt;").Replace(">", "&gt;");
+            return value == null ? null : value.Replace("<", "&lt;").Replace(">", "&gt;");
         }
 
         private string UnEscapeHTML(string value)
         {
-            return value.Replace("&lt;", "<").Replace("&gt;", ">");
+            return value == null ? null : value.Replace("&lt;", "<").Replace("&gt;", ">");
         }
 
         protected override void OnInit(EventArgs e)
