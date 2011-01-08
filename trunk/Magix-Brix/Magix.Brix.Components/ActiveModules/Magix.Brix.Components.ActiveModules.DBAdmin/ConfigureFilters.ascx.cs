@@ -15,19 +15,19 @@ using Magix.UX;
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
     [ActiveModule]
-    public class ConfigureFilters : System.Web.UI.UserControl, IModule
+    public class ConfigureFilters : Module, IModule
     {
         protected Panel pnl;
         protected TextBox equals;
         private bool _isFirst;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
             _isFirst = true;
             Load +=
                 delegate
                 {
-                    DataSource = node;
                 };
         }
 
@@ -54,11 +54,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             switch (DataSource["PropertyTypeName"].Get<string>())
             {
-                case "String":
-                case "Int32":
-                case "Decimal":
-                case "DateTime":
-                case "Boolean":
+                case "System.String":
+                case "System.Int32":
+                case "System.Decimal":
+                case "System.DateTime":
+                case "System.Boolean":
                     CreateNormalCriteria();
                     break;
                 default:
@@ -84,7 +84,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         private void CreateNormalCriteria()
         {
             Label l = new Label();
-            l.Text = "<p>Specify how you want your criteria to appear, empty string removes any existing Criteria...</p>";
+            l.Text = @"<p>Specify how you want your criteria to appear, 
+empty string removes any existing Criteria...</p>";
             pnl.Controls.Add(l);
 
             SelectList ls = new SelectList();
@@ -111,7 +112,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             ls.Items.Add(i);
 
             string setting =
-                DataSource["FullTypeName"].Get<string>() +
+                "DBAdmin.Filter." + DataSource["FullTypeName"].Get<string>() +
                 ":" +
                 DataSource["PropertyName"].Get<string>();
             string[] filter = Settings.Instance.Get(setting, "").Split('|');
@@ -160,11 +161,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             equals = new TextBox();
             equals.ID = "t";
-            equals.Text = Settings.Instance.Get(DataSource["FullTypeName"].Get<string>() + ":" + DataSource["PropertyName"].Value, "");
+            equals.Text = Settings.Instance.Get(
+                "DBAdmin.Filter." + 
+                DataSource["FullTypeName"].Get<string>() + 
+                ":" + 
+                DataSource["PropertyName"].Value, "");
             pnl.Controls.Add(equals);
 
             l = new Label();
-            l.Text = "<p style=\"margin-top:10px;\">Type in a specific ID, integer value, or a list of comma separated IDs.</p>";
+            l.Text = @"<p style=""margin-top:10px;"">Type in a specific ID, integer value, 
+or a list of comma separated IDs.</p>";
             pnl.Controls.Add(l);
             if (_isFirst)
             {
@@ -182,41 +188,23 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             if (propertyName == "ID")
             {
                 string filter = equals.Text;
-                try
+                if (string.IsNullOrEmpty(filter))
                 {
-                    if (string.IsNullOrEmpty(filter))
-                    {
-                        Settings.Instance.Set(fullTypeName + ":" + propertyName, "");
-                    }
-                    else
-                    {
-                        // Just to verify we've got only integers here ...
-                        string[] ids = filter.Split(',');
-                        foreach (string idx in ids)
-                        {
-                            int x = int.Parse(idx);
-                        }
-                        Settings.Instance.Set(fullTypeName + ":" + propertyName, filter);
-                    }
-                    Node node = new Node();
-                    node["Type"].Value = fullTypeName;
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "DBAdmin.FilterChanged",
-                        node);
-                    (this.Parent.Parent.Parent as Window).CloseWindow();
+                    Settings.Instance.Set(
+                        "DBAdmin.Filter." + fullTypeName + ":" + propertyName, "");
                 }
-                catch(Exception err)
+                else
                 {
-                    Node node = new Node();
-                    node["Message"].Value = err.Message;
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "ShowMessage",
-                        node);
-                    equals.Select();
-                    equals.Focus();
+                    // Just to verify we've got only integers here ...
+                    string[] ids = filter.Split(',');
+                    foreach (string idx in ids)
+                    {
+                        int x = int.Parse(idx);
+                    }
+                    Settings.Instance.Set(
+                        "DBAdmin.Filter." + fullTypeName + ":" + propertyName, filter);
                 }
+                ActiveEvents.Instance.RaiseClearControls("child");
             }
             else
             {
@@ -225,7 +213,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 {
                     if (string.IsNullOrEmpty(filter))
                     {
-                        Settings.Instance.Set(fullTypeName + ":" + propertyName, "");
+                        Settings.Instance.Set(
+                            "DBAdmin.Filter." + fullTypeName + ":" + propertyName, "");
                     }
                     else
                     {
@@ -246,15 +235,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 set = "Like";
                                 break;
                         }
-                        Settings.Instance.Set(fullTypeName + ":" + propertyName, set + "|" + filter);
+                        Settings.Instance.Set(
+                            "DBAdmin.Filter." + fullTypeName + ":" + propertyName, set + "|" + filter);
                     }
-                    Node node = new Node();
-                    node["Type"].Value = fullTypeName;
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "DBAdmin.FilterChanged",
-                        node);
-                    (this.Parent.Parent.Parent as Window).CloseWindow();
+                    ActiveEvents.Instance.RaiseClearControls("child");
                 }
                 catch (Exception err)
                 {
@@ -289,10 +273,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
         }
 
-        private Node DataSource
+        protected override void ReDataBind()
         {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
         }
     }
 }

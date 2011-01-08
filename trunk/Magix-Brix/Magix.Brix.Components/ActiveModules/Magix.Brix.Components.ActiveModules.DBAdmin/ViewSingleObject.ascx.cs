@@ -12,245 +12,206 @@ using Magix.Brix.Loader;
 using Magix.UX.Effects;
 using Magix.UX.Widgets.Core;
 using System.Web.UI.HtmlControls;
+using System.Web.UI;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
     [ActiveModule]
-    public class ViewSingleObject : DataBindableSingleInstanceControl, IModule
+    public class ViewSingleObject : Module, IModule
     {
         protected Panel pnl;
         protected Button change;
         protected Button remove;
 
-        void IModule.InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
             Load +=
                 delegate
                 {
-                    UpdateCaption();
-                    if (node["EditingAllowed"].Get<bool>())
-                    {
-                        if (DataSource["Object"]["ID"].Get<int>() != 0)
-                            remove.Enabled = true;
-                        else
-                            remove.Enabled = false;
-                        change.Enabled = true;
-                    }
-                    else
-                    {
-                        remove.Enabled = false;
-                        change.Enabled = false;
-                    }
                 };
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            DataBindObjects();
         }
 
         protected void change_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Node node = new Node();
-                node["ParentID"].Value = ParentID;
-                node["ParentPropertyName"].Value = ParentPropertyName;
-                node["ParentType"].Value = ParentFullType;
-                node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "DBAdmin.ChangeComplexInstance",
-                    node);
-
-            }
-            catch (Exception err)
-            {
-                Node node2 = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                node2["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "ShowMessage",
-                    node2);
-            }
-        }
-
-        protected override void ReDataBind()
-        {
-            try
-            {
-                DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
-                DataSource["Object"].UnTie();
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "DBAdmin.UpdateSingleInstance",
-                    DataSource);
-                pnl.Controls.Clear();
-                UpdateCaption();
-                DataBindObjects();
-                pnl.ReRender();
-
-            }
-            catch (Exception err)
-            {
-                Node node2 = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                node2["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "ShowMessage",
-                    node2);
-            }
+            Node node = new Node();
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            node["ParentID"].Value = DataSource["ParentID"].Value;
+            node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
+            node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+            RaiseSafeEvent(
+                "DBAdmin.Form.ChangeObject",
+                node);
         }
 
         protected void remove_Click(object sender, EventArgs e)
         {
-            try
+            Node node = new Node();
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            node["ParentID"].Value = DataSource["ParentID"].Value;
+            node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
+            node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+            RaiseSafeEvent(
+                "DBAdmin.Data.RemoveObject",
+                node);
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        protected void DataBindObjects()
+        {
+            if (DataSource["Object"]["ID"].Get<int>() != 0)
             {
-                DataSource["ID"].Value = DataSource["Object"]["ID"].Value;
-                DataSource["Object"].UnTie();
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "DBAdmin.RemoveReference",
-                    DataSource);
-                (Parent.Parent.Parent as Window).CloseWindow();
+                Label tb = new Label();
+                tb.Tag = "table";
+                tb.CssClass = "viewObjects singleInstance";
+
+                // Header rows
+                tb.Controls.Add(CreateHeaderRow());
+                foreach (Node idxProp in DataSource["Object"]["Properties"])
+                {
+                    tb.Controls.Add(CreateRow(idxProp));
+                }
+                pnl.Controls.Add(tb);
             }
-            catch (Exception err)
+            DataBindDone();
+        }
+
+        protected void DataBindDone()
+        {
+            change.Enabled = DataSource["IsChange"].Get<bool>();
+            remove.Enabled = DataSource["IsRemove"].Get<bool>() &&
+                DataSource.Contains("Object");
+            string parentTypeName = DataSource["ParentFullTypeName"].Get<string>();
+            if (DataSource["ParentID"].Get<int>() > 0)
             {
-                Node node2 = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                node2["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "ShowMessage",
-                    node2);
+                parentTypeName = parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1);
+                if (DataSource.Contains("Object"))
+                {
+                    (Parent.Parent.Parent as Window).Caption = string.Format(
+                        "{0}[{1}] of {2}[{3}]/{4}",
+                        DataSource["TypeName"].Get<string>(),
+                        DataSource["Object"]["ID"].Get<int>(),
+                        parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
+                        DataSource["ParentID"].Value,
+                        DataSource["ParentPropertyName"].Value);
+                }
+                else
+                {
+                    (Parent.Parent.Parent as Window).Caption = string.Format(
+                        "{0}[null] of {1}[{2}]/{3}",
+                        DataSource["TypeName"].Get<string>(),
+                        parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
+                        DataSource["ParentID"].Value,
+                        DataSource["ParentPropertyName"].Value);
+                }
+            }
+            else
+            {
+                (Parent.Parent.Parent as Window).Caption = string.Format(
+                    "{0}[{1}]",
+                    DataSource["TypeName"].Get<string>(),
+                    DataSource["Object"]["ID"].Get<int>());
             }
         }
 
-        protected override void DataBindObjects()
+        private Label CreateRow(Node node)
         {
-            if (DataSource["Object"]["ID"].Get<int>() == 0)
-                return;
-            HtmlTable tb = new HtmlTable();
-            tb.Attributes.Add("class", "viewObjects");
+            Label row = new Label();
+            row.Tag = "tr";
 
-            // Header rows
-            tb.Rows.Add(CreateHeaderRow());
-            tb.Rows.Add(CreateIDRow());
-            foreach (Node idxProp in DataSource["Object"]["Properties"])
-            {
-                tb.Rows.Add(CreateRow(idxProp));
-            }
-            pnl.Controls.Add(tb);
-        }
+            Label c1 = new Label();
+            c1.Tag = "td";
+            c1.CssClass = "columnName";
+            c1.Text = node.Name;
+            row.Controls.Add(c1);
 
-        private HtmlTableRow CreateRow(Node idxProp)
-        {
-            HtmlTableRow row = new HtmlTableRow();
-            HtmlTableCell c1 = new HtmlTableCell();
-            c1.InnerHtml = idxProp.Name;
-            row.Cells.Add(c1);
-            c1 = new HtmlTableCell();
-            c1.InnerHtml = idxProp["TypeName"].Get<string>();
-            row.Cells.Add(c1);
-            c1 = new HtmlTableCell();
-            if (idxProp["IsComplex"].Get<bool>())
+            c1 = new Label();
+            c1.Tag = "td";
+            c1.CssClass = "columnType";
+            c1.Text =
+                DataSource["Type"]["Properties"][node.Name]["TypeName"].Get<string>()
+                    .Replace("<", "&lt;").Replace(">", "&gt;");
+            row.Controls.Add(c1);
+
+            c1 = new Label();
+            c1.Tag = "td";
+            c1.CssClass = "columnType";
+            string text = "";
+            if (!DataSource["Type"]["Properties"][node.Name]["IsOwner"].Get<bool>())
+                text += "IsNotOwner ";
+            if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
+                text += "BelongsTo ";
+            if (!string.IsNullOrEmpty(DataSource["Type"]["Properties"][node.Name]["RelationName"].Get<string>()))
+                text += "'" + DataSource["Type"]["Properties"][node.Name]["RelationName"].Get<string>() + "'";
+            c1.Text = text;
+            row.Controls.Add(c1);
+
+            c1 = new Label();
+            c1.Tag = "td";
+            if (DataSource["Type"]["Properties"][node.Name]["IsComplex"].Get<bool>())
             {
                 LinkButton ed = new LinkButton();
-                ed.Text = idxProp["Value"].Get<string>();
-                ed.Info = idxProp["PropertyName"].Get<string>() + "|" + idxProp["IsList"].Value;
+                ed.Text = node.Value.ToString();
+                ed.Info = node.Name;
                 ed.Click +=
                     delegate(object sender, EventArgs e)
                     {
-                        try
-                        {
-                            LinkButton lb = sender as LinkButton;
-                            string propertyName = lb.Info.Split('|')[0];
-                            bool isList = bool.Parse(lb.Info.Split('|')[1]);
-                            Node node = new Node();
-                            node["ID"].Value = ActiveID;
-                            node["FullTypeName"].Value = FullTypeName;
-                            node["PropertyName"].Value = propertyName;
-                            if (isList)
+                        LinkButton lb = sender as LinkButton;
+                        Label ctrlOld = Magix.UX.Selector.SelectFirst<Label>(lb.Parent.Parent.Parent,
+                            delegate(Control idxCtrl)
                             {
-                                ActiveEvents.Instance.RaiseActiveEvent(
-                                    this,
-                                    "DBAdmin.ViewList",
-                                    node);
-                            }
-                            else
-                            {
-                                ActiveEvents.Instance.RaiseActiveEvent(
-                                    this,
-                                    "DBAdmin.ViewSingleInstance",
-                                    node);
-                            }
-                        }
-                        catch (Exception err)
-                        {
-                            Node node2 = new Node();
-                            while (err.InnerException != null)
-                                err = err.InnerException;
-                            node2["Message"].Value = err.Message;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "ShowMessage",
-                                node2);
-                        }
+                                BaseWebControl ctrl = idxCtrl as BaseWebControl;
+                                if (ctrl != null)
+                                    return ctrl.CssClass == "grid-selected";
+                                return false;
+                            });
+                        if (ctrlOld != null)
+                            ctrlOld.CssClass = "";
+                        (lb.Parent.Parent as Label).CssClass = "grid-selected";
+                        int id = DataSource["Object"]["ID"].Get<int>();
+                        string column = lb.Info;
+                        Node n = new Node();
+                        n["ID"].Value = id;
+                        n["PropertyName"].Value = column;
+                        n["IsList"].Value = DataSource["Type"]["Properties"][column]["IsList"].Value;
+                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                        RaiseSafeEvent(
+                            "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                            n);
                     };
                 c1.Controls.Add(ed);
             }
             else
             {
                 TextAreaEdit ed = new TextAreaEdit();
-                ed.Text = idxProp["Value"].Get<string>();
-                ed.Info = idxProp["PropertyName"].Get<string>();
+                ed.TextLength = 500;
+                ed.Text = node.Value as string;
+                ed.CssClass += " larger";
+                ed.Info = node.Name;
                 ed.TextChanged +=
                     delegate(object sender, EventArgs e)
                     {
-                        try
-                        {
-                            TextAreaEdit edit = sender as TextAreaEdit;
-                            Node node = new Node();
-                            node["ID"].Value = ActiveID;
-                            node["FullTypeName"].Value = FullTypeName;
-                            node["PropertyName"].Value = edit.Info;
-                            node["Value"].Value = edit.Text;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "DBAdmin.ChangeValue",
-                                node);
-                        }
-                        catch (Exception err)
-                        {
-                            Node node2 = new Node();
-                            while (err.InnerException != null)
-                                err = err.InnerException;
-                            node2["Message"].Value = err.Message;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
-                                "ShowMessage",
-                                node2);
-                        }
+                        TextAreaEdit edit = sender as TextAreaEdit;
+                        int id = DataSource["Object"]["ID"].Get<int>();
+                        string column = edit.Info;
+                        Node n = new Node();
+                        n["ID"].Value = id;
+                        n["PropertyName"].Value = column;
+                        n["NewValue"].Value = edit.Text;
+                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                        RaiseSafeEvent(
+                            "DBAdmin.Data.ChangeSimplePropertyValue",
+                            n);
                     };
                 c1.Controls.Add(ed);
             }
-            row.Cells.Add(c1);
-            return row;
-        }
-
-        private HtmlTableRow CreateIDRow()
-        {
-            HtmlTableRow row = new HtmlTableRow();
-            HtmlTableCell c1 = new HtmlTableCell();
-            c1.InnerHtml = "ID";
-            row.Cells.Add(c1);
-            c1 = new HtmlTableCell();
-            c1.InnerHtml = "Int32";
-            row.Cells.Add(c1);
-            c1 = new HtmlTableCell();
-            c1.InnerHtml = this.ActiveID.ToString();
-            row.Cells.Add(c1);
+            row.Controls.Add(c1);
             return row;
         }
 
@@ -258,27 +219,58 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             HtmlTableRow row = new HtmlTableRow();
             row.Attributes.Add("class", "header");
+
             HtmlTableCell c1 = new HtmlTableCell();
             c1.InnerHtml = "Name";
             row.Cells.Add(c1);
+
             c1 = new HtmlTableCell();
             c1.InnerHtml = "Type";
             row.Cells.Add(c1);
+
+            c1 = new HtmlTableCell();
+            c1.InnerHtml = "Attributes";
+            row.Cells.Add(c1);
+
             c1 = new HtmlTableCell();
             c1.InnerHtml = "Value";
             row.Cells.Add(c1);
             return row;
         }
 
-        [ActiveEvent(Name = "DBAdmin.InstanceWasSelected")]
-        protected void DBAdmin_InstanceWasSelected(object sender, ActiveEventArgs e)
+        protected override void ReDataBind()
         {
-            string idOfWindow = e.Params["WindowID"].Get<string>();
-            Window th = this.Parent.Parent.Parent as Window;
-            if (th.ID == idOfWindow)
+            if (DataSource["ParentID"].Get<int>() > 0)
             {
-                th.CloseWindow();
+                DataSource["Object"].UnTie();
+                DataSource["Type"].UnTie();
+                if (RaiseSafeEvent(
+                    "DBAdmin.Data.GetObjectFromParentProperty",
+                    DataSource))
+                {
+                    pnl.Controls.Clear();
+                    DataBindObjects();
+                    pnl.ReRender();
+                }
             }
+            else
+            {
+                if (!DataSource.Contains("Object"))
+                    return;
+                DataSource["ID"].Value = DataSource["Object"]["ID"].Get<int>();
+                DataSource["Object"].UnTie();
+                DataSource["Type"].UnTie();
+                if (RaiseSafeEvent(
+                    "DBAdmin.Data.GetObject",
+                    DataSource))
+                {
+                    pnl.Controls.Clear();
+                    DataBindObjects();
+                    pnl.ReRender();
+                }
+            }
+            new EffectHighlight(pnl.Parent.Parent.Parent, 500)
+                .Render();
         }
     }
 }

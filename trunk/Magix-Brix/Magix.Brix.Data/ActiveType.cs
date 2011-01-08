@@ -62,6 +62,10 @@ namespace Magix.Brix.Data
          */
         public static int CountWhere(params Criteria[] args)
         {
+            if (args != null && args.Length > 0 && args[0] is CritID)
+            {
+                return args.Length;
+            }
             return Adapter.Instance.CountWhere(typeof(T), args);
         }
 
@@ -90,7 +94,14 @@ namespace Magix.Brix.Data
          */
         public static T SelectFirst(params Criteria[] args)
         {
-            return (T)Adapter.Instance.SelectFirst(typeof(T), null, args);
+            if (args != null && args.Length > 0 && args[0] is CritID)
+            {
+                return SelectByID((int)args[0].Value);
+            }
+            else
+            {
+                return (T)Adapter.Instance.SelectFirst(typeof(T), null, args);
+            }
         }
 
         /**
@@ -100,9 +111,19 @@ namespace Magix.Brix.Data
          */
         public static IEnumerable<T> Select(params Criteria[] args)
         {
-            foreach (object idx in Adapter.Instance.Select(typeof(T), null, args))
+            if (args != null && args.Length > 0 && args[0] is CritID)
             {
-                yield return (T)idx;
+                foreach (CritID idx in args)
+                {
+                    yield return (T)Adapter.Instance.SelectByID(typeof(T), (int)idx.Value);
+                }
+            }
+            else
+            {
+                foreach (object idx in Adapter.Instance.Select(typeof(T), null, args))
+                {
+                    yield return (T)idx;
+                }
             }
         }
 

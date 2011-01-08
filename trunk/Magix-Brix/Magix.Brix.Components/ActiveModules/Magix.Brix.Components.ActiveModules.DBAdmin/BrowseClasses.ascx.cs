@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix-BRIX - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix-BRIX is licensed as GPLv3.
  */
 
 using System;
@@ -13,55 +13,35 @@ using Magix.UX.Effects;
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
     [ActiveModule]
-    public class BrowseClasses : System.Web.UI.UserControl, IModule
+    public class BrowseClasses : Module, IModule
     {
         protected TreeView tree;
         protected Window wnd;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
             Load +=
                 delegate
                 {
-                    try
-                    {
-                        Node tmp = new Node();
-                        ActiveEvents.Instance.RaiseActiveEvent(
-                            this,
-                            "DBAdmin.BrowseClassHierarchy",
-                            tmp);
-                        DataBase = tmp;
-                    }
-                    catch (Exception err)
-                    {
-                        Node node2 = new Node();
-                        while (err.InnerException != null)
-                            err = err.InnerException;
-                        node2["Message"].Value = err.Message;
-                        ActiveEvents.Instance.RaiseActiveEvent(
-                            this,
-                            "ShowMessage",
-                            node2);
-                    }
+                    Node tmp = new Node();
+                    RaiseSafeEvent(
+                        "DBAdmin.Data.GetClassHierarchy",
+                        tmp);
+                    DataSource = tmp;
                 };
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (DataBase != null)
+            if (DataSource != null)
                 DataBindWholeTree();
         }
 
         private void DataBindWholeTree()
         {
-            DataBindTree(DataBase["Classes"], tree);
-        }
-
-        private Node DataBase
-        {
-            get { return ViewState["DataBase"] as Node; }
-            set { ViewState["DataBase"] = value; }
+            DataBindTree(DataSource["Classes"], tree);
         }
 
         private void DataBindTree(Node tmp, System.Web.UI.Control ctrl)
@@ -101,49 +81,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             string classFullName = it.Info;
             if (classFullName.IndexOf("Leaf:") == 0)
             {
-                try
-                {
-                    // Class ...!
-                    // Showing the ViewContens Form
-                    Node node = new Node();
-                    node["FullTypeName"].Value = classFullName.Replace("Leaf:", "");
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "DBAdmin.ViewContents",
-                        node);
-                }
-                catch (Exception err)
-                {
-                    Node node2 = new Node();
-                    while (err.InnerException != null)
-                        err = err.InnerException;
-                    node2["Message"].Value = err.Message;
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "ShowMessage",
-                        node2);
-                }
+                // Class ...!
+                // Showing the ViewClassContens Form
+                Node node = new Node();
+                node["FullTypeName"].Value = classFullName.Replace("Leaf:", "");
+                RaiseSafeEvent(
+                    "DBAdmin.Form.ViewClass",
+                    node);
             }
+        }
+
+        protected override void ReDataBind()
+        {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

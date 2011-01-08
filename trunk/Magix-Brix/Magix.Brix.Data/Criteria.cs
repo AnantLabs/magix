@@ -68,6 +68,14 @@ namespace Magix.Brix.Data
         }
 
         /**
+         * Static constructor to create a criteria of type CritID.
+         */
+        public static Criteria Id(int id)
+        {
+            return new CritID(id);
+        }
+
+        /**
          * Static constructor to create a criteria of type LikeNotEquals.
          */
         public static Criteria NotLike(string propertyName, string value)
@@ -234,6 +242,16 @@ namespace Magix.Brix.Data
     {
         public LikeEquals(string propertyName, string value)
             : base(propertyName, value)
+        { }
+    }
+
+    /**
+     * Specific ID for instance ...
+     */
+    public class CritID : Criteria
+    {
+        public CritID(int id)
+            : base(null, id)
         { }
     }
 
