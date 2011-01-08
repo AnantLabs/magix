@@ -159,6 +159,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 LinkButton ed = new LinkButton();
                 ed.Text = node.Value.ToString();
                 ed.Info = node.Name;
+                if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
+                    ed.CssClass = "belongsTo";
                 ed.Click +=
                     delegate(object sender, EventArgs e)
                     {
