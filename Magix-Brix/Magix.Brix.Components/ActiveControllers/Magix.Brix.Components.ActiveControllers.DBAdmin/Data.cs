@@ -140,7 +140,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["PropertyName"].Value = propertyName;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.DynamicType.GetObjectPropertyNode",
+                    "DBAdmin.DynamicType.GetComplexPropertyFromObjectNode",
                     node);
             }
             else
@@ -185,7 +185,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["End"].Value = end;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.DynamicType.GetObjectPropertyNode",
+                    "DBAdmin.DynamicType.GetComplexPropertyFromListObjectNode",
                     node);
             }
             else
@@ -384,7 +384,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["NewValue"].Value = newValue;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.DynamicType.GetObjectsNode",
+                    "DBAdmin.DynamicType.UpdatePropertyValue",
                     node);
             }
             else
@@ -413,6 +413,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
+        // TODO: Refactor, doesn't support Dynamic Types, referenced in GetFilterForColumn ...!
         public Type GetType(string typeName)
         {
             return (new List<Type>(PluginLoader.Instance.ActiveTypes))
@@ -429,24 +430,39 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             string newValue)
         {
             Type type = GetType(fullTypeName);
-            MethodInfo setter =
-                type.GetProperty(
-                    propertyName,
-                    BindingFlags.Public |
+            if (type == null)
+            {
+                Node node = new Node();
+                node["ID"].Value = id;
+                node["FullTypeName"].Value = fullTypeName;
+                node["PropertyName"].Value = propertyName;
+                node["NewValue"].Value = newValue;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.DynamicType.ChangeValue",
+                    node);
+            }
+            else
+            {
+                MethodInfo setter =
+                    type.GetProperty(
+                        propertyName,
+                        BindingFlags.Public |
+                        BindingFlags.Instance |
+                        BindingFlags.NonPublic)
+                    .GetSetMethod(true);
+                object obj = GetObject(id, fullTypeName);
+                object valueChanged = Convert.ChangeType(
+                    newValue,
+                    setter.GetParameters()[0].ParameterType);
+                setter.Invoke(obj, new object[] { valueChanged });
+                type.GetMethod(
+                    "Save",
                     BindingFlags.Instance |
+                    BindingFlags.Public |
                     BindingFlags.NonPublic)
-                .GetSetMethod(true);
-            object obj = GetObject(id, fullTypeName);
-            object valueChanged = Convert.ChangeType(
-                newValue,
-                setter.GetParameters()[0].ParameterType);
-            setter.Invoke(obj, new object[] { valueChanged });
-            type.GetMethod(
-                "Save",
-                BindingFlags.Instance |
-                BindingFlags.Public |
-                BindingFlags.NonPublic)
-                .Invoke(obj, null);
+                    .Invoke(obj, null);
+            }
         }
 
         public List<Criteria> GetCriteria(string fullTypeName)
@@ -552,7 +568,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["FullTypeName"].Value = fullTypeName;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.CreateObject",
+                    "DBAdmin.DynamicType.CreateObject",
                     node);
                 return node["ID"].Get<int>();
             }
@@ -565,59 +581,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        private int GetID(object obj, Type type)
-        {
-            return (int)type.GetProperty("ID").GetGetMethod().Invoke(obj, null);
-        }
-
-        private Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> GetMethodInfos(
-            string typeNamey)
-        {
-            Type type = GetType(typeNamey);
-            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> retVal =
-                new Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>>();
-            foreach (PropertyInfo idx in type.GetProperties())
-            {
-                ActiveFieldAttribute[] attrs =
-                    idx.GetCustomAttributes(
-                        typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
-                if (attrs != null && attrs.Length > 0)
-                {
-                    // Serializable property...
-                    retVal[idx.Name] =
-                        new Tuple<MethodInfo, ActiveFieldAttribute>(
-                            idx.GetGetMethod(true),
-                            attrs[0]);
-                }
-            }
-            return retVal;
-        }
-
-        private object GetObject(int id, string typeName)
-        {
-            Type type = GetType(typeName);
-            if (type == null)
-            {
-                Node node = new Node();
-                node["FullTypeName"].Value = type.FullName;
-                node["ID"].Value = id;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "DBAdmin.GetObject",
-                    node);
-                return node["Value"].Value;
-            }
-            else
-            {
-                return type.GetMethod(
-                    "SelectByID",
-                    BindingFlags.Public |
-                    BindingFlags.FlattenHierarchy |
-                    BindingFlags.Static).Invoke(null, new object[] { id });
-            }
-        }
-
-        internal void AppendObjectToParentPropertyList(
+        public void AppendObjectToParentPropertyList(
             int id,
             string fullTypeName,
             int parentId,
@@ -635,7 +599,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["ParentFullTypeName"].Value = parentFullTypeName;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.AppendObjectToParentPropertyList",
+                    "DBAdmin.DynamicType.AppendObjectToParentPropertyList",
                     node);
             }
             else
@@ -664,7 +628,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        internal void ChangeObjectReference(
+        public void ChangeObjectReference(
             int id,
             string fullTypeName,
             int parentId,
@@ -682,7 +646,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["ParentFullTypeName"].Value = parentFullTypeName;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.ChangeObjectReference",
+                    "DBAdmin.DynamicType.ChangeObjectReference",
                     node);
             }
             else
@@ -704,7 +668,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        internal void RemoveObjectFromParentPropertyList(
+        public void RemoveObjectFromParentPropertyList(
             int id,
             string fullTypeName,
             int parentId,
@@ -751,7 +715,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        internal void RemoveObjectFromParentProperty(
+        public void RemoveObjectFromParentProperty(
             string fullTypeName,
             int parentId,
             string parentPropertyName,
@@ -767,7 +731,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["ParentFullTypeName"].Value = parentFullTypeName;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.RemoveObjectFromParentPropertyList",
+                    "DBAdmin.RemoveObjectFromParentProperty",
                     node);
             }
             else
@@ -786,6 +750,58 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.Instance |
                     BindingFlags.Public)
                     .Invoke(parent, null);
+            }
+        }
+
+        private int GetID(object obj, Type type)
+        {
+            return (int)type.GetProperty("ID").GetGetMethod().Invoke(obj, null);
+        }
+
+        private Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> GetMethodInfos(
+            string typeNamey)
+        {
+            Type type = GetType(typeNamey);
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> retVal =
+                new Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>>();
+            foreach (PropertyInfo idx in type.GetProperties())
+            {
+                ActiveFieldAttribute[] attrs =
+                    idx.GetCustomAttributes(
+                        typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
+                if (attrs != null && attrs.Length > 0)
+                {
+                    // Serializable property...
+                    retVal[idx.Name] =
+                        new Tuple<MethodInfo, ActiveFieldAttribute>(
+                            idx.GetGetMethod(true),
+                            attrs[0]);
+                }
+            }
+            return retVal;
+        }
+
+        private object GetObject(int id, string typeName)
+        {
+            Type type = GetType(typeName);
+            if (type == null)
+            {
+                Node node = new Node();
+                node["FullTypeName"].Value = typeName;
+                node["ID"].Value = id;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.DynamicType.GetObject",
+                    node);
+                return node["Value"].Value;
+            }
+            else
+            {
+                return type.GetMethod(
+                    "SelectByID",
+                    BindingFlags.Public |
+                    BindingFlags.FlattenHierarchy |
+                    BindingFlags.Static).Invoke(null, new object[] { id });
             }
         }
     }
