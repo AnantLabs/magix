@@ -431,6 +431,43 @@ have relationships towards other instances in your database.</p>";
             ActiveEvents.Instance.RaiseClearControls("child");
         }
 
+        [ActiveEvent(Name = "DBAdmin.Form.RemoveObjectFromParentPropertyList")]
+        protected void DBAdmin_Form_RemoveObjectFromParentPropertyList(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentFullTypeName = e.Params["ParentFullTypeName"].Get<string>();
+
+            string typeName = fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1);
+            Node node = new Node();
+            node["Caption"].Value = @"
+Please confirm removal of " + typeName + " with ID of " + id;
+            node["Text"].Value = @"
+<p>Are you sure you wish to remove this object? 
+Removal is permanent, and cannot be undone! 
+Removal of this object <span style=""color:Red;font-weight:bold;"">might also trigger 
+deletion of the object, and all its child objects</span>, since it may 
+have relationships towards other instances in your database, and be owned by the 
+collection you're removing it from.</p>";
+            node["OK"]["ID"].Value = id;
+            node["OK"]["FullTypeName"].Value = fullTypeName;
+            node["OK"]["ParentID"].Value = parentId;
+            node["OK"]["ParentPropertyName"].Value = parentPropertyName;
+            node["OK"]["ParentFullTypeName"].Value = parentFullTypeName;
+            node["OK"]["Event"].Value = "DBAdmin.Data.RemoveObjectFromParentPropertyList";
+            node["Cancel"]["Event"].Value = "DBAdmin.Data.DoNotRemoveObjectFromParentPropertyList";
+            node["ForcedSize"]["width"].Value = 550;
+            node["ForcedSize"]["height"].Value = 180;
+            node["WindowCssClass"].Value =
+                "mux-shaded mux-rounded window-left-buttons window-left-no-margin";
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
         [ActiveEvent(Name = "DBAdmin.Data.RemoveObjectFromParentPropertyList")]
         protected void DBAdmin_Data_RemoveObjectFromParentPropertyList(object sender, ActiveEventArgs e)
         {
@@ -446,6 +483,9 @@ have relationships towards other instances in your database.</p>";
                 parentId,
                 parentPropertyName,
                 parentFullTypeName);
+
+            // Closing current form ...
+            ActiveEvents.Instance.RaiseClearControls("child");
         }
 
         [ActiveEvent(Name = "DBAdmin.Form.ChangeObject")]

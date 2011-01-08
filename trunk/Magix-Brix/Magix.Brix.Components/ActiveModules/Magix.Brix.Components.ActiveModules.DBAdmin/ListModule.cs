@@ -317,8 +317,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         n["ParentID"].Value = DataSource["ParentID"].Value;
                         n["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
                         n["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
-                        if (RaiseSafeEvent("DBAdmin.Data.RemoveObjectFromParentPropertyList", n))
-                            ReDataBind();
+                        RaiseSafeEvent("DBAdmin.Form.RemoveObjectFromParentPropertyList", n);
                     };
                 cS.Controls.Add(lb2);
                 row.Controls.Add(cS);
