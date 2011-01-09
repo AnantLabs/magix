@@ -146,6 +146,14 @@ namespace Magix.Brix.Data
         {
             return new SortOn(colName, ascending);
         }
+
+        /**
+         * Static constructor to create a criteria of type Range.
+         */
+        public static Criteria Range(int start, int end, string sortColumn)
+        {
+            return new CritRange(start, end, sortColumn);
+        }
     }
 
     /**
@@ -179,6 +187,36 @@ namespace Magix.Brix.Data
         public bool Ascending
         {
             get { return _ascending; }
+        }
+    }
+
+    public class CritRange : Criteria
+    {
+        private int _start;
+        private int _end;
+        private string _sortColumn;
+
+        public CritRange(int start, int end, string sortColumn)
+            : base(sortColumn, null)
+        {
+            _start = start;
+            _end = end;
+            _sortColumn = sortColumn;
+        }
+
+        public int Start
+        {
+            get { return _start; }
+        }
+
+        public int End
+        {
+            get { return _end; }
+        }
+
+        public string SortColumn
+        {
+            get { return _sortColumn; }
         }
     }
 
