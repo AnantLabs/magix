@@ -102,16 +102,27 @@ namespace Magix.Brix.Data.Internal
             }
         }
 
-        protected string CreateSelectStatementForDocument(Type type, string propertyName, Criteria[] args)
+        protected string CreateSelectStatementForDocument(
+            Type type, 
+            string propertyName, 
+            Criteria[] args)
         {
             string retVal = "";
             string join = "";
             string where = "";
             string order = "";
+            bool hasRange = false;
+            bool hasSort = false;
+            CritRange range = null;
             foreach (Criteria idx in args)
             {
                 if (idx is SortOn)
                 {
+                    if (hasSort)
+                        throw new ApplicationException("You cannot have two sorts in the same select query ...");
+                    if (hasRange)
+                        throw new ApplicationException("You cannot have two both sort and range in the same select query ...");
+                    hasSort = true;
                     SortOn tmp = idx as SortOn;
                     string propName = (string)tmp.Value;
                     bool ascending = tmp.Ascending;
@@ -139,16 +150,65 @@ namespace Magix.Brix.Data.Internal
                     where += " and prop.FK_Document = d.ID and prop.Name = 'prop" + propName + "'";
                     order += " order by prop.Value " + (ascending ? "asc" : "desc");
                 }
+                else if (idx is CritRange)
+                {
+                    if (hasSort)
+                        throw new ApplicationException("You cannot have two both sort and range in the same select query ...");
+                    if (hasRange)
+                        throw new ApplicationException("You cannot have two ranges in the same select query ...");
+                    range = idx as CritRange;
+                    hasRange = true;
+                }
             }
-            retVal += "select d.ID from " + TablePrefix + "Documents as d";
-            retVal += join;
-            retVal += CreateCriteriasForDocument(type, propertyName, args);
-            retVal += where;
-            retVal += order;
+            if (hasRange)
+            {
+                int start = range.Start;
+                int end = range.End;
+                string sortColumn = range.SortColumn;
+                if (start >= end)
+                    throw new ApplicationException("End must be higher than Start in your select query ...");
+                int delta = end - start;
+                if (start == 0)
+                {
+                    retVal += string.Format(@"
+select top {4} d.ID from {0}Documents as d {1}{2}{3}",
+                        TablePrefix,
+                        join,
+                        CreateCriteriasForDocument(type, propertyName, args),
+                        where,
+                        end);
+                }
+                else
+                {
+                    retVal += string.Format(@"
+select ID from (select top {6} ID from (
+    select top {5} d.ID from {0}Documents as d {1}{2}{3} 
+    order by {4}) as Tbl1
+order by {4} desc) as Tbl2 order by {4}",
+                        TablePrefix,
+                        join,
+                        CreateCriteriasForDocument(type, propertyName, args),
+                        where,
+                        sortColumn,
+                        end,
+                        delta);
+                }
+            }
+            else
+            {
+                retVal += "select d.ID from " + TablePrefix + "Documents as d";
+                retVal += join;
+                retVal += CreateCriteriasForDocument(type, propertyName, args);
+                retVal += where;
+                retVal += order;
+            }
             return retVal;
         }
 
-        protected string CreateCriteriasForDocument(Type type, string propertyName, Criteria[] args)
+        protected string CreateCriteriasForDocument(
+            Type type, 
+            string propertyName, 
+            Criteria[] args)
         {
             string where = "";
             string order = "";
@@ -172,6 +232,10 @@ namespace Magix.Brix.Data.Internal
                 foreach (Criteria idx in args)
                 {
                     if (idx is SortOn)
+                    {
+                        ; // Intentionally drop over...
+                    }
+                    if (idx is CritRange)
                     {
                         ; // Intentionally drop over...
                     }

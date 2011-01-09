@@ -324,16 +324,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         public void GetObjectsNode(
             string typeName, 
             Node node, 
-            int start, 
-            int end,
+            int startAt, 
+            int endAt,
             Criteria[] pars)
         {
             Type type = GetType(typeName);
             if (type == null)
             {
                 node["FullTypeName"].Value = typeName;
-                node["Start"].Value = start;
-                node["End"].Value = end;
+                node["Start"].Value = startAt;
+                node["End"].Value = endAt;
                 node["Criteria"].Value = pars;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
@@ -347,23 +347,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.Static |
                     BindingFlags.FlattenHierarchy |
                     BindingFlags.Public);
-                if (pars == null)
-                    pars = new Criteria[0];
+                List<Criteria> parameters = new List<Criteria>(pars);
+                parameters.Add(Criteria.Range(startAt, endAt, "ID"));
                 IEnumerable enumer =
-                    ret.Invoke(null, new object[] { pars }) as IEnumerable;
+                    ret.Invoke(null, new object[] { parameters.ToArray() }) as IEnumerable;
                 Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
                     GetMethodInfos(typeName);
-                int idxNo = 0;
                 foreach (object idx in enumer)
                 {
-                    if (idxNo >= start)
-                    {
-                        int id = GetID(idx, type);
-                        GetObjectNode(idx, typeName, node["Objects"]["O-" + id]);
-                    }
-                    idxNo += 1;
-                    if (idxNo >= end)
-                        break;
+                    int id = GetID(idx, type);
+                    GetObjectNode(idx, typeName, node["Objects"]["O-" + id]);
                 }
             }
         }

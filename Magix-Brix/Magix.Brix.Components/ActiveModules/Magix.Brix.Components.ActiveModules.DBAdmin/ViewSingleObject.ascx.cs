@@ -191,27 +191,88 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
             else
             {
-                TextAreaEdit ed = new TextAreaEdit();
-                ed.TextLength = 500;
-                ed.Text = node.Value as string;
-                ed.CssClass += " larger";
-                ed.Info = node.Name;
-                ed.TextChanged +=
-                    delegate(object sender, EventArgs e)
-                    {
-                        TextAreaEdit edit = sender as TextAreaEdit;
-                        int id = DataSource["Object"]["ID"].Get<int>();
-                        string column = edit.Info;
-                        Node n = new Node();
-                        n["ID"].Value = id;
-                        n["PropertyName"].Value = column;
-                        n["NewValue"].Value = edit.Text;
-                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                        RaiseSafeEvent(
-                            "DBAdmin.Data.ChangeSimplePropertyValue",
-                            n);
-                    };
-                c1.Controls.Add(ed);
+                switch (DataSource["Type"]["Properties"][node.Name]["FullTypeName"].Get<string>())
+                {
+                    case "System.DateTime":
+                        {
+                            TextBox b = new TextBox();
+                            b.Text = node.Value as string;
+                            c1.Controls.Add(b);
+                            Panel pp = new Panel();
+                            Calendar cal = new Calendar();
+                            cal.Info = node.Name;
+                            cal.DateSelected +=
+                                delegate(object sender, EventArgs e)
+                                {
+                                    Calendar edit = sender as Calendar;
+                                    DateTime value = edit.Value.Date;
+                                    DateTime hours = DateTime.ParseExact(
+                                        (edit.Parent.Parent.Controls[0] as TextBox).Text,
+                                        "yyyy.MM.dd HH:mm:ss",
+                                        System.Globalization.CultureInfo.InvariantCulture);
+                                    value = 
+                                        new DateTime(
+                                            value.Year, 
+                                            value.Month, 
+                                            value.Day, 
+                                            hours.Hour, 
+                                            hours.Minute, 
+                                            hours.Second);
+                                    cal.Value = value;
+                                    (edit.Parent.Parent.Controls[0] as TextBox).Text = 
+                                        value.ToString("yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                    int id = DataSource["Object"]["ID"].Get<int>();
+                                    string column = edit.Info;
+                                    Node n = new Node();
+                                    n["ID"].Value = id;
+                                    n["PropertyName"].Value = column;
+                                    n["NewValue"].Value = value.ToString("yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                    n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                    RaiseSafeEvent(
+                                        "DBAdmin.Data.ChangeSimplePropertyValue",
+                                        n);
+                                };
+                            cal.CssClass = "mux-shaded mux-rounded mux-calendar";
+                            pp.Style[Styles.position] = "absolute";
+                            pp.Style[Styles.zIndex] = "500";
+                            pp.Style[Styles.display] = "none";
+                            b.ClickEffect =
+                                new EffectFadeIn(pp, 250);
+                            cal.Value = 
+                                DateTime.ParseExact(
+                                    b.Text,
+                                    "yyyy.MM.dd HH:mm:ss", 
+                                    System.Globalization.CultureInfo.InvariantCulture);
+                            pp.MouseOutEffect =
+                                new EffectFadeOut(pp, 250);
+                            pp.Controls.Add(cal);
+                            c1.Controls.Add(pp);
+                        } break;
+                    default:
+                        {
+                            TextAreaEdit ed = new TextAreaEdit();
+                            ed.TextLength = 500;
+                            ed.Text = node.Value as string;
+                            ed.CssClass += " larger";
+                            ed.Info = node.Name;
+                            ed.TextChanged +=
+                                delegate(object sender, EventArgs e)
+                                {
+                                    TextAreaEdit edit = sender as TextAreaEdit;
+                                    int id = DataSource["Object"]["ID"].Get<int>();
+                                    string column = edit.Info;
+                                    Node n = new Node();
+                                    n["ID"].Value = id;
+                                    n["PropertyName"].Value = column;
+                                    n["NewValue"].Value = edit.Text;
+                                    n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                    RaiseSafeEvent(
+                                        "DBAdmin.Data.ChangeSimplePropertyValue",
+                                        n);
+                                };
+                            c1.Controls.Add(ed);
+                        } break;
+                }
             }
             row.Controls.Add(c1);
             return row;
