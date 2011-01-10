@@ -117,8 +117,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void FilterMethod(object sender, EventArgs e)
         {
+            LinkButton btn = sender as LinkButton;
             Node node = new Node();
-            node["PropertyName"].Value = (sender as LinkButton).Info;
+            node["PropertyName"].Value = btn.Info;
             node["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>();
             RaiseSafeEvent(
                 "DBAdmin.Form.GetFilterForColumn",
@@ -189,7 +190,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     continue;
                 Label l = new Label();
                 l.Tag = "td";
-                if (idx["IsComplex"].Get<bool>() || DataSource["IsFilter"].Get<bool>() == false)
+                if (!DataSource["IsFilter"].Get<bool>())
                 {
                     l.Text = idx.Name;
                     string toolTip = "";
@@ -207,7 +208,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         Settings.Instance.Get(
                             "DBAdmin.Filter." +
                             DataSource["FullTypeName"].Get<string>() + ":" + idx.Name, "");
-                    b.ToolTip = "Click to filter ";
+                    b.ToolTip = "Click to filter. ";
                     if (idx["BelongsTo"].Get<bool>())
                         b.ToolTip += "BelongsTo ";
                     if (!string.IsNullOrEmpty(idx["RelationName"].Get<string>()))
@@ -399,11 +400,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             {
                                 if (id != SelectedID)
                                 {
-                                    Selector.SelectFirst<Label>(this,
+                                    Label lblx = Selector.SelectFirst<Label>(this,
                                         delegate(Control idxCtrl)
                                         {
                                             return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                        }).CssClass = "";
+                                        });
+                                    if (lblx != null)
+                                        lblx.CssClass = "";
                                 }
                             }
                             SelectedID = id;

@@ -13,18 +13,40 @@
 </mux:Panel>
 <mux:Button
     runat="server"
+    OnClick="FirstItems"
+    CssClass="pagingButton firstPagingButton"
+    Text="&lt;&lt;"
+    ToolTip="First items"
+    id="beginning" />
+
+<mux:Button
+    runat="server"
     OnClick="PreviousItems"
+    CssClass="pagingButton"
+    Text="&lt;"
+    ToolTip="Previous items"
     id="previous" />
 
 <mux:Button
     runat="server"
     OnClick="NextItems"
+    CssClass="pagingButton"
+    Text="&gt;"
+    ToolTip="Next items"
     id="next" />
 
 <mux:Button
     runat="server"
-    Text="Create new item..."
+    OnClick="EndItems"
+    CssClass="pagingButton"
+    Text="&gt;&gt;"
+    ToolTip="Last items"
+    id="end" />
+
+<mux:Button
+    runat="server"
     OnClick="CreateItem"
+    Text="Create new item..."
     id="create" />
 
 

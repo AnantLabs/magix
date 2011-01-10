@@ -235,7 +235,7 @@ order by {4} desc) as Tbl2 order by {4}",
                     {
                         ; // Intentionally drop over...
                     }
-                    if (idx is CritRange)
+                    else if (idx is CritRange)
                     {
                         ; // Intentionally drop over...
                     }

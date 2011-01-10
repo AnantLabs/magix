@@ -316,8 +316,8 @@ have relationships towards other instances in your database.</p>";
             node["Cancel"]["FullTypeName"].Value = fullTypeName;
             node["ForcedSize"]["width"].Value = 550;
             node["ForcedSize"]["height"].Value = 180;
-            node["WindowCssClass"].Value = 
-                "mux-shaded mux-rounded window-left-buttons window-left-no-margin";
+            node["WindowCssClass"].Value =
+                "mux-shaded mux-rounded";
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
                 "child",
@@ -366,7 +366,7 @@ have relationships towards other instances in your database.</p>";
             node["IsFilter"].Value = true;
             node["Start"].Value = 0;
             node["End"].Value = node["Objects"].Count;
-            int count = Data.Instance.GetCount(fullTypeName, null);
+            int count = Data.Instance.GetCount(fullTypeName, pars.ToArray());
             node["SetCount"].Value = count;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
@@ -461,7 +461,7 @@ collection you're removing it from.</p>";
             node["ForcedSize"]["width"].Value = 550;
             node["ForcedSize"]["height"].Value = 180;
             node["WindowCssClass"].Value =
-                "mux-shaded mux-rounded window-left-buttons window-left-no-margin";
+                "mux-shaded mux-rounded";
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
                 "child",
