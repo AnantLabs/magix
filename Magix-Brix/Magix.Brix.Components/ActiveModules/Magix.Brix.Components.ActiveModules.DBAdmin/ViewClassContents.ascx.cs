@@ -22,6 +22,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button previous;
         protected Button next;
         protected Button create;
+        protected Button end;
+        protected Button beginning;
 
         public override void InitialLoading(Node node)
         {
@@ -30,6 +32,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 delegate
                 {
                 };
+        }
+
+        protected void FirstItems(object sender, EventArgs e)
+        {
+            DataSource["Start"].Value = 0;
+            DataSource["End"].Value = 
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+            ReDataBind();
         }
 
         protected void PreviousItems(object sender, EventArgs e)
@@ -52,13 +62,20 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataSource["Start"].Value =
                     Math.Min(
                         DataSource["SetCount"].Get<int>() - 1,
-                        DataSource["Start"].Get<int>() + 
+                        DataSource["Start"].Get<int>() +
                             DataSource["Objects"].Count);
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+            ReDataBind();
+        }
+
+        protected void EndItems(object sender, EventArgs e)
+        {
+            DataSource["Start"].Value = Math.Max(0, DataSource["SetCount"].Get<int>() - 10);
+            DataSource["End"].Value = DataSource["SetCount"].Get<int>();
             ReDataBind();
         }
 
@@ -84,26 +101,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 ((int)DataSource["Start"].Value) + 1,
                 DataSource["End"].Get<int>(),
                 DataSource["SetCount"].Get<int>());
-            string previousText = "Previous";
-            if (DataSource["Start"].Get<int>() > 0)
-            {
-                previous.Enabled = true;
-            }
-            else
-            {
-                previous.Enabled = false;
-            }
-            previous.Text = previousText;
-            string nextText = "Next";
-            if (DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>())
-            {
-                next.Enabled = true;
-            }
-            else
-            {
-                next.Enabled = false;
-            }
-            next.Text = nextText;
+            previous.Enabled = 
+                DataSource["Start"].Get<int>() > 0;
+            next.Enabled = 
+                DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
+            end.Visible = DataSource["SetCount"].Get<int>() > 20;
+            beginning.Visible = DataSource["SetCount"].Get<int>() > 20;
+            beginning.Enabled = DataSource["Start"].Get<int>() > 0;
+            end.Enabled =
+                DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
         }
 
         protected override void RefreshWindowContent(object sender, ActiveEventArgs e)

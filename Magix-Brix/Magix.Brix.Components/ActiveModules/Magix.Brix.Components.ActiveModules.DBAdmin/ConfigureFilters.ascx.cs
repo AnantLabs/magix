@@ -62,23 +62,39 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     CreateNormalCriteria();
                     break;
                 default:
-                    CreateNotSupportedText();
+                    CreateComplexCriteria();
                     break;
             }
         }
 
-        private void CreateNotSupportedText()
+        private void CreateComplexCriteria()
         {
             Label l = new Label();
-            l.Text = "Criteria on Complex Objects are yet not supported...";
+            l.Text = "In or has: ";
             pnl.Controls.Add(l);
-            Button cancel = Selector.FindControl<Button>(this.Parent.Parent.Parent, "cancel");
-            Button ok = Selector.FindControl<Button>(this.Parent.Parent.Parent, "ok");
-            new EffectTimeout(500)
-                .ChainThese(
-                    new EffectFocusAndSelect(cancel))
-                .Render();
-            ok.Enabled = false;
+
+            equals = new TextBox();
+            equals.ID = "t";
+            equals.Text = Settings.Instance.Get(
+                "DBAdmin.Filter." +
+                DataSource["FullTypeName"].Get<string>() +
+                ":" +
+                DataSource["PropertyName"].Value, "");
+            if (!string.IsNullOrEmpty(equals.Text))
+                equals.Text = equals.Text.Split('|')[1];
+            pnl.Controls.Add(equals);
+
+            l = new Label();
+            l.Text = @"<p style=""margin-top:10px;"">Type in the ID of the 
+Document you want to filter by.</p>";
+            pnl.Controls.Add(l);
+            if (_isFirst)
+            {
+                new EffectTimeout(250)
+                    .ChainThese(
+                        new EffectFocusAndSelect(equals))
+                    .Render();
+            }
         }
 
         private void CreateNormalCriteria()
@@ -208,48 +224,87 @@ or a list of comma separated IDs.</p>";
             }
             else
             {
-                string filter = Selector.SelectFirst<TextBox>(this).Text;
-                try
+                switch (DataSource["PropertyTypeName"].Get<string>())
                 {
-                    if (string.IsNullOrEmpty(filter))
-                    {
-                        Settings.Instance.Set(
-                            "DBAdmin.Filter." + fullTypeName + ":" + propertyName, "");
-                    }
-                    else
-                    {
-                        int selIndex = Selector.SelectFirst<SelectList>(this).SelectedIndex;
-                        string set = "";
-                        switch (selIndex)
+                    case "System.String":
+                    case "System.Int32":
+                    case "System.Decimal":
+                    case "System.Boolean":
+                    case "System.DateTime":
                         {
-                            case 0:
-                                set = "Lt";
-                                break;
-                            case 1:
-                                set = "Gt";
-                                break;
-                            case 2:
-                                set = "Eq";
-                                break;
-                            case 3:
-                                set = "Like";
-                                break;
-                        }
-                        Settings.Instance.Set(
-                            "DBAdmin.Filter." + fullTypeName + ":" + propertyName, set + "|" + filter);
-                    }
-                    ActiveEvents.Instance.RaiseClearControls("child");
-                }
-                catch (Exception err)
-                {
-                    Node node = new Node();
-                    node["Message"].Value = err.Message;
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        "ShowMessage",
-                        node);
-                    equals.Select();
-                    equals.Focus();
+                            string filter = Selector.SelectFirst<TextBox>(this).Text;
+                            try
+                            {
+                                if (string.IsNullOrEmpty(filter))
+                                {
+                                    Settings.Instance.Set(
+                                        "DBAdmin.Filter." + fullTypeName + ":" + propertyName, "");
+                                }
+                                else
+                                {
+                                    int selIndex = Selector.SelectFirst<SelectList>(this).SelectedIndex;
+                                    string set = "";
+                                    switch (selIndex)
+                                    {
+                                        case 0:
+                                            set = "Lt";
+                                            break;
+                                        case 1:
+                                            set = "Gt";
+                                            break;
+                                        case 2:
+                                            set = "Eq";
+                                            break;
+                                        case 3:
+                                            set = "Like";
+                                            break;
+                                    }
+                                    Settings.Instance.Set(
+                                        "DBAdmin.Filter." + fullTypeName + ":" + propertyName, set + "|" + filter);
+                                }
+                                ActiveEvents.Instance.RaiseClearControls("child");
+                            }
+                            catch (Exception err)
+                            {
+                                Node node = new Node();
+                                node["Message"].Value = err.Message;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "ShowMessage",
+                                    node);
+                                equals.Select();
+                                equals.Focus();
+                            }
+                        } break;
+                    default:
+                        {
+                            try
+                            {
+                                string filter = Selector.SelectFirst<TextBox>(this).Text;
+                                if (string.IsNullOrEmpty(filter))
+                                {
+                                    Settings.Instance.Set(
+                                        "DBAdmin.Filter." + fullTypeName + ":" + propertyName, "");
+                                }
+                                else
+                                {
+                                    Settings.Instance.Set(
+                                        "DBAdmin.Filter." + fullTypeName + ":" + propertyName, "In|" + filter);
+                                }
+                                ActiveEvents.Instance.RaiseClearControls("child");
+                            }
+                            catch (Exception err)
+                            {
+                                Node node = new Node();
+                                node["Message"].Value = err.Message;
+                                ActiveEvents.Instance.RaiseActiveEvent(
+                                    this,
+                                    "ShowMessage",
+                                    node);
+                                equals.Select();
+                                equals.Focus();
+                            }
+                        } break;
                 }
             }
         }

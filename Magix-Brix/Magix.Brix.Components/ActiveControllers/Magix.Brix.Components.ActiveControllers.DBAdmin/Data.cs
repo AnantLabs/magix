@@ -522,6 +522,49 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                                     propertyName,
                                     value));
                             break;
+                        case "In":
+                            {
+                                int nVal = int.Parse(value);
+                                Type returnType = getters[propertyName].Left.ReturnType;
+                                Type type = GetType(fullTypeName);
+                                PropertyInfo info =
+                                    type.GetProperty(
+                                        propertyName,
+                                        BindingFlags.Instance |
+                                        BindingFlags.Public |
+                                        BindingFlags.NonPublic);
+                                ActiveFieldAttribute attr =
+                                    info.GetCustomAttributes(
+                                        typeof(ActiveFieldAttribute),
+                                        true)[0] as ActiveFieldAttribute;
+                                if (attr.BelongsTo)
+                                {
+                                    if (string.IsNullOrEmpty(attr.RelationName))
+                                    {
+                                        retVal.Add(
+                                            Criteria.ParentId(
+                                                nVal));
+                                    }
+                                    else
+                                    {
+                                        retVal.Add(
+                                            Criteria.ExistsIn(
+                                                nVal, false));
+                                    }
+                                }
+                                else if (attr.IsOwner)
+                                {
+                                    retVal.Add(
+                                        Criteria.HasChild(
+                                            nVal));
+                                }
+                                else
+                                {
+                                    retVal.Add(
+                                        Criteria.ExistsIn(
+                                            nVal, true));
+                                }
+                            } break;
                     }
                 }
             }
