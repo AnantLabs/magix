@@ -348,7 +348,17 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.FlattenHierarchy |
                     BindingFlags.Public);
                 List<Criteria> parameters = new List<Criteria>(pars);
-                parameters.Add(Criteria.Range(startAt, endAt, "ID"));
+                bool containsId = false;
+                foreach (Criteria idx in parameters)
+                {
+                    if (idx is CritID)
+                    {
+                        containsId = true;
+                        break;
+                    }
+                }
+                if (!containsId)
+                    parameters.Add(Criteria.Range(startAt, endAt, "ID"));
                 IEnumerable enumer =
                     ret.Invoke(null, new object[] { parameters.ToArray() }) as IEnumerable;
                 Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
