@@ -24,6 +24,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button create;
         protected Button end;
         protected Button beginning;
+        protected Button focs;
 
         public override void InitialLoading(Node node)
         {
@@ -31,6 +32,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(focs))
+                        .Render();
                 };
         }
 
@@ -126,6 +131,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void ReDataBind()
         {
+            focs.Focus();
             ResetColumnsVisibility();
             DataSource["Objects"].UnTie();
             DataSource["Type"].UnTie();
