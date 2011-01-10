@@ -19,6 +19,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     {
         protected Panel pnl;
         protected TextBox equals;
+        protected Button ok;
         private bool _isFirst;
 
         public override void InitialLoading(Node node)
@@ -330,6 +331,7 @@ or a list of comma separated IDs.</p>";
 
         protected override void ReDataBind()
         {
+            ok.Focus();
         }
     }
 }

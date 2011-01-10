@@ -6,6 +6,11 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents" %>
 
+<mux:Button
+    runat="server"
+    id="focs"
+    style="margin-left:-4000px;position:absolute;" />
+
 <mux:Panel
     runat="server"
     style="font-size:small;"
@@ -16,7 +21,6 @@
     OnClick="FirstItems"
     CssClass="pagingButton firstPagingButton"
     Text="&lt;&lt;"
-    ToolTip="First items"
     id="beginning" />
 
 <mux:Button
@@ -24,7 +28,6 @@
     OnClick="PreviousItems"
     CssClass="pagingButton"
     Text="&lt;"
-    ToolTip="Previous items"
     id="previous" />
 
 <mux:Button
@@ -32,7 +35,6 @@
     OnClick="NextItems"
     CssClass="pagingButton"
     Text="&gt;"
-    ToolTip="Next items"
     id="next" />
 
 <mux:Button
@@ -40,13 +42,13 @@
     OnClick="EndItems"
     CssClass="pagingButton"
     Text="&gt;&gt;"
-    ToolTip="Last items"
     id="end" />
 
 <mux:Button
     runat="server"
     OnClick="CreateItem"
-    Text="Create new item..."
+    Text="+"
+    CssClass="createButton"
     id="create" />
 
 

@@ -6,6 +6,11 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.DBAdmin.ViewListOfObjects" %>
 
+<mux:Button
+    runat="server"
+    id="focs"
+    style="margin-left:-4000px;position:absolute;" />
+
 <mux:Panel
     runat="server"
     style="font-size:small;"

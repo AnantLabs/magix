@@ -22,6 +22,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button append;
         protected Button previous;
         protected Button next;
+        protected Button focs;
 
         public override void InitialLoading(Node node)
         {
@@ -30,6 +31,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 delegate
                 {
                     append.Enabled = DataSource["IsAppend"].Get<bool>();
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(focs))
+                        .Render();
                 };
         }
 
@@ -118,6 +123,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected override void ReDataBind()
         {
             ResetColumnsVisibility();
+            focs.Focus();
             DataSource["Objects"].UnTie();
             DataSource["Type"].UnTie();
             if (RaiseSafeEvent(
