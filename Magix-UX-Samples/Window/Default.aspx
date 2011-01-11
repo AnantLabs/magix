@@ -28,7 +28,7 @@
                         runat="server" 
                         Caption="Window control"
                         CssClass="mux-shaded mux-rounded mux-window" 
-                        style="width:390px;position:absolute;"
+                        style="width:390px;position:absolute;top:36px;left:0;"
                         ID="wnd">
                         <Content>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
