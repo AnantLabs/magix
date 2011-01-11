@@ -4,16 +4,27 @@
     CodeFile="Default.aspx.cs" 
     Inherits="_Default" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head runat="server">
     <title>Main Magix samples</title>
+
+        <link rel="stylesheet" href="media/blueprint/screen.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="media/blueprint/print.css" type="text/css" media="print" />
+        <!--[if lt IE 8]>
+        <link rel="stylesheet" href="media/blueprint/ie.css" type="text/css" media="screen, projection" />
+        <![endif]-->
+
+        <link href="media/skins/default/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            <ul>
+        <div class="container">
+            <h1>Magix-UX Samples</h1>
+            <div class="span-16">
+                Welcome to the Magix Samples.
+            </div>
+            <ul class="span-8 last">
                 <li>
                     <a href="Timer/Default.aspx">Timer</a>
                 </li>
@@ -22,6 +33,12 @@
                 </li>
                 <li>
                     <a href="AspectUpdater/Default.aspx">AspectUpdater</a>
+                </li>
+                <li>
+                    <a href="AspectModal/Default.aspx">AspectModal</a>
+                </li>
+                <li>
+                    <a href="Carousel/Default.aspx">Carousel</a>
                 </li>
                 <li>
                     <a href="Accordion/Default.aspx">Accordion</a>

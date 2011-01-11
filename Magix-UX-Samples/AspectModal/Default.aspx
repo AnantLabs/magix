@@ -4,29 +4,40 @@
     CodeFile="Default.aspx.cs" 
     Inherits="AspectModalSample" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head runat="server">
         <title>Untitled Page</title>
+        <link rel="stylesheet" href="../media/blueprint/screen.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="../media/blueprint/print.css" type="text/css" media="print" />
+        <!--[if lt IE 8]>
+        <link rel="stylesheet" href="../media/blueprint/ie.css" type="text/css" media="screen, projection" />
+        <![endif]-->
+
         <link href="../media/skins/default/default.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <form id="form1" runat="server">
-            <div style="padding:15px;">
-                Here's an example of the AspectModal...
-                <br/>
-                <a href="http://google.com">I cannot be clicked, even though I am a normal link...</a>
-                <mux:Button 
-                    runat="server" 
-                    id="btn" 
-                    OnClick="btn_Click"
-                    style="margin:15px;position:absolute;z-index:500;"
-                    Text="I am a greedy button. I need the WHOLE screen :)">
-                    <mux:AspectModal 
-                        id="modal"
-                        runat="server" />
-                </mux:Button>
+            <div class="container prepend-top">
+                <div class="span-14 append-1">
+                    <h1>Example of AspectModal</h1>
+                    <p>
+                        <a href="http://google.com">I cannot be clicked, even though I am a normal link...</a>
+                    </p>
+                </div>
+                <div class="span-9 last">
+                    <mux:Button 
+                        runat="server" 
+                        id="btn" 
+                        OnClick="btn_Click"
+                        style="position:absolute;z-index:500;"
+                        Text="I am a greedy button. I need the WHOLE screen :)">
+                        <mux:AspectModal 
+                            id="modal"
+                            runat="server" />
+                    </mux:Button>
+                </div>
             </div>
         </form>
     </body>

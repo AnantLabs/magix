@@ -1,227 +1,21 @@
-﻿/*
- * Reset CSS and Base CSS is Copyright (c) 2008, Yahoo! Inc. 
- * All rights reserved.
- * Code licensed under the BSD License:
- * http://developer.yahoo.net/yui/license.txt
- * version: 2.5.2
- */
-
-/* Reset CSS */
-html
-{
-	color:#000;
-	background:#FFF;
-}
-
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td
-{
-	margin: 0;
-	padding: 0;
-	font-family:Helvetica;
-}
-
-table
-{
-	border-collapse:collapse;
-	border-spacing:0;
-}
-
-fieldset,img
-{
-	border:0;
-}
-
-address,caption,cite,code,dfn,em,strong,th,var
-{
-	font-style:normal;
-	font-weight:normal;
-}
-
-li
-{
-	list-style:none;
-}
-
-caption,th
-{
-	text-align:left;
-}
-
-h1,h2,h3,h4,h5,h6
-{
-	font-size:100%;
-	font-weight:normal;
-}
-
-q:before,q:after
-{
-	content:'';
-}
-
-abbr,acronym
-{
-	border:0;
-	font-variant:normal;
-}
-
-sup
-{
-	vertical-align:text-top;
-}
-
-sub
-{
-	vertical-align:text-bottom;
-}
-
-input,textarea,select
-{
-	font-family:inherit;
-	font-size:inherit;
-	font-weight:inherit;
-}
-
-legend
-{
-	color:#000;
-}
-
-body
-{
-	font:13px/1.231 arial,helvetica,clean,sans-serif;
-}
-
-table
-{
-	font-size:inherit;
-	font:100%;
-}
-
-pre,code,kbd,samp,tt
-{
-	font-family:monospace;
-	line-height:100%;
-}
-
-
-/* Base CSS */
-h1
-{
-	font-size:138.5%;
-}
-
-h2
-{
-	font-size:123.1%;
-}
-
-h3
-{
-	font-size:108%;
-}
-
-h1,h2,h3
-{
-	margin:0;
-}
-
-h1,h2,h3,h4,h5,h6,strong
-{
-	font-weight:bold;
-}
-
-abbr,acronym
-{
-	border-bottom:1px dotted #000;
-	cursor:help;
-}
-
-em
-{
-	font-style:italic;
-}
-
-dl dd
-{
-	margin-left:1em;
-}
-
-th,td
-{
-	border:1px solid #000;
-	padding:.5em;
-}
-
-th
-{
-	font-weight:bold;
-	text-align:center;
-}
-
-caption
-{
-	margin-bottom:.5em;
-	text-align:center;
-}
-
-p,fieldset,table,pre
-{
-	margin-bottom:1em;
-}
-
-input[type=text],
-input[type=email],
-input[type=number],
-input[type=tel],
-select,
-input[type=password],
-textarea
-{
-	width:12.25em;
-}
-
-input[type=checkbox]
-{
-	margin-right:3px;
-	vertical-align:sub;
-}
-
-
-
-
-
-
-
-/* Common elements styles - Base 'extensions' for this skin... */
-
-html,
-body,
-form
-{
-	font-family:Georgia;
-	width:100%;
-	height:100%;
-}
-
-/* hyperlinks */
-a
-{
-	text-decoration:none;
-	color:#33b;
-	outline:medium none;
-}
-
-/* button, input type = button */
+﻿/* button, input type = button */
 input[type=button]
 {
-	text-shadow:2px 2px 4px #999;
-	border:none;
-	padding:5px;
-	margin:10px;
+	display:inline-block;
+	border:none 0;
+	font-size:24px;
+	height:36px;
+	font-weight:normal;
+	color:#111;
+	padding:0 .75em 0 .75em;
+	margin:0 10px 18px 0;
+	min-width:150px;
+	
+	text-shadow:2px 2px 2px #999;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
@@ -230,21 +24,54 @@ input[type=button]
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
 	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 
-	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-property:-moz-box-shadow, color;
 	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-property:-webkit-box-shadow, color;
 	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
+	transition-property:box-shadow, color;
 	transition-duration:0.2s;
+}
+
+input[type=button]:focus
+{
+	-webkit-box-shadow: 2px 2px 3px #444;
+	-moz-box-shadow: 2px 2px 3px #444;
+	box-shadow: 2px 2px 3px #444;
 }
 
 input[type=button]:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+	-webkit-box-shadow: 2px 2px 3px #444;
+	-moz-box-shadow: 2px 2px 3px #444;
+	box-shadow: 2px 2px 3px #444;
+	color:#06c;
 }
 
+input[type=text]
+{
+	margin:8px 10px 8px 0 !important;
+	width:148px;
+}
+
+input[type=radio]
+{
+	margin:0 0 0 0 !important;
+}
+
+select
+{
+	margin:8px 0 8px 0;
+}
+
+
+textarea
+{
+	margin:0;
+	padding-top:18px;
+	padding-bottom:18px;
+	line-height:18px;
+	width:auto;
+}
 
 
 
@@ -258,9 +85,9 @@ input[type=button]:hover
 	-webkit-border-radius:5px;
 	border-radius:5px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 
 	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
@@ -272,9 +99,9 @@ input[type=button]:hover
 
 .mux-rounded:hover
 {
-	-webkit-box-shadow: 2px 2px 15px #444;
-	-moz-box-shadow: 2px 2px 15px #444;
-	box-shadow: 2px 2px 15px #444;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .mux-shaded
@@ -290,14 +117,11 @@ input[type=button]:hover
 .mux-accordion
 {
 	display: block;
-	margin:5px;
 }
 
 .mux-accordion .mux-acc-view
 {
 	display:block;
-	margin-bottom:5px;
-	border:solid 1px #ddd;
 
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -324,19 +148,18 @@ input[type=button]:hover
 
 .mux-accordion .mux-acc-view-caption
 {
-	font-size:138.5%;
+	font-size:1.5em;
+	padding:7px 0 2px 1em;
 	display:block;
-	padding:5px 0 5px 24px;
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
+	text-decoration:none;
 	outline:none;
-	margin-right:-1px;
-	margin-left:-1px;
-	margin-bottom:-1px;
 	color:#000;
 
 	-moz-border-radius:5px 5px 0 0;
 	-webkit-border-radius:5px 5px 0 0;
 	border-radius:5px 5px 0 0;
+
+	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
 
 	-moz-transition-property:color, text-shadow;
 	-moz-transition-duration:0.2s;
@@ -357,11 +180,13 @@ input[type=button]:hover
 
 .mux-accordion .mux-acc-view-content
 {
-	border-top:solid 1px #999;
-	margin-right:-1px;
-	margin-bottom:-1px;
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
 	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+}
+
+.mux-insert
+{
+	padding:1.5em;
 }
 
 
@@ -373,11 +198,12 @@ input[type=button]:hover
 /* Menu */
 .mux-menu
 {
-	font-size:138.5%;
+	font-size:2em;
+	line-height:1;
 	display:block;
-	margin:15px;
-	padding:0 0 0 25px;
-	min-height:35px;
+	height:36px;
+	margin:0 0 .75em 0;
+	padding:0 1.5em 0 1.5em;
 
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
@@ -407,6 +233,7 @@ input[type=button]:hover
 
 .mux-menu .mux-menu-item
 {
+	height:26px;
 	padding:5px 20px 5px 5px;
 	cursor:pointer;
 	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -414,6 +241,7 @@ input[type=button]:hover
 	float:left;
 	color:#000;
 	position:relative;
+	min-width:95px;
 
 	-moz-transition-property:color, text-shadow;
 	-moz-transition-duration:0.2s;
@@ -452,11 +280,12 @@ input[type=button]:hover
 
 .mux-menu .mux-menu-submenu
 {
+	padding-left:0;
 	position:absolute;
 	z-index:1;
-	top:30px;
-	margin-left:-25px;
-	min-width:250px;
+	top:28px;
+	margin-left:0;
+	min-width:350px;
 
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -470,18 +299,33 @@ input[type=button]:hover
 	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
 }
 
+ul.mux-menu li.mux-menu-item ul.mux-menu-submenu .mux-menu-item:first-child
+{
+	margin-top:5px !important;
+}
+
+ul.mux-menu>li.mux-menu-item>ul.mux-menu-submenu>.mux-menu-item:first-child
+{
+	margin-top:26px !important;
+}
+
+ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
+{
+	margin-bottom:16px !important;
+}
+
 .mux-menu .mux-menu-submenu .mux-menu-submenu
 {
-	left:180px;
+	left:40px;
 	top:0px;
 	margin-top:-5px;
 }
 
 .mux-menu .mux-menu-submenu .mux-menu-item
 {
+	padding-left:1.5em;
 	float:none;
 	background-color:rgba(255, 255, 255, 0.0);
-	padding-left:25px;
 
 	-moz-transition-property:background-color;
 	-moz-transition-duration:0.2s;
@@ -505,14 +349,13 @@ input[type=button]:hover
 /* MultiPanel, MultiButton and so on */
 .mux-multi-panel-wrapper
 {
-	margin:15px;
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 
 	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
@@ -524,16 +367,18 @@ input[type=button]:hover
 
 .mux-multi-panel-wrapper:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .mux-multi-button
 {
-	font-size:138.5%;
+	font-size:2em;
 	display:block;
 	min-height:35px;
+	margin:0;
+	padding:0;
 
 	-moz-border-radius:5px 5px 0 0;
 	-webkit-border-radius:5px 5px 0 0;
@@ -581,8 +426,24 @@ input[type=button]:hover
 .mux-multi-button .mux-multi-button-view-button
 {
 	height:25px;
-	padding:5px 15px 5px 15px;
+	padding:0 15px 5px 15px;
 	display:block;
+	text-shadow:2px 2px 5px rgba(0, 0, 0, 0.2);
+	text-decoration:none;
+	outline:none;
+	color:#000;
+	-moz-transition-property:color, text-shadow;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:color, text-shadow;
+	-webkit-transition-duration:0.2s;
+	transition-property:color, text-shadow;
+	transition-duration:0.2s;
+}
+
+.mux-multi-button .mux-multi-button-view-button:hover
+{
+	text-shadow:2px 2px 3px rgba(0, 0, 0, 0.5);
+	color:#33b;
 }
 
 .mux-multi-panel
@@ -601,11 +462,15 @@ input[type=button]:hover
 
 .mux-multi-panel-slide
 {
+	overflow:hidden;
 }
 
 .mux-multi-panel-slide .mux-multi-panel-content
 {
 	width:9999px;
+	margin:0;
+	padding:0;
+	list-style-type:none;
 }
 
 .mux-multi-panel-slide .mux-multi-panel-view
@@ -622,7 +487,9 @@ input[type=button]:hover
 /* SlidingMenu */
 .mux-sliding-menu
 {
-	font-size:138.5%;
+	font-size:1.5em;
+	line-height:1em;
+	margin-top:-10px;
 	overflow:hidden;
 	width:100%;
 	text-shadow:3px 3px 5px rgba(0, 0, 0, 0.3);
@@ -631,9 +498,9 @@ input[type=button]:hover
 	-webkit-border-radius:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 
 	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
@@ -648,21 +515,46 @@ input[type=button]:hover
 
 .mux-sliding-menu:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.mux-sliding-menu a
+{
+	text-decoration:none;
+	display:block;
+	padding:8px 0 0 36px;
+	height:26px;
+	color:#000;
+	margin-left:2px;
+	margin-right:2px;
+
+	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
+
+	-moz-transition-property:color, text-shadow, background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:color, text-shadow, background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:color, text-shadow, background-color;
+	transition-duration:0.2s;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+
+.mux-sliding-menu a:hover
+{
+	color:#33b;
+	background-color:rgba(0, 0, 0, 0.02);
+	text-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 2px 2px 2px rgba(50, 50, 50, 0.3);
+	-moz-box-shadow: 2px 2px 2px rgba(50, 50, 50, 0.3);
 }
 
 .mux-sliding-menu .mux-sliding-menu-back
 {
-	display:block;
-	padding:5px 0 5px 15px;
-}
-
-.mux-sliding-menu .mux-sliding-menu-back:hover
-{
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.2)), to(rgba(210, 210, 210, 0.2)));
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.2) 0%, rgba(210, 210, 210, 0.2) 100%);
+	height:30px;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item-active
@@ -673,6 +565,8 @@ input[type=button]:hover
 {
 	width:100%;
 	position:relative;
+	padding-left:0;
+	margin:0;
 }
 
 .mux-sliding-menu .mux-sliding-menu-level .mux-sliding-menu-level
@@ -685,26 +579,42 @@ input[type=button]:hover
 .mux-sliding-menu .mux-sliding-menu-item
 {
 	width:100%;
+	list-style-type:none;
+	height:36px;
+}
+
+.mux-sliding-menu .mux-sliding-menu-item a
+{
+	text-decoration:none;
 }
 
 .mux-sliding-menu .mux-sliding-menu-has-children .mux-sliding-menu-item-icon
 {
 	position:absolute;
-	top:5px;
+	top:8px;
 	right:15px;
+}
+
+.mux-sliding-menu .mux-sliding-menu-item
+{
+	-moz-transition-property:color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:0.2s;
+	transition-property:color;
+	transition-duration:0.2s;
+	color:#000;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item:hover
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.2)), to(rgba(210, 210, 210, 0.2)));
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.2) 0%, rgba(210, 210, 210, 0.2) 100%);
 }
 
 .mux-sliding-menu .mux-sliding-menu-item-text
 {
 	position:relative;
 	display:block;
-	padding:5px 0 5px 15px;
+	padding:8px 0 7px 36px;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item-icon
@@ -725,12 +635,16 @@ input[type=button]:hover
 {
 	list-style-type:none;
 	list-style-image:none;
+	margin:0;
+	padding:0;
 }
 
 .mux-tree-item
 {
 	cursor:pointer;
 	position:relative;
+	font-size:16px;
+	line-height:1em;
 }
 
 .mux-tree-hover
@@ -779,7 +693,9 @@ input[type=button]:hover
 
 .mux-tree-text
 {
-	text-shadow:2px 2px 4px rgba(80, 80, 80, 0.5);
+	text-shadow:2px 2px 3px rgba(80, 80, 80, 0.2);
+	vertical-align:top;
+	font-size:12px;
 }
 
 .mux-tree-url
@@ -797,7 +713,9 @@ input[type=button]:hover
 .mux-tree-no-children,
 .mux-tree-no-children-last
 {
-	padding-left:16px;
+	padding-left:18px;
+	line-height:18px;
+	font-size:16px;
 }
 
 .mux-tree-expanded .mux-tree-icon
@@ -807,7 +725,7 @@ input[type=button]:hover
 
 .mux-tree-collapsed .mux-tree-icon
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -16px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -18px;
 }
 
 .mux-tree-space
@@ -816,37 +734,37 @@ input[type=button]:hover
 
 .mux-tree-link
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -96px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -108px;
 }
 
 .mux-tree-expanded .mux-tree-children
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -128px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -144px;
 }
 
 .mux-tree-collapsed .mux-tree-children
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -112px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -126px;
 }
 
 .mux-tree-expanded .mux-tree-children-last
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -48px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -54px;
 }
 
 .mux-tree-collapsed .mux-tree-children-last
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -32px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -36px;
 }
 
 .mux-tree-no-children
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -80px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -90px;
 }
 
 .mux-tree-no-children-last
 {
-	background:transparent url(tree-sprites.png) no-repeat 0 -64px;
+	background:transparent url(tree-sprites.png) no-repeat 0 -72px;
 }
 
 
@@ -858,13 +776,17 @@ input[type=button]:hover
 
 .mux-window
 {
+	position:relative;
 }
 
 .mux-window-caption
 {
-	font-size:138.5%;
+	font-size:1.5em;
+	line-height:1;
+	margin-bottom:.5em;
+	padding-top:.5em;
+	margin-left:1.5em;
 	display:block;
-	padding:5px 0 5px 15px;
 	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
 	user-select: none; 
 	-khtml-user-select: none; 
@@ -917,7 +839,7 @@ input[type=button]:hover
 
 .mux-window-content
 {
-	padding:5px 15px 15px 15px;
+	margin:5px 5px 18px 5px;
 }
 
 
@@ -927,8 +849,8 @@ input[type=button]:hover
 
 .mux-calendar
 {
-	width:196px;
-	padding:10px 10px 0px 10px;
+	width:270px;
+	padding:1em;
 	position:relative;
 	cursor:default;
 }
@@ -936,19 +858,26 @@ input[type=button]:hover
 .mux-calendar-previous,
 .mux-calendar-next
 {
+	display:block;
+	position:absolute;
+	top:0;
+	border:none 0;
+	font-size:24px;
+	height:36px;
+	font-weight:normal;
+	color:#111;
+	padding:0 4px 0 4px;
+	width:36px;
+
 	-moz-transition-property:background-color;
 	-moz-transition-duration:0.2s;
 	-webkit-transition-property:background-color;
 	-webkit-transition-duration:0.2s;
 	transition-property:background-color;
 	transition-duration:0.2s;
-	width:25px;
-	height:20px;
-	display:block;
-	position:absolute;
-	top:0px;
-	padding:5px 5px 3px 10px;
 	cursor:default;
+	text-decoration:none;
+	text-align:center;
 }
 
 .mux-calendar-previous
@@ -981,19 +910,23 @@ input[type=button]:hover
 
 .mux-calendar-month-year
 {
+	display:inline-block;
 	position:absolute;
-	cursor:default;
-	top:0px;
-	left:40px;
-	width:126px;
-	height:20px;
-	padding:5px 5px 3px 5px;
-	display:block;
-	font-weight:bold;
+	top:0;
+	left:44px;
+	border:none 0;
+	font-size:2em;
+	height:36px;
+	width:200px;
+	font-weight:normal;
+	color:#111;
+	padding:0 3px 0 3px;
+	background-color:rgba(0, 0, 0, 0);
+
 	-moz-border-radius:0px 0px 5px 5px;
 	-webkit-border-radius:0px 0px 5px 5px;
 	border-radius:0px 0px 5px 5px;
-	background-color:rgba(0, 0, 0, 0);
+
 	-moz-transition-property:background-color;
 	-moz-transition-duration:0.2s;
 	-webkit-transition-property:background-color;
@@ -1014,6 +947,7 @@ input[type=button]:hover
 	width:100%;
 	height:100%;
 	text-align:center;
+	text-decoration:none;
 }
 
 .mux-calendar-month-year input[type=text]
@@ -1023,14 +957,23 @@ input[type=button]:hover
 
 .mux-calendar-table
 {
-	font-size:9px;
-	margin-top:22px;
+	font-size:.8em;
+	margin-bottom:6px;
+	line-height:1.875em;
+	margin-top:42px;
 	border:none 0;
+	padding:0 1.5em 0 1.5em;
 }
 
 .mux-calendar-table tr td
 {
+	padding:0;
 	border:none 0;
+}
+
+.mux-calendar tbody tr:nth-child(2n) td, tbody tr.even td
+{
+	background:transparent none;
 }
 
 .mux-calendar-week
@@ -1066,7 +1009,7 @@ input[type=button]:hover
 .mux-calendar-current-month:hover,
 .mux-calendar-wrong-month:hover
 {
-	background-color:rgba(0, 0, 0, 0.2);
+	background-color:rgba(0, 0, 0, 0.2) !important;
 }
 
 .mux-calendar-today
