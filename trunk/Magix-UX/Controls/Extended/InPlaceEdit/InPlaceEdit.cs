@@ -16,7 +16,7 @@ namespace Magix.UX.Widgets
 
         public InPlaceEdit()
         {
-            CssClass = "mux-in-place-edit";
+            CssClass = "mux-in-place-edit span-1";
         }
 
         public event EventHandler TextChanged;

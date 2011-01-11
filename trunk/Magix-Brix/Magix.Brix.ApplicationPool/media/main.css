@@ -675,7 +675,7 @@ table.viewObjects .mux-in-place-edit
 
 table.viewObjects .mux-in-place-edit textarea
 {
-	margin-left:20px;
+	margin-left:16px;
 	width:190px;
 	min-width:100%;
 	display:inline-block;
@@ -689,7 +689,7 @@ table.viewObjects
 {
 }
 
-table.viewObjects tr td
+table.viewObjects>tbody>tr>td
 {
 	vertical-align:top;
 	/*background-color:rgba(0, 0, 0, 0.05);*/
@@ -705,6 +705,12 @@ table.viewObjects tr.header td
 table.viewObjects tr.header td a
 {
 	color:#9595cc;
+	font-style:normal;
+}
+
+table.viewObjects tr td a.belongsTo
+{
+	color:#cc9595;
 }
 
 table.viewObjects tr.header td
@@ -733,14 +739,23 @@ table.viewObjects tr.header td .overridden
 	color:#e88;
 }
 
-table.viewObjects tr td
+table.viewObjects>tbody>tr>td
 {
-	padding:3px;
+	padding:0;
 }
 
-table.viewObjects tr td a
+table.viewObjects>tbody>tr>td>a
 {
-	color:#00a;
+	color:#06a;
+}
+
+table.viewObjects tr td>a,
+table.viewObjects tr td>div>a
+{
+	font-style:italic;
+	padding-left:16px;
+	padding-right:16px;
+	padding-bottom:3px;
 	display:table-cell;
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
@@ -754,7 +769,8 @@ table.viewObjects tr td a
 	transition-duration:0.2s;
 }
 
-table.viewObjects tr td a:hover
+table.viewObjects tr td>a:hover,
+table.viewObjects tr td>div>a:hover
 {
 	background-color:rgba(0, 0, 0, 0.1);
 	-webkit-box-shadow: 2px 2px 5px #666;
@@ -764,7 +780,11 @@ table.viewObjects tr td a:hover
 
 table.viewObjects tr td .mux-in-place-edit a
 {
+	font-style:normal;
+	color:#00a;
 	height:inherit;
+	white-space:nowrap;
+	display:block;
 }
 
 .window-left-buttons
@@ -1002,13 +1022,122 @@ table.viewObjects tr td .mux-in-place-edit a
 
 .window-left-buttons .mux-window-content
 {
-	padding:5px 170px 60px 15px;
+	padding:15px 170px 60px 15px;
 }
 
-.window-left-no-margin .mux-window-content
+div.larger textarea
 {
-	padding:5px 15px 15px 15px;
+	width:350px !important;
 }
+
+div.larger a
+{
+	white-space:normal !important;
+	width:350px !important;
+}
+
+.singleInstance
+{
+}
+
+table.singleInstance>tbody>tr>td
+{
+	padding:1px 5px 1px 5px;
+}
+
+table.singleInstance tr td>a
+{
+	width:350px !important;
+}
+
+.singleInstance .columnName
+{
+	text-shadow:1px 1px 2px rgba(100, 100, 100, 0.5);
+	color:#666;
+	font-weight:bold;
+	font-size:15px;
+	height:22px;
+}
+
+.singleInstance .columnType
+{
+	text-shadow:1px 1px 2px rgba(100, 100, 100, 0.5);
+	font-style:italic;
+	color:#888;
+}
+
+.firstPagingButton
+{
+}
+
+.pagingButton
+{
+	font-weight:bold;
+	width:50px !important;
+	margin-left:-10px !important;
+	font-weight:bold;
+	text-shadow:4px 4px 3px rgba(0, 0, 0, 0.3) !important;
+	color:rgba(0, 0, 0, 0.5);
+
+	-moz-transition-property:color, text-shadow;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-property:color, text-shadow;
+	-webkit-transition-duration:0.5s;
+	transition-property:color, text-shadow;
+	transition-duration:0.5s;
+}
+
+.pagingButton:hover
+{
+	text-shadow:4px 4px 2px rgba(0, 0, 0, 0.6) !important;
+	color:rgba(0, 0, 0, 1.0);
+}
+
+.pagingButton:disabled
+{
+	font-weight:bold;
+	width:50px !important;
+	margin-left:-10px !important;
+	color:rgba(0, 0, 0, 0.1);
+
+	-moz-transition-property:color;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:0.5s;
+	transition-property:color;
+	transition-duration:0.5s;
+}
+
+.pagingButton:disabled:hover
+{
+	color:rgba(255, 0, 0, 1.0);
+}
+
+
+.createButton
+{
+	font-weight:bold;
+	width:50px !important;
+	margin-left:-10px !important;
+	color:rgba(0, 0, 0, 0.5);
+	text-shadow:4px 4px 3px rgba(0, 0, 0, 0.3) !important;
+
+	-moz-transition-property:color, text-shadow;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-property:color, text-shadow;
+	-webkit-transition-duration:0.5s;
+	transition-property:color, text-shadow;
+	transition-duration:0.5s;
+}
+
+.createButton:hover
+{
+	color:rgba(0, 0, 0, 1.0);
+	text-shadow:4px 4px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
+
+
 
 
 

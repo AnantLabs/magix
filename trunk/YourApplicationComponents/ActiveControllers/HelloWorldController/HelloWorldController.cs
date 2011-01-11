@@ -21,7 +21,7 @@ namespace HelloWorldController
         {
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
-                "DBAdmin.Load");
+                "DBAdmin.Form.ViewClasses");
             return;
             Page.Title = "Magix-Brix Hello World";
             Node n = new Node();

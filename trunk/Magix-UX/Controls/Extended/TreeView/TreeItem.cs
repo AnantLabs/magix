@@ -98,7 +98,7 @@ namespace Magix.UX.Widgets
 
         private TreeItem ParentTreeItem
         {
-            get { return Parent.Parent.Parent as TreeItem; }
+            get { return Parent.Parent as TreeItem; }
         }
 
         private bool IsLast
@@ -272,7 +272,7 @@ namespace Magix.UX.Widgets
                             {
                                 if (itemIdx == null)
                                     break;
-                                isSpace = itemIdx.ParentTreeItem != null && itemIdx.ParentTreeItem.IsLast;
+                                isSpace = itemIdx.IsLast;
                                 itemIdx = itemIdx.ParentTreeItem;
                             }
                             // Not the last nor the second last one, easy case...
