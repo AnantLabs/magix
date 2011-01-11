@@ -797,8 +797,8 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	display:block;
 	position:absolute;
-	top:7px;
-	right:10px;
+	top:5px;
+	left:5px;
 	width:9px;
 	height:8px;
 	padding-left:3px;
