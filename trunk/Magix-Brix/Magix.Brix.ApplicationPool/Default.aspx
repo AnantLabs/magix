@@ -17,7 +17,7 @@
         <![endif]-->
 
         <link href="media/magic-ux-skins/default.css" rel="stylesheet" type="text/css" />
-        <link href="media/main.css" rel="stylesheet" type="text/css" />
+        <!-- <link href="media/main.css" rel="stylesheet" type="text/css" /> -->
 
         <!-- Apple stuff ... -->
         <meta name="apple-mobile-web-app-capable" content="yes" />
