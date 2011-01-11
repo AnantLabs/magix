@@ -10,7 +10,7 @@
     runat="server"
     Caption="Browse ActiveType Classes"
     Closable="false"
-    style="position:absolute;top:20px;left:25px;z-index:500;color:Black;min-width:750px;min-height:450px;" 
+    style="z-index:500;" 
     CssClass="mux-shaded mux-rounded transparent-window" 
     id="wnd">
     <Content>
