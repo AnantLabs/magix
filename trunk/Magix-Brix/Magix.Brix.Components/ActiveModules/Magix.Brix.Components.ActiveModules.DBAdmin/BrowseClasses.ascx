@@ -6,6 +6,8 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.DBAdmin.BrowseClasses" %>
 
+<link href="media/modules/DBAdmin.css" rel="stylesheet" type="text/css" />
+
 <mux:Window 
     runat="server"
     Caption="Browse ActiveType Classes"

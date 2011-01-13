@@ -169,18 +169,18 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 LinkButton b = new LinkButton();
                 b.Text = "ID";
                 b.ToolTip = "Click to filter ";
-                string filterString =
+                string idFilterString =
                     Settings.Instance.Get(
                         "DBAdmin.Filter." +
                         DataSource["FullTypeName"].Get<string>() + ":ID", "");
-                hasIdFilter = !string.IsNullOrEmpty(filterString);
-                b.ToolTip += filterString.Replace("|", " on ");
+                hasIdFilter = !string.IsNullOrEmpty(idFilterString);
+                b.ToolTip += idFilterString.Replace("|", " on ");
                 b.CssClass =
                     string.IsNullOrEmpty(
-                        filterString) ?
+                        idFilterString) ?
                         "" :
                         "filtered overridden";
-                bool isFilterOnId = !string.IsNullOrEmpty(filterString);
+                bool isFilterOnId = !string.IsNullOrEmpty(idFilterString);
                 b.Click += FilterMethod;
                 b.Info = "ID";
                 li.Controls.Add(b);
@@ -237,6 +237,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         b.ToolTip += "'" + idx["RelationName"].Get<string>() + "' ";
                     if (!string.IsNullOrEmpty(filterString))
                         b.ToolTip += filterString.Replace("|", " on ");
+                    if (hasIdFilter)
+                        b.ToolTip += " - Filter overridden by filter on ID column ...";
                     b.CssClass =
                         string.IsNullOrEmpty(
                             filterString) ?
