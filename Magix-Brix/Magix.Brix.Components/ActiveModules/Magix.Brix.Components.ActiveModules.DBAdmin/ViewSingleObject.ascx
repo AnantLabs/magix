@@ -6,6 +6,8 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject" %>
 
+<link href="media/modules/DBAdmin.css" rel="stylesheet" type="text/css" />
+
 <mux:Panel
     runat="server"
     id="pnl">

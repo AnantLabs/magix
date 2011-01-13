@@ -6,6 +6,8 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.DBAdmin.ConfigureColumns" %>
 
+<link href="media/modules/DBAdmin.css" rel="stylesheet" type="text/css" />
+
 <mux:Panel
     runat="server"
     ID="pnl"
