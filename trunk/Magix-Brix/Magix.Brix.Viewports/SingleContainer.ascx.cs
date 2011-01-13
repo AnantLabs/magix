@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix-BRIX - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix-BRIX is licensed as GPLv3.
  */
 
 using System;
@@ -18,8 +18,9 @@ namespace Magix.Brix.Viewports
     [ActiveModule]
     public class SingleContainer : UserControl
     {
-        protected DynamicPanel menu;
-        protected DynamicPanel content;
+        protected DynamicPanel content1;
+        protected DynamicPanel content2;
+        protected DynamicPanel content3;
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
@@ -47,7 +48,7 @@ namespace Magix.Brix.Viewports
                 // Window
                 Window w = new Window();
                 w.CssClass = "mux-shaded mux-rounded mux-window child";
-                w.Style[Styles.left] = (idxNo * 20).ToString() + "px";
+                w.Style[Styles.left] = ((idxNo % 12) * 20).ToString() + "px";
                 w.Style[Styles.top] = (idxNo * 18).ToString() + "px";
                 w.Style[Styles.minWidth] = "470px";
                 w.Style[Styles.zIndex] = (1000 + (idxNo * 2)).ToString();
@@ -97,13 +98,17 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "ClearControls")]
         protected void ClearControls(object sender, ActiveEventArgs e)
         {
-            if (e.Params["Position"].Get<string>() == "content")
+            if (e.Params["Position"].Get<string>() == "content1")
             {
-                ClearControls(content);
+                ClearControls(content1);
             }
-            else if (e.Params["Position"].Get<string>() == "menu")
+            else if (e.Params["Position"].Get<string>() == "content2")
             {
-                ClearControls(menu);
+                ClearControls(content2);
+            }
+            else if (e.Params["Position"].Get<string>() == "content3")
+            {
+                ClearControls(content3);
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
@@ -113,8 +118,8 @@ namespace Magix.Brix.Viewports
                     if (idxChild.Controls.Count > 0)
                         toEmpty = idxChild;
                 }
-                ClearControls(toEmpty);
                 (toEmpty.Parent.Parent as Window).CloseWindow();
+                ClearControls(toEmpty);
             }
         }
 
@@ -132,25 +137,49 @@ namespace Magix.Brix.Viewports
         {
             // Since this is our default container, 
             // we accept "null" and string.Empty values here ...!
-            if (e.Params["Position"].Get<string>() == "content" || 
-                string.IsNullOrEmpty(e.Params["Position"].Get<string>()))
+            if (string.IsNullOrEmpty(e.Params["Position"].Get<string>()) ||
+                e.Params["Position"].Get<string>().IndexOf("content") == 0)
             {
-                if (true.Equals(e.Params["Parameters"]["Append"].Value))
-                    content.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
-                else
+                if (string.IsNullOrEmpty(e.Params["Position"].Get<string>()))
+                    e.Params["Position"].Value = "content1"; // Defaulting to content1 ...
+
+                DynamicPanel dyn = Selector.FindControl<DynamicPanel>(
+                    this, 
+                    e.Params["Position"].Get<string>());
+
+                string cssClass = null;
+                if (e.Params["Parameters"].Contains("Padding"))
                 {
-                    ClearControls(content);
-                    content.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    cssClass += " push-" + e.Params["Parameters"]["Padding"].Get<int>();
                 }
-            }
-            else if (e.Params["Position"].Get<string>() == "dyn2")
-            {
-                if (true.Equals(e.Params["Parameters"]["Append"].Value))
-                    menu.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                if (e.Params["Parameters"].Contains("Width"))
+                {
+                    cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
+                }
+                if (e.Params["Parameters"].Contains("Top"))
+                {
+                    cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
+                }
+                if (e.Params["Parameters"].Contains("Height"))
+                {
+                    cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
+                }
+                if (string.IsNullOrEmpty(cssClass))
+                {
+                    // Defaulting to down-1 ...
+                    cssClass = "down-1";
+                }
+                cssClass += " last";
+                dyn.CssClass = cssClass.Trim();
+                if (e.Params["Parameters"].Contains("Append") &&
+                    e.Params["Parameters"]["Append"].Get<bool>())
+                {
+                    dyn.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                }
                 else
                 {
-                    ClearControls(menu);
-                    menu.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    ClearControls(dyn);
+                    dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
             else if (e.Params["Position"].Get<string>() == "child")
@@ -209,8 +238,11 @@ namespace Magix.Brix.Viewports
                 {
                     w.Caption = e.Params["Parameters"]["Caption"].Get<string>();
                 }
-                if (true.Equals(e.Params["Parameters"]["Append"].Value))
+                if (e.Params["Parameters"].Contains("Append") &&
+                    e.Params["Parameters"]["Append"].Get<bool>())
+                {
                     toAddInto.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                }
                 else
                 {
                     ClearControls(toAddInto);

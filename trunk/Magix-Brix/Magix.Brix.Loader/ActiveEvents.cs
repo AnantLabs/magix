@@ -164,6 +164,10 @@ namespace Magix.Brix.Loader
             string name, 
             Node pars)
         {
+            // Dummy dereferencing of PluginLoader to make sure we've 
+            // loaded all our assemblies and types first ...!
+            IEnumerable<Type> typesMumboJumbo = PluginLoader.Instance.ActiveTypes;
+
             string mapped = ConfigurationManager.AppSettings["mapped-" + name];
             if (!string.IsNullOrEmpty(mapped))
                 name = mapped.Replace("mapped-", "");

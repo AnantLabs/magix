@@ -1,5 +1,6 @@
 ﻿/* button, input type = button */
-input[type=button]
+input[type=button],
+input[type=submit]
 {
 	display:inline-block;
 	border:none 0;
@@ -30,19 +31,22 @@ input[type=button]
 	transition-duration:0.2s;
 }
 
-input[type=button]:focus
+input[type=button]:focus,
+input[type=submit]:focus
 {
 	-webkit-box-shadow: 2px 2px 3px #444;
 	-moz-box-shadow: 2px 2px 3px #444;
 	box-shadow: 2px 2px 3px #444;
 }
 
-input:disabled[type=button]
+input:disabled[type=button],
+input:disabled[type=submit]
 {
 	color:#999;
 }
 
-input[type=button]:hover
+input[type=button]:hover,
+input[type=submit]:hover
 {
 	-webkit-box-shadow: 2px 2px 3px #444;
 	-moz-box-shadow: 2px 2px 3px #444;
@@ -50,10 +54,11 @@ input[type=button]:hover
 	color:#06c;
 }
 
-input[type=text]
+input[type=text],
+input[type=email],
+input[type=password]
 {
-	margin:8px 10px 8px 0 !important;
-	width:148px;
+	margin:8px 0 8px 0 !important;
 }
 
 input[type=radio]

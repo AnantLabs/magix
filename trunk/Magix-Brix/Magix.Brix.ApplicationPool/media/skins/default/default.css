@@ -1,5 +1,6 @@
 ﻿/* button, input type = button */
-input[type=button]
+input[type=button],
+input[type=submit]
 {
 	display:inline-block;
 	border:none 0;
@@ -32,14 +33,16 @@ input[type=button]
 	transition-duration:0.2s;
 }
 
-input[type=button]:focus
+input[type=button]:focus,
+input[type=submit]:focus
 {
 	-webkit-box-shadow: 2px 2px 3px #444;
 	-moz-box-shadow: 2px 2px 3px #444;
 	box-shadow: 2px 2px 3px #444;
 }
 
-input[type=button]:hover
+input[type=button]:hover,
+input[type=submit]:hover
 {
 	-webkit-box-shadow: 2px 2px 3px #444;
 	-moz-box-shadow: 2px 2px 3px #444;
@@ -489,7 +492,6 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	font-size:1.5em;
 	line-height:1em;
-	margin-top:-10px;
 	overflow:hidden;
 	width:100%;
 	text-shadow:3px 3px 5px rgba(0, 0, 0, 0.3);
@@ -524,11 +526,9 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	text-decoration:none;
 	display:block;
-	padding:8px 0 0 36px;
+	padding:10px 0 0 36px;
 	height:26px;
 	color:#000;
-	margin-left:2px;
-	margin-right:2px;
 
 	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
 
@@ -554,7 +554,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 .mux-sliding-menu .mux-sliding-menu-back
 {
-	height:30px;
+	height:26px;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item-active
@@ -614,7 +614,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	position:relative;
 	display:block;
-	padding:8px 0 7px 36px;
+	padding:8px 0 2px 36px;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item-icon

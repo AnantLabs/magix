@@ -37,11 +37,16 @@ namespace Magix.Brix.Components.ActiveModules.Users
             node["Password"].Value = password.Text;
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
-                "LogInUser",
+                "Magix.Core.LogInUser",
                 node);
             if (!node["Success"].Get<bool>())
             {
-                err.Text = "Username or password is invalid. Please try again.";
+                Node n = new Node();
+                n["Message"].Value = "Sorry, no access ...";
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.ShowMessage",
+                    n);
                 username.Select();
                 username.Focus();
             }
