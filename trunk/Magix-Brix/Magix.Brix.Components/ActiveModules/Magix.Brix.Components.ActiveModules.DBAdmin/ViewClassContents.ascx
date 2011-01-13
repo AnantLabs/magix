@@ -13,42 +13,62 @@
 
 <mux:Panel
     runat="server"
-    style="font-size:small;"
     id="pnl">
 </mux:Panel>
-<mux:Button
-    runat="server"
-    OnClick="FirstItems"
-    CssClass="pagingButton firstPagingButton"
-    Text="&lt;&lt;"
-    id="beginning" />
 
-<mux:Button
+<mux:Panel
     runat="server"
-    OnClick="PreviousItems"
-    CssClass="pagingButton"
-    Text="&lt;"
-    id="previous" />
+    id="createPnl"
+    CssClass="pagingButton plus">
+    <mux:Button
+        runat="server"
+        OnClick="CreateItem"
+        Text="+"
+        id="create" />
+</mux:Panel>
 
-<mux:Button
+<mux:Panel
     runat="server"
-    OnClick="NextItems"
-    CssClass="pagingButton"
-    Text="&gt;"
-    id="next" />
+    id="beginningPnl"
+    CssClass="pagingButton beginning">
+    <mux:Button
+        runat="server"
+        OnClick="FirstItems"
+        Text="&lt;&lt;"
+        id="beginning" />
+</mux:Panel>
 
-<mux:Button
+<mux:Panel
     runat="server"
-    OnClick="EndItems"
-    CssClass="pagingButton"
-    Text="&gt;&gt;"
-    id="end" />
+    id="previousPnl"
+    CssClass="pagingButton previous">
+    <mux:Button
+        runat="server"
+        OnClick="PreviousItems"
+        Text="&lt;"
+        id="previous" />
+</mux:Panel>
 
-<mux:Button
+<mux:Panel
     runat="server"
-    OnClick="CreateItem"
-    Text="+"
-    CssClass="createButton"
-    id="create" />
+    id="nextPnl"
+    CssClass="pagingButton next">
+    <mux:Button
+        runat="server"
+        OnClick="NextItems"
+        Text="&gt;"
+        id="next" />
+</mux:Panel>
+
+<mux:Panel
+    runat="server"
+    id="endPnl"
+    CssClass="pagingButton end">
+    <mux:Button
+        runat="server"
+        OnClick="EndItems"
+        Text="&gt;&gt;"
+        id="end" />
+</mux:Panel>
 
 

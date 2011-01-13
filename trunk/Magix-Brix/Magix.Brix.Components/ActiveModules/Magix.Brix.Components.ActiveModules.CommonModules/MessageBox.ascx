@@ -1,5 +1,5 @@
 ﻿<%@ Assembly 
-    Name="WineTasting.Modules" %>
+    Name="Magix.Brix.Components.ActiveModules.CommonModules" %>
 
 <%@ Control 
     Language="C#" 
@@ -8,6 +8,7 @@
 
 <mux:Label
     runat="server"
+    Tag="div"
     id="lbl" />
 <mux:Button
     runat="server"

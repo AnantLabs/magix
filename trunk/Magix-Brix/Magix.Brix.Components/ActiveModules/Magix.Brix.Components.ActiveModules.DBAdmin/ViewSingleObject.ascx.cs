@@ -23,6 +23,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button change;
         protected Button remove;
         protected Button focs;
+        protected Panel changePnl;
+        protected Panel removePnl;
 
         public override void InitialLoading(Node node)
         {
@@ -89,8 +91,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void DataBindDone()
         {
-            change.Enabled = DataSource["IsChange"].Get<bool>();
-            remove.Enabled = DataSource["IsRemove"].Get<bool>() &&
+            changePnl.Visible = DataSource["IsChange"].Get<bool>();
+            removePnl.Visible = DataSource["IsRemove"].Get<bool>() &&
                 DataSource.Contains("Object");
             string parentTypeName = DataSource["ParentFullTypeName"].Get<string>();
             if (DataSource["ParentID"].Get<int>() > 0)
@@ -198,61 +200,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 switch (DataSource["Type"]["Properties"][node.Name]["FullTypeName"].Get<string>())
                 {
-                    case "System.DateTime":
-                        {
-                            TextBox b = new TextBox();
-                            b.Text = node.Value as string;
-                            c1.Controls.Add(b);
-                            Panel pp = new Panel();
-                            Calendar cal = new Calendar();
-                            cal.Info = node.Name;
-                            cal.DateSelected +=
-                                delegate(object sender, EventArgs e)
-                                {
-                                    Calendar edit = sender as Calendar;
-                                    DateTime value = edit.Value.Date;
-                                    DateTime hours = DateTime.ParseExact(
-                                        (edit.Parent.Parent.Controls[0] as TextBox).Text,
-                                        "yyyy.MM.dd HH:mm:ss",
-                                        System.Globalization.CultureInfo.InvariantCulture);
-                                    value = 
-                                        new DateTime(
-                                            value.Year, 
-                                            value.Month, 
-                                            value.Day, 
-                                            hours.Hour, 
-                                            hours.Minute, 
-                                            hours.Second);
-                                    cal.Value = value;
-                                    (edit.Parent.Parent.Controls[0] as TextBox).Text = 
-                                        value.ToString("yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                    int id = DataSource["Object"]["ID"].Get<int>();
-                                    string column = edit.Info;
-                                    Node n = new Node();
-                                    n["ID"].Value = id;
-                                    n["PropertyName"].Value = column;
-                                    n["NewValue"].Value = value.ToString("yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                    n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                                    RaiseSafeEvent(
-                                        "DBAdmin.Data.ChangeSimplePropertyValue",
-                                        n);
-                                };
-                            cal.CssClass = "mux-shaded mux-rounded mux-calendar";
-                            pp.Style[Styles.position] = "absolute";
-                            pp.Style[Styles.zIndex] = "500";
-                            pp.Style[Styles.display] = "none";
-                            b.ClickEffect =
-                                new EffectFadeIn(pp, 250);
-                            cal.Value = 
-                                DateTime.ParseExact(
-                                    b.Text,
-                                    "yyyy.MM.dd HH:mm:ss", 
-                                    System.Globalization.CultureInfo.InvariantCulture);
-                            pp.MouseOutEffect =
-                                new EffectFadeOut(pp, 250);
-                            pp.Controls.Add(cal);
-                            c1.Controls.Add(pp);
-                        } break;
                     default:
                         {
                             TextAreaEdit ed = new TextAreaEdit();
@@ -290,18 +237,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             HtmlTableCell c1 = new HtmlTableCell();
             c1.InnerHtml = "Name";
+            c1.Attributes.Add("class", "wide-4");
             row.Cells.Add(c1);
 
             c1 = new HtmlTableCell();
             c1.InnerHtml = "Type";
+            c1.Attributes.Add("class", "wide-4");
             row.Cells.Add(c1);
 
             c1 = new HtmlTableCell();
             c1.InnerHtml = "Attributes";
+            c1.Attributes.Add("class", "wide-5");
             row.Cells.Add(c1);
 
             c1 = new HtmlTableCell();
             c1.InnerHtml = "Value";
+            c1.Attributes.Add("class", "wide-7");
             row.Cells.Add(c1);
             return row;
         }

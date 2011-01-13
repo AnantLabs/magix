@@ -877,7 +877,7 @@ table.viewObjects tr td .mux-in-place-edit a
 	background-image: -moz-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
 }
 
-.window-left-buttons .window-restore-columns
+.window-restore-columns
 {
 	display:block;
 	position:absolute;

@@ -17,39 +17,26 @@
     <img src="media/images/animated_brain.gif" alt="Marvin's brain ..." />
 </mux:AjaxWait>
 
-<div class="container showgrid">
-    <div class="span-24 prepend-top" style="height:500px;">
-        <mux:Panel 
-            runat="server" 
-            CssClass="wine-rater-main-all"
-            id="pnlAll">
-            <div class="wine-rater-main-content">
-                <mux:DynamicPanel 
-                    runat="server" 
-                    CssClass="dynamic"
-                    OnReload="dynamic_LoadControls"
-                    id="dyn" />
-            </div>
-        </mux:Panel>
-
-        <mux:DynamicPanel 
-            runat="server" 
-            CssClass="dynamic"
-            OnReload="dynamic_LoadControls"
-            id="dyn2" />
-
-        <mux:Window 
-            runat="server" 
-            CssClass="mux-shaded mux-rounded mux-window wine-window"
-            style="display:none;z-index:10000;"
-            Caption="Message from system"
-            Closable="false"
-            id="message">
-            <Content>
-                <mux:Label 
-                    runat="server" 
-                    id="msgLbl" />
-            </Content>
-        </mux:Window>
-    </div>
+<div class="container showgrid main" style="height:500px;">
+    <mux:DynamicPanel 
+        runat="server" 
+        CssClass="span-12 push-6 down-3 last"
+        OnReload="dynamic_LoadControls"
+        id="content" />
+    <mux:Panel
+        runat="server"
+        CssClass="span-22 push-1 last childContainer"
+        id="pnlAll" />
+    <mux:Window 
+        runat="server" 
+        CssClass="mux-shaded mux-rounded mux-window message prepend-top push-8 span-8 last"
+        Caption="Message from system"
+        Closable="false"
+        id="message">
+        <Content>
+            <mux:Label 
+                runat="server" 
+                id="msgLbl" />
+        </Content>
+    </mux:Window>
 </div>

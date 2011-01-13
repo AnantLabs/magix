@@ -1,5 +1,5 @@
 ﻿<%@ Assembly 
-    Name="WineTasting.Modules" %>
+    Name="Magix.Brix.Components.ActiveModules.CommonModules" %>
 
 <%@ Control 
     Language="C#" 

@@ -19,7 +19,7 @@
     </head>
     <body>
         <form id="form1" runat="server">
-            <div class="container prepend-top" style="height:500px;">
+            <div class="container prepend-top showgrid" style="height:500px;">
                 <div class="span-5 append-1">
                     <h2>January 2010</h2>
                     <mux:Label 

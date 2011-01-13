@@ -85,12 +85,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataBindDone();
             if (HasFilteredColumns())
             {
-                rc.CssClass = "window-left-buttons window-remove-columns";
+                rc.CssClass = "window-remove-columns";
                 rc.ToolTip = "Remove columns";
             }
             else
             {
-                rc.CssClass = "window-left-buttons window-restore-columns";
+                rc.CssClass = "window-restore-columns";
                 rc.ToolTip = "Add removed columns, or remove more columns";
             }
         }
@@ -111,7 +111,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void FlashPanel(Panel pnl)
         {
-            new EffectHighlight(pnl.Parent.Parent.Parent, 500)
+            new EffectHighlight(pnl, 500)
                 .Render();
         }
 
@@ -137,6 +137,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Select";
+                cS.CssClass = "wide-2";
                 row.Controls.Add(cS);
             }
             if (DataSource["IsRemove"].Get<bool>())
@@ -144,6 +145,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Remove";
+                cS.CssClass = "wide-2";
                 row.Controls.Add(cS);
             }
             if (DataSource["IsDelete"].Get<bool>())
@@ -151,10 +153,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Delete";
+                cS.CssClass = "wide-2";
                 row.Controls.Add(cS);
             }
             Label li = new Label();
             li.Tag = "td";
+            li.CssClass = "wide-2";
             bool hasIdFilter = false;
             if (!DataSource["IsFilter"].Get<bool>())
             {
@@ -190,6 +194,24 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     continue;
                 Label l = new Label();
                 l.Tag = "td";
+                string idxTypeName = idx["TypeName"].Get<string>();
+                int wide = 3;
+                switch (idxTypeName)
+                {
+                    case "Int32":
+                    case "Boolean":
+                        break;
+                    case "DateTime":
+                        wide += 2;
+                        break;
+                    case "String":
+                        wide += 3;
+                        break;
+                    default:
+                        break;
+                }
+                wide = Math.Max((int)(((double)idx.Name.Length) / 2.5), wide);
+                l.CssClass = "wide-" + wide;
                 if (!DataSource["IsFilter"].Get<bool>())
                 {
                     l.Text = idx.Name;
@@ -313,6 +335,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         LinkButton b2 = sender as LinkButton;
                         Node n = new Node();
+                        int id = int.Parse((b2.Parent.Parent as Label).Info);
+                        (b2.Parent.Parent as Label).CssClass = "grid-selected";
+                        if (SelectedID != -1)
+                        {
+                            if (id != SelectedID)
+                            {
+                                Label l = Selector.SelectFirst<Label>(this,
+                                    delegate(Control idxCtrl)
+                                    {
+                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                    });
+                                if (l != null)
+                                    l.CssClass = "";
+                            }
+                        }
+                        SelectedID = id;
                         n["ID"].Value = int.Parse((b2.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                         n["ParentID"].Value = DataSource["ParentID"].Value;
@@ -334,6 +372,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         LinkButton b = sender as LinkButton;
                         Node n = new Node();
+                        int id = int.Parse((b.Parent.Parent as Label).Info);
+                        (b.Parent.Parent as Label).CssClass = "grid-selected";
+                        if (SelectedID != -1)
+                        {
+                            if (id != SelectedID)
+                            {
+                                Label l = Selector.SelectFirst<Label>(this,
+                                    delegate(Control idxCtrl)
+                                    {
+                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                    });
+                                if (l != null)
+                                    l.CssClass = "";
+                            }
+                        }
+                        SelectedID = id;
                         n["ID"].Value = int.Parse((b.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                         if (RaiseSafeEvent("DBAdmin.Data.DeleteObject",n))
@@ -357,11 +411,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         if (id != SelectedID)
                         {
-                            Selector.SelectFirst<Label>(this,
+                            Label l = Selector.SelectFirst<Label>(this,
                                 delegate(Control idxCtrl)
                                 {
                                     return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                }).CssClass = "";
+                                });
+                            if (l != null)
+                                l.CssClass = "";
                         }
                     }
                     SelectedID = id;
@@ -426,6 +482,27 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 {
                     TextAreaEdit edit = new TextAreaEdit();
                     edit.TextLength = 25;
+                    edit.DisplayTextBox +=
+                        delegate(object sender, EventArgs e)
+                        {
+                            TextAreaEdit ed = sender as TextAreaEdit;
+                            int id = int.Parse((ed.Parent.Parent as Label).Info);
+                            (ed.Parent.Parent as Label).CssClass = "grid-selected";
+                            if (SelectedID != -1)
+                            {
+                                if (id != SelectedID)
+                                {
+                                    Label l2 = Selector.SelectFirst<Label>(this,
+                                        delegate(Control idxCtrl)
+                                        {
+                                            return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                        });
+                                    if (l2 != null)
+                                        l2.CssClass = "";
+                                }
+                            }
+                            SelectedID = id;
+                        };
                     edit.TextChanged +=
                         delegate(object sender, EventArgs e)
                         {
