@@ -16,8 +16,8 @@
 {
 	display:block;
 	color:#efefef;
-	width:400px;
-	margin:50px auto 0px auto;
+	width:430px;
+	margin:72px auto 0px auto;
 }
 
 .ajax-wait img
@@ -25,7 +25,7 @@
 	display:block;
 	color:#efefef;
 	width:166px;
-	margin:50px auto 0px auto;
+	margin:18px auto 0px auto;
 }
 
 .main
@@ -37,6 +37,7 @@
 {
 	position:absolute;
 	display:none;
+	z-index:10000;
 }
 
 .childContainer

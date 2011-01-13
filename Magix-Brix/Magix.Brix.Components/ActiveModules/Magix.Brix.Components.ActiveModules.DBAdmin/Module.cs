@@ -58,7 +58,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 n["Message"].Value = err.Message;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "ShowMessage",
+                    "Magix.Core.ShowMessage",
                     n);
                 return false;
             }
