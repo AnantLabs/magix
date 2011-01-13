@@ -6,48 +6,53 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.Users.Login" %>
 
-<mux:Panel 
+<link href="media/modules/Login.css" rel="stylesheet" type="text/css" />
+
+<mux:Window 
     runat="server" 
-    DefaultWidget="submit"
+    CssClass="mux-shaded mux-rounded mux-window"
+    Caption="Please login..."
+    Closable="false"
     id="wrp">
-    <table>
-        <tr>
-            <td>
-                Username
-            </td>
-            <td>
-                <mux:TextBox 
-                    runat="server" 
-                    AutoCapitalize="false"
-                    id="username" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Password
-            </td>
-            <td>
-                <mux:TextBox 
-                    runat="server" 
-                    TextMode="Password" 
-                    id="password" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align:right;">
-                <asp:Button 
-                    runat="server" 
-                    id="submit"
-                    OnClick="submit_Click"
-                    Text="Submit" />
-            </td>
-        </tr>
-    </table>
-    <mux:Label 
-        runat="server" 
-        id="err" 
-        style="color:Red;" />
-</mux:Panel>
+    <Content>
+        <table class="loginTable">
+            <tr>
+                <td class="wide-2">
+                    Username
+                </td>
+                <td class="span-4 txt">
+                    <mux:TextBox 
+                        runat="server" 
+                        AutoCapitalize="false"
+                        CssClass="span-4 txt"
+                        id="username" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Password
+                </td>
+                <td>
+                    <mux:TextBox 
+                        runat="server" 
+                        TextMode="Password" 
+                        CssClass="span-4 txt"
+                        id="password" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <asp:Button 
+                        runat="server" 
+                        id="submit"
+                        CssClass="span-3 loginOkButton"
+                        OnClick="submit_Click"
+                        Text="Submit" />
+                </td>
+            </tr>
+        </table>
+    </Content>
+</mux:Window>
 
 
 

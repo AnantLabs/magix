@@ -1,16 +1,17 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix-BRIX - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix-BRIX is licensed as GPLv3.
  */
 
 using System;
-using System.Configuration;
-using System.Web.UI;
-using Magix.Brix.Loader;
-using Magix.Brix.Data;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Web.UI;
+using System.Configuration;
+using Magix.Brix.Data;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
 
 namespace Magix.Brix.ApplicationPool
 {
@@ -40,9 +41,23 @@ namespace Magix.Brix.ApplicationPool
 
         private void InitializeViewport()
         {
-            string defaultControl = ConfigurationManager.AppSettings["PortalViewDriver"];
-            Control ctrl = PluginLoader.Instance.LoadActiveModule(defaultControl);
-            Form.Controls.Add(ctrl);
+            string defaultControl =
+                ConfigurationManager.AppSettings["PortalViewDriver"];
+            if (string.IsNullOrEmpty(defaultControl))
+            {
+                Node node = new Node();
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.GetViewPort",
+                    node);
+                Form.Controls.Add(node["Control"].Get<Control>());
+            }
+            else
+            {
+                Control ctrl =
+                    PluginLoader.Instance.LoadActiveModule(defaultControl);
+                Form.Controls.Add(ctrl);
+            }
         }
 
         private PageStatePersister _pageStatePersister;

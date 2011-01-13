@@ -19,7 +19,7 @@
     </head>
     <body>
         <form id="form1" runat="server">
-            <div class="container" style="height:500px;">
+            <div class="container showgrid" style="height:500px;">
                 <div class="span-10 prepend-top">
                     <mux:Label 
                         runat="server" 
@@ -30,7 +30,7 @@
                     <mux:SlidingMenu 
                         runat="server" 
                         OnLeafMenuItemClicked="sliding_LeafMenuItemClicked"
-                        style="height:190px;"
+                        style="height:216px;"
                         ID="sliding">
                         <mux:SlidingMenuLevel 
                             runat="server" 

@@ -24,7 +24,14 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         [ActiveEvent(Name = "DBAdmin.Form.ViewClasses")]
         protected void DBAdmin_Form_ViewClasses(object sender, ActiveEventArgs e)
         {
-            LoadModule("Magix.Brix.Components.ActiveModules.DBAdmin.BrowseClasses");
+            Node node = new Node();
+            node["Padding"].Value = 7;
+            node["Width"].Value = 10;
+            node["Top"].Value = 3;
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.DBAdmin.BrowseClasses",
+                null,
+                node);
         }
 
         // Called by BrowseClasses to fetch the classes for DBAdmin
