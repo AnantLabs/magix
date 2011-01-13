@@ -17,7 +17,7 @@
     <img src="media/images/animated_brain.gif" alt="Marvin's brain ..." />
 </mux:AjaxWait>
 
-<div class="container showgrid main" style="height:500px;">
+<div class="container main" style="height:500px;">
     <mux:DynamicPanel 
         runat="server" 
         CssClass="span-12 push-6 down-3 last"
