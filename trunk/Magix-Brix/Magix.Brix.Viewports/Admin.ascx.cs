@@ -39,8 +39,8 @@ namespace Magix.Brix.Viewports
                 };
         }
 
-        [ActiveEvent(Name = "ShowMessage")]
-        protected void ShowMessage(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.ShowMessage")]
+        protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
             msgLbl.Text = e.Params["Message"].Get<string>();
             new EffectFadeIn(message, 500)

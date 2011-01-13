@@ -286,7 +286,7 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                 node["Message"].Value = err.Message;
                                 ActiveEvents.Instance.RaiseActiveEvent(
                                     this,
-                                    "ShowMessage",
+                                    "Magix.Core.ShowMessage",
                                     node);
                                 equals.Select();
                                 equals.Focus();
@@ -315,7 +315,7 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                 node["Message"].Value = err.Message;
                                 ActiveEvents.Instance.RaiseActiveEvent(
                                     this,
-                                    "ShowMessage",
+                                    "Magix.Core.ShowMessage",
                                     node);
                                 equals.Select();
                                 equals.Focus();
@@ -337,7 +337,7 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                 node["Message"].Value = err.Message;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "ShowMessage",
+                    "Magix.Core.ShowMessage",
                     node);
                 equals.Select();
                 equals.Focus();
