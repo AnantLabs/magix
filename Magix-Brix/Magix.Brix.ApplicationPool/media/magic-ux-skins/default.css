@@ -7,9 +7,7 @@ input[type=button]
 	height:36px;
 	font-weight:normal;
 	color:#111;
-	padding:0 .75em 0 .75em;
 	margin:0 10px 18px 0;
-	min-width:150px;
 	
 	text-shadow:2px 2px 2px #999;
 
@@ -37,6 +35,11 @@ input[type=button]:focus
 	-webkit-box-shadow: 2px 2px 3px #444;
 	-moz-box-shadow: 2px 2px 3px #444;
 	box-shadow: 2px 2px 3px #444;
+}
+
+input:disabled[type=button]
+{
+	color:#999;
 }
 
 input[type=button]:hover
@@ -74,6 +77,29 @@ textarea
 }
 
 
+
+
+/* BluePrint.css plugins... */
+div.down-1, .down-1 {margin-top:1.5em;}
+div.down-2, .down-2 {margin-top:3em;}
+div.down-3, .down-3 {margin-top:4.5em;}
+div.down-4, .down-4 {margin-top:6em;}
+div.down-5, .down-5 {margin-top:7.5em;}
+div.down-6, .down-6 {margin-top:9em;}
+div.down-7, .down-7 {margin-top:10.5em;}
+div.down-8, .down-8 {margin-top:12em;}
+div.down-9, .down-9 {margin-top:13.5em;}
+div.down-10, .down-10 {margin-top:15em;}
+div.down-11, .down-11 {margin-top:16.5em;}
+div.down-12, .down-12 {margin-top:18em;}
+div.down-13, .down-13 {margin-top:19.5em;}
+div.down-14, .down-14 {margin-top:21em;}
+div.down-15, .down-15 {margin-top:22.5em;}
+div.down-16, .down-16 {margin-top:24em;}
+div.down-17, .down-17 {margin-top:25.5em;}
+div.down-18, .down-18 {margin-top:27em;}
+div.down-10, .down-19 {margin-top:28.5em;}
+div.down-20, .down-20 {margin-top:30em;}
 
 
 
@@ -713,7 +739,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-tree-no-children,
 .mux-tree-no-children-last
 {
-	padding-left:18px;
+	padding-left:20px;
 	line-height:18px;
 	font-size:16px;
 }
@@ -785,7 +811,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	line-height:1;
 	margin-bottom:.5em;
 	padding-top:.5em;
-	margin-left:1.5em;
+	margin-left:40px;
 	display:block;
 	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
 	user-select: none; 
@@ -797,8 +823,8 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	display:block;
 	position:absolute;
-	top:5px;
-	left:5px;
+	top:11px;
+	left:9px;
 	width:9px;
 	height:8px;
 	padding-left:3px;
@@ -839,7 +865,6 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 .mux-window-content
 {
-	margin:5px 5px 18px 5px;
 }
 
 
@@ -1086,9 +1111,8 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-in-place-edit a
 {
 	padding-left:20px;
-	min-width:150px;
 	display:inline-block;
-	height:22px;
+	height:18px;
 }
 
 .mux-in-place-edit input
@@ -1097,7 +1121,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	width:148px;
 	display:inline-block;
 	border:solid 1px #aaf;
-	height:20px;
+	height:16px;
 }
 
 .mux-in-place-edit textarea

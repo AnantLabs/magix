@@ -19,7 +19,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div class="container">
+        <div class="container showgrid">
             <h1>Magix-UX Samples</h1>
             <div class="span-16">
                 Welcome to the Magix Samples.

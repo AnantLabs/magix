@@ -8,7 +8,6 @@
 
 <mux:Panel
     runat="server"
-    style="font-size:small;"
     id="pnl">
 </mux:Panel>
 
@@ -17,16 +16,25 @@
     id="focs"
     style="margin-left:-4000px;position:absolute;" />
 
-<mux:Button
+<mux:Panel
     runat="server"
-    id="change"
-    OnClick="change_Click"
-    Text="Change..." />
+    id="changePnl"
+    CssClass="pagingButton change">
+    <mux:Button
+        runat="server"
+        id="change"
+        OnClick="change_Click"
+        Text="Change..." />
+</mux:Panel>
 
-<mux:Button
+<mux:Panel
     runat="server"
-    id="remove"
-    OnClick="remove_Click"
-    Text="Remove Reference" />
-
+    id="removePnl"
+    CssClass="pagingButton remove">
+    <mux:Button
+        runat="server"
+        id="remove"
+        OnClick="remove_Click"
+        Text="Remove Reference" />
+</mux:Panel>
 

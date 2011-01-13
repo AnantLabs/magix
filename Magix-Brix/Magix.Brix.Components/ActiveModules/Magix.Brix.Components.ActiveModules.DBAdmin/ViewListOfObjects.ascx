@@ -13,21 +13,39 @@
 
 <mux:Panel
     runat="server"
-    style="font-size:small;"
-    id="pnl">
+    id="pnl" />
+
+<mux:Panel
+    runat="server"
+    id="previousPnl"
+    CssClass="pagingButton previous">
+    <mux:Button
+        runat="server"
+        OnClick="PreviousItems"
+        Text="&lt;"
+        id="previous" />
 </mux:Panel>
-<mux:Button
-    runat="server"
-    OnClick="PreviousItems"
-    id="previous" />
 
-<mux:Button
+<mux:Panel
     runat="server"
-    OnClick="NextItems"
-    id="next" />
+    id="nextPnl"
+    CssClass="pagingButton next">
+    <mux:Button
+        runat="server"
+        OnClick="NextItems"
+        Text="&gt;"
+        id="next" />
+</mux:Panel>
 
-<mux:Button
+<mux:Panel
     runat="server"
-    id="append"
-    Text="Append..."
-    OnClick="append_Click" />
+    id="appendPnl"
+    CssClass="pagingButton append">
+    <mux:Button
+        runat="server"
+        id="append"
+        Text="Append..."
+        OnClick="append_Click" />
+</mux:Panel>
+
+

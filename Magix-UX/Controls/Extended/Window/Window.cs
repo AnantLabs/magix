@@ -94,7 +94,8 @@ namespace Magix.UX.Widgets
 
             _close.ID = "close";
             _close.CssClass = "mux-window-close";
-            _close.Text = "X";
+            _close.Text = "&nbsp;";
+            _close.ToolTip = "Click to close";
             _close.Click += CloseClick;
             Controls.Add(_close);
 

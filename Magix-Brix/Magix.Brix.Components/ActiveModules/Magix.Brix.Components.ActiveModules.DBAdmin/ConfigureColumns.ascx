@@ -6,31 +6,41 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.DBAdmin.ConfigureColumns" %>
 
-<asp:Repeater
+<mux:Panel
     runat="server"
-    id="rep">
-    <HeaderTemplate>
-        <table>
+    ID="pnl"
+    OnEscKey="EscKey">
+    <asp:Repeater
+        runat="server"
+        id="rep">
+        <HeaderTemplate>
+            <table class="viewObjects singleInstance noMargin">
+        </HeaderTemplate>
+        <FooterTemplate>
+            </table>
+        </FooterTemplate>
+        <ItemTemplate>
             <tr>
-                <td>Name</td>
-                <td>Visible</td>
+                <td class="wide-5">
+                    <mux:CheckBox
+                        runat="server"
+                        OnCheckedChanged="CheckedChange"
+                        CssClass="checkboxWithText"
+                        Info='<%#Eval("Name") %>'
+                        Checked='<%#Eval("[Visible].Value") %>' />
+                    <mux:Label 
+                        runat="server"
+                        Info='<%#Eval("Name") %>'
+                        CssClass="checkboxText"
+                        OnClick="CheckedChangeFromLabel"
+                        Text='<%#Eval("Name") %>' />
+                </td>
             </tr>
-    </HeaderTemplate>
-    <FooterTemplate>
-        </table>
-    </FooterTemplate>
-    <ItemTemplate>
-        <tr>
-            <td>
-                <%#Eval("Name") %>
-            </td>
-            <td>
-                <mux:CheckBox
-                    runat="server"
-                    OnCheckedChanged="CheckedChange"
-                    Info='<%#Eval("Name") %>'
-                    Checked='<%#Eval("[Visible].Value") %>' />
-            </td>
-        </tr>
-    </ItemTemplate>
-</asp:Repeater>
+        </ItemTemplate>
+    </asp:Repeater>
+</mux:Panel>
+
+
+
+
+

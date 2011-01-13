@@ -23,6 +23,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button previous;
         protected Button next;
         protected Button focs;
+        protected Panel appendPnl;
+        protected Panel previousPnl;
+        protected Panel nextPnl;
 
         public override void InitialLoading(Node node)
         {
@@ -30,7 +33,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
-                    append.Enabled = DataSource["IsAppend"].Get<bool>();
+                    appendPnl.Visible = DataSource["IsAppend"].Get<bool>();
                     new EffectTimeout(500)
                         .ChainThese(
                             new EffectFocusAndSelect(focs))
@@ -98,26 +101,34 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 parentTypeName,
                 DataSource["ParentID"].Value,
                 DataSource["ParentPropertyName"].Value);
-            string previousText = "Previous";
             if (DataSource["Start"].Get<int>() > 0)
             {
                 previous.Enabled = true;
+                previousPnl.Visible = true;
             }
             else
             {
                 previous.Enabled = false;
+                if (DataSource["SetCount"].Get<int>() <=
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+                    previousPnl.Visible = false;
+                else
+                    previousPnl.Visible = true;
             }
-            previous.Text = previousText;
-            string nextText = "Next";
             if (DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>())
             {
                 next.Enabled = true;
+                nextPnl.Visible = true;
             }
             else
             {
                 next.Enabled = false;
+                if (DataSource["SetCount"].Get<int>() <=
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+                    nextPnl.Visible = false;
+                else
+                    nextPnl.Visible = true;
             }
-            next.Text = nextText;
         }
 
         protected override void ReDataBind()

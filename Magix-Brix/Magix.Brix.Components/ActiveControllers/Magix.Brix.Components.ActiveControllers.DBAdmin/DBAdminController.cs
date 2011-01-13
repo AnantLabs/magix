@@ -252,13 +252,13 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     prop.PropertyType.Name);
             if (propertyName == "ID")
             {
-                node["ForcedSize"]["width"].Value = 500;
-                node["ForcedSize"]["height"].Value = 200;
+                node["ForcedSize"]["width"].Value = 490;
+                node["ForcedSize"]["height"].Value = 234;
             }
             else
             {
-                node["ForcedSize"]["width"].Value = 550;
-                node["ForcedSize"]["height"].Value = 200;
+                node["ForcedSize"]["width"].Value = 530;
+                node["ForcedSize"]["height"].Value = 234;
             }
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ConfigureFilters",
@@ -314,8 +314,7 @@ have relationships towards other instances in your database.</p>";
             node["OK"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedConfirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Cancel"]["FullTypeName"].Value = fullTypeName;
-            node["ForcedSize"]["width"].Value = 550;
-            node["ForcedSize"]["height"].Value = 180;
+            node["ForcedSize"]["width"].Value = 530;
             node["WindowCssClass"].Value =
                 "mux-shaded mux-rounded";
             LoadModule(
@@ -458,8 +457,7 @@ collection you're removing it from.</p>";
             node["OK"]["ParentFullTypeName"].Value = parentFullTypeName;
             node["OK"]["Event"].Value = "DBAdmin.Data.RemoveObjectFromParentPropertyList";
             node["Cancel"]["Event"].Value = "DBAdmin.Data.DoNotRemoveObjectFromParentPropertyList";
-            node["ForcedSize"]["width"].Value = 550;
-            node["ForcedSize"]["height"].Value = 180;
+            node["ForcedSize"]["width"].Value = 530;
             node["WindowCssClass"].Value =
                 "mux-shaded mux-rounded";
             LoadModule(

@@ -18,8 +18,8 @@ namespace Magix.Brix.Viewports
     [ActiveModule]
     public class SingleContainer : UserControl
     {
-        protected DynamicPanel dyn;
-        protected DynamicPanel dyn2;
+        protected DynamicPanel menu;
+        protected DynamicPanel content;
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
@@ -46,13 +46,14 @@ namespace Magix.Brix.Viewports
             {
                 // Window
                 Window w = new Window();
-                w.CssClass = "mux-shaded mux-rounded window-left-buttons";
-                w.Style[Styles.left] = ((idxNo * 15) + 50).ToString() + "px";
-                w.Style[Styles.top] = ((idxNo * 30) + 60).ToString() + "px";
-                w.Style[Styles.position] = "absolute";
-                w.Style[Styles.zIndex] = (1000 + idxNo).ToString();
-                w.Style[Styles.overflow] = "auto";
+                w.CssClass = "mux-shaded mux-rounded mux-window child";
+                w.Style[Styles.left] = (idxNo * 20).ToString() + "px";
+                w.Style[Styles.top] = (idxNo * 18).ToString() + "px";
+                w.Style[Styles.minWidth] = "470px";
+                w.Style[Styles.zIndex] = (1000 + (idxNo * 2)).ToString();
                 w.Visible = false;
+                w.Style[Styles.overflow] = "hidden";
+                w.Style[Styles.position] = "absolute";
                 w.EscKey +=
                     delegate
                     {
@@ -76,39 +77,11 @@ namespace Magix.Brix.Viewports
                 m.Opacity = 0.3M;
                 w.Controls.Add(m);
 
-                this.Controls.Add(w);
+                pnlAll.Controls.Add(w);
             }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            Page.LoadComplete += Page_LoadComplete;
-        }
-
-        void Page_LoadComplete(object sender, EventArgs e)
-        {
-            if (!HaveCheckedChrome)
-            {
-                Node node = new Node();
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "GetChromeAttributes",
-                    node);
-                if (node["WasSet"].Get<bool>())
-                    HaveCheckedChrome = true;
-                pnlAll.Style[Styles.fontFamily] = node["FontFamily"].Get<string>();
-                pnlAll.Style[Styles.backgroundColor] = node["BackgroundColor"].Get<string>();
-                pnlAll.Style[Styles.color] = node["Color"].Get<string>();
-            }
-        }
-
-        private bool HaveCheckedChrome
-        {
-            get { return ViewState["HaveCheckedChrome"] == null ? false : (bool)ViewState["HaveCheckedChrome"]; }
-            set { ViewState["HaveCheckedChrome"] = value; }
-        }
-
-        [ActiveEvent(Name = "ShowMessage")]
+        [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void ShowMessage(object sender, ActiveEventArgs e)
         {
             msgLbl.Text = e.Params["Message"].Get<string>();
@@ -124,13 +97,13 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "ClearControls")]
         protected void ClearControls(object sender, ActiveEventArgs e)
         {
-            if (e.Params["Position"].Get<string>() == "dyn")
+            if (e.Params["Position"].Get<string>() == "content")
             {
-                ClearControls(dyn);
+                ClearControls(content);
             }
-            else if (e.Params["Position"].Get<string>() == "dyn2")
+            else if (e.Params["Position"].Get<string>() == "menu")
             {
-                ClearControls(dyn2);
+                ClearControls(menu);
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
@@ -159,25 +132,25 @@ namespace Magix.Brix.Viewports
         {
             // Since this is our default container, 
             // we accept "null" and string.Empty values here ...!
-            if (e.Params["Position"].Get<string>() == "dyn" || 
+            if (e.Params["Position"].Get<string>() == "content" || 
                 string.IsNullOrEmpty(e.Params["Position"].Get<string>()))
             {
                 if (true.Equals(e.Params["Parameters"]["Append"].Value))
-                    dyn.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    content.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 else
                 {
-                    ClearControls(dyn);
-                    dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    ClearControls(content);
+                    content.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
             else if (e.Params["Position"].Get<string>() == "dyn2")
             {
                 if (true.Equals(e.Params["Parameters"]["Append"].Value))
-                    dyn2.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    menu.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 else
                 {
-                    ClearControls(dyn2);
-                    dyn2.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    ClearControls(menu);
+                    menu.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
             else if (e.Params["Position"].Get<string>() == "child")
@@ -202,14 +175,26 @@ namespace Magix.Brix.Viewports
                 }
                 if (e.Params["Parameters"].Contains("ForcedSize"))
                 {
-                    int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
-                    int height = e.Params["Parameters"]["ForcedSize"]["height"].Get<int>();
-                    w.Style[Styles.width] = "900px";
-                    w.Style[Styles.height] = "500px";
-                    new EffectFadeIn(w, 750)
-                        .JoinThese(
-                            new EffectSize(width, height))
-                        .Render();
+                    if (e.Params["Parameters"]["ForcedSize"].Contains("height"))
+                    {
+                        int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
+                        int height = e.Params["Parameters"]["ForcedSize"]["height"].Get<int>();
+                        w.Style[Styles.width] = "800px";
+                        w.Style[Styles.height] = "500px";
+                        new EffectFadeIn(w, 750)
+                            .JoinThese(
+                                new EffectSize(width, height))
+                            .Render();
+                    }
+                    else
+                    {
+                        int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
+                        w.Style[Styles.width] = width + "px";
+                        new EffectFadeIn(w, 750)
+                            .JoinThese(
+                                new EffectRollDown())
+                            .Render();
+                    }
                 }
                 else
                 {

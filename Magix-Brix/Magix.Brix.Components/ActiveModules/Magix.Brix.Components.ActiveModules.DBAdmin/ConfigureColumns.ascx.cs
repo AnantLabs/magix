@@ -49,6 +49,27 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 node);
         }
 
+        protected void CheckedChangeFromLabel(object sender, EventArgs e)
+        {
+            Label l = sender as Label;
+            string columnName = l.Info;
+            CheckBox b = Selector.SelectFirst<CheckBox>(l.Parent);
+            b.Checked = !b.Checked;
+            b.Focus();
+            Node node = new Node();
+            node["ColumnName"].Value = columnName;
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            node["Visible"].Value = b.Checked;
+            RaiseSafeEvent(
+                "DBAdmin.Data.ChangeVisibilityOfColumn",
+                node);
+        }
+
+        protected void EscKey(object sender, EventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
         protected override void ReDataBind()
         {
         }

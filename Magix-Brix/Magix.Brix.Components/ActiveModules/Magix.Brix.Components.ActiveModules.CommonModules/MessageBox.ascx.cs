@@ -38,7 +38,12 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         {
             Load += delegate
             {
-                lbl.Text = node["Text"].Get<string>();
+                string message = node["Text"].Get<string>();
+                if (!message.Contains("<p"))
+                {
+                    message = "<p>" + message + "</p>";
+                }
+                lbl.Text = message;
                 OkNode = node["OK"].UnTie();
                 CancelNode = node["Cancel"].UnTie();
                 if (!CancelNode["Visible"].Get(true))

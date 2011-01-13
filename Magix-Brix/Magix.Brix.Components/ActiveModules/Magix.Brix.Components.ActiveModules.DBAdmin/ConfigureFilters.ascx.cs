@@ -70,9 +70,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         private void CreateComplexCriteria()
         {
+            Label wrp = new Label();
+            wrp.Tag = "p";
+
             Label l = new Label();
             l.Text = "In or has: ";
-            pnl.Controls.Add(l);
+            wrp.Controls.Add(l);
 
             equals = new TextBox();
             equals.ID = "t";
@@ -83,11 +86,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["PropertyName"].Value, "");
             if (!string.IsNullOrEmpty(equals.Text))
                 equals.Text = equals.Text.Split('|')[1];
-            pnl.Controls.Add(equals);
+            wrp.Controls.Add(equals);
+            pnl.Controls.Add(wrp);
 
             l = new Label();
-            l.Text = @"<p style=""margin-top:10px;"">Type in the ID of the 
-Document you want to filter by.</p>";
+            l.Tag = "p";
+            l.Text = @"Type in the ID of the 
+Document you want to filter by. Empty string removes any existing filters.";
             pnl.Controls.Add(l);
             if (_isFirst)
             {
@@ -100,13 +105,10 @@ Document you want to filter by.</p>";
 
         private void CreateNormalCriteria()
         {
-            Label l = new Label();
-            l.Text = @"<p>Specify how you want your criteria to appear, 
-empty string removes any existing Criteria...</p>";
-            pnl.Controls.Add(l);
+            Label wrp = new Label();
+            wrp.Tag = "p";
 
             SelectList ls = new SelectList();
-            ls.Style[Styles.width] = "110px";
 
             ListItem i = new ListItem();
             i.Value = "Lt";
@@ -152,12 +154,20 @@ empty string removes any existing Criteria...</p>";
                 }
             }
 
-            pnl.Controls.Add(ls);
+            wrp.Controls.Add(ls);
 
             TextBox t = new TextBox();
             if (!string.IsNullOrEmpty(filter[0]))
                 t.Text = filter[1];
-            pnl.Controls.Add(t);
+            wrp.Controls.Add(t);
+
+            pnl.Controls.Add(wrp);
+
+            Label l = new Label();
+            l.Tag = "p";
+            l.Text = @"Specify how you want your criteria to appear, 
+empty string removes any existing Criteria...";
+            pnl.Controls.Add(l);
 
             if (_isFirst)
             {
@@ -172,9 +182,12 @@ empty string removes any existing Criteria...</p>";
 
         private void CreateControlsForID()
         {
+            Label wrp = new Label();
+            wrp.Tag = "p";
+
             Label l = new Label();
             l.Text = "Equals: ";
-            pnl.Controls.Add(l);
+            wrp.Controls.Add(l);
 
             equals = new TextBox();
             equals.ID = "t";
@@ -183,11 +196,13 @@ empty string removes any existing Criteria...</p>";
                 DataSource["FullTypeName"].Get<string>() + 
                 ":" + 
                 DataSource["PropertyName"].Value, "");
-            pnl.Controls.Add(equals);
+            wrp.Controls.Add(equals);
+            pnl.Controls.Add(wrp);
 
             l = new Label();
-            l.Text = @"<p style=""margin-top:10px;"">Type in a specific ID, integer value, 
-or a list of comma separated IDs.</p>";
+            l.Tag = "p";
+            l.Text = @"Type in a specific ID, integer value, 
+or a list of comma separated IDs. Empty string removes any existing filters.";
             pnl.Controls.Add(l);
             if (_isFirst)
             {
