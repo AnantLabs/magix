@@ -6,33 +6,36 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.CommonModules.ToolTip" %>
 
+<link href="media/modules/ToolTip.css" rel="stylesheet" type="text/css" />
+
 <mux:Window 
     runat="server" 
     Closable="true"
-    style="position:absolute;top:25px;right:25px;z-index:1000;color:Black;width:350px;" 
-    CssClass="mux-shaded mux-rounded wine-admin-message-box" 
+    style="position:absolute;z-index:830;" 
+    CssClass="mux-shaded mux-rounded mux-window" 
     id="wnd">
     <Content>
         <mux:Label
             runat="server"
+            Tag="div"
             id="lbl" />
-        <div class="center-aligned-div" style="width:150px;margin-bottom:-59px;">
-            <mux:Button
-                runat="server"
-                id="previous"
-                OnClick="previous_Click"
-                Text="&lt;&lt;" />
-            <mux:Button
-                runat="server"
-                id="next"
-                OnClick="next_Click"
-                Text="&gt;&gt;" />
-        </div>
+        <mux:Button
+            runat="server"
+            id="previous"
+            OnClick="previous_Click"
+            CssClass="span-3 navButton last"
+            Text="&lt;&lt;" />
+        <mux:Button
+            runat="server"
+            id="next"
+            OnClick="next_Click"
+            CssClass="span-3 navButton"
+            Text="&gt;&gt;" />
         <mux:Button
             runat="server"
             id="ok"
-            CssClass="cancel"
             OnClick="ok_Click"
+            CssClass="span-3 navButton"
             Text="OK" />
     </Content>
     <Control>

@@ -127,7 +127,7 @@ Document you want to filter by. Empty string removes any existing filters.";
 
             i = new ListItem();
             i.Value = "Like";
-            i.Text = "Like";
+            i.Text = "Wildcard";
             ls.Items.Add(i);
 
             string setting =

@@ -105,12 +105,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void DataBindDone()
         {
-            (Parent.Parent.Parent as Window).Caption = string.Format(
-                "{0} {1}-{2}/{3}",
-                DataSource["TypeName"].Get<string>(),
-                ((int)DataSource["Start"].Value) + 1,
-                DataSource["End"].Get<int>(),
-                DataSource["SetCount"].Get<int>());
+            if (Parent.Parent.Parent is Window)
+            {
+                (Parent.Parent.Parent as Window).Caption = string.Format(
+                    "{0} {1}-{2}/{3}",
+                    DataSource["TypeName"].Get<string>(),
+                    ((int)DataSource["Start"].Value) + 1,
+                    DataSource["End"].Get<int>(),
+                    DataSource["SetCount"].Get<int>());
+            }
 
             previousPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
             nextPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
@@ -127,13 +130,26 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void RefreshWindowContent(object sender, ActiveEventArgs e)
         {
-            if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
+            if (e.Params["ClientID"].Get<string>() == "LastWindow")
             {
+                // Last window was closed, we're still around, what are we waiting for ...
+                /// ... phreaking UPDATE ...!!! :P
                 DataSource["Start"].Value = 0;
                 DataSource["End"].Value =
                     DataSource["Start"].Get<int>(0) +
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
                 ReDataBind();
+            }
+            else
+            {
+                if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
+                {
+                    DataSource["Start"].Value = 0;
+                    DataSource["End"].Value =
+                        DataSource["Start"].Get<int>(0) +
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                    ReDataBind();
+                }
             }
         }
 

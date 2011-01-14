@@ -80,7 +80,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["FullTypeName"].Value = type.FullName;
                 node["TypeName"].Value = type.Name;
                 Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
-                    GetMethodInfos(typeName);
+                    GetMethodInfos(typeName, node);
                 foreach (string idxKey in getters.Keys)
                 {
                     Tuple<MethodInfo, ActiveFieldAttribute> idx = getters[idxKey];
@@ -123,7 +123,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         public void GetObjectNode(Node node, int id, string typeName)
         {
             object obj = GetObject(id, typeName);
-            GetObjectNode(obj, typeName, node);
+            GetObjectNode(obj, typeName, node, node);
         }
 
         public void GetComplexPropertyFromObjectNode(
@@ -161,7 +161,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     node["IsRemove"].Value = !attrs[0].BelongsTo;
                     int idOfChild = GetID(child, prop.PropertyType);
                     node["Object"]["ID"].Value = idOfChild;
-                    GetObjectNode(child, prop.PropertyType.FullName, node["Object"]);
+                    GetObjectNode(child, prop.PropertyType.FullName, node["Object"], node);
                 }
                 GetObjectTypeNode(prop.PropertyType.FullName, node);
             }
@@ -221,7 +221,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                         GetObjectNode(
                             idxObj,
                             childType.FullName,
-                            node["Objects"]["O-" + idOfChild]);
+                            node["Objects"]["O-" + idOfChild], node);
                     }
                     idxNo += 1;
                 }
@@ -229,7 +229,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        private void GetObjectNode(object obj, string typeName, Node node)
+        private void GetObjectNode(object obj, string typeName, Node node, Node root)
         {
             Type type = GetType(typeName);
             if (type == null)
@@ -243,7 +243,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             else
             {
                 Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
-                    GetMethodInfos(typeName);
+                    GetMethodInfos(typeName, root);
                 node["ID"].Value =
                     (int)type.GetProperty("ID")
                     .GetGetMethod()
@@ -362,11 +362,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 IEnumerable enumer =
                     ret.Invoke(null, new object[] { parameters.ToArray() }) as IEnumerable;
                 Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
-                    GetMethodInfos(typeName);
+                    GetMethodInfos(typeName, node);
                 foreach (object idx in enumer)
                 {
                     int id = GetID(idx, type);
-                    GetObjectNode(idx, typeName, node["Objects"]["O-" + id]);
+                    GetObjectNode(idx, typeName, node["Objects"]["O-" + id], node);
                 }
             }
         }
@@ -468,11 +468,32 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        public List<Criteria> GetCriteria(string fullTypeName)
+        public List<Criteria> GetCriteria(string fullTypeName, Node node)
         {
-            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters 
-                = GetMethodInfos(fullTypeName);
+            // Creating Criteria from Settings ...
+            Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters
+                = GetMethodInfos(fullTypeName, node);
             List<Criteria> retVal = new List<Criteria>();
+
+
+            // Adding up any given criterias .....
+            if (node.Contains("Criteria"))
+            {
+                // Using given Criteria
+                foreach (Node idx in node["Criteria"])
+                {
+                    switch (idx["Name"].Get<string>())
+                    {
+                        case "ParentId":
+                            retVal.Add(Criteria.ParentId(idx["Value"].Get<int>()));
+                            break;
+                        default:
+                            throw new ApplicationException("Not impemented that criteria yet ...!");
+                    }
+                }
+            }
+            
+            
             string idFilter =
                 Settings.Instance.Get(
                     "DBAdmin.Filter." + fullTypeName + ":ID",
@@ -530,7 +551,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                             retVal.Add(
                                 Criteria.Like(
                                     propertyName,
-                                    value));
+                                    value.Replace("*", "%").Replace("?", "_")));
                             break;
                         case "In":
                             {
@@ -804,8 +825,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             return (int)type.GetProperty("ID").GetGetMethod().Invoke(obj, null);
         }
 
-        private Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> GetMethodInfos(
-            string typeNamey)
+        private Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> 
+            GetMethodInfos(string typeNamey, Node node)
         {
             Type type = GetType(typeNamey);
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> retVal =
@@ -817,11 +838,27 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                         typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
                 if (attrs != null && attrs.Length > 0)
                 {
-                    // Serializable property...
-                    retVal[idx.Name] =
-                        new Tuple<MethodInfo, ActiveFieldAttribute>(
-                            idx.GetGetMethod(true),
-                            attrs[0]);
+                    bool add = true;
+                    if (node.Contains("WhiteListColumns"))
+                    {
+                        add = false;
+                        foreach (Node idxN in node["WhiteListColumns"])
+                        {
+                            if (idx.Name == idxN.Name)
+                            {
+                                add = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (add)
+                    {
+                        // Serializable property...
+                        retVal[idx.Name] =
+                            new Tuple<MethodInfo, ActiveFieldAttribute>(
+                                idx.GetGetMethod(true),
+                                attrs[0]);
+                    }
                 }
             }
             return retVal;
