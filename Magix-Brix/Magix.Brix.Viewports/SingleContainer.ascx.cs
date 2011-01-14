@@ -181,6 +181,9 @@ namespace Magix.Brix.Viewports
                     ClearControls(dyn);
                     dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
+                dyn.Style[Styles.display] = "none";
+                new EffectFadeIn(dyn, 500)
+                    .Render();
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
@@ -256,7 +259,16 @@ namespace Magix.Brix.Viewports
             Window w = sender as Window;
             ClearControls(w.Content.Controls[0] as DynamicPanel);
             int closingWindowID = int.Parse(w.ID.Replace("wd", ""));
-            if (closingWindowID != 0)
+            if (closingWindowID == 0)
+            {
+                Node node = new Node();
+                node["ClientID"].Value = "LastWindow";
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "RefreshWindowContent",
+                    node);
+            }
+            else
             {
                 int refreshWindowID = closingWindowID - 1;
                 Node node = new Node();

@@ -63,6 +63,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Node node = new Node();
             string fullTypeName = DataSource["FullTypeName"].Get<string>();
             node["FullTypeName"].Value = fullTypeName;
+            if (DataSource.Contains("WhiteListColumns"))
+                node["WhiteListColumns"] = DataSource["WhiteListColumns"];
             RaiseSafeEvent(
                 "DBAdmin.Form.ShowAddRemoveColumns",
                 node);
@@ -83,15 +85,32 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             TableParent.Controls.Add(table);
             DataBindDone();
-            if (HasFilteredColumns())
+            // TODO: Refactor ...!
+            if (Parent.Parent.Parent is Window)
             {
-                rc.CssClass = "window-remove-columns";
-                rc.ToolTip = "Remove columns";
+                if (HasFilteredColumns())
+                {
+                    rc.CssClass = "window-remove-columns";
+                    rc.ToolTip = "Remove columns";
+                }
+                else
+                {
+                    rc.CssClass = "window-restore-columns";
+                    rc.ToolTip = "Add removed columns, or remove more columns";
+                }
             }
             else
             {
-                rc.CssClass = "window-restore-columns";
-                rc.ToolTip = "Add removed columns, or remove more columns";
+                if (HasFilteredColumns())
+                {
+                    rc.CssClass = "no-window-remove-columns";
+                    rc.ToolTip = "Remove columns";
+                }
+                else
+                {
+                    rc.CssClass = "no-window-restore-columns";
+                    rc.ToolTip = "Add removed columns, or remove more columns";
+                }
             }
         }
 
@@ -121,6 +140,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Node node = new Node();
             node["PropertyName"].Value = btn.Info;
             node["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>();
+            if (DataSource.Contains("WhiteListColumns"))
+                node["WhiteListColumns"] = DataSource["WhiteListColumns"];
             RaiseSafeEvent(
                 "DBAdmin.Form.GetFilterForColumn",
                 node);
@@ -137,7 +158,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Select";
-                cS.CssClass = "wide-2";
+                cS.CssClass = "wide-2 noFilter";
                 row.Controls.Add(cS);
             }
             if (DataSource["IsRemove"].Get<bool>())
@@ -145,7 +166,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Remove";
-                cS.CssClass = "wide-2";
+                cS.CssClass = "wide-2 noFilter";
                 row.Controls.Add(cS);
             }
             if (DataSource["IsDelete"].Get<bool>())
@@ -153,16 +174,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Delete";
-                cS.CssClass = "wide-2";
+                cS.CssClass = "wide-2 noFilter";
                 row.Controls.Add(cS);
             }
             Label li = new Label();
             li.Tag = "td";
             li.CssClass = "wide-2";
             bool hasIdFilter = false;
-            if (!DataSource["IsFilter"].Get<bool>())
+            if (!DataSource["IsFilter"].Get<bool>() ||
+                (DataSource.Contains("FilterOnId") &&
+                !DataSource["FilterOnId"].Get<bool>()))
             {
                 li.Text = "ID";
+                li.CssClass = "noFilter";
             }
             else
             {

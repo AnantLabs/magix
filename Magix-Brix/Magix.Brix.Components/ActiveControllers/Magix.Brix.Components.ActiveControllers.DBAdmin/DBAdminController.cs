@@ -69,10 +69,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         [ActiveEvent(Name = "DBAdmin.Form.ViewClass")]
         protected void DBAdmin_Form_ViewClass(object sender, ActiveEventArgs e)
         {
-            Node node = new Node();
-            string fullTypeName = 
-                e.Params["FullTypeName"].Get<string>();
-            ShowViewClassForm(node, fullTypeName);
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            ShowViewClassForm(e.Params, fullTypeName);
         }
 
         // Requires a "FullTypeName" parameter, and "Start" + "End"
@@ -83,7 +81,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 e.Params["FullTypeName"].Get<string>();
             Data.Instance.GetObjectTypeNode(fullTypeName, e.Params);
             List<Criteria> pars = 
-                Data.Instance.GetCriteria(fullTypeName);
+                Data.Instance.GetCriteria(fullTypeName, e.Params);
             Data.Instance.GetObjectsNode(
                 fullTypeName,
                 e.Params,
@@ -251,6 +249,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             node["PropertyTypeName"].Value = prop.PropertyType.FullName;
             node["FullTypeName"].Value = fullTypeName;
             node["PropertyName"].Value = propertyName;
+            if (e.Params.Contains("WhiteListColumns"))
+                node["WhiteListColumns"] = e.Params["WhiteListColumns"];
             node["Caption"].Value =
                 string.Format(
                     @"Create filter for {0} [{2}] on {1}",
@@ -282,6 +282,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 string.Format("Configure visible columns for {0}", 
                     fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1));
             node["FullTypeName"].Value = fullTypeName;
+            if (e.Params.Contains("WhiteListColumns"))
+                node["WhiteListColumns"] = e.Params["WhiteListColumns"];
             Data.Instance.GetObjectTypeNode(fullTypeName, node);
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ConfigureColumns",
@@ -321,9 +323,9 @@ have relationships towards other instances in your database.</p>";
             node["OK"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedConfirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Cancel"]["FullTypeName"].Value = fullTypeName;
-            node["ForcedSize"]["width"].Value = 530;
+            node["ForcedSize"]["width"].Value = 550;
             node["WindowCssClass"].Value =
-                "mux-shaded mux-rounded";
+                "mux-shaded mux-rounded push-5 down-2";
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
                 "child",
@@ -360,7 +362,7 @@ have relationships towards other instances in your database.</p>";
         {
             Data.Instance.GetObjectTypeNode(fullTypeName, node);
             List<Criteria> pars =
-                Data.Instance.GetCriteria(fullTypeName);
+                Data.Instance.GetCriteria(fullTypeName, node);
             Data.Instance.GetObjectsNode(
                 fullTypeName,
                 node,
@@ -374,9 +376,12 @@ have relationships towards other instances in your database.</p>";
             node["End"].Value = node["Objects"].Count;
             int count = Data.Instance.GetCount(fullTypeName, pars.ToArray());
             node["SetCount"].Value = count;
+            string container = "child";
+            if (node.Contains("Container"))
+                container = node["Container"].Get<string>();
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
-                "child",
+                container,
                 node);
         }
 

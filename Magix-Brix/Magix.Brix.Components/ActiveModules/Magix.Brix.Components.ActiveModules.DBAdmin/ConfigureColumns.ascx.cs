@@ -26,7 +26,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
-                    rep.DataSource = DataSource["Type"]["Properties"];
+                    Node data = new Node();
+                    if (DataSource.Contains("WhiteListColumns"))
+                    {
+                        foreach (Node idx in DataSource["Type"]["Properties"])
+                        {
+                            string name = idx.Name;
+                            if (DataSource["WhiteListColumns"].Contains(name) &&
+                                DataSource["WhiteListColumns"][name].Get<bool>())
+                            {
+                                data.Add(idx);
+                            }
+                        }
+                    }
+                    else
+                        data = DataSource["Type"]["Properties"];
+                    rep.DataSource = data;
                     rep.DataBind();
                     CheckBox ch = Selector.SelectFirst<CheckBox>(rep);
                     new EffectTimeout(500)

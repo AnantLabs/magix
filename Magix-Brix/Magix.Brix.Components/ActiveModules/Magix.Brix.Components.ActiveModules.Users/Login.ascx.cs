@@ -7,6 +7,7 @@
 using System;
 using System.Web.UI;
 using Magix.UX.Widgets;
+using Magix.UX.Effects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
 
@@ -24,8 +25,10 @@ namespace Magix.Brix.Components.ActiveModules.Users
             Load +=
                 delegate
                 {
-                    username.Focus();
-                    username.Select();
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(username))
+                        .Render();
                     Page.Form.Action = Request.Url.ToString().Replace("default.aspx", "");
                 };
         }

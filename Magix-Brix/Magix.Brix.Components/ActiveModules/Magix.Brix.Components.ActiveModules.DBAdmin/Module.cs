@@ -34,9 +34,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         [ActiveEvent(Name = "RefreshWindowContent")]
         protected virtual void RefreshWindowContent(object sender, ActiveEventArgs e)
         {
-            if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
+            if (e.Params["ClientID"].Get<string>() == "LastWindow")
             {
                 ReDataBind();
+            }
+            else
+            {
+                if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
+                {
+                    ReDataBind();
+                }
             }
         }
 

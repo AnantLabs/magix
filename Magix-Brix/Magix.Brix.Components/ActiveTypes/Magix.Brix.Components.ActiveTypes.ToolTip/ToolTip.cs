@@ -83,7 +83,10 @@ namespace Magix.Brix.Components.ActiveTypes
             if (pos.Position >= Tip.Count)
                 pos.Position = 0;
             pos.Save();
-            return Tip.SelectFirst(Criteria.Eq("No", pos.Position)).Value;
+            Tip retVal = Tip.SelectFirst(Criteria.Eq("No", pos.Position));
+            if (retVal != null)
+                return retVal.Value;
+            return null;
         }
 
         public string Previous(string seed)

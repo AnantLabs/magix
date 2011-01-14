@@ -28,7 +28,10 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             {
                 wnd.Caption = node["Caption"].Get<string>();
                 lbl.Text = node["Text"].Get<string>();
-                ok.Focus();
+                new EffectTimeout(500)
+                    .ChainThese(
+                        new EffectFocusAndSelect(ok))
+                    .Render();
             };
         }
 
