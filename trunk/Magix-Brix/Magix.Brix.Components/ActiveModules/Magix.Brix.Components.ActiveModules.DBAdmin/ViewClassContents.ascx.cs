@@ -114,6 +114,20 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["End"].Get<int>(),
                     DataSource["SetCount"].Get<int>());
             }
+            else
+            {
+                Node node = new Node();
+                node["ClientID"].Value = ClientID;
+                node["Caption"].Value = string.Format(
+                    "{0} {1}-{2}/{3}",
+                    DataSource["TypeName"].Get<string>(),
+                    ((int)DataSource["Start"].Value) + 1,
+                    DataSource["End"].Get<int>(),
+                    DataSource["SetCount"].Get<int>());
+                RaiseSafeEvent(
+                    "DBAdmin.Visual.SetFormCaption",
+                    node);
+            }
 
             previousPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
             nextPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);

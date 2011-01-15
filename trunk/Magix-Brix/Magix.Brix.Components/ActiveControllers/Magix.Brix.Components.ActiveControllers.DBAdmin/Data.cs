@@ -358,7 +358,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     }
                 }
                 if (!containsId)
-                    parameters.Add(Criteria.Range(startAt, endAt, "ID"));
+                    parameters.Add(Criteria.Range(startAt, endAt, "ID", true));
                 IEnumerable enumer =
                     ret.Invoke(null, new object[] { parameters.ToArray() }) as IEnumerable;
                 Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters =
@@ -485,7 +485,21 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     switch (idx["Name"].Get<string>())
                     {
                         case "ParentId":
-                            retVal.Add(Criteria.ParentId(idx["Value"].Get<int>()));
+                            retVal.Add(
+                                Criteria.ParentId(
+                                    idx["Value"].Get<int>()));
+                            break;
+                        case "ExistsIn":
+                            retVal.Add(
+                                Criteria.ExistsIn(
+                                    idx["Value"].Get<int>(),
+                                    idx["Reversed"].Get<bool>()));
+                            break;
+                        case "Sort":
+                            retVal.Add(
+                                Criteria.Sort(
+                                    idx["Value"].Get<string>(), 
+                                    idx["Ascending"].Get<bool>()));
                             break;
                         default:
                             throw new ApplicationException("Not impemented that criteria yet ...!");

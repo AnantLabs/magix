@@ -37,6 +37,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Header.ascx.cs">
+      <DependentUpon>Header.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="ToolTip.ascx.cs">
       <DependentUpon>ToolTip.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -68,6 +72,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ToolTip.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Header.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
