@@ -111,19 +111,54 @@ namespace Magix.Brix.Data.Internal
             string join = "";
             string where = "";
             string order = "";
-            bool hasRange = false;
-            bool hasSort = false;
+
+            // Used as signal objects ...
             CritRange range = null;
+            SortOn sort = null;
+
+            // We need to check to see if there exists both a SortOn and
+            // a CritRange in our collection of Criteria, if there does, we 
+            // need to take the SortColumn from our SortOn Criteria, and stuff into
+            // our CritRange Criteria - plus in the future; Also add up ASC/DESC
+            // depending upon if it's there or not ...
+            List<Criteria> toConvertTo = new List<Criteria>(args);
+            foreach (Criteria idx in toConvertTo)
+            {
+                if (idx is CritRange)
+                    range = idx as CritRange;
+                else if (idx is SortOn)
+                    sort = idx as SortOn;
+            }
+            if (sort != null && range != null)
+            {
+                range.SortColumn = sort.Value.ToString();
+                range.Ascending = sort.Ascending;
+
+                // Now that we have copied the sorting from our
+                // sorting Criteria, since Sort has priority on columns,
+                // we can safely remove the Sort out of the collection ...
+                toConvertTo.RemoveAll(
+                    delegate(Criteria idx)
+                    {
+                        if (idx is SortOn)
+                            return true;
+                        return false;
+                    });
+                args = toConvertTo.ToArray();
+            }
+
+            // Now that we have removed out the Sort parameter, and merged it
+            // with the Range parameter, we can safely reset the "sort" and "range" properties
+            // to null again, to use them as signals again, later down in our code ...
+            range = null;
+            sort = null;
+
             foreach (Criteria idx in args)
             {
                 if (idx is SortOn)
                 {
-                    if (hasSort)
-                        throw new ApplicationException("You cannot have two sorts in the same select query ...");
-                    if (hasRange)
-                        throw new ApplicationException("You cannot have two both sort and range in the same select query ...");
-                    hasSort = true;
                     SortOn tmp = idx as SortOn;
+                    sort = tmp;
                     string propName = (string)tmp.Value;
                     bool ascending = tmp.Ascending;
                     PropertyInfo info = type.GetProperty(propName);
@@ -152,46 +187,121 @@ namespace Magix.Brix.Data.Internal
                 }
                 else if (idx is CritRange)
                 {
-                    if (hasSort)
-                        throw new ApplicationException("You cannot have two both sort and range in the same select query ...");
-                    if (hasRange)
-                        throw new ApplicationException("You cannot have two ranges in the same select query ...");
                     range = idx as CritRange;
-                    hasRange = true;
                 }
             }
-            if (hasRange)
+            if (range != null)
             {
                 int start = range.Start;
                 int end = range.End;
                 string sortColumn = range.SortColumn;
                 if (start >= end)
-                    throw new ApplicationException("End must be higher than Start in your select query ...");
+                    throw new ApplicationException(
+                        @"End must be higher than Start in your select query ...");
+                string tableOfRangeColumnName = "";
+                if (sortColumn != "ID")
+                {
+                    switch (type.GetProperty(
+                        sortColumn,
+                        BindingFlags.Instance |
+                        BindingFlags.Public |
+                        BindingFlags.NonPublic).PropertyType.FullName)
+                    {
+                        case "System.Boolean":
+                            tableOfRangeColumnName = "PropertyBools";
+                            break;
+                        case "System.DateTime":
+                            tableOfRangeColumnName = "PropertyDates";
+                            break;
+                        case "System.Decimal":
+                            tableOfRangeColumnName = "PropertyDecimals";
+                            break;
+                        case "System.Int32":
+                            tableOfRangeColumnName = "PropertyInts";
+                            break;
+                        case "System.String":
+                            tableOfRangeColumnName = "PropertyStrings";
+                            break;
+                        default:
+                            throw new ApplicationException(
+                                "Cannot sort on columns of that type");
+                    }
+                }
                 int delta = end - start;
                 if (start == 0)
                 {
-                    retVal += string.Format(@"
-select top {4} d.ID from {0}Documents as d {1}{2}{3}",
-                        TablePrefix,
-                        join,
-                        CreateCriteriasForDocument(type, propertyName, args),
-                        where,
-                        end);
+                    if (sortColumn == "ID")
+                    {
+                        // Special treatment...
+                        retVal += string.Format(@"
+    select top {4} d.ID from {0}Documents as d 
+            {1}{2}{3}
+    order by {5}{6}",
+                            TablePrefix,
+                            join,
+                            CreateCriteriasForDocument(type, propertyName, args),
+                            where,
+                            end,
+                            sortColumn,
+                        (range.Ascending ? "" : " DESC"));
+                    }
+                    else
+                    {
+                        retVal += string.Format(@"
+    select top {4} d.ID from {0}Documents as d 
+        inner join {0}{7} as prop on 
+            prop.FK_Document=d.ID and prop.Name='prop{5}' {1}{2}{3}
+    order by prop.Value{6}",
+                            TablePrefix,
+                            join,
+                            CreateCriteriasForDocument(type, propertyName, args),
+                            where,
+                            end,
+                            sortColumn,
+                        (range.Ascending ? "" : " DESC"),
+                        tableOfRangeColumnName);
+                    }
                 }
                 else
                 {
-                    retVal += string.Format(@"
+                    if (sortColumn == "ID")
+                    {
+                        // Special treatment...
+                        retVal += string.Format(@"
 select ID from (select top {6} ID from (
-    select top {5} d.ID from {0}Documents as d {1}{2}{3} 
-    order by {4}) as Tbl1
-order by {4} desc) as Tbl2 order by {4}",
-                        TablePrefix,
-                        join,
-                        CreateCriteriasForDocument(type, propertyName, args),
-                        where,
-                        sortColumn,
-                        end,
-                        delta);
+    select top {5} d.ID as ID from {0}Documents as d
+    {1}{2}{3}
+    order by {4}{7}) as Tbl1
+order by {4}{8}) as Tbl2 order by {4}{7}",
+                            TablePrefix,
+                            join,
+                            CreateCriteriasForDocument(type, propertyName, args),
+                            where,
+                            sortColumn,
+                            end,
+                            delta,
+                            (range.Ascending ? "" : " desc"),
+                            (range.Ascending ? " desc" : " "));
+                    }
+                    else
+                    {
+                        retVal += string.Format(@"
+select ID, Value from (select top {6} ID, Value from (
+    select top {5} d.ID as ID, prop.Value as Value from {0}Documents as d, {0}{9} as prop
+    {1}{2}{3} and prop.Name='prop{4}' and prop.FK_Document=d.ID
+    order by Value{7}) as Tbl1
+order by Value{8}) as Tbl2 order by Value{7}",
+                            TablePrefix,
+                            join,
+                            CreateCriteriasForDocument(type, propertyName, args),
+                            where,
+                            sortColumn,
+                            end,
+                            delta,
+                            (range.Ascending ? "" : " desc"),
+                            (range.Ascending ? " desc" : " "),
+                            tableOfRangeColumnName);
+                    }
                 }
             }
             else

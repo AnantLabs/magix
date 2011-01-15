@@ -186,7 +186,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 !DataSource["FilterOnId"].Get<bool>()))
             {
                 li.Text = "ID";
-                li.CssClass = "noFilter";
+                li.CssClass = "wide-1 noFilter";
             }
             else
             {

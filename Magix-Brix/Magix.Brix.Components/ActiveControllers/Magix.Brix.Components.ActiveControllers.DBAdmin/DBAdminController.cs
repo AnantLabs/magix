@@ -352,6 +352,10 @@ have relationships towards other instances in your database.</p>";
         {
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             int id = Data.Instance.CreateObject(fullTypeName);
+            if (id == 0)
+                throw new ApplicationException(
+                    @"Couldn't create object, something went wrong in your
+model while trying to create object, and it was never created for some reasons.");
             Node node = new Node();
             node["IsChange"].Value = false;
             node["IsRemove"].Value = false;

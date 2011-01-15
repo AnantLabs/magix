@@ -82,14 +82,20 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            msgLbl.Text = "";
+        }
+
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
-            msgLbl.Text = e.Params["Message"].Get<string>();
+            msgLbl.Text += e.Params["Message"].Get<string>();
             new EffectFadeIn(message, 500)
                 .JoinThese(new EffectRollDown())
                 .ChainThese(
-                    new EffectTimeout(3000),
+                    new EffectTimeout(20000),
                     new EffectFadeOut(message, 500)
                         .JoinThese(new EffectRollUp()))
                 .Render();
