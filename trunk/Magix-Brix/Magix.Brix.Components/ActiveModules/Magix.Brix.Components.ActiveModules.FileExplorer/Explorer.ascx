@@ -13,17 +13,67 @@
         runat="server"
         CssClass="span-12 fileExplorer"
         id="pnl" />
-    <mux:Button
-        runat="server"
-        id="previous"
-        CssClass="span-2 previous"
-        Text="&lt;" />
-
-    <mux:Button
-        runat="server"
-        id="next"
-        CssClass="span-2 next"
-        Text="&gt;" />
+    <div class="span-12 fileEx">
+        <mux:Button
+            runat="server"
+            id="previous"
+            CssClass="span-2 previous"
+            OnClick="previous_Click"
+            Text="&lt;" />
+        <mux:Button
+            runat="server"
+            id="next"
+            CssClass="span-2 next"
+            OnClick="next_Click"
+            Text="&gt;" />
+        <mux:Button
+            runat="server"
+            id="delete"
+            CssClass="span-4 delete"
+            OnClick="delete_Click"
+            Text="Delete..." />
+        <div class="fileUploader span-4">
+            <asp:FileUpload
+                runat="server"
+                OnChange="foo();"
+                OnMouseOut="foo();"
+                id="file" />
+            <mux:TextBox
+                runat="server"
+                id="fileReal"
+                placeholder="Upload file..."
+                CssClass="browse" />
+            <asp:Button
+                runat="server"
+                id="submitFile"
+                CssClass="submitButton"
+                Enabled="false"
+                Text="Upload ..." 
+                OnClick="submitFile_Click"/>
+            <script type="text/ecmascript" language="ecmascript">
+function foo() {
+  var file = MUX.$('<%=file.ClientID%>');
+  var fileReal = MUX.$('<%=fileReal.ClientID%>');
+  var vl = file.value;
+  if(vl.indexOf('\\') != -1) {
+    vl = vl.split('\\');
+    vl = vl[vl.length - 1];
+  }
+  if(vl.indexOf('/') != -1) {
+    vl = vl.split('/');
+    vl = vl[vl.length - 1];
+  }
+  fileReal.value = vl;
+  var sub = MUX.$('<%=submitFile.ClientID%>');
+  if(file.value) {
+    sub.disabled = '';
+  } else {
+    sub.disabled = 'disabled';
+  }
+}
+            </script>
+        </div>
+    </div>
 </div>
 
 <mux:Panel
@@ -61,18 +111,11 @@
         id="imageSize"
         Tag="p"
         CssClass="imageSize small" />
-    <p class="link">
-        <mux:LinkButton 
-            runat="server"
-            id="imageLink"
-            OnClick="imageLink_Click"
-            Target="_blank"
-            CssClass="imageLink" />
-    </p>
     <div class="span-4 height-8">
         <mux:Image
             runat="server"
             OnClick="preview_Click"
+            ToolTip="Click to see image in full size ..."
             id="preview" />
     </div>
     <div class="span-4 last">

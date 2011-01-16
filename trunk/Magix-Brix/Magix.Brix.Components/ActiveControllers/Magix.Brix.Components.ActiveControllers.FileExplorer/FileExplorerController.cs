@@ -28,12 +28,15 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
 
             node["RootAccessFolder"].Value = folder;
             node["IsSelect"].Value = false;
-            node["Caption"].Value = string.Format("Exploring: '" + folder + "'");
 
             Helper.GetFilesAndFolders(folder, filter, node);
+            node["Caption"].Value = string.Format("Exploring: '" + folder + "', {0} files, {1} folders",
+                node["Files"].Count,
+                node["Directories"].Count);
+
             ActiveEvents.Instance.RaiseLoadControl(
                 "Magix.Brix.Components.ActiveModules.FileExplorer.Explorer",
-                null,
+                "child",
                 node);
         }
 
@@ -47,17 +50,18 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
             {
                 // Going up ...!
                 folder = folder.Trim('/');
-                folder = folder.Substring(0, folder.LastIndexOf('/'));
+                folder = folder.Substring(0, folder.LastIndexOf('/') + 1);
             }
             else
-                folder += folderToOpen.Trim('/') + "/";
+                folder += string.IsNullOrEmpty(folderToOpen) ? "" : folderToOpen.Trim('/') + "/";
 
             Helper.GetFilesAndFolders(
                 folder,
                 e.Params["Filter"].Get<string>(),
                 e.Params);
-            e.Params["Caption"].Value = 
-                "Exploring: '" + e.Params["Folder"].Get<string>() + "'";
+            e.Params["Caption"].Value = string.Format("Exploring: '" + folder + "', {0} files, {1} folders",
+                e.Params["Files"].Count,
+                e.Params["Directories"].Count);
         }
 
         [ActiveEvent(Name = "FileExplorer.FileSelectedInExplorer")]
@@ -84,6 +88,15 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
                 folder, 
                 newName + oldName.Substring(oldName.LastIndexOf(".")), 
                 e.Params);
+        }
+
+        [ActiveEvent(Name = "FileExplorer.DeleteFile")]
+        protected void FileExplorer_DeleteFile(object sender, ActiveEventArgs e)
+        {
+            string fileName = 
+                e.Params["Folder"].Get<string>() +
+                e.Params["File"].Get<string>();
+            Helper.DeleteFile(fileName);
         }
     }
 }

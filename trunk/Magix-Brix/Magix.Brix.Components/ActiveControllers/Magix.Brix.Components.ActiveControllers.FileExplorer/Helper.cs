@@ -140,5 +140,14 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
 
             File.Move(fullOldFilePath, fullNewFilePath);
         }
+
+        public static void DeleteFile(string fileName)
+        {
+            fileName = CleanUpFolder(fileName).Trim('/');
+            string webServerApp = HttpContext.Current.Server.MapPath("~/");
+            string fullFileName = webServerApp + fileName;
+            fullFileName = fullFileName.Replace("//", "\\");
+            File.Delete(fullFileName);
+        }
     }
 }

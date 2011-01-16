@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.IO;
 using System.Web.UI;
 using Magix.UX.Widgets;
 using Magix.Brix.Types;
@@ -24,7 +25,6 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected Label header;
         protected Label extension;
         protected Label size;
-        protected LinkButton imageLink;
         protected Label imageSize;
         protected Label imageWarning;
         protected Label fullUrl;
@@ -32,6 +32,9 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected Button next;
         protected InPlaceEdit name;
         protected Image preview;
+        protected Button delete;
+        protected System.Web.UI.WebControls.FileUpload file;
+        protected TextBox fileReal;
 
         public void InitialLoading(Node node)
         {
@@ -40,6 +43,9 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 {
                     DataSource = node;
                     prop.Visible = false;
+                    delete.Enabled = false;
+                    Start = 0;
+                    End = 18;
                 };
         }
 
@@ -54,39 +60,58 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             DataBindExplorer();
         }
 
+        private int Start
+        {
+            get { return (int)ViewState["Start"]; }
+            set { ViewState["Start"] = value; }
+        }
+
+        private int End
+        {
+            get { return (int)ViewState["End"]; }
+            set { ViewState["End"] = value; }
+        }
+
         private void DataBindExplorer()
         {
+            int start = Start;
+            int end = End;
             previous.Visible = DataSource["Directories"].Count + DataSource["Files"].Count > 17;
             next.Visible = DataSource["Directories"].Count + DataSource["Files"].Count > 17;
-            int start = 0;
-            int end = 18;
+            previous.Enabled = Start > 0;
+            next.Enabled = End < (DataSource["Directories"].Count + DataSource["Files"].Count + (Start == 0 ? 1 : 0));
             int idxNo = 0;
-            if (DataSource["Folder"].Get<string>().Length
-                > DataSource["RootAccessFolder"].Get<string>().Length)
+            if (start == 0)
             {
-                string name = "&nbsp;";
-                Label btn = new Label();
-                btn.Text = name;
-                Panel p = new Panel();
-                p.Info = "../";
-                p.Click +=
-                    delegate(object sender, EventArgs e)
-                    {
-                        Panel pp = sender as Panel;
-                        string folderName = pp.Info;
-                        DataSource["FolderToOpen"].Value = folderName;
-                        DataSource["Directories"].UnTie();
-                        DataSource["Files"].UnTie();
-                        RaiseSafeEvent(
-                            "FileExplorer.GetFilesFromFolder",
-                            DataSource);
-                        DataSource["FolderToOpen"].UnTie();
-                        ReDataBind();
-                    };
-                p.CssClass = "folderUpIcon";
-                p.Controls.Add(btn);
-                pnl.Controls.Add(p);
-                idxNo += 1;
+                if (DataSource["Folder"].Get<string>().Length
+                    > DataSource["RootAccessFolder"].Get<string>().Length)
+                {
+                    string name = "&nbsp;";
+                    Label btn = new Label();
+                    btn.Text = name;
+                    Panel p = new Panel();
+                    p.Info = "../";
+                    p.Click +=
+                        delegate(object sender, EventArgs e)
+                        {
+                            Panel pp = sender as Panel;
+                            string folderName = pp.Info;
+                            DataSource["FolderToOpen"].Value = folderName;
+                            DataSource["Directories"].UnTie();
+                            DataSource["Files"].UnTie();
+                            RaiseSafeEvent(
+                                "FileExplorer.GetFilesFromFolder",
+                                DataSource);
+                            DataSource["FolderToOpen"].UnTie();
+                            Start = 0;
+                            End = 18;
+                            ReDataBind();
+                        };
+                    p.CssClass = "folderUpIcon";
+                    p.Controls.Add(btn);
+                    pnl.Controls.Add(p);
+                    idxNo += 1;
+                }
             }
             if (DataSource.Contains("Directories"))
             {
@@ -145,6 +170,16 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                 name;
 
                             Panel p = new Panel();
+                            p.Style[Styles.position] = "relative";
+                            Label l = new Label();
+                            l.Text = name;
+                            l.Style[Styles.position] = "absolute";
+                            l.Style[Styles.bottom] = "0";
+                            l.Style[Styles.left] = "0";
+                            l.Style[Styles.backgroundColor] = "rgba(0, 0, 0, 0.2)";
+                            l.Style[Styles.color] = "#fff";
+                            l.CssClass = "small";
+                            p.Controls.Add(l);
                             if (idx.Contains("Wide") && idx["Wide"].Get<bool>())
                             {
                                 p.CssClass = "imageIcon wide";
@@ -199,8 +234,77 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 DataSource["File"]["FullName"].Get<string>());
         }
 
+        protected void delete_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["Folder"].Value = DataSource["Folder"].Value;
+            node["File"].Value = DataSource["File"]["FullName"].Value;
+            DataSource["Directories"].UnTie();
+            DataSource["Files"].UnTie();
+            RaiseSafeEvent(
+                "FileExplorer.DeleteFile",
+                node);
+            DataSource["FolderToOpen"].Value = "";
+            RaiseSafeEvent(
+                "FileExplorer.GetFilesFromFolder",
+                DataSource);
+            ReDataBind();
+        }
+
+        protected void submitFile_Click(object sender, EventArgs e)
+        {
+            if (!file.HasFile)
+            {
+                Node node = new Node();
+                node["Message"].Value = "You have to specify a file ...! ";
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.ShowMessage",
+                    node);
+            }
+            else
+            {
+                fileReal.Text = "";
+                string fileName = file.FileName;
+                string webServerApp = Server.MapPath("~/");
+                file.SaveAs(
+                    webServerApp +
+                    DataSource["Folder"].Get<string>().Replace("/", "\\") +
+                    fileName);
+
+                DataSource["FolderToOpen"].Value = "";
+                DataSource["File"].UnTie();
+                DataSource["Files"].UnTie();
+                RaiseSafeEvent(
+                    "FileExplorer.GetFilesFromFolder",
+                    DataSource);
+                ReDataBind();
+
+                SelectedPanelID = fileName;
+                DataSource["File"].Value = fileName;
+                RaiseSafeEvent(
+                    "FileExplorer.FileSelectedInExplorer",
+                    DataSource);
+                UpdateSelectedFile();
+                new EffectFadeIn(prop, 500)
+                    .Render();
+                prop.Visible = true;
+                prop.Style[Styles.display] = "none";
+
+                Panel pl = Selector.SelectFirst<Panel>(this,
+                    delegate(Control idx)
+                    {
+                        return (idx is BaseWebControl) &&
+                            (idx as BaseWebControl).Info == SelectedPanelID;
+                    });
+                if (pl != null)
+                    pl.CssClass += " viewing";
+            }
+        }
+
         private void UpdateSelectedFile()
         {
+            delete.Enabled = true;
             header.Text = "Name: " + DataSource["File"]["Name"].Get<string>();
             extension.Text = "Extension: " + DataSource["File"]["Extension"].Get<string>();
             name.Text = DataSource["File"]["Name"].Get<string>();
@@ -225,13 +329,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 DataSource["File"]["FullName"].Get<string>();
             if (DataSource["File"].Contains("IsImage") && DataSource["File"]["IsImage"].Get<bool>())
             {
-                imageLink.Visible = true;
                 imageSize.Visible = true;
-                imageLink.Text = "Click to view full size...";
-                imageLink.Info = 
-                    DataSource["Folder"].Get<string>() + 
-                    DataSource["File"]["FullName"].Get<string>();
-
                 int width = DataSource["File"]["ImageWidth"].Get<int>();
                 int height = DataSource["File"]["ImageHeight"].Get<int>();
                 int optimalWidth = width - (width < 30 ? -(30 - width) : ((width + 10) % 40));
@@ -285,7 +383,6 @@ flow ...",
             }
             else
             {
-                imageLink.Visible = false;
                 imageSize.Visible = false;
             }
         }
@@ -318,13 +415,6 @@ flow ...",
             prop.Visible = true;
         }
 
-        protected void imageLink_Click(object sender, EventArgs e)
-        {
-            LinkButton b = sender as LinkButton;
-            string file = b.Info;
-            OpenFullPreviewOfImage(file);
-        }
-
         private void OpenFullPreviewOfImage(string file)
         {
             Node node = new Node();
@@ -343,9 +433,38 @@ flow ...",
                 node);
         }
 
+        protected void previous_Click(object sender, EventArgs e)
+        {
+            int delta = End - Start;
+            if (Start == 17)
+                delta -= 1;
+            Start -= delta;
+            End -= delta;
+            pnl.Controls.Clear();
+            DataBindExplorer();
+            pnl.ReRender();
+            prop.Visible = false;
+            delete.Enabled = false;
+        }
+
+        protected void next_Click(object sender, EventArgs e)
+        {
+            int delta = End - Start;
+            if (Start == 0)
+                delta -= 1;
+            Start += delta;
+            End += delta;
+            pnl.Controls.Clear();
+            DataBindExplorer();
+            pnl.ReRender();
+            prop.Visible = false;
+            delete.Enabled = false;
+        }
+
         private void ReDataBind()
         {
             prop.Visible = false;
+            delete.Enabled = false;
             pnl.Controls.Clear();
             DataBindExplorer();
             pnl.ReRender();
