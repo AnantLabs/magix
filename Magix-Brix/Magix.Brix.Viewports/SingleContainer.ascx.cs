@@ -104,17 +104,13 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "ClearControls")]
         protected void ClearControls(object sender, ActiveEventArgs e)
         {
-            if (e.Params["Position"].Get<string>() == "content1")
+            if (e.Params["Position"].Get<string>().StartsWith("content"))
             {
-                ClearControls(content1);
-            }
-            else if (e.Params["Position"].Get<string>() == "content2")
-            {
-                ClearControls(content2);
-            }
-            else if (e.Params["Position"].Get<string>() == "content3")
-            {
-                ClearControls(content3);
+                DynamicPanel pnl = 
+                    Selector.FindControl<DynamicPanel>(
+                    this, 
+                    e.Params["Position"].Get<string>());
+                ClearControls(pnl);
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
@@ -194,6 +190,7 @@ namespace Magix.Brix.Viewports
             else if (e.Params["Position"].Get<string>() == "child")
             {
                 DynamicPanel toAddInto = null;
+                DynamicPanel last = child[0];
                 foreach (DynamicPanel idx in child)
                 {
                     if (idx.Controls.Count == 0)
@@ -201,51 +198,100 @@ namespace Magix.Brix.Viewports
                         toAddInto = idx;
                         break;
                     }
+                    else
+                        last = idx;
                 }
-                if (toAddInto == null)
+
+                bool isAppending = e.Params["Parameters"].Contains("Append") &&
+                    e.Params["Parameters"]["Append"].Get<bool>();
+
+                // Now idx toAddInto is the first Dynamic *without* children,
+                // while the last is the last one *with* children, or the *first* one
+                // if none have children ...
+                if (toAddInto == null && !isAppending)
                     throw new ApplicationException("You cannot open more Windows before you have closed some");
+                if (isAppending)
+                    toAddInto = last;
                 Window w = toAddInto.Parent.Parent as Window;
                 w.Visible = true;
-                w.Style[Styles.display] = "none";
-                if (e.Params["Parameters"].Contains("WindowCssClass"))
+                if (!isAppending)
                 {
-                    w.CssClass = e.Params["Parameters"]["WindowCssClass"].Get<string>();
-                }
-                if (e.Params["Parameters"].Contains("ForcedSize"))
-                {
-                    if (e.Params["Parameters"]["ForcedSize"].Contains("height"))
+                    // We don't want to have race conditions for effects and caption
+                    // of our window .....!
+                    w.Style[Styles.display] = "none";
+                    if (e.Params["Parameters"].Contains("WindowCssClass"))
                     {
-                        int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
-                        int height = e.Params["Parameters"]["ForcedSize"]["height"].Get<int>();
-                        w.Style[Styles.width] = "800px";
-                        w.Style[Styles.height] = "500px";
-                        new EffectFadeIn(w, 750)
-                            .JoinThese(
-                                new EffectSize(width, height))
-                            .Render();
+                        w.CssClass = e.Params["Parameters"]["WindowCssClass"].Get<string>();
+                    }
+                    if (e.Params["Parameters"].Contains("ForcedSize"))
+                    {
+                        if (e.Params["Parameters"]["ForcedSize"].Contains("height"))
+                        {
+                            int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
+                            int height = e.Params["Parameters"]["ForcedSize"]["height"].Get<int>();
+                            w.Style[Styles.width] = "800px";
+                            w.Style[Styles.height] = "500px";
+                            new EffectFadeIn(w, 750)
+                                .JoinThese(
+                                    new EffectSize(width, height))
+                                .Render();
+                        }
+                        else
+                        {
+                            int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
+                            w.Style[Styles.width] = width + "px";
+                            new EffectFadeIn(w, 750)
+                                .JoinThese(
+                                    new EffectRollDown())
+                                .Render();
+                        }
                     }
                     else
                     {
-                        int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
-                        w.Style[Styles.width] = width + "px";
+                        string cssClass = null;
+                        if (e.Params["Parameters"].Contains("Padding"))
+                        {
+                            cssClass += " push-" + e.Params["Parameters"]["Padding"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Width"))
+                        {
+                            cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Top"))
+                        {
+                            cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Height"))
+                        {
+                            cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("last"))
+                        {
+                            cssClass += " last";
+                        }
+                        if (!string.IsNullOrEmpty(cssClass))
+                        {
+                            w.Style[Styles.left] = "";
+                            w.Style[Styles.top] = "";
+                        }
+                        if (!string.IsNullOrEmpty(cssClass))
+                        {
+                            w.CssClass += " " + cssClass.Trim();
+                        }
+                        else
+                        {
+                            w.Style[Styles.width] = "auto";
+                            w.Style[Styles.height] = "auto";
+                        }
                         new EffectFadeIn(w, 750)
                             .JoinThese(
                                 new EffectRollDown())
                             .Render();
                     }
-                }
-                else
-                {
-                    w.Style[Styles.width] = "auto";
-                    w.Style[Styles.height] = "auto";
-                    new EffectFadeIn(w, 750)
-                        .JoinThese(
-                            new EffectRollDown())
-                        .Render();
-                }
-                if (e.Params["Parameters"].Contains("Caption"))
-                {
-                    w.Caption = e.Params["Parameters"]["Caption"].Get<string>();
+                    if (e.Params["Parameters"].Contains("Caption"))
+                    {
+                        w.Caption = e.Params["Parameters"]["Caption"].Get<string>();
+                    }
                 }
                 if (e.Params["Parameters"].Contains("Append") &&
                     e.Params["Parameters"]["Append"].Get<bool>())

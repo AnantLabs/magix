@@ -33,6 +33,11 @@
         OnReload="dynamic_LoadControls"
         style="position:absolute;"
         id="content3" />
+    <mux:DynamicPanel 
+        runat="server" 
+        OnReload="dynamic_LoadControls"
+        style="position:absolute;"
+        id="content4" />
     <mux:Panel
         runat="server"
         CssClass="span-24 last childContainer"

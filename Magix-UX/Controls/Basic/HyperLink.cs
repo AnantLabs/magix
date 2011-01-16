@@ -50,6 +50,17 @@ namespace Magix.UX.Widgets
             }
         }
 
+        public string Target
+        {
+            get { return ViewState["Target"] == null ? "" : (string)ViewState["Target"]; }
+            set
+            {
+                if (value != Target)
+                    this.SetJsonGeneric("target", value);
+                ViewState["Target"] = value;
+            }
+        }
+
         protected override void RenderMuxControl(HtmlBuilder builder)
         {
             using (Element el = builder.CreateElement("a"))
@@ -62,6 +73,7 @@ namespace Magix.UX.Widgets
         protected override void AddAttributes(Element el)
         {
             el.AddAttribute("href", URL);
+            el.AddAttribute("target", Target);
             base.AddAttributes(el);
         }
 	}

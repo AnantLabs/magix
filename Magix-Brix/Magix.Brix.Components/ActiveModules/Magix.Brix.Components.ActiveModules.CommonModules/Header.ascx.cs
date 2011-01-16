@@ -27,8 +27,8 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             };
         }
 
-        [ActiveEvent(Name = "DBAdmin.Visual.SetFormCaption")]
-        protected void DBAdmin_Visual_SetFormCaption(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.SetFormCaption")]
+        protected void Magix_Core_SetFormCaption(object sender, ActiveEventArgs e)
         {
             string caption = e.Params["Caption"].Get<string>();
             lbl.Text = caption;

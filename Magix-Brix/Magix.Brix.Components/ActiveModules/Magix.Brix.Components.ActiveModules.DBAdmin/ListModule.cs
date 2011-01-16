@@ -185,8 +185,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 (DataSource.Contains("FilterOnId") &&
                 !DataSource["FilterOnId"].Get<bool>()))
             {
-                li.Text = "ID";
-                li.CssClass = "wide-1 noFilter";
+                if (DataSource.Contains("IDColumnName"))
+                {
+                    li.Text = DataSource["IDColumnName"].Get<string>();
+                }
+                else
+                {
+                    li.Text = "ID";
+                }
+                li.CssClass = "wide-2 noFilter";
             }
             else
             {
@@ -425,7 +432,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Label li = new Label();
             li.Tag = "td";
             LinkButton lb = new LinkButton();
-            lb.Text = node["ID"].Value.ToString();
+            if (DataSource.Contains("IDColumnValue"))
+            {
+                lb.Text = DataSource["IDColumnValue"].Get<string>();
+            }
+            else
+            {
+                lb.Text = node["ID"].Value.ToString();
+            }
             lb.Click +=
                 delegate(object sender, EventArgs e)
                 {

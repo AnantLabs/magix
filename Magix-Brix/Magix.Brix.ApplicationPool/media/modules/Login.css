@@ -1,0 +1,40 @@
+﻿
+
+input.loginOkButton
+{
+	margin-bottom:0;
+	float:right;
+}
+
+table.loginTable
+{
+	width:auto;
+	margin-bottom:0;
+}
+
+table.loginTable>tbody>tr>td
+{
+	background-color:Transparent;
+	padding:0;
+	margin:0;
+}
+
+.warning
+{
+	color:#CC6600;
+}
+
+.txt
+{
+	margin-right:0;
+}
+
+
+
+
+
+
+
+
+
+

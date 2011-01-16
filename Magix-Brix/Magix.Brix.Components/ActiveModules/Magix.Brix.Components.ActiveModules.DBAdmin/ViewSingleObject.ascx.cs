@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix-BRIX - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix-BRIX is licensed as GPLv3.
  */
 
 using System;
@@ -32,6 +32,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
+                    if (node.Contains("ChildCssClass"))
+                    {
+                        pnl.CssClass = node["ChildCssClass"].Get<string>();
+                    }
                     new EffectTimeout(500)
                         .ChainThese(
                             new EffectFocusAndSelect(focs))
@@ -100,30 +104,54 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 parentTypeName = parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1);
                 if (DataSource.Contains("Object"))
                 {
-                    (Parent.Parent.Parent as Window).Caption = string.Format(
-                        "{0}[{1}] of {2}[{3}]/{4}",
-                        DataSource["TypeName"].Get<string>(),
-                        DataSource["Object"]["ID"].Get<int>(),
-                        parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
-                        DataSource["ParentID"].Value,
-                        DataSource["ParentPropertyName"].Value);
+                    if (DataSource.Contains("Caption"))
+                    {
+                        (Parent.Parent.Parent as Window).Caption =
+                            DataSource["Caption"].Get<string>();
+                    }
+                    else
+                    {
+                        (Parent.Parent.Parent as Window).Caption = string.Format(
+                            "{0}[{1}] of {2}[{3}]/{4}",
+                            DataSource["TypeName"].Get<string>(),
+                            DataSource["Object"]["ID"].Get<int>(),
+                            parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
+                            DataSource["ParentID"].Value,
+                            DataSource["ParentPropertyName"].Value);
+                    }
                 }
                 else
                 {
-                    (Parent.Parent.Parent as Window).Caption = string.Format(
-                        "{0}[null] of {1}[{2}]/{3}",
-                        DataSource["TypeName"].Get<string>(),
-                        parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
-                        DataSource["ParentID"].Value,
-                        DataSource["ParentPropertyName"].Value);
+                    if (DataSource.Contains("Caption"))
+                    {
+                        (Parent.Parent.Parent as Window).Caption =
+                            DataSource["Caption"].Get<string>();
+                    }
+                    else
+                    {
+                        (Parent.Parent.Parent as Window).Caption = string.Format(
+                            "{0}[null] of {1}[{2}]/{3}",
+                            DataSource["TypeName"].Get<string>(),
+                            parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
+                            DataSource["ParentID"].Value,
+                            DataSource["ParentPropertyName"].Value);
+                    }
                 }
             }
             else
             {
-                (Parent.Parent.Parent as Window).Caption = string.Format(
-                    "{0}[{1}]",
-                    DataSource["TypeName"].Get<string>(),
-                    DataSource["Object"]["ID"].Get<int>());
+                if (DataSource.Contains("Caption"))
+                {
+                    (Parent.Parent.Parent as Window).Caption = 
+                        DataSource["Caption"].Get<string>();
+                }
+                else
+                {
+                    (Parent.Parent.Parent as Window).Caption = string.Format(
+                        "{0}[{1}]",
+                        DataSource["TypeName"].Get<string>(),
+                        DataSource["Object"]["ID"].Get<int>());
+                }
             }
         }
 
@@ -132,128 +160,168 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Label row = new Label();
             row.Tag = "tr";
 
-            Label c1 = new Label();
-            c1.Tag = "td";
-            c1.CssClass = "columnName";
-            c1.Text = node.Name;
-            row.Controls.Add(c1);
-
-            c1 = new Label();
-            c1.Tag = "td";
-            c1.CssClass = "columnType";
-            c1.Text =
-                DataSource["Type"]["Properties"][node.Name]["TypeName"].Get<string>()
-                    .Replace("<", "&lt;").Replace(">", "&gt;");
-            row.Controls.Add(c1);
-
-            c1 = new Label();
-            c1.Tag = "td";
-            c1.CssClass = "columnType";
-            string text = "";
-            if (!DataSource["Type"]["Properties"][node.Name]["IsOwner"].Get<bool>())
-                text += "IsNotOwner ";
-            if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
-                text += "BelongsTo ";
-            if (!string.IsNullOrEmpty(DataSource["Type"]["Properties"][node.Name]["RelationName"].Get<string>()))
-                text += "'" + DataSource["Type"]["Properties"][node.Name]["RelationName"].Get<string>() + "'";
-            c1.Text = text;
-            row.Controls.Add(c1);
-
-            c1 = new Label();
-            c1.Tag = "td";
-            if (DataSource["Type"]["Properties"][node.Name]["IsComplex"].Get<bool>())
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Name") &&
+                DataSource["WhiteListProperties"]["Name"].Get<bool>()))
             {
-                LinkButton ed = new LinkButton();
-                ed.Text = node.Value.ToString();
-                ed.Info = node.Name;
+                Label c1 = new Label();
+                c1.Tag = "td";
+                c1.CssClass = "columnName";
+                c1.Text = node.Name;
+                row.Controls.Add(c1);
+            }
+
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Type") &&
+                DataSource["WhiteListProperties"]["Type"].Get<bool>()))
+            {
+                Label c1 = new Label();
+                c1.Tag = "td";
+                c1.CssClass = "columnType";
+                c1.Text =
+                    DataSource["Type"]["Properties"][node.Name]["TypeName"].Get<string>()
+                        .Replace("<", "&lt;").Replace(">", "&gt;");
+                row.Controls.Add(c1);
+            }
+
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Attributes") &&
+                DataSource["WhiteListProperties"]["Attributes"].Get<bool>()))
+            {
+                Label c1 = new Label();
+                c1.Tag = "td";
+                c1.CssClass = "columnType";
+                string text = "";
+                if (!DataSource["Type"]["Properties"][node.Name]["IsOwner"].Get<bool>())
+                    text += "IsNotOwner ";
                 if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
-                    ed.CssClass = "belongsTo";
-                ed.Click +=
-                    delegate(object sender, EventArgs e)
-                    {
-                        LinkButton lb = sender as LinkButton;
-                        Label ctrlOld = Magix.UX.Selector.SelectFirst<Label>(lb.Parent.Parent.Parent,
-                            delegate(Control idxCtrl)
-                            {
-                                BaseWebControl ctrl = idxCtrl as BaseWebControl;
-                                if (ctrl != null)
-                                    return ctrl.CssClass == "grid-selected";
-                                return false;
-                            });
-                        if (ctrlOld != null)
-                            ctrlOld.CssClass = "";
-                        (lb.Parent.Parent as Label).CssClass = "grid-selected";
-                        int id = DataSource["Object"]["ID"].Get<int>();
-                        string column = lb.Info;
-                        Node n = new Node();
-                        n["ID"].Value = id;
-                        n["PropertyName"].Value = column;
-                        n["IsList"].Value = DataSource["Type"]["Properties"][column]["IsList"].Value;
-                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                        RaiseSafeEvent(
-                            "DBAdmin.Form.ViewListOrComplexPropertyValue",
-                            n);
-                    };
-                c1.Controls.Add(ed);
+                    text += "BelongsTo ";
+                if (!string.IsNullOrEmpty(DataSource["Type"]["Properties"][node.Name]["RelationName"].Get<string>()))
+                    text += "'" + DataSource["Type"]["Properties"][node.Name]["RelationName"].Get<string>() + "'";
+                c1.Text = text;
+                row.Controls.Add(c1);
             }
-            else
+
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Value") &&
+                DataSource["WhiteListProperties"]["Value"].Get<bool>()))
             {
-                switch (DataSource["Type"]["Properties"][node.Name]["FullTypeName"].Get<string>())
+                Label c1 = new Label();
+                c1.Tag = "td";
+                if (DataSource["Type"]["Properties"][node.Name]["IsComplex"].Get<bool>())
                 {
-                    default:
+                    LinkButton ed = new LinkButton();
+                    ed.Text = node.Value.ToString();
+                    ed.Info = node.Name;
+                    if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
+                        ed.CssClass = "belongsTo";
+                    ed.Click +=
+                        delegate(object sender, EventArgs e)
                         {
-                            TextAreaEdit ed = new TextAreaEdit();
-                            ed.TextLength = 500;
-                            ed.Text = node.Value as string;
-                            ed.CssClass += " larger";
-                            ed.Info = node.Name;
-                            ed.TextChanged +=
-                                delegate(object sender, EventArgs e)
+                            LinkButton lb = sender as LinkButton;
+                            Label ctrlOld = Magix.UX.Selector.SelectFirst<Label>(lb.Parent.Parent.Parent,
+                                delegate(Control idxCtrl)
                                 {
-                                    TextAreaEdit edit = sender as TextAreaEdit;
-                                    int id = DataSource["Object"]["ID"].Get<int>();
-                                    string column = edit.Info;
-                                    Node n = new Node();
-                                    n["ID"].Value = id;
-                                    n["PropertyName"].Value = column;
-                                    n["NewValue"].Value = edit.Text;
-                                    n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                                    RaiseSafeEvent(
-                                        "DBAdmin.Data.ChangeSimplePropertyValue",
-                                        n);
-                                };
-                            c1.Controls.Add(ed);
-                        } break;
+                                    BaseWebControl ctrl = idxCtrl as BaseWebControl;
+                                    if (ctrl != null)
+                                        return ctrl.CssClass == "grid-selected";
+                                    return false;
+                                });
+                            if (ctrlOld != null)
+                                ctrlOld.CssClass = "";
+                            (lb.Parent.Parent as Label).CssClass = "grid-selected";
+                            int id = DataSource["Object"]["ID"].Get<int>();
+                            string column = lb.Info;
+                            Node n = new Node();
+                            n["ID"].Value = id;
+                            n["PropertyName"].Value = column;
+                            n["IsList"].Value = DataSource["Type"]["Properties"][column]["IsList"].Value;
+                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                            RaiseSafeEvent(
+                                "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                                n);
+                        };
+                    c1.Controls.Add(ed);
                 }
+                else
+                {
+                    switch (DataSource["Type"]["Properties"][node.Name]["FullTypeName"].Get<string>())
+                    {
+                        default:
+                            {
+                                TextAreaEdit ed = new TextAreaEdit();
+                                ed.TextLength = 500;
+                                ed.Text = node.Value as string;
+                                ed.CssClass += " larger";
+                                ed.Info = node.Name;
+                                ed.TextChanged +=
+                                    delegate(object sender, EventArgs e)
+                                    {
+                                        TextAreaEdit edit = sender as TextAreaEdit;
+                                        int id = DataSource["Object"]["ID"].Get<int>();
+                                        string column = edit.Info;
+                                        Node n = new Node();
+                                        n["ID"].Value = id;
+                                        n["PropertyName"].Value = column;
+                                        n["NewValue"].Value = edit.Text;
+                                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                        RaiseSafeEvent(
+                                            "DBAdmin.Data.ChangeSimplePropertyValue",
+                                            n);
+                                    };
+                                c1.Controls.Add(ed);
+                            } break;
+                    }
+                }
+                row.Controls.Add(c1);
             }
-            row.Controls.Add(c1);
             return row;
         }
 
-        private static HtmlTableRow CreateHeaderRow()
+        private HtmlTableRow CreateHeaderRow()
         {
             HtmlTableRow row = new HtmlTableRow();
             row.Attributes.Add("class", "header");
 
-            HtmlTableCell c1 = new HtmlTableCell();
-            c1.InnerHtml = "Name";
-            c1.Attributes.Add("class", "wide-4");
-            row.Cells.Add(c1);
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Name") &&
+                DataSource["WhiteListProperties"]["Name"].Get<bool>()))
+            {
+                HtmlTableCell c1 = new HtmlTableCell();
+                c1.InnerHtml = "Name";
+                c1.Attributes.Add("class", "wide-4");
+                row.Cells.Add(c1);
+            }
 
-            c1 = new HtmlTableCell();
-            c1.InnerHtml = "Type";
-            c1.Attributes.Add("class", "wide-4");
-            row.Cells.Add(c1);
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Type") &&
+                DataSource["WhiteListProperties"]["Type"].Get<bool>()))
+            {
+                HtmlTableCell c1 = new HtmlTableCell();
+                c1.InnerHtml = "Type";
+                c1.Attributes.Add("class", "wide-4");
+                row.Cells.Add(c1);
+            }
 
-            c1 = new HtmlTableCell();
-            c1.InnerHtml = "Attributes";
-            c1.Attributes.Add("class", "wide-5");
-            row.Cells.Add(c1);
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Attributes") &&
+                DataSource["WhiteListProperties"]["Attributes"].Get<bool>()))
+            {
+                HtmlTableCell c1 = new HtmlTableCell();
+                c1.InnerHtml = "Attributes";
+                c1.Attributes.Add("class", "wide-5");
+                row.Cells.Add(c1);
+            }
 
-            c1 = new HtmlTableCell();
-            c1.InnerHtml = "Value";
-            c1.Attributes.Add("class", "wide-7");
-            row.Cells.Add(c1);
+            if (!DataSource.Contains("WhiteListProperties") ||
+                (DataSource["WhiteListProperties"].Contains("Value") &&
+                DataSource["WhiteListProperties"]["Value"].Get<bool>()))
+            {
+                HtmlTableCell c1 = new HtmlTableCell();
+                c1.InnerHtml = "Value";
+                c1.Attributes.Add("class", "wide-7");
+                row.Cells.Add(c1);
+            }
             return row;
         }
 

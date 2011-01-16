@@ -1,5 +1,89 @@
 ﻿
 
+/* BluePrint.css "plugins"... */
+div.down-1, .down-1 {margin-top:1.5em;}
+div.down-2, .down-2 {margin-top:3em;}
+div.down-3, .down-3 {margin-top:4.5em;}
+div.down-4, .down-4 {margin-top:6em;}
+div.down-5, .down-5 {margin-top:7.5em;}
+div.down-6, .down-6 {margin-top:9em;}
+div.down-7, .down-7 {margin-top:10.5em;}
+div.down-8, .down-8 {margin-top:12em;}
+div.down-9, .down-9 {margin-top:13.5em;}
+div.down-10, .down-10 {margin-top:15em;}
+div.down-11, .down-11 {margin-top:16.5em;}
+div.down-12, .down-12 {margin-top:18em;}
+div.down-13, .down-13 {margin-top:19.5em;}
+div.down-14, .down-14 {margin-top:21em;}
+div.down-15, .down-15 {margin-top:22.5em;}
+div.down-16, .down-16 {margin-top:24em;}
+div.down-17, .down-17 {margin-top:25.5em;}
+div.down-18, .down-18 {margin-top:27em;}
+div.down-19, .down-19 {margin-top:28.5em;}
+div.down-20, .down-20 {margin-top:30em;}
+
+
+
+div.height-1, .height-1 {height:1.5em;}
+div.height-2, .height-2 {height:3em;}
+div.height-3, .height-3 {height:4.5em;}
+div.height-4, .height-4 {height:6em;}
+div.height-5, .height-5 {height:7.5em;}
+div.height-6, .height-6 {height:9em;}
+div.height-7, .height-7 {height:10.5em;}
+div.height-8, .height-8 {height:12em;}
+div.height-9, .height-9 {height:13.5em;}
+div.height-10, .height-10 {height:15em;}
+div.height-11, .height-11 {height:16.5em;}
+div.height-12, .height-12 {height:18em;}
+div.height-13, .height-13 {height:19.5em;}
+div.height-14, .height-14 {height:21em;}
+div.height-15, .height-15 {height:22.5em;}
+div.height-16, .height-16 {height:24em;}
+div.height-17, .height-17 {height:25.5em;}
+div.height-18, .height-18 {height:27em;}
+div.height-19, .height-19 {height:28.5em;}
+div.height-20, .height-20 {height:30em;}
+
+
+.wide-1 { width:40px; min-width:40px; }
+.wide-2 { width:80px; min-width:80px; }
+.wide-3 { width:120px; min-width:120px; }
+.wide-4 { width:160px; min-width:160px; }
+.wide-5 { width:200px; min-width:200px; }
+.wide-6 { width:240px; min-width:240px; }
+.wide-7 { width:280px; min-width:280px; }
+.wide-8 { width:320px; min-width:320px; }
+.wide-9 { width:360px; min-width:360px; }
+.wide-10 { width:400px; min-width:400px; }
+.wide-11 { width:440px; min-width:400px; }
+.wide-12 { width:480px; min-width:400px; }
+.wide-13 { width:520px; min-width:400px; }
+.wide-14 { width:560px; min-width:400px; }
+.wide-15 { width:600px; min-width:400px; }
+.wide-16 { width:640px; min-width:400px; }
+.wide-17 { width:680px; min-width:400px; }
+.wide-18 { width:720px; min-width:400px; }
+.wide-19 { width:760px; min-width:400px; }
+.wide-20 { width:800px; min-width:400px; }
+.wide-21 { width:840px; min-width:400px; }
+.wide-22 { width:880px; min-width:400px; }
+.wide-23 { width:920px; min-width:400px; }
+.wide-24 { width:960px; min-width:400px; margin-right:0; }
+
+
+.blockImage
+{
+	display:block;
+	margin-bottom:36px;
+	cursor:pointer;
+}
+
+.float-left
+{
+	float:left;
+	margin-right:20px;
+}
 
 .ajax-wait
 {
@@ -54,72 +138,8 @@
 
 .mux-window-content
 {
-	padding:18px 40px 36px 40px;
-}
-
-
-
-
-
-/* Typography extensions ... */
-.wide-1
-{
-	width:40px;
-	min-width:40px;
-}
-
-.wide-2
-{
-	width:80px;
-	min-width:80px;
-}
-
-.wide-3
-{
-	width:120px;
-	min-width:120px;
-}
-
-.wide-4
-{
-	width:160px;
-	min-width:160px;
-}
-
-.wide-5
-{
-	width:200px;
-	min-width:200px;
-}
-
-.wide-6
-{
-	width:240px;
-	min-width:240px;
-}
-
-.wide-7
-{
-	width:280px;
-	min-width:280px;
-}
-
-.wide-8
-{
-	width:320px;
-	min-width:320px;
-}
-
-.wide-9
-{
-	width:360px;
-	min-width:360px;
-}
-
-.wide-10
-{
-	width:400px;
-	min-width:400px;
+	padding:18px 30px 36px 40px;
+	margin:0 0 0 0;
 }
 
 

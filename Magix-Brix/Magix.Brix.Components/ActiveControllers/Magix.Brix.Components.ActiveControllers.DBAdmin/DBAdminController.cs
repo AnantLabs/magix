@@ -190,7 +190,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Data.Instance.GetObjectNode(
                 e.Params["Object"],
                 id,
-                fullTypeName);
+                fullTypeName,
+                e.Params);
             Data.Instance.GetObjectTypeNode(fullTypeName, e.Params);
         }
 
@@ -213,7 +214,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             int id = e.Params["ID"].Get<int>();
             string fullTypeName = e.Params["FullTypeName"].Get<String>();
 
-            Node node = new Node();
+            Node node = e.Params;
             node["IsChange"].Value = false;
             node["IsRemove"].Value = false;
             ShowComplexObject(id, fullTypeName, node);
@@ -221,8 +222,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 
         private void ShowComplexObject(int id, string fullTypeName, Node node)
         {
-            Data.Instance.GetObjectNode(node["Object"], id, fullTypeName);
             Data.Instance.GetObjectTypeNode(fullTypeName, node);
+            Data.Instance.GetObjectNode(node["Object"], id, fullTypeName, node);
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
