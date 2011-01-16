@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}</ProjectGuid>
+    <ProjectGuid>{2B7F49E6-2867-4E16-AAF6-2236A0FF6402}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magix.Brix.Components.ActiveModules.CommonModules</RootNamespace>
-    <AssemblyName>Magix.Brix.Components.ActiveModules.CommonModules</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveControllers.FileExplorer</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveControllers.FileExplorer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,61 +33,28 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageModule.ascx.cs">
-      <DependentUpon>ImageModule.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Header.ascx.cs">
-      <DependentUpon>Header.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ToolTip.ascx.cs">
-      <DependentUpon>ToolTip.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="FileExplorerController.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MessageBox.ascx.cs">
-      <DependentUpon>MessageBox.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MessageBox.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">
-      <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
-      <Name>Magic.UX</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
       <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
-      <Name>Magic.Brix.Loader</Name>
+      <Name>Magix.Brix.Loader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Magix.Brix.Types\Magix.Brix.Types.csproj">
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
-      <Name>Magic.Brix.Types</Name>
+      <Name>Magix.Brix.Types</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ToolTip.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Header.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ImageModule.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Settings\Magix.Brix.Components.ActiveTypes.Settings.csproj">
+      <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

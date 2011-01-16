@@ -120,10 +120,10 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        public void GetObjectNode(Node node, int id, string typeName)
+        public void GetObjectNode(Node node, int id, string typeName, Node root)
         {
             object obj = GetObject(id, typeName);
-            GetObjectNode(obj, typeName, node, node);
+            GetObjectNode(obj, typeName, node, root);
         }
 
         public void GetComplexPropertyFromObjectNode(

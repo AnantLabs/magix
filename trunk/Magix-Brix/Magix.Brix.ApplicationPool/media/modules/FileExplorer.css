@@ -1,0 +1,221 @@
+﻿
+
+.fileExplorer
+{
+	border-right-color:#bbb;
+	border-bottom-color:#bbb;
+	margin-bottom:36px;
+	height:270px;
+	overflow:hidden;
+}
+
+
+.fileExplorer .imageIcon
+{
+	margin-bottom:18px;
+	margin-right:10px;
+	width:70px;
+	height:72px;
+	float:left;
+	overflow:hidden;
+
+	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, border-radius;
+	transition-duration:0.2s;
+	cursor:pointer;
+}
+
+.fileExplorer .imageIcon:hover
+{
+	-webkit-box-shadow: 2px 2px 3px #444;
+	-moz-box-shadow: 2px 2px 3px #444;
+	box-shadow: 2px 2px 3px #444;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+}
+
+.fileExplorer .imageIcon img
+{
+	height:80%;
+	margin:10%;
+	border:solid 1px transparent;
+}
+
+.fileExplorer .wide img
+{
+	height:auto;
+	width:80%;
+}
+
+.fileExplorer .lastImage
+{
+	margin-right:0;
+}
+
+.fileExplorer .selected
+{
+	background-color:rgba(0, 128, 0, 0.2);
+}
+
+.fileExplorer .imageIcon:hover img
+{
+	border:solid 1px Blue;
+}
+
+
+
+
+
+
+.fileExplorer .folderIcon
+{
+	margin-bottom:18px;
+	margin-right:10px;
+	width:70px;
+	height:72px;
+	float:left;
+	overflow:hidden;
+
+	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, border-radius;
+	transition-duration:0.2s;
+	cursor:pointer;
+}
+
+.fileExplorer .folderIcon:hover
+{
+	-webkit-box-shadow: 2px 2px 3px #444;
+	-moz-box-shadow: 2px 2px 3px #444;
+	box-shadow: 2px 2px 3px #444;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+}
+
+.fileExplorer .folderIcon span
+{
+	text-decoration:none;
+	text-shadow:2px 2px 3px rgba(0, 0, 0, 0.2);
+	color:black;
+	display:block;
+	height:72px;
+	width:70px;
+	background:Transparent url(../images/folder.png) no-repeat 0 0;
+}
+
+.fileExplorer .folderIcon span:hover
+{
+	color:#06c;
+}
+
+
+
+
+
+
+
+
+
+
+.fileExplorer .folderUpIcon
+{
+	margin-bottom:18px;
+	margin-right:10px;
+	width:70px;
+	height:72px;
+	float:left;
+	overflow:hidden;
+
+	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, border-radius;
+	transition-duration:0.2s;
+	cursor:pointer;
+}
+
+.fileExplorer .folderUpIcon:hover
+{
+	-webkit-box-shadow: 2px 2px 3px #444;
+	-moz-box-shadow: 2px 2px 3px #444;
+	box-shadow: 2px 2px 3px #444;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+}
+
+.fileExplorer .folderUpIcon span
+{
+	text-decoration:none;
+	text-shadow:2px 2px 3px rgba(0, 0, 0, 0.2);
+	color:black;
+	display:block;
+	height:72px;
+	width:70px;
+	background:Transparent url(../images/folder-up.png) no-repeat 0 0;
+}
+
+.fileExplorer .folderUpIcon span:hover
+{
+	color:#06c;
+}
+
+.fileExplorer-properties .extension
+{
+	color:#999;
+	font-style:italic;
+}
+
+.fileExplorer-properties .size
+{
+	color:#999;
+	font-style:italic;
+}
+
+.fileExplorer-properties .imageSize
+{
+	color:#999;
+	font-style:italic;
+}
+
+.fileExplorer-properties .imageLink
+{
+	text-decoration:none;
+}
+
+.fileExplorer-properties .imageWarning
+{
+	color:Red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
