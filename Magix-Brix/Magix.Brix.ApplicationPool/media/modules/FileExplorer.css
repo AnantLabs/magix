@@ -2,8 +2,6 @@
 
 .fileExplorer
 {
-	border-right-color:#bbb;
-	border-bottom-color:#bbb;
 	margin-bottom:36px;
 	height:270px;
 }
@@ -44,7 +42,6 @@
 {
 	height:80%;
 	margin:10%;
-	border:solid 1px transparent;
 }
 
 .fileExplorer .wide img
@@ -65,7 +62,6 @@
 
 .fileExplorer .imageIcon:hover img
 {
-	border:solid 1px Blue;
 }
 
 
@@ -119,15 +115,6 @@
 {
 	color:#06c;
 }
-
-
-
-
-
-
-
-
-
 
 .fileExplorer .folderUpIcon
 {
@@ -186,22 +173,92 @@
 	color:#06c;
 }
 
+.fileExplorer .viewing
+{
+	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, border-radius;
+	transition-duration:0.2s;
+	cursor:pointer;
+
+	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .2)), to(rgba(180, 180, 180, .2)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .2) 0%, rgba(180, 180, 180, .2) 80%);
+
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+}
+
+.fileExplorer .viewing img
+{
+}
+
+.fileExplorer .next,
+.fileExplorer .previous
+{
+	margin-bottom:36px;
+}
+
+div.fileExplorer>div.mux-in-place-edit
+{
+	position:relative;
+}
+
+div.mux-in-place-edit input[type=text]
+{
+	margin:-2px 0 -1px 0 !important;
+}
+
+
+
+
+
+
+
+
+
+
+.fileExplorer-properties 
+{
+	margin-bottom:36px;
+}
+
 .fileExplorer-properties .extension
 {
 	color:#999;
 	font-style:italic;
+	margin-bottom:0;
 }
 
 .fileExplorer-properties .size
 {
 	color:#999;
 	font-style:italic;
+	margin-bottom:0;
+}
+
+.fileExplorer-properties .fullUrl
+{
+	color:#999;
+	font-style:italic;
+	margin-bottom:0;
 }
 
 .fileExplorer-properties .imageSize
 {
 	color:#999;
 	font-style:italic;
+	margin-bottom:0;
+}
+
+.fileExplorer-properties .link
+{
+	margin-bottom:0;
 }
 
 .fileExplorer-properties .imageLink
@@ -214,8 +271,18 @@
 	color:Red;
 }
 
+.fileExplorer-properties img.preview
+{
+	width:auto;
+	max-height:100%;
+	cursor:pointer;
+}
 
-
+.fileExplorer-properties img.wide
+{
+	max-width:100%;
+	height:auto;
+}
 
 
 

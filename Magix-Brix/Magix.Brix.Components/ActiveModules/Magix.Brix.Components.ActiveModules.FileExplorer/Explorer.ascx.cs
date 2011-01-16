@@ -11,6 +11,8 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.UX.Effects;
 using System.Globalization;
+using Magix.UX;
+using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Components.ActiveModules.FileExplorer
 {
@@ -25,6 +27,11 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected LinkButton imageLink;
         protected Label imageSize;
         protected Label imageWarning;
+        protected Label fullUrl;
+        protected Button previous;
+        protected Button next;
+        protected InPlaceEdit name;
+        protected Image preview;
 
         public void InitialLoading(Node node)
         {
@@ -49,6 +56,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
         private void DataBindExplorer()
         {
+            previous.Visible = DataSource["Directories"].Count + DataSource["Files"].Count > 17;
+            next.Visible = DataSource["Directories"].Count + DataSource["Files"].Count > 17;
             int start = 0;
             int end = 18;
             int idxNo = 0;
@@ -151,12 +160,26 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                 delegate(object sender, EventArgs e)
                                 {
                                     Panel pp = sender as Panel;
+                                    pp.CssClass += " viewing";
+                                    Panel old = Selector.SelectFirst<Panel>(pp.Parent,
+                                        delegate(System.Web.UI.Control idx3)
+                                        {
+                                            return (idx3 is BaseWebControl) &&
+                                                (idx3 as BaseWebControl).Info == SelectedPanelID;
+                                        });
+                                    if (old != null)
+                                        old.CssClass = old.CssClass.Replace(" viewing", "");
+                                    SelectedPanelID = pp.Info;
                                     string folderName = pp.Info;
                                     DataSource["File"].Value = folderName;
                                     RaiseSafeEvent(
                                         "FileExplorer.FileSelectedInExplorer",
                                         DataSource);
                                     UpdateSelectedFile();
+                                    new EffectFadeIn(prop, 500)
+                                        .Render();
+                                    prop.Visible = true;
+                                    prop.Style[Styles.display] = "none";
                                 };
                             p.Info = name;
                             p.ToolTip = name + " - click for more options/info ...";
@@ -169,18 +192,37 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             }
         }
 
+        protected void preview_Click(object sender, EventArgs e)
+        {
+            OpenFullPreviewOfImage(
+                DataSource["Folder"].Get<string>() + 
+                DataSource["File"]["FullName"].Get<string>());
+        }
+
         private void UpdateSelectedFile()
         {
-            new EffectFadeIn(prop, 500)
-                .Render();
-            prop.Visible = true;
-            prop.Style[Styles.display] = "none";
             header.Text = "Name: " + DataSource["File"]["Name"].Get<string>();
             extension.Text = "Extension: " + DataSource["File"]["Extension"].Get<string>();
+            name.Text = DataSource["File"]["Name"].Get<string>();
+            name.Info = DataSource["File"]["FullName"].Get<string>();
+            preview.AlternateText = DataSource["File"]["Name"].Get<string>();
+            preview.ImageUrl = 
+                DataSource["Folder"].Get<string>() + 
+                DataSource["File"]["FullName"].Get<string>();
+            preview.CssClass =
+                DataSource["Files"][DataSource["File"]["FullName"].Get<string>()]
+                .Contains("Wide") &&
+                DataSource["Files"][DataSource["File"]["FullName"].Get<string>()]["Wide"]
+                .Get<bool>() ? 
+                    "span-4 preview wide" : 
+                    "span-4 preview";
             size.Text = "Size: " +
-                (DataSource["File"]["Size"].Get<long>() / 1024)
-                .ToString("###.###.###.###", CultureInfo.InvariantCulture) +
+                (((double)DataSource["File"]["Size"].Get<long>()) / 1024D)
+                .ToString("###,###,###,##0.0", CultureInfo.InvariantCulture) +
                 "KB";
+            fullUrl.Text = " Full URL: " +
+                DataSource["Folder"].Get<string>() +
+                DataSource["File"]["FullName"].Get<string>();
             if (DataSource["File"].Contains("IsImage") && DataSource["File"]["IsImage"].Get<bool>())
             {
                 imageLink.Visible = true;
@@ -192,8 +234,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
                 int width = DataSource["File"]["ImageWidth"].Get<int>();
                 int height = DataSource["File"]["ImageHeight"].Get<int>();
-                int optimalWidth = width + (width < 30 ? (30 - width) : ((width + 10) % 40));
-                int optimalHeight = height + (height < 18 ? (18 - height) : height % 18);
+                int optimalWidth = width - (width < 30 ? -(30 - width) : ((width + 10) % 40));
+                int optimalHeight = height - (height < 18 ? -(18 - height) : height % 18);
 
                 if ((width + 10) % 40 != 0 || height % 18 != 0 || width > 950)
                 {
@@ -207,8 +249,10 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                         optimalHeight;
                     imageSize.Text = imageSizeText;
                     imageWarning.Visible = true;
+                    imageWarning.Style[Styles.display] = "none";
                     new EffectTimeout(500)
                         .ChainThese(
+                            new EffectRollDown(imageWarning, 500),
                             new EffectHighlight(imageWarning, 500),
                             new EffectTimeout(500),
                             new EffectHighlight(imageWarning, 500),
@@ -216,9 +260,10 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                             new EffectHighlight(imageWarning, 500))
                         .Render();
                     imageWarning.Text = string.Format(
-                        @"Images should be 30, 70, 110, 150 etc till 950, and some multiplication 
-of 18 in height. Your image seems to be {0}x{1}, which means it's {2} pixels too wide
-and {3} pixels to tall to show up beautifully in your design.",
+@"Images should be 30, 70, 110, 150, etc wide, and some multiplication 
+of 18 in height. Your image seems to be {0}x{1}. If you scale it down to
+{2}x{3} pixels, it will show up more beautifully in the design of your website 
+flow ...",
                         width,
                         height,
                         optimalWidth,
@@ -245,19 +290,51 @@ and {3} pixels to tall to show up beautifully in your design.",
             }
         }
 
+        protected void name_TextChanged(object sender, EventArgs e)
+        {
+            string newName = name.Text;
+            string oldName = (sender as InPlaceEdit).Info;
+            Node node = DataSource;
+            node["Directories"].UnTie();
+            node["Files"].UnTie();
+            node["NewName"].Value = newName;
+            node["OldName"].Value = oldName;
+            RaiseSafeEvent(
+                "FileExplorer.ChangeFileName",
+                node);
+            node["NewName"].UnTie();
+            node["OldName"].UnTie();
+            SelectedPanelID = newName + oldName.Substring(oldName.LastIndexOf("."));
+            ReDataBind();
+            Panel pl = Selector.SelectFirst<Panel>(this,
+                delegate(Control idx)
+                {
+                    return (idx is BaseWebControl) &&
+                        (idx as BaseWebControl).Info == SelectedPanelID;
+                });
+            if (pl != null)
+                pl.CssClass += " viewing";
+            UpdateSelectedFile();
+            prop.Visible = true;
+        }
+
         protected void imageLink_Click(object sender, EventArgs e)
         {
             LinkButton b = sender as LinkButton;
             string file = b.Info;
+            OpenFullPreviewOfImage(file);
+        }
+
+        private void OpenFullPreviewOfImage(string file)
+        {
             Node node = new Node();
             node["ForcedSize"]["width"].Value = DataSource["File"]["ImageWidth"].Get<int>() + 80;
-            node["ForcedSize"]["height"].Value = DataSource["File"]["ImageHeight"].Get<int>() + 81;
+            node["ForcedSize"]["height"].Value = DataSource["File"]["ImageHeight"].Get<int>() + 90;
             node["ImageUrl"].Value = file;
             node["SetFocus"].Value = true;
-            node["styles"]["border"].Value = "solid 1px Blue";
             node["AlternateText"].Value = "Preview of image in full size...";
-            node["Caption"].Value = 
-                "Full size of: " + 
+            node["Caption"].Value =
+                "Full size of: " +
                 DataSource["Folder"].Get<string>() +
                 DataSource["File"].Get<string>();
             ActiveEvents.Instance.RaiseLoadControl(
@@ -317,6 +394,12 @@ and {3} pixels to tall to show up beautifully in your design.",
         {
             get { return ViewState["DataSource"] as Node; }
             set { ViewState["DataSource"] = value; }
+        }
+
+        private string SelectedPanelID
+        {
+            get { return ViewState["SelectedPanelID"] as string; }
+            set { ViewState["SelectedPanelID"] = value; }
         }
     }
 }

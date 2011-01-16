@@ -46,23 +46,23 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
                 foreach (string idxFile in Directory.GetFiles(
                     webServerApp + webServerFolder, idxFilter))
                 {
+                    string fileName = idxFile.Substring(idxFile.LastIndexOf("\\") + 1);
                     switch (idxFilter.Substring(idxFilter.LastIndexOf(".") + 1))
                     {
                         case "png":
                         case "gif":
                         case "jpeg":
                         case "jpg":
-                            node["Files"]["F" + idxNo]["IsImage"].Value = true;
+                            node["Files"][fileName]["IsImage"].Value = true;
                             using (Bitmap b = Bitmap.FromFile(idxFile) as Bitmap)
                             {
                                 if (b.Width > b.Height)
-                                    node["Files"]["F" + idxNo]["Wide"].Value = true;
+                                    node["Files"][fileName]["Wide"].Value = true;
                             }
                             break;
                     }
-                    node["Files"]["F" + idxNo]["FullPath"].Value = idxFile;
-                    node["Files"]["F" + idxNo]["Name"].Value =
-                        idxFile.Substring(idxFile.LastIndexOf("\\") + 1);
+                    node["Files"][fileName]["FullPath"].Value = idxFile;
+                    node["Files"][fileName]["Name"].Value = fileName;
                     idxNo += 1;
                 }
             }
@@ -121,6 +121,24 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
                     node["File"]["ImageWidth"].UnTie();
                     break;
             }
+        }
+
+        public static void ChangeFileName(string folder, string oldName, string newName)
+        {
+            folder = CleanUpFolder(folder);
+            string webServerApp = HttpContext.Current.Server.MapPath("~/");
+            string webServerFolder = folder.Replace("/", "\\");
+            string fullOldFilePath = 
+                webServerApp + 
+                webServerFolder + 
+                oldName;
+            string fullNewFilePath = 
+                webServerApp + 
+                webServerFolder + 
+                newName + 
+                oldName.Substring(oldName.IndexOf("."));
+
+            File.Move(fullOldFilePath, fullNewFilePath);
         }
     }
 }

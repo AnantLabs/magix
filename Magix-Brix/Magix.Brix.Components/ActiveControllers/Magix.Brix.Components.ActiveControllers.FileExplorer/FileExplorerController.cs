@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
             Helper.GetFilesAndFolders(folder, filter, node);
             ActiveEvents.Instance.RaiseLoadControl(
                 "Magix.Brix.Components.ActiveModules.FileExplorer.Explorer",
-                "child",
+                null,
                 node);
         }
 
@@ -66,6 +66,24 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
             string file = e.Params["File"].Get<string>();
             string folder = e.Params["Folder"].Get<string>();
             Helper.GetFileProperties(folder, file, e.Params);
+        }
+
+        [ActiveEvent(Name = "FileExplorer.ChangeFileName")]
+        protected void FileExplorer_ChangeFileName(object sender, ActiveEventArgs e)
+        {
+            string newName = e.Params["NewName"].Get<string>();
+            string oldName = e.Params["OldName"].Get<string>();
+            string folder = e.Params["Folder"].Get<string>();
+            Helper.ChangeFileName(folder, oldName, newName);
+
+            Helper.GetFilesAndFolders(
+                folder,
+                e.Params["Filter"].Get<string>(),
+                e.Params);
+            Helper.GetFileProperties(
+                folder, 
+                newName + oldName.Substring(oldName.LastIndexOf(".")), 
+                e.Params);
         }
     }
 }
