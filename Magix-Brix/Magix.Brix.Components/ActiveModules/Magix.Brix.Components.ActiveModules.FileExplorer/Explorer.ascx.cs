@@ -192,16 +192,20 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
                 int width = DataSource["File"]["ImageWidth"].Get<int>();
                 int height = DataSource["File"]["ImageHeight"].Get<int>();
-
-                string imageSizeText =
-                    width +
-                    "px - " +
-                    height +
-                    "px";
-                imageSize.Text = imageSizeText;
+                int optimalWidth = width + (width < 30 ? (30 - width) : ((width + 10) % 40));
+                int optimalHeight = height + (height < 18 ? (18 - height) : height % 18);
 
                 if ((width + 10) % 40 != 0 || height % 18 != 0 || width > 950)
                 {
+                    string imageSizeText =
+                        width +
+                        "px - " +
+                        height +
+                        "px - optimal " +
+                        optimalWidth +
+                        "x" +
+                        optimalHeight;
+                    imageSize.Text = imageSizeText;
                     imageWarning.Visible = true;
                     new EffectTimeout(500)
                         .ChainThese(
@@ -217,11 +221,20 @@ of 18 in height. Your image seems to be {0}x{1}, which means it's {2} pixels too
 and {3} pixels to tall to show up beautifully in your design.",
                         width,
                         height,
-                        width < 30 ? -(30 - width) : ((width + 10) % 40),
-                        height < 18 ? -(18 - height) : height % 18);
+                        optimalWidth,
+                        optimalHeight);
                 }
                 else
                 {
+                    string imageSizeText =
+                        width +
+                        "px - " +
+                        height +
+                        "px - grids " + 
+                        (width + 10) / 40 +
+                        "x" + 
+                        height / 18;
+                    imageSize.Text = imageSizeText;
                     imageWarning.Visible = false;
                 }
             }
