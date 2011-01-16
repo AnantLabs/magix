@@ -6,7 +6,6 @@
 	border-bottom-color:#bbb;
 	margin-bottom:36px;
 	height:270px;
-	overflow:hidden;
 }
 
 
@@ -146,6 +145,16 @@
 	transition-property:box-shadow, border-radius;
 	transition-duration:0.2s;
 	cursor:pointer;
+
+	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .2)), to(rgba(180, 180, 180, .2)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .2) 0%, rgba(180, 180, 180, .2) 80%);
+
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
 }
 
 .fileExplorer .folderUpIcon:hover
