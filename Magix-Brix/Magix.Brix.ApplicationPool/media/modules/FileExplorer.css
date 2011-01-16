@@ -1,9 +1,23 @@
 ﻿
 
+
+input[type=button]
+{
+	padding:0 10px 0 10px;
+	margin-bottom:36px;
+}
+
+input[type=submit]:disabled:hover,
+input[type=button]:disabled:hover
+{
+	color:#CC6600 !important;
+}
+
 .fileExplorer
 {
 	margin-bottom:36px;
 	height:270px;
+	background-color:rgba(0, 0, 0, 0.1);
 }
 
 
@@ -40,14 +54,14 @@
 
 .fileExplorer .imageIcon img
 {
-	height:80%;
-	margin:10%;
+	max-height:100%;
+	width:auto;
 }
 
 .fileExplorer .wide img
 {
 	height:auto;
-	width:80%;
+	max-width:100%;
 }
 
 .fileExplorer .lastImage
@@ -198,34 +212,29 @@
 {
 }
 
-.fileExplorer .next,
-.fileExplorer .previous
+.fileEx .next,
+.fileEx .previous
+{
+	padding:0 20px 0 20px;
+}
+
+
+
+
+
+
+
+
+
+
+.fileExplorer-properties
 {
 	margin-bottom:36px;
 }
 
-div.fileExplorer>div.mux-in-place-edit
-{
-	position:relative;
-}
-
-div.mux-in-place-edit input[type=text]
+.fileExplorer-properties div.mux-in-place-edit input[type=text]
 {
 	margin:-2px 0 -1px 0 !important;
-}
-
-
-
-
-
-
-
-
-
-
-.fileExplorer-properties 
-{
-	margin-bottom:36px;
 }
 
 .fileExplorer-properties .extension
@@ -256,11 +265,6 @@ div.mux-in-place-edit input[type=text]
 	margin-bottom:0;
 }
 
-.fileExplorer-properties .link
-{
-	margin-bottom:0;
-}
-
 .fileExplorer-properties .imageLink
 {
 	text-decoration:none;
@@ -276,6 +280,24 @@ div.mux-in-place-edit input[type=text]
 	width:auto;
 	max-height:100%;
 	cursor:pointer;
+
+	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, border-radius;
+	transition-duration:0.2s;
+	cursor:pointer;
+}
+
+.fileExplorer-properties img:hover
+{
+	-webkit-box-shadow: 2px 2px 3px #444;
+	-moz-box-shadow: 2px 2px 3px #444;
+	box-shadow: 2px 2px 3px #444;
 }
 
 .fileExplorer-properties img.wide
@@ -284,6 +306,51 @@ div.mux-in-place-edit input[type=text]
 	height:auto;
 }
 
+
+
+
+
+
+.fileUploader
+{
+	position:relative;
+}
+
+.fileUploader input[type=file]
+{
+	position:absolute;
+	z-index:2;
+	opacity:0;
+	top:0;
+	left:0;
+	width:110px;
+	margin:0.5em 0;
+}
+
+.fileUploader .browse
+{
+	position:absolute;
+	z-index:1;
+	width:190px;
+	top:0;
+	left:0;
+
+	background-image:url(../magic-ux-skins/pen.png);
+	background-repeat:no-repeat;
+	background-position:1px 1px;
+	padding-left:20px;
+}
+
+input[type=text]
+{
+	width:170px !important;
+	margin-left:10px !important;
+}
+
+.submitButton
+{
+	margin-left:210px !important;
+}
 
 
 
