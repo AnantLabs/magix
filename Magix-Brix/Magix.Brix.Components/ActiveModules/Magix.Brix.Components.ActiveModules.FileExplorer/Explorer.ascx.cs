@@ -172,7 +172,6 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                             Panel p = new Panel();
                             p.Style[Styles.position] = "relative";
                             Label l = new Label();
-                            l.Text = name;
                             l.Style[Styles.position] = "absolute";
                             l.Style[Styles.bottom] = "0";
                             l.Style[Styles.left] = "0";
