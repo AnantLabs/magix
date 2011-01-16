@@ -86,9 +86,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 if (DataSource["Folder"].Get<string>().Length
                     > DataSource["RootAccessFolder"].Get<string>().Length)
                 {
-                    string name = "&nbsp;";
                     Label btn = new Label();
-                    btn.Text = name;
+                    btn.ToolTip = "Go up one level ...";
                     Panel p = new Panel();
                     p.Info = "../";
                     p.Click +=
