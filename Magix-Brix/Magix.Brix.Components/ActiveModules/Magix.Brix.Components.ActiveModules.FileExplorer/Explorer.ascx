@@ -89,6 +89,7 @@ function foo() {
         <mux:InPlaceEdit
             runat="server"
             OnTextChanged="name_TextChanged"
+            ToolTip="Rename file ..."
             id="name" />
     </p>
     <mux:Label 

@@ -150,8 +150,8 @@ input[type=button]:disabled:hover
 	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .2)), to(rgba(180, 180, 180, .2)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .2) 0%, rgba(180, 180, 180, .2) 80%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(200, 255, 200, .3)), to(rgba(180, 255, 180, .3)));
+	background-image: -moz-linear-gradient(rgba(230, 255, 230, .3) 0%, rgba(180, 255, 180, .3) 80%);
 
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
@@ -163,8 +163,8 @@ input[type=button]:disabled:hover
 	-webkit-box-shadow: 2px 2px 3px #444;
 	-moz-box-shadow: 2px 2px 3px #444;
 	box-shadow: 2px 2px 3px #444;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(200, 255, 200, .8)), to(rgba(180, 255, 180, .8)));
+	background-image: -moz-linear-gradient(rgba(230, 255, 230, .8) 0%, rgba(180, 255, 180, .8) 80%);
 
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
