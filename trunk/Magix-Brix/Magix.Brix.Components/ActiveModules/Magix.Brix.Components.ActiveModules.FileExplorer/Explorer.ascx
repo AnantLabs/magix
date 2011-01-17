@@ -13,67 +13,6 @@
         runat="server"
         CssClass="span-12 fileExplorer"
         id="pnl" />
-    <div class="span-12 fileEx">
-        <mux:Button
-            runat="server"
-            id="previous"
-            CssClass="span-2 previous"
-            OnClick="previous_Click"
-            Text="&lt;" />
-        <mux:Button
-            runat="server"
-            id="next"
-            CssClass="span-2 next"
-            OnClick="next_Click"
-            Text="&gt;" />
-        <mux:Button
-            runat="server"
-            id="delete"
-            CssClass="span-4 delete"
-            OnClick="delete_Click"
-            Text="Delete..." />
-        <div class="fileUploader span-4">
-            <asp:FileUpload
-                runat="server"
-                OnChange="window.toggleButtons();"
-                OnMouseOut="window.toggleButtons();"
-                id="file" />
-            <mux:TextBox
-                runat="server"
-                id="fileReal"
-                placeholder="Upload file..."
-                CssClass="browse" />
-            <asp:Button
-                runat="server"
-                id="submitFile"
-                CssClass="submitButton"
-                Enabled="false"
-                Text="Upload ..." 
-                OnClick="submitFile_Click"/>
-            <script type="text/ecmascript">
-window.toggleButtons = function() {
-  var file = MUX.$('<%=file.ClientID%>');
-  var fileReal = MUX.$('<%=fileReal.ClientID%>');
-  var vl = file.value;
-  if(vl.indexOf('\\') != -1) {
-    vl = vl.split('\\');
-    vl = vl[vl.length - 1];
-  }
-  if(vl.indexOf('/') != -1) {
-    vl = vl.split('/');
-    vl = vl[vl.length - 1];
-  }
-  fileReal.value = vl;
-  var sub = MUX.$('<%=submitFile.ClientID%>');
-  if(file.value) {
-    sub.disabled = '';
-  } else {
-    sub.disabled = 'disabled';
-  }
-}
-            </script>
-        </div>
-    </div>
 </div>
 
 <mux:Panel
@@ -128,6 +67,73 @@ window.toggleButtons = function() {
     </div>
 </mux:Panel>
 
+<div class="span-20 last fileEx">
+    <mux:Button
+        runat="server"
+        id="previous"
+        CssClass="span-2 previous"
+        OnClick="previous_Click"
+        Text="&lt;" />
+    <mux:Button
+        runat="server"
+        id="next"
+        CssClass="span-2 next"
+        OnClick="next_Click"
+        Text="&gt;" />
+    <mux:Button
+        runat="server"
+        id="delete"
+        CssClass="span-4 delete"
+        OnClick="delete_Click"
+        Text="Delete" />
+    <div class="fileUploader span-4">
+        <asp:FileUpload
+            runat="server"
+            OnChange="window.toggleButtons();"
+            OnMouseOut="window.toggleButtons();"
+            id="file" />
+        <mux:TextBox
+            runat="server"
+            id="fileReal"
+            placeholder="Upload file..."
+            CssClass="browse" />
+        <asp:Button
+            runat="server"
+            id="submitFile"
+            CssClass="submitButton"
+            Enabled="false"
+            Text="Upload ..." 
+            OnClick="submitFile_Click"/>
+        <script type="text/ecmascript">
+window.toggleButtons = function() {
+var file = MUX.$('<%=file.ClientID%>');
+var fileReal = MUX.$('<%=fileReal.ClientID%>');
+var vl = file.value;
+if(vl.indexOf('\\') != -1) {
+vl = vl.split('\\');
+vl = vl[vl.length - 1];
+}
+if(vl.indexOf('/') != -1) {
+vl = vl.split('/');
+vl = vl[vl.length - 1];
+}
+fileReal.value = vl;
+var sub = MUX.$('<%=submitFile.ClientID%>');
+if(file.value) {
+sub.disabled = '';
+} else {
+sub.disabled = 'disabled';
+}
+}
+        </script>
+    </div>
+    <mux:Button
+        runat="server"
+        id="select"
+        CssClass="span-4 select last"
+        OnClick="select_Click"
+        Text="Select" />
+</div>
 
 
 

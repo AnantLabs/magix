@@ -66,6 +66,12 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             }
         }
 
+        [ActiveEvent(Name = "Magix.Core.ChangeImage")]
+        protected void Magix_Core_ChangeImage(object sende, ActiveEventArgs e)
+        {
+            img.ImageUrl = e.Params["ImageURL"].Get<string>();
+        }
+
         private Node DataSource
         {
             get { return ViewState["DataSource"] as Node; }
