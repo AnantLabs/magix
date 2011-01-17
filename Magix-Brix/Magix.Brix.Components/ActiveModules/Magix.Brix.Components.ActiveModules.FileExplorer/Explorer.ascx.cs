@@ -265,6 +265,39 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 fileReal.Text = "";
                 string fileName = file.FileName;
                 string webServerApp = Server.MapPath("~/");
+                if (DataSource.Contains("Filter") && 
+                    DataSource["Filter"].Get<string>().Trim().Length > 0)
+                {
+                    bool message = true;
+                    foreach (string idx in 
+                        DataSource["Filter"].Get<string>().Trim().Split(';'))
+                    {
+                        if (idx == null)
+                            continue;
+                        if (idx == "*.*")
+                        {
+                            message = false;
+                            break;
+                        }
+                        if (fileName.Substring(
+                            fileName.LastIndexOf(".") + 1).
+                            Contains(idx.Replace("*.", "")))
+                        {
+                            message = false;
+                            break;
+                        }
+                    }
+                    if (message)
+                    {
+                        Node node = new Node();
+                        node["Message"].Value = "You cannot save files of that type...";
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            "Magix.Core.ShowMessage",
+                            node);
+                        return;
+                    }
+                }
                 file.SaveAs(
                     webServerApp +
                     DataSource["Folder"].Get<string>().Replace("/", "\\") +

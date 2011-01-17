@@ -16,7 +16,7 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
     public class FileExplorerController
     {
         [ActiveEvent(Name = "FileExplorer.Form.LaunchFileExplorer")]
-        protected void LaunchFileExplorer(object sender, ActiveEventArgs e)
+        protected void FileExplorer_Form_LaunchFileExplorer(object sender, ActiveEventArgs e)
         {
             string folder = "media/";
             string filter = "*.png;*.jpeg;*.jpg;*.gif;";
@@ -25,7 +25,21 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
             node["Top"].Value = 4;
             node["Padding"].Value = 1;
             node["Width"].Value = 22;
+            node["Folder"].Value = folder;
+            node["Filter"].Value = filter;
+            LaunchFileExplorer(node, folder, filter);
+        }
 
+        [ActiveEvent(Name = "FileExplorer.Form.LaunchFileExplorerWithParams")]
+        protected void FileExplorer_Form_LaunchFileExplorerWithParams(object sender, ActiveEventArgs e)
+        {
+            string folder = e.Params["RootAccessFolder"].Get<string>();
+            string filter = e.Params["Filter"].Get<string>();
+            LaunchFileExplorer(e.Params, folder, filter);
+        }
+
+        private void LaunchFileExplorer(Node node, string folder, string filter)
+        {
             node["RootAccessFolder"].Value = folder;
             node["IsSelect"].Value = false;
 
