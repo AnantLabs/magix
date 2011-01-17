@@ -360,7 +360,12 @@ model while trying to create object, and it was never created for some reasons."
             Node node = new Node();
             node["IsChange"].Value = false;
             node["IsRemove"].Value = false;
-            ShowComplexObject(id, fullTypeName, node);
+            node["FullTypeName"].Value = fullTypeName;
+            node["ID"].Value = id;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewComplexObject",
+                node);
         }
 
         private void ShowViewClassForm(Node node, string fullTypeName)

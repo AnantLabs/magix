@@ -33,6 +33,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected InPlaceEdit name;
         protected Image preview;
         protected Button delete;
+        protected Button select;
         protected System.Web.UI.WebControls.FileUpload file;
         protected TextBox fileReal;
 
@@ -44,6 +45,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                     DataSource = node;
                     prop.Visible = false;
                     delete.Enabled = false;
+                    select.Enabled = false;
                     Start = 0;
                     End = 18;
                 };
@@ -249,6 +251,17 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             ReDataBind();
         }
 
+        protected void select_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["FileName"].Value = DataSource["File"]["FullName"].Value;
+            node["Folder"].Value = DataSource["Folder"].Value;
+            node["Params"].AddRange(DataSource["SelectEvent"]["Params"]);
+            RaiseSafeEvent(
+                DataSource["SelectEvent"].Get<string>(),
+                node);
+        }
+
         protected void submitFile_Click(object sender, EventArgs e)
         {
             if (!file.HasFile)
@@ -336,6 +349,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         private void UpdateSelectedFile()
         {
             delete.Enabled = true;
+            select.Enabled = true;
             header.Text = "Name: " + DataSource["File"]["Name"].Get<string>();
             extension.Text = "Extension: " + DataSource["File"]["Extension"].Get<string>();
             name.Text = DataSource["File"]["Name"].Get<string>();
@@ -391,8 +405,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                     imageWarning.Text = string.Format(
 @"Images should be 30, 70, 110, 150, etc wide, and some multiplication 
 of 18 in height. Your image seems to be {0}x{1}. If you scale it down to
-{2}x{3} pixels, it will show up more beautifully in the design of your website 
-flow ...",
+{2}x{3} pixels, it will show up more beautifully ...",
                         width,
                         height,
                         optimalWidth,
@@ -476,6 +489,7 @@ flow ...",
             pnl.ReRender();
             prop.Visible = false;
             delete.Enabled = false;
+            select.Enabled = false;
         }
 
         protected void next_Click(object sender, EventArgs e)
@@ -490,12 +504,14 @@ flow ...",
             pnl.ReRender();
             prop.Visible = false;
             delete.Enabled = false;
+            select.Enabled = false;
         }
 
         private void ReDataBind()
         {
             prop.Visible = false;
             delete.Enabled = false;
+            select.Enabled = false;
             pnl.Controls.Clear();
             DataBindExplorer();
             pnl.ReRender();
