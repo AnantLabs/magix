@@ -35,8 +35,8 @@
         <div class="fileUploader span-4">
             <asp:FileUpload
                 runat="server"
-                OnChange="foo();"
-                OnMouseOut="foo();"
+                OnChange="window.toggleButtons();"
+                OnMouseOut="window.toggleButtons();"
                 id="file" />
             <mux:TextBox
                 runat="server"
@@ -50,8 +50,8 @@
                 Enabled="false"
                 Text="Upload ..." 
                 OnClick="submitFile_Click"/>
-            <script type="text/ecmascript" language="ecmascript">
-function foo() {
+            <script type="text/ecmascript">
+window.toggleButtons = function() {
   var file = MUX.$('<%=file.ClientID%>');
   var fileReal = MUX.$('<%=fileReal.ClientID%>');
   var vl = file.value;
