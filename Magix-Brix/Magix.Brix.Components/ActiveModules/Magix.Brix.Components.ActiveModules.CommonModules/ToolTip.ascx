@@ -12,31 +12,36 @@
     runat="server" 
     Closable="true"
     style="position:absolute;z-index:830;" 
-    CssClass="mux-shaded mux-rounded mux-window" 
+    CssClass="mux-shaded mux-rounded mux-window tooltip" 
     id="wnd">
     <Content>
+        <img 
+            src="media/images/marvin-happy.png" 
+            class="image" />
         <mux:Label
             runat="server"
             Tag="div"
             id="lbl" />
-        <mux:Button
-            runat="server"
-            id="previous"
-            OnClick="previous_Click"
-            CssClass="span-3 navButton last"
-            Text="&lt;&lt;" />
-        <mux:Button
-            runat="server"
-            id="next"
-            OnClick="next_Click"
-            CssClass="span-3 navButton"
-            Text="&gt;&gt;" />
-        <mux:Button
-            runat="server"
-            id="ok"
-            OnClick="ok_Click"
-            CssClass="span-3 navButton"
-            Text="OK" />
+        <div class="navigation">
+            <mux:Button
+                runat="server"
+                id="ok"
+                OnClick="ok_Click"
+                CssClass="span-3 navButton"
+                Text="OK" />
+            <mux:Button
+                runat="server"
+                id="next"
+                OnClick="next_Click"
+                CssClass="span-3 navButton"
+                Text="&gt;" />
+            <mux:Button
+                runat="server"
+                id="previous"
+                OnClick="previous_Click"
+                CssClass="span-3 navButton"
+                Text="&lt;" />
+        </div>
     </Content>
     <Control>
         <mux:AspectModal

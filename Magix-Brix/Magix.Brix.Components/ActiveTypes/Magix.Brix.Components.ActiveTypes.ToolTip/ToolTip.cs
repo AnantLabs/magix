@@ -70,39 +70,45 @@ namespace Magix.Brix.Components.ActiveTypes
             get { return Tip.Count; }
         }
 
-        public string Next(string seed)
+        private static string GetToolTip(string seed, int addition)
         {
             TipPosition pos = TipPosition.SelectFirst(
                 Criteria.Eq("Seed", seed));
             if (pos == null)
             {
                 pos = new TipPosition();
+                pos.Position = 0 - addition;
                 pos.Seed = seed;
             }
-            pos.Position += 1;
-            if (pos.Position >= Tip.Count)
+            pos.Position = pos.Position + addition;
+            if (pos.Position >= Tip.Count - 1)
                 pos.Position = 0;
-            pos.Save();
+            if (pos.Position < 0)
+                pos.Position = Tip.Count - 1;
             Tip retVal = Tip.SelectFirst(Criteria.Eq("No", pos.Position));
-            if (retVal != null)
-                return retVal.Value;
-            return null;
+            if (retVal == null)
+            {
+                // Defaulting to first ...
+                pos.Position = 0;
+                retVal = Tip.SelectFirst(Criteria.Eq("No", pos.Position));
+                if (retVal == null)
+                {
+                    pos.Save();
+                    return null; // No tips here .....
+                }
+            }
+            pos.Save();
+            return retVal.Value;
         }
 
         public string Previous(string seed)
         {
-            TipPosition pos = TipPosition.SelectFirst(
-                Criteria.Eq("Seed", seed));
-            if (pos == null)
-            {
-                pos = new TipPosition();
-                pos.Seed = seed;
-            }
-            pos.Position -= 1;
-            if (pos.Position == 0)
-                pos.Position = Tip.Count - 1;
-            pos.Save();
-            return Tip.SelectFirst(Criteria.Eq("No", pos.Position)).Value;
+            return GetToolTip(seed, -1);
+        }
+
+        public string Next(string seed)
+        {
+            return GetToolTip(seed, 1);
         }
     }
 }

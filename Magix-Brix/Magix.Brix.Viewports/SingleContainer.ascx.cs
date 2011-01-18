@@ -21,6 +21,7 @@ namespace Magix.Brix.Viewports
         protected DynamicPanel content1;
         protected DynamicPanel content2;
         protected DynamicPanel content3;
+        protected DynamicPanel content4;
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
@@ -111,6 +112,11 @@ namespace Magix.Brix.Viewports
                     this, 
                     e.Params["Position"].Get<string>());
                 ClearControls(pnl);
+                if (pnl.ID == "content3")
+                {
+                    // These two are normally grouped together ...
+                    ClearControls(content4);
+                }
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
@@ -148,6 +154,12 @@ namespace Magix.Brix.Viewports
                 DynamicPanel dyn = Selector.FindControl<DynamicPanel>(
                     this, 
                     e.Params["Position"].Get<string>());
+
+                if (dyn.ID == "content2")
+                {
+                    // These two are normally grouped together ...
+                    ClearControls(content4);
+                }
 
                 string cssClass = null;
                 if (e.Params["Parameters"].Contains("Padding"))

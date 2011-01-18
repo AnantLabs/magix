@@ -6,9 +6,19 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.CommonModules.ImageModule" %>
 
-<mux:Image
+<mux:Panel
     runat="server"
-    id="img" />
+    id="root">
+    <mux:Image
+        runat="server"
+        id="img" />
+
+    <mux:Label
+        runat="server"
+        Tag="p"
+        CssClass="imageDescription small"
+        id="lbl" />
+</mux:Panel>
 
 <mux:Button
     runat="server"

@@ -19,15 +19,28 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
         protected void FileExplorer_Form_LaunchFileExplorer(object sender, ActiveEventArgs e)
         {
             string folder = "media/";
-            string filter = "*.png;*.jpeg;*.jpg;*.gif;";
+            string filter = "*.png;*.jpeg;*.jpg;*.gif;"; // TODO: Implement support for more file types ...
 
             Node node = new Node();
             node["Top"].Value = 4;
+            if (e.Params.Contains("Top"))
+                node["Top"].Value = e.Params["Top"].Get<int>();
             node["Padding"].Value = 1;
+            if (e.Params.Contains("Padding"))
+                node["Padding"].Value = e.Params["Padding"].Get<int>();
             node["Width"].Value = 22;
+            if (e.Params.Contains("Width"))
+                node["Width"].Value = e.Params["Width"].Get<int>();
+            if (e.Params.Contains("Container"))
+                node["Container"].Value = e.Params["Container"].Get<string>();
+            if (e.Params.Contains("Last"))
+                node["Last"].Value = e.Params["Last"].Get<bool>();
             node["Folder"].Value = folder;
             node["Filter"].Value = filter;
-            LaunchFileExplorer(node, folder, filter);
+            LaunchFileExplorer(
+                node, 
+                folder, 
+                filter);
         }
 
         [ActiveEvent(Name = "FileExplorer.Form.LaunchFileExplorerWithParams")]
@@ -41,16 +54,19 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
         private void LaunchFileExplorer(Node node, string folder, string filter)
         {
             node["RootAccessFolder"].Value = folder;
-            node["IsSelect"].Value = false;
 
             Helper.GetFilesAndFolders(folder, filter, node);
             node["Caption"].Value = string.Format("Exploring: '" + folder + "', {0} files, {1} folders",
                 node["Files"].Count,
                 node["Directories"].Count);
 
+            string container = "child";
+            if (node.Contains("Container"))
+                container = node["Container"].Get<string>();
+
             ActiveEvents.Instance.RaiseLoadControl(
                 "Magix.Brix.Components.ActiveModules.FileExplorer.Explorer",
-                "child",
+                container,
                 node);
         }
 

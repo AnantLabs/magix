@@ -470,8 +470,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             li.Controls.Add(lb);
             row.Controls.Add(li);
             
-            foreach (Node idx in node["Properties"])
+            foreach (Node idxType in DataSource["Type"]["Properties"])
             {
+                Node idx = node["Properties"][idxType.Name];
                 bool columnVisible = GetColumnVisibility(idx.Name);
                 if (!columnVisible)
                     continue;
@@ -480,43 +481,54 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 l.Info = idx.Name;
                 if (DataSource["Type"]["Properties"][idx.Name]["IsComplex"].Get<bool>())
                 {
-                    LinkButton btn = new LinkButton();
-                    btn.Text = idx.Get<string>();
-                    if (DataSource["Type"]["Properties"][idx.Name]["BelongsTo"].Get<bool>())
-                        btn.CssClass = "belongsTo";
-                    btn.Info
-                        = DataSource["Type"]["Properties"][idx.Name]["IsList"].Get<bool>().ToString();
-                    btn.Click +=
-                        delegate(object sender, EventArgs e)
-                        {
-                            LinkButton ed = sender as LinkButton;
-                            (ed.Parent.Parent as Label).CssClass = "grid-selected";
-                            int id = int.Parse((ed.Parent.Parent as Label).Info);
-                            if (SelectedID != -1)
+                    if (DataSource["Type"]["Properties"][idx.Name].Contains("ReadOnly") &&
+                        DataSource["Type"]["Properties"][idx.Name]["ReadOnly"].Get<bool>())
+                    {
+                        l.CssClass += "read-only";
+                        Label ll = new Label();
+                        ll.Text = idx.Get<string>();
+                        l.Controls.Add(ll);
+                    }
+                    else
+                    {
+                        LinkButton btn = new LinkButton();
+                        btn.Text = idx.Get<string>();
+                        if (DataSource["Type"]["Properties"][idx.Name]["BelongsTo"].Get<bool>())
+                            btn.CssClass = "belongsTo";
+                        btn.Info
+                            = DataSource["Type"]["Properties"][idx.Name]["IsList"].Get<bool>().ToString();
+                        btn.Click +=
+                            delegate(object sender, EventArgs e)
                             {
-                                if (id != SelectedID)
+                                LinkButton ed = sender as LinkButton;
+                                (ed.Parent.Parent as Label).CssClass = "grid-selected";
+                                int id = int.Parse((ed.Parent.Parent as Label).Info);
+                                if (SelectedID != -1)
                                 {
-                                    Label lblx = Selector.SelectFirst<Label>(this,
-                                        delegate(Control idxCtrl)
-                                        {
-                                            return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                        });
-                                    if (lblx != null)
-                                        lblx.CssClass = "";
+                                    if (id != SelectedID)
+                                    {
+                                        Label lblx = Selector.SelectFirst<Label>(this,
+                                            delegate(Control idxCtrl)
+                                            {
+                                                return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                            });
+                                        if (lblx != null)
+                                            lblx.CssClass = "";
+                                    }
                                 }
-                            }
-                            SelectedID = id;
-                            string column = (ed.Parent as Label).Info;
-                            Node n = new Node();
-                            n["ID"].Value = id;
-                            n["PropertyName"].Value = column;
-                            n["IsList"].Value = bool.Parse(ed.Info);
-                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                            RaiseSafeEvent(
-                                "DBAdmin.Form.ViewListOrComplexPropertyValue",
-                                n);
-                        };
-                    l.Controls.Add(btn);
+                                SelectedID = id;
+                                string column = (ed.Parent as Label).Info;
+                                Node n = new Node();
+                                n["ID"].Value = id;
+                                n["PropertyName"].Value = column;
+                                n["IsList"].Value = bool.Parse(ed.Info);
+                                n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                RaiseSafeEvent(
+                                    "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                                    n);
+                            };
+                        l.Controls.Add(btn);
+                    }
                 }
                 else
                 {
