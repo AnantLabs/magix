@@ -46,6 +46,15 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                     prop.Visible = false;
                     delete.Enabled = false;
                     select.Enabled = false;
+                    if (node.Contains("IsSelect") &&
+                        node["IsSelect"].Get<bool>())
+                    {
+                        select.Visible = true;
+                    }
+                    else
+                    {
+                        select.Visible = false;
+                    }
                     Start = 0;
                     End = 18;
                 };

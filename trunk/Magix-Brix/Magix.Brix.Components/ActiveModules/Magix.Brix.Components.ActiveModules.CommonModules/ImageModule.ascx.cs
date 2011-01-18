@@ -20,6 +20,8 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
     {
         protected Image img;
         protected Button focs;
+        protected Label lbl;
+        protected Panel root;
 
         public void InitialLoading(Node node)
         {
@@ -29,7 +31,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 img.AlternateText = node["AlternateText"].Get<string>();
                 img.ToolTip = node["AlternateText"].Get<string>();
                 if (node.Contains("ChildCssClass"))
-                    img.CssClass = node["ChildCssClass"].Get<string>();
+                    root.CssClass = node["ChildCssClass"].Get<string>();
                 DataSource = node;
                 if (node.Contains("SetFocus") && node["SetFocus"].Get<bool>())
                 {
@@ -44,6 +46,16 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     {
                         img.Style[idx.Name] = idx.Get<string>();
                     }
+                }
+                if (node.Contains("Description") &&
+                    !string.IsNullOrEmpty(node["Description"].Get<string>()))
+                {
+                    lbl.Visible = true;
+                    lbl.Text = node["Description"].Get<string>();
+                }
+                else
+                {
+                    lbl.Visible = false;
                 }
             };
         }

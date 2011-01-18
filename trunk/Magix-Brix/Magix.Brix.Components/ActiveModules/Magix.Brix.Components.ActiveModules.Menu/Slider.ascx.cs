@@ -9,6 +9,8 @@ using System.Web.UI;
 using Magix.UX.Widgets;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
+using Magix.UX;
+using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Components.ActiveModules.Menu
 {
@@ -47,6 +49,9 @@ namespace Magix.Brix.Components.ActiveModules.Menu
             string caption = node["Caption"].Get<string>();
             string eventName = node["Event"]["Name"].Get<string>();
             SlidingMenuItem item = new SlidingMenuItem();
+            if (node.Contains("Selected") &&
+                node["Selected"].Get<bool>())
+                item.CssClass += " selected";
             item.Text = caption;
             item.Info = eventName;
             if (node.Contains("Items") && node["Items"].Count > 0)
@@ -68,6 +73,16 @@ namespace Magix.Brix.Components.ActiveModules.Menu
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 eventName);
+            SlidingMenuItem old = Selector.SelectFirst<SlidingMenuItem>(
+                root,
+                delegate(Control idx)
+                {
+                    return (idx is BaseWebControl) &&
+                        (idx as BaseWebControl).CssClass.Contains(" selected");
+                });
+            if (old != null)
+                old.CssClass = old.CssClass.Replace(" selected", "");
+            item.CssClass += " selected";
         }
 
         private Node DataSource

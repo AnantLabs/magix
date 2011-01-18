@@ -45,7 +45,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             Node node = new Node();
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
-                "GetPreviousToolTip",
+                "Magix.Core.GetPreviousToolTip",
                 node);
             lbl.Text = node["Text"].Get<string>();
             new EffectHighlight(lbl, 500)
@@ -57,7 +57,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             Node node = new Node();
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
-                "GetNextToolTip",
+                "Magix.Core.GetNextToolTip",
                 node);
             lbl.Text = node["Text"].Get<string>();
             new EffectHighlight(lbl, 500)
