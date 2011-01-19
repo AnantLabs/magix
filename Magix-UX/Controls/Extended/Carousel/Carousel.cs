@@ -25,10 +25,10 @@ namespace Magix.UX.Widgets
         protected override void OnPreRender(EventArgs e)
         {
             AjaxManager.Instance.IncludeScriptFromResource(
-                typeof(Timer),
+                typeof(Carousel),
                 "Magix.UX.Js.Carousel.js");
             AjaxManager.Instance.IncludeScriptFromResource(
-                typeof(Timer),
+                typeof(Effect),
                 "Magix.UX.Js.Effects.js");
             base.OnPreRender(e);
         }

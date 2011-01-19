@@ -264,6 +264,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         {
             Node node = new Node();
             node["FileName"].Value = DataSource["File"]["FullName"].Value;
+            if (DataSource.Contains("Seed"))
+                node["Seed"].Value = DataSource["Seed"].Value;
             node["Folder"].Value = DataSource["Folder"].Value;
             node["Params"].AddRange(DataSource["SelectEvent"]["Params"]);
             RaiseSafeEvent(

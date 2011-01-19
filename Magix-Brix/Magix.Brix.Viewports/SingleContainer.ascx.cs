@@ -96,7 +96,7 @@ namespace Magix.Brix.Viewports
             new EffectFadeIn(message, 500)
                 .JoinThese(new EffectRollDown())
                 .ChainThese(
-                    new EffectTimeout(20000),
+                    new EffectTimeout(5000),
                     new EffectFadeOut(message, 500)
                         .JoinThese(new EffectRollUp()))
                 .Render();
@@ -143,6 +143,9 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {
+            bool insertAtBeginning = e.Params["Parameters"].Contains("InsertAtBeginning") &&
+                e.Params["Parameters"]["InsertAtBeginning"].Get<bool>();
+
             // Since this is our default container, 
             // we accept "null" and string.Empty values here ...!
             if (string.IsNullOrEmpty(e.Params["Position"].Get<string>()) ||
@@ -161,43 +164,61 @@ namespace Magix.Brix.Viewports
                     ClearControls(content4);
                 }
 
-                string cssClass = null;
-                if (e.Params["Parameters"].Contains("Padding"))
+                bool hasCssClass = false;
+                if (dyn.Controls.Count == 0)
                 {
-                    cssClass += " push-" + e.Params["Parameters"]["Padding"].Get<int>();
+                    string cssClass = null;
+                    if (e.Params["Parameters"].Contains("Padding"))
+                    {
+                        cssClass += " push-" + e.Params["Parameters"]["Padding"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("Width"))
+                    {
+                        cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("Top"))
+                    {
+                        cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("Height"))
+                    {
+                        cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
+                    }
+                    if (!string.IsNullOrEmpty(cssClass))
+                    {
+                        hasCssClass = true;
+                    }
+                    else
+                    {
+                        // Defaulting to down-1 ...
+                        cssClass = "down-1";
+                    }
+                    cssClass += " last";
+                    dyn.CssClass = cssClass.Trim();
                 }
-                if (e.Params["Parameters"].Contains("Width"))
-                {
-                    cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
-                }
-                if (e.Params["Parameters"].Contains("Top"))
-                {
-                    cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
-                }
-                if (e.Params["Parameters"].Contains("Height"))
-                {
-                    cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
-                }
-                if (string.IsNullOrEmpty(cssClass))
-                {
-                    // Defaulting to down-1 ...
-                    cssClass = "down-1";
-                }
-                cssClass += " last";
-                dyn.CssClass = cssClass.Trim();
+
                 if (e.Params["Parameters"].Contains("Append") &&
                     e.Params["Parameters"]["Append"].Get<bool>())
                 {
-                    dyn.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    dyn.AppendControl(
+                        e.Params["Name"].Value.ToString(), 
+                        e.Params["Parameters"], 
+                        insertAtBeginning);
+
+                    // We highlight our newly injected module here ...!
+                    new EffectHighlight(dyn, 500)
+                        .Render();
                 }
                 else
                 {
                     ClearControls(dyn);
                     dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+
+                    // We do NOT do any "fade in" effects if we're in append mode here ...
+                    dyn.Style[Styles.display] = "none";
+                    new EffectFadeIn(dyn, 500)
+                        .Render();
                 }
-                dyn.Style[Styles.display] = "none";
-                new EffectFadeIn(dyn, 500)
-                    .Render();
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
@@ -308,7 +329,10 @@ namespace Magix.Brix.Viewports
                 if (e.Params["Parameters"].Contains("Append") &&
                     e.Params["Parameters"]["Append"].Get<bool>())
                 {
-                    toAddInto.AppendControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    toAddInto.AppendControl(
+                        e.Params["Name"].Value.ToString(), 
+                        e.Params["Parameters"],
+                        insertAtBeginning);
                 }
                 else
                 {
@@ -360,7 +384,10 @@ namespace Magix.Brix.Viewports
                         }
                     };
             }
-            dynamic.Controls.Add(ctrl);
+            if (e.InsertAtBeginning)
+                dynamic.Controls.AddAt(0, ctrl);
+            else
+                dynamic.Controls.Add(ctrl);
         }
     }
 }

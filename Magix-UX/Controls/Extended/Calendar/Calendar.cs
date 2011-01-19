@@ -206,7 +206,7 @@ namespace Magix.UX.Widgets
                 Value = DateTime.Now.Date;
             _month_year.Text = Value.ToString("MMMM yyyy", CultureInfo.InvariantCulture);
             AjaxManager.Instance.IncludeScriptFromResource(
-                typeof(Timer),
+                typeof(Calendar),
                 "Magix.UX.Js.Calendar.js");
             base.OnPreRender(e);
         }

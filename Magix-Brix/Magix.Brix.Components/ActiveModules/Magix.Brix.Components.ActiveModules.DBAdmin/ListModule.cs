@@ -226,23 +226,32 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label l = new Label();
                 l.Tag = "td";
                 string idxTypeName = idx["TypeName"].Get<string>();
-                int wide = 3;
-                switch (idxTypeName)
+                if (DataSource.Contains("WhiteListColumns") &&
+                    DataSource["WhiteListColumns"][idx.Name].Contains("ForcedWidth"))
                 {
-                    case "Int32":
-                    case "Boolean":
-                        break;
-                    case "DateTime":
-                        wide += 2;
-                        break;
-                    case "String":
-                        wide += 3;
-                        break;
-                    default:
-                        break;
+                    l.CssClass = "wide-" + 
+                        DataSource["WhiteListColumns"][idx.Name]["ForcedWidth"].Get<int>();
                 }
-                wide = Math.Max((int)(((double)idx.Name.Length) / 2.5), wide);
-                l.CssClass = "wide-" + wide;
+                else
+                {
+                    int wide = 3;
+                    switch (idxTypeName)
+                    {
+                        case "Int32":
+                        case "Boolean":
+                            break;
+                        case "DateTime":
+                            wide += 2;
+                            break;
+                        case "String":
+                            wide += 3;
+                            break;
+                        default:
+                            break;
+                    }
+                    wide = Math.Max((int)(((double)idx.Name.Length) / 2.5), wide);
+                    l.CssClass = "wide-" + wide;
+                }
                 if (!DataSource["IsFilter"].Get<bool>())
                 {
                     l.Text = idx.Name;
@@ -533,7 +542,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 else
                 {
                     TextAreaEdit edit = new TextAreaEdit();
-                    edit.TextLength = 25;
+                    edit.TextLength = 20;
                     edit.DisplayTextBox +=
                         delegate(object sender, EventArgs e)
                         {
