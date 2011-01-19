@@ -16,9 +16,12 @@ namespace Magix.Brix.Data
 {
     public class TransactionalObject
     {
-        public virtual int ID { get; internal set; }
+        public TransactionalObject()
+        {
+            ParentDocument = -1;
+        }
 
-        public DbTransaction Transaction { get; set; }
+        public virtual int ID { get; internal set; }
 
         public int ParentDocument { get; set; }
 
@@ -26,11 +29,6 @@ namespace Magix.Brix.Data
 
         public virtual void Save()
         { }
-
-        public void Reset()
-        {
-            Transaction = null;
-        }
     }
 
     /**

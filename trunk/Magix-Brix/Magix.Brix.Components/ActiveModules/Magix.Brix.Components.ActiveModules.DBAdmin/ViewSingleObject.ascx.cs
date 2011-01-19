@@ -99,19 +99,21 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             removePnl.Visible = DataSource["IsRemove"].Get<bool>() &&
                 DataSource.Contains("Object");
             string parentTypeName = DataSource["ParentFullTypeName"].Get<string>();
-            if (DataSource["ParentID"].Get<int>() > 0)
+            string caption = "";
+            if (DataSource.Contains("Caption"))
             {
-                parentTypeName = parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1);
-                if (DataSource.Contains("Object"))
+                caption = DataSource["Caption"].Get<string>();
+            }
+            else
+            {
+                if (DataSource["ParentID"].Get<int>() > 0)
                 {
-                    if (DataSource.Contains("Caption"))
+                    parentTypeName =
+                        parentTypeName.Substring(
+                            parentTypeName.LastIndexOf(".") + 1);
+                    if (DataSource.Contains("Object"))
                     {
-                        (Parent.Parent.Parent as Window).Caption =
-                            DataSource["Caption"].Get<string>();
-                    }
-                    else
-                    {
-                        (Parent.Parent.Parent as Window).Caption = string.Format(
+                        caption = string.Format(
                             "{0}[{1}] of {2}[{3}]/{4}",
                             DataSource["TypeName"].Get<string>(),
                             DataSource["Object"]["ID"].Get<int>(),
@@ -122,36 +124,33 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 }
                 else
                 {
-                    if (DataSource.Contains("Caption"))
+                    if (DataSource.Contains("Object"))
                     {
-                        (Parent.Parent.Parent as Window).Caption =
-                            DataSource["Caption"].Get<string>();
-                    }
-                    else
-                    {
-                        (Parent.Parent.Parent as Window).Caption = string.Format(
-                            "{0}[null] of {1}[{2}]/{3}",
+                        caption = string.Format(
+                            "{0}[{1}] of {2}[{3}]/{4}",
                             DataSource["TypeName"].Get<string>(),
+                            DataSource["Object"]["ID"].Get<int>(),
                             parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
                             DataSource["ParentID"].Value,
                             DataSource["ParentPropertyName"].Value);
                     }
+                    else
+                    {
+                        caption = "Viewing an object...";
+                    }
                 }
+            }
+            if (Parent.Parent.Parent is Window)
+            {
+                (Parent.Parent.Parent as Window).Caption = caption;
             }
             else
             {
-                if (DataSource.Contains("Caption"))
-                {
-                    (Parent.Parent.Parent as Window).Caption = 
-                        DataSource["Caption"].Get<string>();
-                }
-                else
-                {
-                    (Parent.Parent.Parent as Window).Caption = string.Format(
-                        "{0}[{1}]",
-                        DataSource["TypeName"].Get<string>(),
-                        DataSource["Object"]["ID"].Get<int>());
-                }
+                Node node = new Node();
+                node["Caption"].Value = caption;
+                RaiseSafeEvent(
+                    "Magix.Core.SetFormCaption",
+                    node);
             }
         }
 
@@ -327,7 +326,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void ReDataBind()
         {
-            focs.Focus();
+            //focs.Focus();
             if (DataSource["ParentID"].Get<int>() > 0)
             {
                 DataSource["Object"].UnTie();
@@ -357,7 +356,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     pnl.ReRender();
                 }
             }
-            new EffectHighlight(pnl.Parent.Parent.Parent, 500)
+            new EffectHighlight(Parent.Parent.Parent, 500)
                 .Render();
         }
     }

@@ -43,6 +43,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Adapter.cs" />
+    <Compile Include="Transaction.cs" />
     <Compile Include="IPersistViewState.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="ActiveType.cs" />

@@ -26,12 +26,6 @@
         <div class="navigation">
             <mux:Button
                 runat="server"
-                id="ok"
-                OnClick="ok_Click"
-                CssClass="span-3 navButton"
-                Text="OK" />
-            <mux:Button
-                runat="server"
                 id="next"
                 OnClick="next_Click"
                 CssClass="span-3 navButton"
@@ -42,6 +36,12 @@
                 OnClick="previous_Click"
                 CssClass="span-3 navButton"
                 Text="&lt;" />
+            <mux:Button
+                runat="server"
+                id="ok"
+                OnClick="ok_Click"
+                CssClass="span-3 navButton"
+                Text="OK" />
         </div>
     </Content>
     <Control>

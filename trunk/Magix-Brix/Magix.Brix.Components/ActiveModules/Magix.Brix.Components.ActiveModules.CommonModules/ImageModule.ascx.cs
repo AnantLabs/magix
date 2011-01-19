@@ -30,8 +30,10 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 img.ImageUrl = node["ImageUrl"].Get<string>();
                 img.AlternateText = node["AlternateText"].Get<string>();
                 img.ToolTip = node["AlternateText"].Get<string>();
+
                 if (node.Contains("ChildCssClass"))
                     root.CssClass = node["ChildCssClass"].Get<string>();
+
                 DataSource = node;
                 if (node.Contains("SetFocus") && node["SetFocus"].Get<bool>())
                 {
@@ -81,7 +83,12 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         [ActiveEvent(Name = "Magix.Core.ChangeImage")]
         protected void Magix_Core_ChangeImage(object sende, ActiveEventArgs e)
         {
-            img.ImageUrl = e.Params["ImageURL"].Get<string>();
+            if ((e.Params.Contains("Seed") && 
+                e.Params["Seed"].Value.Equals(DataSource["Seed"].Value)) ||
+                !e.Params.Contains("Seed"))
+            {
+                img.ImageUrl = e.Params["ImageURL"].Get<string>();
+            }
         }
 
         private Node DataSource

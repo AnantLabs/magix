@@ -38,6 +38,7 @@ namespace Magix.UX.Widgets
             private string _key;
             private object _extra;
             private bool _firstReload;
+            private bool _insertAtBeginning;
 
             /**
              * The unique key or ID given while calling LoadControl or AppendControl.
@@ -64,11 +65,20 @@ namespace Magix.UX.Widgets
                 get { return _firstReload; }
             }
 
-            internal ReloadEventArgs(string key, object extra, bool firstReload)
+            /**
+             * If True, will load this control in at the beginning ...
+             */
+            public bool InsertAtBeginning
+            {
+                get { return _insertAtBeginning; }
+            }
+
+            internal ReloadEventArgs(string key, object extra, bool firstReload, bool insertAtBeginning)
             {
                 _key = key;
                 _extra = extra;
                 _firstReload = firstReload;
+                _insertAtBeginning = insertAtBeginning;
             }
         }
 
@@ -133,7 +143,12 @@ namespace Magix.UX.Widgets
                 {
                     if (!string.IsNullOrEmpty(idx))
                     {
-                        ReloadEventArgs e = new ReloadEventArgs(idx, extra, firstReload);
+                        ReloadEventArgs e = 
+                            new ReloadEventArgs(
+                                idx.IndexOf("<") == 0 ? idx.Substring(1) : idx, 
+                                extra, 
+                                firstReload,
+                                idx.IndexOf("<") == 0);
                         Reload(this, e);
                     }
                 }
@@ -144,7 +159,14 @@ namespace Magix.UX.Widgets
                 {
                     if (!string.IsNullOrEmpty(idx))
                     {
-                        Controls.Add(Page.LoadControl(idx));
+                        if (idx.IndexOf("<") == 0)
+                        {
+                            Controls.AddAt(0, Page.LoadControl(idx.Substring(1)));
+                        }
+                        else
+                        {
+                            Controls.Add(Page.LoadControl(idx));
+                        }
                     }
                 }
             }
@@ -225,8 +247,16 @@ namespace Magix.UX.Widgets
          */
         public void AppendControl(string key, object extra)
         {
+            AppendControl(key, extra, false);
+        }
+
+        // TODO: Document ...!!!
+        public void AppendControl(string key, object extra, bool insertAtBeginning)
+        {
             if (string.IsNullOrEmpty(_key))
                 _key = "";
+            if (insertAtBeginning)
+                key = "<" + key;
             string newKey = string.IsNullOrEmpty(_key) ? key : _key + "|" + key;
             _key = key;
             LoadDynamicControl(true, extra);

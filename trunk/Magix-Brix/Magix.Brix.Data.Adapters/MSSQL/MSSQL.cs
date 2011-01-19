@@ -18,7 +18,7 @@ using Magix.Brix.Loader;
 namespace Magix.Brix.Data.Adapters.MSSQL
 {
     /**
-     * Microsoft SQL Server Database Adapter, which probably works with 2005 and later, for
+     * Microsoft SQL Server Database Adapter, which probably works with 2005 and any later, for
      * Magix-Brix. Contains all MS SQL specific logic needed to use Magix-Brix 
      * together with MS SQL.
      */
@@ -31,6 +31,7 @@ namespace Magix.Brix.Data.Adapters.MSSQL
         private static Dictionary<string, MethodInfo> _setIdMethods = new Dictionary<string, MethodInfo>();
         private static Dictionary<string, List<Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>>>> _props = new Dictionary<string, List<Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>>>>();
         private static Dictionary<string, MethodInfo> _setMethods = new Dictionary<string, MethodInfo>();
+        private MSTransaction _transaction;
 
         public override void Open(string connectionString)
         {
@@ -49,29 +50,58 @@ namespace Magix.Brix.Data.Adapters.MSSQL
                 {
                     TextReader reader = new StreamReader(stream);
                     string sql = reader.ReadToEnd();
-                    SqlCommand cmd = new SqlCommand(sql, _connection);
+                    SqlCommand cmd = CreateSqlCommand(sql);
                     cmd.ExecuteNonQuery();
                 }
                 else
                 {
-                    throw new ApplicationException("Couldn't find DDL resource in assembly. Something is *seriously* wrong ...!");
+                    throw new ApplicationException(
+                        @"Couldn't find DDL resource in assembly. Something 
+is *seriously* wrong with your Data Adapter ...!");
                 }
             }
             _hasInitialised = true;
         }
 
+        public override Transaction BeginTransaction()
+        {
+            if (_transaction != null)
+            {
+                throw new ApplicationException(
+                    "Cannot open transaction, when there's already an existing transaction open");
+            }
+            _transaction = new MSTransaction(_connection);
+            return _transaction;
+        }
+
+        private SqlTransaction GetTransaction()
+        {
+            if (_transaction != null)
+                return _transaction.Trans as SqlTransaction;
+            return null;
+        }
+
+        private SqlCommand CreateSqlCommand(string sql)
+        {
+            return new SqlCommand(sql, _connection, GetTransaction());
+        }
+
         public override int CountWhere(Type type, params Criteria[] args)
         {
             string where = CreateCriteriasForDocument(type, null, args);
-            SqlCommand cmd = new SqlCommand("select count(*) from " + TablePrefix + "Documents as d" + where, _connection);
+            SqlCommand cmd = CreateSqlCommand(
+                "select count(*) from " + 
+                TablePrefix + 
+                "Documents as d" + where);
             return (int)cmd.ExecuteScalar();
         }
 
-        private bool ObjectExists(int id)
+        private bool ObjectExists(int id, Type type)
         {
-            SqlCommand cmdExists = new SqlCommand(
-                string.Format("select count(*) from " + TablePrefix + "Documents where ID={0}", id),
-                _connection);
+            SqlCommand cmdExists = CreateSqlCommand(
+                string.Format(
+                    "select count(*) from " + TablePrefix + "Documents where ID={0} " +
+                    "and TypeName='doc{1}'", id, type.FullName));
             return (int)cmdExists.ExecuteScalar() != 0;
         }
 
@@ -80,7 +110,9 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             if (!_ctors.ContainsKey(type.FullName))
             {
                 ConstructorInfo ctor = type.GetConstructor(
-                    BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance,
+                    BindingFlags.NonPublic | 
+                    BindingFlags.Public | 
+                    BindingFlags.Instance,
                     null,
                     new Type[] { },
                     null);
@@ -106,7 +138,9 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             {
                 _setIdMethods[type.FullName] = type.GetProperty(
                     "ID",
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    BindingFlags.Instance | 
+                    BindingFlags.Public | 
+                    BindingFlags.NonPublic)
                     .GetSetMethod(true);
 
             }
@@ -119,7 +153,7 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             object x = PluginLoader.Instance;
 
             // Checking to see if object exists...
-            if (!ObjectExists(id))
+            if (!ObjectExists(id, type))
                 return null;
 
             // Creating object...
@@ -144,7 +178,8 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             {
                 CacheCompositionMethods(type);
             }
-            foreach (Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>> idxProp in _props[type.FullName])
+            foreach (Tuple<PropertyInfo, Tuple<ActiveFieldAttribute, MethodInfo>> idxProp 
+                in _props[type.FullName])
             {
                 // Serializable property
                 string where = " FK_Document=" + id + " and Name='" + Helpers.PropertyName(idxProp.Left) + "'";
@@ -337,7 +372,7 @@ namespace Magix.Brix.Data.Adapters.MSSQL
 select Name, Value from {0} where FK_Document={1}",
                     fullTableName,
                     id);
-                SqlCommand cmd = new SqlCommand(selectStatement, _connection);
+                SqlCommand cmd = CreateSqlCommand(selectStatement);
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader != null && reader.Read())
@@ -375,7 +410,7 @@ select Name, Value from {0} where FK_Document={1}",
         public override object SelectFirst(Type type, string propertyName, params Criteria[] args)
         {
             string where = CreateSelectStatementForDocument(type, propertyName, args);
-            SqlCommand cmd = new SqlCommand(where, _connection);
+            SqlCommand cmd = CreateSqlCommand(where);
             int retValID;
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -389,7 +424,7 @@ select Name, Value from {0} where FK_Document={1}",
         public override IEnumerable<object> Select(Type type, string propertyName, params Criteria[] args)
         {
             string where = CreateSelectStatementForDocument(type, propertyName, args);
-            SqlCommand cmd = new SqlCommand(where, _connection);
+            SqlCommand cmd = CreateSqlCommand(where);
             List<int> retValIDs = new List<int>();
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -406,7 +441,8 @@ select Name, Value from {0} where FK_Document={1}",
 
         public override IEnumerable<object> Select()
         {
-            SqlCommand cmd = new SqlCommand("select ID, TypeName from " + TablePrefix + "Documents as d", _connection);
+            SqlCommand cmd = CreateSqlCommand(
+                "select ID, TypeName from " + TablePrefix + "Documents as d");
             List<Tuple<int, Type>> retValIDs = new List<Tuple<int, Type>>();
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -443,45 +479,34 @@ select Name, Value from {0} where FK_Document={1}",
 
         protected override void DeleteObject(int id)
         {
-            using (SqlTransaction transaction = _connection.BeginTransaction())
-            {
-                DeleteWithTransaction(id, transaction);
-                transaction.Commit();
-            }
+            DeleteWithTransaction(id);
         }
 
-        protected void DeleteObject(int id, SqlTransaction transaction)
+        private void DeleteWithTransaction(int id)
         {
-            DeleteWithTransaction(id, transaction);
-        }
-
-        private void DeleteWithTransaction(int id, SqlTransaction transaction)
-        {
-            DeleteChildren(id, transaction);
-            DeleteComposition(id, transaction);
-            SqlCommand cmd = new SqlCommand(
-                string.Format("delete from " + TablePrefix + "Documents where ID=" + id),
-                _connection,
-                transaction);
+            DeleteChildren(id);
+            DeleteComposition(id);
+            SqlCommand cmd = CreateSqlCommand(
+                string.Format("delete from " + TablePrefix + "Documents where ID=" + id));
             cmd.ExecuteNonQuery();
         }
 
-        private void DeleteComposition(int id, SqlTransaction transaction)
+        private void DeleteComposition(int id)
         {
-            SqlCommand cmdChild = new SqlCommand(
-                string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} or Document2ID={0}", id),
-                _connection,
-                transaction);
+            SqlCommand cmdChild = CreateSqlCommand(
+                string.Format(
+                    "delete from " + 
+                    TablePrefix + 
+                    "Documents2Documents where Document1ID={0} or Document2ID={0}", 
+                    id));
             cmdChild.ExecuteNonQuery();
         }
 
-        private void DeleteChildren(int id, SqlTransaction transaction)
+        private void DeleteChildren(int id)
         {
             List<int> childDocuments = new List<int>();
-            SqlCommand cmdChild = new SqlCommand(
-                string.Format("select ID from " + TablePrefix + "Documents where Parent={0}", id),
-                _connection,
-                transaction);
+            SqlCommand cmdChild = CreateSqlCommand(
+                string.Format("select ID from " + TablePrefix + "Documents where Parent={0}", id));
             using (SqlDataReader reader = cmdChild.ExecuteReader())
             {
                 if (reader != null)
@@ -490,40 +515,33 @@ select Name, Value from {0} where FK_Document={1}",
                     {
                         childDocuments.Add(reader.GetInt32(0));
                     }
-                    
                 }
             }
             foreach (int idxChild in childDocuments)
             {
-                DeleteWithTransaction(idxChild, transaction);
+                DeleteWithTransaction(idxChild);
             }
         }
 
         public override void Save(object value)
         {
             TransactionalObject trs = value as TransactionalObject;
-            if(trs.Transaction != null)
+            if(trs != null)
             {
                 // Recursive save ...
                 SaveWithTransaction(
                     value, 
-                    trs.Transaction as SqlTransaction, 
                     trs.ParentDocument, 
                     trs.ParentPropertyName);
             }
             else
             {
-                using (SqlTransaction transaction = _connection.BeginTransaction())
-                {
-                    SaveWithTransaction(value, transaction, -1, null);
-                    transaction.Commit();
-                }
+                SaveWithTransaction(value, -1, null);
             }
         }
 
         private int SaveWithTransaction(
             object value, 
-            SqlTransaction transaction, 
             int parentId, 
             string parentPropertyName)
         {
@@ -547,7 +565,6 @@ select Name, Value from {0} where FK_Document={1}",
 
             id = PrepareForSerialization(
                 value, 
-                transaction, 
                 parentId, 
                 parentPropertyName, 
                 type, 
@@ -590,7 +607,6 @@ select Name, Value from {0} where FK_Document={1}",
                             if (valueOfProperty == null)
                             {
                                 DeleteNewlyRemovedChildObjects(
-                                    transaction, 
                                     id, 
                                     idxProp, 
                                     attrs);
@@ -598,7 +614,6 @@ select Name, Value from {0} where FK_Document={1}",
                             else
                             {
                                 SerializeComplexChildren(
-                                    transaction, 
                                     id, 
                                     listOfIDsOfChildren, 
                                     listOfParentPropertyNamesToNotDelete, 
@@ -615,21 +630,26 @@ select Name, Value from {0} where FK_Document={1}",
                              tableName,
                              id,
                              Helpers.PropertyName(idxProp));
-                        SqlCommand cmd = new SqlCommand(sql, _connection, transaction);
+                        SqlCommand cmd = CreateSqlCommand(sql);
                         cmd.Parameters.Add(new SqlParameter("@value", valueOfProperty));
                         cmd.ExecuteNonQuery();
                     }
                 }
             }
             CleanUpAfterSerializing(
-                transaction, 
                 id, 
                 listOfIDsOfChildren, 
                 listOfParentPropertyNamesToNotDelete);
             return id;
         }
 
-        private int PrepareForSerialization(object value, SqlTransaction transaction, int parentId, string parentPropertyName, Type type, int id, bool isUpdate)
+        private int PrepareForSerialization(
+            object value, 
+            int parentId, 
+            string parentPropertyName, 
+            Type type, 
+            int id, 
+            bool isUpdate)
         {
             if (isUpdate)
             {
@@ -638,31 +658,33 @@ select Name, Value from {0} where FK_Document={1}",
                     // We do NOT want to tamper with the parent parts of the object unless
                     // we are given a valid parentId explicitly since it might be saving of
                     // a child that belongs to another object in the first place...
-                    SqlCommand cmd = new SqlCommand(
-                        string.Format("update " + TablePrefix + "Documents set Modified=getdate() where ID={0}",
-                            id), _connection, transaction);
+                    SqlCommand cmd = CreateSqlCommand(
+                        string.Format(
+                            "update " + TablePrefix + "Documents set Modified=getdate() where ID={0}",
+                            id));
                     cmd.ExecuteNonQuery();
                 }
                 else
                 {
-                    SqlCommand cmd = new SqlCommand(
-                        string.Format("update " + TablePrefix + "Documents set Modified=getdate(), Parent={1}, ParentPropertyName='{2}' where ID={0}",
+                    SqlCommand cmd = CreateSqlCommand(
+                        string.Format(
+                            "update " + 
+                                TablePrefix + 
+                                "Documents set Modified=getdate(), Parent={1}, ParentPropertyName='{2}' where ID={0}",
                             id,
                             parentId,
-                            parentPropertyName), _connection, transaction);
+                            parentPropertyName));
                     cmd.ExecuteNonQuery();
                 }
             }
             else
             {
-                SqlCommand cmd = new SqlCommand(
+                SqlCommand cmd = CreateSqlCommand(
                     string.Format(
                         "insert into " + TablePrefix + "Documents (TypeName, Created, Modified, Parent, ParentPropertyName) values ('doc{0}', getdate(), getdate(), {1}, {2});select @@Identity;",
                         type.FullName,
                         parentId == -1 ? "NULL" : parentId.ToString(),
-                        parentPropertyName == null ? "null" : "'" + parentPropertyName + "'", _connection, transaction),
-                    _connection,
-                    transaction);
+                        parentPropertyName == null ? "null" : "'" + parentPropertyName + "'"));
                 id = (int)((decimal)cmd.ExecuteScalar());
                 type.GetProperty(
                     "ID",
@@ -678,7 +700,7 @@ select Name, Value from {0} where FK_Document={1}",
                 foreach (string idxTableName in new[] { "PropertyBLOBS", "PropertyBools", "PropertyDates", "PropertyDates", "PropertyDecimals", "PropertyInts", "PropertyLongStrings", "PropertyStrings" })
                 {
                     string sql = string.Format("delete from {0} where FK_Document={1}", idxTableName, id);
-                    SqlCommand cmd = new SqlCommand(sql, _connection, transaction);
+                    SqlCommand cmd = CreateSqlCommand(sql);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -686,7 +708,6 @@ select Name, Value from {0} where FK_Document={1}",
         }
 
         private void CleanUpAfterSerializing(
-            SqlTransaction transaction, 
             int id, 
             List<int> listOfIDsOfChildren, 
             List<string> listOfParentPropertyNamesToNotDelete)
@@ -716,10 +737,13 @@ select Name, Value from {0} where FK_Document={1}",
                 string.IsNullOrEmpty(whereDelete)
                     ? ""
                     : string.Format(" and ParentPropertyName not in({0})", whereDelete);
-            SqlCommand cmdDeleteAllInfants = new SqlCommand(
-                string.Format("select ID from " + TablePrefix + "Documents where Parent={0}{1}{2}", id, andNotIn, andNotInParentPropertyNames),
-                _connection,
-                transaction);
+            SqlCommand cmdDeleteAllInfants = CreateSqlCommand(
+                string.Format(
+                    "select ID from {3}Documents where Parent={0}{1}{2}", 
+                    id, 
+                    andNotIn, 
+                    andNotInParentPropertyNames,
+                    TablePrefix));
             List<int> idsToDelete = new List<int>();
             using (SqlDataReader reader = cmdDeleteAllInfants.ExecuteReader())
             {
@@ -734,12 +758,11 @@ select Name, Value from {0} where FK_Document={1}",
             }
             foreach (int idxItemToDelete in idsToDelete)
             {
-                DeleteObject(idxItemToDelete, transaction);
+                DeleteObject(idxItemToDelete);
             }
         }
 
         private void SerializeComplexChildren(
-            SqlTransaction transaction, 
             int id, 
             List<int> listOfIDsOfChildren, 
             List<string> listOfParentPropertyNamesToNotDelete, 
@@ -751,7 +774,6 @@ select Name, Value from {0} where FK_Document={1}",
             if (enumerable == null)
             {
                 SerializeSingleComplexChild(
-                    transaction, 
                     id, 
                     listOfIDsOfChildren, 
                     idxProp, 
@@ -761,7 +783,6 @@ select Name, Value from {0} where FK_Document={1}",
             else
             {
                 SerializeMultipleComplexChildren(
-                    transaction, 
                     id, 
                     listOfIDsOfChildren, 
                     listOfParentPropertyNamesToNotDelete, 
@@ -773,7 +794,6 @@ select Name, Value from {0} where FK_Document={1}",
         }
 
         private void SerializeMultipleComplexChildren(
-            SqlTransaction transaction, 
             int id, 
             List<int> listOfIDsOfChildren, 
             List<string> listOfParentPropertyNamesToNotDelete, 
@@ -791,7 +811,6 @@ select Name, Value from {0} where FK_Document={1}",
             if (listRetrieved != null)
             {
                 SerializeLazyList(
-                    transaction, 
                     id, 
                     listOfIDsOfChildren, 
                     listOfParentPropertyNamesToNotDelete, 
@@ -804,7 +823,6 @@ select Name, Value from {0} where FK_Document={1}",
             else
             {
                 SerializeActiveList(
-                    transaction, 
                     id, 
                     listOfIDsOfChildren, 
                     idxProp, 
@@ -814,7 +832,6 @@ select Name, Value from {0} where FK_Document={1}",
         }
 
         private void SerializeActiveList(
-            SqlTransaction transaction, 
             int id, 
             List<int> listOfIDsOfChildren, 
             PropertyInfo idxProp, 
@@ -832,18 +849,10 @@ select Name, Value from {0} where FK_Document={1}",
                 foreach (object idxChild in enumerable)
                 {
                     TransactionalObject trs = idxChild as TransactionalObject;
-                    trs.Transaction = transaction;
                     trs.ParentDocument = id;
                     trs.ParentPropertyName = idxProp.Name;
-                    try
-                    {
-                        trs.Save();
-                        listOfIDsOfChildren.Add(trs.ID);
-                    }
-                    finally
-                    {
-                        trs.Reset();
-                    }
+                    trs.Save();
+                    listOfIDsOfChildren.Add(trs.ID);
                     int childId = trs.ID;
                     listOfIDsOfChildren.Add(childId);
                 }
@@ -851,10 +860,10 @@ select Name, Value from {0} where FK_Document={1}",
             else
             {
                 // Delete old relationships whith this documentid and this property name
-                SqlCommand sqlDeleteRelationRecords = new SqlCommand(
+                SqlCommand sqlDeleteRelationRecords = CreateSqlCommand(
                     string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
                         id,
-                        idxProp.Name), _connection, transaction);
+                        idxProp.Name));
                 sqlDeleteRelationRecords.ExecuteNonQuery();
 
                 foreach (object idxChild in enumerable)
@@ -862,21 +871,18 @@ select Name, Value from {0} where FK_Document={1}",
                     TransactionalObject trs = idxChild as TransactionalObject;
                     int documentId = trs.ID;
 
-                    SqlCommand cmdContains = new SqlCommand(
+                    SqlCommand cmdContains = CreateSqlCommand(
                         string.Format(
                             "insert into " + TablePrefix + "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
                             id,
                             documentId,
-                            idxProp.Name),
-                        _connection,
-                        transaction);
+                            idxProp.Name));
                     cmdContains.ExecuteNonQuery();
                 }
             }
         }
 
         private void SerializeLazyList(
-            SqlTransaction transaction, 
             int id, 
             List<int> listOfIDsOfChildren, 
             List<string> listOfParentPropertyNamesToNotDelete, 
@@ -904,28 +910,20 @@ select Name, Value from {0} where FK_Document={1}",
                     foreach (object idxChild in enumerable)
                     {
                         TransactionalObject trs = idxChild as TransactionalObject;
-                        trs.Transaction = transaction;
                         trs.ParentDocument = id;
                         trs.ParentPropertyName = idxProp.Name;
-                        try
-                        {
-                            trs.Save();
-                            listOfIDsOfChildren.Add(trs.ID);
-                        }
-                        finally
-                        {
-                            trs.Reset();
-                        }
+                        trs.Save();
+                        listOfIDsOfChildren.Add(trs.ID);
                     }
                 }
                 else
                 {
                     // Delete old relationships whith this documentid and this property name
-                    SqlCommand sqlDeleteRelationRecords = new SqlCommand(
+                    SqlCommand sqlDeleteRelationRecords = CreateSqlCommand(
                         string.Format("delete from " + TablePrefix +
                             "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
                             id,
-                            idxProp.Name), _connection, transaction);
+                            idxProp.Name));
                     sqlDeleteRelationRecords.ExecuteNonQuery();
 
                     foreach (object idxChild in enumerable)
@@ -933,15 +931,13 @@ select Name, Value from {0} where FK_Document={1}",
                         TransactionalObject trs = idxChild as TransactionalObject;
                         int documentId = trs.ID;
 
-                        SqlCommand cmdContains = new SqlCommand(
+                        SqlCommand cmdContains = CreateSqlCommand(
                             string.Format(
                                 "insert into " + TablePrefix +
                                 "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
                                 id,
                                 documentId,
-                                idxProp.Name),
-                            _connection,
-                            transaction);
+                                idxProp.Name));
                         cmdContains.ExecuteNonQuery();
                     }
                 }
@@ -949,7 +945,6 @@ select Name, Value from {0} where FK_Document={1}",
         }
 
         private void SerializeSingleComplexChild(
-            SqlTransaction transaction, 
             int id, 
             List<int> listOfIDsOfChildren, 
             PropertyInfo idxProp, 
@@ -963,18 +958,10 @@ select Name, Value from {0} where FK_Document={1}",
             else if (attrs[0].IsOwner)
             {
                 TransactionalObject trs = valueOfProperty as TransactionalObject;
-                trs.Transaction = transaction;
                 trs.ParentDocument = id;
                 trs.ParentPropertyName = idxProp.Name;
-                try
-                {
-                    trs.Save();
-                    listOfIDsOfChildren.Add(trs.ID);
-                }
-                finally
-                {
-                    trs.Reset();
-                }
+                trs.Save();
+                listOfIDsOfChildren.Add(trs.ID);
                 int childId = trs.ID;
                 listOfIDsOfChildren.Add(childId);
             }
@@ -989,28 +976,23 @@ select Name, Value from {0} where FK_Document={1}",
                     .GetGetMethod()
                     .Invoke(valueOfProperty, null);
 
-                SqlCommand deleteFromD2D = new SqlCommand(
+                SqlCommand deleteFromD2D = CreateSqlCommand(
                     string.Format("delete from " + TablePrefix + "Documents2Documents where Document1ID={0} and PropertyName='{1}'",
                         id,
-                        propertyRelationshipName),
-                    _connection,
-                    transaction);
+                        propertyRelationshipName));
                 deleteFromD2D.ExecuteNonQuery();
 
-                SqlCommand cmdContains = new SqlCommand(
+                SqlCommand cmdContains = CreateSqlCommand(
                     string.Format(
                         "insert into " + TablePrefix + "Documents2Documents (Document1ID, Document2ID, PropertyName) values ({0}, {1}, '{2}')",
                         id,
                         childId,
-                        propertyRelationshipName),
-                    _connection,
-                    transaction);
+                        propertyRelationshipName));
                 cmdContains.ExecuteNonQuery();
             }
         }
 
         private void DeleteNewlyRemovedChildObjects(
-            SqlTransaction transaction, 
             int id, 
             PropertyInfo idxProp, 
             ActiveFieldAttribute[] attrs)
@@ -1038,7 +1020,8 @@ select Name, Value from {0} where FK_Document={1}",
                     string.Format("delete from Documents where Parent = {0} and ParentPropertyName='{1}'",
                     id,
                     relationshipName);
-                SqlCommand cmdDeleteRelationShip = new SqlCommand(toDeleteRelationShip, _connection, transaction);
+                SqlCommand cmdDeleteRelationShip = CreateSqlCommand(
+                    toDeleteRelationShip);
                 cmdDeleteRelationShip.ExecuteNonQuery();
             }
             else if (!attrs[0].IsOwner)
@@ -1048,7 +1031,8 @@ select Name, Value from {0} where FK_Document={1}",
                     string.Format("delete from Documents2Documents where Document1ID = {0} and PropertyName='{1}'",
                     id,
                     relationshipName);
-                SqlCommand cmdDeleteRelationShip = new SqlCommand(toDeleteRelationShip, _connection, transaction);
+                SqlCommand cmdDeleteRelationShip = CreateSqlCommand(
+                    toDeleteRelationShip);
                 cmdDeleteRelationShip.ExecuteNonQuery();
             }
         }
@@ -1062,14 +1046,14 @@ select Name, Value from {0} where FK_Document={1}",
         {
             // Deleting *OLD* ViewState from table...
             string key = sessionId + "|" + pageUrl;
-            SqlCommand sql = new SqlCommand("delete from " + TablePrefix + "ViewStateStorage where ID='" + key + "' or Created < @dateNow", _connection);
+            SqlCommand sql = CreateSqlCommand(
+                "delete from " + TablePrefix + "ViewStateStorage where ID='" + key + "' or Created < @dateNow");
             sql.Parameters.Add(new SqlParameter("@dateNow", DateTime.Now.AddHours(-4)));
             sql.ExecuteNonQuery();
 
             // Saving new value
-            sql = new SqlCommand(
-                "insert into " + TablePrefix + "ViewStateStorage (ID, Content, Created) values (@id, @content, @created)",
-                _connection);
+            sql = CreateSqlCommand(
+                "insert into " + TablePrefix + "ViewStateStorage (ID, Content, Created) values (@id, @content, @created)");
             sql.Parameters.Add(new SqlParameter("@id", key));
             sql.Parameters.Add(new SqlParameter("@content", content));
             sql.Parameters.Add(new SqlParameter("@created", DateTime.Now));
@@ -1080,7 +1064,8 @@ select Name, Value from {0} where FK_Document={1}",
         {
             // Retrieving ViewState
             string key = sessionId + "|" + pageUrl;
-            SqlCommand sql = new SqlCommand("select content from " + TablePrefix + "ViewStateStorage where ID=@id", _connection);
+            SqlCommand sql = CreateSqlCommand(
+                "select content from " + TablePrefix + "ViewStateStorage where ID=@id");
             sql.Parameters.Add(new SqlParameter("@id", key));
             string retVal = sql.ExecuteScalar() as string;
             return retVal;

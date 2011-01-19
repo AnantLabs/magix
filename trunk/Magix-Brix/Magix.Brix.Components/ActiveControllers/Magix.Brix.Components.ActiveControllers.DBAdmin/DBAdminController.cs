@@ -234,9 +234,13 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Data.Instance.GetObjectTypeNode(fullTypeName, node);
             Data.Instance.GetObjectNode(node["Object"], id, fullTypeName, node);
 
+            string container = "child";
+            if (node.Contains("Container"))
+                container = node["Container"].Get<string>();
+
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
-                "child",
+                container,
                 node);
         }
 
