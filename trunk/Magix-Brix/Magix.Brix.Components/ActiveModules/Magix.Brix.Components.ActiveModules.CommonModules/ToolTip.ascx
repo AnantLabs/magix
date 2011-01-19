@@ -12,6 +12,7 @@
     runat="server" 
     Closable="true"
     style="position:absolute;z-index:830;" 
+    OnEscKey="wnd_EscKey"
     CssClass="mux-shaded mux-rounded mux-window tooltip" 
     id="wnd">
     <Content>
