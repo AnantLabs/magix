@@ -40,6 +40,11 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
         }
 
+        protected void wnd_EscKey(object sender, EventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
+        }
+
         protected void previous_Click(object sender, EventArgs e)
         {
             Node node = new Node();
