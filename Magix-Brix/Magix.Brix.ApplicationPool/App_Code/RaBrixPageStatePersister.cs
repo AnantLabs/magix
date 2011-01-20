@@ -44,7 +44,7 @@ namespace Magix.Brix.ApplicationPool
 
         public override void Load()
         {
-            IPersistViewState state = Magix.Brix.Data.Internal.Adapter.Instance as IPersistViewState;
+            IPersistViewState state = Magix.Brix.Data.Adapter.Instance as IPersistViewState;
             LosFormatter formatter = new LosFormatter();
             Pair pair = formatter.Deserialize(state.Load(_session.ToString(), Page.Request.Url.ToString())) as Pair;
             ViewState = pair.First;
@@ -53,7 +53,7 @@ namespace Magix.Brix.ApplicationPool
 
         public override void Save()
         {
-            IPersistViewState state = Magix.Brix.Data.Internal.Adapter.Instance as IPersistViewState;
+            IPersistViewState state = Magix.Brix.Data.Adapter.Instance as IPersistViewState;
             LosFormatter formatter = new LosFormatter();
             StringBuilder builder = new StringBuilder();
             using (StringWriter writer = new StringWriter(builder))

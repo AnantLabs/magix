@@ -98,7 +98,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             changePnl.Visible = DataSource["IsChange"].Get<bool>();
             removePnl.Visible = DataSource["IsRemove"].Get<bool>() &&
                 DataSource.Contains("Object");
-            string parentTypeName = DataSource["ParentFullTypeName"].Get<string>();
+            string parentTypeName = 
+                !DataSource.Contains("ParentFullTypeName") ? 
+                "" : 
+                DataSource["ParentFullTypeName"].Get<string>();
+
             string caption = "";
             if (DataSource.Contains("Caption"))
             {
@@ -127,12 +131,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     if (DataSource.Contains("Object"))
                     {
                         caption = string.Format(
-                            "{0}[{1}] of {2}[{3}]/{4}",
+                            "{0}[{1}]",
                             DataSource["TypeName"].Get<string>(),
-                            DataSource["Object"]["ID"].Get<int>(),
-                            parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1),
-                            DataSource["ParentID"].Value,
-                            DataSource["ParentPropertyName"].Value);
+                            DataSource["Object"]["ID"].Get<int>());
                     }
                     else
                     {
@@ -326,7 +327,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void ReDataBind()
         {
-            //focs.Focus();
             if (DataSource["ParentID"].Get<int>() > 0)
             {
                 DataSource["Object"].UnTie();

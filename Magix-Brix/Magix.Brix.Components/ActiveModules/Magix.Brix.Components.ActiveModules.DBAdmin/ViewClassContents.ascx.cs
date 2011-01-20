@@ -96,6 +96,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             RaiseSafeEvent(
                 "DBAdmin.Common.CreateObject",
                 node);
+            ReDataBind();
         }
 
         protected override System.Web.UI.Control TableParent
@@ -172,6 +173,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             ResetColumnsVisibility();
             DataSource["Objects"].UnTie();
             DataSource["Type"].UnTie();
+            if (DataSource["SetCount"].Get<int>() >= DataSource["End"].Get<int>() &&
+                DataSource["End"].Get<int>() -
+                DataSource["Start"].Get<int>() <
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+            {
+                DataSource["End"].Value =
+                    DataSource["Start"].Get<int>() +
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+            }
             if (RaiseSafeEvent(
                 "DBAdmin.Data.GetContentsOfClass",
                 DataSource))

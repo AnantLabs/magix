@@ -65,7 +65,7 @@ namespace Magix.Brix.ApplicationPool
         {
             get
             {
-                if (Magix.Brix.Data.Internal.Adapter.Instance is IPersistViewState)
+                if (Magix.Brix.Data.Adapter.Instance is IPersistViewState)
                 {
                     if (_pageStatePersister == null)
                         _pageStatePersister = new RaBrixPageStatePersister(this);
