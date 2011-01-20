@@ -423,7 +423,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 Label l = Selector.SelectFirst<Label>(this,
                                     delegate(Control idxCtrl)
                                     {
-                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                        return idxCtrl is Label && 
+                                            (idxCtrl as Label).Info == 
+                                            SelectedID.ToString();
                                     });
                                 if (l != null)
                                     l.CssClass = "";

@@ -123,7 +123,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         public void GetObjectNode(Node node, int id, string typeName, Node root)
         {
             object obj = GetObject(id, typeName);
-            GetObjectNode(obj, typeName, node, root);
+            if (obj != null)
+                GetObjectNode(obj, typeName, node, root);
         }
 
         public void GetComplexPropertyFromObjectNode(
