@@ -283,12 +283,17 @@ namespace Magix.UX
          */
         public void IncludeScriptFromResource(Type type, string id)
         {
-            string resource = 
+            IncludeScriptFromResource(type, id, true);
+        }
+
+        public void IncludeScriptFromResource(Type type, string id, bool atEnd)
+        {
+            string resource =
                 ((Page)HttpContext.Current.CurrentHandler)
                     .ClientScript.GetWebResourceUrl(type, id);
 
             if (!string.IsNullOrEmpty(resource))
-                IncludeScript(resource);
+                IncludeScript((!atEnd ? "<" : "") + resource);
         }
 
         /**
@@ -355,11 +360,18 @@ namespace Magix.UX
 
             // Stringbuilder to hold our "register script" parts...
             StringBuilder builder = new StringBuilder();
-            AddScriptIncludes(builder);
+            AddScriptIncludes(builder, true);
             AddInitializationScripts(builder);
 
             // Replacing the </body> element with the client-side object creation scripts for the Ra Controls...
             Regex reg = new Regex("</body>", RegexOptions.IgnoreCase);
+            wholePageContent = reg.Replace(wholePageContent, builder.ToString());
+
+            builder = new StringBuilder();
+            AddScriptIncludes(builder, false);
+            builder.Append("<body");
+
+            reg = new Regex("<body", RegexOptions.IgnoreCase);
             wholePageContent = reg.Replace(wholePageContent, builder.ToString());
 
             // Now writing everything back to client (or next Filter)
@@ -455,10 +467,10 @@ namespace Magix.UX
         {
             builder.Append("<script type=\"text/javascript\">");
             builder.Append(@"
-function RAUnInitialize() {
+function MUXUnload() {
   MUX.Ajax._pageUnloads = true;
 }
-function RAInitialize() {
+function MUXInit() {
 ");
 
             Writer.Flush();
@@ -480,27 +492,35 @@ function RAInitialize() {
 }
 (function() {
 if (window.addEventListener) {
-  window.addEventListener('load', RAInitialize, false);
-  window.addEventListener('unload', RAUnInitialize, false);
+  window.addEventListener('load', MUXInit, false);
+  window.addEventListener('unload', MUXUnload, false);
 } else {
-  window.attachEvent('onload', RAInitialize);
-  window.attachEvent('onunload', RAUnInitialize);
+  window.attachEvent('onload', MUXInit);
+  window.attachEvent('onunload', MUXUnload);
 }
 })();
 
 ");
-            _scriptIncludes.ForEach(delegate(string script) {
-                builder.AppendFormat("MUX._scripts['{0}']=true;\r\n", script.Replace("&", "&amp;")); 
-            });
+            _scriptIncludes.ForEach(
+                delegate(string script)
+                {
+                    if (script.IndexOf("<") == 0)
+                        script = script.Substring(1);
+                    builder.AppendFormat("MUX._scripts['{0}']=true;\r\n", script.Replace("&", "&amp;")); 
+                });
             builder.Append("</script>");
             builder.Append("</body>");
         }
 
-        private void AddScriptIncludes(StringBuilder builder)
+        private void AddScriptIncludes(StringBuilder builder, bool end)
         {
             foreach (string idx in _scriptIncludes)
             {
+                if (idx.IndexOf("<") == 0 == end)
+                    continue;
                 string script = idx.Replace("&", "&amp;");
+                if (script.IndexOf("<") == 0)
+                    script = script.Substring(1);
                 string scriptInclusion = 
                     string.Format(
                         "<script src=\"{0}\" type=\"text/javascript\"></script>\r\n", script);
@@ -510,10 +530,13 @@ if (window.addEventListener) {
 
         private void AddDynamicScriptIncludes(TextWriter writer)
         {
-            foreach (string script in _dynamicScriptIncludes)
-            {
-                writer.WriteLine("MUX.$I('{0}');", script.Replace("&", "&amp;"));
-            }
+            _dynamicScriptIncludes.ForEach(
+                delegate(string script)
+                {
+                    if (script.IndexOf("<") == 0)
+                        script = script.Substring(1);
+                    writer.WriteLine("MUX.$I('{0}');", script.Replace("&", "&amp;"));
+                });
         }
     }
 }
