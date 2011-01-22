@@ -320,7 +320,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
         }
 
-        private int SelectedID
+        protected int SelectedID
         {
             get { return ViewState["SelectedID"] == null ? -1 : (int)ViewState["SelectedID"]; }
             set { ViewState["SelectedID"] = value; }

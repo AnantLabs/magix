@@ -49,7 +49,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataSource["Start"].Value = 0;
             DataSource["End"].Value = 
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-            ReDataBind();
+            ReDataBind(false);
         }
 
         protected void PreviousItems(object sender, EventArgs e)
@@ -64,14 +64,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["SetCount"].Get<int>(), 
                     DataSource["Start"].Get<int>() + 
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
-            ReDataBind();
+            ReDataBind(false);
         }
 
         protected void NextItems(object sender, EventArgs e)
         {
             DataSource["Start"].Value =
                     Math.Min(
-                        DataSource["SetCount"].Get<int>() - 1,
+                        DataSource["SetCount"].Get<int>() - 10,
                         DataSource["Start"].Get<int>() +
                             DataSource["Objects"].Count);
             DataSource["End"].Value =
@@ -79,14 +79,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
-            ReDataBind();
+            ReDataBind(false);
         }
 
         protected void EndItems(object sender, EventArgs e)
         {
             DataSource["Start"].Value = Math.Max(0, DataSource["SetCount"].Get<int>() - 10);
             DataSource["End"].Value = DataSource["SetCount"].Get<int>();
-            ReDataBind();
+            ReDataBind(false);
         }
 
         protected void CreateItem(object sender, EventArgs e)
@@ -96,7 +96,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             RaiseSafeEvent(
                 "DBAdmin.Common.CreateObject",
                 node);
-            ReDataBind();
+            ReDataBind(true);
         }
 
         protected override System.Web.UI.Control TableParent
@@ -152,7 +152,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["End"].Value =
                     DataSource["Start"].Get<int>(0) +
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-                ReDataBind();
+                ReDataBind(false);
             }
             else
             {
@@ -162,12 +162,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["End"].Value =
                         DataSource["Start"].Get<int>(0) +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-                    ReDataBind();
+                    ReDataBind(false);
                 }
             }
         }
 
         protected override void ReDataBind()
+        {
+            ReDataBind(false);
+        }
+
+        private void ReDataBind(bool setSelectedRow)
         {
             focs.Focus();
             ResetColumnsVisibility();
@@ -182,10 +187,50 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["Start"].Get<int>() +
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
             }
+            if (setSelectedRow)
+            {
+                // Now the logical thing to do, is to page to the end, since that's the likely
+                // place we'll find this object within our grid ...
+                if (DataSource["SetCount"].Get<int>() >=
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+                {
+                    // We have more items in our SetCount, than we have space for at
+                    // the time being within our Grid component ...
+                    DataSource["End"].Value =
+                        DataSource["SetCount"].Get<int>() + 1;
+                    DataSource["Start"].Value =
+                        DataSource["SetCount"].Get<int>() -
+                        (Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) - 1);
+                }
+            }
             if (RaiseSafeEvent(
                 "DBAdmin.Data.GetContentsOfClass",
                 DataSource))
             {
+                if (setSelectedRow)
+                {
+                    // Findinge the object with the highest ID, since this
+                    // is basically only being called from the "CreateNewObject"
+                    // logic, and hence the only point where we want to update the
+                    // selecetd item ...
+                    int selectedID = -1;
+                    foreach (Node idx in DataSource["Objects"])
+                    {
+                        if (idx.Contains("ID"))
+                        {
+                            int id = idx["ID"].Get<int>();
+                            if (id > selectedID)
+                            {
+                                // We exploit the fact here that every single DB system in the world,
+                                // using integers as ID's, will create larger and larger ID's for us,
+                                // for every new object being created ...
+                                selectedID = id;
+                            }
+                        }
+                    }
+                    SelectedID = selectedID;
+                }
+
                 pnl.Controls.Clear();
                 DataBindGrid();
                 pnl.ReRender();
