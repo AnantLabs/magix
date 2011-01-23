@@ -45,9 +45,7 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
             node["RootAccessFolder"].Value = folder;
 
             Helper.GetFilesAndFolders(folder, filter, node);
-            node["Caption"].Value = string.Format("Exploring: '" + folder + "', {0} files, {1} folders",
-                node["Files"].Count,
-                node["Directories"].Count);
+            node["Caption"].Value = folder;
 
             string container = "child";
             if (node.Contains("Container"))
@@ -78,9 +76,7 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
                 folder,
                 e.Params["Filter"].Get<string>(),
                 e.Params);
-            e.Params["Caption"].Value = string.Format("Exploring: '" + folder + "', {0} files, {1} folders",
-                e.Params["Files"].Count,
-                e.Params["Directories"].Count);
+            e.Params["Caption"].Value = folder;
         }
 
         [ActiveEvent(Name = "FileExplorer.FileSelectedInExplorer")]
