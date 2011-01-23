@@ -48,7 +48,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             rc.Click += rc_Click;
             rc.ToolTip = "Configure visible columns...";
             rc.Text = "&nbsp;";
-            Controls.Add(rc);
+            Root.Controls.Add(rc);
+        }
+
+        protected virtual Control Root
+        {
+            get { return this; }
         }
 
         protected override void OnLoad(EventArgs e)

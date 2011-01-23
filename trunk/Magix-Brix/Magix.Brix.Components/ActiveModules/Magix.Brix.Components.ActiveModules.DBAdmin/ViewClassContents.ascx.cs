@@ -30,6 +30,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel createPnl;
         protected Panel endPnl;
         protected Panel beginningPnl;
+        protected Panel root;
 
         public override void InitialLoading(Node node)
         {
@@ -42,6 +43,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             new EffectFocusAndSelect(focs))
                         .Render();
                 };
+        }
+
+        protected override System.Web.UI.Control Root
+        {
+            get { return root; }
         }
 
         protected void FirstItems(object sender, EventArgs e)

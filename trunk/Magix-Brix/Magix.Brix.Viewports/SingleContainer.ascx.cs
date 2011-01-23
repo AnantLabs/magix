@@ -151,9 +151,6 @@ MUX.$('ping').play();");
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {
-            bool insertAtBeginning = e.Params["Parameters"].Contains("InsertAtBeginning") &&
-                e.Params["Parameters"]["InsertAtBeginning"].Get<bool>();
-
             // Since this is our default container, 
             // we accept "null" and string.Empty values here ...!
             if (string.IsNullOrEmpty(e.Params["Position"].Get<string>()) ||
@@ -166,18 +163,20 @@ MUX.$('ping').play();");
                     this, 
                     e.Params["Position"].Get<string>());
 
-                if (dyn.ID == "content2")
+                if (dyn.ID == "content3")
                 {
                     // These two are normally grouped together ...
                     ClearControls(content4);
                 }
 
-                if (dyn.Controls.Count == 0)
+                if (dyn.Controls.Count == 0 || 
+                    !e.Params["Parameters"].Contains("Append") ||
+                    !e.Params["Parameters"]["Append"].Get<bool>())
                 {
                     string cssClass = null;
                     if (e.Params["Parameters"].Contains("Padding"))
                     {
-                        cssClass += " push-" + e.Params["Parameters"]["Padding"].Get<int>();
+                        cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
                     }
                     if (e.Params["Parameters"].Contains("Width"))
                     {
@@ -191,12 +190,23 @@ MUX.$('ping').play();");
                     {
                         cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
                     }
+                    if (e.Params["Parameters"].Contains("Absolute"))
+                    {
+                        cssClass += " absolutized";
+                    }
+                    if (e.Params["Parameters"].Contains("Relativize"))
+                    {
+                        cssClass += " relativized";
+                    }
+                    if (e.Params["Parameters"].Contains("Last"))
+                    {
+                        cssClass += " last";
+                    }
                     if (string.IsNullOrEmpty(cssClass))
                     {
                         // Defaulting to down-1 ...
                         cssClass = "down-1";
                     }
-                    cssClass += " last";
                     dyn.CssClass = cssClass.Trim();
                 }
 
@@ -205,8 +215,7 @@ MUX.$('ping').play();");
                 {
                     dyn.AppendControl(
                         e.Params["Name"].Value.ToString(), 
-                        e.Params["Parameters"], 
-                        insertAtBeginning);
+                        e.Params["Parameters"]);
 
                     // We highlight our newly injected module here ...!
                     new EffectHighlight(dyn, 500)
@@ -287,7 +296,7 @@ MUX.$('ping').play();");
                         string cssClass = null;
                         if (e.Params["Parameters"].Contains("Padding"))
                         {
-                            cssClass += " push-" + e.Params["Parameters"]["Padding"].Get<int>();
+                            cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
                         }
                         if (e.Params["Parameters"].Contains("Width"))
                         {
@@ -334,8 +343,7 @@ MUX.$('ping').play();");
                 {
                     toAddInto.AppendControl(
                         e.Params["Name"].Value.ToString(), 
-                        e.Params["Parameters"],
-                        insertAtBeginning);
+                        e.Params["Parameters"]);
                 }
                 else
                 {

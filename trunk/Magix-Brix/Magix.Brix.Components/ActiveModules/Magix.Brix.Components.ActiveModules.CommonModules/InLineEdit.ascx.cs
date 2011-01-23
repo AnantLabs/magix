@@ -27,6 +27,8 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 edit.Text = node["Text"].Get<string>();
                 if (node.Contains("Tag"))
                     edit.Tag = node["Tag"].Get<string>();
+                if (node.Contains("ToolTip"))
+                    edit.ToolTip = node["ToolTip"].Get<string>();
                 Event = node["Event"];
             };
         }
