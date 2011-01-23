@@ -1,7 +1,7 @@
 ﻿/*
- * Magix-BRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix-BRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3.
  */
 
 using System;
@@ -86,20 +86,28 @@ namespace Magix.Brix.Viewports
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            msgLbl.Text = "";
         }
+
+        private bool first = true;
 
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
+            if (first)
+            {
+                msgLbl.Text = "";
+                new EffectFadeIn(message, 500)
+                    .JoinThese(new EffectRollDown())
+                    .ChainThese(
+                        new EffectTimeout(5000),
+                        new EffectFadeOut(message, 500)
+                            .JoinThese(new EffectRollUp()))
+                    .Render();
+                first = false;
+                AjaxManager.Instance.WriterAtBack.Write(@"
+MUX.$('ping').play();");
+            }
             msgLbl.Text += e.Params["Message"].Get<string>();
-            new EffectFadeIn(message, 500)
-                .JoinThese(new EffectRollDown())
-                .ChainThese(
-                    new EffectTimeout(5000),
-                    new EffectFadeOut(message, 500)
-                        .JoinThese(new EffectRollUp()))
-                .Render();
         }
 
         [ActiveEvent(Name = "ClearControls")]
@@ -164,7 +172,6 @@ namespace Magix.Brix.Viewports
                     ClearControls(content4);
                 }
 
-                bool hasCssClass = false;
                 if (dyn.Controls.Count == 0)
                 {
                     string cssClass = null;
@@ -184,11 +191,7 @@ namespace Magix.Brix.Viewports
                     {
                         cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
                     }
-                    if (!string.IsNullOrEmpty(cssClass))
-                    {
-                        hasCssClass = true;
-                    }
-                    else
+                    if (string.IsNullOrEmpty(cssClass))
                     {
                         // Defaulting to down-1 ...
                         cssClass = "down-1";

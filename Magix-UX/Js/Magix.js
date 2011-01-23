@@ -466,15 +466,15 @@
 
     serializeForm: function() {
       var bs = MUX.Form.beforeSerialization;
-      var idx = bs.length;
-      while (idx--) {
+      var i = bs.length;
+      while (i--) {
         bs[i].handler.apply(bs[i].context, []);
       }
       var val = [];
       var els = this.form.getElementsByTagName('*');
-      var idx = els.length;
-      while (idx--) {
-        var el = els[idx];
+      var i = els.length;
+      while (i--) {
+        var el = els[i];
         if (el.name && !el.disabled) {
           switch (el.tagName.toLowerCase()) {
             case 'input':

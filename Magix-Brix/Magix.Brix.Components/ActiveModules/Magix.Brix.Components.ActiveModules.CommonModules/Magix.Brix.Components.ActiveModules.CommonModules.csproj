@@ -38,6 +38,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clickable.ascx.cs">
+      <DependentUpon>Clickable.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InLineEdit.ascx.cs">
+      <DependentUpon>InLineEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="ImageModule.ascx.cs">
       <DependentUpon>ImageModule.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -87,6 +95,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageModule.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="InLineEdit.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Clickable.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
