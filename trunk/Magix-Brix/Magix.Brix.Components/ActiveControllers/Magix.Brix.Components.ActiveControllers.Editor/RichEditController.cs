@@ -25,6 +25,9 @@ namespace Magix.Brix.Components.ActiveControllers.Editor
 ";
                 node["Container"].Value = "content1";
             }
+            if (node["Container"].Get<string>("content1") != "child")
+                ActiveEvents.Instance.RaiseClearControls(
+                    node["Container"].Get<string>("content1"));
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Editor.RichEdit",
                 node["Container"].Get<string>("content1"),

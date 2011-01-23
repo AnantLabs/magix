@@ -17,7 +17,7 @@
     <img src="media/images/animated_brain.gif" alt="Marvin's brain ..." />
 </mux:AjaxWait>
 
-<div class="container main showgrid" style="height:1000px;">
+<div class="container main">
     <mux:DynamicPanel 
         runat="server" 
         OnReload="dynamic_LoadControls"
@@ -49,6 +49,10 @@
         Closable="false"
         id="message">
         <Content>
+            <audio 
+                src="media/sounds/ping.wav" 
+                id="ping">
+            </audio>
             <mux:Label 
                 runat="server" 
                 id="msgLbl" />

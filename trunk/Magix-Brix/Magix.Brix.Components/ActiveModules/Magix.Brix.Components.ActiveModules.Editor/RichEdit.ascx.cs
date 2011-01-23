@@ -7,10 +7,11 @@
 using System;
 using System.Web.UI;
 using Magix.UX;
+using Magix.UX.Core;
 using Magix.UX.Widgets;
+using Magix.UX.Effects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
-using Magix.UX.Effects;
 
 [assembly: WebResource("Magix.Brix.Components.ActiveModules.Editor.editor-min.js", "text/javascript")]
 [assembly: WebResource("Magix.Brix.Components.ActiveModules.Editor.button-min.js", "text/javascript")]
@@ -46,11 +47,54 @@ namespace Magix.Brix.Components.ActiveModules.Editor
                         false);
                     }
                     txt.Text = node["Text"].Get<string>();
+                    SaveEvent = node["SaveEvent"].UnTie();
                 };
         }
 
-        protected void save_Click(object sender, EventArgs e)
+        protected Node SaveEvent
         {
+            get { return ViewState["SaveEvent"] as Node; }
+            set { ViewState["SaveEvent"] = value; }
+        }
+
+        [ActiveEvent(Name = "Magix.Brix.Core.GetRichEditorValue")]
+        protected void Magix_Brix_Core_GetRichEditorValue(object sender, ActiveEventArgs e)
+        {
+            e.Params["Text"].Value = txt.Text;
+        }
+
+        [WebMethod]
+        protected void Save(string text)
+        {
+            Node node = new Node();
+            node["Text"].Value = txt.Text;
+            RaiseSafeEvent(
+                SaveEvent.Get<string>(),
+                node);
+        }
+
+        protected bool RaiseSafeEvent(string eventName, Node node)
+        {
+            try
+            {
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    eventName,
+                    node);
+                return true;
+            }
+            catch (Exception err)
+            {
+                Node n = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                n["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.ShowMessage",
+                    n);
+                return false;
+            }
         }
     }
 }

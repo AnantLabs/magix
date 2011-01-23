@@ -215,22 +215,18 @@ namespace Magix.UX
             {
                 // A "." means there's a UserControl hosting this method
                 string[] entities = functionName.Split('.');
-                Control ctrl = null;
-                for (int idx = 0; idx < entities.Length - 1; idx++)
-                {
-                    if (ctrl == null)
+                Control ctrl = Selector.SelectFirst<UserControl>(
+                    ((Page)HttpContext.Current.CurrentHandler),
+                    delegate(Control idx)
                     {
-                        ctrl = Selector.FindControl<UserControl>(
-                            HttpContext.Current.CurrentHandler as Page, 
-                            entities[idx]);
-                    }
-                    else
-                    {
-                        ctrl = Selector.FindControl<UserControl>(ctrl, entities[idx]);
-                    }
-                }
-                webMethod = ctrl.GetType().BaseType.GetMethod(entities[entities.Length - 1],
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                        return entities[0] == idx.ClientID;
+                    });
+                webMethod = 
+                    ctrl.GetType().BaseType.GetMethod(
+                        entities[entities.Length - 1],
+                        BindingFlags.Instance | 
+                        BindingFlags.Public | 
+                        BindingFlags.NonPublic);
                 ctrlToCallFor = ctrl;
             }
             return webMethod;

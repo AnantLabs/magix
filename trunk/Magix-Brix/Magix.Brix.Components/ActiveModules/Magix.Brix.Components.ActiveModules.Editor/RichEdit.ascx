@@ -29,32 +29,45 @@
 
 <script type="text/ecmascript">
 (function() {
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
-    
-    var myConfig = {
-        dompath: true,
-        focusAtStart: true
+  var Dom = YAHOO.util.Dom, Event = YAHOO.util.Event;
+  var myConfig = {
+    dompath: true
+  };
+
+  var myEditor = new YAHOO.widget.Editor('<%=txt.ClientID %>', myConfig);
+
+  myEditor.on('toolbarLoaded', function() { 
+    var imgConfig = {
+      type: 'push', label: 'Save', value: 'saveicon'
     };
+    myEditor.toolbar.addButtonToGroup(imgConfig, 'insertitem');
+    myEditor.toolbar.on('saveiconClick', function(ev) {
+      this.saveHTML();
+      MUX.Control.callServerMethod('<%=this.ClientID%>.Save', {
+        onSuccess: function(retVal) {
+        },
+        onError: function(status, fullTrace) {
+        }
+      }, [encodeURIComponent(MUX.$('<%=txt.ClientID%>').innerHTML)]);
+      return false;
+    }, myEditor, true);
+  });
 
-    var myEditor = new YAHOO.widget.Editor('<%=txt.ClientID %>', myConfig);
-    myEditor._defaultToolbar.buttonType = 'basic';
-    myEditor.render();
+  myEditor.render();
 
+  MUX.Form.beforeSerialization.push({
+    handler:function(){
+      this.saveHTML();
+    },
+    context:myEditor
+  });
 })();
 
 </script>
 
-<div class="yui-skin-sam span-16 height-12">
+<div class="yui-skin-sam mux-rich-editor" style="width:100%;height:100%;">
     <mux:TextArea
         runat="server"
+        style="width:100%;height:100%;display:none;"
         id="txt" />
 </div>
-<div class="span-16">
-    <mux:Button
-        runat="server"
-        id="save"
-        Text="Save"
-        OnClick="save_Click" />
-</div>
-
