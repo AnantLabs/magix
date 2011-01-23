@@ -21,26 +21,15 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
             string folder = "media/";
             string filter = "*.png;*.jpeg;*.jpg;*.gif;"; // TODO: Implement support for more file types ...
 
-            Node node = new Node();
-            node["Top"].Value = 4;
-            if (e.Params.Contains("Top"))
-                node["Top"].Value = e.Params["Top"].Get<int>();
-            node["Padding"].Value = 1;
-            if (e.Params.Contains("Padding"))
-                node["Padding"].Value = e.Params["Padding"].Get<int>();
-            node["Width"].Value = 22;
-            if (e.Params.Contains("Width"))
-                node["Width"].Value = e.Params["Width"].Get<int>();
-            if (e.Params.Contains("Container"))
-                node["Container"].Value = e.Params["Container"].Get<string>();
-            if (e.Params.Contains("Last"))
-                node["Last"].Value = e.Params["Last"].Get<bool>();
-            node["Folder"].Value = folder;
-            node["Filter"].Value = filter;
+            Node node = e.Params;
+            if (!node.Contains("Folder"))
+                node["Folder"].Value = folder;
+            if (!node.Contains("Filter"))
+                node["Filter"].Value = filter;
             LaunchFileExplorer(
-                node, 
-                folder, 
-                filter);
+                node,
+                node["Folder"].Get<string>(),
+                node["Filter"].Get<string>());
         }
 
         [ActiveEvent(Name = "FileExplorer.Form.LaunchFileExplorerWithParams")]

@@ -17,26 +17,22 @@
     <img src="media/images/animated_brain.gif" alt="Marvin's brain ..." />
 </mux:AjaxWait>
 
-<div class="container main">
+<div class="container main showgrid">
     <mux:DynamicPanel 
         runat="server" 
         OnReload="dynamic_LoadControls"
-        style="position:absolute;"
         id="content1" />
     <mux:DynamicPanel 
         runat="server" 
         OnReload="dynamic_LoadControls"
-        style="position:absolute;"
         id="content2" />
     <mux:DynamicPanel 
         runat="server" 
         OnReload="dynamic_LoadControls"
-        style="position:absolute;"
         id="content3" />
     <mux:DynamicPanel 
         runat="server" 
         OnReload="dynamic_LoadControls"
-        style="position:absolute;"
         id="content4" />
     <mux:Panel
         runat="server"
@@ -46,6 +42,7 @@
         runat="server" 
         CssClass="mux-shaded mux-rounded mux-window message prepend-top push-8 span-8 last"
         Caption="Message from system"
+        style="position:fixed;"
         Closable="false"
         id="message">
         <Content>
