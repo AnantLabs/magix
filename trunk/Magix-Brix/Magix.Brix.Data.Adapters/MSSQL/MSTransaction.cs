@@ -29,6 +29,7 @@ namespace Magix.Brix.Data.Adapters.MSSQL
 
         protected override void Rollback()
         {
+            base.Rollback();
             _trans.Rollback();
             _trans = null;
         }

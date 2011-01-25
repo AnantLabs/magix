@@ -24,7 +24,10 @@ namespace Magix.Brix.Data
             get;
         }
 
-        protected abstract void Rollback();
+        protected virtual void Rollback()
+        {
+            Adapter.Instance.InvalidateCache();
+        }
 
         public virtual void Commit()
         {
