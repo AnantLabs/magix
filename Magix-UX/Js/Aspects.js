@@ -171,6 +171,10 @@
 
 
 
+
+
+
+
   MUX.AspectScreenSaver = MUX.klass();
   MUX.AspectScreenSaver._current = null;
   MUX.extend(MUX.AspectScreenSaver.prototype, MUX.Aspect.prototype);
@@ -548,60 +552,95 @@
 
     initFixated: function() {
       MUX.extend(window, MUX.Element.prototype);
-      window.observe('scroll', this.onScroll, this);
-      this._top = parseInt(this.parent.element.getStyle('top'), 10);
-      this._lastScroll = this.scroll();
+      MUX.extend(document.body, MUX.Element.prototype);
+
+      document.body.observe('touchmove', function() {
+        return false;
+      }, this);
+      this.el = MUX.$('mainPanel') || document.body;
+      this.el.observe('touchstart', this.onTouchStart, this);
+      this.el.observe('touchmove', this.onTouchMove, this);
+      this.el.observe('touchend', this.onTouchEnd, this);
     },
 
-    onScroll: function(event) {
-      this._lastTick = new Date().getTime();
-      this.tick();
+    onTouchStart: function(e) {
+      this.stopMomentum();
+      this.startTouchY = e.touches[0].clientY;
+      this.contentStartOffsetY = this.contentOffsetY;
     },
 
-    tick: function() {
-      if(this._destroyed) {
-        return;
-      }
-      if (!this._isRunning && this._lastTick + 250 < new Date().getTime()) {
-        this.runEffect();
-      } else {
-        var T = this;
-        setTimeout(function() { T.tick(); }, 250);
+    onTouchMove: function(e) {
+      if (this.isDragging()) {
+        var currentY = e.touches[0].clientY;
+        var deltaY = currentY - this.startTouchY;
+        var newY = deltaY + this.contentStartOffsetY;
+        this.animateTo(newY);
       }
     },
 
-    runEffect: function() {
-      this._isRunning = true;
-      if(this._destroyed) {
-        return;
-      }
-      var T = this;
-      var scr = this.scroll();
-      var prevScroll = this._lastScroll;
-      new MUX.Effect.Generic(this.parent.element, {
-        transition: 'Explosive',
-        loop: function(pos) {
-          var nPos = (prevScroll.y + parseInt(((scr.y - prevScroll.y) * pos), 10) + T._top);
-          T.parent.element.setStyle('top', nPos + 'px');
-        },
-        end: function() {
-          T.parent.element.setStyle('top', scr.y + T._top + 'px');
-          T._lastScroll = scr;
-          T._isRunning = false;
+    onTouchEnd: function(e) {
+      if (this.isDragging()) {
+        if (this.shouldStartMomentum()) {
+          this.doMomentum();
+        } else {
+          this.snapToBounds();
         }
-      });
+      }
     },
 
-    scroll: function(event) {
-      return {
-        x: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-        y: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      };
+    animateTo: function(offsetY) {
+      this.contentOffsetY = offsetY;
+      this.el.style.webkitTransform = 'translate3d(0, ' + offsetY + 'px, 0)';
+    },
+
+    snapToBounds: function() {
+    },
+
+    isDragging: function() {
+      return true;
+    },
+
+    shouldStartMomentum: function() {
+      return true;
+    },
+
+    isDecelerating: function() {
+      return true;
+    },
+
+    doMomentum: function() {
+      // Calculate the movement properties. Implement getEndVelocity using the
+      // start and end position / time.
+      var velocity = this.getEndVelocity();
+      var acceleration = velocity < 0 ? 0.0005 : -0.0005;
+      var displacement = - (velocity * velocity) / (2 * acceleration);
+      var time = - velocity / acceleration;
+
+      // Set up the transition and execute the transform. Once you implement this
+      // you will need to figure out an appropriate time to clear the transition
+      // so that it doesn’t apply to subsequent scrolling.
+      this.el.style.webkitTransition = '-webkit-transform ' + time +
+          'ms cubic-bezier(0.33, 0.66, 0.66, 1)';
+
+      var newY = this.contentOffsetY + displacement;
+      this.contentOffsetY = newY;
+      this.el.style.webkitTransform = 'translate3d(0, ' + newY + 'px, 0)';
+    },
+
+    stopMomentum: function() {
+      if (this.isDecelerating()) {
+        // Get the computed style object.
+        var style = document.defaultView.getComputedStyle(this.el, null);
+        // Computed the transform in a matrix object given the style.
+        var transform = new WebKitCSSMatrix(style.webkitTransform);
+        // Clear the active transition so it doesn’t apply to our next transform.
+        this.el.style.webkitTransition = '';
+        // Set the element transform to where it is right now.
+        this.animateTo(transform.m42);
+      }
     },
 
     destroy: function() {
-      window.stopObserving('scroll', this.onScroll, this);
-      this._destroyed = true;
     }
   });
 })();

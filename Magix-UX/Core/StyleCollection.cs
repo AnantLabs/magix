@@ -62,6 +62,17 @@ namespace Magix.UX.Widgets
             _control.PreRender += new EventHandler(_control_PreRender);
         }
 
+        public IEnumerable<string> Keys
+        {
+            get
+            {
+                foreach (string idx in _styleValues.Keys)
+                {
+                    yield return idx;
+                }
+            }
+        }
+
         private void _control_PreRender(object sender, EventArgs e)
         {
             if (_control.HasRendered && _styleValues.Count > 0)
@@ -107,19 +118,7 @@ namespace Magix.UX.Widgets
                 // use full opacity if the user didn't specify a correct value
                 if (!decimal.TryParse(styleValue, NumberStyles.Float, CultureInfo.InvariantCulture, out opacity))
                     opacity = 1.0M;
-
-                if (HttpContext.Current.Request.Browser.Browser == "IE")
-                {
-                    styleName = "filter";
-                    if (opacity == 1.0M)
-                        styleValue = "alpha(enabled=false)";
-                    else
-                        styleValue = string.Format("alpha(opacity={0:0})", Math.Round(opacity * 100));
-                }
-                else
-                {
-                    styleValue = opacity.ToString(CultureInfo.InvariantCulture);
-                }
+                styleValue = opacity.ToString(CultureInfo.InvariantCulture);
             }
 
             if (_styleValues.ContainsKey(styleName))
