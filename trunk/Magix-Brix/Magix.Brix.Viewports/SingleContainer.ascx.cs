@@ -13,6 +13,8 @@ using Magix.UX.Aspects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
 
+[assembly: WebResource("Magix.Brix.Viewports.iscroll.js", "text/javascript")]
+
 namespace Magix.Brix.Viewports
 {
     [ActiveModule]
@@ -25,13 +27,20 @@ namespace Magix.Brix.Viewports
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
+        protected Panel wrp;
         protected Window[] wnd;
         protected DynamicPanel[] child;
+        protected AspectSmartScroll scroll;
 
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
             EnsureChildControls();
+
+            AjaxManager.Instance.IncludeScriptFromResource(
+                typeof(SingleContainer),
+                "Magix.Brix.Viewports.iscroll.js",
+                false);
         }
 
         protected override void CreateChildControls()
@@ -81,11 +90,6 @@ namespace Magix.Brix.Viewports
 
                 pnlAll.Controls.Add(w);
             }
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
         }
 
         private bool first = true;
@@ -178,6 +182,10 @@ MUX.$('ping').play();");
                     {
                         cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
                     }
+                    if (e.Params["Parameters"].Contains("CssClass"))
+                    {
+                        cssClass += " " + e.Params["Parameters"]["CssClass"].Get<string>();
+                    }
                     if (e.Params["Parameters"].Contains("Width"))
                     {
                         cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
@@ -202,6 +210,14 @@ MUX.$('ping').play();");
                     {
                         cssClass += " last";
                     }
+                    if (e.Params["Parameters"].Contains("Overflow"))
+                    {
+                        cssClass += " overflowized";
+                    }
+                    if (e.Params["Parameters"].Contains("IPad"))
+                    {
+                        cssClass += " ipad";
+                    }
                     if (string.IsNullOrEmpty(cssClass))
                     {
                         // Defaulting to down-1 ...
@@ -225,11 +241,6 @@ MUX.$('ping').play();");
                 {
                     ClearControls(dyn);
                     dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
-
-                    // We do NOT do any "fade in" effects if we're in append mode here ...
-                    dyn.Style[Styles.display] = "none";
-                    new EffectFadeIn(dyn, 500)
-                        .Render();
                 }
             }
             else if (e.Params["Position"].Get<string>() == "child")
@@ -350,6 +361,20 @@ MUX.$('ping').play();");
                     ClearControls(toAddInto);
                     toAddInto.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Core.SetViewPortSize")]
+        protected void Magix_Core_SetViewPortSize(object sender, ActiveEventArgs e)
+        {
+            if (e.Params.Contains("Width"))
+            {
+                wrp.Style[Styles.width] = e.Params["Width"].Value.ToString();
+                wrp.Style[Styles.marginRight] = "auto !important";
+            }
+            if (e.Params.Contains("Height"))
+            {
+                wrp.Style[Styles.height] = e.Params["Height"].Value.ToString();
             }
         }
 

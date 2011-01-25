@@ -43,6 +43,7 @@
     <Compile Include="Aspects\AspectAjaxWait.cs" />
     <Compile Include="Aspects\AspectFixated.cs" />
     <Compile Include="Aspects\AspectScreenSaver.cs" />
+    <Compile Include="Aspects\SmartScroll.cs" />
     <Compile Include="Controls\Core\CompositeControl.cs" />
     <Compile Include="Controls\Core\CompositeViewCollectionControl.cs" />
     <Compile Include="Controls\Core\BaseWebControlFormElementText.cs">

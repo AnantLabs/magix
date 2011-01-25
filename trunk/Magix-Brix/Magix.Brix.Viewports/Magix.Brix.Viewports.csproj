@@ -49,7 +49,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Magix-UX\Magix.UX.csproj">
       <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
-      <Name>Magic.UX</Name>
+      <Name>Magix.UX</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Data\Magix.Brix.Data.csproj">
       <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
