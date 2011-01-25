@@ -29,7 +29,7 @@ namespace Magix.UX.Widgets
 
         private string EscapeHTML(string value)
         {
-            return value.Replace("<", "&lt;").Replace(">", "&gt;");
+            return value == null ? "" : value.Replace("<", "&lt;").Replace(">", "&gt;");
         }
 
         private string UnEscapeHTML(string value)
