@@ -46,7 +46,14 @@ namespace Magix.Brix.Components.ActiveModules.Editor
                         idx,
                         false);
                     }
-                    txt.Text = node["Text"].Get<string>();
+                    string text = node["Text"].Get<string>();
+
+                    // Normalizing text, making sure it's made on paragraph form ...!
+                    if (string.IsNullOrEmpty(text.Trim()))
+                        text = "Default text...";
+                    if (text.IndexOf("<p") == -1)
+                        text = "<p>" + text + "</p>";
+                    txt.Text = text;
                     SaveEvent = node["SaveEvent"].UnTie();
                 };
         }

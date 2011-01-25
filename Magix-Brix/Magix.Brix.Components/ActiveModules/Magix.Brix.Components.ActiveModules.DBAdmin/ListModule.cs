@@ -262,9 +262,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     wide = Math.Max((int)(((double)idx.Name.Length) / 2.5), wide);
                     l.CssClass = "wide-" + wide;
                 }
-                if (!DataSource["IsFilter"].Get<bool>())
+                string captionOfColumn = idx.Name;
+                if (idx.Contains("Header") &&
+                    !string.IsNullOrEmpty(idx["Header"].Get<string>()))
                 {
-                    l.Text = idx.Name;
+                    captionOfColumn = idx["Header"].Get<string>();
+                }
+                if (!DataSource["IsFilter"].Get<bool>() || 
+                    (idx.Contains("NoFilter") && idx["NoFilter"].Get<bool>()))
+                {
+                    l.Text = captionOfColumn;
+                    l.CssClass += " noFilter";
                     string toolTip = "";
                     if (idx["BelongsTo"].Get<bool>())
                         toolTip += "BelongsTo ";
@@ -275,7 +283,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 else
                 {
                     LinkButton b = new LinkButton();
-                    b.Text = idx.Name;
+                    b.Text = captionOfColumn;
                     string filterString =
                         Settings.Instance.Get(
                             "DBAdmin.Filter." +
@@ -504,7 +512,23 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label l = new Label();
                 l.Tag = "td";
                 l.Info = idx.Name;
-                if (DataSource["Type"]["Properties"][idx.Name]["IsComplex"].Get<bool>())
+                if (DataSource["Type"]["Properties"][idx.Name].Contains("TemplateColumnEvent") &&
+                    !string.IsNullOrEmpty(
+                        DataSource["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Get<string>()))
+                {
+                    string eventName = DataSource["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Get<string>();
+                    Node colNode = new Node();
+                    colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>(); ;
+                    colNode["Name"].Value = idx.Name;
+                    colNode["Value"].Value = idx.Get<string>();
+                    colNode["ID"].Value = node["ID"].Get<int>();
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        eventName,
+                        colNode);
+                    l.Controls.Add(colNode["Control"].Get<Control>());
+                }
+                else if (DataSource["Type"]["Properties"][idx.Name]["IsComplex"].Get<bool>())
                 {
                     if (DataSource["Type"]["Properties"][idx.Name].Contains("ReadOnly") &&
                         DataSource["Type"]["Properties"][idx.Name]["ReadOnly"].Get<bool>())

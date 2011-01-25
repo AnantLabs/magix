@@ -108,11 +108,18 @@ namespace Magix.Brix.Data
             return null;
         }
 
+        public void InvalidateCache()
+        {
+            Cache.Clear();
+        }
+
         private static Dictionary<int, object> Cache
         {
             get
             {
-                if (HttpContext.Current == null || HttpContext.Current.CurrentHandler == null || (HttpContext.Current.CurrentHandler as Page) == null)
+                if (HttpContext.Current == null || 
+                    HttpContext.Current.CurrentHandler == null || 
+                    (HttpContext.Current.CurrentHandler as Page) == null)
                 {
                     // TODO: Implement cache also for non-web scenarios...
                     return new Dictionary<int, object>();
