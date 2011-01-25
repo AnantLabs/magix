@@ -182,46 +182,51 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 cS.CssClass = "wide-2 noFilter";
                 row.Controls.Add(cS);
             }
-            Label li = new Label();
-            li.Tag = "td";
-            li.CssClass = "wide-2";
+
             bool hasIdFilter = false;
-            if (!DataSource["IsFilter"].Get<bool>() ||
-                (DataSource.Contains("FilterOnId") &&
-                !DataSource["FilterOnId"].Get<bool>()))
+            if (!(DataSource.Contains("NoIdColumn")
+                && DataSource["NoIdColumn"].Get<bool>()))
             {
-                if (DataSource.Contains("IDColumnName"))
+                Label li = new Label();
+                li.Tag = "td";
+                li.CssClass = "wide-2";
+                if (!DataSource["IsFilter"].Get<bool>() ||
+                    (DataSource.Contains("FilterOnId") &&
+                    !DataSource["FilterOnId"].Get<bool>()))
                 {
-                    li.Text = DataSource["IDColumnName"].Get<string>();
+                    if (DataSource.Contains("IDColumnName"))
+                    {
+                        li.Text = DataSource["IDColumnName"].Get<string>();
+                    }
+                    else
+                    {
+                        li.Text = "ID";
+                    }
+                    li.CssClass = "wide-2 noFilter";
                 }
                 else
                 {
-                    li.Text = "ID";
+                    LinkButton b = new LinkButton();
+                    b.Text = "ID";
+                    b.ToolTip = "Click to filter ";
+                    string idFilterString =
+                        Settings.Instance.Get(
+                            "DBAdmin.Filter." +
+                            DataSource["FullTypeName"].Get<string>() + ":ID", "");
+                    hasIdFilter = !string.IsNullOrEmpty(idFilterString);
+                    b.ToolTip += idFilterString.Replace("|", " on ");
+                    b.CssClass =
+                        string.IsNullOrEmpty(
+                            idFilterString) ?
+                            "" :
+                            "filtered overridden";
+                    bool isFilterOnId = !string.IsNullOrEmpty(idFilterString);
+                    b.Click += FilterMethod;
+                    b.Info = "ID";
+                    li.Controls.Add(b);
                 }
-                li.CssClass = "wide-2 noFilter";
+                row.Controls.Add(li);
             }
-            else
-            {
-                LinkButton b = new LinkButton();
-                b.Text = "ID";
-                b.ToolTip = "Click to filter ";
-                string idFilterString =
-                    Settings.Instance.Get(
-                        "DBAdmin.Filter." +
-                        DataSource["FullTypeName"].Get<string>() + ":ID", "");
-                hasIdFilter = !string.IsNullOrEmpty(idFilterString);
-                b.ToolTip += idFilterString.Replace("|", " on ");
-                b.CssClass =
-                    string.IsNullOrEmpty(
-                        idFilterString) ?
-                        "" :
-                        "filtered overridden";
-                bool isFilterOnId = !string.IsNullOrEmpty(idFilterString);
-                b.Click += FilterMethod;
-                b.Info = "ID";
-                li.Controls.Add(b);
-            }
-            row.Controls.Add(li);
 
             foreach (Node idx in DataSource["Type"]["Properties"])
             {
@@ -445,46 +450,50 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 cS.Controls.Add(lb2);
                 row.Controls.Add(cS);
             }
-            Label li = new Label();
-            li.Tag = "td";
-            LinkButton lb = new LinkButton();
-            if (DataSource.Contains("IDColumnValue"))
+            if (!(DataSource.Contains("NoIdColumn")
+                && DataSource["NoIdColumn"].Get<bool>()))
             {
-                lb.Text = DataSource["IDColumnValue"].Get<string>();
-            }
-            else
-            {
-                lb.Text = node["ID"].Value.ToString();
-            }
-            lb.Click +=
-                delegate(object sender, EventArgs e)
+                Label li = new Label();
+                li.Tag = "td";
+                LinkButton lb = new LinkButton();
+                if (DataSource.Contains("IDColumnValue"))
                 {
-                    LinkButton b = sender as LinkButton;
-                    Node n = new Node();
-                    int id = int.Parse((b.Parent.Parent as Label).Info);
-                    (b.Parent.Parent as Label).CssClass = "grid-selected";
-                    if (SelectedID != -1)
+                    lb.Text = DataSource["IDColumnValue"].Get<string>();
+                }
+                else
+                {
+                    lb.Text = node["ID"].Value.ToString();
+                }
+                lb.Click +=
+                    delegate(object sender, EventArgs e)
                     {
-                        if (id != SelectedID)
+                        LinkButton b = sender as LinkButton;
+                        Node n = new Node();
+                        int id = int.Parse((b.Parent.Parent as Label).Info);
+                        (b.Parent.Parent as Label).CssClass = "grid-selected";
+                        if (SelectedID != -1)
                         {
-                            Label l = Selector.SelectFirst<Label>(this,
-                                delegate(Control idxCtrl)
-                                {
-                                    return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                });
-                            if (l != null)
-                                l.CssClass = "";
+                            if (id != SelectedID)
+                            {
+                                Label l = Selector.SelectFirst<Label>(this,
+                                    delegate(Control idxCtrl)
+                                    {
+                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                    });
+                                if (l != null)
+                                    l.CssClass = "";
+                            }
                         }
-                    }
-                    SelectedID = id;
-                    n["ID"].Value = id;
-                    n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                    RaiseSafeEvent(
-                        "DBAdmin.Form.ViewComplexObject",
-                        n);
-                };
-            li.Controls.Add(lb);
-            row.Controls.Add(li);
+                        SelectedID = id;
+                        n["ID"].Value = id;
+                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                        RaiseSafeEvent(
+                            "DBAdmin.Form.ViewComplexObject",
+                            n);
+                    };
+                li.Controls.Add(lb);
+                row.Controls.Add(li);
+            }
             
             foreach (Node idxType in DataSource["Type"]["Properties"])
             {
@@ -548,46 +557,57 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 }
                 else
                 {
-                    TextAreaEdit edit = new TextAreaEdit();
-                    edit.TextLength = 20;
-                    edit.DisplayTextBox +=
-                        delegate(object sender, EventArgs e)
-                        {
-                            TextAreaEdit ed = sender as TextAreaEdit;
-                            int id = int.Parse((ed.Parent.Parent as Label).Info);
-                            (ed.Parent.Parent as Label).CssClass = "grid-selected";
-                            if (SelectedID != -1)
+                    if (DataSource["Type"]["Properties"][idx.Name].Contains("ReadOnly") &&
+                        DataSource["Type"]["Properties"][idx.Name]["ReadOnly"].Get<bool>())
+                    {
+                        l.CssClass += "read-only";
+                        Label ll = new Label();
+                        ll.Text = idx.Get<string>();
+                        l.Controls.Add(ll);
+                    }
+                    else
+                    {
+                        TextAreaEdit edit = new TextAreaEdit();
+                        edit.TextLength = 20;
+                        edit.DisplayTextBox +=
+                            delegate(object sender, EventArgs e)
                             {
-                                if (id != SelectedID)
+                                TextAreaEdit ed = sender as TextAreaEdit;
+                                int id = int.Parse((ed.Parent.Parent as Label).Info);
+                                (ed.Parent.Parent as Label).CssClass = "grid-selected";
+                                if (SelectedID != -1)
                                 {
-                                    Label l2 = Selector.SelectFirst<Label>(this,
-                                        delegate(Control idxCtrl)
-                                        {
-                                            return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                        });
-                                    if (l2 != null)
-                                        l2.CssClass = "";
+                                    if (id != SelectedID)
+                                    {
+                                        Label l2 = Selector.SelectFirst<Label>(this,
+                                            delegate(Control idxCtrl)
+                                            {
+                                                return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                            });
+                                        if (l2 != null)
+                                            l2.CssClass = "";
+                                    }
                                 }
-                            }
-                            SelectedID = id;
-                        };
-                    edit.TextChanged +=
-                        delegate(object sender, EventArgs e)
-                        {
-                            TextAreaEdit ed = sender as TextAreaEdit;
-                            int id = int.Parse((ed.Parent.Parent as Label).Info);
-                            string column = (ed.Parent as Label).Info;
-                            Node n = new Node();
-                            n["ID"].Value = id;
-                            n["PropertyName"].Value = column;
-                            n["NewValue"].Value = ed.Text;
-                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                            RaiseSafeEvent(
-                                "DBAdmin.Data.ChangeSimplePropertyValue",
-                                n);
-                        };
-                    edit.Text = idx.Get<string>();
-                    l.Controls.Add(edit);
+                                SelectedID = id;
+                            };
+                        edit.TextChanged +=
+                            delegate(object sender, EventArgs e)
+                            {
+                                TextAreaEdit ed = sender as TextAreaEdit;
+                                int id = int.Parse((ed.Parent.Parent as Label).Info);
+                                string column = (ed.Parent as Label).Info;
+                                Node n = new Node();
+                                n["ID"].Value = id;
+                                n["PropertyName"].Value = column;
+                                n["NewValue"].Value = ed.Text;
+                                n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                RaiseSafeEvent(
+                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                    n);
+                            };
+                        edit.Text = idx.Get<string>();
+                        l.Controls.Add(edit);
+                    }
                 }
                 row.Controls.Add(l);
             }

@@ -18,7 +18,7 @@ namespace Magix.Brix.Components.ActiveTypes
     public sealed class Settings
     {
         [ActiveType]
-        private class Setting : ActiveType<Setting>
+        public class Setting : ActiveType<Setting>
         {
             [ActiveField]
             public string Key { get; set; }

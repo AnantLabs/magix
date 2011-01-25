@@ -392,9 +392,12 @@ model while trying to create object, and it was never created for some reasons."
                 0,
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10),
                 pars.ToArray());
-            node["IsDelete"].Value = true;
-            node["IsCreate"].Value = true;
-            node["IsFilter"].Value = true;
+            if (!node.Contains("IsDelete"))
+                node["IsDelete"].Value = true;
+            if (!node.Contains("IsCreate"))
+                node["IsCreate"].Value = true;
+            if (!node.Contains("IsFilter"))
+                node["IsFilter"].Value = true;
             node["Start"].Value = 0;
             node["End"].Value = node["Objects"].Count;
             int count = Data.Instance.GetCount(fullTypeName, pars.ToArray());

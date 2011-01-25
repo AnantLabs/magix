@@ -408,12 +408,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 setter.Invoke(
                     obj,
                     new object[] { valueChanged });
-                type.GetMethod(
-                    "Save",
-                    BindingFlags.Instance |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic)
-                    .Invoke(obj, null);
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    type.GetMethod(
+                        "Save",
+                        BindingFlags.Instance |
+                        BindingFlags.Public |
+                        BindingFlags.NonPublic)
+                        .Invoke(obj, null);
+                    tr.Commit();
+                }
             }
         }
 
@@ -460,12 +464,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     newValue,
                     setter.GetParameters()[0].ParameterType);
                 setter.Invoke(obj, new object[] { valueChanged });
-                type.GetMethod(
-                    "Save",
-                    BindingFlags.Instance |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic)
-                    .Invoke(obj, null);
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    type.GetMethod(
+                        "Save",
+                        BindingFlags.Instance |
+                        BindingFlags.Public |
+                        BindingFlags.NonPublic)
+                        .Invoke(obj, null);
+                    tr.Commit();
+                }
             }
         }
 
@@ -489,6 +497,12 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                             retVal.Add(
                                 Criteria.ParentId(
                                     idx["Value"].Get<int>()));
+                            break;
+                        case "Like":
+                            retVal.Add(
+                                Criteria.Like(
+                                    idx["Column"].Get<string>(),
+                                    idx["Value"].Get<string>()));
                             break;
                         case "ExistsIn":
                             retVal.Add(
@@ -657,7 +671,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             else
             {
                 object o = type.GetConstructor(Type.EmptyTypes).Invoke(null);
-                type.GetMethod("Save").Invoke(o, null);
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    type.GetMethod("Save").Invoke(o, null);
+                    tr.Commit();
+                }
                 int id = (int)type.GetProperty("ID").GetGetMethod(true).Invoke(o, null);
                 return id;
             }
@@ -702,11 +720,15 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.Public |
                     BindingFlags.Instance)
                     .Invoke(list, new object[] { n });
-                parentType.GetMethod(
-                    "Save",
-                    BindingFlags.Instance |
-                    BindingFlags.Public)
-                    .Invoke(parent, null);
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    parentType.GetMethod(
+                        "Save",
+                        BindingFlags.Instance |
+                        BindingFlags.Public)
+                        .Invoke(parent, null);
+                    tr.Commit();
+                }
             }
         }
 
@@ -742,11 +764,15 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.NonPublic)
                     .GetSetMethod(true)
                     .Invoke(parent, new object[] { n });
-                parentType.GetMethod(
-                    "Save",
-                    BindingFlags.Instance |
-                    BindingFlags.Public)
-                    .Invoke(parent, null);
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    parentType.GetMethod(
+                        "Save",
+                        BindingFlags.Instance |
+                        BindingFlags.Public)
+                        .Invoke(parent, null);
+                    tr.Commit();
+                }
             }
         }
 
@@ -789,11 +815,15 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.Public |
                     BindingFlags.Instance)
                     .Invoke(list, new object[] { n });
-                parentType.GetMethod(
-                    "Save",
-                    BindingFlags.Instance |
-                    BindingFlags.Public)
-                    .Invoke(parent, null);
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    parentType.GetMethod(
+                        "Save",
+                        BindingFlags.Instance |
+                        BindingFlags.Public)
+                        .Invoke(parent, null);
+                    tr.Commit();
+                }
             }
         }
 
@@ -827,11 +857,15 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.NonPublic)
                     .GetSetMethod(true)
                     .Invoke(parent, new object[] { null });
-                parentType.GetMethod(
-                    "Save",
-                    BindingFlags.Instance |
-                    BindingFlags.Public)
-                    .Invoke(parent, null);
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    parentType.GetMethod(
+                        "Save",
+                        BindingFlags.Instance |
+                        BindingFlags.Public)
+                        .Invoke(parent, null);
+                    tr.Commit();
+                }
             }
         }
 
