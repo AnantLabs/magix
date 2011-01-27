@@ -356,8 +356,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     pnl.ReRender();
                 }
             }
-            new EffectHighlight(Parent.Parent.Parent, 500)
-                .Render();
         }
     }
 }

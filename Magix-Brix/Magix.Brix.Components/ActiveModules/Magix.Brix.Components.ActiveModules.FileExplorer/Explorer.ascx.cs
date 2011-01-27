@@ -42,6 +42,16 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             Load +=
                 delegate
                 {
+                    // The below lines of code must be there to allow the browser to cache the images
+                    // to avoid "flickering" during load ... :(
+                    pnl.Style[Styles.display] = "none";
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFadeIn(pnl, 750)
+                                .JoinThese(
+                                    new EffectRollDown()))
+                        .Render();
+
                     DataSource = node;
                     prop.Visible = false;
                     delete.Enabled = false;
@@ -134,6 +144,9 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                         string name = idx["Name"].Get<string>();
                         Label btn = new Label();
                         btn.Text = name;
+                        btn.CssClass = "text";
+                        Label icon = new Label();
+                        icon.CssClass = "icon";
                         Panel p = new Panel();
                         p.Info = name;
                         p.Click +=
@@ -157,6 +170,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                             p.CssClass += " selected";
                         p.ToolTip = name.Substring(name.LastIndexOf("\\") + 1);
                         p.Controls.Add(btn);
+                        p.Controls.Add(icon);
                         pnl.Controls.Add(p);
                     }
                     idxNo += 1;
@@ -520,14 +534,20 @@ of 18 in height. Your image seems to be {0}x{1}. If you scale it down to
 
         private void ReDataBind()
         {
+            // The below lines of code must be there to allow the browser to cache the images
+            // to avoid "flickering" during load ... :(
+            pnl.Style[Styles.display] = "none";
+            new EffectFadeIn(pnl, 750)
+                .JoinThese(
+                    new EffectRollDown())
+                .Render();
+
             prop.Visible = false;
             delete.Enabled = false;
             select.Enabled = false;
             pnl.Controls.Clear();
             DataBindExplorer();
             pnl.ReRender();
-            new EffectHighlight(pnl, 500)
-                .Render();
             if (Parent.Parent.Parent is Window)
             {
                 (Parent.Parent.Parent as Window).Caption = 
