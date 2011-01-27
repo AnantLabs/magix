@@ -89,8 +89,8 @@
     <div class="fileUploader span-4">
         <asp:FileUpload
             runat="server"
-            OnChange="window.toggleButtons();"
-            OnMouseOut="window.toggleButtons();"
+            OnChange="toggleButtons();"
+            OnMouseOut="toggleButtons();"
             id="file" />
         <mux:TextBox
             runat="server"
@@ -105,26 +105,28 @@
             Text="Upload ..." 
             OnClick="submitFile_Click"/>
         <script type="text/ecmascript">
-window.toggleButtons = function() {
-var file = MUX.$('<%=file.ClientID%>');
-var fileReal = MUX.$('<%=fileReal.ClientID%>');
-var vl = file.value;
-if(vl.indexOf('\\') != -1) {
-vl = vl.split('\\');
-vl = vl[vl.length - 1];
+(function() {
+toggleButtons = function() {
+  var file = MUX.$('<%=file.ClientID%>');
+  var fileReal = MUX.$('<%=fileReal.ClientID%>');
+  var vl = file.value;
+  if(vl.indexOf('\\') != -1) {
+    vl = vl.split('\\');
+    vl = vl[vl.length - 1];
+  }
+  if(vl.indexOf('/') != -1) {
+    vl = vl.split('/');
+    vl = vl[vl.length - 1];
+  }
+  fileReal.value = vl;
+  var sub = MUX.$('<%=submitFile.ClientID%>');
+  if(file.value) {
+    sub.disabled = '';
+  } else {
+    sub.disabled = 'disabled';
+  }
 }
-if(vl.indexOf('/') != -1) {
-vl = vl.split('/');
-vl = vl[vl.length - 1];
-}
-fileReal.value = vl;
-var sub = MUX.$('<%=submitFile.ClientID%>');
-if(file.value) {
-sub.disabled = '';
-} else {
-sub.disabled = 'disabled';
-}
-}
+})();
         </script>
     </div>
     <mux:Button
