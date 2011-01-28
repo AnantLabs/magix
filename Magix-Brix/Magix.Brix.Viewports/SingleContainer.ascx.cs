@@ -152,6 +152,21 @@ MUX.$('ping').play();");
             dynamic.ClearControls();
         }
 
+        [ActiveEvent(Name="Magix.Core.SetBodyStyles")]
+        private void SetStyles(object sender, ActiveEventArgs e)
+        {
+            string bgcolor = e.Params["BackgroundColor"].Get<string>();
+            string color = e.Params["Color"].Get<string>();
+            if (!string.IsNullOrEmpty(color))
+            {
+                wrp.Style[Styles.color] = color;
+            }
+            if (!string.IsNullOrEmpty(bgcolor))
+            {
+                wrp.Style[Styles.backgroundColor] = bgcolor;
+            }
+        }
+
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {
