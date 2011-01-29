@@ -32,7 +32,7 @@ namespace Magix.UX.Widgets
             {
                 if (value != Value)
                 {
-                    // Huuh...!??
+                    ReRender();
                 }
                 ViewState["Value"] = value;
             }
