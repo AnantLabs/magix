@@ -20,7 +20,7 @@
 <mux:Panel
     runat="server"
     id="wrp"
-    CssClass="container main showgrid">
+    CssClass="container main">
     <mux:DynamicPanel 
         runat="server" 
         OnReload="dynamic_LoadControls"

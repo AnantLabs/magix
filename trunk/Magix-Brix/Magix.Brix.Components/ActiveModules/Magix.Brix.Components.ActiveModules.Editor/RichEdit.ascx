@@ -6,26 +6,11 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.Editor.RichEdit" %>
 
-<link 
-    rel="stylesheet" 
-    type="text/css" 
-    href="media/modules/editor/assets/skins/sam/menu.css" />
-<link 
-    rel="stylesheet" 
-    type="text/css" 
-    href="media/modules/editor/assets/skins/sam/button.css" />
-<link 
-    rel="stylesheet" 
-    type="text/css" 
-    href="media/modules/editor/assets/skins/sam/container.css" />
-<link 
-    rel="stylesheet" 
-    type="text/css" 
-    href="media/modules/editor/assets/skins/sam/editor.css" />
-<link 
-    href="media/modules/RichEdit.css" 
-    rel="stylesheet" 
-    type="text/css" />
+<link href="media/modules/editor/assets/skins/sam/menu.css" rel="stylesheet" type="text/css" />
+<link href="media/modules/editor/assets/skins/sam/button.css" rel="stylesheet" type="text/css" />
+<link href="media/modules/editor/assets/skins/sam/container.css" rel="stylesheet" type="text/css" />
+<link href="media/modules/editor/assets/skins/sam/editor.css" rel="stylesheet" type="text/css" />
+<link href="media/modules/RichEdit.css" rel="stylesheet" type="text/css" />
 
 <script type="text/ecmascript">
 (function() {
