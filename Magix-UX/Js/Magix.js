@@ -196,7 +196,7 @@
   MUX.Element = MUX.klass();
   MUX.Element._evtId = 1;
   MUX.Element._scriptRegEx = '<script[^>]*>([\\S\\s]*?)<\/script>';
-  MUX.Element._cssRegEx = /<link\s+.*href\s*=\s*[\'\"](([^\'\"]+)?)[^>]*>/img;
+  MUX.Element._cssRegEx = /<link\s+.*href\s*=\s*[\'\"](([^\'\"]+)?)[^>]*[>]+/img;
 
   // The only way to create instances of this class is by using the MUX.$ function
   // or yourself using the MUX.extend function.
