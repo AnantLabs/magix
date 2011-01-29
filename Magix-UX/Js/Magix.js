@@ -196,6 +196,7 @@
   MUX.Element = MUX.klass();
   MUX.Element._evtId = 1;
   MUX.Element._scriptRegEx = '<script[^>]*>([\\S\\s]*?)<\/script>';
+  MUX.Element._cssRegEx = /<link\s+.*href\s*=\s*[\'\"](([^\'\"]+)?)[^>]*>/img;
 
   // The only way to create instances of this class is by using the MUX.$ function
   // or yourself using the MUX.extend function.
@@ -227,6 +228,37 @@
       return val;
     },
 
+    // Will include any CSS inclusions into the header of the document, 
+    // unless CSS is already included from before ...
+    includeCSS: function(val) {
+      var rx = MUX.Element._cssRegEx;
+      var scr = rx.exec(val);
+      var sf = false;
+      while (scr) {
+        sf = true;
+        var cssL = document.getElementsByTagName('link');
+        var found = false;
+        for(var i = 0; i < cssL.length; i++) {
+          if (cssL[i].href.indexOf(scr[1]) != -1) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          var el = document.createElement("link");
+          el.href = scr[1];
+          el.rel = 'stylesheet';
+          el.type = 'text/css';
+          document.getElementsByTagName('head')[0].appendChild(el);
+        }
+        scr = rx.exec(val);
+      }
+      if (sf) {
+        return val.replace(rx, '');
+      }
+      return val;
+    },
+
     // Replace entire element's HTML with given HTML
     // Will actually strip the scripts parts and execute them separately to 
     // support all the different browsers.
@@ -238,6 +270,7 @@
         // Content was given, hence replacing existing content with given content
         var id = this.id;
         val = this.executeScripts(val);
+        val = this.includeCSS(val);
         if (this.outerHTML) {
           this.outerHTML = val;
         } else {

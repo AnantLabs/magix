@@ -324,6 +324,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return (bool)ViewState["ColVisible" + colName];
         }
 
+        [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
+        protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
+            {
+                ReDataBind();
+            }
+        }
+
         protected void ResetColumnsVisibility()
         {
             List<string> keys = new List<string>();

@@ -24,6 +24,7 @@ namespace Magix.Brix.Viewports
         protected DynamicPanel content2;
         protected DynamicPanel content3;
         protected DynamicPanel content4;
+        protected DynamicPanel content5;
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
@@ -152,7 +153,7 @@ MUX.$('ping').play();");
             dynamic.ClearControls();
         }
 
-        [ActiveEvent(Name="Magix.Core.SetBodyStyles")]
+        [ActiveEvent(Name = "Magix.Core.SetBodyStyles")]
         private void SetStyles(object sender, ActiveEventArgs e)
         {
             string bgcolor = e.Params["BackgroundColor"].Get<string>();
@@ -184,8 +185,10 @@ MUX.$('ping').play();");
 
                 if (dyn.ID == "content3")
                 {
-                    // These two are normally grouped together ...
+                    // These are normally grouped together with different "blocks" of
+                    // applications ...
                     ClearControls(content4);
+                    ClearControls(content5);
                 }
 
                 if (dyn.Controls.Count == 0 || 
@@ -209,6 +212,10 @@ MUX.$('ping').play();");
                     {
                         cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
                     }
+                    if (e.Params["Parameters"].Contains("Pull"))
+                    {
+                        cssClass += " pull-" + e.Params["Parameters"]["Pull"].Get<int>();
+                    }
                     if (e.Params["Parameters"].Contains("Height"))
                     {
                         cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
@@ -216,6 +223,10 @@ MUX.$('ping').play();");
                     if (e.Params["Parameters"].Contains("Absolute"))
                     {
                         cssClass += " absolutized";
+                    }
+                    if (e.Params["Parameters"].Contains("Clear"))
+                    {
+                        cssClass += " cleared";
                     }
                     if (e.Params["Parameters"].Contains("Relativize"))
                     {
@@ -248,7 +259,7 @@ MUX.$('ping').play();");
                         e.Params["Name"].Value.ToString(), 
                         e.Params["Parameters"]);
 
-                    // We highlight our newly injected module here ...!
+                    // We highlight our newly injected module's container here ...!
                     new EffectHighlight(dyn, 500)
                         .Render();
                 }

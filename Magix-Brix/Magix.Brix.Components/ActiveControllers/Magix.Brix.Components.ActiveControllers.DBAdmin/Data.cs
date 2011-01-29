@@ -510,6 +510,24 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                                     idx["Value"].Get<int>(),
                                     idx["Reversed"].Get<bool>()));
                             break;
+                        case "Mt":
+                            retVal.Add(
+                                Criteria.Mt(
+                                    idx["Prop"].Get<string>(),
+                                    idx["Value"].Value));
+                            break;
+                        case "Lt":
+                            retVal.Add(
+                                Criteria.Lt(
+                                    idx["Prop"].Get<string>(),
+                                    idx["Value"].Value));
+                            break;
+                        case "Eq":
+                            retVal.Add(
+                                Criteria.Eq(
+                                    idx["Prop"].Get<string>(),
+                                    idx["Value"].Value));
+                            break;
                         case "Sort":
                             retVal.Add(
                                 Criteria.Sort(

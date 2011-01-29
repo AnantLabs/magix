@@ -167,6 +167,14 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
+         * Will reload all settings from DB ...
+         */
+        public void Reload()
+        {
+            _instance = null;
+        }
+
+        /**
          * Will delete all settings. Notice that this operation cannot be undone!
          */
         public void Clear()
