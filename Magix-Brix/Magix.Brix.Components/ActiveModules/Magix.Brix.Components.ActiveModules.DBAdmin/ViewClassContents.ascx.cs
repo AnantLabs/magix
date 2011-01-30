@@ -24,7 +24,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button create;
         protected Button end;
         protected Button beginning;
-        protected Button focs;
         protected Panel previousPnl;
         protected Panel nextPnl;
         protected Panel createPnl;
@@ -38,10 +37,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
-                    new EffectTimeout(500)
-                        .ChainThese(
-                            new EffectFocusAndSelect(focs))
-                        .Render();
                     create.Visible = node.Contains("IsCreate") && 
                         node["IsCreate"].Get<bool>();
                 };
@@ -182,7 +177,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         private void ReDataBind(bool setSelectedRow)
         {
-            focs.Focus();
             ResetColumnsVisibility();
             DataSource["Objects"].UnTie();
             DataSource["Type"].UnTie();

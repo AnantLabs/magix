@@ -250,6 +250,9 @@ MUX.$('ping').play();");
                         cssClass = "down-1";
                     }
                     dyn.CssClass = cssClass.Trim();
+                    dyn.Style[Styles.display] = "none";
+                    new EffectFadeIn(dyn, 750)
+                        .Render();
                 }
 
                 if (e.Params["Parameters"].Contains("Append") &&

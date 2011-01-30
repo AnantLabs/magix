@@ -12,10 +12,6 @@
     runat="server"
     id="root"
     CssClass="dbAdminTableWrapper">
-    <mux:Button
-        runat="server"
-        id="focs"
-        style="margin-left:-4000px;position:absolute;" />
 
     <mux:Panel
         runat="server"

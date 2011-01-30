@@ -14,11 +14,6 @@
     id="pnl">
 </mux:Panel>
 
-<mux:Button
-    runat="server"
-    id="focs"
-    style="margin-left:-4000px;position:absolute;" />
-
 <mux:Panel
     runat="server"
     id="changePnl"
