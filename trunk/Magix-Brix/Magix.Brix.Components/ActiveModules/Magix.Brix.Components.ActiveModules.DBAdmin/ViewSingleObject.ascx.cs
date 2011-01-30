@@ -1,7 +1,7 @@
 ﻿/*
- * Magix-BRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix-BRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3.
  */
 
 using System;
@@ -22,7 +22,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel pnl;
         protected Button change;
         protected Button remove;
-        protected Button focs;
         protected Panel changePnl;
         protected Panel removePnl;
 
@@ -36,10 +35,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         pnl.CssClass = node["ChildCssClass"].Get<string>();
                     }
-                    new EffectTimeout(500)
-                        .ChainThese(
-                            new EffectFocusAndSelect(focs))
-                        .Render();
                 };
         }
 

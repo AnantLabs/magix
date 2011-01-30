@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3.
  */
 
 using System;
@@ -22,7 +22,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button append;
         protected Button previous;
         protected Button next;
-        protected Button focs;
         protected Panel appendPnl;
         protected Panel previousPnl;
         protected Panel nextPnl;
@@ -34,10 +33,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 delegate
                 {
                     appendPnl.Visible = DataSource["IsAppend"].Get<bool>();
-                    new EffectTimeout(500)
-                        .ChainThese(
-                            new EffectFocusAndSelect(focs))
-                        .Render();
                 };
         }
 
@@ -134,7 +129,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected override void ReDataBind()
         {
             ResetColumnsVisibility();
-            focs.Focus();
             DataSource["Objects"].UnTie();
             DataSource["Type"].UnTie();
             if (RaiseSafeEvent(

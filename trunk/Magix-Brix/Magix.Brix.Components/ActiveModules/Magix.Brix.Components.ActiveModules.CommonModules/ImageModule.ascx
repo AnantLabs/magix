@@ -18,10 +18,5 @@
         Tag="p"
         CssClass="imageDescription small"
         id="lbl" />
-
-<mux:Button
-    runat="server"
-    style="margin-left:-4000px;display:none;"
-    id="focs" />
 </mux:Panel>
 

@@ -1,7 +1,7 @@
 ﻿/*
- * Magix-BRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix-BRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3.
  */
 
 using System;
@@ -19,7 +19,6 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
     public class ImageModule : UserControl, IModule
     {
         protected Image img;
-        protected Button focs;
         protected Label lbl;
         protected Panel root;
 
@@ -35,13 +34,6 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     root.CssClass = node["ChildCssClass"].Get<string>();
 
                 DataSource = node;
-                if (node.Contains("SetFocus") && node["SetFocus"].Get<bool>())
-                {
-                    new EffectTimeout(500)
-                        .ChainThese(
-                            new EffectFocusAndSelect(focs))
-                        .Render();
-                }
                 if (node.Contains("styles"))
                 {
                     foreach (Node idx in node["styles"])
