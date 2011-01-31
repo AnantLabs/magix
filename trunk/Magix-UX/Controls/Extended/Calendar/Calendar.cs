@@ -53,13 +53,13 @@ namespace Magix.UX.Widgets
         private void CreateCalendarControls()
         {
             _previous.ID = "prev";
-            _previous.Text = "<<";
+            _previous.Text = "<";
             _previous.CssClass = "mux-calendar-previous";
             _previous.Click += _previous_Click;
             Controls.Add(_previous);
 
             _next.ID = "next";
-            _next.Text = ">>";
+            _next.Text = ">";
             _next.CssClass = "mux-calendar-next";
             _next.Click += _next_Click;
             Controls.Add(_next);
