@@ -58,16 +58,16 @@ namespace Magix.UX.Widgets
             _previous.Click += _previous_Click;
             Controls.Add(_previous);
 
+            _month_year.ID = "monthYear";
+            _month_year.CssClass = "mux-calendar-month-year";
+            _month_year.TextChanged += _month_year_TextChanged;
+            Controls.Add(_month_year);
+
             _next.ID = "next";
             _next.Text = ">";
             _next.CssClass = "mux-calendar-next";
             _next.Click += _next_Click;
             Controls.Add(_next);
-
-            _month_year.ID = "monthYear";
-            _month_year.CssClass = "mux-calendar-month-year";
-            _month_year.TextChanged += _month_year_TextChanged;
-            Controls.Add(_month_year);
         }
 
         void _month_year_TextChanged(object sender, EventArgs e)
@@ -255,11 +255,11 @@ namespace Magix.UX.Widgets
                     tbl.AddAttribute("id", ID + "tbl");
                     using (Element topRow = builder.CreateElement("tr"))
                     {
-                        foreach (string idx in new string[] { "Wk.", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"})
+                        foreach (string idx in new string[] { "W", "S", "M", "T", "W", "T", "F", "S"})
                         {
                             using (Element cell = builder.CreateElement("td"))
                             {
-                                cell.AddAttribute("class", "mux-calendar-week");
+                                cell.AddAttribute("class", "mux-calendar-weekday");
                                 cell.Write(idx);
                             }
                         }
