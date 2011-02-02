@@ -210,10 +210,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     LinkButton b = new LinkButton();
                     b.Text = "ID";
                     b.ToolTip = "Click to filter ";
-                    string idFilterString =
-                        Settings.Instance.Get(
-                            "DBAdmin.Filter." +
-                            DataSource["FullTypeName"].Get<string>() + ":ID", "");
+                    Node fNode = new Node();
+                    fNode["Key"].Value = 
+                        "DBAdmin.Filter." + 
+                        DataSource["FullTypeName"].Get<string>() + 
+                        ":ID";
+                    fNode["Default"].Value = "";
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        "DBAdmin.Data.GetFilter",
+                        fNode);
+                    string idFilterString = fNode["Filter"].Get<string>();
                     hasIdFilter = !string.IsNullOrEmpty(idFilterString);
                     b.ToolTip += idFilterString.Replace("|", " on ");
                     b.CssClass =
@@ -285,10 +292,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 {
                     LinkButton b = new LinkButton();
                     b.Text = captionOfColumn;
-                    string filterString =
-                        Settings.Instance.Get(
-                            "DBAdmin.Filter." +
-                            DataSource["FullTypeName"].Get<string>() + ":" + idx.Name, "");
+                    Node fNode = new Node();
+                    fNode["Key"].Value = 
+                        "DBAdmin.Filter." +
+                        DataSource["FullTypeName"].Get<string>() + ":" + 
+                        idx.Name;
+                    fNode["Default"].Value = "";
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        "DBAdmin.Data.GetFilter",
+                        fNode);
+                    string filterString = fNode["Filter"].Get<string>();
                     b.ToolTip = "Click to filter. ";
                     if (idx["BelongsTo"].Get<bool>())
                         b.ToolTip += "BelongsTo ";
