@@ -539,12 +539,15 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     }
                 }
             }
-            
-            
-            string idFilter =
-                Settings.Instance.Get(
-                    "DBAdmin.Filter." + fullTypeName + ":ID",
-                    "");
+
+            Node fNode = new Node();
+            fNode["Key"].Value = "DBAdmin.Filter." + fullTypeName + ":ID";
+            fNode["Default"].Value = "";
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Data.GetFilter",
+                fNode);
+            string idFilter = fNode["Filter"].Get<string>();
             if (!string.IsNullOrEmpty(idFilter))
             {
                 // ID filters overrides any other filters ...
@@ -560,11 +563,17 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 // Non ID filters in existance ...
                 foreach (string propertyName in getters.Keys)
                 {
-                    string filter =
-                        Settings.Instance.Get(
-                            "DBAdmin.Filter." + fullTypeName +
+                    fNode = new Node();
+                    fNode["Key"].Value =
+                        "DBAdmin.Filter." + fullTypeName +
                             ":" +
-                            propertyName, "");
+                            propertyName;
+                    fNode["Default"].Value = "";
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        "DBAdmin.Data.GetFilter",
+                        fNode);
+                    string filter = fNode["Filter"].Get<string>();
                     if (string.IsNullOrEmpty(filter))
                         continue;
                     if (filter.IndexOf("|") == 0)

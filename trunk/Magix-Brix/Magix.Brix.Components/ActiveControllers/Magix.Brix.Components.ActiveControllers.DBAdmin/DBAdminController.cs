@@ -554,6 +554,26 @@ collection you're removing it from.</p>";
                 parentPropertyName,
                 parentFullTypeName);
         }
+
+        [ActiveEvent(Name = "DBAdmin.Data.GetFilter")]
+        protected void DBAdmin_Data_GetFilter(object sender, ActiveEventArgs e)
+        {
+            string key = e.Params["Key"].Get<string>();
+            string defaultValue = e.Params["Default"].Get<string>();
+            string idFilter =
+                Settings.Instance.Get(
+                    key,
+                    defaultValue);
+            e.Params["Filter"].Value = idFilter;
+        }
+
+        [ActiveEvent(Name = "DBAdmin.Data.SetFilter")]
+        protected void DBAdmin_Data_SetFilter(object sender, ActiveEventArgs e)
+        {
+            string key = e.Params["Key"].Get<string>();
+            string value = e.Params["Value"].Get<string>();
+            Settings.Instance.Set(key,value);
+        }
     }
 }
 
