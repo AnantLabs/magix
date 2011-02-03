@@ -48,8 +48,8 @@
     <mux:Window 
         runat="server" 
         CssClass="mux-shaded mux-rounded mux-window message prepend-top push-6 span-8 last"
-        Caption="Marvin says; Oops ...!"
-        style="position:fixed;"
+        Caption="Message from Marvin ..."
+        style="position:fixed;display:none;"
         Closable="false"
         id="message">
         <Content>
