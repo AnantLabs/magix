@@ -1,7 +1,7 @@
 ﻿/*
- * Magix-BRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix-BRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3.
  */
 
 using System;
@@ -25,9 +25,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected Label header;
         protected Label extension;
         protected Label size;
-        protected Label imageSize;
         protected Label imageWarning;
-        protected Label fullUrl;
+        protected HyperLink fullUrl;
         protected Button previous;
         protected Button next;
         protected InPlaceEdit name;
@@ -36,6 +35,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected Button select;
         protected System.Web.UI.WebControls.FileUpload file;
         protected TextBox fileReal;
+        protected Label imageSize;
 
         public void InitialLoading(Node node)
         {
@@ -44,14 +44,6 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 {
                     // The below lines of code must be there to allow the browser to cache the images
                     // to avoid "flickering" during load ... :(
-                    pnl.Style[Styles.display] = "none";
-                    new EffectTimeout(500)
-                        .ChainThese(
-                            new EffectFadeIn(pnl, 750)
-                                .JoinThese(
-                                    new EffectRollDown()))
-                        .Render();
-
                     DataSource = node;
                     prop.Visible = false;
                     delete.Enabled = false;
@@ -397,14 +389,14 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             fullUrl.Text = " Full URL: " +
                 DataSource["Folder"].Get<string>() +
                 DataSource["File"]["FullName"].Get<string>();
+            fullUrl.URL = DataSource["Folder"].Get<string>() +
+                DataSource["File"]["FullName"].Get<string>();
             if (DataSource["File"].Contains("IsImage") && DataSource["File"]["IsImage"].Get<bool>())
             {
-                imageSize.Visible = true;
                 int width = DataSource["File"]["ImageWidth"].Get<int>();
                 int height = DataSource["File"]["ImageHeight"].Get<int>();
                 int optimalWidth = width - (width < 30 ? -(30 - width) : ((width + 10) % 40));
                 int optimalHeight = height - (height < 18 ? -(18 - height) : height % 18);
-
                 if ((width + 10) % 40 != 0 || height % 18 != 0 || width > 950)
                 {
                     string imageSizeText =
@@ -416,25 +408,6 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                         "x" +
                         optimalHeight;
                     imageSize.Text = imageSizeText;
-                    imageWarning.Visible = true;
-                    imageWarning.Style[Styles.display] = "none";
-                    new EffectTimeout(500)
-                        .ChainThese(
-                            new EffectRollDown(imageWarning, 500),
-                            new EffectHighlight(imageWarning, 500),
-                            new EffectTimeout(500),
-                            new EffectHighlight(imageWarning, 500),
-                            new EffectTimeout(500),
-                            new EffectHighlight(imageWarning, 500))
-                        .Render();
-                    imageWarning.Text = string.Format(
-@"Images should be 30, 70, 110, 150, etc wide, and some multiplication 
-of 18 in height. Your image seems to be {0}x{1}. If you scale it down to
-{2}x{3} pixels, it will show up more beautifully ...",
-                        width,
-                        height,
-                        optimalWidth,
-                        optimalHeight);
                 }
                 else
                 {
@@ -442,17 +415,12 @@ of 18 in height. Your image seems to be {0}x{1}. If you scale it down to
                         width +
                         "px - " +
                         height +
-                        "px - grids " + 
+                        "px - grids " +
                         (width + 10) / 40 +
-                        "x" + 
+                        "x" +
                         height / 18;
                     imageSize.Text = imageSizeText;
-                    imageWarning.Visible = false;
                 }
-            }
-            else
-            {
-                imageSize.Visible = false;
             }
         }
 
@@ -487,15 +455,24 @@ of 18 in height. Your image seems to be {0}x{1}. If you scale it down to
         private void OpenFullPreviewOfImage(string file)
         {
             Node node = new Node();
-            node["ForcedSize"]["width"].Value = DataSource["File"]["ImageWidth"].Get<int>() + 80;
-            node["ForcedSize"]["height"].Value = DataSource["File"]["ImageHeight"].Get<int>() + 90;
+            int width = DataSource["File"]["ImageWidth"].Get<int>() + 80;
+            width += 40 - ((width + 10) % 40);
+            node["ForcedSize"]["width"].Value = width;
+            int height = DataSource["File"]["ImageHeight"].Get<int>() + 90;
+            height += 18 - (height % 18);
+            node["ForcedSize"]["height"].Value = height;
             node["ImageUrl"].Value = file;
+            node["Push"].Value = 2;
+            node["Top"].Value = 4;
+            node["Width"].Value = 22;
             node["SetFocus"].Value = true;
+            node["ToolTip"].Value = 
+                @"Grid is optimal size(s) of image to work perfectly with the Typography 
+Layout System in our WinePad product ...";
             node["AlternateText"].Value = "Preview of image in full size...";
+            node["DynCssClass"].Value = "showgrid";
             node["Caption"].Value =
-                "Full size of: " +
-                DataSource["Folder"].Get<string>() +
-                DataSource["File"].Get<string>();
+                "Preview";
             ActiveEvents.Instance.RaiseLoadControl(
                 "Magix.Brix.Components.ActiveModules.CommonModules.ImageModule",
                 "child",
@@ -536,12 +513,7 @@ of 18 in height. Your image seems to be {0}x{1}. If you scale it down to
         {
             // The below lines of code must be there to allow the browser to cache the images
             // to avoid "flickering" during load ... :(
-            pnl.Style[Styles.display] = "none";
-            new EffectFadeIn(pnl, 750)
-                .JoinThese(
-                    new EffectRollDown())
-                .Render();
-
+            pnl.Style[Styles.display] = "block";
             prop.Visible = false;
             delete.Enabled = false;
             select.Enabled = false;

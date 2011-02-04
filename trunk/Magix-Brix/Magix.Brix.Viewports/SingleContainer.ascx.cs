@@ -59,13 +59,8 @@ namespace Magix.Brix.Viewports
                 // Window
                 Window w = new Window();
                 w.CssClass = "mux-shaded mux-rounded mux-window child";
-                w.Style[Styles.left] = ((idxNo % 12) * 20).ToString() + "px";
-                w.Style[Styles.top] = (idxNo * 18).ToString() + "px";
-                w.Style[Styles.minWidth] = "470px";
-                w.Style[Styles.zIndex] = (1000 + (idxNo * 2)).ToString();
+                w.Style[Styles.zIndex] = (1000 + (idxNo * 8)).ToString();
                 w.Visible = false;
-                w.Style[Styles.overflow] = "hidden";
-                w.Style[Styles.position] = "absolute";
                 w.EscKey +=
                     delegate
                     {
@@ -171,6 +166,8 @@ MUX.$('ping').play();");
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {
+            string cssClass = null;
+
             // Since this is our default container, 
             // we accept "null" and string.Empty values here ...!
             if (string.IsNullOrEmpty(e.Params["Position"].Get<string>()) ||
@@ -195,7 +192,6 @@ MUX.$('ping').play();");
                     !e.Params["Parameters"].Contains("Append") ||
                     !e.Params["Parameters"]["Append"].Get<bool>())
                 {
-                    string cssClass = null;
                     if (e.Params["Parameters"].Contains("Padding"))
                     {
                         cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
@@ -208,6 +204,10 @@ MUX.$('ping').play();");
                     {
                         cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
                     }
+                    if (e.Params["Parameters"].Contains("Height"))
+                    {
+                        cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
+                    }
                     if (e.Params["Parameters"].Contains("Top"))
                     {
                         cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
@@ -216,9 +216,9 @@ MUX.$('ping').play();");
                     {
                         cssClass += " pull-" + e.Params["Parameters"]["Pull"].Get<int>();
                     }
-                    if (e.Params["Parameters"].Contains("Height"))
+                    if (e.Params["Parameters"].Contains("Push"))
                     {
-                        cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
+                        cssClass += " push-" + e.Params["Parameters"]["Push"].Get<int>();
                     }
                     if (e.Params["Parameters"].Contains("Absolute"))
                     {
@@ -239,10 +239,6 @@ MUX.$('ping').play();");
                     if (e.Params["Parameters"].Contains("Overflow"))
                     {
                         cssClass += " overflowized";
-                    }
-                    if (e.Params["Parameters"].Contains("IPad"))
-                    {
-                        cssClass += " ipad";
                     }
                     if (string.IsNullOrEmpty(cssClass))
                     {
@@ -304,10 +300,84 @@ MUX.$('ping').play();");
                     // We don't want to have race conditions for effects and caption
                     // of our window .....!
                     w.Style[Styles.display] = "none";
+
+                    // Resetting any previous CSS classes ...
+                    w.CssClass = "mux-shaded mux-rounded mux-window child";
+                    
+                    // Adding child CSS class(es)
                     if (e.Params["Parameters"].Contains("WindowCssClass"))
                     {
                         w.CssClass = e.Params["Parameters"]["WindowCssClass"].Get<string>();
                     }
+
+                    // Background color ...?
+                    if (e.Params["Parameters"].Contains("BackgroundColor"))
+                    {
+                        string bg = e.Params["Parameters"]["BackgroundColor"].Get<string>();
+                        toAddInto.Style[Styles.backgroundColor] = bg;
+                    }
+                    else
+                    {
+                        toAddInto.Style[Styles.backgroundColor] = "";
+                    }
+                    if (e.Params["Parameters"].Contains("ToolTip"))
+                    {
+                        string tooltip = e.Params["Parameters"]["ToolTip"].Get<string>();
+                        toAddInto.ToolTip = tooltip;
+                    }
+                    else
+                    {
+                        toAddInto.ToolTip = "";
+                    }
+                    if (e.Params["Parameters"].Contains("DynCssClass"))
+                    {
+                        string cssClass2 = e.Params["Parameters"]["DynCssClass"].Get<string>();
+                        toAddInto.CssClass += " " + cssClass2;
+                    }
+                    else
+                    {
+                        toAddInto.CssClass = "dynamic";
+                    }
+
+                    if (e.Params["Parameters"].Contains("Padding"))
+                    {
+                        cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("Top"))
+                    {
+                        cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("Pull"))
+                    {
+                        cssClass += " pull-" + e.Params["Parameters"]["Pull"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("Push"))
+                    {
+                        cssClass += " push-" + e.Params["Parameters"]["Push"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("Width"))
+                    {
+                        cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("last"))
+                    {
+                        cssClass += " last";
+                    }
+                    if (!string.IsNullOrEmpty(cssClass))
+                    {
+                        w.Style[Styles.left] = "";
+                        w.Style[Styles.top] = "";
+                        w.Style[Styles.width] = "";
+                        w.Style[Styles.height] = "";
+                        w.CssClass += " " + cssClass.Trim();
+                    }
+                    else
+                    {
+                        w.Style[Styles.width] = "auto";
+                        w.Style[Styles.height] = "auto";
+                    }
+
+                    // Animation ...?
                     if (e.Params["Parameters"].Contains("ForcedSize"))
                     {
                         if (e.Params["Parameters"]["ForcedSize"].Contains("height"))
@@ -333,40 +403,13 @@ MUX.$('ping').play();");
                     }
                     else
                     {
-                        string cssClass = null;
-                        if (e.Params["Parameters"].Contains("Padding"))
-                        {
-                            cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
-                        }
                         if (e.Params["Parameters"].Contains("Width"))
                         {
                             cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
                         }
-                        if (e.Params["Parameters"].Contains("Top"))
-                        {
-                            cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
-                        }
                         if (e.Params["Parameters"].Contains("Height"))
                         {
                             cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
-                        }
-                        if (e.Params["Parameters"].Contains("last"))
-                        {
-                            cssClass += " last";
-                        }
-                        if (!string.IsNullOrEmpty(cssClass))
-                        {
-                            w.Style[Styles.left] = "";
-                            w.Style[Styles.top] = "";
-                        }
-                        if (!string.IsNullOrEmpty(cssClass))
-                        {
-                            w.CssClass += " " + cssClass.Trim();
-                        }
-                        else
-                        {
-                            w.Style[Styles.width] = "auto";
-                            w.Style[Styles.height] = "auto";
                         }
                         new EffectFadeIn(w, 750)
                             .JoinThese(
