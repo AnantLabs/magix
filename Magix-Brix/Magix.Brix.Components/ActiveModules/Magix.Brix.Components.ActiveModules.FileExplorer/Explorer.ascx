@@ -14,11 +14,10 @@
         CssClass="span-12 fileExplorer"
         id="pnl" />
 </div>
-
 <mux:Panel
     runat="server"
     id="prop"
-    CssClass="span-8 last fileExplorer-properties">
+    CssClass="span-6 last fileExplorer-properties">
     <mux:Label
         runat="server"
         id="header"
@@ -41,11 +40,11 @@
         id="size"
         CssClass="size small"
         Tag="p" />
-    <mux:Label 
+    <mux:HyperLink 
         runat="server"
         id="fullUrl"
-        CssClass="fullUrl small"
-        Tag="p" />
+        Target="_blank"
+        CssClass="fullUrl small" />
     <mux:Label 
         runat="server"
         id="imageSize"
@@ -58,16 +57,8 @@
             ToolTip="Click to see image in full size ..."
             id="preview" />
     </div>
-    <div class="span-4 last">
-        <mux:Label
-            runat="server"
-            id="imageWarning"
-            Tag="p"
-            CssClass="imageWarning small" />
-    </div>
 </mux:Panel>
-
-<div class="span-20 last fileEx">
+<div class="span-18 last fileEx">
     <mux:Button
         runat="server"
         id="previous"
@@ -86,7 +77,7 @@
         CssClass="span-4 delete"
         OnClick="delete_Click"
         Text="Delete" />
-    <div class="fileUploader span-4">
+    <div class="fileUploader span-2">
         <asp:FileUpload
             runat="server"
             OnChange="toggleButtons();"
@@ -136,6 +127,7 @@ toggleButtons = function() {
         OnClick="select_Click"
         Text="Select" />
 </div>
+
 
 
 
