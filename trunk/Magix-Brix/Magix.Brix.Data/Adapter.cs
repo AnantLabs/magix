@@ -30,6 +30,7 @@ namespace Magix.Brix.Data
     {
         private static Adapter _adapter;
         private static ConstructorInfo _ctorToAdapter;
+        private readonly static List<Type> _activeTypes = new List<Type>();
 
         /**
          * Retrieves the configured database adapter. Notice that you would very rarely
@@ -81,6 +82,14 @@ namespace Magix.Brix.Data
             string connectionString = ConfigurationManager.AppSettings["LegoConnectionString"];
             adapter.Open(connectionString);
             return adapter;
+        }
+
+        public static List<Type> ActiveTypes
+        {
+            get
+            {
+                return _activeTypes;
+            }
         }
 
         private static ConstructorInfo GetAdapterConstructor()
@@ -143,7 +152,7 @@ namespace Magix.Brix.Data
          */
         public object SelectByID(Type type, int id)
         {
-            if (Cache.ContainsKey(id))
+            if (Cache.ContainsKey(id) && Cache[id].GetType() == type)
                 return Cache[id];
             object retVal = SelectObjectByID(type, id);
             if (retVal != null)

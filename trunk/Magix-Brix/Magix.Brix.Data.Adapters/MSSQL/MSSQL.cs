@@ -101,7 +101,9 @@ is *seriously* wrong with your Data Adapter ...!");
             SqlCommand cmdExists = CreateSqlCommand(
                 string.Format(
                     "select count(*) from " + TablePrefix + "Documents where ID={0} " +
-                    "and TypeName='doc{1}'", id, type.FullName));
+                    "and TypeName='{1}'", 
+                    id, 
+                    Helpers.TypeName(type)));
             return (int)cmdExists.ExecuteScalar() != 0;
         }
 
@@ -350,7 +352,7 @@ is *seriously* wrong with your Data Adapter ...!");
                             idxProp,
                             new Tuple<ActiveFieldAttribute, MethodInfo>(
                                 attrs[0],
-                                idxProp.GetSetMethod())));
+                                idxProp.GetSetMethod(true))));
                 }
             }
         }
@@ -681,8 +683,8 @@ select Name, Value from {0} where FK_Document={1}",
             {
                 SqlCommand cmd = CreateSqlCommand(
                     string.Format(
-                        "insert into " + TablePrefix + "Documents (TypeName, Created, Modified, Parent, ParentPropertyName) values ('doc{0}', getdate(), getdate(), {1}, {2});select @@Identity;",
-                        type.FullName,
+                        "insert into " + TablePrefix + "Documents (TypeName, Created, Modified, Parent, ParentPropertyName) values ('{0}', getdate(), getdate(), {1}, {2});select @@Identity;",
+                        Helpers.TypeName(type),
                         parentId == -1 ? "NULL" : parentId.ToString(),
                         parentPropertyName == null ? "null" : "'" + parentPropertyName + "'"));
                 id = (int)((decimal)cmd.ExecuteScalar());

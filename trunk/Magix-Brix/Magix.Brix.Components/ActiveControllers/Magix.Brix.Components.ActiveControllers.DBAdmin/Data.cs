@@ -424,7 +424,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         // TODO: Refactor, doesn't support Dynamic Types, referenced in GetFilterForColumn ...!
         public Type GetType(string typeName)
         {
-            return (new List<Type>(PluginLoader.Instance.ActiveTypes))
+            return (new List<Type>(Adapter.ActiveTypes))
                 .Find(delegate(Type idx)
                 {
                     return idx.FullName == typeName;

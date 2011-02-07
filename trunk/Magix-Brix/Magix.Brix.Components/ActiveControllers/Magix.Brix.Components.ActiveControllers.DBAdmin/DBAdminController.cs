@@ -49,7 +49,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         protected void DBAdmin_Data_GetClassHierarchy(object sender, ActiveEventArgs e)
         {
             int idxNo = 0;
-            foreach (Type idx in PluginLoader.Instance.ActiveTypes)
+            foreach (Type idx in Adapter.ActiveTypes)
             {
                 string fullTypeName = idx.FullName;
                 List<string> entities = new List<string>(fullTypeName.Split('.'));

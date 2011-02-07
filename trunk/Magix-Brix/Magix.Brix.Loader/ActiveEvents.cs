@@ -26,6 +26,7 @@ namespace Magix.Brix.Loader
         private static ActiveEvents _instance;
         private Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> _nonWeb = 
             new Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>>();
+        private static Dictionary<string, string> _eventMappers = new Dictionary<string, string>();
 
         private delegate void AsyncDelegate(object sender, ActiveEventArgs e);
 
@@ -166,11 +167,9 @@ namespace Magix.Brix.Loader
         {
             // Dummy dereferencing of PluginLoader to make sure we've 
             // loaded all our assemblies and types first ...!
-            IEnumerable<Type> typesMumboJumbo = PluginLoader.Instance.ActiveTypes;
+            PluginLoader typesMumboJumbo = PluginLoader.Instance;
 
-            string mapped = ConfigurationManager.AppSettings["mapped-" + name];
-            if (!string.IsNullOrEmpty(mapped))
-                name = mapped.Replace("mapped-", "");
+            name = GetEventName(name);
             ActiveEventArgs e = new ActiveEventArgs(name, pars);
             if (_methods.ContainsKey(name) || InstanceMethod.ContainsKey(name))
             {
@@ -198,6 +197,32 @@ namespace Magix.Brix.Loader
                         }
                     }
                 }
+            }
+        }
+
+        public void CreateEventMapping(string from, string to)
+        {
+            _eventMappers[from] = to;
+        }
+
+        private string GetEventName(string name)
+        {
+            if (_eventMappers.ContainsKey(name))
+                return _eventMappers[name];
+            else
+            {
+                string mapped = ConfigurationManager.AppSettings["mapped-" + name];
+                if (!string.IsNullOrEmpty(mapped))
+                {
+                    string evtName = mapped.Replace("mapped-", "");
+                    _eventMappers[name] = evtName;
+                }
+                else
+                {
+                    // No mapping, defaulting to the default event name ...
+                    _eventMappers[name] = name;
+                }
+                return _eventMappers[name];
             }
         }
 

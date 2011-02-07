@@ -27,7 +27,6 @@ namespace Magix.Brix.Loader
         private static PluginLoader _instance;
         private readonly Dictionary<string, Tuple<string, Type>> _loadedPlugins = new Dictionary<string, Tuple<string, Type>>();
         private readonly List<Type> _controllerTypes = new List<Type>();
-        private readonly List<Type> _activeTypes = new List<Type>();
         private static List<Assembly> _assemblies;
 
         private delegate void TypeDelegate(Type type);
@@ -58,20 +57,9 @@ namespace Magix.Brix.Loader
             FindAllTypesWithAttribute<ActiveTypeAttribute>(
                 delegate(Type type)
                 {
-                    _activeTypes.Add(type);
+                    Adapter.ActiveTypes.Add(type);
                     InitializeEventHandlers(null, type);
                 });
-        }
-
-        public IEnumerable<Type> ActiveTypes
-        {
-            get
-            {
-                foreach (Type idx in this._activeTypes)
-                {
-                    yield return idx;
-                }
-            }
         }
 
         // Helper method that loops through every type in AppDomain and 

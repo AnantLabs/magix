@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{128EEB4C-DE60-4533-B819-4C53AB4BB2C2}</ProjectGuid>
+    <ProjectGuid>{1239EAE2-0A90-4E26-9A23-3442EBBCC366}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magix.Brix.Components.ActiveModules.Settings</RootNamespace>
-    <AssemblyName>Magix.Brix.Components.ActiveModules.Settings</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveTypes.TalkBack</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveTypes.TalkBack</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,31 +29,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewSettings.ascx.cs">
-      <DependentUpon>ViewSettings.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Posting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ViewSettings.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">
-      <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
-      <Name>Magix.UX</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Magix.Brix.Data\Magix.Brix.Data.csproj">
       <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
       <Name>Magix.Brix.Data</Name>
@@ -67,13 +52,9 @@
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
       <Name>Magix.Brix.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Settings\Magix.Brix.Components.ActiveTypes.Settings.csproj">
-      <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
-      <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
-      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
-      <Name>Magix.Brix.Components</Name>
+    <ProjectReference Include="..\Magix.Brix.Components.ActiveTypes.Users\Magix.Brix.Components.ActiveTypes.Users.csproj">
+      <Project>{72BD8731-239E-463D-A66C-556ED55A4578}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Users</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -84,8 +65,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
 </Project>
