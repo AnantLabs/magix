@@ -8,9 +8,11 @@
  * 
  */
 
+using System;
+using System.Data.Common;
+using System.Configuration;
 using System.Collections.Generic;
 using Magix.Brix.Data.Internal;
-using System.Data.Common;
 
 namespace Magix.Brix.Data
 {
@@ -40,6 +42,21 @@ namespace Magix.Brix.Data
      */
     public class ActiveType<T> : TransactionalObject
     {
+        private static Type GetType(Type type)
+        {
+            string mapped =
+                ConfigurationManager.AppSettings["typeMapping-" + type.FullName];
+            if (!string.IsNullOrEmpty(mapped))
+                return Adapter.ActiveTypes.Find(
+                    delegate(Type idx)
+                    {
+                        return idx.FullName == mapped;
+                    });
+
+            // Returning original type ...
+            return type;
+        }
+
         /**
          * The data storage associated ID of the object. Often the primary
          * key if you're using a database as your data storage.
@@ -51,7 +68,7 @@ namespace Magix.Brix.Data
          */
         public static int Count
         {
-            get { return Adapter.Instance.CountWhere(typeof(T), null); }
+            get { return Adapter.Instance.CountWhere(GetType(typeof(T)), null); }
         }
 
         /**
@@ -71,7 +88,7 @@ namespace Magix.Brix.Data
             }
             if (no > 0)
                 return no;
-            return Adapter.Instance.CountWhere(typeof(T), args);
+            return Adapter.Instance.CountWhere(GetType(typeof(T)), args);
         }
 
         /**
@@ -79,7 +96,7 @@ namespace Magix.Brix.Data
          */
         public static T SelectByID(int id)
         {
-            return (T)Adapter.Instance.SelectByID(typeof(T), id);
+            return (T)Adapter.Instance.SelectByID(GetType(typeof(T)), id);
         }
 
         /**
@@ -89,7 +106,7 @@ namespace Magix.Brix.Data
         {
             foreach (int id in ids)
             {
-                yield return (T)Adapter.Instance.SelectByID(typeof(T), id);
+                yield return (T)Adapter.Instance.SelectByID(GetType(typeof(T)), id);
             }
         }
 
@@ -105,7 +122,7 @@ namespace Magix.Brix.Data
             }
             else
             {
-                return (T)Adapter.Instance.SelectFirst(typeof(T), null, args);
+                return (T)Adapter.Instance.SelectFirst(GetType(typeof(T)), null, args);
             }
         }
 
@@ -133,7 +150,9 @@ namespace Magix.Brix.Data
                     {
                         if (idx is CritID)
                         {
-                            T tmp = (T)Adapter.Instance.SelectByID(typeof(T), (int)idx.Value);
+                            T tmp = (T)Adapter.Instance.SelectByID(
+                                GetType(typeof(T)), 
+                                (int)idx.Value);
                             if (tmp != null)
                                 yield return tmp;
                         }
@@ -142,7 +161,8 @@ namespace Magix.Brix.Data
             }
             if (!hasId)
             {
-                foreach (object idx in Adapter.Instance.Select(typeof(T), null, args))
+                foreach (object idx in 
+                    Adapter.Instance.Select(GetType(typeof(T)), null, args))
                 {
                     yield return (T)idx;
                 }

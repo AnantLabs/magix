@@ -16,6 +16,13 @@ namespace Magix.Brix.Data.Internal
     {
         public static string TypeName(Type type)
         {
+            ActiveTypeAttribute[] attr = 
+                type.GetCustomAttributes(typeof(ActiveTypeAttribute), true)
+                as ActiveTypeAttribute[];
+            if (attr != null &&
+                attr.Length > 0 &&
+                !string.IsNullOrEmpty(attr[0].TableName))
+                return attr[0].TableName;
             return "doc" + type.FullName;
         }
 

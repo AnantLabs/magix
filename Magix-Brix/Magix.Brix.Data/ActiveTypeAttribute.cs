@@ -17,5 +17,6 @@ namespace Magix.Brix.Data
     [AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
     public class ActiveTypeAttribute : Attribute
     {
+        public string TableName;
     }
 }

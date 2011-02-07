@@ -90,6 +90,24 @@ namespace Magix.Brix.Viewports
 
         private bool first = true;
 
+        [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]
+        protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
+        {
+            string cssFile = e.Params["CSSFile"].Get<String>();
+            if (AjaxManager.Instance.IsCallback)
+                throw new ApplicationException(
+                    "Sorry, no support for setting custom CSS files in Ajax Callbacks (yet!)");
+            if (!string.IsNullOrEmpty(cssFile))
+            {
+                LiteralControl lit = new LiteralControl();
+                lit.Text = string.Format(@"
+<link href=""{0}"" rel=""stylesheet"" type=""text/css"" />
+",
+                    cssFile);
+                Page.Header.Controls.Add(lit);
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
