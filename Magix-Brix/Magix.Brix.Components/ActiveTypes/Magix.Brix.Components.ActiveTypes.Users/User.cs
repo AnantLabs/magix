@@ -47,6 +47,9 @@ namespace Magix.Brix.Components.ActiveTypes.Users
         [ActiveField]
         public string Password { get; set; }
 
+        [ActiveField]
+        public string Email { get; set; }
+
         [ActiveField(IsOwner = false)]
         public LazyList<Role> Roles { get; set; }
 

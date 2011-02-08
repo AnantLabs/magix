@@ -8,6 +8,9 @@ using System;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.UX.Widgets;
+using Magix.UX;
+using Magix.UX.Effects;
+using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Components.ActiveModules.TalkBack
 {
@@ -16,32 +19,128 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
     {
         protected Panel wrp;
         protected System.Web.UI.WebControls.Repeater rep;
+        protected TextBox header;
+        protected TextArea body;
 
         public void InitialLoading(Node node)
         {
             Load +=
                 delegate
                 {
-                    DataSource = node["Posts"];
+                    DataSource = node;
                     DataBindRepeater();
                 };
         }
 
         private void DataBindRepeater()
         {
-            rep.DataSource = DataSource;
+            rep.DataSource = DataSource["Posts"];
             rep.DataBind();
+            foreach (Label idx in Selector.Select<Label>(rep,
+                delegate(System.Web.UI.Control idxP)
+                {
+                    return (idxP is Label) && (idxP as Label).CssClass == "header";
+                }))
+            {
+                Panel p = Selector.SelectFirst<Panel>(idx.Parent,
+                    delegate(System.Web.UI.Control idxN)
+                    {
+                        return (idxN is BaseWebControl) &&
+                            (idxN as BaseWebControl).CssClass.Contains("one-item-content");
+                    });
+                idx.ClickEffect = new EffectToggle(p, 250, false);
+            }
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected string GetShorter(object strObj)
         {
-            base.OnLoad(e);
+            string retVal = strObj as string;
+            if (retVal != null)
+            {
+                if (retVal.Length > 45)
+                    retVal = retVal.Substring(0, 45) + "...";
+            }
+            return retVal;
+        }
+
+        protected void submit_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["Header"].Value = header.Text;
+            node["Body"].Value = body.Text;
+            RaiseSafeEvent(
+                "Talkback.CreatePost",
+                node);
+
+            DataSource["Posts"].UnTie();
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Talkback.GetPostings",
+                DataSource);
+
+            DataBindRepeater();
+            wrp.ReRender();
+            new EffectHighlight(wrp, 500)
+                .Render();
+            header.Text = "";
+            body.Text = "";
+        }
+
+        protected void reply_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+
+            Node node = new Node();
+            node["Header"].Value = Selector.SelectFirst<TextBox>(button.Parent).Text;
+            node["Body"].Value = Selector.SelectFirst<TextArea>(button.Parent).Text;
+            node["Parent"].Value = int.Parse(button.Info);
+            if (RaiseSafeEvent(
+                "Talkback.CreatePost",
+                node))
+            {
+                DataSource["Posts"].UnTie();
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Talkback.GetPostings",
+                    DataSource);
+
+                DataBindRepeater();
+                wrp.ReRender();
+                new EffectHighlight(wrp, 500)
+                    .Render();
+                header.Text = "";
+                body.Text = "";
+            }
         }
 
         private Node DataSource
         {
             get { return ViewState["DataSource"] as Node; }
             set { ViewState["DataSource"] = value; }
+        }
+
+        protected bool RaiseSafeEvent(string eventName, Node node)
+        {
+            try
+            {
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    eventName,
+                    node);
+                return true;
+            }
+            catch (Exception err)
+            {
+                Node n = new Node();
+                while (err.InnerException != null)
+                    err = err.InnerException;
+                n["Message"].Value = err.Message;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.ShowMessage",
+                    n);
+                return false;
+            }
         }
     }
 }
