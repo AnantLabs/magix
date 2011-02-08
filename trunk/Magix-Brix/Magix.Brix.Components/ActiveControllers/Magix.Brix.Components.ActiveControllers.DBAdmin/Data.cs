@@ -907,7 +907,10 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Type type = GetType(typeNamey);
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> retVal =
                 new Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>>();
-            foreach (PropertyInfo idx in type.GetProperties())
+            foreach (PropertyInfo idx in type.GetProperties(
+                BindingFlags.Public |
+                BindingFlags.NonPublic |
+                BindingFlags.Instance))
             {
                 ActiveFieldAttribute[] attrs =
                     idx.GetCustomAttributes(
