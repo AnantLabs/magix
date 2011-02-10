@@ -39,7 +39,7 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
 
                 string content = idx.Content;
                 content = content.Replace("\r\n", "\n");
-                content = content.Replace("\n", "</p><p>");
+                content = content.Replace("\n\n", "</p><p>");
                 content = "<p>" + content + "</p>";
                 while (true)
                 {
@@ -50,6 +50,8 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
                     else 
                         break;
                 }
+                content = content.Replace("\n", "<br />");
+                content = content.Replace("<p><br />", "<p>");
                 node["Posts"]["P" + idx.ID]["Header"].Value = idx.Header;
                 node["Posts"]["P" + idx.ID]["Content"].Value = content;
                 node["Posts"]["P" + idx.ID]["ID"].Value = idx.ID;
@@ -67,7 +69,7 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
                     node["Posts"]["P" + idx.ID]["Children"]["P" + idxChild.ID]["User"].Value = idxChild.User == null ? "[null]" : idxChild.User.Username;
                     node["Posts"]["P" + idx.ID]["Children"]["P" + idxChild.ID]["Date"].Value = idxChild.When;
                 }
-                if (idxNo >= 10)
+                if (idxNo > 6)
                     break;
             }
         }
@@ -121,6 +123,21 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
                     p.Save();
                 }
                 tr.Commit();
+
+                string content = p.Content;
+                content = content.Replace("\r\n", "\n");
+                content = content.Replace("\n", "</p><p>");
+                content = "<p>" + content + "</p>";
+                while (true)
+                {
+                    if (content.Contains("</p><p></p><p>"))
+                    {
+                        content = content.Replace("</p><p></p><p>", "</p><p>");
+                    }
+                    else
+                        break;
+                }
+
                 foreach (UserBase idx in UserBase.Select())
                 {
                     if (!string.IsNullOrEmpty(idx.Email) && 
@@ -132,19 +149,13 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
                         Node node = new Node();
                         node["Header"].Value = "New posting at TalkBack  ...";
                         node["Body"].Value = "<html><body>" + string.Format(@"
-<p>New posting at the TalkBack forums, <a href=""{0}"">click here</a> to go to the new posting...</p>
-<p>
-<h3>Posting header: '{1}'<h3>
-</p>
-<p>
-<strong>Posting content:</strong>
-<br/>
+<p><em style=""color:#999;"">New posting at the TalkBack forums, <a href=""{0}"">click here</a> to go to the new posting...</em></p>
+<h3>{1}</h3>
 {2}
-</p>
 ",
                             urlOfForum,
                             p.Header,
-                            p.Content) + "</body></html>";
+                            content) + "</body></html>";
                         node["AdminEmail"].Value = 
                             Settings.Instance.Get("TalkBackForumsAdminEmail", "rick.gibson@winergyinc.com");
                         node["AdminEmailFrom"].Value =
