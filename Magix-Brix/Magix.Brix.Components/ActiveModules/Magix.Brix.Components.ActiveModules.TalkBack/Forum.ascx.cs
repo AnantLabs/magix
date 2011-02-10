@@ -57,10 +57,24 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
             string retVal = strObj as string;
             if (retVal != null)
             {
-                if (retVal.Length > 45)
-                    retVal = retVal.Substring(0, 45) + "...";
+                if (retVal.Length > 35)
+                    retVal = retVal.Substring(0, 35) + "...";
             }
             return retVal;
+        }
+
+        protected string GetVisiblePanel(object strID)
+        {
+            int id = (int)strID;
+            if (id == Current)
+                return "";
+            return "display:none;";
+        }
+
+        private int Current
+        {
+            get { return ViewState["Current"] == null ? -1 : (int)ViewState["Current"]; }
+            set { ViewState["Current"] = value; }
         }
 
         protected void submit_Click(object sender, EventArgs e)
@@ -77,6 +91,8 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
                 this,
                 "Talkback.GetPostings",
                 DataSource);
+
+            Current = DataSource["Posts"][0]["ID"].Get<int>();
 
             DataBindRepeater();
             wrp.ReRender();
@@ -103,6 +119,8 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
                     this,
                     "Talkback.GetPostings",
                     DataSource);
+
+                Current = DataSource["Posts"][0]["ID"].Get<int>();
 
                 DataBindRepeater();
                 wrp.ReRender();
