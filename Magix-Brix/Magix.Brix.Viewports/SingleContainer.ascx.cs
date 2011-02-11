@@ -264,9 +264,16 @@ MUX.$('ping').play();");
                         cssClass = "down-1";
                     }
                     dyn.CssClass = cssClass.Trim();
-                    dyn.Style[Styles.display] = "none";
-                    new EffectFadeIn(dyn, 750)
-                        .Render();
+                    if (IsPostBack)
+                    {
+                        dyn.Style[Styles.display] = "none";
+                        new EffectFadeIn(dyn, 750)
+                            .Render();
+                    }
+                    else
+                    {
+                        dyn.Style[Styles.display] = "";
+                    }
                 }
 
                 if (e.Params["Parameters"].Contains("Append") &&
@@ -276,9 +283,12 @@ MUX.$('ping').play();");
                         e.Params["Name"].Value.ToString(), 
                         e.Params["Parameters"]);
 
-                    // We highlight our newly injected module's container here ...!
-                    new EffectHighlight(dyn, 500)
-                        .Render();
+                    if (IsPostBack)
+                    {
+                        // We highlight our newly injected module's container here ...!
+                        new EffectHighlight(dyn, 500)
+                            .Render();
+                    }
                 }
                 else
                 {
@@ -404,19 +414,35 @@ MUX.$('ping').play();");
                             int height = e.Params["Parameters"]["ForcedSize"]["height"].Get<int>();
                             w.Style[Styles.width] = "800px";
                             w.Style[Styles.height] = "500px";
-                            new EffectFadeIn(w, 750)
-                                .JoinThese(
-                                    new EffectSize(width, height))
-                                .Render();
+                            if (IsPostBack)
+                            {
+                                new EffectFadeIn(w, 750)
+                                    .JoinThese(
+                                        new EffectSize(width, height))
+                                    .Render();
+                            }
+                            else
+                            {
+                                w.Style[Styles.display] = "";
+                                new EffectSize(w, 750, width, height)
+                                    .Render();
+                            }
                         }
                         else
                         {
                             int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
                             w.Style[Styles.width] = width + "px";
-                            new EffectFadeIn(w, 750)
-                                .JoinThese(
-                                    new EffectRollDown())
-                                .Render();
+                            if (IsPostBack)
+                            {
+                                new EffectFadeIn(w, 750)
+                                    .JoinThese(
+                                        new EffectRollDown())
+                                    .Render();
+                            }
+                            else
+                            {
+                                w.Style[Styles.display] = "";
+                            }
                         }
                     }
                     else
@@ -429,10 +455,17 @@ MUX.$('ping').play();");
                         {
                             cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
                         }
-                        new EffectFadeIn(w, 750)
-                            .JoinThese(
-                                new EffectRollDown())
-                            .Render();
+                        if (IsPostBack)
+                        {
+                            new EffectFadeIn(w, 750)
+                                .JoinThese(
+                                    new EffectRollDown())
+                                .Render();
+                        }
+                        else
+                        {
+                            w.Style[Styles.display] = "";
+                        }
                     }
                     if (e.Params["Parameters"].Contains("Caption"))
                     {
