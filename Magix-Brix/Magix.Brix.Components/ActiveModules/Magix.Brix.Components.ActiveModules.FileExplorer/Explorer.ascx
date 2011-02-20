@@ -77,11 +77,12 @@
         CssClass="span-4 delete"
         OnClick="delete_Click"
         Text="Delete" />
-    <div class="fileUploader span-2">
+    <div class="fileUploader span-5">
         <asp:FileUpload
             runat="server"
             OnChange="toggleButtons();"
             OnMouseOut="toggleButtons();"
+            CssClass="span-5"
             id="file" />
         <mux:TextBox
             runat="server"
@@ -113,6 +114,7 @@ toggleButtons = function() {
   var sub = MUX.$('<%=submitFile.ClientID%>');
   if(file.value) {
     sub.disabled = '';
+    sub.click();
   } else {
     sub.disabled = 'disabled';
   }

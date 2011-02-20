@@ -122,10 +122,8 @@ namespace Magix.Brix.Viewports
                             .JoinThese(new EffectRollUp()))
                     .Render();
                 first = false;
-                AjaxManager.Instance.WriterAtBack.Write(@"
-MUX.$('ping').play();");
             }
-            msgLbl.Text += e.Params["Message"].Get<string>();
+            msgLbl.Text += string.Format("<p>{0}</p>", e.Params["Message"].Get<string>());
         }
 
         [ActiveEvent(Name = "ClearControls")]
@@ -264,7 +262,7 @@ MUX.$('ping').play();");
                         cssClass = "down-1";
                     }
                     dyn.CssClass = cssClass.Trim();
-                    if (IsPostBack)
+                    if (AjaxManager.Instance.IsCallback)
                     {
                         dyn.Style[Styles.display] = "none";
                         new EffectFadeIn(dyn, 750)
@@ -283,7 +281,7 @@ MUX.$('ping').play();");
                         e.Params["Name"].Value.ToString(), 
                         e.Params["Parameters"]);
 
-                    if (IsPostBack)
+                    if (AjaxManager.Instance.IsCallback)
                     {
                         // We highlight our newly injected module's container here ...!
                         new EffectHighlight(dyn, 500)
@@ -414,7 +412,7 @@ MUX.$('ping').play();");
                             int height = e.Params["Parameters"]["ForcedSize"]["height"].Get<int>();
                             w.Style[Styles.width] = "800px";
                             w.Style[Styles.height] = "500px";
-                            if (IsPostBack)
+                            if (AjaxManager.Instance.IsCallback)
                             {
                                 new EffectFadeIn(w, 750)
                                     .JoinThese(
@@ -432,7 +430,7 @@ MUX.$('ping').play();");
                         {
                             int width = e.Params["Parameters"]["ForcedSize"]["width"].Get<int>();
                             w.Style[Styles.width] = width + "px";
-                            if (IsPostBack)
+                            if (AjaxManager.Instance.IsCallback)
                             {
                                 new EffectFadeIn(w, 750)
                                     .JoinThese(
@@ -455,7 +453,7 @@ MUX.$('ping').play();");
                         {
                             cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
                         }
-                        if (IsPostBack)
+                        if (AjaxManager.Instance.IsCallback)
                         {
                             new EffectFadeIn(w, 750)
                                 .JoinThese(
