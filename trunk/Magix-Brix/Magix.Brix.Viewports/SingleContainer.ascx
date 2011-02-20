@@ -11,6 +11,7 @@
 <mux:AjaxWait 
     runat="server" 
     CssClass="ajax-wait"
+    Delay="2500"
     MaxOpacity="0.8"
     id="waiter">
     <h2>Please wait while Marvin is thinking ...</h2>
@@ -47,16 +48,12 @@
         id="pnlAll" />
     <mux:Window 
         runat="server" 
-        CssClass="mux-shaded mux-rounded mux-window message prepend-top push-6 span-8 last"
+        CssClass="mux-shaded mux-rounded mux-window message push-6 span-8 last"
         Caption="Message from Marvin ..."
-        style="position:fixed;display:none;"
+        style="position:fixed;display:none;top:54px;"
         Closable="false"
         id="message">
         <Content>
-            <audio 
-                src="media/sounds/ping.wav" 
-                id="ping">
-            </audio>
             <mux:Label 
                 runat="server" 
                 id="msgLbl" />

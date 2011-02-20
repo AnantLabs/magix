@@ -460,11 +460,11 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             node["ForcedSize"]["width"].Value = width;
             int height = DataSource["File"]["ImageHeight"].Get<int>() + 90;
             height += 18 - (height % 18);
-            node["ForcedSize"]["height"].Value = height;
+            node["ForcedSize"]["height"].Value = height + 2;
             node["ImageUrl"].Value = file;
             node["Push"].Value = 2;
             node["Top"].Value = 4;
-            node["Width"].Value = 22;
+            node["Last"].Value = true;
             node["SetFocus"].Value = true;
             node["ToolTip"].Value = 
                 @"Grid is optimal size(s) of image to work perfectly with the Typography 

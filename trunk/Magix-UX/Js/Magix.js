@@ -28,7 +28,7 @@
     if (id._className == 'MUX.Element') {
       // Element is already an element, and it is already extended
       return id;
-    } else if (id.innerHTML) {
+    } else if (id.parentNode) {
       // This is a DOM element, hence we're extending it and returning it as it is
       return MUX.extend(id, MUX.Element.prototype);
     }
@@ -219,7 +219,8 @@
       var sf = false;
       while (scr) {
         sf = true;
-        eval(scr[1]);
+        var TT = scr[1];
+        setTimeout(function() { eval(TT); }, 1);
         scr = rx.exec(val);
       }
       if (sf) {

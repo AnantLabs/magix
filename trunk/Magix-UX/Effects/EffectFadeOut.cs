@@ -49,7 +49,6 @@ namespace Magix.UX.Effects
             BaseWebControl tmp = this.Control as BaseWebControl;
             if (tmp != null)
             {
-                tmp.Style.SetStyleValueViewStateOnly("opacity", "0");
                 tmp.Style.SetStyleValueViewStateOnly("display", "none");
             }
             return base.RenderImplementation(topLevel, chainedEffects);

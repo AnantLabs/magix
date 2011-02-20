@@ -225,7 +225,7 @@ namespace Magix.UX.Widgets
             string retVal = "";
             foreach (string idxKey in _styleValues.Keys)
             {
-                string value = "";
+                string value = null;
                 if (_styleValues[idxKey].OnlyViewStateValue != null)
                 {
                     value = _styleValues[idxKey].OnlyViewStateValue;
@@ -238,7 +238,7 @@ namespace Magix.UX.Widgets
                 {
                     value = _styleValues[idxKey].ViewStateValue;
                 }
-                if (!string.IsNullOrEmpty(value))
+                if (value != null)
                 {
                     retVal +=
                         TransformToViewStateShorthand(idxKey) +
@@ -255,7 +255,7 @@ namespace Magix.UX.Widgets
             string retVal = "";
             foreach (string idxKey in _styleValues.Keys)
             {
-                string value = "";
+                string value = null;
                 if (_styleValues[idxKey].AfterViewStateTrackingValue != null)
                 {
                     value = _styleValues[idxKey].AfterViewStateTrackingValue;
@@ -268,7 +268,7 @@ namespace Magix.UX.Widgets
                 {
                     value = _styleValues[idxKey].BeforeViewStateTrackingValue;
                 }
-                if (value != "")
+                if (value != null)
                     retVal += idxKey + ":" + value + ";";
             }
             return retVal;
