@@ -208,6 +208,14 @@ namespace Magix.Brix.Viewports
                     !e.Params["Parameters"].Contains("Append") ||
                     !e.Params["Parameters"]["Append"].Get<bool>())
                 {
+                    if (e.Params["Parameters"].Contains("ParentIsRelative"))
+                    {
+                        wrp.Style[Styles.position] = "relative";
+                    }
+                    else
+                    {
+                        wrp.Style[Styles.position] = "";
+                    }
                     if (e.Params["Parameters"].Contains("Padding"))
                     {
                         cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
