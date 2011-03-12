@@ -79,27 +79,40 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
 
         protected void submit_Click(object sender, EventArgs e)
         {
-            Node node = new Node();
-            node["Header"].Value = header.Text;
-            node["Body"].Value = body.Text;
-            RaiseSafeEvent(
-                "Talkback.CreatePost",
-                node);
+            if (string.IsNullOrEmpty(header.Text.Trim()) ||
+                string.IsNullOrEmpty(body.Text.Trim()))
+            {
+                Node n = new Node();
+                n["Message"].Value = "You need to supply at least some characters in both the header and the body field ...";
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.ShowMessage",
+                    n);
+            }
+            else
+            {
+                Node node = new Node();
+                node["Header"].Value = header.Text;
+                node["Body"].Value = body.Text;
+                RaiseSafeEvent(
+                    "Talkback.CreatePost",
+                    node);
 
-            DataSource["Posts"].UnTie();
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "Talkback.GetPostings",
-                DataSource);
+                DataSource["Posts"].UnTie();
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Talkback.GetPostings",
+                    DataSource);
 
-            Current = DataSource["Posts"][0]["ID"].Get<int>();
+                Current = DataSource["Posts"][0]["ID"].Get<int>();
 
-            DataBindRepeater();
-            wrp.ReRender();
-            new EffectHighlight(wrp, 500)
-                .Render();
-            header.Text = "";
-            body.Text = "";
+                DataBindRepeater();
+                wrp.ReRender();
+                new EffectHighlight(wrp, 500)
+                    .Render();
+                header.Text = "";
+                body.Text = "";
+            }
         }
 
         protected void reply_Click(object sender, EventArgs e)

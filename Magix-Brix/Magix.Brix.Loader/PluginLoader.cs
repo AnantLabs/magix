@@ -175,6 +175,12 @@ namespace Magix.Brix.Loader
         {
             foreach (Type idxType in _controllerTypes)
             {
+                string mapped = ConfigurationManager.AppSettings["exclude-" + idxType.FullName];
+                if (mapped == "true")
+                    continue;
+                string mapped2 = ConfigurationManager.AppSettings["exclude-" + idxType.FullName.Replace(idxType.Name, "*")];
+                if (mapped2 == "true")
+                    continue;
                 object controllerObject = idxType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
                 InitializeEventHandlers(controllerObject, idxType);
             }

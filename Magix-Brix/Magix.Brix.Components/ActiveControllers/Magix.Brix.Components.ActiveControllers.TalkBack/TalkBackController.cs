@@ -52,7 +52,8 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
                 }
                 content = content.Replace("\n", "<br />");
                 content = content.Replace("<p><br />", "<p>");
-                node["Posts"]["P" + idx.ID]["Header"].Value = idx.Header;
+                node["Posts"]["P" + idx.ID]["Header"].Value =
+                    string.IsNullOrEmpty(idx.Header) ? "[empty]" : idx.Header;
                 node["Posts"]["P" + idx.ID]["Content"].Value = content;
                 node["Posts"]["P" + idx.ID]["ID"].Value = idx.ID;
                 node["Posts"]["P" + idx.ID]["User"].Value = idx.User == null ? "[null]" : idx.User.Username;
