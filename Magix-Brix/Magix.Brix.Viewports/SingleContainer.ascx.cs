@@ -397,6 +397,10 @@ namespace Magix.Brix.Viewports
                     {
                         cssClass += " last";
                     }
+                    if (e.Params["Parameters"].Contains("NoClose"))
+                        w.Closable = false;
+                    else
+                        w.Closable = true;
                     if (!string.IsNullOrEmpty(cssClass))
                     {
                         w.Style[Styles.left] = "";
