@@ -118,46 +118,54 @@ namespace Magix.Brix.Components.ActiveTypes.Users
 
         public override void Save()
         {
-            if (Current == null)
-                throw new ApplicationException(
-                    @"Saving this object requires being logged in, you are not ...!
+            Save(true);
+        }
+
+        protected void Save(bool verify)
+        {
+            if (verify)
+            {
+                if (Current == null)
+                    throw new ApplicationException(
+                        @"Saving this object requires being logged in, you are not ...!
 Please login to retry operation ...");
-            if (!Current.InRole("Administrator") &&
-                !Current.InRole("Superuser"))
-            {
-                if (Current != this)
-                    throw new ApplicationException(
-                        @"You do not have sufficient rights to save this object");
-                // BUT! You ARE allowed to save *yourself* ... ;)
-                // But only as long as you don't add yourself up to any new roles ...
-                // This to support for changing ones one password and such ...
-            }
-            if (Username == "Administrator")
-                throw new Exception("That was a very bad username suggestion my friend ...");
-            if (string.IsNullOrEmpty(Password))
-            {
-                if (ID != 0)
-                    throw new ApplicationException(
-                        @"Sorry, but there's no way we'd allow you to change your Password to
+                if (!Current.InRole("Administrator") &&
+                    !Current.InRole("Superuser"))
+                {
+                    if (Current != this)
+                        throw new ApplicationException(
+                            @"You do not have sufficient rights to save this object");
+                    // BUT! You ARE allowed to save *yourself* ... ;)
+                    // But only as long as you don't add yourself up to any new roles ...
+                    // This to support for changing ones one password and such ...
+                }
+                if (Username == "Administrator")
+                    throw new Exception("That was a very bad username suggestion my friend ...");
+                if (string.IsNullOrEmpty(Password))
+                {
+                    if (ID != 0)
+                        throw new ApplicationException(
+                            @"Sorry, but there's no way we'd allow you to change your Password to
 and empty string ...");
-                Password = "password123";
-            }
-            if (string.IsNullOrEmpty(Username))
-            {
-                if (ID != 0)
-                    throw new ApplicationException(
-                        @"Sorry, but there's no way we'd allow you to change your Username to an 
+                    Password = "password123";
+                }
+                if (string.IsNullOrEmpty(Username))
+                {
+                    if (ID != 0)
+                        throw new ApplicationException(
+                            @"Sorry, but there's no way we'd allow you to change your Username to an 
 empty string ...");
-                Username = "username" + Guid.NewGuid().ToString().Substring(0, 8);
-            }
-            UserBase other =
-                UserBase.SelectFirst(
-                    Criteria.Eq("Username", Username));
-            if (other != null && other != this)
-            {
-                throw new ApplicationException(
-                    @"Sorry, but that Username is already taken by another user, 
+                    Username = "username" + Guid.NewGuid().ToString().Substring(0, 8);
+                }
+                UserBase other =
+                    UserBase.SelectFirst(
+                        Criteria.Eq("Username", Username));
+                if (other != null && other != this)
+                {
+                    throw new ApplicationException(
+                        @"Sorry, but that Username is already taken by another user, 
 usernames must be unique within the application ...");
+                }
             }
             base.Save();
         }

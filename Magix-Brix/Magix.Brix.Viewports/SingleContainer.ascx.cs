@@ -129,12 +129,15 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "ClearControls")]
         protected void ClearControls(object sender, ActiveEventArgs e)
         {
-            if (e.Params["Position"].Get<string>().StartsWith("content"))
+            string container = e.Params["Position"].Value as string;
+            if (string.IsNullOrEmpty(container))
+                container = "content1";
+            if (container.StartsWith("content"))
             {
                 DynamicPanel pnl = 
                     Selector.FindControl<DynamicPanel>(
                     this, 
-                    e.Params["Position"].Get<string>());
+                    container);
                 ClearControls(pnl);
                 if (pnl.ID == "content3")
                 {

@@ -191,6 +191,7 @@ is *seriously* wrong with your Data Adapter ...!");
                     case "System.DateTime":
                     case "System.Decimal":
                     case "System.Int32":
+                    case "System.Guid":
                     case "System.String":
                     case "System.Byte[]":
                         break;
@@ -366,6 +367,7 @@ is *seriously* wrong with your Data Adapter ...!");
                 "Dates", 
                 "Decimals", 
                 "Ints", 
+                "Guids", 
                 "LongStrings", 
                 "Strings" })
             {
@@ -602,6 +604,9 @@ select Name, Value from {0} where FK_Document={1}",
                         case "System.String":
                             tableName = "PropertyStrings";
                             break;
+                        case "System.Guid":
+                            tableName = "PropertyGuids";
+                            break;
                         case "System.Byte[]":
                             tableName = "PropertyBLOBS";
                             break;
@@ -699,7 +704,7 @@ select Name, Value from {0} where FK_Document={1}",
             if (isUpdate)
             {
                 // We need to iterate through everything and delete "old values" before saving new values...
-                foreach (string idxTableName in new[] { "PropertyBLOBS", "PropertyBools", "PropertyDates", "PropertyDates", "PropertyDecimals", "PropertyInts", "PropertyLongStrings", "PropertyStrings" })
+                foreach (string idxTableName in new[] { "PropertyBLOBS", "PropertyBools", "PropertyDates", "PropertyDates", "PropertyDecimals", "PropertyInts", "PropertyLongStrings", "PropertyStrings", "PropertyGuids" })
                 {
                     string sql = string.Format("delete from {0} where FK_Document={1}", idxTableName, id);
                     SqlCommand cmd = CreateSqlCommand(sql);
