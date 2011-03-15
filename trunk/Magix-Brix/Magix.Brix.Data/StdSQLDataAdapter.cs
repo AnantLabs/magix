@@ -174,6 +174,9 @@ namespace Magix.Brix.Data.Internal
                         case "System.DateTime":
                             tableName = "PropertyDates";
                             break;
+                        case "System.Guid":
+                            tableName = "PropertyGuids";
+                            break;
                         case "System.Int32":
                             tableName = "PropertyInts";
                             break;
@@ -212,6 +215,9 @@ namespace Magix.Brix.Data.Internal
                             break;
                         case "System.DateTime":
                             tableOfRangeColumnName = "PropertyDates";
+                            break;
+                        case "System.Guid":
+                            tableOfRangeColumnName = "PropertyGuids";
                             break;
                         case "System.Decimal":
                             tableOfRangeColumnName = "PropertyDecimals";
@@ -436,6 +442,11 @@ order by Value{8}) as Tbl2 order by Value{7}",
                                 tableName = "PropertyInts";
                                 if (idx.Value != null)
                                     sqlEscapedValue = idx.Value.ToString();
+                                break;
+                            case "System.Guid":
+                                tableName = "PropertyGuids";
+                                if (idx.Value != null)
+                                    sqlEscapedValue = "'" + idx.Value.ToString() + "'";
                                 break;
                             case "System.String":
                                 tableName = "PropertyStrings";
