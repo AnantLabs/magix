@@ -122,6 +122,17 @@ namespace Magix.UX.Widgets
             }
         }
 
+        public bool AutoComplete
+        {
+            get { return ViewState["AutoComplete"] == null ? true : (bool)ViewState["AutoComplete"]; }
+            set
+            {
+                if (value != AutoComplete)
+                    SetJsonGeneric("autocomplete", value ? "on" : "off");
+                ViewState["AutoComplete"] = value;
+            }
+        }
+
         /**
          * The maximum number of characters this TextBox allows the user to type in.
          */
@@ -196,6 +207,8 @@ namespace Magix.UX.Widgets
                 el.AddAttribute("maxlength", MaxLength.ToString());
             if (!AutoCapitalize)
                 el.AddAttribute("autocapitalize", "off");
+            if (AutoComplete)
+                el.AddAttribute("autocomplete", "on");
             if (!AutoCorrect)
                 el.AddAttribute("autocorrect", "off");
             if (!string.IsNullOrEmpty(PlaceHolder))
