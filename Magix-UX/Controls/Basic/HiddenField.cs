@@ -44,28 +44,17 @@ namespace Magix.UX.Widgets
 
         protected override void OnInit(EventArgs e)
         {
-            if (!this.IsViewStateEnabled && 
-                Page.IsPostBack)
+            if (Page.IsPostBack)
             {
                 GetValue();
             }
             base.OnInit(e);
         }
 
-        protected override void LoadViewState(object savedState)
-        {
-            base.LoadViewState(savedState);
-            if (Page.IsPostBack)
-            {
-                GetValue();
-            }
-        }
-
         private void GetValue()
         {
             string value = Page.Request.Params[ClientID];
-            if (value != Value)
-                Value = value;
+            Value = value;
         }
 
         protected override void RenderMuxControl(HtmlBuilder builder)
