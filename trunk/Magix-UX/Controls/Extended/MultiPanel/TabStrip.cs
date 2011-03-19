@@ -89,12 +89,6 @@ namespace Magix.UX.Widgets
             // Getting the index of the previously selected AccordionView
             TabButton previouslySelectedView = this[ActiveMultiButtonViewIndex];
 
-            // Checking to see if the newly selected one is the same as the
-            // previously selected one, and if so just returning since we then shouldn't
-            // do any of the below logic.
-            if (previouslySelectedView.ID == selectedView.ID)
-                return;
-
             // Updating the currently selected AccordionView
             ActiveMultiButtonViewIndex = this[selectedView];
 

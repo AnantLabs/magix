@@ -32,6 +32,7 @@ namespace Magix.Brix.Viewports
         protected Window[] wnd;
         protected DynamicPanel[] child;
         protected AspectSmartScroll scroll;
+        protected Image ajaxWait;
 
         protected override void OnInit(EventArgs e)
         {
@@ -500,6 +501,12 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        [ActiveEvent(Name = "Magix.Core.SetAjaxWaitImage")]
+        protected void Magix_Core_SetAjaxWaitImage(object sender, ActiveEventArgs e)
+        {
+            ajaxWait.ImageUrl = e.Params["Image"].Get<string>();
+        }
+
         [ActiveEvent(Name = "Magix.Core.SetViewPortSize")]
         protected void Magix_Core_SetViewPortSize(object sender, ActiveEventArgs e)
         {
@@ -507,6 +514,16 @@ namespace Magix.Brix.Viewports
             {
                 wrp.Style[Styles.width] = e.Params["Width"].Value.ToString();
                 wrp.Style[Styles.marginRight] = "auto !important";
+                wrp.Style[Styles.marginLeft] = "auto !important";
+                string contr =
+                    string.Format(@"
+<meta name=""viewport"" content=""user-scalable=no, width={0}"" />
+<meta name=""apple-mobile-web-app-capable"" content=""yes"" />
+<meta name=""apple-mobile-web-app-status-bar-style"" content=""black"" />
+<link rel=""apple-touch-icon"" href=""./media/images/icon.png"" />",
+                e.Params["Width"].Value.ToString());
+                LiteralControl lit = new LiteralControl(contr);
+                Page.Header.Controls.Add(lit);
             }
             if (e.Params.Contains("Height"))
             {

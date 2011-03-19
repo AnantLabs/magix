@@ -38,6 +38,13 @@ namespace Magix.UX.Widgets
             set { ViewState["Value"] = value; }
         }
 
+        [DefaultValue(0)]
+        public int Average
+        {
+            get { return ViewState["Average"] == null ? 0 : (int)ViewState["Average"]; }
+            set { ViewState["Average"] = value; }
+        }
+
         [DefaultValue(true)]
         public bool Enabled
         {
@@ -108,7 +115,7 @@ function() {{
 
         private void SetCssClass()
         {
-            if (!this.HasRendered)
+            if (!this.HasRendered || !AjaxManager.Instance.IsCallback)
             {
                 for (int idx = 0; idx < MaxValue; idx++)
                 {
@@ -120,7 +127,14 @@ function() {{
                     }
                     else
                     {
-                        l.CssClass += " mux-rating-star-unchecked";
+                        if (Average >= idx)
+                        {
+                            l.CssClass += " mux-rating-star-average";
+                        }
+                        else
+                        {
+                            l.CssClass += " mux-rating-star-unchecked";
+                        }
                     }
                     if (ShowAlternativeIcons)
                     {

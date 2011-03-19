@@ -240,7 +240,8 @@
         var cssL = document.getElementsByTagName('link');
         var found = false;
         for(var i = 0; i < cssL.length; i++) {
-          if (cssL[i].href.indexOf(scr[1]) != -1) {
+          if (cssL[i].href.indexOf(scr[1]) != -1
+            && cssL[i].parentNode.tagName == 'head') {
             found = true;
             break;
           }
