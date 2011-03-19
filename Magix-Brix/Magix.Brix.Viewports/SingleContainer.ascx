@@ -15,7 +15,11 @@
     MaxOpacity="0.8"
     id="waiter">
     <h2>Please wait while Marvin is thinking ...</h2>
-    <img src="media/images/animated_brain.gif" alt="Marvin's brain ..." />
+    <mux:Image
+        runat="server"
+        id="ajaxWait"
+        ImageUrl="media/images/animated_brain.gif" 
+        AlternateText="Marvin's brain ..." />
 </mux:AjaxWait>
 
 <mux:Panel
@@ -48,9 +52,9 @@
         id="pnlAll" />
     <mux:Window 
         runat="server" 
-        CssClass="mux-shaded mux-rounded mux-window message push-6 span-8 last"
+        CssClass="mux-shaded mux-rounded mux-window message last msg-center push-2"
         Caption="Message from Marvin ..."
-        style="position:fixed;display:none;top:54px;"
+        style="position:fixed;display:none;top:36px;"
         Closable="false"
         id="message">
         <Content>
