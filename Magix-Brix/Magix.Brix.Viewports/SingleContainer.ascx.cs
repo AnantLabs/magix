@@ -512,9 +512,12 @@ namespace Magix.Brix.Viewports
         {
             if (e.Params.Contains("Width"))
             {
-                wrp.Style[Styles.width] = e.Params["Width"].Value.ToString();
-                wrp.Style[Styles.marginRight] = "auto !important";
-                wrp.Style[Styles.marginLeft] = "auto !important";
+                if (!e.Params["NoCss"].Get<bool>())
+                {
+                    wrp.Style[Styles.width] = e.Params["Width"].Value.ToString();
+                    wrp.Style[Styles.marginRight] = "auto !important";
+                    wrp.Style[Styles.marginLeft] = "auto !important";
+                }
                 string contr =
                     string.Format(@"
 <meta name=""viewport"" content=""user-scalable=no, width={0}"" />
