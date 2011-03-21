@@ -115,11 +115,11 @@ namespace Magix.Brix.Viewports
             if (first)
             {
                 msgLbl.Text = "";
-                new EffectFadeIn(message, 500)
+                new EffectFadeIn(message, 250)
                     .JoinThese(new EffectRollDown())
                     .ChainThese(
-                        new EffectTimeout(5000),
-                        new EffectFadeOut(message, 500)
+                        new EffectTimeout(2500),
+                        new EffectFadeOut(message, 250)
                             .JoinThese(new EffectRollUp()))
                     .Render();
                 first = false;
@@ -520,11 +520,15 @@ namespace Magix.Brix.Viewports
                 }
                 string contr =
                     string.Format(@"
-<meta name=""viewport"" content=""user-scalable=no, width={0}"" />
+<meta name=""viewport"" content=""width={0}{1}{2}"" />
 <meta name=""apple-mobile-web-app-capable"" content=""yes"" />
 <meta name=""apple-mobile-web-app-status-bar-style"" content=""black"" />
 <link rel=""apple-touch-icon"" href=""./media/images/icon.png"" />",
-                e.Params["Width"].Value.ToString());
+                e.Params["Width"].Value.ToString().Replace("px", ""),
+                e.Params["InitialScale"].Value != null 
+                    ? string.Format(", initial-scale={0}", e.Params["InitialScale"].Get<string>()) 
+                    : "",
+                e.Params["InitialScale"].Value == null ? ", user-scalable=no" : "");
                 LiteralControl lit = new LiteralControl(contr);
                 Page.Header.Controls.Add(lit);
             }

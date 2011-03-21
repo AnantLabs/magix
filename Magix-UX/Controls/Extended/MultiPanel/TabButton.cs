@@ -76,6 +76,22 @@ namespace Magix.UX.Widgets
             base.CreateChildControls();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            MultiPanelView view = Selector.FindControl<MultiPanelView>(Page, MultiPanelViewID);
+            view.DeActivated +=
+                delegate
+                {
+                    this.CssClass = this.CssClass.Replace(" mux-multi-button-selected", "");
+                };
+            view.Activated +=
+                delegate
+                {
+                    this.CssClass += " mux-multi-button-selected";
+                };
+        }
+
         private void ButtonTriggered(object sender, EventArgs e)
         {
             (Parent as TabStrip).SetActiveView(this);
