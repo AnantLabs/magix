@@ -25,7 +25,7 @@
 <mux:Panel
     runat="server"
     id="wrp"
-    CssClass="container main">
+    CssClass="container main prepend-top">
     <mux:DynamicPanel 
         runat="server" 
         OnReload="dynamic_LoadControls"
