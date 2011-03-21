@@ -86,7 +86,7 @@
                         <mux:Button
                             runat="server"
                             style="display:block;"
-                            CssClass="span-3 push-13 last"
+                            CssClass="span-3 push-12 prepend-top last"
                             Info='<%#Eval("[ID].Value") %>'
                             OnClick="reply_Click"
                             Text="Reply" />
