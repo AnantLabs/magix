@@ -32,9 +32,9 @@ namespace Magix.UX.Widgets.Core
         /**
          * Event being raised when the widget does no longer have focus. 
          * The exact opposite of the Focused event. Will trigger whenever the
-         * widget looses focus for some reasons. Notice that the widget (obviously)
-         * needs to *have* focus before it can 'loose' it.
-         * Some ways a widget may loose focus is when the user tabs through 
+         * widget loses focus for some reasons. Notice that the widget (obviously)
+         * needs to *have* focus before it can 'lose' it.
+         * Some ways a widget may lose focus is when the user tabs through 
          * the widgets on the screen. Another way is clicking another widget, 
          * and thereby loosing focus for the previously focused widget.
          */
@@ -90,7 +90,7 @@ namespace Magix.UX.Widgets.Core
         }
 
         /**
-         * What Effect will run when user is making the widget loose focus.
+         * What Effect will run when user is making the widget lose focus.
          */
         public Effect BlurEffect
         {
