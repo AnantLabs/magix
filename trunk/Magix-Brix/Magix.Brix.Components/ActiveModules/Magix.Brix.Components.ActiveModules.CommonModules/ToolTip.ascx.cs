@@ -18,31 +18,14 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
     [ActiveModule]
     public class ToolTip : UserControl, IModule
     {
-        protected Window wnd;
         protected Label lbl;
-        protected Button ok;
 
         public void InitialLoading(Node node)
         {
             Load += delegate
             {
-                wnd.Caption = node["Caption"].Get<string>();
                 lbl.Text = node["Text"].Get<string>();
-                new EffectTimeout(500)
-                    .ChainThese(
-                        new EffectFocusAndSelect(ok))
-                    .Render();
             };
-        }
-
-        protected void ok_Click(object sender, EventArgs e)
-        {
-            ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
-        }
-
-        protected void wnd_EscKey(object sender, EventArgs e)
-        {
-            ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
         }
 
         protected void previous_Click(object sender, EventArgs e)
