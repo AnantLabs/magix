@@ -118,10 +118,10 @@ namespace Magix.Brix.Components.ActiveTypes.Users
 
         public override void Save()
         {
-            Save(true);
+            SaveImpl(true);
         }
 
-        protected void Save(bool verify)
+        protected void SaveImpl(bool verify)
         {
             if (verify)
             {
