@@ -7,6 +7,7 @@
 using System.Web.UI;
 using System.ComponentModel;
 using Magix.UX.Widgets;
+using System;
 
 namespace Magix.UX.Widgets
 {
@@ -17,6 +18,10 @@ namespace Magix.UX.Widgets
      */
     public class MultiPanelView : Panel
     {
+        // TODO: Comment ...
+        public event EventHandler Activated;
+        public event EventHandler DeActivated;
+
         public MultiPanelView()
         {
             CssClass = "mux-multi-panel-view";
@@ -51,6 +56,18 @@ namespace Magix.UX.Widgets
             {
                 Style[Styles.display] = "none";
             }
+        }
+
+        internal void DeActivate()
+        {
+            if (DeActivated != null)
+                DeActivated(this, new EventArgs());
+        }
+
+        internal void Activate()
+        {
+            if (Activated != null)
+                Activated(this, new EventArgs());
         }
     }
 }

@@ -105,6 +105,8 @@ namespace Magix.UX.Widgets
         {
             // Getting the index of the previously selected AccordionView
             MultiPanelView previouslySelectedView = this[ActiveMultiPanelViewIndex];
+            previouslySelectedView.DeActivate();
+            selectedView.Activate();
 
             // Checking to see if the newly selected one is the same as the
             // previously selected one, and if so just returning since we then shouldn't
@@ -140,8 +142,8 @@ namespace Magix.UX.Widgets
                     {
                         new EffectSlide(
                             Content,
-                            AnimationDuration, 
-                            -ActiveMultiPanelViewIndex)
+                            AnimationDuration,
+                            ActiveMultiPanelViewIndex == 0 ? 0 : -ActiveMultiPanelViewIndex)
                             .Render();
                     } break;
             }
