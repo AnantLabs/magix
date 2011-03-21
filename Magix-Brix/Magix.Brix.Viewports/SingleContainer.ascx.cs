@@ -514,13 +514,22 @@ namespace Magix.Brix.Viewports
             {
                 if (!e.Params["NoCss"].Get<bool>())
                 {
-                    wrp.Style[Styles.width] = e.Params["Width"].Value.ToString();
-                    wrp.Style[Styles.marginRight] = "auto !important";
-                    wrp.Style[Styles.marginLeft] = "auto !important";
+                    if (e.Params["CSSWidth"].Value != null)
+                    {
+                        wrp.Style[Styles.width] = e.Params["CSSWidth"].Value.ToString();
+                        wrp.Style[Styles.marginRight] = "auto !important";
+                        wrp.Style[Styles.marginLeft] = "auto !important";
+                    }
+                    else
+                    {
+                        wrp.Style[Styles.width] = e.Params["Width"].Value.ToString();
+                        wrp.Style[Styles.marginRight] = "auto !important";
+                        wrp.Style[Styles.marginLeft] = "auto !important";
+                    }
                 }
                 string contr =
                     string.Format(@"
-<meta name=""viewport"" content=""width={0}{1}{2}"" />
+<meta name=""viewport"" content=""width={0}{1}{2}{3}"" />
 <meta name=""apple-mobile-web-app-capable"" content=""yes"" />
 <meta name=""apple-mobile-web-app-status-bar-style"" content=""black"" />
 <link rel=""apple-touch-icon"" href=""./media/images/icon.png"" />",
@@ -528,7 +537,8 @@ namespace Magix.Brix.Viewports
                 e.Params["InitialScale"].Value != null 
                     ? string.Format(", initial-scale={0}", e.Params["InitialScale"].Get<string>()) 
                     : "",
-                e.Params["InitialScale"].Value == null ? ", user-scalable=no" : "");
+                e.Params["InitialScale"].Value == null ? ", user-scalable=no" : "",
+                e.Params["MaxScale"].Value != null ? string.Format(", maximum-scale={0}", e.Params["MaxScale"].Value) : "");
                 LiteralControl lit = new LiteralControl(contr);
                 Page.Header.Controls.Add(lit);
             }
