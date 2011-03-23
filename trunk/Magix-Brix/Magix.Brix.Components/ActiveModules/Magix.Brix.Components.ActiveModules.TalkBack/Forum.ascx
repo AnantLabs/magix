@@ -15,8 +15,6 @@
     <asp:Repeater
         runat="server"
         id="rep">
-        <HeaderTemplate>
-        </HeaderTemplate>
         <ItemTemplate>
             <mux:Panel
                 runat="server"

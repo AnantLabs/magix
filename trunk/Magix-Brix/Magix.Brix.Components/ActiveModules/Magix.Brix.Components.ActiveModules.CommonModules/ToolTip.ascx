@@ -21,7 +21,7 @@
     <mux:Button
         runat="server"
         id="next"
-        style="margin-right:345px;"
+        style="margin-right:355px;"
         OnClick="next_Click"
         CssClass="span-3 navButton"
         Text="&gt;" />
