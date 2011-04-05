@@ -6,6 +6,8 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Viewports.SingleContainer" %>
 
+<%--<link href="media/modules/SingleContainer.css" rel="stylesheet" type="text/css" />
+--%>
 <mux:AjaxWait 
     runat="server" 
     CssClass="ajax-wait"
