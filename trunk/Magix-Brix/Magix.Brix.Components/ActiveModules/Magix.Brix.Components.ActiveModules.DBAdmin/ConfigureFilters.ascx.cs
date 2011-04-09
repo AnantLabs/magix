@@ -185,7 +185,7 @@ empty string removes any existing Criteria...";
             if (_isFirst)
             {
                 if (string.IsNullOrEmpty(setting))
-                    ls.SelectedIndex = 2;
+                    ls.SelectedIndex = 3;
                 new EffectTimeout(500)
                     .ChainThese(
                         new EffectFocusAndSelect(t))
@@ -314,6 +314,8 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                             break;
                                         case 3:
                                             set = "Like";
+                                            if (!filter.Contains("*"))
+                                                filter = "*" + filter + "*";
                                             break;
                                     }
                                     Node fNode = new Node();

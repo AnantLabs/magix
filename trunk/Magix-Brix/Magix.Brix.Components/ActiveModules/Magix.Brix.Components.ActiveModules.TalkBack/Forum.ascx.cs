@@ -27,6 +27,8 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
             Load +=
                 delegate
                 {
+                    if (node.Contains("Active"))
+                        Current = node["Active"].Get<int>();
                     DataSource = node;
                     DataBindRepeater();
                 };

@@ -24,6 +24,13 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
             Node node = e.Params;
             if (node == null)
                 node = new Node();
+
+            // Currently open item ...
+            if (e.Params.Contains("Active"))
+            {
+                node["Active"].Value = e.Params["Active"].Get<int>();
+            }
+
             int idxNo = 0;
             foreach (Posting idxReal in Posting.Select(Criteria.Sort("When", false)))
             {
@@ -147,6 +154,20 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
                         string urlOfForum = 
                             HttpContext.Current.Request.Url.ToString().ToLower()
                             .Replace("default.aspx", "");
+                        if (p.Parent != null)
+                        {
+                            if (urlOfForum.Contains("?"))
+                                urlOfForum += "&TalkBack=" + p.Parent.ID;
+                            else
+                                urlOfForum += "?TalkBack=" + p.Parent.ID;
+                        }
+                        else
+                        {
+                            if (urlOfForum.Contains("?"))
+                                urlOfForum += "&TalkBack=" + p.ID;
+                            else
+                                urlOfForum += "?TalkBack=" + p.ID;
+                        }
                         Node node = new Node();
                         node["Header"].Value = "New posting at TalkBack  ...";
                         node["Body"].Value = "<html><body>" + string.Format(@"
