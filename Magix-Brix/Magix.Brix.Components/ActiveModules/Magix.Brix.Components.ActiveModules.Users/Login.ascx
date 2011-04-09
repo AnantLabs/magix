@@ -5,6 +5,8 @@
     Language="C#" 
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.Users.Login" %>
+
+<link href="media/magic-ux-skins/default.css" rel="stylesheet" type="text/css" />
 <link href="media/modules/SingleContainer.css" rel="stylesheet" type="text/css" />
 <link href="media/modules/Login.css" rel="stylesheet" type="text/css" />
 

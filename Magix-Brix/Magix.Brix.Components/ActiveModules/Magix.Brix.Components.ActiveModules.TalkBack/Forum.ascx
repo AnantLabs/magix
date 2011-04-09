@@ -98,12 +98,12 @@
 <div class="span-18 last">
     <mux:TextBox
         runat="server"
-        CssClass="span-18"
+        CssClass="span-18 talkback-header"
         PlaceHolder="Short, but descriptive header of new post ..."
         id="header" />
     <mux:TextArea
         runat="server"
-        CssClass="clear span-18 height-7"
+        CssClass="clear talkback-header span-18 height-7"
         PlaceHolder="Detailed description of new post ..."
         id="body" />
     <mux:Button
