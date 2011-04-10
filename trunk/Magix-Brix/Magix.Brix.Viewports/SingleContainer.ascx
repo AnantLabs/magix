@@ -49,6 +49,7 @@
     <mux:Panel
         runat="server"
         CssClass="span-24 last childContainer"
+        Visible="false"
         id="pnlAll" />
     <mux:Window 
         runat="server" 
