@@ -28,7 +28,7 @@
                     <div class="span-18 last mux-multi-panel-wrapper">
                         <mux:TabStrip 
                             runat="server" 
-                            MultiPanelID="mp"
+                            MultiPanelViewID="mp"
                             ID="mub">
                             <mux:TabButton 
                                 runat="server" 

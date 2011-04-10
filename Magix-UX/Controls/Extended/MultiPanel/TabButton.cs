@@ -79,17 +79,20 @@ namespace Magix.UX.Widgets
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            MultiPanelView view = Selector.FindControl<MultiPanelView>(Page, MultiPanelViewID);
-            view.DeActivated +=
-                delegate
-                {
-                    this.CssClass = this.CssClass.Replace(" mux-multi-button-selected", "");
-                };
-            view.Activated +=
-                delegate
-                {
-                    this.CssClass += " mux-multi-button-selected";
-                };
+            if (!string.IsNullOrEmpty(MultiPanelViewID))
+            {
+                MultiPanelView view = Selector.FindControl<MultiPanelView>(Page, MultiPanelViewID);
+                view.DeActivated +=
+                    delegate
+                    {
+                        this.CssClass = this.CssClass.Replace(" mux-multi-button-selected", "");
+                    };
+                view.Activated +=
+                    delegate
+                    {
+                        this.CssClass += " mux-multi-button-selected";
+                    };
+            }
         }
 
         private void ButtonTriggered(object sender, EventArgs e)

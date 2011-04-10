@@ -208,6 +208,13 @@ namespace Magix.Brix.Types
             return (T)_value;
         }
 
+        public T Get<T>(T defaultValue, bool force)
+        {
+            if (string.IsNullOrEmpty(_value as string))
+                return defaultValue;
+            return (T)_value;
+        }
+
         /**
          * Returns the first node that matches the given Predicate
          */
