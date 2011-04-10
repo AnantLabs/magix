@@ -308,6 +308,7 @@ namespace Magix.Brix.Viewports
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
+                pnlAll.Visible = true;
                 DynamicPanel toAddInto = null;
                 DynamicPanel last = child[0];
                 foreach (DynamicPanel idx in child)
