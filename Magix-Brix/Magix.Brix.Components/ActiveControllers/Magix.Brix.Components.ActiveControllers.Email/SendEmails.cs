@@ -19,7 +19,7 @@ namespace Magix.Brix.Components.ActiveControllers.Email
     [ActiveController]
     public class SendEmails : ActiveController
     {
-        [ActiveEvent(Name = "WineTasting.SendEmailLocally", Async = true)]
+        [ActiveEvent(Name = "WineTasting.SendEmailLocally", Async = false)]
         protected void SendEmail(object sender, ActiveEventArgs e)
         {
             string header = e.Params["Header"].Get<string>();
