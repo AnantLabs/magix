@@ -366,8 +366,23 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     GetMethodInfos(typeName, node);
                 foreach (object idx in enumer)
                 {
-                    int id = GetID(idx, type);
-                    GetObjectNode(idx, typeName, node["Objects"]["O-" + id], node);
+                    bool add = true;
+                    if (node.Contains("WasherCriteria") && node["WasherCriteria"].Value != null)
+                    {
+                        string washerCriteria = node["WasherCriteria"].Get<string>();
+                        Node tmp = new Node();
+                        tmp["Object"].Value = idx;
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            washerCriteria,
+                            tmp);
+                        add = tmp["Add"].Get<bool>();
+                    }
+                    if (add)
+                    {
+                        int id = GetID(idx, type);
+                        GetObjectNode(idx, typeName, node["Objects"]["O-" + id], node);
+                    }
                 }
             }
         }
