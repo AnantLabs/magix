@@ -530,7 +530,7 @@ namespace Magix.Brix.Viewports
                 }
                 string contr =
                     string.Format(@"
-<meta name=""viewport"" content=""width={0}{1}{2}{3}"" />
+<meta name=""viewport"" content=""width={0}{1}{2}{3}{4}{5}"" />
 <meta name=""apple-mobile-web-app-capable"" content=""yes"" />
 <meta name=""apple-mobile-web-app-status-bar-style"" content=""black"" />
 <link rel=""apple-touch-icon"" href=""./media/images/icon.png"" />",
@@ -539,7 +539,9 @@ namespace Magix.Brix.Viewports
                     ? string.Format(", initial-scale={0}", e.Params["InitialScale"].Get<string>()) 
                     : "",
                 e.Params["InitialScale"].Value == null ? ", user-scalable=no" : "",
-                e.Params["MaxScale"].Value != null ? string.Format(", maximum-scale={0}", e.Params["MaxScale"].Value) : "");
+                e.Params["MaxScale"].Value != null ? string.Format(", maximum-scale={0}", e.Params["MaxScale"].Value) : "",
+                e.Params["MinScale"].Value != null ? string.Format(", minimum-scale={0}", e.Params["MinScale"].Value) : "",
+                e.Params["TargetDensity"].Value != null ? string.Format(", target-densitydpi={0}", e.Params["TargetDensity"].Value) : "");
                 LiteralControl lit = new LiteralControl(contr);
                 Page.Header.Controls.Add(lit);
             }
