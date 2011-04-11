@@ -53,9 +53,9 @@
         id="pnlAll" />
     <mux:Window 
         runat="server" 
-        CssClass="mux-shaded mux-rounded mux-window message last msg-center push-2"
+        CssClass="mux-shaded mux-rounded mux-window message last msg-center"
         Caption="Message from Marvin ..."
-        style="position:fixed;display:none;top:36px;"
+        style="position:fixed;display:none;top:54px;left:190px;"
         Closable="false"
         id="message">
         <Content>
