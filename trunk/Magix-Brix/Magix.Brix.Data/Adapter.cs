@@ -122,6 +122,8 @@ namespace Magix.Brix.Data
             Cache.Clear();
         }
 
+        public abstract void ResetTransaction();
+
         private static Dictionary<int, object> Cache
         {
             get

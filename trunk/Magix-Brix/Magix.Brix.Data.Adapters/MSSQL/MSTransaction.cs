@@ -22,7 +22,8 @@ namespace Magix.Brix.Data.Adapters.MSSQL
     {
         SqlTransaction _trans;
 
-        public MSTransaction(SqlConnection connection)
+        public MSTransaction(SqlConnection connection, Adapter ad)
+            : base(ad)
         {
             _trans = connection.BeginTransaction();
         }

@@ -70,7 +70,7 @@ is *seriously* wrong with your Data Adapter ...!");
                 throw new ApplicationException(
                     "Cannot open transaction, when there's already an existing transaction open");
             }
-            _transaction = new MSTransaction(_connection);
+            _transaction = new MSTransaction(_connection, this);
             return _transaction;
         }
 
@@ -1076,6 +1076,11 @@ select Name, Value from {0} where FK_Document={1}",
             sql.Parameters.Add(new SqlParameter("@id", key));
             string retVal = sql.ExecuteScalar() as string;
             return retVal;
+        }
+
+        public override void ResetTransaction()
+        {
+            _transaction = null;
         }
     }
 }
