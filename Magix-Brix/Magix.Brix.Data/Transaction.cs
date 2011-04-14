@@ -18,6 +18,12 @@ namespace Magix.Brix.Data
     {
         private bool _disposed;
         private bool _comitted;
+        private Adapter _ad;
+
+        public Transaction(Adapter ad)
+        {
+            _ad = ad;
+        }
 
         public abstract IDbTransaction Trans
         {
@@ -27,11 +33,13 @@ namespace Magix.Brix.Data
         protected virtual void Rollback()
         {
             Adapter.Instance.InvalidateCache();
+            _ad.ResetTransaction();
         }
 
         public virtual void Commit()
         {
             _comitted = true;
+            _ad.ResetTransaction();
         }
 
         void IDisposable.Dispose()
