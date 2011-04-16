@@ -8,20 +8,10 @@
 
 <link href="media/modules/DBAdmin.css" rel="stylesheet" type="text/css" />
 
-<mux:Window 
+<mux:TreeView
     runat="server"
-    Caption="Browse ActiveType Classes"
-    Closable="false"
-    style="z-index:500;" 
-    CssClass="mux-shaded mux-rounded transparent-window" 
-    id="wnd">
-    <Content>
-        <mux:TreeView
-            runat="server"
-            id="tree"
-            OnSelectedItemChanged="tree_SelectedItemChanged">
-        </mux:TreeView>
-    </Content>
-</mux:Window>
+    id="tree"
+    OnSelectedItemChanged="tree_SelectedItemChanged">
+</mux:TreeView>
 
 

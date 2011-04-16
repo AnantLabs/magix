@@ -69,6 +69,9 @@ namespace Magix.Brix.Viewports
                     };
                 w.ID = "wd" + idxNo;
                 w.Closed += wnd_Closed;
+                w.Style[Styles.position] = "absolute";
+                w.Style[Styles.left] = (idxNo * 20).ToString() + "px";
+                w.Style[Styles.top] = (idxNo * 36).ToString() + "px";
                 wnd[idxNo] = w;
 
                 // Dynamic Panel
@@ -349,6 +352,11 @@ namespace Magix.Brix.Viewports
                         w.CssClass = e.Params["Parameters"]["WindowCssClass"].Get<string>();
                     }
 
+                    if (e.Params["Parameters"].Contains("CloseEvent"))
+                    {
+                        w.Info = e.Params["Parameters"]["CloseEvent"].Get<string>();
+                    }
+
                     // Background color ...?
                     if (e.Params["Parameters"].Contains("BackgroundColor"))
                     {
@@ -554,6 +562,13 @@ namespace Magix.Brix.Viewports
         protected void wnd_Closed(object sender, EventArgs e)
         {
             Window w = sender as Window;
+            if (!string.IsNullOrEmpty(w.Info))
+            {
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    w.Info);
+                w.Info = "";
+            }
             ClearControls(w.Content.Controls[0] as DynamicPanel);
             int closingWindowID = int.Parse(w.ID.Replace("wd", ""));
             if (closingWindowID == 0)
