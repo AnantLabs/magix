@@ -1082,5 +1082,10 @@ select Name, Value from {0} where FK_Document={1}",
         {
             _transaction = null;
         }
+
+        public override string GetConnectionString()
+        {
+            return _connection.ConnectionString;
+        }
     }
 }

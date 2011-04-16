@@ -369,7 +369,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             select.Enabled = true;
             header.Text = "Name: " + DataSource["File"]["Name"].Get<string>();
             extension.Text = "Extension: " + DataSource["File"]["Extension"].Get<string>();
-            name.Text = DataSource["File"]["Name"].Get<string>();
+            name.Text = DataSource["File"]["Name"].Get<string>() + 
+                    DataSource["File"]["Extension"].Get<string>();
             name.Info = DataSource["File"]["FullName"].Get<string>();
             preview.AlternateText = DataSource["File"]["Name"].Get<string>();
             preview.ImageUrl = 
@@ -426,7 +427,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
         protected void name_TextChanged(object sender, EventArgs e)
         {
-            string newName = name.Text;
+            string newName = name.Text.Replace(DataSource["File"]["Extension"].Get<string>(), "");
             string oldName = (sender as InPlaceEdit).Info;
             Node node = DataSource;
             node["Directories"].UnTie();

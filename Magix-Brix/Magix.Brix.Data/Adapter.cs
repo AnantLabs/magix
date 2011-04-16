@@ -194,6 +194,11 @@ namespace Magix.Brix.Data
         public abstract IEnumerable<object> Select(Type type, string propertyName, params Criteria[] args);
 
         /**
+         * Should return some sort of string identification of the underlaying datasource
+         */
+        public abstract string GetConnectionString();
+
+        /**
          * Begins a new transaction object, which ensures the entire opertion within
          * the scope of the transaction object will be either saved or rejected, 
          * and thrown an exception from ...

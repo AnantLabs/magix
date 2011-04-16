@@ -24,19 +24,10 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         [ActiveEvent(Name = "DBAdmin.Form.ViewClasses")]
         protected void DBAdmin_Form_ViewClasses(object sender, ActiveEventArgs e)
         {
-            string container = null;
-            Node node = new Node();
-            if (e.Params.Contains("container"))
-                container = e.Params["container"].Get<string>();
-            node["Padding"].Value = 7;
-            if (e.Params.Contains("Padding"))
-                node["Padding"].Value = e.Params["Padding"].Get<int>();
-            node["Width"].Value = 10;
-            if (e.Params.Contains("Width"))
-                node["Width"].Value = e.Params["Width"].Get<int>();
-            node["Top"].Value = 3;
-            if (e.Params.Contains("Top"))
-                node["Top"].Value = e.Params["Top"].Get<int>();
+            if (e.Params == null)
+                e.Params = new Node();
+            Node node = e.Params;
+            string container = node["container"].Get<string>();
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.BrowseClasses",
                 container,

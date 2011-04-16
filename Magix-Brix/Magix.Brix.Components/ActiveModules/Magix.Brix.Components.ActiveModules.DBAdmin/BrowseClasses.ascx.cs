@@ -16,7 +16,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     public class BrowseClasses : Module, IModule
     {
         protected TreeView tree;
-        protected Window wnd;
 
         public override void InitialLoading(Node node)
         {
