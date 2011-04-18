@@ -9,14 +9,14 @@
 <mux:AjaxWait 
     runat="server" 
     CssClass="ajax-wait"
-    Delay="2500"
+    Delay="500"
     MaxOpacity="0.8"
     id="waiter">
-    <h2>Please wait while Marvin is thinking ...</h2>
+    <p>Please wait while Marvin is thinking ...</p>
     <mux:Image
         runat="server"
         id="ajaxWait"
-        ImageUrl="media/images/animated_brain.gif" 
+        ImageUrl="media/images/ajax.gif" 
         AlternateText="Marvin's brain ..." />
 </mux:AjaxWait>
 
