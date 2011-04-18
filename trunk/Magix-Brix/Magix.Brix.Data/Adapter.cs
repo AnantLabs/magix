@@ -124,23 +124,12 @@ namespace Magix.Brix.Data
 
         public abstract void ResetTransaction();
 
-        private static Dictionary<int, object> Cache
+        private Dictionary<int, object> _cache = new Dictionary<int, object>();
+        private Dictionary<int, object> Cache
         {
             get
             {
-                if (HttpContext.Current == null || 
-                    HttpContext.Current.CurrentHandler == null || 
-                    (HttpContext.Current.CurrentHandler as Page) == null)
-                {
-                    // TODO: Implement cache also for non-web scenarios...
-                    return new Dictionary<int, object>();
-                }
-                Page page = HttpContext.Current.CurrentHandler as Page;
-                if (page.Items["__LegoDataAdapterCache"] == null)
-                {
-                    page.Items["__LegoDataAdapterCache"] = new Dictionary<int, object>();
-                }
-                return page.Items["__LegoDataAdapterCache"] as Dictionary<int, object>;
+                return _cache;
             }
         }
 
