@@ -99,8 +99,7 @@ namespace Magix.Brix.Viewports
         {
             string cssFile = e.Params["CSSFile"].Get<String>();
             if (AjaxManager.Instance.IsCallback)
-                throw new ApplicationException(
-                    "Sorry, no support for setting custom CSS files in Ajax Callbacks (yet!)");
+                return;
             if (!string.IsNullOrEmpty(cssFile))
             {
                 LiteralControl lit = new LiteralControl();
