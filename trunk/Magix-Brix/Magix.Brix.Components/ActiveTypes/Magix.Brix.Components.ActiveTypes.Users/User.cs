@@ -181,12 +181,14 @@ usernames must be unique within the application ...");
                     if (userCookie == null)
                         return null;
                     string[] entities = userCookie.Value.Split('|');
+                    if (entities.Length < 2)
+                        return null;
                     string cookieUsername = entities[0];
                     string cookiePassword = entities[1];
                     UserBase user =
                         UserBase.SelectFirst(
                             Criteria.Eq("Username", cookieUsername));
-                    if (user == null)
+                    if (user == null || string.IsNullOrEmpty(user.Password))
                         return null;
 
                     StringBuilder passwordHashBuffer = new StringBuilder();
@@ -202,6 +204,7 @@ usernames must be unique within the application ...");
                     {
                         HttpContext.Current.Session["Magix.Brix.Components.ActiveTypes.Users.User.Current"] = user.ID;
                     }
+                    return null;
                 }
                 return UserBase.SelectByID(
                     (int)HttpContext.Current.Session[
