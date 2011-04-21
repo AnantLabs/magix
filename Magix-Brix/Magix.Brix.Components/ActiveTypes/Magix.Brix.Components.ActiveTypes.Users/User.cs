@@ -204,7 +204,6 @@ usernames must be unique within the application ...");
                     {
                         HttpContext.Current.Session["Magix.Brix.Components.ActiveTypes.Users.User.Current"] = user.ID;
                     }
-                    return null;
                 }
                 return UserBase.SelectByID(
                     (int)HttpContext.Current.Session[
