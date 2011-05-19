@@ -237,13 +237,13 @@ namespace Magix.UX.Widgets.Core
          * widget will be given focus when tabbing. This is the value defining the
          * tab order.
          */
-        public int TabIndex
+        public string TabIndex
         {
-            get { return ViewState["TabIndex"] == null ? 0 : (int)ViewState["TabIndex"]; }
+            get { return ViewState["TabIndex"] as string; }
             set
             {
                 if (value != TabIndex)
-                    SetJsonGeneric("tabindex", value.ToString());
+                    SetJsonGeneric("tabindex", value);
                 ViewState["TabIndex"] = value;
             }
         }
@@ -273,6 +273,8 @@ namespace Magix.UX.Widgets.Core
             string style = Style.GetStylesForResponse();
             if (!string.IsNullOrEmpty(style))
                 el.AddAttribute("style", style);
+            if (!string.IsNullOrEmpty(TabIndex))
+                el.AddAttribute("tabindex", TabIndex);
             base.AddAttributes(el);
         }
 
