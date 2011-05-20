@@ -13,50 +13,64 @@ using System.IO;
 using System.Net.Security;
 using System.Text;
 using System.Text.RegularExpressions;
+using System;
 
 namespace Magix.Brix.Components.ActiveControllers.Email
 {
     [ActiveController]
     public class SendEmails : ActiveController
     {
-        [ActiveEvent(Name = "WineTasting.SendEmailLocally", Async = false)]
+        [ActiveEvent(Name = "WineTasting.SendEmailLocally", Async = true)]
         protected void SendEmail(object sender, ActiveEventArgs e)
         {
-            string header = e.Params["Header"].Get<string>();
-            string body = e.Params["Body"].Get<string>();
-            string adminEmail = e.Params["AdminEmail"].Get<string>();
-            string adminEmailFrom = e.Params["AdminEmailFrom"].Get<string>();
+            try
+            {
+                string header = e.Params["Header"].Get<string>();
+                string body = e.Params["Body"].Get<string>();
+                string adminEmail = e.Params["AdminEmail"].Get<string>();
+                string adminEmailFrom = e.Params["AdminEmailFrom"].Get<string>();
 
-            MailMessage msg = new MailMessage();
-            msg.BodyEncoding = Encoding.UTF8;
-            msg.IsBodyHtml = true;
-            msg.Subject = header;
-            AlternateView plainView = AlternateView.CreateAlternateViewFromString(
-                Regex.Replace(body, @"<(.|\n)*?>", string.Empty), 
-                null, 
-                "text/plain");
-            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(
-                body, 
-                null, 
-                "text/html");
+                MailMessage msg = new MailMessage();
+                msg.BodyEncoding = Encoding.UTF8;
+                msg.IsBodyHtml = true;
+                msg.Subject = header;
+                AlternateView plainView = AlternateView.CreateAlternateViewFromString(
+                    Regex.Replace(body, @"<(.|\n)*?>", string.Empty),
+                    null,
+                    "text/plain");
+                AlternateView htmlView = AlternateView.CreateAlternateViewFromString(
+                    body,
+                    null,
+                    "text/html");
 
-            msg.AlternateViews.Add(plainView);
-            msg.AlternateViews.Add(htmlView);
-            foreach (Node idxEmail in e.Params["EmailAddresses"])
-            {
-                msg.To.Add(new MailAddress(idxEmail.Get<string>()));
+                msg.AlternateViews.Add(plainView);
+                msg.AlternateViews.Add(htmlView);
+                foreach (Node idxEmail in e.Params["EmailAddresses"])
+                {
+                    msg.To.Add(new MailAddress(idxEmail.Get<string>()));
+                }
+                if (!string.IsNullOrEmpty(adminEmailFrom))
+                {
+                    string emailFrom = "\"" + adminEmailFrom + "\" <" + adminEmail + ">";
+                    msg.From = new MailAddress(emailFrom);
+                }
+                else
+                {
+                    msg.From = new MailAddress(adminEmail);
+                }
+                SmtpClient smtp = new SmtpClient();
+                smtp.Send(msg);
             }
-            if (!string.IsNullOrEmpty(adminEmailFrom))
+            catch (Exception err)
             {
-                string emailFrom = "\"" + adminEmailFrom + "\" <" + adminEmail + ">";
-                msg.From = new MailAddress(emailFrom);
+                //Node n = new Node();
+                //n["Message"].Value = "Something went wrong while trying to send email, message from server was; " + err.Message;
+                //ActiveEvents.Instance.RaiseActiveEvent(
+                //    this,
+                //    "Magix.Core.ShowMessage",
+                //    n);
+                // CAN'T DO, ANOTHER THREAD ...!
             }
-            else
-            {
-                msg.From = new MailAddress(adminEmail);
-            }
-            SmtpClient smtp = new SmtpClient();
-            smtp.Send(msg);
         }
     }
 }

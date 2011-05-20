@@ -63,3 +63,15 @@
         </Content>
     </mux:Window>
 </mux:Panel>
+
+
+<mux:DynamicPanel 
+    runat="server" 
+    OnReload="dynamic_LoadControls"
+    CssClass="full-screen"
+    style="display:none;"
+    id="fullScreen" />
+
+
+
+
