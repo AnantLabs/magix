@@ -40,6 +40,7 @@ namespace Magix.Brix.Loader
             FindAllTypesWithAttribute<ActiveModuleAttribute>(
                 delegate(Type type)
                 {
+                    Adapter.ActiveModules.Add(type);
                     string userControlFile = type.FullName + ".ascx";
                     _loadedPlugins[type.FullName] = new Tuple<string, Type>(userControlFile, type);
                     InitializeEventHandlers(null, type);

@@ -50,9 +50,12 @@
 
 </script>
 
-<div class="yui-skin-sam mux-rich-editor" style="width:100%;height:100%;">
+<mux:Panel
+    runat="server"
+    id="wrp"
+    CssClass="yui-skin-sam mux-rich-editor" style="width:100%;height:100%;">
     <mux:TextArea
         runat="server"
         style="width:100%;height:100%;display:none;"
         id="txt" />
-</div>
+</mux:Panel>
