@@ -26,6 +26,7 @@ namespace Magix.Brix.Components.ActiveModules.Editor
     public class RichEdit : UserControl, IModule
     {
         protected TextArea txt;
+        protected Panel wrp;
 
         void IModule.InitialLoading(Node node)
         {
@@ -55,6 +56,11 @@ namespace Magix.Brix.Components.ActiveModules.Editor
                         text = "<p>" + text + "</p>";
                     txt.Text = text;
                     SaveEvent = node["SaveEvent"].UnTie();
+
+                    if (node.Contains("NoChrome") && node["NoChrome"].Get<bool>())
+                    {
+                        wrp.CssClass = wrp.CssClass.Replace(" mux-rich-editor", " mux-rich-editor-no-chrome");
+                    }
                 };
         }
 
@@ -75,6 +81,7 @@ namespace Magix.Brix.Components.ActiveModules.Editor
         {
             Node node = new Node();
             node["Text"].Value = txt.Text;
+            node["Params"] = SaveEvent["Params"];
             RaiseSafeEvent(
                 SaveEvent.Get<string>(),
                 node);

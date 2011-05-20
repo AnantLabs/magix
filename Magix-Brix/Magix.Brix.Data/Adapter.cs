@@ -31,6 +31,7 @@ namespace Magix.Brix.Data
         private static Adapter _adapter;
         private static ConstructorInfo _ctorToAdapter;
         private readonly static List<Type> _activeTypes = new List<Type>();
+        private readonly static List<Type> _activeModules = new List<Type>();
 
         /**
          * Retrieves the configured database adapter. Notice that you would very rarely
@@ -89,6 +90,14 @@ namespace Magix.Brix.Data
             get
             {
                 return _activeTypes;
+            }
+        }
+
+        public static List<Type> ActiveModules
+        {
+            get
+            {
+                return _activeModules;
             }
         }
 
