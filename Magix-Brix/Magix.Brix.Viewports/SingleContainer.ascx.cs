@@ -25,6 +25,7 @@ namespace Magix.Brix.Viewports
         protected DynamicPanel content3;
         protected DynamicPanel content4;
         protected DynamicPanel content5;
+        protected DynamicPanel fullScreen;
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
@@ -158,6 +159,12 @@ namespace Magix.Brix.Viewports
                 }
                 (toEmpty.Parent.Parent as Window).CloseWindow();
                 ClearControls(toEmpty);
+            }
+            else if (e.Params["Position"].Get<string>() == "fullScreen")
+            {
+                ClearControls(fullScreen);
+                new EffectFadeOut(fullScreen, 500)
+                    .Render();
             }
         }
 
@@ -308,6 +315,13 @@ namespace Magix.Brix.Viewports
                     dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
+            else if (e.Params["Position"].Get<string>() == "fullScreen")
+            {
+                ClearControls(fullScreen);
+                new EffectFadeIn(fullScreen, 500)
+                    .Render();
+                fullScreen.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+            }
             else if (e.Params["Position"].Get<string>() == "child")
             {
                 pnlAll.Visible = true;
@@ -344,7 +358,7 @@ namespace Magix.Brix.Viewports
 
                     // Resetting any previous CSS classes ...
                     w.CssClass = "mux-shaded mux-rounded mux-window child";
-                    
+
                     // Adding child CSS class(es)
                     if (e.Params["Parameters"].Contains("WindowCssClass"))
                     {
@@ -498,7 +512,7 @@ namespace Magix.Brix.Viewports
                     e.Params["Parameters"]["Append"].Get<bool>())
                 {
                     toAddInto.AppendControl(
-                        e.Params["Name"].Value.ToString(), 
+                        e.Params["Name"].Value.ToString(),
                         e.Params["Parameters"]);
                 }
                 else
