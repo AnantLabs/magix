@@ -14,11 +14,19 @@ namespace Magix.UX.Effects
     public class EffectFocusAndSelect : Effect
     {
         private bool isRaControl;
+        private bool isOnlyFocus;
 
         public EffectFocusAndSelect(Control control)
-			: base(control, 1)
-		{
+            : base(control, 1)
+        {
             isRaControl = control is BaseWebControl;
+        }
+
+        public EffectFocusAndSelect(Control control, bool onlyFocus)
+            : base(control, 1)
+        {
+            isRaControl = control is BaseWebControl;
+            isOnlyFocus = onlyFocus;
         }
 
         protected override string NameOfEffect
@@ -28,6 +36,8 @@ namespace Magix.UX.Effects
 
         protected override string GetOptions()
         {
+            if (isOnlyFocus)
+                return "isFocus:true,";
             return "";
         }
     }

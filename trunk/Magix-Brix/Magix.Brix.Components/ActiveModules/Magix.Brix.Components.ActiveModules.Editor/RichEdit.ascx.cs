@@ -85,6 +85,8 @@ namespace Magix.Brix.Components.ActiveModules.Editor
             RaiseSafeEvent(
                 SaveEvent.Get<string>(),
                 node);
+            if (node["Text"].Get<string>() != txt.Text)
+                txt.Text = node["Text"].Get<string>(); // Changed in save ...!
         }
 
         protected bool RaiseSafeEvent(string eventName, Node node)

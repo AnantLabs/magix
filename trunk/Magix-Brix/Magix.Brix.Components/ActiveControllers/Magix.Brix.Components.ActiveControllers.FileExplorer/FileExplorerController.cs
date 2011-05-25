@@ -9,6 +9,7 @@ using System.IO;
 using System.Web;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
+using System.Web.UI;
 
 namespace Magix.Brix.Components.ActiveControllers.FileExplorer
 {
@@ -77,6 +78,20 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
                 e.Params["Filter"].Get<string>(),
                 e.Params);
             e.Params["Caption"].Value = folder;
+        }
+
+        [ActiveEvent(Name = "FileExplorer.EditAsciiFile")]
+        protected void FileExplorer_EditAsciiFile(object sender, ActiveEventArgs e)
+        {
+            string fullPath = HttpContext.Current.Server.MapPath("~/" + e.Params["File"].Get<string>());
+            Node node = new Node();
+            node["File"].Value = fullPath;
+            node["Width"].Value = 24;
+            node["Caption"].Value = "Editing file: " + fullPath.Replace(HttpContext.Current.Server.MapPath("~"), "");
+            ActiveEvents.Instance.RaiseLoadControl(
+                "Magix.Brix.Components.ActiveModules.FileExplorer.EditAsciiFile",
+                "child",
+                node);
         }
 
         [ActiveEvent(Name = "FileExplorer.FileSelectedInExplorer")]
