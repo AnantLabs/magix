@@ -131,8 +131,13 @@ namespace Magix.UX
 
         void CurrentPage_LoadComplete_NO_AJAX(object sender, EventArgs e)
         {
-            string browser = ((Page) HttpContext.Current.CurrentHandler).Request.Browser.Browser.ToLower();
-            if ( browser == "firefox" || browser == "iceweasel" || browser == "netscape" || browser.Contains("mozilla"))
+            string browser = 
+                ((Page) HttpContext.Current.CurrentHandler).Request.Browser.Browser.ToLower();
+            if (browser == "firefox" || 
+                browser == "iceweasel" ||
+                browser == "netscape" ||
+                browser == "applewebkit" ||
+                browser.Contains("mozilla"))
                 ((Page)HttpContext.Current.CurrentHandler).Form.Attributes.Add("autocomplete", "off");
         }
 

@@ -221,6 +221,9 @@
   MUX.extend(MUX.Effect.FocusSelect.prototype, {
 
     init: function(el, opt) {
+      this.options = MUX.extend({
+        isFocus: false
+      }, opt || {});
       this.initC(el, opt);
     },
 
@@ -230,7 +233,7 @@
 
     doFinish: function() {
       this.element.focus();
-      if (this.element.select) {
+      if (this.element.select && !this.options.isFocus) {
         this.element.select();
       }
     }

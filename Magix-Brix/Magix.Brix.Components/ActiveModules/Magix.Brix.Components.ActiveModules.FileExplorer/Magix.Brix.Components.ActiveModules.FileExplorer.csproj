@@ -38,6 +38,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditAsciiFile.ascx.cs">
+      <DependentUpon>EditAsciiFile.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Explorer.ascx.cs">
       <DependentUpon>Explorer.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -70,6 +74,11 @@
       <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EditAsciiFile.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -125,9 +125,19 @@ toggleButtons = function() {
     <mux:Button
         runat="server"
         id="select"
-        CssClass="span-4 select last"
+        style="display:block;margin-right:10px !iomportant;"
+        CssClass="span-4 select"
+        ToolTip="Click to select active file"
         OnClick="select_Click"
         Text="Select" />
+    <mux:Button
+        runat="server"
+        id="newCss"
+        style="display:block;"
+        ToolTip="Click to create a new empty CSS file"
+        CssClass="span-1 last"
+        OnClick="newCss_Click"
+        Text="+" />
 </div>
 
 

@@ -282,6 +282,12 @@ namespace Magix.Brix.Viewports
                         // Defaulting to down-1 ...
                         cssClass = "down-1";
                     }
+                    if (e.Params["Parameters"].Contains("DynCssClass"))
+                    {
+                        string cssClass2 = e.Params["Parameters"]["DynCssClass"].Get<string>();
+                        if (!string.IsNullOrEmpty(cssClass2.Trim()))
+                            cssClass += " " + cssClass2;
+                    }
                     dyn.CssClass = cssClass.Trim();
                     if (AjaxManager.Instance.IsCallback)
                     {

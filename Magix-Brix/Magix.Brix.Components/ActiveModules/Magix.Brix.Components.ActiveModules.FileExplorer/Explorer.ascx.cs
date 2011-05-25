@@ -36,6 +36,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected System.Web.UI.WebControls.FileUpload file;
         protected TextBox fileReal;
         protected Label imageSize;
+        protected Button newCss;
 
         public void InitialLoading(Node node)
         {
@@ -59,6 +60,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                     }
                     Start = 0;
                     End = 18;
+                    newCss.Visible = node.Contains("CanCreateNewCssFile") && node["CanCreateNewCssFile"].Get<bool>();
                 };
         }
 
@@ -176,7 +178,59 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                         break;
                     if (idxNo >= start)
                     {
-                        if (idx.Contains("IsImage") && idx["IsImage"].Get<bool>())
+                        if (!(idx.Contains("IsImage") && idx["IsImage"].Get<bool>()))
+                        {
+                            // Allowing ASCII editing of non-image files ...
+                            string name = idx["Name"].Get<string>();
+                            Image btn = new Image();
+                            btn.AlternateText = name;
+                            btn.ImageUrl =
+                                "media/images/" +
+                                name.Substring(name.IndexOf('.') + 1) + ".png";
+
+                            Panel p = new Panel();
+                            p.Style[Styles.position] = "relative";
+                            Label l = new Label();
+                            l.CssClass = "small-image-label";
+                            l.Text = name;
+                            p.Controls.Add(l);
+                            p.CssClass = "imageIcon";
+                            if (((idxNo + 1) - start) % 6 == 0)
+                                p.CssClass += " lastImage";
+                            if (DataSource.Contains("SelectedFile") &&
+                                DataSource["SelectedFile"].Get<string>().ToLower() == name.ToLower())
+                                p.CssClass += " selected";
+                            p.Click +=
+                                delegate(object sender, EventArgs e)
+                                {
+                                    Panel pp = sender as Panel;
+                                    pp.CssClass += " viewing";
+                                    Panel old = Selector.SelectFirst<Panel>(pp.Parent,
+                                        delegate(System.Web.UI.Control idx3)
+                                        {
+                                            return (idx3 is BaseWebControl) &&
+                                                (idx3 as BaseWebControl).Info == SelectedPanelID;
+                                        });
+                                    if (old != null)
+                                        old.CssClass = old.CssClass.Replace(" viewing", "");
+                                    SelectedPanelID = pp.Info;
+                                    string folderName = pp.Info;
+                                    DataSource["File"].Value = folderName;
+                                    RaiseSafeEvent(
+                                        "FileExplorer.FileSelectedInExplorer",
+                                        DataSource);
+                                    UpdateSelectedFile();
+                                    new EffectFadeIn(prop, 500)
+                                        .Render();
+                                    prop.Visible = true;
+                                    prop.Style[Styles.display] = "none";
+                                };
+                            p.Info = name;
+                            p.ToolTip = name + " - click for more options/info ...";
+                            p.Controls.Add(btn);
+                            pnl.Controls.Add(p);
+                        }
+                        else
                         {
                             string name = idx["Name"].Get<string>();
                             Image btn = new Image();
@@ -188,12 +242,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                             Panel p = new Panel();
                             p.Style[Styles.position] = "relative";
                             Label l = new Label();
-                            l.Style[Styles.position] = "absolute";
-                            l.Style[Styles.bottom] = "0";
-                            l.Style[Styles.left] = "0";
-                            l.Style[Styles.backgroundColor] = "rgba(0, 0, 0, 0.2)";
-                            l.Style[Styles.color] = "#fff";
-                            l.CssClass = "small";
+                            l.CssClass = "small-image-label";
+                            l.Text = name;
                             p.Controls.Add(l);
                             if (idx.Contains("Wide") && idx["Wide"].Get<bool>())
                             {
@@ -244,9 +294,22 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
         protected void preview_Click(object sender, EventArgs e)
         {
-            OpenFullPreviewOfImage(
-                DataSource["Folder"].Get<string>() + 
-                DataSource["File"]["FullName"].Get<string>());
+            if (DataSource["File"].Contains("IsImage") && DataSource["File"]["IsImage"].Get<bool>())
+            {
+                OpenFullPreviewOfImage(
+                    DataSource["Folder"].Get<string>() +
+                    DataSource["File"]["FullName"].Get<string>());
+            }
+            else
+            {
+                // Raising the "EditFile" event ...
+                Node node = new Node();
+                node["File"].Value =
+                    DataSource["Folder"].Get<string>() + DataSource["File"]["FullName"].Get<string>();
+                RaiseSafeEvent(
+                    "FileExplorer.EditAsciiFile",
+                    node);
+            }
         }
 
         protected void delete_Click(object sender, EventArgs e)
@@ -264,6 +327,60 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 "FileExplorer.GetFilesFromFolder",
                 DataSource);
             ReDataBind();
+        }
+
+        protected void newCss_Click(object sender, EventArgs e)
+        {
+            string folder = DataSource["Folder"].Get<string>();
+            string path = Page.Server.MapPath("~/" + folder + "empty.css");
+            if (File.Exists(path))
+            {
+                Node n = new Node();
+                n["Message"].Value = "Couldn't create file! You must rename the existing 'empty.css' file before you can create new CSS files.";
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.ShowMessage",
+                    n);
+            }
+            else
+            {
+                using (TextWriter writer = File.CreateText(path))
+                {
+                    writer.Write(@"
+/*
+ * Magix Generated CSS file,
+ * please modify to fit your needs ...
+ */
+");
+                }
+                DataSource["FolderToOpen"].Value = "";
+                DataSource["File"].UnTie();
+                DataSource["Files"].UnTie();
+                RaiseSafeEvent(
+                    "FileExplorer.GetFilesFromFolder",
+                    DataSource);
+                ReDataBind();
+
+                SelectedPanelID = "empty.css";
+                DataSource["File"].Value = "empty.css";
+                RaiseSafeEvent(
+                    "FileExplorer.FileSelectedInExplorer",
+                    DataSource);
+                UpdateSelectedFile();
+                new EffectFadeIn(prop, 500)
+                    .Render();
+                prop.Visible = true;
+                prop.Style[Styles.display] = "none";
+
+                Panel pl = Selector.SelectFirst<Panel>(this,
+                    delegate(Control idx)
+                    {
+                        return (idx is BaseWebControl) &&
+                            (idx as BaseWebControl).Info == SelectedPanelID;
+                    });
+                if (pl != null)
+                    pl.CssClass += " viewing";
+            }
         }
 
         protected void select_Click(object sender, EventArgs e)
@@ -373,9 +490,23 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                     DataSource["File"]["Extension"].Get<string>();
             name.Info = DataSource["File"]["FullName"].Get<string>();
             preview.AlternateText = DataSource["File"]["Name"].Get<string>();
-            preview.ImageUrl = 
-                DataSource["Folder"].Get<string>() + 
-                DataSource["File"]["FullName"].Get<string>();
+
+            string imageUrl = "";
+
+            if (DataSource["File"].Contains("IsImage") && DataSource["File"]["IsImage"].Get<bool>())
+            {
+                imageUrl = DataSource["Folder"].Get<string>() +
+                    DataSource["File"]["FullName"].Get<string>();
+                preview.ToolTip = "Click Image to view full-size ...";
+            }
+            else
+            {
+                imageUrl = "media/images/" +
+                    DataSource["File"]["FullName"].Get<string>().Substring(DataSource["File"]["FullName"].Get<string>().LastIndexOf('.') + 1) + ".png";
+                preview.ToolTip = "Click file to edit in ASCII editor ...";
+            }
+
+            preview.ImageUrl = imageUrl;
             preview.CssClass =
                 DataSource["Files"][DataSource["File"]["FullName"].Get<string>()]
                 .Contains("Wide") &&
