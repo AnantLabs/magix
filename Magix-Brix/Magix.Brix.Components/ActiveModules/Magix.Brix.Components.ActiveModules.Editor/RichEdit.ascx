@@ -36,9 +36,38 @@
       }, [encodeURIComponent(MUX.$('<%=txt.ClientID%>').innerHTML)]);
       return false;
     }, myEditor, true);
+
+    var imgConfig2 = {
+      type: 'push', label: 'HTML', value: 'htmlicon'
+    };
+    myEditor.toolbar.addButtonToGroup(imgConfig2, 'insertitem');
+    myEditor.toolbar.on('htmliconClick', function(ev) {
+
+      this.saveHTML();
+      var el = MUX.$('<%=rawTxt.ClientID%>');
+      el.value = 
+        myEditor.get('textarea').value;
+      el.setStyle('display', '');
+      el.focus();
+
+      var txt = MUX.$('toggle');
+      txt.setStyle('display', '');
+
+      return false;
+    }, myEditor, true);
   });
 
   myEditor.render();
+
+  window.close1 = function()
+  {
+    var el = MUX.$('<%=rawTxt.ClientID%>');
+    var txt = MUX.$('toggle');
+    myEditor.setEditorHTML(el.value); 
+    el.setStyle('display', 'none');
+
+    txt.setStyle('display', 'none');
+  }
 
   MUX.Form.beforeSerialization.push({
     handler:function(){
@@ -58,4 +87,16 @@
         runat="server"
         style="width:100%;height:100%;display:none;"
         id="txt" />
+    <mux:TextArea
+        runat="server"
+        style="display:none;"
+        CssClass="rawText"
+        id="rawTxt" />
+    <input 
+        type="button" 
+        id="toggle"
+        onclick="window.close1();" 
+        class="span-3 last"
+        style="position:absolute;right:5%;bottom:5%;display:none;z-index:998;margin-bottom:-24px;margin-right:-10px;"
+        value="Close" />
 </mux:Panel>
