@@ -99,16 +99,21 @@ namespace Magix.Brix.Viewports
         protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
         {
             string cssFile = e.Params["CSSFile"].Get<String>();
-            if (AjaxManager.Instance.IsCallback)
-                return;
             if (!string.IsNullOrEmpty(cssFile))
             {
-                LiteralControl lit = new LiteralControl();
-                lit.Text = string.Format(@"
+                if (AjaxManager.Instance.IsCallback)
+                {
+                    AjaxManager.Instance.WriterAtBack.Write(@"MUX.Element.prototype.includeCSS('<link href=""{0}"" rel=""stylesheet"" type=""text/css"" />');", cssFile);
+                }
+                else
+                {
+                    LiteralControl lit = new LiteralControl();
+                    lit.Text = string.Format(@"
 <link href=""{0}"" rel=""stylesheet"" type=""text/css"" />
 ",
-                    cssFile);
-                Page.Header.Controls.Add(lit);
+                        cssFile);
+                    Page.Header.Controls.Add(lit);
+                }
             }
         }
 
