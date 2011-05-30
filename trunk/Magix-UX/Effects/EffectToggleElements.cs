@@ -31,11 +31,23 @@ namespace Magix.UX.Effects
 		}
 
         public EffectToggleElements(IEnumerable<Control> elements)
-			: base(null, 0)
-		{
+            : base(null, 0)
+        {
             _elements = new List<Control>(elements);
-		}
-		
+        }
+
+        public EffectToggleElements(Control parent, IEnumerable<Control> elements)
+            : base(parent, 0)
+        {
+            _elements = new List<Control>(elements);
+        }
+
+        public EffectToggleElements(Control parent, IEnumerable<Control> elements, int milliseconds)
+            : base(parent, milliseconds)
+        {
+            _elements = new List<Control>(elements);
+        }
+
         protected override string NameOfEffect
         {
             get { return "MUX.Effect.ToggleElements"; }
