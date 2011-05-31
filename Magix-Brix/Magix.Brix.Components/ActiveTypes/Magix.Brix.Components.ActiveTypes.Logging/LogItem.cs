@@ -31,6 +31,9 @@ namespace Magix.Brix.Components.ActiveTypes.Logging
         public int ObjectID { get; set; }
 
         [ActiveField]
+        public int ParentID { get; set; }
+
+        [ActiveField]
         public string StackTrace { get; set; }
 
         [ActiveField]
