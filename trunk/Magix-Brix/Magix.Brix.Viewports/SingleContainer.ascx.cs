@@ -218,8 +218,16 @@ namespace Magix.Brix.Viewports
                 {
                     // These are normally grouped together with different "blocks" of
                     // applications ...
-                    ClearControls(content4);
-                    ClearControls(content5);
+                    if (!(e.Params["Parameters"].Contains("FREEZE4") && e.Params["Parameters"]["FREEZE4"].Get<bool>()))
+                    {
+                        ClearControls(content4);
+                        e.Params["FREEZE4"].UnTie(); // To be sure ...!
+                    }
+                    if (!(e.Params["Parameters"].Contains("FREEZE5") && e.Params["Parameters"]["FREEZE5"].Get<bool>()))
+                    {
+                        ClearControls(content5);
+                        e.Params["FREEZE5"].UnTie(); // To be sure ...!
+                    }
                 }
 
                 if (dyn.Controls.Count == 0 || 
