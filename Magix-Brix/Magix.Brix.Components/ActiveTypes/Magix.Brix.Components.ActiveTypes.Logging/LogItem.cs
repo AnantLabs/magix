@@ -41,5 +41,8 @@ namespace Magix.Brix.Components.ActiveTypes.Logging
 
         [ActiveField(IsOwner = false)]
         public UserBase User { get; set; }
+
+        [ActiveField]
+        public string UserID { get; set; }
     }
 }
