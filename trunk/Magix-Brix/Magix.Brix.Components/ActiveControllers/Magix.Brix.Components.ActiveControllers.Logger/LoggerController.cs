@@ -9,6 +9,8 @@ using System.Web;
 using System.Text;
 using System.Web.UI;
 using System.Collections.Generic;
+using Magix.Brix.Data;
+using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes.Users;
 using Magix.Brix.Components.ActiveTypes.Logging;
@@ -18,6 +20,24 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
     [ActiveController]
     public class LoggerController : ActiveController
     {
+        [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
+        private void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
+        {
+            UserBase u = 
+                UserBase.SelectFirst(
+                    Criteria.Eq("Username", e.Params["Username"].Get<string>()));
+            Node node = new Node();
+            node["LogItemType"].Value = "Magix.Core.UserLoggedIn";
+            node["Header"].Value = u.Username + " - " + u.RolesString;
+
+            node["Message"].Value = "Sender: " + sender.ToString() + ".";
+            node["ObjectID"].Value = u.ID;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                sender,
+                "Magix.Core.Log",
+                node);
+        }
+
         [ActiveEvent(Name = "Magix.Core.Log")]
         protected void Magix_Core_Log(object sender, ActiveEventArgs e)
         {
@@ -25,10 +45,12 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             string logItemType = e.Params["LogItemType"].Get<string>("Generic-Type");
             string header = e.Params["Header"].Get<string>();
             string msg = e.Params["Message"].Get<string>();
+
             if (string.IsNullOrEmpty(header) || string.IsNullOrEmpty(msg))
             {
                 throw new ArgumentException("Both Header and Message minimum needs to be set when Logging ...");
             }
+
             int objectID = e.Params["ObjectID"].Get<int>(-1);
             int parentID = e.Params["ParentID"].Get<int>(-1);
             string stackTrace = e.Params["StackTrace"].Get<string>();
@@ -45,7 +67,271 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             l.StackTrace = stackTrace;
             l.IPAddress = ip;
             l.User = user;
+
+            HttpCookie cookie = Page.Request.Cookies["UserID"];
+            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            {
+                l.UserID = cookie.Value;
+            }
+            else
+            {
+                cookie = Page.Response.Cookies["UserID"];
+                if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+                {
+                    l.UserID = cookie.Value;
+                }
+            }
             l.Save();
+        }
+
+        [ActiveEvent(Name = "Magix.Core.NewUserIDCookieCreated")]
+        protected void Magix_Core_NewUserIDCookieCreated(object sender, ActiveEventArgs e)
+        {
+            string userID = e.Params["UserID"].Get<string>();
+
+            // Running through 10 latest log requests with same IP address to determine
+            // probability of log item comes from previous UserID with cleared cookies or such...
+            bool noneExist = true;
+            int no = 0;
+            string firstCookie = null;
+            bool allSame = true;
+            bool lastSame = true;
+            bool oneSame = false;
+            string lastUserId = "";
+            Dictionary<string, bool> keys = new Dictionary<string, bool>();
+            foreach (LogItem idx in LogItem.Select(
+                Criteria.Eq("IPAddress", Page.Request.UserHostAddress),
+                Criteria.Range(0, 10, "When", false)))
+            {
+                if (firstCookie == null)
+                {
+                    firstCookie = idx.UserID ?? "";
+                }
+                else
+                {
+                    if (firstCookie != idx.UserID)
+                        allSame = false;
+                    else
+                        oneSame = true;
+                }
+                if (!string.IsNullOrEmpty(idx.UserID))
+                {
+                    lastUserId = idx.UserID;
+                    keys[idx.UserID] = true;
+                }
+                noneExist = false;
+                if (no >= 4)
+                {
+                    // Halfway there ...
+                    if (firstCookie != idx.UserID)
+                        lastSame = false;
+                }
+                no += 1;
+            }
+
+            // Almost certainly a new visit, though not entirely certain either ...
+            // Still logged as a first time visit ...
+            Node n = new Node();
+            n["LogItemType"].Value = "Magix.Core.NewTrackingCookieCreated";
+            n["Header"].Value = "System-Message";
+
+            n["Message"].Value = "UserAgent: " + Page.Request.UserAgent + " - Sender: " + sender.ToString() + ".";
+            if (UserBase.Current != null)
+            {
+                n["ObjectID"].Value = UserBase.Current.ID;
+            }
+            ActiveEvents.Instance.RaiseActiveEvent(
+                sender,
+                "Magix.Core.Log",
+                n);
+            if (noneExist)
+            {
+                // Almost certainly a new visit, though not entirely certain either ...
+                // Still logged as a first time visit ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.FirstVisitFromIP";
+                node["Header"].Value = "System-Message";
+
+                if (Page.Request.UrlReferrer != null && Page.Request.UrlReferrer.ToString().Length > 0)
+                    node["Message"].Value = "Referral: " + Page.Request.UrlReferrer.ToString();
+                else
+                    node["Message"].Value = "Referral: Empty Host name...";
+
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            if (noneExist || (!oneSame && no > 5))
+            {
+                // Almost certainly a new visit, though not entirely certain either ...
+                // Still logged as a first time visit ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.FirstVisit";
+                node["Header"].Value = "Certainty: 0.95";
+
+                node["Message"].Value = "UserAgent: " + Page.Request.UserAgent + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else if (no > 5 && keys.Count >= 3)
+            {
+                // Almost certainly a new visit, though not entirely certain either ...
+                // Still logged as a first time visit with 90% certainty ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.FirstVisit";
+                node["Header"].Value = "Certainty: 0.9";
+                if (Page.Request.UrlReferrer != null && Page.Request.UrlReferrer.ToString().Length > 0)
+                    node["Message"].Value = "Referral: " + Page.Request.UrlReferrer.ToString();
+                else
+                    node["Message"].Value = "Referral: Empty Host name...";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else if (allSame && no >= 10)
+            {
+                // Highly probably the same visit
+                // Logged as a 90% certainty 'Linked-Visit' ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.LinkedVisit";
+                node["Header"].Value = "Certainty: 0.9";
+
+                node["Message"].Value = "Old-UserID: " + firstCookie + " - New-UserID: " + userID + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else if (allSame && no >= 5)
+            {
+                // Probably the same visit
+                // Logged as a 80% certainty 'Linked-Visit' ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.LinkedVisit";
+                node["Header"].Value = "Certainty: 0.8";
+
+                node["Message"].Value = "Old-UserID: " + firstCookie + " - New-UserID: " + userID + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else if (lastSame && no >= 10)
+            {
+                // Likely the same visit
+                // Logged as a 70% certainty 'Linked-Visit' ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.LinkedVisit";
+                node["Header"].Value = "Certainty: 0.7";
+
+                node["Message"].Value = "Old-UserID: " + firstCookie + " - New-UserID: " + userID + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else if (lastSame && no >= 8)
+            {
+                // Probably the same visit
+                // Logged as a 50% certainty 'Linked-Visit' ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.LinkedVisit";
+                node["Header"].Value = "Certainty: 0.5";
+
+                node["Message"].Value = "Old-UserID: " + firstCookie + " - New-UserID: " + userID + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else if (no > 2 && no / keys.Count >= 2)
+            {
+                // Probably the same visit
+                // Logged as a 50% certainty 'Linked-Visit' ...
+                // Though no Old-UserID is given ...!
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.LinkedVisit";
+                node["Header"].Value = "Certainty: 0.5";
+
+                node["Message"].Value = "Old-UserID: " + lastUserId + "? - New-UserID: " + userID + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else if (no > 2 && no / keys.Count < 2)
+            {
+                // Probably the same visit
+                // Logged as a 40% certainty 'Linked-Visit' ...
+                // Though no Old-UserID is given ...!
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.LinkedVisit";
+                node["Header"].Value = "Certainty: 0.4";
+
+                node["Message"].Value = "Old-UserID: " + lastUserId + "? - New-UserID: " + userID + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
+            else
+            {
+                // Probably new visit
+                // Logged as a 90% certainty 'New-Visit' ...
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.NewVisit";
+                node["Header"].Value = "Certainty: 0.9";
+
+                node["Message"].Value = "UserAgent: " + Page.Request.UserAgent + " - Sender: " + sender.ToString() + ".";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                }
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.Core.Log",
+                    node);
+            }
         }
     }
 }

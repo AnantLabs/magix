@@ -12,6 +12,7 @@ using Magix.UX.Effects;
 using Magix.UX.Aspects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
+using System.Web;
 
 [assembly: WebResource("Magix.Brix.Viewports.iscroll.js", "text/javascript")]
 
@@ -44,6 +45,26 @@ namespace Magix.Brix.Viewports
                 typeof(SingleContainer),
                 "Magix.Brix.Viewports.iscroll.js",
                 false);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            HttpCookie cookie = Request.Cookies["UserID"];
+            if (cookie == null)
+            {
+                // Creating new cookie, with Random GUID inside ...
+                cookie = new HttpCookie("UserID", Guid.NewGuid().ToString());
+                cookie.HttpOnly = true;
+                cookie.Expires = DateTime.Now.AddYears(5);
+                Page.Response.Cookies.Add(cookie);
+                Node node = new Node();
+                node["UserID"].Value = cookie.Value;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.NewUserIDCookieCreated",
+                    node);
+            }
         }
 
         protected override void CreateChildControls()
