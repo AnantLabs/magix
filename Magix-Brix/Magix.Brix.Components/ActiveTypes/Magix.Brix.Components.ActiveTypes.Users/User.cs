@@ -199,6 +199,19 @@ usernames must be unique within the application ...");
             base.Save();
         }
 
+        public override void Delete()
+        {
+            Node node = new Node();
+            node["LogItemType"].Value = "Magix.Core.UserDeleted";
+            node["Header"].Value = "Username: " + Username;
+            node["Message"].Value = "Existing user was deleted ...";
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Core.Log",
+                node);
+            base.Delete();
+        }
+
         public static UserBase Current
         {
             get

@@ -159,7 +159,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 object child = prop.GetGetMethod(true).Invoke(obj, null);
                 if (child != null)
                 {
-                    node["IsRemove"].Value = !attrs[0].BelongsTo;
+                    node["IsRemove"].Value = !(attrs[0].BelongsTo || attrs[0].IsOwner);
+                    node["IsDelete"].Value = attrs[0].BelongsTo || attrs[0].IsOwner;
                     int idOfChild = GetID(child, prop.PropertyType);
                     node["Object"]["ID"].Value = idOfChild;
                     GetObjectNode(child, prop.PropertyType.FullName, node["Object"], node);
@@ -199,15 +200,17 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.Instance);
                 ActiveFieldAttribute[] attrs = 
                     prop.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
-                if (attrs[0].BelongsTo)
+                if (attrs[0].BelongsTo || attrs[0].IsOwner)
                 {
                     node["IsRemove"].Value = false;
-                    node["IsAppend"].Value = false;
+                    node["IsAppend"].Value = true;
+                    node["IsDelete"].Value = true;
                 }
                 else
                 {
                     node["IsRemove"].Value = true;
                     node["IsAppend"].Value = true;
+                    node["IsDelete"].Value = false;
                 }
                 object child = prop.GetGetMethod(true).Invoke(obj, null);
                 Type childType = prop.PropertyType.GetGenericArguments()[0];

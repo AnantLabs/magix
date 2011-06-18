@@ -214,10 +214,10 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             int id = e.Params["ID"].Get<int>();
             string fullTypeName = e.Params["FullTypeName"].Get<String>();
 
-            Node node = e.Params;
-            node["IsChange"].Value = false;
-            node["IsRemove"].Value = false;
-            ShowComplexObject(id, fullTypeName, node);
+            e.Params["IsChange"].Value = false;
+            e.Params["IsRemove"].Value = false;
+            e.Params["IsDelete"].Value = false;
+            ShowComplexObject(id, fullTypeName, e.Params);
         }
 
         private void ShowComplexObject(int id, string fullTypeName, Node node)
@@ -368,12 +368,47 @@ model while trying to create object, and it was never created for some reasons."
             Node node = new Node();
             node["IsChange"].Value = false;
             node["IsRemove"].Value = false;
+            node["IsDelete"].Value = false;
             node["FullTypeName"].Value = fullTypeName;
             node["ID"].Value = id;
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.Form.ViewComplexObject",
                 node);
+        }
+
+        [ActiveEvent(Name = "DBAdmin.Common.CreateObjectAsChild")]
+        protected void DBAdmin_Common_CreateObjectAsChild(object sender, ActiveEventArgs e)
+        {
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int parentId = e.Params["ParentID"].Get<int>();
+            string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
+            string parentFullTypeName = e.Params["ParentFullTypeName"].Get<string>();
+            int id = Data.Instance.CreateObject(fullTypeName);
+            if (id == 0)
+                throw new ApplicationException(
+                    @"Couldn't create object, something went wrong in your
+model while trying to create object, and it was never created for some reasons.");
+            Data.Instance.AppendObjectToParentPropertyList(
+                id, 
+                fullTypeName, 
+                parentId, 
+                parentPropertyName, 
+                parentFullTypeName);
+
+            // Showing 'Edit This Object' UI ...
+            // Commented OUT since it creates too much noise ...
+
+            //Node node = new Node();
+            //node["IsChange"].Value = false;
+            //node["IsRemove"].Value = false;
+            //node["IsDelete"].Value = false;
+            //node["FullTypeName"].Value = fullTypeName;
+            //node["ID"].Value = id;
+            //ActiveEvents.Instance.RaiseActiveEvent(
+            //    this,
+            //    "DBAdmin.Form.ViewComplexObject",
+            //    node);
         }
 
         private void ShowViewClassForm(Node node, string fullTypeName)

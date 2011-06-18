@@ -38,14 +38,30 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void append_Click(object sender, EventArgs e)
         {
-            Node node = new Node();
-            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-            node["ParentID"].Value = DataSource["ParentID"].Value;
-            node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
-            node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
-            RaiseSafeEvent(
-                "DBAdmin.Form.AppendObject",
-                node);
+            if (DataSource["IsDelete"].Get<bool>())
+            {
+                Node node = new Node();
+                node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                node["ParentID"].Value = DataSource["ParentID"].Value;
+                node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
+                node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+                RaiseSafeEvent(
+                    "DBAdmin.Common.CreateObjectAsChild",
+                    node);
+                ReDataBind();
+            }
+            else
+            {
+                // Defaulting to Append Logic ...
+                Node node = new Node();
+                node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                node["ParentID"].Value = DataSource["ParentID"].Value;
+                node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
+                node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+                RaiseSafeEvent(
+                    "DBAdmin.Form.AppendObject",
+                    node);
+            }
         }
 
         protected void PreviousItems(object sender, EventArgs e)
