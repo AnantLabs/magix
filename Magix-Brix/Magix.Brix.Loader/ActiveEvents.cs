@@ -165,12 +165,21 @@ namespace Magix.Brix.Loader
             string name, 
             Node pars)
         {
+            name = RaiseEventImplementation(sender, name, pars, name);
+        }
+
+        private string RaiseEventImplementation(object sender, string name, Node pars, string actualName)
+        {
             // Dummy dereferencing of PluginLoader to make sure we've 
             // loaded all our assemblies and types first ...!
             PluginLoader typesMumboJumbo = PluginLoader.Instance;
 
             name = GetEventName(name);
-            ActiveEventArgs e = new ActiveEventArgs(name, pars);
+            ActiveEventArgs e = new ActiveEventArgs(actualName, pars);
+            if (name != "")
+            {
+                RaiseEventImplementation(sender, "", pars, actualName);
+            }
             if (_methods.ContainsKey(name) || InstanceMethod.ContainsKey(name))
             {
                 // We must run this in two operations since events clear controls out
@@ -198,6 +207,7 @@ namespace Magix.Brix.Loader
                     }
                 }
             }
+            return name;
         }
 
         public void CreateEventMapping(string from, string to)
@@ -282,7 +292,7 @@ namespace Magix.Brix.Loader
         {
             if (name == null)
             {
-                throw new ArgumentException("Cannot have an event handler listening to 'null' event");
+                name = "";
             }
             if (context == null)
             {

@@ -13,6 +13,7 @@ using Magix.UX.Aspects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using System.Web;
+using System.Configuration;
 
 [assembly: WebResource("Magix.Brix.Viewports.iscroll.js", "text/javascript")]
 
@@ -35,9 +36,20 @@ namespace Magix.Brix.Viewports
         protected DynamicPanel[] child;
         protected AspectSmartScroll scroll;
         protected Image ajaxWait;
+        protected Label debug;
+        private string debugText = "";
+
+        private bool _isDebug;
 
         protected override void OnInit(EventArgs e)
         {
+            _isDebug = bool.Parse(ConfigurationManager.AppSettings["IsDebug"] ?? "false");
+            if (_isDebug)
+            {
+                debug.ClickEffect = new EffectSize(debug, 125, 640, -1);
+                debug.MouseOutEffect = new EffectSize(debug, 125, 30, -1);
+            }
+
             base.OnInit(e);
             EnsureChildControls();
 
@@ -49,6 +61,7 @@ namespace Magix.Brix.Viewports
 
         protected override void OnLoad(EventArgs e)
         {
+            debug.Visible = _isDebug;
             base.OnLoad(e);
             HttpCookie cookie = Request.Cookies["UserID"];
             if (cookie == null)
@@ -114,7 +127,35 @@ namespace Magix.Brix.Viewports
             }
         }
 
-        private bool first = true;
+        private bool firstEvent = true;
+
+        [ActiveEvent] // Null event handler for logging in debug cases ...
+        protected void NULLEventHandler(object sender, ActiveEventArgs e)
+        {
+            if (firstEvent)
+            {
+                debugText = "";
+                firstEvent = false;
+            }
+            if (_isDebug)
+            {
+                debugText += string.Format(@"
+<p><strong>Event Name:</strong> {0}
+{1}
+</p>
+<hr />",
+                    e.Name,
+                    (e.Params == null ? "" : ("<br /><strong>e.Params:</strong> " + e.Params.ToJSONString())));
+            }
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            debug.Text = debugText;
+            base.OnPreRender(e);
+        }
+
+        private bool firstMessage = true;
 
         [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]
         protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
@@ -141,17 +182,22 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
-            if (first)
+            int timeOut = 2500;
+            if (e.Params.Contains("Milliseconds"))
+            {
+                timeOut = e.Params["Milliseconds"].Get<int>();
+            }
+            if (firstMessage)
             {
                 msgLbl.Text = "";
                 new EffectFadeIn(message, 250)
                     .JoinThese(new EffectRollDown())
                     .ChainThese(
-                        new EffectTimeout(2500),
+                        new EffectTimeout(timeOut),
                         new EffectFadeOut(message, 250)
                             .JoinThese(new EffectRollUp()))
                     .Render();
-                first = false;
+                firstMessage = false;
             }
             msgLbl.Text += string.Format("<p>{0}</p>", e.Params["Message"].Get<string>());
         }

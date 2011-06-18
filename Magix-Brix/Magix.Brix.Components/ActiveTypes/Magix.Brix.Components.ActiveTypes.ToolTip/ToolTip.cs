@@ -81,7 +81,7 @@ namespace Magix.Brix.Components.ActiveTypes
                 pos.Seed = seed;
             }
             pos.Position = pos.Position + addition;
-            if (pos.Position >= Tip.Count - 1)
+            if (pos.Position >= Tip.Count)
                 pos.Position = 0;
             if (pos.Position < 0)
                 pos.Position = Tip.Count - 1;

@@ -12,6 +12,8 @@ using System.Text;
 using System.Web;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using Magix.Brix.Loader;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveTypes.Users
 {
@@ -52,6 +54,17 @@ namespace Magix.Brix.Components.ActiveTypes.Users
 
         [ActiveField(IsOwner = false)]
         public LazyList<Role> Roles { get; set; }
+
+        [ActiveEvent(Name = "Magix.Core.UserLoggedOut")]
+        private static void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
+        {
+            // Logging out...
+            UserBase.Current = null;
+
+            // Redirecting back to landing page, to 'invalidate' DOM ...!
+            AjaxManager.Instance.Redirect(
+                HttpContext.Current.Request.Url.ToString().ToLower().Replace("default.aspx", ""));
+        }
 
         [ActiveField]
         internal LazyList<UserSettings> Settings { get; set; }
@@ -121,6 +134,11 @@ namespace Magix.Brix.Components.ActiveTypes.Users
             SaveImpl(true);
         }
 
+        public void SaveNoVerification()
+        {
+            SaveImpl(false);
+        }
+
         protected void SaveImpl(bool verify)
         {
             if (verify)
@@ -166,6 +184,17 @@ empty string ...");
                         @"Sorry, but that Username is already taken by another user, 
 usernames must be unique within the application ...");
                 }
+            }
+            if (ID == 0)
+            {
+                Node node = new Node();
+                node["LogItemType"].Value = "Magix.Core.UserCreated";
+                node["Header"].Value = "Username: " + Username;
+                node["Message"].Value = "New user was created ...";
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.Log",
+                    node);
             }
             base.Save();
         }
