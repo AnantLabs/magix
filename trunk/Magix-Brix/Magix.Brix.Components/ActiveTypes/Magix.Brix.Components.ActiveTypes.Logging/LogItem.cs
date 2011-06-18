@@ -12,28 +12,6 @@ using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveTypes.Logging
 {
-
-    [ActiveType]
-    class Person : ActiveType<Person>
-    {
-        [ActiveField]
-        public string Name { get; set; }
-
-        [ActiveField]
-        public DateTime Born { get; set; }
-
-        protected void foo()
-        {
-            Person per = Person.SelectFirst(Criteria.Eq("Name", "Thomas Hansen"));
-
-            foreach (Person idxx in Person.Select())
-            {
-                idxx.Name = "Something else";
-                idxx.Save();
-            }
-        }
-    }
-
     [ActiveType]
     public class LogItem : ActiveType<LogItem>
     {

@@ -20,6 +20,13 @@
         AlternateText="Marvin's brain ..." />
 </mux:AjaxWait>
 
+<mux:Label
+    runat="server"
+    CssClass="mux-shaded mux-rounded span-1 height-10 mux-debug"
+    Tag="div"
+    Visible="false"
+    id="debug" />
+
 <mux:Panel
     runat="server"
     id="wrp"

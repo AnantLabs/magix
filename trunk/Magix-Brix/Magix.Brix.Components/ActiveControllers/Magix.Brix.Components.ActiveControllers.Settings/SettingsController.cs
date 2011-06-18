@@ -15,6 +15,9 @@ namespace Magix.Brix.Components.ActiveControllers.Settings
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         private static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
+            // To interact with DBAdmin, and make updates in DBAdmin 'flush' the cache, at all
+            // times kept of the Settings ...
+            // BAD solution, untie ...!
             ActiveEvents.Instance.CreateEventMapping(
                 "DBAdmin.Data.ChangeSimplePropertyValue",
                 "DBAdmin.Data.ChangeSimplePropertyValue-Override");
