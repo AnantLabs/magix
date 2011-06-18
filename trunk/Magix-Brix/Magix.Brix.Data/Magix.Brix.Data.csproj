@@ -52,12 +52,6 @@
     <Compile Include="Criteria.cs" />
     <Compile Include="StdSQLDataAdapter.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Magix.Brix.Types\Magix.Brix.Types.csproj">
-      <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
-      <Name>Magix.Brix.Types</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
