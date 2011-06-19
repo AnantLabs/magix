@@ -80,7 +80,7 @@ namespace Magix.UX
             return SelectFirst<T>(from,
                 delegate(Control idx)
                 {
-                    return idx.ID == clientId;
+                    return idx.ClientID == clientId;
                 });
         }
 
