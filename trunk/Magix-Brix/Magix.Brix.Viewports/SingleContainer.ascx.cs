@@ -297,6 +297,18 @@ namespace Magix.Brix.Viewports
                     }
                 }
 
+                if (dyn.Controls.Count == 0)
+                {
+                    if (e.Params["Parameters"].Contains("ClearBoth") && e.Params["Parameters"]["ClearBoth"].Get<bool>())
+                    {
+                        dyn.Style[Styles.clear] = "both";
+                    }
+                    else
+                    {
+                        dyn.Style[Styles.clear] = "";
+                    }
+                }
+
                 if (dyn.Controls.Count == 0 || 
                     !e.Params["Parameters"].Contains("Append") ||
                     !e.Params["Parameters"]["Append"].Get<bool>())
