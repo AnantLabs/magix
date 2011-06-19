@@ -29,6 +29,25 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                 delegate
                 {
                     DataSource = node;
+
+                    // Figuring out our start/end dates here ...
+                    DateTime start = DataSource["Month"].Get<DateTime>();
+                    start = new DateTime(start.Year, start.Month, 1);
+                    DateTime end = start.AddMonths(1);
+
+                    // Finding first Sunday before our start ...
+                    while (start.DayOfWeek != DayOfWeek.Sunday)
+                        start = start.AddDays(-1);
+
+                    // Putting start/end dates into our DataSource
+                    DataSource["Start"].Value = start;
+                    DataSource["End"].Value = end;
+
+                    // Fetching items ...
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        DataSource["GetItemsEvent"].Get<string>(),
+                        DataSource);
                 };
         }
 
@@ -40,17 +59,8 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
 
         private void CreateCalendar()
         {
-            // Figuring out which Month to render ...
-            DateTime start = DataSource["Month"].Get<DateTime>();
-            start = new DateTime(start.Year, start.Month, 1);
-            DateTime end = start.AddMonths(1);
-
-            // Finding first previous Sunday ...
-            while (start.DayOfWeek != DayOfWeek.Sunday)
-                start = start.AddDays(-1);
-
-            DateTime idx = start;
-            while (idx < end)
+            DateTime idx = DataSource["Start"].Get<DateTime>();
+            while (idx < DataSource["End"].Get<DateTime>())
             {
                 for (int idxNo = 0; idxNo < 7; idxNo++)
                 {
@@ -87,8 +97,11 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                         DataSource["Objects"][idx.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture)])
                     {
                         Label item = new Label();
-                        item.CssClass = "cal-item";
                         item.Tag = "div";
+                        if(idxObj.Contains("CssClass"))
+                            item.CssClass = "cal-activity " + idxObj["CssClass"].Get<string>();
+                        else
+                            item.CssClass = "cal-activity";
                         item.Text = idxObj["Header"].Get<string>();
                         item.ToolTip = idxObj["Body"].Get<string>();
                         cell.Controls.Add(item);
@@ -113,6 +126,7 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
             if (p.CssClass.Contains(" cal-selected"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected", "");
+                PreviousSelected = null;
             }
             else
             {
