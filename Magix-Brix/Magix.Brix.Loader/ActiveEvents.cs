@@ -255,18 +255,6 @@ namespace Magix.Brix.Loader
                     idxCur.Remove(idxObj);
                 }
             }
-
-            // Removing all list of event handlers that no longer have any events...
-            List<string> toBeRemoved = new List<string>();
-            foreach(string idx in InstanceMethod.Keys)
-            {
-                if(InstanceMethod[idx].Count == 0)
-                    toBeRemoved.Add(idx);
-            }
-            foreach (string idx in toBeRemoved)
-            {
-                InstanceMethod.Remove(idx);
-            }
         }
 
         private Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> InstanceMethod
