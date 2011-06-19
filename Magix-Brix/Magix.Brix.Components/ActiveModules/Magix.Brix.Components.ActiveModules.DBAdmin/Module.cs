@@ -9,6 +9,7 @@ using System.Web.UI;
 using Magix.Brix.Loader;
 using Magix.Brix.Types;
 using Magix.UX.Widgets;
+using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
@@ -29,6 +30,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             get { return ViewState["DataSource"] as Node; }
             set { ViewState["DataSource"] = value; }
+        }
+
+        [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
+        protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string propertyName = e.Params["PropertyName"].Get<string>();
+            string newValue = e.Params["NewValue"].Get<string>();
+            if (fullTypeName == DataSource["FullTypeName"].Get<string>())
+            {
+                ReDataBind();
+            }
         }
 
         [ActiveEvent(Name = "RefreshWindowContent")]
@@ -69,6 +83,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     n);
                 return false;
             }
+        }
+
+        protected void FlashPanel(Panel pnl)
+        {
+            new EffectHighlight(pnl, 500)
+                .Render();
         }
     }
 }

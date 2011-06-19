@@ -412,6 +412,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     pnl.ReRender();
                 }
             }
+            FlashPanel(pnl);
         }
     }
 }

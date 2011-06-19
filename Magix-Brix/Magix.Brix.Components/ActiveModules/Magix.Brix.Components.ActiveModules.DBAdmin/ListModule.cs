@@ -134,12 +134,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return green;
         }
 
-        protected void FlashPanel(Panel pnl)
-        {
-            new EffectHighlight(pnl, 500)
-                .Render();
-        }
-
         protected void FilterMethod(object sender, EventArgs e)
         {
             LinkButton btn = sender as LinkButton;
