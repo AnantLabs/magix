@@ -187,11 +187,14 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         {
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             int id = e.Params["ID"].Get<int>();
+            Node objNode = new Node();
             Data.Instance.GetObjectNode(
-                e.Params["Object"],
+                objNode,
                 id,
                 fullTypeName,
                 e.Params);
+            if (objNode.Count > 0)
+                e.Params["Object"] = objNode;
             Data.Instance.GetObjectTypeNode(fullTypeName, e.Params);
         }
 
@@ -335,6 +338,7 @@ have relationships towards other instances in your database.</p>";
             node["OK"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedConfirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Cancel"]["FullTypeName"].Value = fullTypeName;
+            node["Width"].Value = 15;
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
                 "child",
@@ -347,12 +351,15 @@ have relationships towards other instances in your database.</p>";
             int id = e.Params["ID"].Get<int>();
             string typeName = e.Params["FullTypeName"].Get<string>();
             Data.Instance.DeleteObject(id, typeName);
+
+            // Closing top-most Window, which should be our Message Box ...
             ActiveEvents.Instance.RaiseClearControls("child");
         }
 
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed")]
         protected void DBAdmin_Data_ComplexInstanceDeletedNotConfirmed(object sender, ActiveEventArgs e)
         {
+            // Closing top-most Window, which should be our Message Box ...
             ActiveEvents.Instance.RaiseClearControls("child");
         }
 

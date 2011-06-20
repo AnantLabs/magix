@@ -71,7 +71,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void DataBindObjects()
         {
-            if (DataSource["Object"]["ID"].Get<int>() != 0)
+            if (DataSource.Contains("Object") && 
+                DataSource["Object"]["ID"].Get<int>() != 0)
             {
                 Label tb = new Label();
                 tb.Tag = "table";
@@ -402,7 +403,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     return;
                 DataSource["ID"].Value = DataSource["Object"]["ID"].Get<int>();
                 DataSource["Object"].UnTie();
-                DataSource["Type"].UnTie();
+                DataSource["Type"].UnTie(); // TODO; Remove ALL of these UnTies [Type unties] since they destroy architecture by not allowing DRY ...
                 if (RaiseSafeEvent(
                     "DBAdmin.Data.GetObject",
                     DataSource))
@@ -410,6 +411,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     pnl.Controls.Clear();
                     DataBindObjects();
                     pnl.ReRender();
+                }
+
+                // Checking to see if our object has 'vanished' ...
+                if (!DataSource.Contains("Object"))
+                {
+                    // We are ooking at one object, with no parent 'select logic' included
+                    // This one object is NOT EXISTING
+                    // Hence we can safely close this particular window ...
+
+
+                    // DOESN'T WORK ...!!!!!!!!!!!!!!!!!!!!!!!!
+                    //ActiveEvents.Instance.RaiseClearControls(Parent.ID);
+                    return;
                 }
             }
             FlashPanel(pnl);
