@@ -187,14 +187,14 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         {
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             int id = e.Params["ID"].Get<int>();
-            Node objNode = new Node();
+            Node objNode = new Node("Object");
             Data.Instance.GetObjectNode(
                 objNode,
                 id,
                 fullTypeName,
                 e.Params);
             if (objNode.Count > 0)
-                e.Params["Object"] = objNode;
+                e.Params.Add(objNode);
             Data.Instance.GetObjectTypeNode(fullTypeName, e.Params);
         }
 
