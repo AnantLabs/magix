@@ -419,9 +419,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     // We are looking at one object, with no parent 'select logic' included
                     // This one object is NOT EXISTING
                     // Hence we can safely close this particular window ...
-
-
-                    // DOESN'T WORK ...!!!!!!!!!!!!!!!!!!!!!!!!
                     ActiveEvents.Instance.RaiseClearControls(Parent.ID);
                     return;
                 }
