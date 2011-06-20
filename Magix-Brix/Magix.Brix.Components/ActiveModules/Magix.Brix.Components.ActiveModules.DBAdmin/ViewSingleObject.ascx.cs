@@ -416,13 +416,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 // Checking to see if our object has 'vanished' ...
                 if (!DataSource.Contains("Object"))
                 {
-                    // We are ooking at one object, with no parent 'select logic' included
+                    // We are looking at one object, with no parent 'select logic' included
                     // This one object is NOT EXISTING
                     // Hence we can safely close this particular window ...
 
 
                     // DOESN'T WORK ...!!!!!!!!!!!!!!!!!!!!!!!!
-                    //ActiveEvents.Instance.RaiseClearControls(Parent.ID);
+                    ActiveEvents.Instance.RaiseClearControls(Parent.ID);
                     return;
                 }
             }
