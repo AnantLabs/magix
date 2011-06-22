@@ -106,7 +106,6 @@ namespace Magix.UX.Widgets
                 {
                     this.SetJsonValue("Value", value.Value);
                 }
-                SelectedIndex = Items.IndexOf(value);
             }
         }
 
@@ -125,10 +124,10 @@ namespace Magix.UX.Widgets
             {
                 if (Items == null || Items.Count == 0)
                     return -1;
-                for (int i = 0; i < Items.Count; i++)
+                for (int idx = 0; idx < Items.Count; idx++)
                 {
-                    if (Items[i].Selected)
-                        return i;
+                    if (Items[idx].Value == _selectedItemValue)
+                        return idx;
                 }
                 return 0;
             }
@@ -136,11 +135,7 @@ namespace Magix.UX.Widgets
             {
                 if (value == SelectedIndex)
                     return;
-                for (int i = 0; i < Items.Count; i++)
-                {
-                    if (i == value)
-                        _selectedItemValue = Items[i].Value;
-                }
+                _selectedItemValue = Items[value].Value;
                 if (IsTrackingViewState)
                 {
                     SetJsonGeneric("value", _selectedItemValue);

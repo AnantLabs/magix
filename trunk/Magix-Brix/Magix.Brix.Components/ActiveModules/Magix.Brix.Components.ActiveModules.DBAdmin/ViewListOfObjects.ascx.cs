@@ -146,7 +146,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             ResetColumnsVisibility();
             DataSource["Objects"].UnTie();
-            DataSource["Type"].UnTie();
+            //DataSource["Type"].UnTie();
             if (RaiseSafeEvent(
                 "DBAdmin.Data.GetListFromObject",
                 DataSource))
