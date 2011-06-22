@@ -11,8 +11,7 @@
 <mux:Panel
     runat="server"
     CssClass="panelSingleObject"
-    id="pnl">
-</mux:Panel>
+    id="pnl" />
 
 <mux:Panel
     runat="server"

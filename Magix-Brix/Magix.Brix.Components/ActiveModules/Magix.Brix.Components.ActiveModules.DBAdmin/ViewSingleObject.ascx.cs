@@ -80,9 +80,16 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
                 // Header rows
                 tb.Controls.Add(CreateHeaderRow());
+
+                // Creating property rows
                 foreach (Node idxProp in DataSource["Type"]["Properties"])
                 {
-                    tb.Controls.Add(CreateRow(DataSource["Object"]["Properties"][idxProp.Name]));
+                    if (DataSource.Contains("WhiteListColumns") &&
+                        DataSource["WhiteListColumns"].Contains(idxProp.Name) &&
+                        DataSource["WhiteListColumns"][idxProp.Name].Get<bool>())
+                    {
+                        tb.Controls.Add(CreateRow(DataSource["Object"]["Properties"][idxProp.Name]));
+                    }
                 }
                 pnl.Controls.Add(tb);
             }
@@ -161,9 +168,26 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["WhiteListProperties"]["Name"].Get<bool>()))
             {
                 Label c1 = new Label();
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
+                {
+                    c1.CssClass += "wide-" +
+                        DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
+                }
+                bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
+                    DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
+                if (bold)
+                    c1.Style[Styles.fontWeight] = "bold";
                 c1.Tag = "td";
                 c1.CssClass = "columnName";
-                c1.Text = node.Name;
+                if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
+                {
+                    c1.Text = DataSource["Type"]["Properties"][node.Name]["Header"].Get<string>();
+                }
+                else
+                {
+                    c1.Text = node.Name;
+                }
                 row.Controls.Add(c1);
             }
 
@@ -174,6 +198,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label c1 = new Label();
                 c1.Tag = "td";
                 c1.CssClass = "columnType";
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"]["Type"].Contains("ForcedWidth"))
+                {
+                    c1.CssClass += "wide-" +
+                        DataSource["WhiteListProperties"]["Type"]["ForcedWidth"].Get<int>();
+                }
                 c1.Text =
                     DataSource["Type"]["Properties"][node.Name]["TypeName"].Get<string>()
                         .Replace("<", "&lt;").Replace(">", "&gt;");
@@ -187,6 +217,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label c1 = new Label();
                 c1.Tag = "td";
                 c1.CssClass = "columnType";
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"]["Attributes"].Contains("ForcedWidth"))
+                {
+                    c1.CssClass += "wide-" +
+                        DataSource["WhiteListProperties"]["Attributes"]["ForcedWidth"].Get<int>();
+                }
                 string text = "";
                 if (!DataSource["Type"]["Properties"][node.Name]["IsOwner"].Get<bool>())
                     text += "IsNotOwner ";
@@ -202,123 +238,139 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 (DataSource["WhiteListProperties"].Contains("Value") &&
                 DataSource["WhiteListProperties"]["Value"].Get<bool>()))
             {
-                bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
-                    DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
-                Label c1 = new Label();
-                if (bold)
-                    c1.Style[Styles.fontWeight] = "bold";
-                c1.Tag = "td";
-                if (DataSource["Type"]["Properties"][node.Name]["IsComplex"].Get<bool>())
+                if (DataSource["Type"]["Properties"][node.Name].Contains("TemplateColumnEvent") &&
+                    !string.IsNullOrEmpty(
+                        DataSource["Type"]["Properties"][node.Name]["TemplateColumnEvent"].Get<string>()))
                 {
-                    int width = DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth") ?
-                        DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>() : -1;
 
-                    if (DataSource["Type"]["Properties"][node.Name].Contains("ReadOnly") &&
-                        DataSource["Type"]["Properties"][node.Name]["ReadOnly"].Get<bool>())
+                    Label c1 = new Label();
+                    c1.Tag = "td";
+                    c1.Info = node.Name;
+
+                    if (DataSource.Contains("WhiteListProperties") &&
+                        DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                     {
-                        Label ed = new Label();
-                        ed.Text = node.Value.ToString();
-                        if (width != -1)
-                        {
-                            ed.Style[Styles.display] = "block";
-                            ed.CssClass = "span-" + width;
-                        }
-                        c1.Controls.Add(ed);
+                        c1.CssClass += "wide-" +
+                            DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
                     }
-                    else
-                    {
-                        LinkButton ed = new LinkButton();
-                        if (width != -1)
-                        {
-                            ed.Style[Styles.display] = "block";
-                            ed.CssClass = "span-" + width;
-                        }
-                        ed.Text = node.Value.ToString();
-                        ed.Info = node.Name;
-                        if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
-                            ed.CssClass = "belongsTo";
-                        ed.Click +=
-                            delegate(object sender, EventArgs e)
-                            {
-                                LinkButton lb = sender as LinkButton;
-                                Label ctrlOld = Magix.UX.Selector.SelectFirst<Label>(lb.Parent.Parent.Parent,
-                                    delegate(Control idxCtrl)
-                                    {
-                                        BaseWebControl ctrl = idxCtrl as BaseWebControl;
-                                        if (ctrl != null)
-                                            return ctrl.CssClass == "grid-selected";
-                                        return false;
-                                    });
-                                if (ctrlOld != null)
-                                    ctrlOld.CssClass = "";
-                                (lb.Parent.Parent as Label).CssClass = "grid-selected";
-                                int id = DataSource["Object"]["ID"].Get<int>();
-                                string column = lb.Info;
-                                Node n = new Node();
-                                n["ID"].Value = id;
-                                n["PropertyName"].Value = column;
-                                n["IsList"].Value = DataSource["Type"]["Properties"][column]["IsList"].Value;
-                                n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                                RaiseSafeEvent(
-                                    "DBAdmin.Form.ViewListOrComplexPropertyValue",
-                                    n);
-                            };
-                        c1.Controls.Add(ed);
-                    }
+
+                    string eventName = 
+                        DataSource["Type"]["Properties"][node.Name]["TemplateColumnEvent"].Get<string>();
+
+                    Node colNode = new Node();
+                    colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>(); ;
+                    colNode["Name"].Value = node.Name;
+                    colNode["Value"].Value = node.Get<string>();
+                    colNode["ID"].Value = DataSource["Object"]["ID"].Get<int>();
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        eventName,
+                        colNode);
+
+                    c1.Controls.Add(colNode["Control"].Get<Control>());
+                    row.Controls.Add(c1);
                 }
                 else
                 {
-                    int width = DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth") ?
-                        DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>() : -1;
-
-                    if (DataSource["Type"]["Properties"][node.Name].Contains("ReadOnly") &&
-                        DataSource["Type"]["Properties"][node.Name]["ReadOnly"].Get<bool>())
+                    bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
+                        DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
+                    Label c1 = new Label();
+                    if (bold)
+                        c1.Style[Styles.fontWeight] = "bold";
+                    if (DataSource.Contains("WhiteListProperties") &&
+                        DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                     {
-                        Label ed = new Label();
-                        if (width != -1)
+                        c1.CssClass += "wide-" +
+                            DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
+                    }
+                    c1.Tag = "td";
+                    if (DataSource["Type"]["Properties"][node.Name]["IsComplex"].Get<bool>())
+                    {
+                        if (DataSource["Type"]["Properties"][node.Name].Contains("ReadOnly") &&
+                            DataSource["Type"]["Properties"][node.Name]["ReadOnly"].Get<bool>())
                         {
-                            ed.CssClass = "db-table-cell-content span-" + width;
+                            Label ed = new Label();
+                            ed.Text = node.Value.ToString();
+                            c1.Controls.Add(ed);
                         }
-                        ed.Text = node.Value as string;
-                        c1.Controls.Add(ed);
+                        else
+                        {
+                            LinkButton ed = new LinkButton();
+                            ed.Text = node.Value.ToString();
+                            ed.Info = node.Name;
+                            if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
+                                ed.CssClass = "belongsTo";
+                            ed.Click +=
+                                delegate(object sender, EventArgs e)
+                                {
+                                    LinkButton lb = sender as LinkButton;
+                                    Label ctrlOld = Magix.UX.Selector.SelectFirst<Label>(lb.Parent.Parent.Parent,
+                                        delegate(Control idxCtrl)
+                                        {
+                                            BaseWebControl ctrl = idxCtrl as BaseWebControl;
+                                            if (ctrl != null)
+                                                return ctrl.CssClass == "grid-selected";
+                                            return false;
+                                        });
+                                    if (ctrlOld != null)
+                                        ctrlOld.CssClass = "";
+                                    (lb.Parent.Parent as Label).CssClass = "grid-selected";
+                                    int id = DataSource["Object"]["ID"].Get<int>();
+                                    string column = lb.Info;
+                                    Node n = new Node();
+                                    n["ID"].Value = id;
+                                    n["PropertyName"].Value = column;
+                                    n["IsList"].Value = DataSource["Type"]["Properties"][column]["IsList"].Value;
+                                    n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                    RaiseSafeEvent(
+                                        "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                                        n);
+                                };
+                            c1.Controls.Add(ed);
+                        }
                     }
                     else
                     {
-                        switch (DataSource["Type"]["Properties"][node.Name]["FullTypeName"].Get<string>())
+                        if (DataSource["Type"]["Properties"][node.Name].Contains("ReadOnly") &&
+                            DataSource["Type"]["Properties"][node.Name]["ReadOnly"].Get<bool>())
                         {
-                            default:
-                                {
-                                    TextAreaEdit ed = new TextAreaEdit();
-                                    if (width != -1)
+                            Label ed = new Label();
+                            ed.Text = node.Value as string;
+                            c1.Controls.Add(ed);
+                        }
+                        else
+                        {
+                            switch (DataSource["Type"]["Properties"][node.Name]["FullTypeName"].Get<string>())
+                            {
+                                default:
                                     {
-                                        ed.Style[Styles.display] = "block";
-                                        ed.CssClass = "span-" + width;
-                                    }
-                                    ed.TextLength = 500;
-                                    ed.Text = node.Value as string;
-                                    ed.CssClass += " larger";
-                                    ed.Info = node.Name;
-                                    ed.TextChanged +=
-                                        delegate(object sender, EventArgs e)
-                                        {
-                                            TextAreaEdit edit = sender as TextAreaEdit;
-                                            int id = DataSource["Object"]["ID"].Get<int>();
-                                            string column = edit.Info;
-                                            Node n = new Node();
-                                            n["ID"].Value = id;
-                                            n["PropertyName"].Value = column;
-                                            n["NewValue"].Value = edit.Text;
-                                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                                            RaiseSafeEvent(
-                                                "DBAdmin.Data.ChangeSimplePropertyValue",
-                                                n);
-                                        };
-                                    c1.Controls.Add(ed);
-                                } break;
+                                        TextAreaEdit ed = new TextAreaEdit();
+                                        ed.TextLength = 500;
+                                        ed.Text = node.Value as string;
+                                        ed.CssClass += " larger";
+                                        ed.Info = node.Name;
+                                        ed.TextChanged +=
+                                            delegate(object sender, EventArgs e)
+                                            {
+                                                TextAreaEdit edit = sender as TextAreaEdit;
+                                                int id = DataSource["Object"]["ID"].Get<int>();
+                                                string column = edit.Info;
+                                                Node n = new Node();
+                                                n["ID"].Value = id;
+                                                n["PropertyName"].Value = column;
+                                                n["NewValue"].Value = edit.Text;
+                                                n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                                RaiseSafeEvent(
+                                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                                    n);
+                                            };
+                                        c1.Controls.Add(ed);
+                                    } break;
+                            }
                         }
                     }
+                    row.Controls.Add(c1);
                 }
-                row.Controls.Add(c1);
             }
             return row;
         }
@@ -334,7 +386,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 HtmlTableCell c1 = new HtmlTableCell();
                 c1.InnerHtml = "Name";
-                if (DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
                     c1.Attributes.Add(
                         "class",
                         "wide-" +
@@ -350,7 +403,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 HtmlTableCell c1 = new HtmlTableCell();
                 c1.InnerHtml = "Type";
-                c1.Attributes.Add("class", "wide-4");
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"]["Type"].Contains("ForcedWidth"))
+                    c1.Attributes.Add(
+                        "class",
+                        "wide-" +
+                        DataSource["WhiteListProperties"]["Type"]["ForcedWidth"].Get<int>());
+                else
+                    c1.Attributes.Add("class", "wide-4");
                 row.Cells.Add(c1);
             }
 
@@ -360,7 +420,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 HtmlTableCell c1 = new HtmlTableCell();
                 c1.InnerHtml = "Attributes";
-                c1.Attributes.Add("class", "wide-5");
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"]["Attributes"].Contains("ForcedWidth"))
+                    c1.Attributes.Add(
+                        "class",
+                        "wide-" +
+                        DataSource["WhiteListProperties"]["Attributes"]["ForcedWidth"].Get<int>());
+                else
+                    c1.Attributes.Add("class", "wide-5");
                 row.Cells.Add(c1);
             }
 
@@ -370,7 +437,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 HtmlTableCell c1 = new HtmlTableCell();
                 c1.InnerHtml = "Value";
-                if (DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
+                if (DataSource.Contains("WhiteListProperties") && 
+                    DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                     c1.Attributes.Add(
                         "class", 
                         "wide-" + 
@@ -382,12 +450,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return row;
         }
 
+        [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
+        protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
+            {
+                ReDataBind();
+            }
+        }
+
         protected override void ReDataBind()
         {
-            if (DataSource["ParentID"].Get<int>() > 0)
+            if (DataSource.Contains("ParentID") && 
+                DataSource["ParentID"].Get<int>() > 0)
             {
                 DataSource["Object"].UnTie();
-                DataSource["Type"].UnTie();
+                //DataSource["Type"].UnTie();
                 if (RaiseSafeEvent(
                     "DBAdmin.Data.GetObjectFromParentProperty",
                     DataSource))
@@ -403,7 +481,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     return;
                 DataSource["ID"].Value = DataSource["Object"]["ID"].Get<int>();
                 DataSource["Object"].UnTie();
-                DataSource["Type"].UnTie(); // TODO; Remove ALL of these UnTies [Type unties] since they destroy architecture by not allowing DRY ...
+                //DataSource["Type"].UnTie(); // TODO; Remove ALL of these UnTies [Type unties] since they destroy architecture by not allowing DRY ...
                 if (RaiseSafeEvent(
                     "DBAdmin.Data.GetObject",
                     DataSource))

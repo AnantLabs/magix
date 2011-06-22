@@ -17,7 +17,6 @@ namespace Magix.UX.Widgets
         private string _text;
         private bool _enabled = true;
         private SelectList _selectList;
-        private bool _hasSetSelectedTrue;
 
         public ListItem()
         { }
@@ -40,10 +39,7 @@ namespace Magix.UX.Widgets
             {
                 if (value)
                 {
-                    if (_selectList == null)
-                        _hasSetSelectedTrue = true;
-                    else
-                        _selectList.SelectedItem = this;
+                    _selectList.SelectedItem = this;
                 }
                 else if (this.Selected)
                     _selectList.SelectedIndex = 0;
@@ -56,8 +52,6 @@ namespace Magix.UX.Widgets
             set
             {
                 _selectList = value;
-                if (_hasSetSelectedTrue)
-                    _selectList.SelectedItem = this;
             }
         }
 

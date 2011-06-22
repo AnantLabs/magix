@@ -91,6 +91,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             TableParent.Controls.Add(table);
             DataBindDone();
+
             // TODO: Refactor ...!
             if (Parent.Parent.Parent is Window)
             {
@@ -527,14 +528,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 bool columnVisible = GetColumnVisibility(idx.Name);
                 if (!columnVisible)
                     continue;
+
                 Label l = new Label();
                 l.Tag = "td";
                 l.Info = idx.Name;
+
                 if (DataSource["Type"]["Properties"][idx.Name].Contains("TemplateColumnEvent") &&
                     !string.IsNullOrEmpty(
                         DataSource["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Get<string>()))
                 {
                     string eventName = DataSource["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Get<string>();
+
                     Node colNode = new Node();
                     colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>(); ;
                     colNode["Name"].Value = idx.Name;
