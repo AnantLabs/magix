@@ -248,10 +248,29 @@
         }
         if (!found) {
           var el = document.createElement("link");
-          el.href = scr[1];
+          var href = scr[1];
+          el.href = href;
           el.rel = 'stylesheet';
           el.type = 'text/css';
-          document.getElementsByTagName('head')[0].appendChild(el);
+          var head = document.getElementsByTagName('head')[0];
+
+          if(href.indexOf('?back') != -1) {
+            head.appendChild(el);
+          } else {
+            var frScr = null;
+            for (var i = 0; i < head.children.length; i++) {
+              var idxCh = head.children[i];
+              if (idxCh.tagName == 'SCRIPT') {
+                frScr = idxCh;
+                break;
+              }
+              if(idxCh.tagName == 'LINK' && idxCh.href.indexOf('?back') != -1) {
+                frScr = idxCh;
+                break;
+              }
+            }
+            head.insertBefore(el, frScr);
+          }
         }
         scr = rx.exec(val);
       }
