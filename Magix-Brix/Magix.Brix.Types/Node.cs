@@ -8,6 +8,7 @@ using System;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Magix.Brix.Types
 {
@@ -459,6 +460,9 @@ namespace Magix.Brix.Types
                 {
                     case "System.String":
                         value = Value.ToString().Replace("\"", "\\\"");
+                        break;
+                    case "System.DateTime":
+                        value = ((DateTime)Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
                         break;
                     default:
                         value = Value.ToString();

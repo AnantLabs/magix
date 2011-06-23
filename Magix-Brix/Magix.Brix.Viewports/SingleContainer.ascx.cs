@@ -14,6 +14,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using System.Web;
 using System.Configuration;
+using System.Collections.Generic;
 
 [assembly: WebResource("Magix.Brix.Viewports.iscroll.js", "text/javascript")]
 
@@ -63,6 +64,13 @@ namespace Magix.Brix.Viewports
         {
             debug.Visible = _isDebug;
             base.OnLoad(e);
+
+            // Re-including all previously embedded CSS files
+            // Need to preserve CSS files for those scenarios where 
+            // you're doing a 'conventional postback' ...
+            if (!AjaxManager.Instance.IsCallback && IsPostBack)
+                IncludeAllCssFiles();
+
             HttpCookie cookie = Request.Cookies["UserID"];
             if (cookie == null)
             {
@@ -77,6 +85,14 @@ namespace Magix.Brix.Viewports
                     this,
                     "Magix.Core.NewUserIDCookieCreated",
                     node);
+            }
+        }
+
+        private void IncludeAllCssFiles()
+        {
+            foreach (string idx in CssFiles)
+            {
+                IncludeCssFile(idx);
             }
         }
 
@@ -157,15 +173,32 @@ namespace Magix.Brix.Viewports
 
         private bool firstMessage = true;
 
+        private List<string> CssFiles
+        {
+            get
+            {
+                if (ViewState["CssFiles"] == null)
+                    ViewState["CssFiles"] = new List<string>();
+                return ViewState["CssFiles"] as List<string>;
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]
         protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
         {
             string cssFile = e.Params["CSSFile"].Get<String>();
+            CssFiles.Add(cssFile);
+            IncludeCssFile(cssFile);
+        }
+
+        private void IncludeCssFile(string cssFile)
+        {
             if (!string.IsNullOrEmpty(cssFile))
             {
                 if (AjaxManager.Instance.IsCallback)
                 {
-                    AjaxManager.Instance.WriterAtBack.Write(@"MUX.Element.prototype.includeCSS('<link href=""{0}"" rel=""stylesheet"" type=""text/css"" />');", cssFile);
+                    AjaxManager.Instance.WriterAtBack.Write(
+                        @"MUX.Element.prototype.includeCSS('<link href=""{0}"" rel=""stylesheet"" type=""text/css"" />');", cssFile);
                 }
                 else
                 {

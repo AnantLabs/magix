@@ -1,5 +1,5 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * MagixBRIX - A Web Application Framework for ASP.NET
  * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
  * MagicBRIX is licensed as GPLv3.
  */
@@ -39,6 +39,9 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                     while (start.DayOfWeek != DayOfWeek.Sunday)
                         start = start.AddDays(-1);
 
+                    while (end.DayOfWeek != DayOfWeek.Sunday)
+                        end = end.AddDays(1);
+
                     // Putting start/end dates into our DataSource
                     DataSource["Start"].Value = start;
                     DataSource["End"].Value = end;
@@ -68,6 +71,11 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                 {
                     Panel cell = new Panel();
                     cell.CssClass = "mux-big-calendar-item mux-rounded mux-shaded";
+                    if (DataSource["Objects"][idx.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture)]
+                        .Contains("CssClass"))
+                    {
+                        cell.CssClass += " " + DataSource["Objects"][idx.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture)]["CssClass"].Get<string>();
+                    }
                     string position = " pos-" + idxNoTotal ++;
                     cell.CssClass += position;
                     cell.Info = idx.Date.ToString("yyyy.MM.dd");
@@ -181,9 +189,16 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
             }
             else
             {
-                DateTime date = DateTime.ParseExact(p.Info.Split('|')[0], "yyyy.MM.dd", CultureInfo.InvariantCulture);
+                DateTime date = 
+                    DateTime.ParseExact(
+                        p.Info.Split('|')[0], 
+                        "yyyy.MM.dd", 
+                        CultureInfo.InvariantCulture);
 
-                string position = p.CssClass.Substring(p.CssClass.IndexOf("pos")).Split(' ')[0];
+                string position = 
+                    p.CssClass.Substring(
+                        p.CssClass.IndexOf("pos"))
+                    .Split(' ')[0];
 
                 switch (position)
                 {
