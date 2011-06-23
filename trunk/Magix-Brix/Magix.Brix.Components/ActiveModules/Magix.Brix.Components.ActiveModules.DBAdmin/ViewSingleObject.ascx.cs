@@ -291,6 +291,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         {
                             Label ed = new Label();
                             ed.Text = node.Value.ToString();
+                            if (DataSource.Contains("WhiteListProperties") &&
+                                DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
+                            {
+                                c1.CssClass += "span-" + 
+                                    DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
+                            }
                             c1.Controls.Add(ed);
                         }
                         else
@@ -336,6 +342,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         {
                             Label ed = new Label();
                             ed.Text = node.Value as string;
+                            if (DataSource.Contains("WhiteListProperties") &&
+                                DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
+                            {
+                                ed.CssClass += "span-" +
+                                    DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
+                            }
                             c1.Controls.Add(ed);
                         }
                         else

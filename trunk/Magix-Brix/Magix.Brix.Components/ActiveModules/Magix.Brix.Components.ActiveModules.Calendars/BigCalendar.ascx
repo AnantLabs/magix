@@ -6,6 +6,8 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.Calendars.BigCalendar" %>
 
+<link href="media/modules/Calendar.css" rel="stylesheet" type="text/css" />
+
 <mux:Panel
     runat="server"
     CssClass="span-15 last"
