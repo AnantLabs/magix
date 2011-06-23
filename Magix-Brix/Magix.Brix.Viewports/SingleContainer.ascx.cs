@@ -186,9 +186,32 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]
         protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
         {
-            string cssFile = e.Params["CSSFile"].Get<String>();
-            CssFiles.Add(cssFile);
-            IncludeCssFile(cssFile);
+            if (e.Params.Contains("CSSFile"))
+            {
+                string cssFile = e.Params["CSSFile"].Get<String>();
+                CssFiles.Add(cssFile);
+                IncludeCssFile(cssFile);
+            }
+            foreach (Node idx in e.Params)
+            {
+                if (idx.Name.IndexOf("CSSFile") == 0 &&
+                    idx.Name != "CSSFile")
+                {
+                    // BEGINS with CSSFile, but is NOT CSSFile directly
+                    // Meaning, will handle stuff such as "CSSFile1" and "CSSFile-Main" etc ...
+
+                    // PS!
+                    // Will add them in the order they were ADDED to the node, NOT the
+                    // alphabetical order, numerical order or anything else ...
+                    string cssFile = idx.Get<string>();
+                    if (idx.Contains("Back") && idx["Back"].Get<bool>())
+                    {
+                        cssFile += "?back";
+                    }
+                    CssFiles.Add(cssFile);
+                    IncludeCssFile(cssFile);
+                }
+            }
         }
 
         private void IncludeCssFile(string cssFile)
