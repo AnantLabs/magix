@@ -465,7 +465,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
         protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
+            if (e.Params["FullTypeName"].Get<string>().Contains(DataSource["FullTypeName"].Get<string>()))
             {
                 ReDataBind();
             }
