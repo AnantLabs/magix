@@ -34,6 +34,12 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             set { ViewState["CancelNode"] = value; }
         }
 
+        private Node ExtraButtons
+        {
+            get { return ViewState["ExtraButtons"] as Node; }
+            set { ViewState["ExtraButtons"] = value; }
+        }
+
         public void InitialLoading(Node node)
         {
             Load += delegate
@@ -42,6 +48,8 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 txt.Text = message;
                 OkNode = node["OK"].UnTie();
                 CancelNode = node["Cancel"].UnTie();
+                if (node.Contains("ExtraButtons"))
+                    ExtraButtons = node["ExtraButtons"].UnTie();
                 if (!CancelNode["Visible"].Get(true))
                 {
                     cancel.Visible = false;
@@ -52,6 +60,37 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                         new EffectFocusAndSelect(txt))
                     .Render();
             };
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            CreateExtraButtons();
+        }
+
+        private void CreateExtraButtons()
+        {
+            if (ExtraButtons != null)
+            {
+                foreach (Node idx in ExtraButtons)
+                {
+                    Button b = new Button();
+                    b.Text = idx["Caption"].Get<string>();
+                    b.Info = idx.Name;
+                    if (idx.Contains("CssClass"))
+                        b.CssClass += idx["CssClass"].Get<string>();
+                    b.Click +=
+                        delegate(object sender, EventArgs e)
+                        {
+                            Button b2 = sender as Button;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                ExtraButtons[b2.Info]["Event"].Get<string>(),
+                                ExtraButtons[b2.Info]["EventNode"]);
+                        };
+                    this.Controls.Add(b);
+                }
+            }
         }
 
         protected void ok_Click(object sender, EventArgs e)

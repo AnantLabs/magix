@@ -337,7 +337,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
         protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
+            if (e.Params["FullTypeName"].Get<string>().Contains(DataSource["FullTypeName"].Get<string>()))
             {
                 ReDataBind();
             }
@@ -608,7 +608,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         l.CssClass += "read-only";
                         Label ll = new Label();
-                        ll.Text = idx.Get<string>();
+                        string txt = idx.Get<string>();
+                        if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
+                        {
+                            int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();
+                            if (txt.Length > maxLength)
+                                txt = txt.Substring(0, maxLength) + "...";
+                        }
+                        ll.Text = txt;
                         l.Controls.Add(ll);
                     }
                     else

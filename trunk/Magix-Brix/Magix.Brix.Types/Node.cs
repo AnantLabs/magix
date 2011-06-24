@@ -489,5 +489,10 @@ namespace Magix.Brix.Types
             builder.Append("}");
             return builder.ToString();
         }
+
+        public void Sort(Comparison<Node> del)
+        {
+            _children.Sort(del);
+        }
     }
 }
