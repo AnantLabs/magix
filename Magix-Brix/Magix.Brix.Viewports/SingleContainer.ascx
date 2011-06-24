@@ -20,6 +20,12 @@
         AlternateText="Marvin's brain ..." />
 </mux:AjaxWait>
 
+<mux:Timer
+    runat="server"
+    id="timer"
+    OnTick="timer_Tick"
+    Enabled="false" />
+
 <mux:Label
     runat="server"
     CssClass="mux-shaded mux-rounded span-1 height-10 mux-debug"

@@ -348,11 +348,12 @@ namespace Magix.UX.Widgets.Core
             {
                 if (handlers[idx] != null)
                 {
+                    string xtra = _handlerNames[idx] == "click" ? ", true" : "";
                     evts = StringHelper.ConditionalAdd(
                         evts,
                         "",
                         ",",
-                        "['" + _handlerNames[idx] + "']");
+                        "['" + _handlerNames[idx] + "'" + xtra + "]");
                 }
             }
             return evts;
