@@ -38,6 +38,7 @@ namespace Magix.Brix.Viewports
         protected AspectSmartScroll scroll;
         protected Image ajaxWait;
         protected Label debug;
+        protected Timer timer;
         private string debugText = "";
 
         private bool _isDebug;
@@ -86,6 +87,23 @@ namespace Magix.Brix.Viewports
                     "Magix.Core.NewUserIDCookieCreated",
                     node);
             }
+
+            Page.LoadComplete += Page_LoadComplete;
+        }
+
+        void Page_LoadComplete(object sender, EventArgs e)
+        {
+            debug.Text = debugText;
+        }
+
+        protected void timer_Tick(object sender, EventArgs e)
+        {
+            // ORDER COUNTS!!!
+            // In case of exceptions ...
+            timer.Enabled = false;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                timer.Info);
         }
 
         private void IncludeAllCssFiles()
@@ -165,12 +183,6 @@ namespace Magix.Brix.Viewports
             }
         }
 
-        protected override void OnPreRender(EventArgs e)
-        {
-            debug.Text = debugText;
-            base.OnPreRender(e);
-        }
-
         private bool firstMessage = true;
 
         private List<string> CssFiles
@@ -181,6 +193,13 @@ namespace Magix.Brix.Viewports
                     ViewState["CssFiles"] = new List<string>();
                 return ViewState["CssFiles"] as List<string>;
             }
+        }
+
+        [ActiveEvent(Name = "Magix.Core.TimeOut")]
+        protected void Magix_Core_TimeOut(object sender, ActiveEventArgs e)
+        {
+            timer.Enabled = true;
+            timer.Info = e.Params["EventName"].Get<string>();
         }
 
         [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]

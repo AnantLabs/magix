@@ -42,6 +42,10 @@
       <DependentUpon>Clickable.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="GetShortNote.ascx.cs">
+      <DependentUpon>GetShortNote.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Separator.ascx.cs">
       <DependentUpon>Separator.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -114,6 +118,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Separator.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GetShortNote.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

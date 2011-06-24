@@ -97,6 +97,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Node node = new Node();
             node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
             RaiseSafeEvent(
+                DataSource.Contains("CreateEventName") ? 
+                DataSource["CreateEventName"].Get<string>() :
                 "DBAdmin.Common.CreateObject",
                 node);
             ReDataBind(true);
