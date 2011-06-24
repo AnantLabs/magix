@@ -608,7 +608,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         l.CssClass += "read-only";
                         Label ll = new Label();
-                        string txt = idx.Get<string>();
+                        string txt = idx.Get<string>() ?? "";
                         if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
                         {
                             int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();
