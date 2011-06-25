@@ -22,6 +22,7 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
     public class BigCalendar : UserControl, IModule
     {
         protected Panel pnl;
+        protected TextBox filter;
 
         public void InitialLoading(Node node)
         {
@@ -31,27 +32,68 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                     DataSource = node;
 
                     // Figuring out our start/end dates here ...
-                    DateTime start = DataSource["Month"].Get<DateTime>();
-                    start = new DateTime(start.Year, start.Month, 1);
-                    DateTime end = start.AddMonths(1);
-
-                    // Finding first Sunday before our start ...
-                    while (start.DayOfWeek != DayOfWeek.Sunday)
-                        start = start.AddDays(-1);
-
-                    while (end.DayOfWeek != DayOfWeek.Sunday)
-                        end = end.AddDays(1);
-
-                    // Putting start/end dates into our DataSource
-                    DataSource["Start"].Value = start;
-                    DataSource["End"].Value = end;
-
-                    // Fetching items ...
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
-                        DataSource["GetItemsEvent"].Get<string>(),
-                        DataSource);
+                    DateTime month = DataSource["Month"].Get<DateTime>();
+                    FetchCalendarItems(month);
                 };
+        }
+
+        private void FetchCalendarItems(DateTime month)
+        {
+            DateTime start = new DateTime(month.Year, month.Month, 1);
+            DateTime end = start.AddMonths(1);
+
+            // Finding first Sunday before our start ...
+            while (start.DayOfWeek != DayOfWeek.Sunday)
+                start = start.AddDays(-1);
+
+            while (end.DayOfWeek != DayOfWeek.Sunday)
+                end = end.AddDays(1);
+
+            // Putting start/end dates into our DataSource
+            DataSource["Start"].Value = start;
+            DataSource["End"].Value = end;
+
+            // Fetching items ...
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                DataSource["GetItemsEvent"].Get<string>(),
+                DataSource);
+        }
+
+        protected void Previous(object sender, EventArgs e)
+        {
+            DateTime month = DataSource["Month"].Get<DateTime>();
+            month = month.AddMonths(-1);
+            DataSource["Month"].Value = new DateTime(month.Year, month.Month, 1);
+            pnl.Controls.Clear();
+            DataSource["Objects"].UnTie();
+            FetchCalendarItems(month);
+            CreateCalendar();
+            pnl.ReRender();
+        }
+
+        protected void Next(object sender, EventArgs e)
+        {
+            DateTime month = DataSource["Month"].Get<DateTime>();
+            month = month.AddMonths(1);
+            DataSource["Month"].Value = new DateTime(month.Year, month.Month, 1);
+            pnl.Controls.Clear();
+            DataSource["Objects"].UnTie();
+            FetchCalendarItems(month);
+            CreateCalendar();
+            pnl.ReRender();
+        }
+
+        protected void Filter(object sender, EventArgs e)
+        {
+            DataSource["Filter"].Value = filter.Text;
+            pnl.Controls.Clear();
+            DataSource["Objects"].UnTie();
+            FetchCalendarItems(DataSource["Month"].Get<DateTime>());
+            CreateCalendar();
+            pnl.ReRender();
+            filter.Focus();
+            filter.Select();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -121,7 +163,7 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                         cell.CssClass += " cal-today";
                         cell.ToolTip += " Today!";
                     }
-                    if (idx.Date.Month != DateTime.Now.Date.Month)
+                    if (idx.Date.Month != DataSource["Month"].Get<DateTime>().Month)
                     {
                         cell.CssClass += " cal-off-month";
                         cell.ToolTip += idx.Date.ToString("MMMM", CultureInfo.InvariantCulture);
@@ -138,6 +180,10 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                         else
                         {
                             det.Text = "View Details ...";
+                        }
+                        if (DataSource.Contains("DateDetailsClickedEventTooltip"))
+                        {
+                            det.ToolTip = DataSource["DateDetailsClickedEventTooltip"].Get<string>();
                         }
                         det.CssClass = "cal-view-details";
                         det.Info = idx.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
@@ -195,6 +241,36 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                                     ActiveEvents.Instance.RaiseActiveEvent(
                                         this,
                                         tmpNode["ClickEvent"].Get<string>(),
+                                        node);
+                                };
+                            item.Text = idxObj["Header"].Get<string>();
+                            item.ToolTip = idxObj["Body"].Get<string>();
+                            cell.Controls.Add(item);
+                        }
+                        else if (idxObj.Contains("EditEvent"))
+                        {
+                            Node tmpNode = idxObj;
+
+                            TextAreaEdit item = new TextAreaEdit();
+                            if (idxObj.Contains("CssClass"))
+                                item.CssClass = "cal-activity " + idxObj["CssClass"].Get<string>();
+                            else
+                                item.CssClass = "cal-activity";
+                            item.Info = idx.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
+                            item.TextChanged +=
+                                delegate(object sender2, EventArgs e2)
+                                {
+                                    Node node = null;
+                                    if (tmpNode.Contains("EditEventParams"))
+                                    {
+                                        node = tmpNode["EditEventParams"];
+                                    }
+                                    else
+                                        node = new Node();
+                                    node["Text"].Value = (sender2 as TextAreaEdit).Text;
+                                    ActiveEvents.Instance.RaiseActiveEvent(
+                                        this,
+                                        tmpNode["EditEvent"].Get<string>(),
                                         node);
                                 };
                             item.Text = idxObj["Header"].Get<string>();
@@ -306,41 +382,44 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                 if (!string.IsNullOrEmpty(PreviousSelected))
                 {
                     Panel old = Selector.FindControlClientID<Panel>(pnl, PreviousSelected);
-                    if (old.CssClass.Contains(" cal-selected-top-left"))
+                    if (old != null)
                     {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-top-left", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected-top-right"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-top-right", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected-bottom-left"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-bottom-left", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected-bottom-right"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-bottom-right", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected-top"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-top", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected-bottom"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-bottom", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected-left"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-left", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected-right"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected-right", "");
-                    }
-                    else if (old.CssClass.Contains(" cal-selected"))
-                    {
-                        old.CssClass = old.CssClass.Replace(" cal-selected", "");
+                        if (old.CssClass.Contains(" cal-selected-top-left"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-top-left", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected-top-right"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-top-right", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected-bottom-left"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-bottom-left", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected-bottom-right"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-bottom-right", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected-top"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-top", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected-bottom"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-bottom", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected-left"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-left", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected-right"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected-right", "");
+                        }
+                        else if (old.CssClass.Contains(" cal-selected"))
+                        {
+                            old.CssClass = old.CssClass.Replace(" cal-selected", "");
+                        }
                     }
                 }
 
