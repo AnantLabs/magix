@@ -33,6 +33,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 delegate
                 {
                     appendPnl.Visible = DataSource["IsAppend"].Get<bool>();
+
+                    if (node.Contains("ChildCssClass"))
+                    {
+                        pnl.CssClass = node["ChildCssClass"].Get<string>();
+                    }
                 };
         }
 
@@ -103,7 +108,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             string parentTypeName = DataSource["ParentFullTypeName"].Get<string>();
             parentTypeName = parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1);
-            (Parent.Parent.Parent as Window).Caption = string.Format(
+            string caption = string.Format(
                 "{0} {1}-{2}/{3} of {4}[{5}]/{6}",
                 DataSource["TypeName"].Get<string>(),
                 ((int)DataSource["Start"].Value) + 1,
@@ -112,6 +117,20 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 parentTypeName,
                 DataSource["ParentID"].Value,
                 DataSource["ParentPropertyName"].Value);
+
+            if (Parent.Parent.Parent is Window)
+            {
+                (Parent.Parent.Parent as Window).Caption = caption;
+            }
+            else
+            {
+                Node node = new Node();
+                node["Caption"].Value = caption;
+                RaiseSafeEvent(
+                    "Magix.Core.SetFormCaption",
+                    node);
+            }
+
             if (DataSource["Start"].Get<int>() > 0)
             {
                 previous.Enabled = true;

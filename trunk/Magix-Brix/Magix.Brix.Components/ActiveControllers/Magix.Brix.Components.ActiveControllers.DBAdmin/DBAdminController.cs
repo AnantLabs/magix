@@ -114,10 +114,18 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             string propertyName = e.Params["PropertyName"].Get<string>();
             bool isList = e.Params["IsList"].Get<bool>();
+
             Node node = new Node();
+            if (e.Params.Contains("ReUseNode") && e.Params["ReUseNode"].Get<bool>())
+                node = e.Params;
+
             node["ParentID"].Value = id;
             node["ParentFullTypeName"].Value = fullTypeName;
             node["ParentPropertyName"].Value = propertyName;
+
+            if (e.Params.Contains("Append"))
+                node["Append"].Value = e.Params["Append"].Value;
+
             if (isList)
             {
                 Data.Instance.GetComplexPropertyFromListObjectNode(
@@ -132,7 +140,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["IsFilter"].Value = false;
                 LoadModule(
                     "Magix.Brix.Components.ActiveModules.DBAdmin.ViewListOfObjects",
-                    "child",
+                    (e.Params.Contains("Container") ? e.Params["Container"].Get<string>() :  "child"),
                     node);
             }
             else
