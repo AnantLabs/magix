@@ -237,6 +237,12 @@ namespace Magix.Brix.Viewports
         {
             if (!string.IsNullOrEmpty(cssFile))
             {
+                if (cssFile.Contains("~"))
+                {
+                    string appPath = HttpContext.Current.Request.Url.ToString();
+                    appPath = appPath.Substring(0, appPath.LastIndexOf('/'));
+                    cssFile = cssFile.Replace("~", appPath);
+                }
                 if (AjaxManager.Instance.IsCallback)
                 {
                     AjaxManager.Instance.WriterAtBack.Write(

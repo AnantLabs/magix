@@ -363,6 +363,40 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             set { ViewState["SelectedID"] = value; }
         }
 
+        [ActiveEvent(Name = "DBAdmin.Grid.SetActiveRow")]
+        public void DBAdmin_Grid_SetActiveRow(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
+            {
+                if (SelectedID != -1)
+                {
+                    if (e.Params["ID"].Get<int>() != SelectedID)
+                    {
+                        Label l = Selector.SelectFirst<Label>(this,
+                            delegate(Control idxCtrl)
+                            {
+                                return idxCtrl is Label && 
+                                    (idxCtrl as Label).Info == SelectedID.ToString();
+                            });
+                        if (l != null)
+                            l.CssClass = "";
+                    }
+                }
+                SelectedID = e.Params["ID"].Get<int>();
+                if (SelectedID != -1)
+                {
+                    Label l = Selector.SelectFirst<Label>(this,
+                        delegate(Control idxCtrl)
+                        {
+                            return idxCtrl is Label &&
+                                (idxCtrl as Label).Info == SelectedID.ToString();
+                        });
+                    if (l != null)
+                        l.CssClass = "grid-selected";
+                }
+            }
+        }
+
         private Control CreateRow(Node node)
         {
             Label row = new Label();
@@ -435,7 +469,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         n["ParentID"].Value = DataSource["ParentID"].Value;
                         n["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
                         n["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
-                        RaiseSafeEvent("DBAdmin.Form.RemoveObjectFromParentPropertyList", n);
+
+                        RaiseSafeEvent(
+                            "DBAdmin.Form.RemoveObjectFromParentPropertyList", 
+                            n);
                     };
                 cS.Controls.Add(lb2);
                 row.Controls.Add(cS);
