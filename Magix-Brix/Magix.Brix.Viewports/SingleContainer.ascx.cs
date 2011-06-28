@@ -28,6 +28,8 @@ namespace Magix.Brix.Viewports
         protected DynamicPanel content3;
         protected DynamicPanel content4;
         protected DynamicPanel content5;
+        protected DynamicPanel content6;
+        protected DynamicPanel content7;
         protected DynamicPanel fullScreen;
         protected Window message;
         protected Label msgLbl;
@@ -298,8 +300,25 @@ namespace Magix.Brix.Viewports
                 ClearControls(pnl);
                 if (pnl.ID == "content3")
                 {
-                    // These two are normally grouped together ...
                     ClearControls(content4);
+                    ClearControls(content5);
+                    ClearControls(content6);
+                    ClearControls(content7);
+                }
+                else if (pnl.ID == "content4")
+                {
+                    ClearControls(content5);
+                    ClearControls(content6);
+                    ClearControls(content7);
+                }
+                else if (pnl.ID == "content5")
+                {
+                    ClearControls(content6);
+                    ClearControls(content7);
+                }
+                else if (pnl.ID == "content6")
+                {
+                    ClearControls(content7);
                 }
             }
             else if (e.Params["Position"].Get<string>() == "child")
@@ -375,6 +394,16 @@ namespace Magix.Brix.Viewports
                     {
                         ClearControls(content5);
                         e.Params["FREEZE5"].UnTie(); // To be sure ...!
+                    }
+                    if (!(e.Params["Parameters"].Contains("FREEZE6") && e.Params["Parameters"]["FREEZE6"].Get<bool>()))
+                    {
+                        ClearControls(content6);
+                        e.Params["FREEZE6"].UnTie(); // To be sure ...!
+                    }
+                    if (!(e.Params["Parameters"].Contains("FREEZE7") && e.Params["Parameters"]["FREEZE7"].Get<bool>()))
+                    {
+                        ClearControls(content7);
+                        e.Params["FREEZE7"].UnTie(); // To be sure ...!
                     }
                 }
 

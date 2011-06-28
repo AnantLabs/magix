@@ -57,6 +57,14 @@
         runat="server" 
         OnReload="dynamic_LoadControls"
         id="content5" />
+    <mux:DynamicPanel 
+        runat="server" 
+        OnReload="dynamic_LoadControls"
+        id="content6" />
+    <mux:DynamicPanel 
+        runat="server" 
+        OnReload="dynamic_LoadControls"
+        id="content7" />
     <mux:Panel
         runat="server"
         CssClass="span-24 last childContainer"

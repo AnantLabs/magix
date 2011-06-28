@@ -45,4 +45,15 @@
         OnClick="append_Click" />
 </mux:Panel>
 
+<mux:Panel
+    runat="server"
+    id="appendPnl2"
+    CssClass="pagingButton append">
+    <mux:Button
+        runat="server"
+        id="extra1"
+        Visible="false"
+        OnClick="extra1_Click" />
+</mux:Panel>
+
 
