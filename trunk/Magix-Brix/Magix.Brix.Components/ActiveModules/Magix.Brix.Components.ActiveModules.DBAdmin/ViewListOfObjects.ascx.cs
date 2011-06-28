@@ -22,6 +22,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button append;
         protected Button previous;
         protected Button next;
+        protected Button extra1;
         protected Panel appendPnl;
         protected Panel previousPnl;
         protected Panel nextPnl;
@@ -37,6 +38,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     if (node.Contains("ChildCssClass"))
                     {
                         pnl.CssClass = node["ChildCssClass"].Get<string>();
+                    }
+                    if (node.Contains("AppendText"))
+                    {
+                        append.Text = node["AppendText"].Get<string>();
+                    }
+                    if (node.Contains("Extra1Event"))
+                    {
+                        extra1.Visible = true;
+                        extra1.Text = node["Extra1EventDescription"].Get<string>();
                     }
                 };
         }
@@ -67,6 +77,19 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     "DBAdmin.Form.AppendObject",
                     node);
             }
+        }
+
+        protected void extra1_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            node["ParentID"].Value = DataSource["ParentID"].Value;
+            node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
+            node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+            RaiseSafeEvent(
+                DataSource["Extra1Event"].Get<string>(),
+                DataSource["Extra1Event"]["Params"]);
+            ReDataBind();
         }
 
         protected void PreviousItems(object sender, EventArgs e)

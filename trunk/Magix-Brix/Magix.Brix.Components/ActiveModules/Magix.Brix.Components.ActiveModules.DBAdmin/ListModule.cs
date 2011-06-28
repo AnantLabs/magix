@@ -658,7 +658,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     else
                     {
                         TextAreaEdit edit = new TextAreaEdit();
-                        edit.TextLength = 20;
+                        if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
+                        {
+                            int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();
+                            edit.TextLength = maxLength;
+                        }
+                        else
+                            edit.TextLength = 20;
                         edit.DisplayTextBox +=
                             delegate(object sender, EventArgs e)
                             {

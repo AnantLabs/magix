@@ -202,9 +202,12 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     prop.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
                 if (attrs[0].BelongsTo || attrs[0].IsOwner)
                 {
-                    node["IsRemove"].Value = false;
-                    node["IsAppend"].Value = true;
-                    node["IsDelete"].Value = true;
+                    if (!node.Contains("IsRemove"))
+                        node["IsRemove"].Value = false;
+                    if (!node.Contains("IsAppend"))
+                        node["IsAppend"].Value = true;
+                    if (!node.Contains("IsDelete"))
+                        node["IsDelete"].Value = true;
                 }
                 else
                 {

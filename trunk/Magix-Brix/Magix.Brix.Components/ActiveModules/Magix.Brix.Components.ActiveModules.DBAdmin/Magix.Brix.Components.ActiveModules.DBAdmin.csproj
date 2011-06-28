@@ -46,6 +46,10 @@
       <DependentUpon>ConfigureFilters.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="FindObject.ascx.cs">
+      <DependentUpon>FindObject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Module.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -115,6 +119,11 @@
       <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
       <Name>Magix.Brix.Components</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FindObject.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

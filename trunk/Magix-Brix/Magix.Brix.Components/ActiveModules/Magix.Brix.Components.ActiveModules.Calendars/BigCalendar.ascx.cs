@@ -205,7 +205,9 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                     // Day of month part
                     Label lbl = new Label();
                     lbl.CssClass = "cal-date";
+                    lbl.Click += cell2_Click;
                     lbl.Tag = "div";
+                    lbl.ToolTip = "Click here to minimize day again";
                     lbl.Text = idx.Day.ToString();
                     cell.Controls.Add(lbl);
 
@@ -308,62 +310,92 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
             set { ViewState["Rows"] = value; }
         }
 
+        [ActiveEvent(Name = "Magix.Core.Calendar.SetActiveDate")]
+        protected void Magix_Core_Calendar_SetActiveDate(object sender, ActiveEventArgs e)
+        {
+            DateTime date = e.Params["Date"].Get<DateTime>().Date;
+            Panel p = Selector.SelectFirst<Panel>(pnl,
+                delegate(Control idx)
+                {
+                    Panel p2 = idx as Panel;
+                    if (p2 != null)
+                    {
+                        return p2.Info == date.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
+                    }
+                    return false;
+                });
+            if (p != null)
+            {
+                BlowUpDownPanel(p, false);
+            }
+        }
+
         private void cell_Click(object sender, EventArgs e)
         {
             Panel p = sender as Panel;
+            BlowUpDownPanel(p, false);
+        }
 
+        private void cell2_Click(object sender, EventArgs e)
+        {
+            Label p = sender as Label;
+            BlowUpDownPanel(p.Parent as Panel, true);
+        }
+
+        private void BlowUpDownPanel(Panel p, bool blowDown)
+        {
             bool shouldRaiseDeSelect = false;
 
             // Checking to see if this is 'un-select' ...
-            if (p.CssClass.Contains(" cal-selected-top-left"))
+            if (blowDown && p.CssClass.Contains(" cal-selected-top-left"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-top-left", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected-top-right"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected-top-right"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-top-right", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected-bottom-left"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected-bottom-left"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-bottom-left", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected-bottom-right"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected-bottom-right"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-bottom-right", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected-top"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected-top"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-top", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected-bottom"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected-bottom"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-bottom", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected-left"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected-left"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-left", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected-right"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected-right"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected-right", "");
                 PreviousSelected = null;
                 shouldRaiseDeSelect = true;
             }
-            else if (p.CssClass.Contains(" cal-selected"))
+            else if (blowDown && p.CssClass.Contains(" cal-selected"))
             {
                 p.CssClass = p.CssClass.Replace(" cal-selected", "");
                 PreviousSelected = null;
@@ -371,15 +403,21 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
             }
             else
             {
-                DateTime date = 
+                DateTime date =
                     DateTime.ParseExact(
-                        p.Info.Split('|')[0], 
-                        "yyyy.MM.dd", 
+                        p.Info.Split('|')[0],
+                        "yyyy.MM.dd",
                         CultureInfo.InvariantCulture);
 
-                SetCssClass(p);
+                bool changed = false;
 
-                if (!string.IsNullOrEmpty(PreviousSelected))
+                if (!p.CssClass.Contains(" cal-selected"))
+                {
+                    SetCssClass(p);
+                    changed = true;
+                }
+
+                if (changed && !string.IsNullOrEmpty(PreviousSelected))
                 {
                     Panel old = Selector.FindControlClientID<Panel>(pnl, PreviousSelected);
                     if (old != null)
@@ -423,14 +461,19 @@ namespace Magix.Brix.Components.ActiveModules.Calendars
                     }
                 }
 
-                PreviousSelected = p.ClientID;
+                if (PreviousSelected != p.ClientID)
+                {
+                    PreviousSelected = p.ClientID;
 
-                Node node = new Node();
-                node["Date"].Value = date;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    DataSource["DateClickedEvent"].Get<string>(),
-                    node);
+                    Node node = new Node();
+
+                    node["Date"].Value = date;
+
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        DataSource["DateClickedEvent"].Get<string>(),
+                        node);
+                }
             }
 
             if (shouldRaiseDeSelect)

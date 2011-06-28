@@ -445,13 +445,15 @@ model while trying to create object, and it was never created for some reasons."
                 node["IsFilter"].Value = true;
             node["Start"].Value = 0;
             node["End"].Value = node["Objects"].Count;
+
             int count = Data.Instance.GetCount(fullTypeName, pars.ToArray());
+
             node["SetCount"].Value = count;
             string container = "child";
             if (node.Contains("Container"))
                 container = node["Container"].Get<string>();
             LoadModule(
-                "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
+                node.Contains("IsFind") && node["IsFind"].Get<bool>() ? "Magix.Brix.Components.ActiveModules.DBAdmin.FindObject" : "Magix.Brix.Components.ActiveModules.DBAdmin.ViewClassContents",
                 container,
                 node);
         }
