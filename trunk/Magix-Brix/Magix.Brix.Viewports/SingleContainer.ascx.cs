@@ -342,6 +342,7 @@ namespace Magix.Brix.Viewports
 
         private void ClearControls(DynamicPanel dynamic)
         {
+            dynamic.CssClass = "";
             foreach (Control idx in dynamic.Controls)
             {
                 ActiveEvents.Instance.RemoveListener(idx);
@@ -380,6 +381,9 @@ namespace Magix.Brix.Viewports
                 DynamicPanel dyn = Selector.FindControl<DynamicPanel>(
                     this, 
                     e.Params["Position"].Get<string>());
+
+                if (!e.Params["Parameters"].Contains("Append") || !e.Params["Parameters"]["Append"].Get<bool>())
+                    ClearControls(dyn);
 
                 if (dyn.ID == "content3")
                 {
@@ -519,7 +523,6 @@ namespace Magix.Brix.Viewports
                 }
                 else
                 {
-                    ClearControls(dyn);
                     dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
