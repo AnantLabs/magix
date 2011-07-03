@@ -38,6 +38,33 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 node);
         }
 
+        [ActiveEvent(Name = "Magix.Core.ShowMessage")]
+        protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
+        {
+            UserBase u =
+                UserBase.SelectFirst(
+                    Criteria.Eq("Username", e.Params["Username"].Get<string>()));
+            Node node = new Node();
+            node["LogItemType"].Value = "Magix.Core.ShowMessage";
+            if (u != null)
+            {
+                node["ObjectID"].Value = u.ID;
+                node["Header"].Value = u.Username + " - " + u.RolesString;
+            }
+            else
+            {
+                node["ObjectID"].Value = -1;
+                node["Header"].Value = "anonymous";
+            }
+
+            node["Message"].Value = e.Params["Message"].Get<string>();
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                sender,
+                "Magix.Core.Log",
+                node);
+        }
+
         [ActiveEvent(Name = "Magix.Core.Log")]
         protected void Magix_Core_Log(object sender, ActiveEventArgs e)
         {

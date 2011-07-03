@@ -174,7 +174,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 Label cS = new Label();
                 cS.Tag = "td";
-                cS.Text = "Delete";
+                string header = "Delete";
+                if (DataSource.Contains("DeleteHeader"))
+                    header = DataSource["DeleteHeader"].Get<string>();
+                cS.Text = header;
                 cS.CssClass = "wide-2 noFilter";
                 row.Controls.Add(cS);
             }
@@ -334,15 +337,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return (bool)ViewState["ColVisible" + colName];
         }
 
-        [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
-        protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
-        {
-            if (e.Params["FullTypeName"].Get<string>().Contains(DataSource["FullTypeName"].Get<string>()))
-            {
-                ReDataBind();
-            }
-        }
-
         protected void ResetColumnsVisibility()
         {
             List<string> keys = new List<string>();
@@ -424,13 +418,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         if (DataSource["IsList"].Get<bool>())
                         {
                             RaiseSafeEvent(
-                                "DBAdmin.Data.AppendObjectToParentPropertyList",
+                                (DataSource.Contains("SelectEvent") ? 
+                                    DataSource["SelectEvent"].Get<string>() : 
+                                    "DBAdmin.Data.AppendObjectToParentPropertyList"),
                                 n);
                         }
                         else
                         {
                             RaiseSafeEvent(
-                                "DBAdmin.Data.ChangeObjectReference",
+                                (DataSource.Contains("SelectEvent") ?
+                                    DataSource["SelectEvent"].Get<string>() :
+                                    "DBAdmin.Data.AppendObjectToParentPropertyList"),
                                 n);
                         }
                     };
@@ -482,7 +480,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Label cS = new Label();
                 cS.Tag = "td";
                 LinkButton lb2 = new LinkButton();
-                lb2.Text = "Delete";
+                string lblTxt = "Delete";
+                if (DataSource.Contains("DeleteText"))
+                    lblTxt = DataSource["DeleteText"].Get<string>();
+                lb2.Text = lblTxt;
                 lb2.Click +=
                     delegate(object sender, EventArgs e)
                     {

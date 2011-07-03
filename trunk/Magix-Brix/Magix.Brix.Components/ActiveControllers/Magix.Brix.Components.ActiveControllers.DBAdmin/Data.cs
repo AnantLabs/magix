@@ -36,14 +36,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        public int GetCount(string typeName, Criteria[] pars)
+        public int GetCount(string typeName, Criteria[] pars, Node node)
         {
             Type type = GetType(typeName);
             if (type == null)
             {
-                Node node = new Node();
-                node["FullTypeName"].Value = typeName;
-                node["Criteria"].Value = pars;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.GetCount",
@@ -341,7 +338,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["FullTypeName"].Value = typeName;
                 node["Start"].Value = startAt;
                 node["End"].Value = endAt;
-                node["Criteria"].Value = pars;
+                if (pars != null && pars.Length > 0)
+                    node["Criteria"].Value = pars;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.GetObjectsNode",
@@ -500,6 +498,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 
         public List<Criteria> GetCriteria(string fullTypeName, Node node)
         {
+
+            Type type2 = GetType(fullTypeName);
+            if (type2 == null)
+                return new List<Criteria>();
+
             // Creating Criteria from Settings ...
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters
                 = GetMethodInfos(fullTypeName, node);

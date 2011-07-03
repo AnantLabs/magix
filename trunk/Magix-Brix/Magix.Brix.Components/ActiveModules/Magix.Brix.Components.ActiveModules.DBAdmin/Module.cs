@@ -32,14 +32,29 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             set { ViewState["DataSource"] = value; }
         }
 
+        protected bool CheckForTypeHit(ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>().Contains(DataSource["FullTypeName"].Get<string>()))
+                return true;
+            if (DataSource.Contains("CoExistsWith") && 
+                DataSource["CoExistsWith"].Get<string>().Contains(e.Params["FullTypeName"].Get<string>()))
+                return true;
+            return false;
+        }
+
+        [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
+        protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
+        {
+            if (CheckForTypeHit(e))
+            {
+                ReDataBind();
+            }
+        }
+
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
         protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
         {
-            int id = e.Params["ID"].Get<int>();
-            string fullTypeName = e.Params["FullTypeName"].Get<string>();
-            string propertyName = e.Params["PropertyName"].Get<string>();
-            string newValue = e.Params["NewValue"].Get<string>();
-            if (fullTypeName == DataSource["FullTypeName"].Get<string>())
+            if (CheckForTypeHit(e))
             {
                 ReDataBind();
             }
