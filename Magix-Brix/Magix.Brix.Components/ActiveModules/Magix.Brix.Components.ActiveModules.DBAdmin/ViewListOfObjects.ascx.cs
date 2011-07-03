@@ -61,7 +61,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
                 node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
                 RaiseSafeEvent(
-                    "DBAdmin.Common.CreateObjectAsChild",
+                    (DataSource.Contains("AppendEvent") ? 
+                        DataSource["AppendEvent"].Get<string>() : 
+                        "DBAdmin.Common.CreateObjectAsChild"),
                     node);
                 ReDataBind();
             }

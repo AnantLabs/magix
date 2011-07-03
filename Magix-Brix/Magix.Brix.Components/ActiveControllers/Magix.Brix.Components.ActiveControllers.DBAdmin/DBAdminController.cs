@@ -70,7 +70,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         protected void DBAdmin_Form_ViewClass(object sender, ActiveEventArgs e)
         {
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
-            ShowViewClassForm(e.Params, fullTypeName);
+            ShowViewClassForm(e.Params, fullTypeName, e.Params);
         }
 
         // Requires a "FullTypeName" parameter, and "Start" + "End"
@@ -89,7 +89,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 e.Params["End"].Get<int>(Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10)),
                 pars.ToArray());
             e.Params["End"].Value = e.Params["Start"].Get<int>(0) + e.Params["Objects"].Count;
-            int count = Data.Instance.GetCount(fullTypeName, pars.ToArray());
+            int count = Data.Instance.GetCount(fullTypeName, pars.ToArray(), e.Params);
             e.Params["SetCount"].Value = count;
         }
 
@@ -164,9 +164,6 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             string fullTypeName = e.Params["ParentFullTypeName"].Get<string>();
             string propertyName = e.Params["ParentPropertyName"].Get<string>();
             bool isList = e.Params.Contains("Start");
-            e.Params["ParentID"].Value = id;
-            e.Params["ParentFullTypeName"].Value = fullTypeName;
-            e.Params["ParentPropertyName"].Value = propertyName;
             if (isList)
             {
                 Data.Instance.GetComplexPropertyFromListObjectNode(
@@ -426,7 +423,7 @@ model while trying to create object, and it was never created for some reasons."
             //    node);
         }
 
-        private void ShowViewClassForm(Node node, string fullTypeName)
+        private void ShowViewClassForm(Node node, string fullTypeName, Node xx)
         {
             Data.Instance.GetObjectTypeNode(fullTypeName, node);
             List<Criteria> pars =
@@ -446,7 +443,7 @@ model while trying to create object, and it was never created for some reasons."
             node["Start"].Value = 0;
             node["End"].Value = node["Objects"].Count;
 
-            int count = Data.Instance.GetCount(fullTypeName, pars.ToArray());
+            int count = Data.Instance.GetCount(fullTypeName, pars.ToArray(), xx);
 
             node["SetCount"].Value = count;
             string container = "child";
@@ -472,7 +469,7 @@ model while trying to create object, and it was never created for some reasons."
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentFullTypeName"].Value = parentFullTypeName;
             node["IsList"].Value = true;
-            ShowViewClassForm(node, fullTypeName);
+            ShowViewClassForm(node, fullTypeName, e.Params);
         }
 
         [ActiveEvent(Name = "DBAdmin.Data.AppendObjectToParentPropertyList")]
@@ -584,7 +581,7 @@ collection you're removing it from.</p>";
             node["ParentID"].Value = parentId;
             node["ParentPropertyName"].Value = parentPropertyName;
             node["ParentFullTypeName"].Value = parentFullTypeName;
-            ShowViewClassForm(node, fullTypeName);
+            ShowViewClassForm(node, fullTypeName, e.Params);
         }
 
         [ActiveEvent(Name = "DBAdmin.Data.RemoveObject")]
