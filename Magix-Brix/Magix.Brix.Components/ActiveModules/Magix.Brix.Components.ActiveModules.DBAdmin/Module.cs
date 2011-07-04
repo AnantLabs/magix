@@ -34,11 +34,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected bool CheckForTypeHit(ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>().Contains(DataSource["FullTypeName"].Get<string>()))
-                return true;
-            if (DataSource.Contains("CoExistsWith") && 
-                DataSource["CoExistsWith"].Get<string>().Contains(e.Params["FullTypeName"].Get<string>()))
-                return true;
+            if (DataSource.Contains("FullTypeName") && 
+                !string.IsNullOrEmpty(DataSource["FullTypeName"].Get<string>()))
+            {
+                if (e.Params["FullTypeName"].Get<string>().Contains(DataSource["FullTypeName"].Get<string>()))
+                    return true;
+                if (DataSource.Contains("CoExistsWith") &&
+                    DataSource["CoExistsWith"].Get<string>().Contains(e.Params["FullTypeName"].Get<string>()))
+                    return true;
+            }
             return false;
         }
 
