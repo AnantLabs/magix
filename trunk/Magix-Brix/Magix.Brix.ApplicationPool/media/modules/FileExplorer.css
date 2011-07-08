@@ -1,14 +1,14 @@
 ﻿
 
 
-input[type=button]
+.fileEx input[type=button]
 {
 	padding:0 10px 0 10px;
-	margin-bottom:36px;
+	margin-bottom:0;
 }
 
-input[type=submit]:disabled:hover,
-input[type=button]:disabled:hover
+.fileEx input[type=submit]:disabled:hover,
+.fileEx input[type=button]:disabled:hover
 {
 	color:#CC6600 !important;
 }
@@ -17,7 +17,6 @@ input[type=button]:disabled:hover
 {
 	margin-bottom:36px;
 	height:270px;
-	background-color:rgba(0, 0, 0, 0.1);
 }
 
 
@@ -30,26 +29,29 @@ input[type=button]:disabled:hover
 	float:left;
 	overflow:hidden;
 
-	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-property:-webkit-box-shadow;
 	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, border-radius;
+	transition-property:box-shadow;
 	transition-duration:0.2s;
 	cursor:pointer;
+
+	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
 }
 
 .fileExplorer .imageIcon:hover
 {
-	-webkit-box-shadow: 2px 2px 3px #444;
-	-moz-box-shadow: 2px 2px 3px #444;
-	box-shadow: 2px 2px 3px #444;
+	-webkit-box-shadow: 2px 2px 3px rgba(80, 80, 80, 1);
+	-moz-box-shadow: 2px 2px 3px rgba(80, 80, 80, 1);
+	box-shadow: 2px 2px 3px rgba(80, 80, 80, 1);
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
 	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
-
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
 }
 
 .fileExplorer .imageIcon img
@@ -69,11 +71,6 @@ input[type=button]:disabled:hover
 	margin-right:0;
 }
 
-.fileExplorer .selected
-{
-	background-color:rgba(0, 128, 0, 0.2);
-}
-
 .fileExplorer .imageIcon:hover img
 {
 }
@@ -91,41 +88,62 @@ input[type=button]:disabled:hover
 	height:72px;
 	float:left;
 	overflow:hidden;
+	position:relative;
 
-	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-property:-webkit-box-shadow;
 	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, border-radius;
+	transition-property:box-shadow;
 	transition-duration:0.2s;
 	cursor:pointer;
-}
 
-.fileExplorer .folderIcon:hover
-{
-	-webkit-box-shadow: 2px 2px 3px #444;
-	-moz-box-shadow: 2px 2px 3px #444;
-	box-shadow: 2px 2px 3px #444;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
-
+	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
 }
 
-.fileExplorer .folderIcon span
+.fileExplorer .folderIcon:hover
 {
-	text-decoration:none;
-	text-shadow:2px 2px 3px rgba(0, 0, 0, 0.2);
-	color:black;
-	display:block;
-	height:72px;
-	width:70px;
-	background:Transparent url(../images/folder.png) no-repeat 0 0;
+	-webkit-box-shadow: 2px 2px 3px  2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px  2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px  2px 2px 3px rgba(0, 0, 0, 0.8);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
 }
 
-.fileExplorer .folderIcon span:hover
+.fileExplorer .folderIcon span.icon
+{
+	background:Transparent url(../images/folder.png) no-repeat 0 0;
+	display:block;
+	width:100%;
+	height:100%;
+}
+
+.fileExplorer .folderIcon span.text
+{
+	text-decoration:none;
+	color:black;
+	display:block;
+	position:absolute;
+	right:0;
+	bottom:0;
+
+	-moz-transition-property:color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:0.2s;
+	transition-property:color;
+	transition-duration:0.2s;
+}
+
+.fileExplorer .folderIcon span.text:hover
 {
 	color:#06c;
 }
@@ -139,19 +157,17 @@ input[type=button]:disabled:hover
 	float:left;
 	overflow:hidden;
 
-	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
+	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-property:-webkit-box-shadow;
 	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, border-radius;
+	transition-property:box-shadow;
 	transition-duration:0.2s;
 	cursor:pointer;
 
-	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(200, 255, 200, .3)), to(rgba(180, 255, 180, .3)));
-	background-image: -moz-linear-gradient(rgba(230, 255, 230, .3) 0%, rgba(180, 255, 180, .3) 80%);
+	-webkit-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
+	box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
 
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
@@ -160,15 +176,11 @@ input[type=button]:disabled:hover
 
 .fileExplorer .folderUpIcon:hover
 {
-	-webkit-box-shadow: 2px 2px 3px #444;
-	-moz-box-shadow: 2px 2px 3px #444;
-	box-shadow: 2px 2px 3px #444;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(200, 255, 200, .8)), to(rgba(180, 255, 180, .8)));
-	background-image: -moz-linear-gradient(rgba(230, 255, 230, .8) 0%, rgba(180, 255, 180, .8) 80%);
-
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+	-webkit-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
+	box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
 }
 
 .fileExplorer .folderUpIcon span
@@ -197,11 +209,11 @@ input[type=button]:disabled:hover
 	transition-duration:0.2s;
 	cursor:pointer;
 
-	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .2)), to(rgba(180, 180, 180, .2)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .2) 0%, rgba(180, 180, 180, .2) 80%);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .4)), to(rgba(180, 180, 180, .4)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .4) 0%, rgba(180, 180, 180, .4) 80%);
 
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
@@ -216,6 +228,13 @@ input[type=button]:disabled:hover
 .fileEx .previous
 {
 	padding:0 20px 0 20px;
+	min-width:70px;
+}
+
+.fileEx .delete
+{
+	padding:0 20px 0 20px;
+	min-width:150px;
 }
 
 
@@ -253,7 +272,6 @@ input[type=button]:disabled:hover
 
 .fileExplorer-properties .fullUrl
 {
-	color:#999;
 	font-style:italic;
 	margin-bottom:0;
 }
@@ -281,9 +299,9 @@ input[type=button]:disabled:hover
 	max-height:100%;
 	cursor:pointer;
 
-	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 	-moz-transition-property:-moz-box-shadow, -moz-border-radius;
 	-moz-transition-duration:0.2s;
 	-webkit-transition-property:-webkit-box-shadow, -webkit-border-radius;
@@ -295,9 +313,9 @@ input[type=button]:disabled:hover
 
 .fileExplorer-properties img:hover
 {
-	-webkit-box-shadow: 2px 2px 3px #444;
-	-moz-box-shadow: 2px 2px 3px #444;
-	box-shadow: 2px 2px 3px #444;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
 }
 
 .fileExplorer-properties img.wide
@@ -314,6 +332,8 @@ input[type=button]:disabled:hover
 .fileUploader
 {
 	position:relative;
+	height:36px;
+	overflow:hidden; /* For some reasons the file input field fucks up things ... */
 }
 
 .fileUploader input[type=file]
@@ -324,14 +344,14 @@ input[type=button]:disabled:hover
 	top:0;
 	left:0;
 	width:110px;
-	margin:0.5em 0;
+	margin:10px 0 0 0 !important;
 }
 
 .fileUploader .browse
 {
 	position:absolute;
 	z-index:1;
-	width:190px;
+	width:168px !important;
 	top:0;
 	left:0;
 
@@ -339,23 +359,67 @@ input[type=button]:disabled:hover
 	background-repeat:no-repeat;
 	background-position:1px 1px;
 	padding-left:20px;
+	margin-left:0 !important;
+	margin-right:10px;
 }
 
-input[type=text]
+input[type=text].browse
 {
-	width:170px !important;
+	width:150px !important;
 	margin-left:10px !important;
 }
 
 .submitButton
 {
-	margin-left:210px !important;
+	margin-left:120px !important;
+	width:110px;
+	margin-right:10px;
+	display:none !important;
 }
 
+.select
+{
+	min-width:150px;
+	margin-right:0 !important;
+}
 
+.imageIcon .small-image-label
+{
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:100%;
+	background-color:rgba(0, 0, 0, 0.1);
+	color:rgba(255, 255, 255, 0.5);
+	font-size:10px;
 
+	-moz-transition-property:background-color, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color, color;
+	transition-duration:0.2s;
+}
 
+.viewing .small-image-label,
+.imageIcon:hover .small-image-label
+{
+	background-color:rgba(0, 0, 0, 0.6);
+	color:rgba(255, 255, 255, 1);
+}
 
+.ascii-editor
+{
+	height:360px;
+    white-space: nowrap;
+    display:block;
+}
+
+.save-btn
+{
+	margin-bottom:0px;
+	margin-top:18px;
+}
 
 
 

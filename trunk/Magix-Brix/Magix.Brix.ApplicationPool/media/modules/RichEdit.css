@@ -1,5 +1,54 @@
 ﻿
 
+.mux-rich-editor
+{
+	position:relative;
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+
+	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow;
+	transition-duration:0.2s;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.8)), to(rgba(210, 210, 210, 0.8)));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(210, 210, 210, 0.8) 100%);
+}
+
+.rawText
+{
+	width:90%;
+	margin:5%;
+	height:80%;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:999;
+}
+
+.mux-rich-editor-no-chrome
+{
+}
+
+.mux-rich-editor:hover
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.yui-skin-sam .yui-toolbar-container
+{
+	background-color:Transparent;
+}
+
 
 .yui-skin-sam .yui-toolbar-container select
 {
@@ -53,6 +102,7 @@
 .yui-skin-sam .yui-editor-container .dompath
 {
 	border:none 0;
+	background-color:Transparent;
 }
 
 .yui-skin-sam .yui-editor-container .dompath
@@ -144,6 +194,52 @@
 {
 	margin:6px 20px 6px 0;
 }
+
+.yui-editor-container .yui-editor-editable-container
+{
+	height:396px !important;
+	padding-left:10px;
+	padding-right:10px;
+	width:auto;
+}
+
+h1.mux-in-place-edit
+{
+}
+
+h1.mux-in-place-edit a
+{
+	text-decoration:none;
+}
+
+h1.mux-in-place-edit input[type=text]
+{
+	font-size:1em;
+	line-height:1;
+	margin-bottom:0.5em;
+	display:block;
+	position:absolute;
+	z-index:1; /* just needs a little bit of a push ... ;) */
+	top:0;
+	left:0;
+	margin:-2px 0 0 -1px !important;
+	padding:0 !important;
+	width:100%;
+	height:36px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-saveicon span.yui-toolbar-icon
+{
+	background:Transparent url(editor/assets/skins/sam/save.png) no-repeat 0 0 !important;
+	left:5px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-htmlicon span.yui-toolbar-icon
+{
+	background:Transparent url(../images/html.png) no-repeat 0 0 !important;
+	left:5px;
+}
+
 
 
 

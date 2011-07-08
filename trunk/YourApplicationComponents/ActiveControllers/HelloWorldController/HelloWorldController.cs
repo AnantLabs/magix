@@ -19,6 +19,22 @@ namespace HelloWorldController
         [ActiveEvent(Name = "Page_Init_InitialLoading")]
         private void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
         {
+            Node node = new Node();
+            node["CSSFile"].Value = "media/magic-ux-skins/default.css";
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Core.AddCustomCssFile",
+                node);
+
+            node = new Node();
+            node["CSSFile"].Value = "media/modules/SingleContainer.css";
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Core.AddCustomCssFile",
+                node);
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.Form.ViewClasses");
