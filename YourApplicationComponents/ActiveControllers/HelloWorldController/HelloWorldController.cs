@@ -20,7 +20,7 @@ namespace HelloWorldController
         private void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
         {
             Node node = new Node();
-            node["CSSFile"].Value = "media/magic-ux-skins/default.css";
+            node["CSSFile"].Value = "media/magix-ux-skins/default.css";
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
