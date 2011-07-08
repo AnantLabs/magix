@@ -88,23 +88,23 @@
   <ItemGroup>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Settings\Magix.Brix.Components.ActiveTypes.Settings.csproj">
       <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
-      <Name>Magic.Brix.Components.ActiveTypes.Settings</Name>
+      <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Data.Adapters\MSSQL\Magix.Brix.Data.Adapters.MSSQL.csproj">
       <Project>{853598D1-F9CF-48C2-90DD-354480F34F91}</Project>
-      <Name>Magic.Brix.Data.Adapters.MSSQL</Name>
+      <Name>Magix.Brix.Data.Adapters.MSSQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Data\Magix.Brix.Data.csproj">
       <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
-      <Name>Magic.Brix.Data</Name>
+      <Name>Magix.Brix.Data %28Brix\Magix.Brix.Data\Magix.Brix.Data%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
       <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
-      <Name>Magic.Brix.Loader</Name>
+      <Name>Magix.Brix.Loader</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Types\Magix.Brix.Types.csproj">
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
-      <Name>Magic.Brix.Types</Name>
+      <Name>Magix.Brix.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

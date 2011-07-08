@@ -101,7 +101,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Magix.Brix.Data\Magix.Brix.Data.csproj">
       <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
-      <Name>Magix.Brix.Data</Name>
+      <Name>Magix.Brix.Data %28Brix\Magix.Brix.Data\Magix.Brix.Data%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
       <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
@@ -117,7 +117,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
       <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
-      <Name>Magix.Brix.Components</Name>
+      <Name>Magix.Brix.Components %28Brix\Magix.Brix.Components\Helpers\Magix.Brix.Components%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
