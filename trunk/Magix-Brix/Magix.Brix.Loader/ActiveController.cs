@@ -18,18 +18,6 @@ namespace Magix.Brix.Loader
     public abstract class ActiveController
     {
         /**
-         * Loads the given module and puts it into the given container.
-         * Will create a Node object, pass it into the InitialLoading, and return
-         * it back to the caller.
-         */
-        protected Node LoadModule(string name, string container)
-        {
-            Node node = new Node();
-            LoadModule(name, container, node);
-            return node;
-        }
-
-        /**
          * Loads the given module and puts it into your default container.
          */
         protected Node LoadModule(string name)
@@ -40,8 +28,18 @@ namespace Magix.Brix.Loader
         }
 
         /**
+         * Loads the given module and puts it into the given container.
+         */
+        protected Node LoadModule(string name, string container)
+        {
+            Node node = new Node();
+            LoadModule(name, container, node);
+            return node;
+        }
+
+        /**
          * Shorthand method for Loading a specific Module and putting it into
-         * the given container.
+         * the given container, with the given Node structure.
          */
         protected void LoadModule(string name, string container, Node node)
         {
@@ -72,6 +70,17 @@ namespace Magix.Brix.Loader
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 eventName,
+                node);
+        }
+
+        protected void IncludeCssFile(string file)
+        {
+            Node node = new Node();
+            node["CSSFile"].Value = file;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Core.AddCustomCssFile",
                 node);
         }
 

@@ -19,26 +19,14 @@ namespace HelloWorldController
         [ActiveEvent(Name = "Page_Init_InitialLoading")]
         private void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
         {
-            Node node = new Node();
-            node["CSSFile"].Value = "media/magix-ux-skins/default.css";
-
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "Magix.Core.AddCustomCssFile",
-                node);
-
-            node = new Node();
-            node["CSSFile"].Value = "media/modules/SingleContainer.css";
-
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "Magix.Core.AddCustomCssFile",
-                node);
+            IncludeCssFile("media/magix-ux-skins/default.css");
+            IncludeCssFile("media/modules/SingleContainer.css");
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.Form.ViewClasses");
             return;
+
             Page.Title = "Magix-Brix Hello World";
             Node n = new Node();
             n["Message"].Value = "I am Marvin, I am your guide through the Universe...";

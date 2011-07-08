@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Magix.Brix.Loader;
-using Magix.Brix.Components.ActiveTypes;
+using T = Magix.Brix.Components.ActiveTypes;
 using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.ToolTip
@@ -20,14 +20,14 @@ namespace Magix.Brix.Components.ActiveControllers.ToolTip
         private void Magix_Core_GetPreviousToolTip(object sender, ActiveEventArgs e)
         {
             e.Params["Text"].Value = 
-                Magix.Brix.Components.ActiveTypes.ToolTip.Instance.Previous(UserBase.Current.Username);
+                T.ToolTip.Instance.Previous(UserBase.Current.Username);
         }
 
         [ActiveEvent(Name = "Magix.Core.GetNextToolTip")]
         private void Magix_Core_GetNextToolTip(object sender, ActiveEventArgs e)
         {
             e.Params["Text"].Value =
-                Magix.Brix.Components.ActiveTypes.ToolTip.Instance.Next(UserBase.Current.Username);
+                T.ToolTip.Instance.Next(UserBase.Current.Username);
         }
     }
 }
