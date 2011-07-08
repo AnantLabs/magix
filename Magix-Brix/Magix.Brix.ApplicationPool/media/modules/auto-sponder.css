@@ -1,0 +1,32 @@
+﻿
+
+.auto-sponder
+{
+}
+
+.auto-sponder-text
+{
+	height:232px;
+}
+
+
+.right-aligned
+{
+	height:auto;
+	overflow:visible;
+	position:relative;
+}
+
+.right-aligned input[type=button]
+{
+	position:absolute;
+	right:0;
+}
+
+
+
+
+
+
+
+

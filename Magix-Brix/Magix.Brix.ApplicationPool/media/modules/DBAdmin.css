@@ -15,6 +15,21 @@ li.tree-item-class span.mux-tree-icon
 
 
 /* Table for viewing objects in DBAdmin */
+div.panelSingleObject
+{
+	float:left;
+	margin-right:10px;
+}
+
+
+
+.dbAdminTableWrapper
+{
+	position:relative;
+	height:auto;
+	overflow:visible;
+}
+
 table.viewObjects
 {
 	width:inherit;
@@ -142,10 +157,12 @@ table.viewObjects>tbody>tr>td
 
 /* Commons for all [known types only!!] links within a Table Cell */
 table.viewObjects>tbody>tr>td>a,
+table.viewObjects>tbody>tr>td>div>a,
 table.viewObjects>tbody>tr>td>div.mux-in-place-edit>a
 {
 	display:block;
 	text-decoration:none;
+	overflow:hidden;
 
 	-moz-transition-property:-moz-border-radius, background-color, -moz-box-shadow;
 	-moz-transition-duration:0.2s;
@@ -157,6 +174,7 @@ table.viewObjects>tbody>tr>td>div.mux-in-place-edit>a
 
 /* Hover commons for all [known types only!!] link types */
 table.viewObjects>tbody>tr>td>a:hover,
+table.viewObjects>tbody>tr>td>div>a:hover,
 table.viewObjects>tbody>tr>td>div.mux-in-place-edit>a:hover
 {
 	background-color:rgba(0, 0, 0, 0.05);
@@ -197,7 +215,7 @@ table.viewObjects>tbody>tr>td>div.larger
 table.viewObjects>tbody>tr>td>div.larger>a
 {
 	height:inherit;
-	width:280px;
+	width:auto;
 	overflow:hidden;
 }
 
@@ -214,14 +232,20 @@ table.viewObjects>tbody>tr>td>div.mux-in-place-edit>textarea
 	height:72px;
 }
 
+table.viewObjects>tbody>tr>td>span
+{
+	display:block;
+	overflow:hidden;
+}
+
 table.viewObjects>tbody>tr.grid-selected
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 0.4)), to(rgba(180, 180, 180, 0.4)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, 0.4) 0%, rgba(180, 180, 180, 0.4) 80%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(210, 230, 210, 0.5)), to(rgba(150, 180, 150, 0.5)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, 0.5) 0%, rgba(180, 180, 180, 0.5) 80%);
 
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 
 	-moz-border-radius:2px;
 	-webkit-border-radius:2px;
@@ -275,6 +299,7 @@ table.noMargin .checkboxWithText
 /* The actual Paging button itself inside a list view form ... */
 .pagingButton input[type=button]
 {
+	margin-bottom:0;
 	display:block;
 	width:100%;
 	-moz-transition-property:color;
@@ -297,43 +322,45 @@ table.noMargin .checkboxWithText
 }
 
 /* The different [known!] paging buttons in our system ... */
-.plus,
-.next,
-.previous
-{
-	width:30px;
-	min-width:30px;
-}
-
-/* Continuing ... */
-.beginning,
-.end
+.dbAdminTableWrapper div.plus,
+.dbAdminTableWrapper div.next,
+.dbAdminTableWrapper div.previous
 {
 	width:70px;
 	min-width:70px;
-	margin:0 10px 18px 0;
+	height:36px;
+	margin-bottom:0;
+}
+
+/* Continuing ... */
+.dbAdminTableWrapper .beginning,
+.dbAdminTableWrapper .end
+{
+	width:70px;
+	min-width:70px;
+	margin:0 10px 0 0;
 }
 
 .plus
 {
-	margin:0 50px 18px 0;
+	margin:0 90px 0 0;
 }
 
-.beginning
+.dbAdminTableWrapper .beginning
 {
 }
 
-.previous
+.dbAdminTableWrapper .previous
 {
-	margin:0 10px 18px 0;
+	margin:0 10px 0 0;
 }
 
-.next
+.dbAdminTableWrapper .next
 {
-	margin:0 10px 18px 0;
+	margin:0 10px 0 0;
 }
 
-.end
+.dbAdminTableWrapper .end
 {
 }
 
@@ -341,7 +368,7 @@ table.noMargin .checkboxWithText
 {
 	width:150px;
 	min-width:150px;
-	margin:0 10px 18px 0;
+	margin:0 10px 0 0;
 }
 
 
@@ -349,14 +376,14 @@ table.noMargin .checkboxWithText
 {
 	width:150px;
 	min-width:150px;
-	margin:0 10px 18px 0;
+	margin:0 10px 0 0;
 }
 
 .remove
 {
 	width:230px;
 	min-width:230px;
-	margin:0 10px 18px 0;
+	margin:0 10px 0 0;
 }
 
 
@@ -568,6 +595,51 @@ table.noMargin .checkboxWithText
 	margin-right:10px;
 	margin-bottom:0 !important;
 }
+
+.columnName
+{
+	vertical-align:top;
+}
+
+.repLabel
+{
+	display:block;
+	font-weight:bold;
+	clear:both;
+}
+
+.repValue
+{
+	display:block;
+	text-decoration:none;
+}
+
+.repBody
+{
+	display:block;
+	text-decoration:none;
+	clear:both;
+}
+
+.repValue-selected,
+.repValue-selected:hover,
+.repValue-selected:focus
+{
+	font-weight:bold;
+	display:block;
+	text-decoration:none;
+	color:Black;
+}
+
+.db-table-cell-content
+{
+	display:block;
+	overflow:hidden;
+}
+
+
+
+
 
 
 

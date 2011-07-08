@@ -1,0 +1,471 @@
+﻿
+
+
+
+
+/* Calendar ... */
+.mux-big-calendar-item
+{
+	float:left;
+	width:70px;
+	height:72px;
+	margin:0 10px 9px 0;
+	position:relative;
+	z-index:99;
+	cursor:pointer;
+
+	background-image: -webkit-gradient(linear, 0% 50%, 0% 100%, from(rgba(255, 255, 255, 1)), to(rgba(235, 235, 235, 1)));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 50%, rgba(235, 235, 235, 1) 100%);
+
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+
+	-moz-transition-property:margin, width, height, background-image, -moz-box-shadow;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:margin, width, height, background-image, -webkit-box-shadow;
+	-webkit-transition-duration:0.2s;
+	transition-property:margin, width, height, background-image, box-shadow;
+	transition-duration:0.2s;
+}
+
+.mux-big-calendar-item:hover
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+}
+
+.cal-off-month
+{
+	background-image: -webkit-gradient(linear, 0% 80%, 0% 100%, from(rgba(255, 255, 255, 1)), to(rgba(245, 245, 245, 1)));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 80%, rgba(245, 245, 245, 1) 100%);
+
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mux-big-calendar-item .cal-date
+{
+	position:absolute;
+	top:0;
+	right:3px;
+	font-size:11px;
+	color:#777;
+
+	-moz-transition-property:font-size, margin-right, color, background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:font-size, margin-right, color, background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:font-size, margin-right, color, background-color;
+	transition-duration:0.2s;
+}
+
+.cal-selected-top-left .cal-date:hover,
+.cal-selected-top .cal-date:hover,
+.cal-selected-top-right .cal-date:hover,
+.cal-selected-right .cal-date:hover,
+.cal-selected-bottom-right .cal-date:hover,
+.cal-selected-bottom .cal-date:hover,
+.cal-selected-bottom-left .cal-date:hover,
+.cal-selected-left .cal-date:hover,
+.cal-selected .cal-date:hover
+{
+	background-color:rgba(0, 0, 0, .2);
+
+	-moz-transition-property:font-size, margin-right, color, background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:font-size, margin-right, color, background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:font-size, margin-right, color, background-color;
+	transition-duration:0.2s;
+}
+
+.cal-off-month .cal-date
+{
+	color:#eee;
+}
+
+.mux-big-calendar-item .cal-month
+{
+	font-size:11px;
+	color:#bbb;
+	opacity:0;
+	margin-left:70px;
+
+	-moz-transition-property:font-size, margin-right, opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:font-size, margin-right, opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:font-size, margin-right, opacity;
+	transition-duration:0.2s;
+}
+
+.cal-selected-top-left,
+.cal-selected-top,
+.cal-selected-top-right,
+.cal-selected-right,
+.cal-selected-bottom-right,
+.cal-selected-bottom,
+.cal-selected-bottom-left,
+.cal-selected-left,
+.cal-selected
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+
+	background-image: -webkit-gradient(linear, 0% 10%, 0% 80%, from(rgba(250, 250, 250, 1)), to(rgba(240, 240, 240, 1)));
+	background-image: -moz-linear-gradient(rgba(250, 250, 250, 1) 10%, rgba(240, 240, 240, 1) 80%);
+	
+	width:210px;
+	height:207px;
+	opacity:.8;
+
+	z-index:100;
+
+	-moz-transition-property:margin, width, height, background-image, -moz-box-shadow, opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:margin, width, height, background-image, -webkit-box-shadow, opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:margin, width, height, background-image, box-shadow, opacity;
+	transition-duration:0.2s;
+}
+
+.cal-selected-top-left:hover,
+.cal-selected-top:hover,
+.cal-selected-top-right:hover,
+.cal-selected-right:hover,
+.cal-selected-bottom-right:hover,
+.cal-selected-bottom:hover,
+.cal-selected-bottom-left:hover,
+.cal-selected-left:hover,
+.cal-selected:hover
+{
+	opacity:1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+.cal-selected
+{
+	margin:-67px -60px -79px -70px;
+}
+
+.cal-selected-top-left
+{
+	margin:0 -130px -146px 0;
+}
+
+.cal-selected-top
+{
+	margin:0 -60px -146px -70px;
+}
+
+.cal-selected-top-right
+{
+	margin:0 0 -146px -140px;
+}
+
+.cal-selected-right
+{
+	margin:-67px 0 -79px -140px;
+}
+
+.cal-selected-bottom-right
+{
+	margin:-136px 0 0 -140px;
+}
+
+.cal-selected-bottom
+{
+	margin:-136px -60px 0 -70px;
+}
+
+.cal-selected-bottom-left
+{
+	margin:-136px -130px 0 0;
+}
+
+.cal-selected-left
+{
+	margin:-67px -130px -79px 0;
+}
+
+
+.cal-selected:hover
+{
+	background-image: -webkit-gradient(linear, 0% 10%, 0% 80%, from(rgba(250, 250, 250, 1)), to(rgba(240, 240, 240, 1)));
+	background-image: -moz-linear-gradient(rgba(250, 250, 250, 1) 10%, rgba(240, 240, 240, 1) 80%);
+}
+
+.cal-selected-top-left .cal-date,
+.cal-selected-top .cal-date,
+.cal-selected-top-right .cal-date,
+.cal-selected-right .cal-date,
+.cal-selected-bottom-right .cal-date,
+.cal-selected-bottom .cal-date,
+.cal-selected-bottom-left .cal-date,
+.cal-selected-left .cal-date,
+.cal-selected .cal-date
+{
+	font-size:44px;
+	font-weight:bold;
+	margin-right:150px;
+	color:#000;
+
+	-moz-transition-property:font-size, margin-right, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:font-size, margin-right, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:font-size, margin-right, color;
+	transition-duration:0.2s;
+}
+
+.cal-selected-top-left .cal-month,
+.cal-selected-top .cal-month,
+.cal-selected-top-right .cal-month,
+.cal-selected-right .cal-month,
+.cal-selected-bottom-right .cal-month,
+.cal-selected-bottom .cal-month,
+.cal-selected-bottom-left .cal-month,
+.cal-selected-left .cal-month,
+.cal-selected .cal-month
+{
+	font-size:32px;
+	font-weight:bold;
+	margin-top:12px;
+	opacity:1;
+
+	-moz-transition-property:font-size, opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:font-size, opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:font-size, opacity;
+	transition-duration:0.2s;
+}
+
+.cal-today
+{
+	background-image: -webkit-gradient(linear, 0% 50%, 0% 100%, from(rgba(235, 255, 235, .8)), to(rgba(235, 235, 235, .8)));
+	background-image: -moz-linear-gradient(rgba(235, 255, 235, .8) 50%, rgba(235, 235, 235, .8) 100%);
+}
+
+.cal-today:hover
+{
+	background-image: -webkit-gradient(linear, 0% 50%, 0% 100%, from(rgba(235, 255, 235, 1)), to(rgba(235, 235, 235, 1)));
+	background-image: -moz-linear-gradient(rgba(235, 255, 235, 1) 50%, rgba(235, 235, 235, 1) 100%);
+}
+
+.cal-clear-both
+{
+	clear:both;
+}
+
+.cal-activity
+{
+	font-size:8px;
+	color:#aaa;
+	margin:-5px 5px 5px 10px;
+	text-align:left;
+
+	-moz-transition-property:font-size, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:font-size, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:font-size, color;
+	transition-duration:0.2s;
+}
+
+.cal-selected-top-left .cal-activity,
+.cal-selected-top .cal-activity,
+.cal-selected-top-right .cal-activity,
+.cal-selected-right .cal-activity,
+.cal-selected-bottom-right .cal-activity,
+.cal-selected-bottom .cal-activity,
+.cal-selected-bottom-left .cal-activity,
+.cal-selected-left .cal-activity,
+.cal-selected .cal-activity
+{
+	font-size:12px;
+	color:#333;
+	font-weight:bold;
+
+	-moz-transition-property:font-size, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:font-size, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:font-size, color;
+	transition-duration:0.2s;
+}
+
+.cal-view-details
+{
+	display:none;
+	opacity:1;
+	color:Yellow;
+	text-decoration:none;
+
+	-moz-transition-property:opacity, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity, color;
+	transition-duration:0.2s;
+}
+
+.cal-selected-top-left .cal-view-details,
+.cal-selected-top .cal-view-details,
+.cal-selected-top-right .cal-view-details,
+.cal-selected-right .cal-view-details,
+.cal-selected-bottom-right .cal-view-details,
+.cal-selected-bottom .cal-view-details,
+.cal-selected-bottom-left .cal-view-details,
+.cal-selected-left .cal-view-details,
+.cal-selected .cal-view-details
+{
+	display:block;
+	position:absolute;
+	right:5px;
+	bottom:5px;
+	opacity:1;
+	color:rgba(128, 128, 255, 1);
+	background-color:rgba(0, 0, 0, 0);
+	padding:5px;
+
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+
+	-moz-transition-property:opacity, color, background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity, color, background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity, color, background-color;
+	transition-duration:0.2s;
+}
+
+.cal-selected-top-left .cal-view-details:hover,
+.cal-selected-top .cal-view-details:hover,
+.cal-selected-top-right .cal-view-details:hover,
+.cal-selected-right .cal-view-details:hover,
+.cal-selected-bottom-right .cal-view-details:hover,
+.cal-selected-bottom .cal-view-details:hover,
+.cal-selected-bottom-left .cal-view-details:hover,
+.cal-selected-left .cal-view-details:hover,
+.cal-selected .cal-view-details:hover
+{
+	background-color:rgba(0, 0, 0, 0.2);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
+}
+
+input[type=button].previous-button
+{
+	float:left;
+	display:block;
+	margin-bottom:18px !important;
+	opacity:.1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+input[type=button].next-button
+{
+	float:right;
+	display:block;
+	margin-bottom:18px !important;
+	margin-right:40px;
+	opacity:.1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+input[type=button].previous-button:hover,
+input[type=button].next-button:hover
+{
+	opacity:1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+.filter-text
+{
+	display:block;
+	margin:4px 10px 0px 0px !important;
+	padding:0 0 0 0 !important;
+	line-height:28px;
+	font-size:28px;
+	height:30px;
+	opacity:.2;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+.filter-text:hover
+{
+	opacity:1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+.filter-kick
+{
+	-webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
