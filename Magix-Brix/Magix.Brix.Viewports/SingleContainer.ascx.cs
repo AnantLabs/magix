@@ -52,6 +52,8 @@ namespace Magix.Brix.Viewports
             {
                 debug.ClickEffect = new EffectSize(debug, 125, 640, -1);
                 debug.MouseOutEffect = new EffectSize(debug, 125, 30, -1);
+                if (!wrp.CssClass.Contains("showgrid"))
+                    wrp.CssClass += " showgrid";
             }
 
             base.OnInit(e);

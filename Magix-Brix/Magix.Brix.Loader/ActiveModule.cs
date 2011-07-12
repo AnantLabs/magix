@@ -13,39 +13,26 @@ namespace Magix.Brix.Loader
 {
     /**
      * Helper class for simplifying some of the common tasks you'd normally
-     * want to use from your controllers, such as Loading Modules etc.
+     * want to use from your Modules, such as RaisingEvents etc.
      */
-    public abstract class ActiveController
+    public abstract class ActiveModule : UserControl, IModule
     {
-        /**
-         * Loads the given module and puts it into your default container.
-         */
-        protected Node LoadModule(string name)
+        public void InitialLoading(Node node)
         {
-            Node node = new Node();
-            LoadModule(name, null, node);
-            return node;
+            Load +=
+                delegate
+                {
+                    DataSource = node;
+                };
         }
 
         /**
-         * Loads the given module and puts it into the given container.
+         * The Node passed into InitialLoading will automatically be stored here ...
          */
-        protected Node LoadModule(string name, string container)
+        protected Node DataSource
         {
-            Node node = new Node();
-            LoadModule(name, container, node);
-            return node;
-        }
-
-        /**
-         * Shorthand method for Loading a specific Module and putting it into
-         * the given container, with the given Node structure.
-         */
-        protected void LoadModule(string name, string container, Node node)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new ApplicationException("You have to specify which Module you want to load");
-            ActiveEvents.Instance.RaiseLoadControl(name, container, node);
+            get { return ViewState["DataSource"] as Node; }
+            set { ViewState["DataSource"] = value; }
         }
 
         /**
@@ -71,6 +58,47 @@ namespace Magix.Brix.Loader
                 this,
                 eventName,
                 node);
+        }
+
+        /**
+         * Shorthand for raising events. Will return a node, initially created empty, 
+         * but passed onto the Event Handler(s)
+         */
+        protected Node RaiseSaveEvent(string eventName)
+        {
+            Node node = new Node();
+            RaiseSafeEvent(eventName, node);
+            return node;
+        }
+
+        /**
+         * Shorthand for raising events.
+         */
+        protected bool RaiseSafeEvent(string eventName, Node node)
+        {
+            try
+            {
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    eventName,
+                    node);
+                return true;
+            }
+            catch (Exception err)
+            {
+                Exception tmp = err;
+                while (tmp.InnerException != null)
+                    tmp = tmp.InnerException;
+
+                Node m = new Node();
+                
+                m["Message"].Value = tmp.Message;
+                
+                RaiseEvent(
+                    "Magix.Core.ShowMessage",
+                    m);
+                return false;
+            }
         }
 
         /**
@@ -100,17 +128,6 @@ namespace Magix.Brix.Loader
                     "/" : 
                     HttpContext.Current.Request.ApplicationPath + "/")
                         .Replace("Default.aspx", "").Replace("default.aspx", "");
-        }
-
-        /**
-         * Shorthand for getting access to our "Page" object.
-         */
-        protected Page Page
-        {
-            get
-            {
-                return (Page)HttpContext.Current.Handler;
-            }
         }
     }
 }

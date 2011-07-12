@@ -1,6 +1,5 @@
 ﻿.main
 {
-	padding-top:18px;
 }
 
 
@@ -84,7 +83,8 @@ p>label
 
 select
 {
-	margin:8px 0 8px 0;
+	margin:0;
+	border:none 0;
 }
 
 
@@ -1184,9 +1184,9 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 .mux-in-place-edit textarea
 {
 	margin-left:20px;
-	width:248px;
+	height:54px;
 	display:inline-block;
-	height:180px;
+	width:auto !important;
 	border:solid 1px #aaf;
 }
 

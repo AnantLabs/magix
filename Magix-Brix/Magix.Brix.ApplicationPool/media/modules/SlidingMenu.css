@@ -12,18 +12,8 @@
 	-moz-border-radius:2px;
 	-webkit-border-radius:2px;
 	border-radius:2px;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(180, 180, 180, .4))), to(rgba(230, 230, 230, .4));
-	background-image: -moz-linear-gradient(rgba(180, 180, 180, .4) 0%, rgba(230, 230, 230, .4) 80%);
 }
 
-
-
-
-/* NVB extensions ... */
-.mux-sliding-menu
-{
-	background:Transparent url(../images/menu-logo.png) no-repeat 0 0;
-}
 
 
 

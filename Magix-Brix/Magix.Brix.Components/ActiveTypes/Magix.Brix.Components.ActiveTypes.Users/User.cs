@@ -188,9 +188,11 @@ usernames must be unique within the application ...");
             if (ID == 0)
             {
                 Node node = new Node();
+
                 node["LogItemType"].Value = "Magix.Core.UserCreated";
                 node["Header"].Value = "Username: " + Username;
                 node["Message"].Value = "New user was created ...";
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "Magix.Core.Log",
@@ -205,10 +207,12 @@ usernames must be unique within the application ...");
             node["LogItemType"].Value = "Magix.Core.UserDeleted";
             node["Header"].Value = "Username: " + Username;
             node["Message"].Value = "Existing user was deleted ...";
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "Magix.Core.Log",
                 node);
+
             base.Delete();
         }
 

@@ -30,9 +30,11 @@ and would create very hard to track-down bugs if allowed to be created ...");
             if (ID == 0)
             {
                 Node node = new Node();
+
                 node["LogItemType"].Value = "Magix.Core.RoleCreated";
                 node["Header"].Value = "Name: " + Name;
-                node["ObjectID"].Value = "nothing...";
+                node["ObjectID"].Value = "-1";
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "Magix.Core.Log",
