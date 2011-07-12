@@ -1,0 +1,259 @@
+﻿/*
+ * Magix - A Web Application Framework for ASP.NET
+ * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
+ * Magix is licensed as GPLv3.
+ */
+
+using System;
+using System.Web.UI;
+using Magix.UX.Widgets;
+using Magix.UX.Effects;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
+using System.Web;
+
+namespace Magix.Brix.Components.ActiveModules.Publishing
+{
+    [ActiveModule]
+    public class EditSpecificPage : ActiveModule, IModule
+    {
+        protected InPlaceTextAreaEdit header;
+        protected InPlaceTextAreaEdit url;
+        protected SelectList sel;
+        protected Panel parts;
+
+        public void InitialLoading(Node node)
+        {
+            base.InitialLoading(node);
+            Load +=
+                delegate
+                {
+                    header.Text = node["Header"].Get<string>();
+                    url.Text = node["URL"].Get<string>();
+                    foreach (Node idx in node["Templates"])
+                    {
+                        ListItem i = new ListItem(idx["Name"].Get<string>(), idx["ID"].Get<int>().ToString());
+                        if (idx["ID"].Get<int>() == DataSource["TemplateID"].Get<int>())
+                            i.Selected = true;
+                        sel.Items.Add(i);
+                    }
+                };
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (DataSource != null)
+                DataBindWebParts();
+        }
+
+        private void DataBindWebParts()
+        {
+            int current = int.Parse(sel.SelectedItem.Value);
+            foreach (Node idx in DataSource["Templates"])
+            {
+                if (idx.Name == "t-" + current)
+                {
+                    foreach (Node idxC in idx["Containers"])
+                    {
+                        int width = idxC["Width"].Get<int>();
+                        int height = idxC["Height"].Get<int>();
+                        bool last = idxC["Last"].Get<bool>();
+                        string name = idxC["Name"].Get<string>() ?? "[Unknown]";
+                        int id = idxC["ID"].Get<int>();
+                        int padding = idxC["Padding"].Get<int>();
+                        int push = idxC["Push"].Get<int>();
+                        int top = idxC["Top"].Get<int>();
+                        int bottomMargin = idxC["BottomMargin"].Get<int>();
+                        string moduleName = idxC["ModuleName"].Get<string>();
+
+                        // Creating Window ...
+                        Window w = new Window();
+                        w.ToolTip = string.Format("Module is of type '{0}'", moduleName);
+                        w.CssClass += " mux-shaded mux-rounded";
+                        if (width > 0)
+                            w.CssClass += " span-" + width;
+                        if (height > 0)
+                            w.CssClass += " height-" + height;
+                        if (last)
+                            w.CssClass += " last";
+                        w.Caption = name;
+                        w.Info = id.ToString();
+                        if (padding > 0)
+                            w.CssClass += " padding-" + padding;
+                        if (push > 0)
+                            w.CssClass += " push-" + push;
+                        if (top > 0)
+                            w.CssClass += " down-" + top;
+                        if (bottomMargin > 0)
+                            w.CssClass += " spcBottom-" + bottomMargin;
+                        w.Draggable = false;
+                        w.Closable = false;
+
+                        // Creating InPlaceEdits [or other types of controls] for every Setting we've got ...
+                        if (DataSource.Contains("ObjectTemplates"))
+                        {
+                            foreach (Node idxT in DataSource["ObjectTemplates"])
+                            {
+                                if (idxT.Contains("i-" + id))
+                                {
+                                    string propName = idxT["i-" + id][0].Name;
+                                    string value = idxT["i-" + id][0].Get<string>();
+                                    string editor = idxT["i-" + id][0]["Editor"].Get<string>();
+                                    if (!string.IsNullOrEmpty(editor))
+                                    {
+                                        Label ed = new Label();
+                                        ed.ToolTip = 
+                                            string.Format("Click to edit '{0}'",
+                                                propName);
+                                        ed.Text = value;
+                                        ed.Tag = "div";
+                                        ed.CssClass += "magix-publishing-wysiwyg";
+                                        ed.Info = id.ToString() + "|" + propName + "|" + editor;
+                                        ed.Click +=
+                                            delegate(object sender2, EventArgs e2)
+                                            {
+                                                Label ed2 = sender2 as Label;
+                                                int id2 = int.Parse(ed2.Info.Split('|')[0]);
+                                                string propName2 = ed2.Info.Split('|')[1];
+
+                                                Node tx = new Node();
+
+                                                tx["SaveEvent"].Value = "Magix.Publishing.SavePageObjectIDSetting";
+                                                tx["SaveEvent"]["Params"]["ID"].Value = DataSource["ID"].Value;
+                                                tx["SaveEvent"]["Params"]["PropertyName"].Value = propName2;
+                                                tx["SaveEvent"]["Params"]["PotID"].Value = id2;
+                                                tx["Text"].Value = ed2.Text;
+                                                tx["Width"].Value = width;
+                                                tx["Height"].Value = height;
+                                                tx["Last"].Value = last;
+                                                tx["Padding"].Value = padding;
+                                                tx["Push"].Value = push;
+                                                tx["Top"].Value = top;
+                                                tx["BottomMargin"].Value = bottomMargin;
+
+                                                ActiveEvents.Instance.RaiseLoadControl(
+                                                    ed2.Info.Split('|')[2],
+                                                    Parent.ID,
+                                                    tx);
+                                            };
+                                        w.Content.Controls.Add(ed);
+                                    }
+                                    else
+                                    {
+                                        CreateInPlaceEdit(id, w, propName, value);
+                                    }
+                                }
+                            }
+                        }
+
+                        parts.Controls.Add(w);
+                    }
+                }
+            }
+        }
+
+        private void CreateInPlaceEdit(int id, Window w, string propName, string value)
+        {
+            InPlaceEdit ed = new InPlaceEdit();
+            ed.ToolTip = propName;
+            ed.Text = value;
+            ed.Info = id.ToString() + "|" + propName;
+            ed.TextChanged +=
+                delegate(object sender2, EventArgs e2)
+                {
+                    InPlaceEdit ed2 = sender2 as InPlaceEdit;
+                    int id2 = int.Parse(ed2.Info.Split('|')[0]);
+                    string propName2 = ed2.Info.Split('|')[1];
+
+                    Node tx = new Node();
+
+                    tx["PageObjectID"].Value = DataSource["ID"].Get<int>();
+                    tx["ID"].Value = id2;
+                    tx["PropertyName"].Value = propName2;
+                    tx["Value"].Value = ed2.Text;
+
+                    RaiseSafeEvent(
+                        "Magix.Publishing.ChangeModuleSetting",
+                        tx);
+                };
+            w.Content.Controls.Add(ed);
+        }
+
+        protected void header_TextChanged(object sende, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Get<int>();
+            node["Text"].Value = header.Text;
+
+            RaiseSafeEvent(
+                "Magix.Publishing.ChangePageProperty",
+                node);
+        }
+
+        protected void url_TextChanged(object sende, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Get<int>();
+            node["URL"].Value = url.Text;
+
+            RaiseSafeEvent(
+                "Magix.Publishing.ChangePageProperty",
+                node);
+
+            url.Text = node["URL"].Get<string>();
+        }
+
+        protected void createChild_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Get<int>();
+
+            RaiseEvent(
+                "Magix.Publishing.CreateChild",
+                node);
+        }
+
+        protected void delete_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Get<int>();
+
+            if (RaiseSafeEvent(
+                "Magix.Publishing.DeletePageObject",
+                node))
+            {
+                // Removing this module, since the editing page no longer exists ...
+                ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
+            }
+        }
+
+        protected void sel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Get<int>();
+            node["PageTemplateID"].Value = int.Parse(sel.SelectedItem.Value);
+
+            RaiseSafeEvent(
+                "Magix.Publishing.ChangePageProperty",
+                node);
+
+            foreach (ListItem idx in sel.Items)
+            {
+                if (idx.Value == node["PageTemplateID"].Get<int>().ToString())
+                {
+                    idx.Selected = true;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+

@@ -44,7 +44,10 @@ namespace Magix.UX.Widgets
             }
             set
             {
-                ViewState["SelectedItem"] = value.ID;
+                if (value == null)
+                    ViewState["SelectedItem"] = null;
+                else
+                    ViewState["SelectedItem"] = value.ID;
             }
         }
 

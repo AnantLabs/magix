@@ -49,8 +49,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 if (idx["FullTypeName"].Value == null)
                     continue;
+
                 TreeItem it = new TreeItem();
+
                 it.ID = idx["FullTypeName"].Get<string>().Replace(".", "").Replace("+", "");
+
                 if (idx["IsLeafClass"].Get<bool>())
                 {
                     it.Info = "Leaf:" + idx["FullTypeName"].Get<string>();
@@ -61,8 +64,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     it.Info = idx["FullTypeName"].Get<string>();
                     it.CssClass += " tree-item-namespace";
                 }
+
                 it.Text = idx["Name"].Get<string>();
+
                 DataBindTree(idx, it);
+
                 if (ctrl is TreeItem)
                 {
                     (ctrl as TreeItem).Content.Controls.Add(it);

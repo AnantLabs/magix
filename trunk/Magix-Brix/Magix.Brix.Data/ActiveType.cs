@@ -42,7 +42,7 @@ namespace Magix.Brix.Data
      */
     public class ActiveType<T> : TransactionalObject
     {
-        private static Type GetType(Type type)
+        protected static Type GetType(Type type)
         {
             string mapped =
                 ConfigurationManager.AppSettings["typeMapping-" + type.FullName];

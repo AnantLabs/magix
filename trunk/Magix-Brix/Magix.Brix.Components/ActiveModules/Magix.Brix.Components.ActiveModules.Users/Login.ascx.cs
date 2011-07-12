@@ -36,20 +36,25 @@ namespace Magix.Brix.Components.ActiveModules.Users
         protected void submit_Click(object sender, EventArgs e)
         {
             Node node = new Node();
+
             node["Username"].Value = username.Text;
             node["Password"].Value = password.Text;
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "Magix.Core.LogInUser",
                 node);
+
             if (!node["Success"].Get<bool>())
             {
                 Node n = new Node();
                 n["Message"].Value = "Sorry, no access ...";
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "Magix.Core.ShowMessage",
                     n);
+
                 username.Select();
                 username.Focus();
             }
