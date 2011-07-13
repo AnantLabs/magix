@@ -216,6 +216,11 @@ usernames must be unique within the application ...");
             base.Delete();
         }
 
+        private static string GetUniqueAppString()
+        {
+            return HttpContext.Current.Request.ApplicationPath.Trim('/');
+        }
+
         public static UserBase Current
         {
             get
@@ -223,7 +228,9 @@ usernames must be unique within the application ...");
                 if (HttpContext.Current.Session["Magix.Brix.Components.ActiveTypes.Users.User.Current"] == null)
                 {
                     HttpCookie userCookie =
-                        HttpContext.Current.Request.Cookies["Magix.Brix.Components.ActiveTypes.Users.User.Current"];
+                        HttpContext.Current.Request.Cookies[
+                            GetUniqueAppString() +
+                            "Magix.Brix.Components.ActiveTypes.Users.User.Current"];
                     if (userCookie == null)
                         return null;
                     string[] entities = userCookie.Value.Split('|');
@@ -259,7 +266,9 @@ usernames must be unique within the application ...");
             {
                 if (value == null)
                 {
-                    HttpCookie cookie = new HttpCookie("Magix.Brix.Components.ActiveTypes.Users.User.Current");
+                    HttpCookie cookie = new HttpCookie(
+                        GetUniqueAppString() + 
+                        "Magix.Brix.Components.ActiveTypes.Users.User.Current");
                     cookie.Value = "mumboJumbo|mumboJumbo";
                     cookie.HttpOnly = true;
                     HttpContext.Current.Response.Cookies.Add(cookie);
@@ -276,7 +285,9 @@ usernames must be unique within the application ...");
                         passwordHashBuffer.Append(idxByte);
                     }
                     string passwordHashed = passwordHashBuffer.ToString();
-                    HttpCookie cookie = new HttpCookie("Magix.Brix.Components.ActiveTypes.Users.User.Current");
+                    HttpCookie cookie = new HttpCookie(
+                        GetUniqueAppString() + 
+                        "Magix.Brix.Components.ActiveTypes.Users.User.Current");
                     cookie.Value = value.Username + "|" + passwordHashed;
                     cookie.HttpOnly = true;
                     HttpContext.Current.Response.Cookies.Add(cookie);

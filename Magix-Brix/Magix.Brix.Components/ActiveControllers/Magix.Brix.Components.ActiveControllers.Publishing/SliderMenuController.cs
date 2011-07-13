@@ -25,10 +25,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 if (idx.Parent != null)
                     continue; // Looking for Root Page and starting traversal from it ...
-                foreach (PageObject idx2 in idx.Children)
-                {
-                    GetOneMenuItem(e.Params, idx2);
-                }
+
+                GetOneMenuItem(e.Params, idx);
             }
         }
 
