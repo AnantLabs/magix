@@ -19,11 +19,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
     [PublisherPlugin]
     public class Content : ActiveModule
     {
-        public void InitialLoading(Node node)
+        protected Label lbl;
+
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
             Load +=
                 delegate
                 {
+                    lbl.Text = Text;
                 };
         }
 

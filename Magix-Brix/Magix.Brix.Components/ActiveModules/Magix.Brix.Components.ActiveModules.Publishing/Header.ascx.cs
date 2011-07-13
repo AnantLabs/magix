@@ -21,11 +21,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
     {
         protected Label lbl;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
             Load +=
                 delegate
                 {
+                    lbl.Text = Caption;
                 };
         }
 

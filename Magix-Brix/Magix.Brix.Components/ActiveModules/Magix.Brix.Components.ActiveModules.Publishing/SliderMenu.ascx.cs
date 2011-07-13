@@ -22,8 +22,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         protected SlidingMenu slid;
         protected SlidingMenuLevel root;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
             Load +=
                 delegate
                 {
@@ -57,6 +58,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node["Event"]["MenuItemID"].Get<string>();
 
             SlidingMenuItem item = new SlidingMenuItem();
+            item.ID = node.Name;
             if (node.Contains("Selected") &&
                 node["Selected"].Get<bool>())
                 item.CssClass += " selected";
@@ -83,7 +85,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             Node node = new Node();
 
-            node["MenuItemID"].Value = int.Parse(menuItemId);
+            node["MenuItemID"].Value = menuItemId;
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -102,6 +104,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 old.CssClass = old.CssClass.Replace(" selected", "");
 
             item.CssClass += " selected";
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.ShouldReloadWebPart")]
+        protected void Magix_Publishing_ShouldReloadWebPart(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["ModuleName"].Get<string>() == typeof(SliderMenu).FullName)
+            {
+                e.Params["Stop"].Value = true;
+            }
         }
     }
 }

@@ -26,9 +26,11 @@ namespace Magix.Brix.ApplicationPool
                 "Page_Init");
             if (!IsPostBack)
             {
+                Node node = new Node();
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "Brix.Core.InitialLoading");
+                    "Brix.Core.InitialLoading",
+                    node);
             }
             LoadComplete += MainWebPage_LoadComplete;
         }

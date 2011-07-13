@@ -21,9 +21,47 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             // Including standard CSS files ...
             IncludeCssFiles();
 
-            // Getting relative URL ...
-            string baseUrl = GetApplicationBaseUrl();
-            string relUrl = Page.Request.Url.ToString().Replace(baseUrl, "");
+            // Checking to see if some other modules have handled our request and wants
+            // to be left alone ...
+            if (ShouldShowLoginBox())
+            {
+                // Loading login module ...
+                Node node = new Node();
+
+                node["Container"].Value = "content1";
+                node["Width"].Value = 8;
+                node["Push"].Value = 8;
+                node["Last"].Value = true;
+                node["Top"].Value = 5;
+
+                RaiseEvent(
+                    "Magix.Core.LoadLoginModule",
+                    node);
+            }
+            else
+            {
+                // Getting relative URL ...
+                string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
+                string relUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "").Replace(baseUrl, "");
+
+                if (relUrl.IndexOf('?') != -1)
+                {
+                    relUrl = relUrl.Substring(0, relUrl.IndexOf('?'));
+                }
+
+                Node node = new Node();
+
+                node["URL"].Value = relUrl;
+
+                RaiseEvent(
+                    "Magix.Publishing.UrlRequested",
+                    node);
+            }
+        }
+
+        private bool ShouldShowLoginBox()
+        {
+            return Page.Request.Params["login"] == "true";
         }
 
         private void IncludeCssFiles()

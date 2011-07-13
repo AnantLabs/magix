@@ -98,8 +98,7 @@ namespace Magix.Brix.Loader
                 HttpContext.Current.Request.ServerVariables["HTTP_HOST"],
                 (Page.Request.ApplicationPath.Equals("/")) ? 
                     "/" : 
-                    HttpContext.Current.Request.ApplicationPath + "/")
-                        .Replace("Default.aspx", "").Replace("default.aspx", "");
+                    HttpContext.Current.Request.ApplicationPath + "/");
         }
 
         /**
