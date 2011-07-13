@@ -441,6 +441,21 @@ namespace Magix.Brix.Viewports
                     {
                         cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
                     }
+                    if (e.Params["Parameters"].Contains("PushRight")
+                        && e.Params["Parameters"]["PushRight"].Get<int>() > 0)
+                    {
+                        cssClass += " pushRight-" + e.Params["Parameters"]["PushRight"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("PushLeft") &&
+                        e.Params["Parameters"]["PushLeft"].Get<int>() > 0)
+                    {
+                        cssClass += " pushLeft-" + e.Params["Parameters"]["PushLeft"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("SpcBottom") &&
+                        e.Params["Parameters"]["SpcBottom"].Get<int>() > 0)
+                    {
+                        cssClass += " spcBottom-" + e.Params["Parameters"]["SpcBottom"].Get<int>();
+                    }
                     if (e.Params["Parameters"].Contains("CssClass"))
                     {
                         cssClass += " " + e.Params["Parameters"]["CssClass"].Get<string>();
@@ -827,10 +842,22 @@ namespace Magix.Brix.Viewports
                 ctrl.Init +=
                     delegate
                     {
+                        Node nn = e.Extra as Node;
+                        if (nn != null && 
+                            nn.Contains("ModuleInitializationEvent") && 
+                            !string.IsNullOrEmpty(nn["ModuleInitializationEvent"].Get<string>()))
+                        {
+                            nn["_ctrl"].Value = ctrl;
+                            ActiveEvents.Instance.RaiseActiveEvent(
+                                this,
+                                nn["ModuleInitializationEvent"].Get<string>(),
+                                nn);
+                            nn["_ctrl"].UnTie();
+                        }
                         IModule module = ctrl as IModule;
                         if (module != null)
                         {
-                            module.InitialLoading(e.Extra as Node);
+                            module.InitialLoading(nn);
                         }
                     };
             }

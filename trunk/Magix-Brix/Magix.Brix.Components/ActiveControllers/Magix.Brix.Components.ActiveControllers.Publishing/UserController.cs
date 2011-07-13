@@ -42,30 +42,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Brix.Core.InitialLoading")]
-        protected void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
-        {
-            if (User.Current == null && ShouldShowLoginBox())
-            {
-                // Loading login module ...
-                Node node = new Node();
-
-                node["Container"].Value = "content4";
-                node["Width"].Value = 8;
-                node["Push"].Value = 8;
-                node["Last"].Value = true;
-                node["Top"].Value = 5;
-
-                RaiseEvent(
-                    "Magix.Core.LoadLoginModule",
-                    node);
-            }
-            else if (User.Current != null)
-            {
-                RaiseEvent("Magix.Publishing.LoadDashboard");
-            }
-        }
-
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
         protected void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {
@@ -89,12 +65,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 RaiseEvent("Magix.Core.UserLoggedIn");
             }
-        }
-
-        private bool ShouldShowLoginBox()
-        {
-            return Page.Request.Params["login"] == "true" ||
-                Settings.Instance.Get("ShouldShowLogin", true);
         }
     }
 }

@@ -23,16 +23,38 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             foreach (PageObject idx in PageObject.Select())
             {
-                e.Params["Items"]["i" + idx.ID]["Caption"].Value = idx.Name;
-                e.Params["Items"]["i" + idx.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
-                e.Params["Items"]["i" + idx.ID]["Event"]["MenuItemID"].Value = idx.ID;
+                if (idx.Parent != null)
+                    continue; // Looking for Root Page and starting traversal from it ...
+                foreach (PageObject idx2 in idx.Children)
+                {
+                    GetOneMenuItem(e.Params, idx2);
+                }
+            }
+        }
+
+        private static void GetOneMenuItem(Node node, PageObject po)
+        {
+            node["Items"]["i" + po.ID]["Caption"].Value = po.Name;
+            node["Items"]["i" + po.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
+            node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
+            foreach (PageObject idx in po.Children)
+            {
+                GetOneMenuItem(node["Items"]["i" + po.ID], idx);
             }
         }
 
         [ActiveEvent(Name = "Magix.Publishing.SliderMenuItemClicked")]
         protected void Magix_Publishing_SliderMenuItemClicked(object sender, ActiveEventArgs e)
         {
-            PageObject o = PageObject.SelectByID(e.Params["MenuItemID"].Get<int>());
+            PageObject o = PageObject.SelectFirst(Criteria.Eq("URL", e.Params["MenuItemID"].Get<string>()));
+
+            Node node = new Node();
+
+            node["ID"].Value = o.ID;
+
+            RaiseEvent(
+                "Magix.Publishing.OpenPage",
+                node);
         }
     }
 }

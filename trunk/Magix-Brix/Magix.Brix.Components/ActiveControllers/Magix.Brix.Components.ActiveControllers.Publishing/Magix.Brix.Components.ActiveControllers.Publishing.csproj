@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdministratorDashboardController.cs" />
+    <Compile Include="PageController.cs" />
     <Compile Include="EditTemplatesController.cs" />
     <Compile Include="SliderMenuController.cs" />
     <Compile Include="EditPagesController.cs" />
