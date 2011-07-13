@@ -128,6 +128,57 @@ div.height-30, .height-30 {height:45em;}
 .wide-23 { width:920px; min-width:400px; }
 .wide-24 { width:960px; min-width:400px; margin-right:0; }
 
+.pushLeft-1 {margin-left:40px;}
+.pushLeft-2 {margin-left:80px;}
+.pushLeft-3 {margin-left:120px;}
+.pushLeft-4 {margin-left:160px;}
+.pushLeft-5 {margin-left:200px;}
+.pushLeft-6 {margin-left:240px;}
+.pushLeft-7 {margin-left:280px;}
+.pushLeft-8 {margin-left:320px;}
+.pushLeft-9 {margin-left:360px;}
+.pushLeft-10 {margin-left:400px;}
+.pushLeft-11 {margin-left:440px;}
+.pushLeft-12 {margin-left:480px;}
+.pushLeft-13 {margin-left:520px;}
+.pushLeft-14 {margin-left:560px;}
+.pushLeft-15 {margin-left:600px;}
+.pushLeft-16 {margin-left:640px;}
+.pushLeft-17 {margin-left:680px;}
+.pushLeft-18 {margin-left:720px;}
+.pushLeft-19 {margin-left:760px;}
+.pushLeft-20 {margin-left:800px;}
+.pushLeft-21 {margin-left:840px;}
+.pushLeft-22 {margin-left:880px;}
+.pushLeft-23 {margin-left:920px;}
+.pushLeft-24 {margin-left:960px;}
+.pushLeft-1, .pushLeft-2, .pushLeft-3, .pushLeft-4, .pushLeft-5, .pushLeft-6, .pushLeft-7, .pushLeft-8, .pushLeft-9, .pushLeft-10, .pushLeft-11, .pushLeft-12, .pushLeft-13, .pushLeft-14, .pushLeft-15, .pushLeft-16, .pushLeft-17, .pushLeft-18, .pushLeft-19, .pushLeft-20, .pushLeft-21, .pushLeft-22, .pushLeft-23, .pushLeft-24 {float:left;position:relative;}
+
+.pushRight-1 {margin-right:50px;}
+.pushRight-2 {margin-right:90px;}
+.pushRight-3 {margin-right:130px;}
+.pushRight-4 {margin-right:170px;}
+.pushRight-5 {margin-right:210px;}
+.pushRight-6 {margin-right:250px;}
+.pushRight-7 {margin-right:290px;}
+.pushRight-8 {margin-right:330px;}
+.pushRight-9 {margin-right:370px;}
+.pushRight-10 {margin-right:410px;}
+.pushRight-11 {margin-right:450px;}
+.pushRight-12 {margin-right:490px;}
+.pushRight-13 {margin-right:530px;}
+.pushRight-14 {margin-right:570px;}
+.pushRight-15 {margin-right:610px;}
+.pushRight-16 {margin-right:650px;}
+.pushRight-17 {margin-right:690px;}
+.pushRight-18 {margin-right:730px;}
+.pushRight-19 {margin-right:770px;}
+.pushRight-20 {margin-right:810px;}
+.pushRight-21 {margin-right:850px;}
+.pushRight-22 {margin-right:890px;}
+.pushRight-23 {margin-right:930px;}
+.pushRight-1, .pushRight-2, .pushRight-3, .pushRight-4, .pushRight-5, .pushRight-6, .pushRight-7, .pushRight-8, .pushRight-9, .pushRight-10, .pushRight-11, .pushRight-12, .pushRight-13, .pushRight-14, .pushRight-15, .pushRight-16, .pushRight-17, .pushRight-18, .pushRight-19, .pushRight-20, .pushRight-21, .pushRight-22, .pushRight-23 {position:relative;}
+
 
 .blockImage
 {
