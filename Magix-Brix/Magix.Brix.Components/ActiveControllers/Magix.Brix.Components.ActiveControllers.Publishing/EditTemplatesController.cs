@@ -41,10 +41,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["IDColumnName"].Value = "Edit";
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.Publishing.EditTemplate";
+            node["CreateEventName"].Value = "Magix.Publishing.CreateTemplate";
 
             node["ReuseNode"].Value = true;
 
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Containers"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Containers"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Containers"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetContainersTemplateColumn";
@@ -55,6 +56,34 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.CreateTemplate")]
+        protected void Magix_Publishing_CreateTemplate(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                PageTemplate p = new PageTemplate();
+                p.Name = "Template...";
+
+                PageTemplateContainer c = new PageTemplateContainer();
+                c.Width = 6;
+                c.Height = 6;
+                c.Name = "Name";
+                c.ModuleName = Adapter.ActiveModules.Find(
+                    delegate(Type idx)
+                    {
+                        PublisherPluginAttribute[] atrs = idx.GetCustomAttributes(typeof(PublisherPluginAttribute), true) as PublisherPluginAttribute[];
+                        return atrs != null && atrs.Length > 0;
+                    }).FullName;
+                c.ViewportContainer = "content1";
+                p.Containers.Add(c);
+                c.PageTemplate = p;
+
+                p.Save();
+
+                tr.Commit();
+            }
         }
 
         [ActiveEvent(Name = "Magix.Publishing.EditTemplate")]
@@ -167,6 +196,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     t.BottomMargin = Math.Min(30, t.BottomMargin + 1);
                 else if (e.Params["Action"].Get<string>() == "DecreaseBottom")
                     t.BottomMargin = Math.Max(0, t.BottomMargin - 1);
+                else if (e.Params["Action"].Get<string>() == "IncreaseLeft")
+                    t.Push = Math.Min(18, t.Push + 1);
+                else if (e.Params["Action"].Get<string>() == "DecreaseLeft")
+                    t.Push = Math.Max(0, t.Push - 1);
+                else if (e.Params["Action"].Get<string>() == "IncreasePadding")
+                    t.Padding = Math.Min(18, t.Padding + 1);
+                else if (e.Params["Action"].Get<string>() == "DecreasePadding")
+                    t.Padding = Math.Max(0, t.Padding - 1);
                 else if (e.Params["Action"].Get<string>() == "ChangeName")
                     t.Name = e.Params["Action"]["Value"].Get<string>();
                 else if (e.Params["Action"].Get<string>() == "ChangeCssClass")

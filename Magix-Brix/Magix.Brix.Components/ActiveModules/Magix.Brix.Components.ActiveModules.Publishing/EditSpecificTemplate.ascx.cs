@@ -49,6 +49,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         // Creating Window ...
                         Window w = new Window();
+                        w.CssClass += " web-part";
                         SetCommonWebPartProperties(
                             width, 
                             height, 
@@ -238,6 +239,38 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             decBottom.Info = id.ToString();
             decBottom.Click += decBottom_Click;
             w.Content.Controls.Add(decBottom);
+
+            LinkButton incLeft = new LinkButton();
+            incLeft.Text = "&nbsp;";
+            incLeft.ToolTip = "Increase Left Margin";
+            incLeft.CssClass = "magix-publishing-increase-left";
+            incLeft.Info = id.ToString();
+            incLeft.Click += incLeft_Click;
+            w.Content.Controls.Add(incLeft);
+
+            LinkButton decLeft = new LinkButton();
+            decLeft.Text = "&nbsp;";
+            decLeft.ToolTip = "Decrease Left Margin";
+            decLeft.CssClass = "magix-publishing-decrease-left";
+            decLeft.Info = id.ToString();
+            decLeft.Click += decLeft_Click;
+            w.Content.Controls.Add(decLeft);
+
+            LinkButton incPadding = new LinkButton();
+            incPadding.Text = "&nbsp;";
+            incPadding.ToolTip = "Increase Right Margin";
+            incPadding.CssClass = "magix-publishing-increase-padding";
+            incPadding.Info = id.ToString();
+            incPadding.Click += incPadding_Click;
+            w.Content.Controls.Add(incPadding);
+
+            LinkButton decPadding = new LinkButton();
+            decPadding.Text = "&nbsp;";
+            decPadding.ToolTip = "Decrease Right Margin";
+            decPadding.CssClass = "magix-publishing-decrease-padding";
+            decPadding.Info = id.ToString();
+            decPadding.Click += decPadding_Click;
+            w.Content.Controls.Add(decPadding);
         }
 
         void incWidth_Click(object sender, EventArgs e)
@@ -278,6 +311,26 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         void decBottom_Click(object sender, EventArgs e)
         {
             ChangeProperty(sender, "DecreaseBottom");
+        }
+
+        void incLeft_Click(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreaseLeft");
+        }
+
+        void decLeft_Click(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreaseLeft");
+        }
+
+        void incPadding_Click(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreasePadding");
+        }
+
+        void decPadding_Click(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreasePadding");
         }
 
         private void ChangeProperty(object sender, string action)
@@ -324,9 +377,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             w.Caption = name;
             w.Info = id.ToString();
             if (padding > 0)
-                w.CssClass += " padding-" + padding;
+                w.CssClass += " pushRight-" + padding;
             if (push > 0)
-                w.CssClass += " push-" + push;
+                w.CssClass += " pushLeft-" + push;
             if (top > 0)
                 w.CssClass += " down-" + top;
             if (bottomMargin > 0)

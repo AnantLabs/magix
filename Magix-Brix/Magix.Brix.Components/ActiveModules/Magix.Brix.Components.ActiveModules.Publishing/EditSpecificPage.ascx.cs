@@ -80,9 +80,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         w.Caption = name;
                         w.Info = id.ToString();
                         if (padding > 0)
-                            w.CssClass += " padding-" + padding;
+                            w.CssClass += " pushRight-" + padding;
                         if (push > 0)
-                            w.CssClass += " push-" + push;
+                            w.CssClass += " pushLeft-" + push;
                         if (top > 0)
                             w.CssClass += " down-" + top;
                         if (bottomMargin > 0)

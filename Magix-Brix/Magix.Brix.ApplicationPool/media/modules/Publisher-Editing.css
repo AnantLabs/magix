@@ -72,6 +72,34 @@
 	background-position:0 -750px;
 }
 
+.magix-publishing-increase-left
+{
+	top:0;
+	left:40px;
+	background-position:0 -600px;
+}
+
+.magix-publishing-decrease-left
+{
+	top:0;
+	left:0;
+	background-position:0 -550px;
+}
+
+.magix-publishing-increase-padding
+{
+	top:0;
+	left:120px;
+	background-position:0 -600px;
+}
+
+.magix-publishing-decrease-padding
+{
+	top:0;
+	left:80px;
+	background-position:0 -550px;
+}
+
 .magix-publishing-increase-width,
 .magix-publishing-decrease-width,
 .magix-publishing-increase-height,
@@ -79,7 +107,11 @@
 .magix-publishing-increase-down,
 .magix-publishing-decrease-down,
 .magix-publishing-increase-bottom,
-.magix-publishing-decrease-bottom
+.magix-publishing-decrease-bottom,
+.magix-publishing-increase-left,
+.magix-publishing-decrease-left,
+.magix-publishing-increase-padding,
+.magix-publishing-decrease-padding
 {
 	position:absolute;
 	width:40px;
@@ -107,7 +139,11 @@
 .magix-publishing-increase-down:hover,
 .magix-publishing-decrease-down:hover,
 .magix-publishing-increase-bottom:hover,
-.magix-publishing-decrease-bottom:hover
+.magix-publishing-decrease-bottom:hover,
+.magix-publishing-increase-left:hover,
+.magix-publishing-decrease-left:hover,
+.magix-publishing-increase-padding:hover,
+.magix-publishing-decrease-padding:hover
 {
 	opacity:.8;
 
@@ -119,6 +155,11 @@
 	transition-duration:0.2s;
 }
 
+
+.web-part .mux-window-caption
+{
+	visibility:hidden;
+}
 
 
 .magix-publishing-wysiwyg
