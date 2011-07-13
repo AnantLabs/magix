@@ -79,7 +79,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     PageObjectTemplate t2 = new PageObjectTemplate();
                     t2.Container = PageTemplateContainer.SelectFirst(Criteria.Eq("Name", "Header"));
                     PageObjectTemplate.PageObjectTemplateSetting s1 = new PageObjectTemplate.PageObjectTemplateSetting();
-                    s1.Name = "Caption";
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
                     s1.Value = "Welcome to Magix";
                     t2.Settings.Add(s1);
                     o.ObjectTemplates.Add(t2);
@@ -87,7 +87,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     PageObjectTemplate t3 = new PageObjectTemplate();
                     t3.Container = PageTemplateContainer.SelectFirst(Criteria.Eq("Name", "Content"));
                     PageObjectTemplate.PageObjectTemplateSetting s2 = new PageObjectTemplate.PageObjectTemplateSetting();
-                    s2.Name = "Text";
+                    s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = "<p>Hello there world ...</p>";
                     t3.Settings.Add(s2);
                     o.ObjectTemplates.Add(t3);
@@ -180,13 +180,17 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                             return idxT.FullName == idx.Container.ModuleName;
                         });
                     if (moduleType.GetProperty(
-                        idxI.Name, 
+                        idxI.Name.Replace(moduleType.FullName, ""), 
                         BindingFlags.NonPublic | 
                         BindingFlags.Public | 
                         BindingFlags.Instance) != null)
                     {
                         node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name].Value = idxI.Value;
-                        PropertyInfo prop = moduleType.GetProperty(idxI.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        PropertyInfo prop = moduleType.GetProperty(
+                            idxI.Name.Replace(moduleType.FullName, ""),
+                            BindingFlags.Public | 
+                            BindingFlags.NonPublic | 
+                            BindingFlags.Instance);
                         if (prop != null)
                         {
                             ModuleSettingAttribute[] atrs =
@@ -287,7 +291,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 // Signalizing that Pages has been changed, in case other modules are
                 // dependent upon knowing ...
-                RaiseEvent("Magix.Publishing.PageWasUpdated");
+                Node node = new Node();
+                node["ID"].Value = o.ID;
+                RaiseEvent(
+                    "Magix.Publishing.PageWasDeleted", 
+                    node);
             }
         }
 
@@ -357,6 +365,21 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 this,
                 "Magix.Publishing.EditSpecificPage",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.TemplateWasModified")]
+        protected void Magix_Publishing_TemplateWasModified(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                foreach (PageObject idx in 
+                    PageObject.Select(
+                        Criteria.ExistsIn(e.Params["ID"].Get<int>(), true)))
+                {
+                    idx.Save();
+                }
+                tr.Commit();
+            }
         }
     }
 }

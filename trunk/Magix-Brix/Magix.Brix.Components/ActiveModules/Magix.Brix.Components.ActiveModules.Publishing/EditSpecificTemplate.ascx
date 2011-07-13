@@ -10,7 +10,7 @@
 
 <mux:Panel
     runat="server"
-    CssClass="span-24 last"
+    CssClass="span-24 last down-1"
     id="parts" />
 
 

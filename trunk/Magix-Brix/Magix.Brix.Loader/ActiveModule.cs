@@ -17,7 +17,7 @@ namespace Magix.Brix.Loader
      */
     public abstract class ActiveModule : UserControl, IModule
     {
-        public void InitialLoading(Node node)
+        public virtual void InitialLoading(Node node)
         {
             Load +=
                 delegate

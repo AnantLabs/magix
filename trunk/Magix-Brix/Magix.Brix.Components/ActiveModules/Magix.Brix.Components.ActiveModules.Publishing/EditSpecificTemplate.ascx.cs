@@ -68,32 +68,72 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         CreateNameInPlaceEdit(name, id, w);
 
-                        InPlaceTextAreaEdit tx = new InPlaceTextAreaEdit();
-                        tx.Text = cssClass;
-                        tx.CssClass += " span-5";
-                        tx.Info = id.ToString();
-                        tx.TextChanged +=
-                            delegate(object sender, EventArgs e)
+                        CreateChangeCssClassInPlaceEdit(id, cssClass, w);
+
+                        CheckBox ch = new CheckBox();
+                        ch.Checked = last;
+                        ch.CheckedChanged +=
+                            delegate
                             {
-                                InPlaceTextAreaEdit t = sender as InPlaceTextAreaEdit;
+                                Node nx = new Node();
 
-                                Node node = new Node();
-
-                                node["ID"].Value = int.Parse(t.Info);
-                                node["Action"].Value = "ChangeCssClass";
-                                node["Value"].Value = t.Text;
+                                nx["ID"].Value = id;
+                                nx["Action"].Value = "ChangeLast";
+                                nx["Value"].Value = ch.Checked;
 
                                 RaiseSafeEvent(
                                     "Magix.Publishing.ChangeTemplateProperty",
-                                    node);
+                                    nx);
+
+                                ReDataBind();
                             };
-                        tx.ToolTip = "Css Class of WebPart";
-                        w.Content.Controls.Add(tx);
+
+                        Label lbl = new Label();
+                        lbl.Text = "Last";
+                        lbl.Load
+                            +=
+                            delegate
+                            {
+                                lbl.For = ch.ClientID;
+                            };
+                        lbl.Tag = "label";
+                        
+                        Panel pnl = new Panel();
+                        pnl.CssClass = "span-3";
+                        pnl.Controls.Add(ch);
+                        pnl.Controls.Add(lbl);
+
+                        w.Content.Controls.Add(pnl);
 
                         parts.Controls.Add(w);
                     }
                 }
             }
+        }
+
+        private void CreateChangeCssClassInPlaceEdit(int id, string cssClass, Window w)
+        {
+            InPlaceTextAreaEdit tx = new InPlaceTextAreaEdit();
+            tx.Text = cssClass;
+            tx.CssClass += " span-5  editer";
+            tx.Info = id.ToString();
+            tx.TextChanged +=
+                delegate(object sender, EventArgs e)
+                {
+                    InPlaceTextAreaEdit t = sender as InPlaceTextAreaEdit;
+
+                    Node node = new Node();
+
+                    node["ID"].Value = int.Parse(t.Info);
+                    node["Action"].Value = "ChangeCssClass";
+                    node["Value"].Value = t.Text;
+
+                    RaiseSafeEvent(
+                        "Magix.Publishing.ChangeTemplateProperty",
+                        node);
+                };
+            tx.ToolTip = "Css Class of WebPart";
+            w.Content.Controls.Add(tx);
         }
 
         private void CreateNameInPlaceEdit(string name, int id, Window w)
@@ -169,7 +209,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             LinkButton incDown = new LinkButton();
             incDown.Text = "&nbsp;";
-            incDown.ToolTip = "Increase Down";
+            incDown.ToolTip = "Increase Top Margin";
             incDown.CssClass = "magix-publishing-increase-down";
             incDown.Info = id.ToString();
             incDown.Click += incDown_Click;
@@ -177,11 +217,27 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             LinkButton decDown = new LinkButton();
             decDown.Text = "&nbsp;";
-            decDown.ToolTip = "Decrease Down";
+            decDown.ToolTip = "Decrease Top Margin";
             decDown.CssClass = "magix-publishing-decrease-down";
             decDown.Info = id.ToString();
             decDown.Click += decDown_Click;
             w.Content.Controls.Add(decDown);
+
+            LinkButton incBottom = new LinkButton();
+            incBottom.Text = "&nbsp;";
+            incBottom.ToolTip = "Increase Bottom Margin";
+            incBottom.CssClass = "magix-publishing-increase-bottom";
+            incBottom.Info = id.ToString();
+            incBottom.Click += incBottom_Click;
+            w.Content.Controls.Add(incBottom);
+
+            LinkButton decBottom = new LinkButton();
+            decBottom.Text = "&nbsp;";
+            decBottom.ToolTip = "Decrease Bottom Margin";
+            decBottom.CssClass = "magix-publishing-decrease-bottom";
+            decBottom.Info = id.ToString();
+            decBottom.Click += decBottom_Click;
+            w.Content.Controls.Add(decBottom);
         }
 
         void incWidth_Click(object sender, EventArgs e)
@@ -214,6 +270,16 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             ChangeProperty(sender, "DecreaseDown");
         }
 
+        void incBottom_Click(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreaseBottom");
+        }
+
+        void decBottom_Click(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreaseBottom");
+        }
+
         private void ChangeProperty(object sender, string action)
         {
             LinkButton lbn = sender as LinkButton;
@@ -228,6 +294,11 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 "Magix.Publishing.ChangeTemplateProperty",
                 node);
 
+            ReDataBind();
+        }
+
+        private void ReDataBind()
+        {
             DataSource["Templates"].UnTie();
             DataSource["AllModules"].UnTie();
 
@@ -299,6 +370,12 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 }
                 w.Content.Controls.Add(sel);
             }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.TemplateWasModified")]
+        protected void Magix_Publishing_TemplateWasModified(object sender, EventArgs e)
+        {
+            ReDataBind();
         }
     }
 }

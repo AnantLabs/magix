@@ -22,7 +22,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         protected SelectList sel;
         protected Panel parts;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
             Load +=
@@ -124,13 +124,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                                 tx["SaveEvent"]["Params"]["PropertyName"].Value = propName2;
                                                 tx["SaveEvent"]["Params"]["PotID"].Value = id2;
                                                 tx["Text"].Value = ed2.Text;
-                                                tx["Width"].Value = width;
-                                                tx["Height"].Value = height;
-                                                tx["Last"].Value = last;
-                                                tx["Padding"].Value = padding;
-                                                tx["Push"].Value = push;
-                                                tx["Top"].Value = top;
-                                                tx["BottomMargin"].Value = bottomMargin;
+                                                tx["Width"].Value = 18;
+                                                tx["Height"].Value = 30;
+                                                tx["Last"].Value = true;
+                                                tx["Padding"].Value = 6;
+                                                tx["Push"].Value = 0;
+                                                tx["Top"].Value = 0;
+                                                tx["BottomMargin"].Value = 15;
 
                                                 ActiveEvents.Instance.RaiseLoadControl(
                                                     ed2.Info.Split('|')[2],
@@ -217,19 +217,36 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node);
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.PageWasDeleted")]
+        protected void Magix_Publishing_PageWasDeleted(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["ID"].Get<int>() == DataSource["ID"].Get<int>())
+            {
+                ActiveEvents.Instance.RaiseClearControls(Parent.ID);
+            }
+        }
+
         protected void delete_Click(object sender, EventArgs e)
         {
             Node node = new Node();
 
             node["ID"].Value = DataSource["ID"].Get<int>();
 
-            if (RaiseSafeEvent(
+            RaiseSafeEvent(
                 "Magix.Publishing.DeletePageObject",
-                node))
-            {
-                // Removing this module, since the editing page no longer exists ...
-                ActiveEvents.Instance.RaiseClearControls(this.Parent.ID);
-            }
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.PageWasUpdated")]
+        protected void Magix_Publishing_PageWasUpdated(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Value;
+
+            RaiseSafeEvent(
+                "Magix.Publishing.EditSpecificPage",
+                node);
         }
 
         protected void sel_SelectedIndexChanged(object sender, EventArgs e)
@@ -251,6 +268,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                     break;
                 }
             }
+
+            // Signalizing that Pages has been changed, in case other modules are
+            // dependent upon knowing ...
+            RaiseEvent("Magix.Publishing.PageWasUpdated");
         }
     }
 }

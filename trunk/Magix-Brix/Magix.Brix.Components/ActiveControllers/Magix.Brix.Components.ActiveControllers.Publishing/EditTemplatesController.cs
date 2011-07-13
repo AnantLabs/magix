@@ -125,18 +125,22 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 PageTemplateContainer t = PageTemplateContainer.SelectByID(e.Params["ID"].Get<int>());
                 t.ModuleName = e.Params["ModuleName"].Get<string>();
                 t.Save();
-                foreach (PageObject idx in PageObject.Select())
+                foreach (PageObject idx in PageObject.Select(
+                        Criteria.ExistsIn(t.PageTemplate.ID, true)))
                 {
-                    if (idx.Parent == null)
-                    {
-                        // Forcing a 'rethink' of Settings for PageObjects ...
-                        // And dereferencing children to force them re-saving too ...
-                        int x = idx.Children.Count;
-                        idx.Save();
-                        break;
-                    }
+                    // Forcing a 'rethink' of PageObjects beloning to this template
+                    // to force [among other things] Defaut settings and such into the
+                    // objects, and have them correctly numbered and aligned and such ...
+                    idx.Save();
                 }
                 tr.Commit();
+
+                Node node = new Node();
+                node["ID"].Value = t.ID;
+
+                RaiseEvent(
+                    "Magix.Publishing.TemplateWasModified",
+                    node);
             }
         }
 
@@ -159,10 +163,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     t.Top = Math.Min(30, t.Top + 1);
                 else if (e.Params["Action"].Get<string>() == "DecreaseDown")
                     t.Top = Math.Max(0, t.Top - 1);
+                else if (e.Params["Action"].Get<string>() == "IncreaseBottom")
+                    t.BottomMargin = Math.Min(30, t.BottomMargin + 1);
+                else if (e.Params["Action"].Get<string>() == "DecreaseBottom")
+                    t.BottomMargin = Math.Max(0, t.BottomMargin - 1);
                 else if (e.Params["Action"].Get<string>() == "ChangeName")
                     t.Name = e.Params["Action"]["Value"].Get<string>();
                 else if (e.Params["Action"].Get<string>() == "ChangeCssClass")
                     t.CssClass = e.Params["Value"].Get<string>();
+                else if (e.Params["Action"].Get<string>() == "ChangeLast")
+                    t.Last = e.Params["Value"].Get<bool>();
                 t.Save();
                 tr.Commit();
             }
@@ -186,7 +196,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     using (Transaction tr = Adapter.Instance.BeginTransaction())
                     {
                         PageTemplate t = PageTemplate.SelectByID(int.Parse(t2.Info));
-                        int count = Math.Min(7, int.Parse(t2.Text));
+                        int countInt = int.Parse(t2.Text);
+                        if (countInt > 7 || countInt < 1)
+                            throw new ArgumentException("Between 1 and 7 please ...");
+                        int count = Math.Max(1, Math.Min(7, countInt));
                         if (t.Containers.Count < count)
                         {
                             while (t.Containers.Count < count)
@@ -195,20 +208,34 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                                 c.Name = "Default Name";
                                 c.Width = 6;
                                 c.Height = 6;
+                                c.ViewportContainer = "content" + (t.Containers.Count + 1);
+                                c.ModuleName = Adapter.ActiveModules.Find(
+                                    delegate(Type idx)
+                                    {
+                                        PublisherPluginAttribute[] atrs = idx.GetCustomAttributes(typeof(PublisherPluginAttribute), true) as PublisherPluginAttribute[];
+                                        return atrs != null && atrs.Length > 0;
+                                    }).FullName;
                                 t.Containers.Add(c);
                             }
                         }
                         else if (t.Containers.Count > count)
                         {
-                            while (count > 0)
+                            while (t.Containers.Count - count > 0)
                             {
                                 t.Containers.RemoveAt(t.Containers.Count - 1);
-                                count -= 1;
                             }
                         }
                         t.Save();
                         tr.Commit();
+
+                        Node node = new Node();
+                        node["ID"].Value = t.ID;
+
+                        RaiseEvent(
+                            "Magix.Publishing.TemplateWasModified", 
+                            node);
                     }
+
                 };
             e.Params["Control"].Value = txt;
         }

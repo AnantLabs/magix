@@ -89,13 +89,14 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
                             PageObjectTemplate.PageObjectTemplateSetting set = nTpl.Settings.Find(
                                 delegate(PageObjectTemplate.PageObjectTemplateSetting idxSet)
                                 {
-                                    return idxSet.Name == idxProp.Name;
+                                    return idxSet.Name == moduleType.FullName + idxProp.Name;
                                 });
                             if (set == null)
                             {
                                 set = new PageObjectTemplate.PageObjectTemplateSetting();
-                                set.Name = idxProp.Name;
+                                set.Name = moduleType.FullName + idxProp.Name;
                                 nTpl.Settings.Add(set);
+                                set.Parent = nTpl;
                             }
                             set.Value = "default value, please change ...";
                             idx.Save();
@@ -108,15 +109,6 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
                         delegate(PageObjectTemplate idxI)
                         {
                             return idxI.Container == idx;
-                        });
-                    tpl.Settings.RemoveAll(
-                        delegate(PageObjectTemplate.PageObjectTemplateSetting idxS)
-                        {
-                            return ObjectTemplates.Exists(
-                                delegate(PageObjectTemplate tpl2)
-                                {
-                                    return tpl2 == tpl;
-                                });
                         });
                     Type moduleType = Adapter.ActiveModules.Find(
                         delegate(Type idxType)
@@ -138,29 +130,20 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
                             PageObjectTemplate.PageObjectTemplateSetting set = tpl.Settings.Find(
                                 delegate(PageObjectTemplate.PageObjectTemplateSetting idxSet)
                                 {
-                                    return idxSet.Name == idxProp.Name;
+                                    return idxSet.Name == moduleType.FullName + idxProp.Name;
                                 });
                             if (set == null)
                             {
                                 set = new PageObjectTemplate.PageObjectTemplateSetting();
-                                set.Name = idxProp.Name;
+                                set.Name = moduleType.FullName + idxProp.Name;
                                 tpl.Settings.Add(set);
+                                set.Parent = tpl;
+                                set.Value = "default value, please change ...";
+                                tpl.Save();
                             }
-                            set.Value = "default value, please change ...";
-                            idx.Save();
                         }
                     }
-                    foreach (PageObjectTemplate idxTpl in ObjectTemplates)
-                    {
-                        if (!idxTpl.Settings.Exists(
-                            delegate(PageObjectTemplate.PageObjectTemplateSetting ixS)
-                            {
-                                return false;//ixS.Name == idxTpl.
-                            }))
-                        {
-                        }
-                    }
-                        tpl.Save();
+                    tpl.Save();
                 }
             }
             base.Save();

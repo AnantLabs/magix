@@ -5,13 +5,14 @@
  */
 
 using System;
-using System.IO;
-using System.Text;
-using System.Web.UI;
 using System.Configuration;
-using Magix.Brix.Data;
-using Magix.Brix.Types;
+using System.Web.UI;
+using System.Text;
+using System.IO;
 using Magix.Brix.Loader;
+using Magix.Brix.Types;
+using Magix.Brix.Data;
+using Magix.UX;
 
 namespace Magix.Brix.ApplicationPool
 {
@@ -26,23 +27,33 @@ namespace Magix.Brix.ApplicationPool
             if (!IsPostBack)
             {
                 ActiveEvents.Instance.RaiseActiveEvent(
-                    this, 
-                    "Page_Init_InitialLoading");
+                    this,
+                    "Brix.Core.InitialLoading");
             }
             LoadComplete += MainWebPage_LoadComplete;
         }
 
         void MainWebPage_LoadComplete(object sender, EventArgs e)
         {
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "Page_LoadComplete_InitialLoading");
+            if (!IsPostBack)
+            {
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Brix.Core.LoadComplete_InitialLoading");
+            }
+            Form.Action = Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "");
+
+            if (!AjaxManager.Instance.IsCallback)
+            {
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.PostBackOrLoad");
+            }
         }
 
         private void InitializeViewport()
         {
-            string defaultControl =
-                ConfigurationManager.AppSettings["PortalViewDriver"];
+            string defaultControl = ConfigurationManager.AppSettings["PortalViewDriver"];
             if (string.IsNullOrEmpty(defaultControl))
             {
                 Node node = new Node();
@@ -54,8 +65,7 @@ namespace Magix.Brix.ApplicationPool
             }
             else
             {
-                Control ctrl =
-                    PluginLoader.Instance.LoadActiveModule(defaultControl);
+                Control ctrl = PluginLoader.Instance.LoadActiveModule(defaultControl);
                 Form.Controls.Add(ctrl);
             }
         }
