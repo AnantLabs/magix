@@ -15,7 +15,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     [ActiveController]
     public class PublishingController : ActiveController
     {
-        [ActiveEvent(Name = "Page_Init_InitialLoading")]
+        [ActiveEvent(Name = "Brix.Core.InitialLoading")]
         protected void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
         {
             // Including standard CSS files ...

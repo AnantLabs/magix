@@ -18,69 +18,108 @@
 
 .magix-publishing-increase-width
 {
-	position:absolute;
-	top:9px;
-	right:20px;
-	width:40px;
-	height:20px;
-	text-decoration:none;
-	background:Transparent url(editor/assets/skins/sam/sprite.png) no-repeat 0 -600px;
+	top:0;
+	right:0;
+	background-position:0 -600px;
 }
 
 .magix-publishing-decrease-width
 {
-	position:absolute;
-	top:9px;
-	right:60px;
-	width:40px;
-	height:20px;
-	text-decoration:none;
-	background:Transparent url(editor/assets/skins/sam/sprite.png) no-repeat 0 -550px;
+	top:0;
+	right:40px;
+	background-position:0 -550px;
 }
 
 .magix-publishing-increase-height
 {
-	position:absolute;
-	bottom:9px;
-	right:20px;
-	width:40px;
-	height:20px;
-	text-decoration:none;
-	background:Transparent url(editor/assets/skins/sam/sprite.png) no-repeat 0 -800px;
+	bottom:0;
+	right:0;
+	background-position:0 -800px;
 }
 
 .magix-publishing-decrease-height
 {
-	position:absolute;
-	bottom:27px;
-	right:20px;
-	width:40px;
-	height:20px;
-	text-decoration:none;
-	background:Transparent url(editor/assets/skins/sam/sprite.png) no-repeat 0 -750px;
+	bottom:18px;
+	right:0;
+	background-position:0 -750px;
 }
 
 .magix-publishing-increase-down
 {
-	position:absolute;
-	top:45px;
-	right:20px;
-	width:40px;
-	height:20px;
-	text-decoration:none;
-	background:Transparent url(editor/assets/skins/sam/sprite.png) no-repeat 0 -800px;
+	top:36px;
+	right:0;
+	background-position:0 -800px;
 }
 
 .magix-publishing-decrease-down
 {
+	top:18px;
+	right:0;
+	background-position:0 -750px;
+}
+
+.magix-publishing-increase-bottom
+{
+	bottom:0;
+	left:0;
+	background-position:0 -800px;
+}
+
+.magix-publishing-decrease-bottom
+{
+	bottom:20px;
+	left:0;
+	background-position:0 -750px;
+}
+
+.magix-publishing-increase-width,
+.magix-publishing-decrease-width,
+.magix-publishing-increase-height,
+.magix-publishing-decrease-height,
+.magix-publishing-increase-down,
+.magix-publishing-decrease-down,
+.magix-publishing-increase-bottom,
+.magix-publishing-decrease-bottom
+{
 	position:absolute;
-	top:27px;
-	right:20px;
 	width:40px;
 	height:20px;
 	text-decoration:none;
-	background:Transparent url(editor/assets/skins/sam/sprite.png) no-repeat 0 -750px;
+	z-index:1;
+	background-color:Transparent;
+	background-image:url(editor/assets/skins/sam/sprite.png);
+	background-repeat:no-repeat;
+
+	opacity:.1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
 }
+
+.magix-publishing-increase-width:hover,
+.magix-publishing-decrease-width:hover,
+.magix-publishing-increase-height:hover,
+.magix-publishing-decrease-height:hover,
+.magix-publishing-increase-down:hover,
+.magix-publishing-decrease-down:hover,
+.magix-publishing-increase-bottom:hover,
+.magix-publishing-decrease-bottom:hover
+{
+	opacity:.8;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+
 
 .magix-publishing-wysiwyg
 {
@@ -122,7 +161,7 @@
 
 .editer textarea
 {
-	height:36px !important;
+	height:18px !important;
 }
 
 

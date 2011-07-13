@@ -73,8 +73,19 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node);
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.PageWasDeleted")]
+        protected void Magix_Publishing_PageWasDeleted(object sender, ActiveEventArgs e)
+        {
+            ReDataBind();
+        }
+
         [ActiveEvent(Name = "Magix.Publishing.PageWasUpdated")]
         protected void Magix_Publishing_PageWasUpdated(object sender, ActiveEventArgs e)
+        {
+            ReDataBind();
+        }
+
+        private void ReDataBind()
         {
             // Refetching items ...
             DataSource["Pages"].UnTie();

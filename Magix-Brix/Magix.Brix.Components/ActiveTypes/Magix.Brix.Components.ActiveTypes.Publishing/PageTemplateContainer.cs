@@ -46,5 +46,8 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
 
         [ActiveField]
         public string CssClass { get; set; }
+
+        [ActiveField(BelongsTo = true)]
+        public PageTemplate PageTemplate { get; set; }
     }
 }

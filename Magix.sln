@@ -30,26 +30,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Magix-UX-Samples", "Magix-U
 		VWDPort = "52489"
 	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Magix.Brix.ApplicationPool", "Magix-Brix\Magix.Brix.ApplicationPool\", "{CA521C5F-7AD9-4B29-A150-D24672CA421E}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFramework = "2.0"
-		ProjectReferences = "{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}|Magix.Brix.Data.dll;{853598D1-F9CF-48C2-90DD-354480F34F91}|Magix.Brix.Data.Adapters.MSSQL.dll;{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}|Magix.Brix.Types.dll;{0423B777-2C18-4B0F-B87E-0AD059529167}|Magix.Brix.Loader.dll;{73074A14-F8BE-4831-B02A-A76F8EC126DC}|Magix.Brix.Viewports.dll;{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}|Magix.Brix.Components.ActiveModules.CommonModules.dll;{13A3391A-39FC-40BD-8EA0-0353090675C7}|Magix.UX.dll;{3807790C-726E-4870-89DB-D25D80223C8A}|Magix.Brix.Components.ActiveControllers.Email.dll;{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}|Magix.Brix.Components.ActiveModules.Calendars.dll;{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}|Magix.Brix.Components.ActiveModules.Users.dll;{78EE9D9B-691B-4D5C-AD72-9023366BE44F}|Magix.Brix.Components.ActiveTypes.Settings.dll;{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}|Magix.Brix.Components.dll;{124E0BB5-A992-4216-9FE3-C5CBED735888}|Magix.Brix.Components.ActiveControllers.DBAdmin.dll;{7FC406CB-D31A-4F8E-937E-280B3F987942}|Magix.Brix.Components.ActiveModules.DBAdmin.dll;{2B149F44-D59A-4D1F-B91B-E97A99D92A38}|Magix.Brix.Components.ActiveModules.FileExplorer.dll;{2B7F49E6-2867-4E16-AAF6-2236A0FF6402}|Magix.Brix.Components.ActiveControllers.FileExplorer.dll;{4A6D6D16-C455-4C81-8B1A-195B78F7421A}|Magix.Brix.Components.ActiveControllers.Editor.dll;{9CA6EB99-8D12-4C69-B4A9-8E2649CE7D57}|Magix.Brix.Components.ActiveModules.Editor.dll;{55506E9C-89C5-432E-8431-DDDD08D22A37}|Magix.Brix.Components.ActiveControllers.TalkBack.dll;{72B871E5-2DD3-4294-BAE3-F80D67ACEB74}|Magix.Brix.Components.ActiveModules.TalkBack.dll;{1239EAE2-0A90-4E26-9A23-3442EBBCC366}|Magix.Brix.Components.ActiveTypes.TalkBack.dll;{72BD8731-239E-463D-A66C-556ED55A4578}|Magix.Brix.Components.ActiveTypes.Users.dll;{314FAAAA-759C-4357-BA64-985CD9EA08BE}|Magix.Brix.Components.ActiveControllers.Settings.dll;{4E93A1A1-0F18-49BB-9BDD-8A69A383116E}|Magix.Brix.Components.ActiveControllers.Publishing.dll;{175455B9-43D0-4190-A2AE-8033BD3D62A1}|Magix.Brix.Components.ActiveTypes.Publishing.dll;{C152475B-51AC-4892-9E86-8315C058830D}|Magix.Brix.Components.ActiveControllers.Login.dll;{654A39FC-51E7-492D-BE57-39DC99CB8686}|Magix.Brix.Components.ActiveModules.Menu.dll;{9B9A05F6-4593-496B-80B2-C324DCC734A5}|Magix.Brix.Components.ActiveModules.Publishing.dll;{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}|Magix.Brix.Publishing.Common.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/Magix.Brix.ApplicationPool"
-		Debug.AspNetCompiler.PhysicalPath = "Magix-Brix\Magix.Brix.ApplicationPool\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Magix.Brix.ApplicationPool\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/Magix.Brix.ApplicationPool"
-		Release.AspNetCompiler.PhysicalPath = "Magix-Brix\Magix.Brix.ApplicationPool\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Magix.Brix.ApplicationPool\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Magix.Brix.Data", "Magix.Brix.Data", "{FEF46D16-CBFF-4E64-8077-706681125A83}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Magix.Brix.Components", "Magix.Brix.Components", "{87F11C1C-29D9-42FD-854D-EEA734413072}"
@@ -134,6 +114,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Publishing.Common", "Magix-Brix\Magix.Brix.Components\Magix.Brix.Publishing.Common\Magix.Brix.Publishing.Common.csproj", "{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.ApplicationPool", "Magix-Brix\Magix.Brix.ApplicationPool\Magix.Brix.ApplicationPool.csproj", "{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,10 +129,6 @@ Global
 		{9F07B239-903A-4340-9489-4E678A5C41F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F07B239-903A-4340-9489-4E678A5C41F9}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F07B239-903A-4340-9489-4E678A5C41F9}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA521C5F-7AD9-4B29-A150-D24672CA421E}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{3807790C-726E-4870-89DB-D25D80223C8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3807790C-726E-4870-89DB-D25D80223C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3807790C-726E-4870-89DB-D25D80223C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -287,12 +265,15 @@ Global
 		{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CA521C5F-7AD9-4B29-A150-D24672CA421E} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
 		{FEF46D16-CBFF-4E64-8077-706681125A83} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
 		{87F11C1C-29D9-42FD-854D-EEA734413072} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
 		{F3BFEC5D-7957-4575-8DCD-D8D22217F535} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
@@ -300,6 +281,7 @@ Global
 		{F266D261-5A5F-4BB6-84F6-A71EA2B5090E} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
 		{73074A14-F8BE-4831-B02A-A76F8EC126DC} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
 		{31B0B5B6-E8D8-4CD8-955C-715E02396B85} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
+		{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E} = {BC659023-75CD-4A1C-BF08-8B22FA8FD00E}
 		{13A3391A-39FC-40BD-8EA0-0353090675C7} = {98974FEE-99D5-45FF-8B14-8FE7E7F1FC5C}
 		{9F07B239-903A-4340-9489-4E678A5C41F9} = {8AB46E20-2FF7-41C6-9261-523191945326}
 		{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0} = {FEF46D16-CBFF-4E64-8077-706681125A83}

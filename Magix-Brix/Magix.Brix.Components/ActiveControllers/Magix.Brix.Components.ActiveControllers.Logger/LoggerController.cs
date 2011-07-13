@@ -23,9 +23,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
         private void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {
-            UserBase u = 
-                UserBase.SelectFirst(
-                    Criteria.Eq("Username", e.Params["Username"].Get<string>()));
+            UserBase u = UserBase.Current;
             Node node = new Node();
             node["LogItemType"].Value = "Magix.Core.UserLoggedIn";
             node["Header"].Value = u.Username + " - " + u.RolesString;

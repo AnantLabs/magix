@@ -1,0 +1,358 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Magix.Brix.ApplicationPool</RootNamespace>
+    <AssemblyName>Magix.Brix.ApplicationPool</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="media\blueprint\ie.css" />
+    <Content Include="media\blueprint\plugins\buttons\icons\cross.png" />
+    <Content Include="media\blueprint\plugins\buttons\icons\key.png" />
+    <Content Include="media\blueprint\plugins\buttons\icons\tick.png" />
+    <Content Include="media\blueprint\plugins\buttons\readme.txt" />
+    <Content Include="media\blueprint\plugins\buttons\screen.css" />
+    <Content Include="media\blueprint\plugins\fancy-type\readme.txt" />
+    <Content Include="media\blueprint\plugins\fancy-type\screen.css" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\doc.png" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\email.png" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\external.png" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\feed.png" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\im.png" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\pdf.png" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\visited.png" />
+    <Content Include="media\blueprint\plugins\link-icons\icons\xls.png" />
+    <Content Include="media\blueprint\plugins\link-icons\readme.txt" />
+    <Content Include="media\blueprint\plugins\link-icons\screen.css" />
+    <Content Include="media\blueprint\plugins\rtl\readme.txt" />
+    <Content Include="media\blueprint\plugins\rtl\screen.css" />
+    <Content Include="media\blueprint\print.css" />
+    <Content Include="media\blueprint\screen.css" />
+    <Content Include="media\blueprint\src\forms.css" />
+    <Content Include="media\blueprint\src\grid.css" />
+    <Content Include="media\blueprint\src\grid.png" />
+    <Content Include="media\blueprint\src\ie.css" />
+    <Content Include="media\blueprint\src\print.css" />
+    <Content Include="media\blueprint\src\reset.css" />
+    <Content Include="media\blueprint\src\typography.css" />
+    <Content Include="media\images\actual-size.png" />
+    <Content Include="media\images\ajax.gif" />
+    <Content Include="media\images\css.png" />
+    <Content Include="media\images\delete.png" />
+    <Content Include="media\images\filter-overridden.png" />
+    <Content Include="media\images\filter.png" />
+    <Content Include="media\images\folder-up.png" />
+    <Content Include="media\images\folder.png" />
+    <Content Include="media\images\html.png" />
+    <Content Include="media\images\marvin-headshot.png" />
+    <Content Include="media\images\Marvin-the-smart-and-sad-robot.png" />
+    <Content Include="media\images\pen.png" />
+    <Content Include="media\images\tree.png" />
+    <Content Include="media\magix-ux-skins\default.css" />
+    <Content Include="media\magix-ux-skins\pen.png" />
+    <Content Include="media\magix-ux-skins\star-max.png" />
+    <Content Include="media\magix-ux-skins\star-mid.png" />
+    <Content Include="media\magix-ux-skins\star-min.png" />
+    <Content Include="media\magix-ux-skins\star.png" />
+    <Content Include="media\magix-ux-skins\tree-sprites.png" />
+    <Content Include="media\main.css" />
+    <Content Include="media\modules\auto-sponder.css" />
+    <Content Include="media\modules\Calendar.css" />
+    <Content Include="media\modules\DBAdmin.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\ajax-loader.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\asc.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\autocomplete.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\back-h.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\back-v.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\bar-h.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\bar-v.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\bg-h.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\bg-v.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\blankimage.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\button.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\calendar.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\carousel.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\check0.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\check1.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\check2.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\colorpicker.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\container.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\datatable.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\desc.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\dt-arrow-dn.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\dt-arrow-up.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\editor-knob.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\editor-sprite-active.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\editor-sprite.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\editor.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\header_background.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\hue_bg.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\imagecropper.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\layout.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\layout_sprite.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\loading.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\logger.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\menu-button-arrow-disabled.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\menu-button-arrow.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\menu.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\menubaritem_submenuindicator.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\menubaritem_submenuindicator_disabled.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\menuitem_checkbox.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\menuitem_checkbox_disabled.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\menuitem_submenuindicator.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\menuitem_submenuindicator_disabled.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\paginator.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\picker_mask.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\profilerviewer.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\progressbar.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\resize.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\save.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\simpleeditor.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\skin.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\slider.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\split-button-arrow-active.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\split-button-arrow-disabled.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\split-button-arrow-focus.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\split-button-arrow-hover.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\split-button-arrow.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\sprite.png" />
+    <Content Include="media\modules\editor\assets\skins\sam\tabview.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\treeview-loading.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\treeview-sprite.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\treeview.css" />
+    <Content Include="media\modules\editor\assets\skins\sam\wait.gif" />
+    <Content Include="media\modules\editor\assets\skins\sam\yuitest.css" />
+    <Content Include="media\modules\editor\save.png" />
+    <Content Include="media\modules\FileExplorer.css" />
+    <Content Include="media\modules\Login.css" />
+    <Content Include="media\modules\Publisher-Editing.css" />
+    <Content Include="media\modules\ReportFilter.css" />
+    <Content Include="media\modules\RichEdit.css" />
+    <Content Include="media\modules\signature.css" />
+    <Content Include="media\modules\SingleContainer.css" />
+    <Content Include="media\modules\SlidingMenu.css" />
+    <Content Include="server-error.html" />
+    <Content Include="Tmp\dont_delete_me.txt" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\RaBrixPageStatePersister.cs" />
+    <Compile Include="Default.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Magix-UX\Magix.UX.csproj">
+      <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
+      <Name>Magix.UX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.DBAdmin\Magix.Brix.Components.ActiveControllers.DBAdmin.csproj">
+      <Project>{124E0BB5-A992-4216-9FE3-C5CBED735888}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.DBAdmin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Editor\Magix.Brix.Components.ActiveControllers.Editor.csproj">
+      <Project>{4A6D6D16-C455-4C81-8B1A-195B78F7421A}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Email\Magix.Brix.Components.ActiveControllers.Email.csproj">
+      <Project>{3807790C-726E-4870-89DB-D25D80223C8A}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Email</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.FileExplorer\Magix.Brix.Components.ActiveControllers.FileExplorer.csproj">
+      <Project>{2B7F49E6-2867-4E16-AAF6-2236A0FF6402}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.FileExplorer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Logger\Magix.Brix.Components.ActiveControllers.Logger.csproj">
+      <Project>{4FF5FFF4-4B4E-4E7E-8978-07A94C9C494B}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Login\Magix.Brix.Components.ActiveControllers.Login.csproj">
+      <Project>{C152475B-51AC-4892-9E86-8315C058830D}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Login</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Publishing\Magix.Brix.Components.ActiveControllers.Publishing.csproj">
+      <Project>{4E93A1A1-0F18-49BB-9BDD-8A69A383116E}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Publishing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Settings\Magix.Brix.Components.ActiveControllers.Settings.csproj">
+      <Project>{314FAAAA-759C-4357-BA64-985CD9EA08BE}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.TalkBack\Magix.Brix.Components.ActiveControllers.TalkBack.csproj">
+      <Project>{55506E9C-89C5-432E-8431-DDDD08D22A37}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.TalkBack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.ToolTip\Magix.Brix.Components.ActiveControllers.ToolTip.csproj">
+      <Project>{CF6572CF-2B0A-4AE8-A688-448130EF39A1}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.ToolTip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Calendars\Magix.Brix.Components.ActiveModules.Calendars.csproj">
+      <Project>{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Calendars</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.CommonModules\Magix.Brix.Components.ActiveModules.CommonModules.csproj">
+      <Project>{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.CommonModules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.DBAdmin\Magix.Brix.Components.ActiveModules.DBAdmin.csproj">
+      <Project>{7FC406CB-D31A-4F8E-937E-280B3F987942}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.DBAdmin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Editor\Magix.Brix.Components.ActiveModules.Editor.csproj">
+      <Project>{9CA6EB99-8D12-4C69-B4A9-8E2649CE7D57}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.FileExplorer\Magix.Brix.Components.ActiveModules.FileExplorer.csproj">
+      <Project>{2B149F44-D59A-4D1F-B91B-E97A99D92A38}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.FileExplorer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Menu\Magix.Brix.Components.ActiveModules.Menu.csproj">
+      <Project>{654A39FC-51E7-492D-BE57-39DC99CB8686}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Menu</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Publishing\Magix.Brix.Components.ActiveModules.Publishing.csproj">
+      <Project>{9B9A05F6-4593-496B-80B2-C324DCC734A5}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Publishing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Signature\Magix.Brix.Components.ActiveModules.Signature.csproj">
+      <Project>{DAEAEEE8-F190-457F-A56D-2131DB6F8945}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Signature</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.TalkBack\Magix.Brix.Components.ActiveModules.TalkBack.csproj">
+      <Project>{72B871E5-2DD3-4294-BAE3-F80D67ACEB74}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.TalkBack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Users\Magix.Brix.Components.ActiveModules.Users.csproj">
+      <Project>{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Users</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Logging\Magix.Brix.Components.ActiveTypes.Logging.csproj">
+      <Project>{58466D6B-928F-4932-B1AC-913AD28EB8A2}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Publishing\Magix.Brix.Components.ActiveTypes.Publishing.csproj">
+      <Project>{175455B9-43D0-4190-A2AE-8033BD3D62A1}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Publishing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Settings\Magix.Brix.Components.ActiveTypes.Settings.csproj">
+      <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.TalkBack\Magix.Brix.Components.ActiveTypes.TalkBack.csproj">
+      <Project>{1239EAE2-0A90-4E26-9A23-3442EBBCC366}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.TalkBack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.ToolTip\Magix.Brix.Components.ActiveTypes.ToolTip.csproj">
+      <Project>{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.ToolTip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Users\Magix.Brix.Components.ActiveTypes.Users.csproj">
+      <Project>{72BD8731-239E-463D-A66C-556ED55A4578}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Users</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\Helpers\Magix.Brix.Components.csproj">
+      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
+      <Name>Magix.Brix.Components %28Brix\Magix.Brix.Components\Helpers\Magix.Brix.Components%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\Magix.Brix.Publishing.Common\Magix.Brix.Publishing.Common.csproj">
+      <Project>{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}</Project>
+      <Name>Magix.Brix.Publishing.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Data.Adapters\MSSQL\Magix.Brix.Data.Adapters.MSSQL.csproj">
+      <Project>{853598D1-F9CF-48C2-90DD-354480F34F91}</Project>
+      <Name>Magix.Brix.Data.Adapters.MSSQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Data\Magix.Brix.Data.csproj">
+      <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
+      <Name>Magix.Brix.Data %28Brix\Magix.Brix.Data\Magix.Brix.Data%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
+      <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
+      <Name>Magix.Brix.Loader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Tests\Magix.Brix.Tests.csproj">
+      <Project>{3E847F44-BC2C-4C42-B612-2C9934E8BB38}</Project>
+      <Name>Magix.Brix.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Types\Magix.Brix.Types.csproj">
+      <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
+      <Name>Magix.Brix.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Viewports\Magix.Brix.Viewports.csproj">
+      <Project>{73074A14-F8BE-4831-B02A-A76F8EC126DC}</Project>
+      <Name>Magix.Brix.Viewports</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50561</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/magix</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -100,7 +100,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
             Settings.RemoveAll(
                 delegate(UserSettings idx)
                 {
-                    return idx.Name == "ReportOnlyUser";
+                    return idx.Name == name;
                 });
             Save();
         }
