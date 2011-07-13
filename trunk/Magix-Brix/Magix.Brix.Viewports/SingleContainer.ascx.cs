@@ -183,7 +183,9 @@ namespace Magix.Brix.Viewports
 </p>
 <hr />",
                     e.Name,
-                    (e.Params == null ? "" : ("<br /><strong>e.Params:</strong> " + e.Params.ToJSONString())));
+                    (e.Params == null ? 
+                        "" : 
+                        ("<br /><strong>e.Params:</strong> " + e.Params.ToJSONString().Replace("<", "&lt;").Replace("&gt;", ""))));
             }
         }
 

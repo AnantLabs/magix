@@ -21,8 +21,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             // Including standard CSS files ...
             IncludeCssFiles();
 
-            // Checking to see if some other modules have handled our request and wants
-            // to be left alone ...
             if (ShouldShowLoginBox())
             {
                 // Loading login module ...
@@ -37,6 +35,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 RaiseEvent(
                     "Magix.Core.LoadLoginModule",
                     node);
+            }
+            else if(User.Current != null)
+            {
+                RaiseEvent("Magix.Publishing.LoadDashboard");
             }
             else
             {
@@ -61,7 +63,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
         private bool ShouldShowLoginBox()
         {
-            return Page.Request.Params["login"] == "true";
+            return User.Current == null &&
+                Page.Request.Params["login"] == "true";
         }
 
         private void IncludeCssFiles()
