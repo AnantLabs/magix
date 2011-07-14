@@ -15,6 +15,7 @@ using Magix.Brix.Components.ActiveTypes.Publishing;
 using System.Reflection;
 using Magix.Brix.Publishing.Common;
 using System.Web;
+using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -170,6 +171,26 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             GetTemplates(node);
 
+            GetTemplates(p, node);
+
+            foreach (Role idx in Role.Select())
+            {
+                node["Roles"]["r-" + idx.ID]["Name"].Value = idx.Name;
+                node["Roles"]["r-" + idx.ID]["ID"].Value = idx.ID;
+            }
+
+            RaiseEvent(
+                "Magix.Publishing.GetRolesListForPage",
+                node);
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.Publishing.EditSpecificPage",
+                "content4",
+                node);
+        }
+
+        private static void GetTemplates(PageObject p, Node node)
+        {
             foreach (PageObjectTemplate idx in p.ObjectTemplates)
             {
                 foreach (PageObjectTemplate.PageObjectTemplateSetting idxI in idx.Settings)
@@ -180,16 +201,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                             return idxT.FullName == idx.Container.ModuleName;
                         });
                     if (moduleType.GetProperty(
-                        idxI.Name.Replace(moduleType.FullName, ""), 
-                        BindingFlags.NonPublic | 
-                        BindingFlags.Public | 
+                        idxI.Name.Replace(moduleType.FullName, ""),
+                        BindingFlags.NonPublic |
+                        BindingFlags.Public |
                         BindingFlags.Instance) != null)
                     {
                         node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name].Value = idxI.Value;
                         PropertyInfo prop = moduleType.GetProperty(
                             idxI.Name.Replace(moduleType.FullName, ""),
-                            BindingFlags.Public | 
-                            BindingFlags.NonPublic | 
+                            BindingFlags.Public |
+                            BindingFlags.NonPublic |
                             BindingFlags.Instance);
                         if (prop != null)
                         {
@@ -208,11 +229,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     }
                 }
             }
-
-            LoadModule(
-                "Magix.Brix.Components.ActiveModules.Publishing.EditSpecificPage",
-                "content4",
-                node);
         }
 
         private void GetTemplates(Node node)

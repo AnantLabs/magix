@@ -33,7 +33,7 @@ and would create very hard to track-down bugs if allowed to be created ...");
 
                 node["LogItemType"].Value = "Magix.Core.RoleCreated";
                 node["Header"].Value = "Name: " + Name;
-                node["ObjectID"].Value = "-1";
+                node["ObjectID"].Value = -1;
 
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,

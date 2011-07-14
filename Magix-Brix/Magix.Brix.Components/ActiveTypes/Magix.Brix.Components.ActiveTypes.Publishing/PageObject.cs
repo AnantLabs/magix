@@ -9,6 +9,7 @@ using Magix.Brix.Data;
 using Magix.Brix.Types;
 using System.Reflection;
 using Magix.Brix.Publishing.Common;
+using Magix.Brix.Loader;
 
 namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
@@ -147,6 +148,17 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
                 }
             }
             base.Save();
+        }
+
+        public override void Delete()
+        {
+            Node node = new Node();
+            node["ID"].Value = ID;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Publishing.PageObjectDeleted",
+                node);
+            base.Delete();
         }
 
         private void FixLocalURL()

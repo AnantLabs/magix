@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PageObjectAccess.cs" />
     <Compile Include="PageObjectTemplate.cs" />
     <Compile Include="PageTemplateContainer.cs" />
     <Compile Include="PageTemplate.cs" />

@@ -17,7 +17,10 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
     [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Publishing.User")]
     public class User : U.UserBase
     {
-        // TDO: Check up if these are redundant ...!
+        [ActiveField]
+        public string AvatarURL { get; set; }
+
+        // TODO: Check up if these are redundant ...!
         /**
          * Returns the object with the given ID from your data storage.
          */

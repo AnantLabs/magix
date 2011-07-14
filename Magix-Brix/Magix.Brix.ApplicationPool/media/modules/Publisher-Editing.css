@@ -205,5 +205,28 @@
 	height:18px !important;
 }
 
+input[type=button].neutral
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .2)), to(rgba(180, 180, 180, .2)));
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .2) 0%, rgba(180, 180, 180, .2) 80%);
+}
+
+input[type=button].checked
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 255, 230, .2)), to(rgba(180, 220, 180, .2)));
+	background-image: -moz-linear-gradient(rgba(230, 255, 230, .2) 0%, rgba(180, 220, 180, .2) 80%);
+}
+
+input[type=button].unchecked
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 230, 230, .2)), to(rgba(220, 180, 180, .2)));
+	background-image: -moz-linear-gradient(rgba(255, 230, 230, .2) 0%, rgba(220, 180, 180, .2) 80%);
+}
+
+input[type=button].checked-expl
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 255, 230, .8)), to(rgba(180, 220, 180, .8)));
+	background-image: -moz-linear-gradient(rgba(230, 255, 230, .8) 0%, rgba(180, 220, 180, .8) 80%);
+}
 
 

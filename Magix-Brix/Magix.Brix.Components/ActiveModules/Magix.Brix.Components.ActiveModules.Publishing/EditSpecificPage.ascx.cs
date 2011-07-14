@@ -21,6 +21,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         protected InPlaceTextAreaEdit url;
         protected SelectList sel;
         protected Panel parts;
+        protected Panel roles;
 
         public override void InitialLoading(Node node)
         {
@@ -44,7 +45,85 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         {
             base.OnLoad(e);
             if (DataSource != null)
+            {
+                DataBindRoles();
                 DataBindWebParts();
+            }
+        }
+
+        private void DataBindRoles()
+        {
+            foreach (Node idx in DataSource["Roles"])
+            {
+                Button b = new Button();
+                b.Text = idx["Name"].Get<string>();
+                b.Info = idx["ID"].Get<int>().ToString();
+                b.CssClass = "span-6";
+                b.Click +=
+                    delegate
+                    {
+                        Node node = new Node();
+
+                        node["ID"].Value = DataSource["ID"].Get<int>();
+                        node["RoleID"].Value = int.Parse(b.Info);
+
+                        bool createAccess = false;
+
+                        if (b.CssClass.Contains(" unchecked") || b.CssClass.Contains(" neutral"))
+                            createAccess = true;
+
+                        node["Access"].Value = createAccess;
+
+                        RaiseSafeEvent(
+                            "Magix.Publishing.ChangePageAccess",
+                            node);
+
+                        // Signalizing that Pages has been changed, in case other modules are
+                        // dependent upon knowing ...
+                        RaiseEvent("Magix.Publishing.PageWasUpdated");
+                    };
+                b.ToolTip = idx["Name"].Get<string>();
+
+                if (DataSource.Contains("ActiveRoles"))
+                {
+                    foreach (Node idxA in DataSource["ActiveRoles"])
+                    {
+                        if (idx["ID"].Get<int>() == idxA["ID"].Get<int>())
+                        {
+                            if (!idxA.Contains("HasAccess"))
+                            {
+                                b.CssClass += " neutral";
+                                b.ToolTip = "Can implicitly access object";
+                            }
+                            else if (idxA["HasAccess"].Get<bool>())
+                            {
+                                if (idxA["Explicitly"].Get<bool>())
+                                {
+                                    b.ToolTip = "Can Explicitly Access the Object, click this button to Remove Explicit Access";
+                                    b.CssClass += " checked-expl";
+                                }
+                                else
+                                {
+                                    b.ToolTip = "Can Implicitly Access the Object, click this button to Create Explicit Access";
+                                    b.CssClass += " checked";
+                                }
+                            }
+                            else
+                            {
+                                b.ToolTip = "Implicitly have no Access to the Object, click here to Explicitly Grant Access";
+                                b.CssClass += " unchecked";
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    b.CssClass += " neutral";
+                    b.ToolTip = "Implicitly have Access to the Object, click here to Explicitly grant it access";
+                }
+                roles.Controls.Add(b);
+            }
         }
 
         private void DataBindWebParts()
