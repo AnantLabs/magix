@@ -217,6 +217,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             User u = new User();
             u.Save();
+            ActiveEvents.Instance.RaiseClearControls("content4");
         }
 
         [ActiveEvent(Name = "Magix.Publishing.ChangeAvatarForUser")]
@@ -286,6 +287,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 "Magix.Brix.Components.ActiveModules.CommonModules.ImageModule",
                 "content4",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetDefaultGravatarURL")]
+        protected void Magix_Publishing_GetDefaultGravatarURL(object sender, ActiveEventArgs e)
+        {
+            e.Params["URL"].Value = "media/images/avatars/marvin-headshot.png";
         }
     }
 }

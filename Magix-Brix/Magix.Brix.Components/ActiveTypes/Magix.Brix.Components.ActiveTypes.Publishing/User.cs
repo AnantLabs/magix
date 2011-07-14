@@ -141,5 +141,19 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
                 U.UserBase.Current = value;
             }
         }
+
+        public override void Save()
+        {
+            if (string.IsNullOrEmpty(AvatarURL))
+            {
+                Node node = new Node();
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Publishing.GetDefaultGravatarURL",
+                    node);
+                AvatarURL = node["URL"].Get<string>();
+            }
+            base.Save();
+        }
     }
 }

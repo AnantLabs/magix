@@ -92,6 +92,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 e.Params["Items"]["LogOut"]["Event"]["Name"].Value = "Magix.Core.UserLoggedOut";
             }
 
+            RaiseEvent(
+                "Magix.Publishing.GetPluginMenuItems",
+                e.Params);
+
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Menu.Slider",
                 "content1",
