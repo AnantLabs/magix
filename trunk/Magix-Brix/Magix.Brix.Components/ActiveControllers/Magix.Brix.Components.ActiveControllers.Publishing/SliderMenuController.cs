@@ -12,6 +12,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes;
 using Magix.Brix.Components.ActiveTypes.Publishing;
+using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -30,14 +31,53 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        private static void GetOneMenuItem(Node node, PageObject po)
+        private void GetOneMenuItem(Node node, PageObject po)
         {
-            node["Items"]["i" + po.ID]["Caption"].Value = po.Name;
-            node["Items"]["i" + po.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
-            node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
-            foreach (PageObject idx in po.Children)
+            bool canAccess = true;
+            if (User.Current != null)
             {
-                GetOneMenuItem(node["Items"]["i" + po.ID], idx);
+                foreach (Role idx in User.Current.Roles)
+                {
+                    Node xx = new Node();
+
+                    xx["ID"].Value = po.ID;
+
+                    RaiseEvent(
+                        "Magix.Publishing.GetRolesListForPage",
+                        xx);
+
+                    if (xx.Contains("ActiveRoles") &&
+                        !xx["ActiveRoles"]["r-" + idx.ID]["HasAccess"].Get<bool>())
+                    {
+                        canAccess = false;
+                    }
+                }
+            }
+            else
+            {
+                Node xx = new Node();
+
+                xx["ID"].Value = po.ID;
+
+                RaiseEvent(
+                    "Magix.Publishing.GetRolesListForPage",
+                    xx);
+
+                if (xx.Contains("ActiveRoles"))
+                {
+                    canAccess = false;
+                }
+            }
+
+            if (canAccess)
+            {
+                node["Items"]["i" + po.ID]["Caption"].Value = po.Name;
+                node["Items"]["i" + po.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
+                node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
+                foreach (PageObject idx in po.Children)
+                {
+                    GetOneMenuItem(node["Items"]["i" + po.ID], idx);
+                }
             }
         }
 

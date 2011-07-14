@@ -36,7 +36,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     "Magix.Core.LoadLoginModule",
                     node);
             }
-            else if(User.Current != null)
+            else if(ShouldShowDashboard())
             {
                 RaiseEvent("Magix.Publishing.LoadDashboard");
             }
@@ -59,6 +59,13 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     "Magix.Publishing.UrlRequested",
                     node);
             }
+        }
+
+        private bool ShouldShowDashboard()
+        {
+            return User.Current != null &&
+                User.Current.InRole("Administrator") &&
+                Page.Request.Params["login"] == "true";
         }
 
         private bool ShouldShowLoginBox()

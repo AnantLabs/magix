@@ -71,9 +71,9 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             string header = e.Params["Header"].Get<string>();
             string msg = e.Params["Message"].Get<string>();
 
-            if (string.IsNullOrEmpty(header) || string.IsNullOrEmpty(msg))
+            if (string.IsNullOrEmpty(header))
             {
-                throw new ArgumentException("Both Header and Message minimum needs to be set when Logging ...");
+                throw new ArgumentException("Header as a minimum needs to be set when Logging ...");
             }
 
             int objectID = e.Params["ObjectID"].Get<int>(-1);

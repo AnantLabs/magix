@@ -60,8 +60,21 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (!e.Params["Items"].Contains("Admin"))
             {
                 e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
+            }
+            if (!e.Params["Items"]["Admin"]["Items"].Contains("DBAdmin"))
+            {
                 e.Params["Items"]["Admin"]["Items"]["DBAdmin"]["Caption"].Value = "Database ...";
                 e.Params["Items"]["Admin"]["Items"]["DBAdmin"]["Event"]["Name"].Value = "Magix.Publishing.ViewClasses";
+            }
+            if (!e.Params["Items"]["Admin"]["Items"].Contains("Roles"))
+            {
+                e.Params["Items"]["Admin"]["Items"]["Roles"]["Caption"].Value = "Roles ...";
+                e.Params["Items"]["Admin"]["Items"]["Roles"]["Event"]["Name"].Value = "Magix.Publishing.EditRoles";
+            }
+            if (!e.Params["Items"]["Admin"]["Items"].Contains("Users"))
+            {
+                e.Params["Items"]["Admin"]["Items"]["Users"]["Caption"].Value = "Users ...";
+                e.Params["Items"]["Admin"]["Items"]["Users"]["Event"]["Name"].Value = "Magix.Publishing.EditUsers";
             }
             if (!e.Params["Items"]["Publishing"]["Items"].Contains("Pages"))
             {
