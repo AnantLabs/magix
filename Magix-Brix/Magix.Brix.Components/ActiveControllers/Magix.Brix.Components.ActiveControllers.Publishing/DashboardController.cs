@@ -9,6 +9,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes;
 using Magix.Brix.Components.ActiveTypes.Publishing;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -25,6 +26,19 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             else
             {
                 RaiseEvent("Magix.Publishing.LoadUserDashboard", e.Params);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Core.LogInUser")]
+        protected void Magix_Core_LogInUser(object sender, ActiveEventArgs e)
+        {
+            // Getting relative URL ...
+            string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
+            string relUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "").Replace(baseUrl, "");
+
+            if (User.Current.InRole("Administrator"))
+            {
+                AjaxManager.Instance.Redirect("~/?dashboard=true");
             }
         }
     }

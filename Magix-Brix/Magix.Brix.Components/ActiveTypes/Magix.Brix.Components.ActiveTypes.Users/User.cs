@@ -238,6 +238,7 @@ usernames must be unique within the application ...");
                         return null;
                     string cookieUsername = entities[0];
                     string cookiePassword = entities[1];
+
                     UserBase user =
                         UserBase.SelectFirst(
                             Criteria.Eq("Username", cookieUsername));
@@ -266,6 +267,9 @@ usernames must be unique within the application ...");
             {
                 if (value == null)
                 {
+                    HttpContext.Current.Request.Cookies.Remove(
+                        GetUniqueAppString() +
+                        "Magix.Brix.Components.ActiveTypes.Users.User.Current");
                     HttpCookie cookie = new HttpCookie(
                         GetUniqueAppString() + 
                         "Magix.Brix.Components.ActiveTypes.Users.User.Current");

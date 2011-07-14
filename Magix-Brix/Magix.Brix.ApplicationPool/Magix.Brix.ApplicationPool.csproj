@@ -74,6 +74,7 @@
     <Content Include="media\blueprint\src\typography.css" />
     <Content Include="media\images\actual-size.png" />
     <Content Include="media\images\ajax.gif" />
+    <Content Include="media\images\avatars\marvin-headshot.png" />
     <Content Include="media\images\css.png" />
     <Content Include="media\images\delete.png" />
     <Content Include="media\images\filter-overridden.png" />

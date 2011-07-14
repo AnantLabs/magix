@@ -9,6 +9,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes;
 using Magix.Brix.Components.ActiveTypes.Publishing;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -18,6 +19,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Brix.Core.InitialLoading")]
         protected void Page_Init_InitialLoading(object sender, ActiveEventArgs e)
         {
+            if (Page.Request.Params["login"] == "true")
+                User.Current = null;
+
             // Including standard CSS files ...
             IncludeCssFiles();
 
@@ -42,22 +46,29 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
             else
             {
-                // Getting relative URL ...
-                string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
-                string relUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "").Replace(baseUrl, "");
-
-                if (relUrl.IndexOf('?') != -1)
+                if (Page.Request.Params["dashboard"] == "true")
                 {
-                    relUrl = relUrl.Substring(0, relUrl.IndexOf('?'));
+                    AjaxManager.Instance.Redirect("~/?login=true");
                 }
+                else
+                {
+                    // Getting relative URL ...
+                    string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
+                    string relUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "").Replace(baseUrl, "");
 
-                Node node = new Node();
+                    if (relUrl.IndexOf('?') != -1)
+                    {
+                        relUrl = relUrl.Substring(0, relUrl.IndexOf('?'));
+                    }
 
-                node["URL"].Value = relUrl;
+                    Node node = new Node();
 
-                RaiseEvent(
-                    "Magix.Publishing.UrlRequested",
-                    node);
+                    node["URL"].Value = relUrl;
+
+                    RaiseEvent(
+                        "Magix.Publishing.UrlRequested",
+                        node);
+                }
             }
         }
 
@@ -65,7 +76,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             return User.Current != null &&
                 User.Current.InRole("Administrator") &&
-                Page.Request.Params["login"] == "true";
+                Page.Request.Params["dashboard"] == "true";
         }
 
         private bool ShouldShowLoginBox()
