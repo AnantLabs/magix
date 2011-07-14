@@ -68,6 +68,45 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.FindFirstPageRequestCanAccess")]
+        protected void Magix_Publishing_FindFirstPageRequestCanAccess(object sender, ActiveEventArgs e)
+        {
+            PageObject p = PageObject.SelectByID(e.Params["ID"].Get<int>());
+
+            // Assuming already checked for access against this bugger ...
+            foreach (PageObject idx in p.Children)
+            {
+                if (CheckAccess(p, e.Params))
+                {
+                    return;
+                }
+            }
+        }
+
+        private bool CheckAccess(PageObject p, Node node)
+        {
+            Node ch1 = new Node();
+            ch1["ID"].Value = p.ID;
+            RaiseEvent(
+                "Magix.Publishing.CanLoadPageObject",
+                ch1);
+
+            if (!ch1.Contains("STOP") ||
+                !ch1["STOP"].Get<bool>())
+            {
+                node["AccessToID"].Value = p.ID;
+                return true;
+            }
+            foreach (PageObject idx in p.Children)
+            {
+                if (CheckAccess(idx, node))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         [ActiveEvent(Name = "Magix.Publishing.OpenPage")]
         protected void Magix_Publishing_OpenPage(object sender, ActiveEventArgs e)
         {
@@ -88,64 +127,84 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 if (ch1.Contains("STOP") &&
                     ch1["STOP"].Get<bool>())
                 {
-                    throw new ArgumentException("You don't have access to this page ...");
+                    if (p.URL.Trim('/') == "")
+                    {
+                        // Finding first page level user [or anonymous] have access to from here ...
+                        Node node = new Node();
+                        node["ID"].Value = p.ID;
+                        RaiseEvent(
+                            "Magix.Publishing.FindFirstPageRequestCanAccess",
+                            node);
+                        if(!node.Contains("AccessToID"))
+                            throw new ArgumentException("You don't have access to this website ...");
+                        OpenPage(PageObject.SelectByID(node["AccessToID"].Get<int>()));
+                    }
+                    else
+                    {
+                        throw new ArgumentException("You don't have access to this page ...");
+                    }
                 }
                 else
                 {
-                    string lastModule = "content1";
-
-                    foreach (PageObjectTemplate idx in p.ObjectTemplates)
-                    {
-                        if (idx.Container.ViewportContainer.CompareTo(lastModule) > 0)
-                            lastModule = idx.Container.ViewportContainer;
-
-                        // Checking to see if we're supposed to 'fall through'
-                        // Some modules [e.g. Menu] doesn't need re-initialization
-                        // upon loadups ...
-
-                        Node ch = new Node();
-
-                        ch["ModuleName"].Value = idx.Container.ModuleName;
-
-                        RaiseEvent(
-                            "Magix.Publishing.ShouldReloadWebPart",
-                            ch);
-
-                        if (!ch.Contains("Stop") || !ch["Stop"].Get<bool>())
-                        {
-                            Node node = new Node();
-
-                            if (idx.Container.BottomMargin > 0)
-                                node["BottomMargin"].Value = idx.Container.BottomMargin;
-                            if (!string.IsNullOrEmpty(idx.Container.CssClass))
-                                node["CssClass"].Value = idx.Container.CssClass;
-                            if (idx.Container.Height > 0)
-                                node["Height"].Value = idx.Container.Height;
-                            if (idx.Container.Last)
-                                node["Last"].Value = idx.Container.Last;
-                            if (idx.Container.Padding > 0)
-                                node["PushRight"].Value = idx.Container.Padding;
-                            if (idx.Container.Push > 0)
-                                node["PushLeft"].Value = idx.Container.Push;
-                            if (idx.Container.BottomMargin > 0)
-                                node["SpcBottom"].Value = idx.Container.BottomMargin;
-                            if (idx.Container.Top > 0)
-                                node["Top"].Value = idx.Container.Top;
-                            if (idx.Container.Width > 0)
-                                node["Width"].Value = idx.Container.Width;
-                            node["ID"].Value = idx.ID;
-                            node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
-
-                            LoadModule(
-                                idx.Container.ModuleName,
-                                idx.Container.ViewportContainer,
-                                node);
-                        }
-                        int cl = int.Parse(lastModule.Replace("content", ""));
-                        if (cl < 7)
-                            ActiveEvents.Instance.RaiseClearControls("content" + (cl + 1));
-                    }
+                    OpenPage(p);
                 }
+            }
+        }
+
+        private void OpenPage(PageObject p)
+        {
+            string lastModule = "content1";
+
+            foreach (PageObjectTemplate idx in p.ObjectTemplates)
+            {
+                if (idx.Container.ViewportContainer.CompareTo(lastModule) > 0)
+                    lastModule = idx.Container.ViewportContainer;
+
+                // Checking to see if we're supposed to 'fall through'
+                // Some modules [e.g. Menu] doesn't need re-initialization
+                // upon loadups ...
+
+                Node ch = new Node();
+
+                ch["ModuleName"].Value = idx.Container.ModuleName;
+
+                RaiseEvent(
+                    "Magix.Publishing.ShouldReloadWebPart",
+                    ch);
+
+                if (!ch.Contains("Stop") || !ch["Stop"].Get<bool>())
+                {
+                    Node node = new Node();
+
+                    if (idx.Container.BottomMargin > 0)
+                        node["BottomMargin"].Value = idx.Container.BottomMargin;
+                    if (!string.IsNullOrEmpty(idx.Container.CssClass))
+                        node["CssClass"].Value = idx.Container.CssClass;
+                    if (idx.Container.Height > 0)
+                        node["Height"].Value = idx.Container.Height;
+                    if (idx.Container.Last)
+                        node["Last"].Value = idx.Container.Last;
+                    if (idx.Container.Padding > 0)
+                        node["PushRight"].Value = idx.Container.Padding;
+                    if (idx.Container.Push > 0)
+                        node["PushLeft"].Value = idx.Container.Push;
+                    if (idx.Container.BottomMargin > 0)
+                        node["SpcBottom"].Value = idx.Container.BottomMargin;
+                    if (idx.Container.Top > 0)
+                        node["Top"].Value = idx.Container.Top;
+                    if (idx.Container.Width > 0)
+                        node["Width"].Value = idx.Container.Width;
+                    node["ID"].Value = idx.ID;
+                    node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
+
+                    LoadModule(
+                        idx.Container.ModuleName,
+                        idx.Container.ViewportContainer,
+                        node);
+                }
+                int cl = int.Parse(lastModule.Replace("content", ""));
+                if (cl < 7)
+                    ActiveEvents.Instance.RaiseClearControls("content" + (cl + 1));
             }
         }
     }

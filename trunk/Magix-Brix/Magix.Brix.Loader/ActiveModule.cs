@@ -64,7 +64,7 @@ namespace Magix.Brix.Loader
          * Shorthand for raising events. Will return a node, initially created empty, 
          * but passed onto the Event Handler(s)
          */
-        protected Node RaiseSaveEvent(string eventName)
+        public Node RaiseSafeEvent(string eventName)
         {
             Node node = new Node();
             RaiseSafeEvent(eventName, node);

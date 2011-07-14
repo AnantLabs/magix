@@ -1,0 +1,22 @@
+﻿
+div.type-editor
+{
+	position:relative;
+}
+
+div.type-editor textarea
+{
+	position:absolute;
+	z-index:1;
+}
+
+.clear-left
+{
+	clear:left;
+}
+
+.larger
+{
+	font-size:1.5em;
+}
+

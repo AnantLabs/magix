@@ -22,12 +22,27 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.GetSliderMenuItems")]
         protected void Magix_Publishing_GetSliderMenuItems(object sender, ActiveEventArgs e)
         {
+            PageObject root = null;
             foreach (PageObject idx in PageObject.Select())
             {
                 if (idx.Parent != null)
                     continue; // Looking for Root Page and starting traversal from it ...
 
+                root = idx;
+
                 GetOneMenuItem(e.Params, idx);
+            }
+            if (!e.Params.Contains("Items"))
+            {
+                // Finding first page level user [or anonymous] have access to from here ...
+                Node node = new Node();
+                node["ID"].Value = root.ID;
+                RaiseEvent(
+                    "Magix.Publishing.FindFirstPageRequestCanAccess",
+                    node);
+                if (!node.Contains("AccessToID"))
+                    throw new ArgumentException("You don't have access to this website ...");
+                GetOneMenuItem(e.Params, PageObject.SelectByID(node["AccessToID"].Get<int>()));
             }
         }
 
