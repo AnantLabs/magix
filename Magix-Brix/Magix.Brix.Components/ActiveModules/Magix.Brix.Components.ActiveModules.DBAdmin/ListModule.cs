@@ -649,13 +649,20 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         DataSource["Type"]["Properties"][idx.Name]["ReadOnly"].Get<bool>())
                     {
                         l.CssClass += "read-only";
-                        Label ll = new Label();
+
                         string txt = idx.Get<string>() ?? "";
+
+                        Label ll = new Label();
+
+                        ll.ToolTip = txt; // Settings ToolTip before we shrink text ...
+
                         if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
                         {
                             int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();
                             if (txt.Length > maxLength)
+                            {
                                 txt = txt.Substring(0, maxLength) + "...";
+                            }
                         }
                         ll.Text = txt;
                         l.Controls.Add(ll);
@@ -663,6 +670,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     else
                     {
                         TextAreaEdit edit = new TextAreaEdit();
+                        edit.ToolTip = idx.Get<string>();
                         if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
                         {
                             int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();

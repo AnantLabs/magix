@@ -15,6 +15,7 @@ using Magix.Brix.Loader;
 using System.Web;
 using System.Configuration;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 [assembly: WebResource("Magix.Brix.Viewports.iscroll.js", "text/javascript")]
 
@@ -168,6 +169,7 @@ namespace Magix.Brix.Viewports
         private bool firstEvent = true;
 
         [ActiveEvent] // Null event handler for logging in debug cases ...
+        [DebuggerStepThrough]
         protected void NULLEventHandler(object sender, ActiveEventArgs e)
         {
             if (firstEvent)

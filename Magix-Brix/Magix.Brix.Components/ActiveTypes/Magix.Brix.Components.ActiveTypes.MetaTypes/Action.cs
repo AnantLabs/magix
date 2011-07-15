@@ -15,6 +15,29 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
     [ActiveType]
     public class Action : ActiveType<Action>
     {
+        [ActiveType]
+        public class ActionParams : ActiveType<ActionParams>
+        {
+            public ActionParams()
+            {
+                Children = new LazyList<ActionParams>();
+            }
+
+            [ActiveField]
+            public string Name { get; set; }
+
+            [ActiveField]
+            public string Value { get; set; }
+
+            [ActiveField]
+            public LazyList<ActionParams> Children { get; set; }
+        }
+
+        public Action()
+        {
+            Params = new LazyList<ActionParams>();
+        }
+
         [ActiveField]
         public string Name { get; set; }
 
@@ -23,5 +46,11 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
         [ActiveField]
         public string EventName { get; set; }
+
+        [ActiveField]
+        public LazyList<ActionParams> Params { get; set; }
+
+        [ActiveField]
+        public bool StripInput { get; set; }
     }
 }

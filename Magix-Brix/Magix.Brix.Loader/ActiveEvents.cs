@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Configuration;
 using System.Collections.Generic;
 using Magix.Brix.Types;
+using System.Diagnostics;
 
 namespace Magix.Brix.Loader
 {
@@ -40,6 +41,7 @@ namespace Magix.Brix.Loader
          */
         public static ActiveEvents Instance
         {
+            [DebuggerStepThrough]
             get
             {
                 if (_instance == null)
@@ -60,6 +62,7 @@ namespace Magix.Brix.Loader
          * that there exists an overload of this method which takes an object parameter that will be 
          * passed into the InitialLoading method when control is loaded.
          */
+        [DebuggerStepThrough]
         public void RaiseLoadControl(string name, string position)
         {
             RaiseLoadControl(name, position, null);
@@ -71,6 +74,7 @@ namespace Magix.Brix.Loader
          * will pass the "initializingArgument" parameter into the InitialLoading method when control 
          * is loaded.
          */
+        [DebuggerStepThrough]
         public void RaiseLoadControl(string name, string position, Node parameters)
         {
             Node tmpNode = new Node("LoadControl");
@@ -86,6 +90,7 @@ namespace Magix.Brix.Loader
         /**
          * Clear all controls out of the position (Ra-Dynamic) of your Viewport.
          */
+        [DebuggerStepThrough]
         public void RaiseClearControls(string position)
         {
             Node tmp = new Node("ClearControls");
@@ -98,11 +103,13 @@ namespace Magix.Brix.Loader
          * This will dispatch control to all the ActiveEvent that are marked with
          * the Name attribute matching the name parameter of this method call.
          */
+        [DebuggerStepThrough]
         public void RaiseActiveEvent(object sender, string name)
         {
             RaiseActiveEvent(sender, name, null);
         }
 
+        [DebuggerStepThrough]
         private List<Tuple<MethodInfo, Tuple<object, bool>>> SlurpAllEventHandlers(string eventName)
         {
             List<Tuple<MethodInfo, Tuple<object, bool>>> retVal = 
@@ -128,6 +135,7 @@ namespace Magix.Brix.Loader
             return retVal;
         }
 
+        [DebuggerStepThrough]
         private void ExecuteMethod(
             MethodInfo method, 
             object context, 
@@ -160,6 +168,7 @@ namespace Magix.Brix.Loader
          * Raises an event. This will dispatch control to all the ActiveEvent that are marked with
          * the Name attribute matching the name parameter of this method call.
          */
+        [DebuggerStepThrough]
         public void RaiseActiveEvent(
             object sender, 
             string name, 
@@ -168,6 +177,7 @@ namespace Magix.Brix.Loader
             name = RaiseEventImplementation(sender, name, pars, name);
         }
 
+        [DebuggerStepThrough]
         private string RaiseEventImplementation(object sender, string name, Node pars, string actualName)
         {
             // Dummy dereferencing of PluginLoader to make sure we've 
@@ -215,6 +225,7 @@ namespace Magix.Brix.Loader
             _eventMappers[from] = to;
         }
 
+        [DebuggerStepThrough]
         private string GetEventName(string name)
         {
             if (_eventMappers.ContainsKey(name))
@@ -259,6 +270,7 @@ namespace Magix.Brix.Loader
 
         private Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> InstanceMethod
         {
+            [DebuggerStepThrough]
             get
             {
                 // NON-web scenario...

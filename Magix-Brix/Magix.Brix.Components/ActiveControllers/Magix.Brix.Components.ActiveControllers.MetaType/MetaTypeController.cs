@@ -265,7 +265,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
             node["WhiteListColumns"]["EventName"].Value = true;
-            node["WhiteListColumns"]["EventName"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["EventName"]["ForcedWidth"].Value = 5;
             node["WhiteListColumns"]["Description"].Value = true;
             node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 8;
 
@@ -276,10 +276,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["CreateEventName"].Value = "Magix.Meta.CreateAction";
             node["MetaTypeID"].Value = e.Params["ID"].Get<int>();
 
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["EventName"]["Header"].Value = "Action";
-            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -291,7 +291,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         protected void Magix_Meta_AppendAction(object sender, ActiveEventArgs e)
         {
             Action a = Action.SelectByID(e.Params["ID"].Get<int>());
-            e.Params["Action"].Value = a.EventName;
+            if (a.StripInput || a.Params.Count > 0)
+            {
+                e.Params["Action"].Value = "Magix.Meta.RaiseEvent";
+                e.Params["ActionID"].Value = a.ID;
+            }
+            else
+                e.Params["Action"].Value = a.EventName;
 
             RaiseEvent(
                 "Magix.Meta.AppendAction",
