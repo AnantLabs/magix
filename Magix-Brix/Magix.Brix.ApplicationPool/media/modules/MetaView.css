@@ -1,4 +1,7 @@
 ﻿
+
+
+
 div.type-editor
 {
 	position:relative;
@@ -10,17 +13,8 @@ div.type-editor textarea
 	z-index:1;
 }
 
-.clear-left
-{
-	clear:left;
-}
 
-.larger
-{
-}
 
-.delete
-{
-	display:block;
-}
+
+
 

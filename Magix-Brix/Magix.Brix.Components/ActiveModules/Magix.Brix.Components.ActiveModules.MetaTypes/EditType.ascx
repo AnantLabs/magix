@@ -8,15 +8,9 @@
 
 <link href="media/modules/MetaType-Editing.css" rel="stylesheet" type="text/css" />
 
-<mux:InPlaceEdit
-    runat="server"
-    OnTextChanged="lbl_TextChanged"
-    CssClass="mux-in-place-edit larger"
-    id="lbl" />
-
 <mux:Panel
     runat="server"
-    CssClass="span-12 down-2"
+    CssClass="span-12 down-1"
     id="values" />
 
 <mux:Button
