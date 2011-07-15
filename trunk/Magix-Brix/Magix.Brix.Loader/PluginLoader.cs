@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Magix.Brix.Data;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
+using System.Diagnostics;
 
 namespace Magix.Brix.Loader
 {
@@ -100,6 +101,7 @@ namespace Magix.Brix.Loader
          */
         public static PluginLoader Instance
         {
+            [DebuggerStepThrough]
             get
             {
                 if (_instance == null)

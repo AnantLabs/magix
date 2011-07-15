@@ -490,6 +490,12 @@ input[type=button].clear-left
 	clear:left;
 }
 
+.clear-both,
+input[type=button].clear-both
+{
+	clear:both;
+}
+
 .yellow-background
 {
 	background:Transparent url(../images/actual-size.png) repeat 0 0;

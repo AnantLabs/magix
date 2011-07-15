@@ -6,6 +6,7 @@
 
 using System;
 using Magix.Brix.Types;
+using System.Diagnostics;
 
 namespace Magix.Brix.Loader
 {
@@ -19,6 +20,7 @@ namespace Magix.Brix.Loader
         private readonly string _name;
         private Node _params;
 
+        [DebuggerStepThrough]
         internal ActiveEventArgs(string name, Node pars)
         {
             _name = name;
@@ -31,12 +33,22 @@ namespace Magix.Brix.Loader
          * than one Event. For cases like this the Name property might be useful to understand
          * which event you're actually handling.
          */
-        public string Name { get { return _name; } }
+        public string Name
+        {
+            [DebuggerStepThrough]
+            get { return _name; }
+        }
 
         /**
          * This is the "initializationObject" passed into your RaiseEvent call. Use this 
          * parameter to pass around data between components.
          */
-        public Node Params { get { return _params; } set { _params = value; } }
+        public Node Params
+        {
+            [DebuggerStepThrough]
+            get { return _params; }
+            [DebuggerStepThrough]
+            set { _params = value; }
+        }
     }
 }

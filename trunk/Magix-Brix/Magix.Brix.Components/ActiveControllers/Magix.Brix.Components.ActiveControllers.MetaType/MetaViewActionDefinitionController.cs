@@ -43,15 +43,23 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
         }
 
-        [ActiveEvent(Name = "Magix.Meta.GetActionItems")]
-        protected void Magix_Meta_GetActionItems(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Meta.RaiseEvent")]
+        protected void Magix_Meta_RaiseEvent(object sender, ActiveEventArgs e)
         {
-            foreach (Action idx in Action.Select())
+            Action action = Action.SelectByID(e.Params["ActionID"].Get<int>());
+
+            Node node = e.Params;
+            if (action.StripInput)
+                node = new Node();
+
+            foreach (Action.ActionParams idx in action.Params)
             {
-                e.Params["Items"][idx.Name]["Name"].Value = idx.Name;
-                e.Params["Items"][idx.Name]["Action"].Value = idx.EventName;
-                e.Params["Items"][idx.Name]["Description"].Value = idx.Description;
+                node[idx.Name].Value = idx.Value;
             }
+
+            RaiseEvent(
+                action.EventName,
+                node);
         }
 
         [ActiveEvent(Name = "Magix.Meta.Actions.SaveObject")]

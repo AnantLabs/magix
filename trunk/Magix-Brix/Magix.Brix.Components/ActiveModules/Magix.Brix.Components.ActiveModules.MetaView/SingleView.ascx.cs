@@ -41,19 +41,22 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
 
         private void DataBindCtrls()
         {
+            bool lastWasButton = false;
             foreach (Node idx in DataSource["Properties"])
             {
+                lastWasButton = false;
                 if (!string.IsNullOrEmpty(idx["Action"].Get<string>()))
                 {
                     CreateActionControl(idx);
+                    lastWasButton = true;
                 }
                 else if (idx["ReadOnly"].Get<bool>())
                 {
-                    CreateReadOnlyControl(idx);
+                    CreateReadOnlyControl(idx, true);
                 }
                 else
                 {
-                    CreateReadWriteControl(idx);
+                    CreateReadWriteControl(idx, true);
                 }
             }
         }
@@ -79,9 +82,25 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                         DataSource["EventTime"].Value = DateTime.Now;
                         DataSource["EventReference"].Value = idxS;
 
-                        RaiseSafeEvent(
-                            idxS,
-                            DataSource);
+                        string eventName = idxS;
+
+                        if (eventName.Contains("("))
+                        {
+                            int eventId = int.Parse(eventName.Split('(')[1].Split(')')[0]);
+                            eventName = eventName.Substring(0, eventName.IndexOf("("));
+
+                            DataSource["ActionID"].Value = eventId;
+
+                            RaiseSafeEvent(
+                                eventName,
+                                DataSource);
+                        }
+                        else
+                        {
+                            RaiseSafeEvent(
+                                eventName,
+                                DataSource);
+                        }
                     }
                 };
             ctrls.Controls.Add(b);
@@ -108,22 +127,26 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             }
         }
 
-        private void CreateReadOnlyControl(Node idx)
+        private void CreateReadOnlyControl(Node idx, bool shouldClear)
         {
             Label lbl = new Label();
-            lbl.Text = idx["Name"].Get<string>();
+            lbl.ToolTip = idx["Name"].Get<string>();
             lbl.Info = idx["Name"].Get<string>();
-            lbl.ToolTip = idx["Description"].Get<string>();
+            lbl.Text = idx["Description"].Get<string>();
             lbl.CssClass = "meta-view-form-element meta-view-form-label";
+            if (shouldClear)
+                lbl.CssClass += " clear-both";
             ctrls.Controls.Add(lbl);
         }
 
-        private void CreateReadWriteControl(Node idx)
+        private void CreateReadWriteControl(Node idx, bool shouldClear)
         {
             TextBox b = new TextBox();
             b.PlaceHolder = idx["Description"].Get<string>();
             b.ToolTip = b.PlaceHolder;
             b.Info = idx["Name"].Get<string>();
+            if (shouldClear)
+                b.CssClass += " clear-both";
             b.CssClass = "meta-view-form-element meta-view-form-textbox";
             ctrls.Controls.Add(b);
         }

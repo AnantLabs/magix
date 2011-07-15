@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Diagnostics;
 
 namespace Magix.Brix.Types
 {
@@ -22,6 +23,7 @@ namespace Magix.Brix.Types
         /**
          * CTOR taking left/first and right/second arguments.
          */
+        [DebuggerStepThrough]
         public Tuple(TLeft left, TRight right)
         {
             _left = left;
@@ -33,6 +35,7 @@ namespace Magix.Brix.Types
          */
         public TLeft Left
         {
+            [DebuggerStepThrough]
             get { return _left; }
         }
 
@@ -41,9 +44,11 @@ namespace Magix.Brix.Types
          */
         public TRight Right
         {
+            [DebuggerStepThrough]
             get { return _right; }
         }
 
+        [DebuggerStepThrough]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -51,16 +56,19 @@ namespace Magix.Brix.Types
             return Equals((Tuple<TLeft, TRight>) obj);
         }
 
+        [DebuggerStepThrough]
         public static bool operator ==(Tuple<TLeft, TRight> left, Tuple<TRight, TLeft> right)
         {
             return left.Equals(right);
         }
 
+        [DebuggerStepThrough]
         public static bool operator !=(Tuple<TLeft, TRight> left, Tuple<TRight, TLeft> right)
         {
             return !left.Equals(right);
         }
 
+        [DebuggerStepThrough]
         public bool Equals(Tuple<TLeft, TRight> other)
         {
             return Equals(other._left, _left) && Equals(other._right, _right);

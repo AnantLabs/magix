@@ -306,7 +306,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                     p.Action = "";
                 else
                     p.Action += "|";
-                p.Action += e.Params["Action"].Get<string>();
+                string action = e.Params["Action"].Get<string>();
+                if (e.Params.Contains("ActionID"))
+                {
+                    action += "(" + e.Params["ActionID"].Get<int>() + ")";
+                }
+                p.Action += action;
 
                 p.Save();
 

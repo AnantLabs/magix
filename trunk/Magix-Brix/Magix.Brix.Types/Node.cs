@@ -9,6 +9,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace Magix.Brix.Types
 {
@@ -37,6 +38,7 @@ namespace Magix.Brix.Types
         /**
          * Default CTOR, creates a new node with no name and no value and no children
          */
+        [DebuggerStepThrough]
         public Node()
             : this(null)
         { }
@@ -44,6 +46,7 @@ namespace Magix.Brix.Types
         /**
          * Creates a new node with the given name
          */
+        [DebuggerStepThrough]
         public Node(string name)
             : this(name, null)
         { }
@@ -51,10 +54,12 @@ namespace Magix.Brix.Types
         /**
          * Creates a new node with the given name and the given value
          */
+        [DebuggerStepThrough]
         public Node(string name, object value)
             : this(name, value, null)
         { }
 
+        [DebuggerStepThrough]
         private Node(string name, object value, Node parent)
         {
             _name = name;
@@ -62,6 +67,7 @@ namespace Magix.Brix.Types
             _parent = parent;
         }
 
+        [DebuggerStepThrough]
         public static Node FromJSONString(string json)
         {
             List<string> tokens = ExtractTokens(json);
@@ -78,6 +84,7 @@ namespace Magix.Brix.Types
             return retVal;
         }
 
+        [DebuggerStepThrough]
         private static void ParseToken(IList<string> tokens, ref int idxToken, Node node)
         {
             if (tokens[idxToken] == "{")
@@ -115,6 +122,7 @@ namespace Magix.Brix.Types
             return;
         }
 
+        [DebuggerStepThrough]
         private static List<string> ExtractTokens(string json)
         {
             List<string> tokens = new List<string>();
@@ -168,6 +176,7 @@ namespace Magix.Brix.Types
          */
         public Node Parent
         {
+            [DebuggerStepThrough]
             get { return _parent; }
         }
 
@@ -176,7 +185,9 @@ namespace Magix.Brix.Types
          */
         public string Name
         {
+            [DebuggerStepThrough]
             get { return _name; }
+            [DebuggerStepThrough]
             private set { _name = value; }
         }
 
@@ -185,13 +196,16 @@ namespace Magix.Brix.Types
          */
         public object Value
         {
+            [DebuggerStepThrough]
             get { return _value; }
+            [DebuggerStepThrough]
             set { _value = value; }
         }
 
         /**
          * Returns the value of the object to type of T
          */
+        [DebuggerStepThrough]
         public T Get<T>()
         {
             return _value == null ? default(T) : (T)_value;
@@ -202,6 +216,7 @@ namespace Magix.Brix.Types
          * object cannot for some reason be converted will return 
          * the "default" value...
          */
+        [DebuggerStepThrough]
         public T Get<T>(T defaultValue)
         {
             if (_value == null)
@@ -209,6 +224,7 @@ namespace Magix.Brix.Types
             return (T)_value;
         }
 
+        [DebuggerStepThrough]
         public T Get<T>(T defaultValue, bool force)
         {
             if (string.IsNullOrEmpty(_value as string))
@@ -219,6 +235,7 @@ namespace Magix.Brix.Types
         /**
          * Returns the first node that matches the given Predicate
          */
+        [DebuggerStepThrough]
         public Node Find(Predicate<Node> functor)
         {
             if (functor(this))
@@ -237,6 +254,7 @@ namespace Magix.Brix.Types
         /**
          * Returns true if node exists in children collection
          */
+        [DebuggerStepThrough]
         public bool Exists(Predicate<Node> functor)
         {
             return Exists(functor, false);
@@ -245,6 +263,7 @@ namespace Magix.Brix.Types
         /**
          * Returns true if node exists in children collection
          */
+        [DebuggerStepThrough]
         public bool Exists(Predicate<Node> functor, bool flat)
         {
             if (!flat && functor(this))
@@ -266,6 +285,7 @@ namespace Magix.Brix.Types
          * Will "disconnect" the node from its parent node. Useful for parsing subtrees
          * where you're dependant upon the DNA code or something...
          */
+        [DebuggerStepThrough]
         public Node UnTie()
         {
             _parent.Remove(this);
@@ -280,6 +300,7 @@ namespace Magix.Brix.Types
          */
         public Node this[string name]
         {
+            [DebuggerStepThrough]
             get
             {
                 Node retVal = _children.Find(
@@ -294,6 +315,7 @@ namespace Magix.Brix.Types
                 }
                 return retVal;
             }
+            [DebuggerStepThrough]
             set
             {
                 int idxNo = -1;
@@ -313,6 +335,7 @@ namespace Magix.Brix.Types
 
         public Node this[string name, bool forceCreation]
         {
+            [DebuggerStepThrough]
             get
             {
                 if (forceCreation)
@@ -326,17 +349,20 @@ namespace Magix.Brix.Types
             }
         }
 
+        [DebuggerStepThrough]
         public int IndexOf(Node item)
         {
             return _children.IndexOf(item);
         }
 
+        [DebuggerStepThrough]
         public void Insert(int index, Node item)
         {
             _children.Insert(index, item);
             item._parent = this;
         }
 
+        [DebuggerStepThrough]
         public void RemoveAt(int index)
         {
             _children[index]._parent = null;
@@ -345,10 +371,12 @@ namespace Magix.Brix.Types
 
         public Node this[int index]
         {
+            [DebuggerStepThrough]
             get
             {
                 return _children[index];
             }
+            [DebuggerStepThrough]
             set
             {
                 _children[index] = value;
@@ -356,12 +384,14 @@ namespace Magix.Brix.Types
             }
         }
 
+        [DebuggerStepThrough]
         public void Add(Node item)
         {
             _children.Add(item);
             item._parent = this;
         }
 
+        [DebuggerStepThrough]
         public void AddRange(IEnumerable<Node> items)
         {
             foreach (Node idx in items)
@@ -370,6 +400,7 @@ namespace Magix.Brix.Types
             }
         }
 
+        [DebuggerStepThrough]
         public void Clear()
         {
             foreach (Node idx in _children)
@@ -379,11 +410,13 @@ namespace Magix.Brix.Types
             _children.Clear();
         }
 
+        [DebuggerStepThrough]
         public bool Contains(Node item)
         {
             return _children.Contains(item);
         }
 
+        [DebuggerStepThrough]
         public bool Contains(string itemName)
         {
             return _children.Exists(
@@ -393,6 +426,7 @@ namespace Magix.Brix.Types
                 });
         }
 
+        [DebuggerStepThrough]
         public void CopyTo(Node[] array, int arrayIndex)
         {
             foreach (Node idx in _children)
@@ -404,14 +438,17 @@ namespace Magix.Brix.Types
 
         public int Count
         {
+            [DebuggerStepThrough]
             get { return _children.Count; }
         }
 
         public bool IsReadOnly
         {
+            [DebuggerStepThrough]
             get { return false; }
         }
 
+        [DebuggerStepThrough]
         public bool Remove(Node item)
         {
             bool retVal = _children.Remove(item);
@@ -420,16 +457,19 @@ namespace Magix.Brix.Types
             return retVal;
         }
 
+        [DebuggerStepThrough]
         public IEnumerator<Node> GetEnumerator()
         {
             return _children.GetEnumerator();
         }
 
+        [DebuggerStepThrough]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _children.GetEnumerator();
         }
 
+        [DebuggerStepThrough]
         public override string ToString()
         {
             string retVal = "";
@@ -441,6 +481,7 @@ namespace Magix.Brix.Types
             return retVal;
         }
 
+        [DebuggerStepThrough]
         public string ToJSONString()
         {
             StringBuilder builder = new StringBuilder();
@@ -490,6 +531,7 @@ namespace Magix.Brix.Types
             return builder.ToString();
         }
 
+        [DebuggerStepThrough]
         public void Sort(Comparison<Node> del)
         {
             _children.Sort(del);
