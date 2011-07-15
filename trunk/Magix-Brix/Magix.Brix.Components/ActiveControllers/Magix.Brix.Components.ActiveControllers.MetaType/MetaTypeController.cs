@@ -24,8 +24,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
             if (!e.Params["Items"]["Admin"]["Items"].Contains("MetaType"))
             {
-                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Caption"].Value = "MetaTypes ...";
-                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
+                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
+                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Types ...";
+                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
             }
         }
 
@@ -142,6 +143,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 tr.Commit();
             }
+
+            Node node = new Node();
+            node["FullTypeName"].Value = typeof(MetaType).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
         }
 
         [ActiveEvent(Name = "Magix.MetaType.ChangeName")]
@@ -173,22 +181,48 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.MetaType.ChangeNameOfMetaType")]
         protected void Magix_MetaType_ChangeNameOfMetaType(object sender, ActiveEventArgs e)
         {
-            using (Transaction tra = Adapter.Instance.BeginTransaction())
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaType t = MetaType.SelectByID(e.Params["ID"].Get<int>());
                 t.Name = e.Params["Name"].Get<string>();
 
                 t.Save();
 
-                Node node = new Node();
-                node["FullTypeName"].Value = typeof(MetaType).FullName;
-
-                RaiseEvent(
-                    "Magix.Core.UpdateGrids",
-                    node);
-
-                tra.Commit();
+                tr.Commit();
             }
+
+            Node node = new Node();
+            node["FullTypeName"].Value = typeof(MetaType).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.DeleteValue")]
+        protected void Magix_MetaType_DeleteValue(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaType.Value t = MetaType.Value.SelectByID(e.Params["ID"].Get<int>());
+
+                t.Delete();
+
+                tr.Commit();
+            }
+
+            Node node = new Node();
+            node["ID"].Value = e.Params["ParentID"].Get<int>();
+            RaiseEvent(
+                "Magix.MetaType.EditType",
+                node);
+
+            node = new Node();
+            node["FullTypeName"].Value = typeof(MetaType).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
         }
     }
 }

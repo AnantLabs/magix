@@ -17,7 +17,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaTypes
     [ActiveModule]
     public class EditType : ActiveModule
     {
-        protected InPlaceEdit lbl;
         protected Panel values;
 
         public override void InitialLoading(Node node)
@@ -26,7 +25,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaTypes
             Load +=
                 delegate
                 {
-                    lbl.Text = node["Name"].Get<string>();
                 };
         }
 
@@ -45,8 +43,24 @@ namespace Magix.Brix.Components.ActiveModules.MetaTypes
                 string name = idx["Name"].Get<string>();
                 string val = idx["Val"].Get<string>();
 
+                LinkButton btn = new LinkButton();
+                btn.Text = "Delete";
+                btn.CssClass = "span-2 delete clear-left";
+                btn.Click +=
+                    delegate
+                    {
+                        Node node = new Node();
+                        node["ID"].Value = id;
+                        node["ParentID"].Value = DataSource["ID"].Get<int>();
+
+                        RaiseSafeEvent(
+                            "Magix.MetaType.DeleteValue",
+                            node);
+                    };
+                values.Controls.Add(btn);
+
                 InPlaceTextAreaEdit lbl = new InPlaceTextAreaEdit();
-                lbl.CssClass += " type-editor span-5 clear-left";
+                lbl.CssClass += " type-editor span-5";
                 lbl.Text = name;
                 lbl.TextChanged +=
                     delegate
@@ -63,7 +77,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaTypes
 
                 InPlaceTextAreaEdit txt = new InPlaceTextAreaEdit();
                 txt.Text = val;
-                txt.CssClass += " type-editor span-7 last";
+                txt.CssClass += " type-editor span-5 last";
                 txt.TextChanged +=
                     delegate
                     {
@@ -77,18 +91,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaTypes
                     };
                 values.Controls.Add(txt);
             }
-        }
-
-        protected void lbl_TextChanged(object sender, EventArgs e)
-        {
-            Node node = new Node();
-
-            node["ID"].Value = DataSource["ID"].Value;
-            node["Name"].Value = lbl.Text;
-
-            RaiseSafeEvent(
-                "Magix.MetaType.ChangeNameOfMetaType",
-                node);
         }
 
         protected void create_Click(object sender, EventArgs e)
