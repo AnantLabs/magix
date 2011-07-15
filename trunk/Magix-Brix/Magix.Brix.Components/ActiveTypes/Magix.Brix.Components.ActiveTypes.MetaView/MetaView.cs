@@ -28,6 +28,9 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
 
             [ActiveField]
             public string Action { get; set; }
+
+            [ActiveField(BelongsTo=true)]
+            public MetaView MetaView { get; set; }
         }
 
         public MetaView()

@@ -67,14 +67,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                         node["ParentID"].Value = DataSource["ID"].Get<int>();
 
                         RaiseSafeEvent(
-                            "Magix.MetaView.FindAction",
+                            "Magix.Meta.FindAction",
                             node);
                     };
                 properties.Controls.Add(act);
 
                 LinkButton btn = new LinkButton();
                 btn.Text = "Delete";
-                btn.CssClass = "span-2 delete clear-left";
+                btn.CssClass = "span-2 delete";
                 btn.ToolTip = "Will irrevocably delete your Property";
                 btn.Click +=
                     delegate

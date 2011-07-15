@@ -41,9 +41,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Last"].Value = true;
 
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
+            node["WhiteListColumns"]["Reference"].Value = true;
+            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 5;
+            node["WhiteListColumns"]["Created"].Value = true;
+            node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 3;
             node["WhiteListColumns"]["Values"].Value = true;
-            node["WhiteListColumns"]["Values"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Values"]["ForcedWidth"].Value = 2;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
@@ -54,6 +58,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["CreateEventName"].Value = "Magix.MetaType.CreateType";
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Values"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Values"]["NoFilter"].Value = true;
 
@@ -115,7 +121,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Last"].Value = true;
             node["Padding"].Value = 6;
             node["MarginBottom"].Value = 10;
-            node["PullTop"].Value = 10;
 
             node["ID"].Value = e.Params["ID"].Value;
 
@@ -241,6 +246,56 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 ActiveEvents.Instance.RaiseClearControls("content4");
             }
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.FindAction")]
+        protected void Magix_Meta_FindAction(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["FullTypeName"].Value = typeof(Action).FullName;
+            node["Container"].Value = "content5";
+            node["Width"].Value = 21;
+            node["Last"].Value = true;
+            node["Padding"].Value = 3;
+            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 8;
+            node["IsDelete"].Value = false;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["EventName"].Value = true;
+            node["WhiteListColumns"]["EventName"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Description"].Value = true;
+            node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 8;
+
+            node["FilterOnId"].Value = false;
+            node["IDColumnName"].Value = "Select";
+            node["IDColumnValue"].Value = "Select";
+            node["IDColumnEvent"].Value = "Magix.Meta.SelectAction";
+            node["CreateEventName"].Value = "Magix.Meta.CreateAction";
+            node["MetaTypeID"].Value = e.Params["ID"].Get<int>();
+
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["EventName"]["Header"].Value = "Action";
+            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.SelectAction")]
+        protected void Magix_Meta_AppendAction(object sender, ActiveEventArgs e)
+        {
+            Action a = Action.SelectByID(e.Params["ID"].Get<int>());
+            e.Params["Action"].Value = a.EventName;
+
+            RaiseEvent(
+                "Magix.Meta.AppendAction",
+                e.Params);
         }
     }
 }
