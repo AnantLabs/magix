@@ -218,9 +218,9 @@
       <Project>{C152475B-51AC-4892-9E86-8315C058830D}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Login</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaType\Magix.Brix.Components.ActiveControllers.MetaType.csproj">
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaType\Magix.Brix.Components.ActiveControllers.MetaTypes.csproj">
       <Project>{6F72A0D1-66F2-4840-97B5-42D262F32B45}</Project>
-      <Name>Magix.Brix.Components.ActiveControllers.MetaType</Name>
+      <Name>Magix.Brix.Components.ActiveControllers.MetaTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaView\Magix.Brix.Components.ActiveControllers.MetaView.csproj">
       <Project>{BAF5E8CE-D6A2-486C-8DBA-E97D169E9547}</Project>

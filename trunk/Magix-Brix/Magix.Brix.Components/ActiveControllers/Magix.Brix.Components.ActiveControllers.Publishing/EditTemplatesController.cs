@@ -101,7 +101,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["ID"].Value = t.ID;
             node["Width"].Value = 24;
             node["Last"].Value = true;
-            node["CssClass"].Value = "publisher-edit-template";
+            node["CssClass"].Value = "yellow-background";
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Publishing.EditSpecificTemplate",

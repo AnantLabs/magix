@@ -474,6 +474,14 @@ namespace Magix.Brix.Viewports
                     {
                         cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
                     }
+                    if (e.Params["Parameters"].Contains("MarginBottom"))
+                    {
+                        cssClass += " spcBottom-" + e.Params["Parameters"]["MarginBottom"].Get<int>();
+                    }
+                    if (e.Params["Parameters"].Contains("PullTop"))
+                    {
+                        cssClass += " pullTop-" + e.Params["Parameters"]["PullTop"].Get<int>();
+                    }
                     if (e.Params["Parameters"].Contains("Pull"))
                     {
                         cssClass += " pull-" + e.Params["Parameters"]["Pull"].Get<int>();

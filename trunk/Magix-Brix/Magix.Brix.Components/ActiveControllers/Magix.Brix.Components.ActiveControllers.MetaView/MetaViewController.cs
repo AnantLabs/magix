@@ -76,12 +76,25 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
 
             Node node = new Node();
 
-            node["Width"].Value = 18;
+            node["Width"].Value = 21;
+            node["Down"].Value = 2;
             node["Last"].Value = true;
-            node["Padding"].Value = 6;
+            node["Padding"].Value = 3;
             node["ID"].Value = m.ID;
             node["MetaTypeName"].Value = m.TypeName;
             node["IsList"].Value = m.IsList;
+            node["HasSearch"].Value = m.HasSearch;
+            node["Caption"].Value = m.Caption;
+            node["MarginBottom"].Value = 10;
+
+            foreach (MetaView.MetaViewProperty idx in m.Properties)
+            {
+                node["Properties"]["p-" + idx.ID]["ID"].Value = idx.ID;
+                node["Properties"]["p-" + idx.ID]["Name"].Value = idx.Name;
+                node["Properties"]["p-" + idx.ID]["ReadOnly"].Value = idx.ReadOnly;
+                node["Properties"]["p-" + idx.ID]["Description"].Value = idx.Description;
+                node["Properties"]["p-" + idx.ID]["Action"].Value = idx.Action;
+            }
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.MetaView.EditView",
@@ -89,8 +102,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.ChangeTypeOfMetaView")]
-        protected void Magix_Publishing_ChangeTypeOfMetaView(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.MetaView.ChangeTypeOfMetaView")]
+        protected void Magix_MetaView_ChangeTypeOfMetaView(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
@@ -106,6 +119,180 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
 
                 tr.Commit();
             }
+
+            Node node = new Node();
+            node["FullTypeName"].Value = typeof(MetaView).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.CreateProperty")]
+        protected void Magix_MetaView_CreateProperty(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView m = MetaView.SelectByID(e.Params["ID"].Get<int>());
+
+                MetaView.MetaViewProperty t = new MetaView.MetaViewProperty();
+                t.Name = "Default Property Name";
+                m.Properties.Add(t);
+
+                m.Save();
+
+                tr.Commit();
+            }
+
+            Node node = new Node();
+            node["FullTypeName"].Value = typeof(MetaView).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.DeleteProperty")]
+        protected void Magix_MetaView_DeleteProperty(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+
+                p.Delete();
+
+                tr.Commit();
+            }
+
+            Node node = new Node();
+            node["ID"].Value = e.Params["ParentID"].Get<int>();
+
+            RaiseEvent(
+                "Magix.MetaView.EditMetaView",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.ChangePropertyName")]
+        protected void Magix_MetaView_ChangePropertyName(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+                p.Name = e.Params["Name"].Get<string>();
+
+                p.Save();
+
+                tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.ChangePropertyReadOnly")]
+        protected void Magix_MetaView_ChangePropertyReadOnly(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+                p.ReadOnly = e.Params["ReadOnly"].Get<bool>();
+
+                p.Save();
+
+                tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.ChangePropertyAction")]
+        protected void Magix_MetaView_ChangePropertyAction(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+                p.Action = e.Params["MetaViewAction"].Get<string>();
+
+                p.Save();
+
+                tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.SetSearch")]
+        protected void Magix_MetaView_SetSearch(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView m = MetaView.SelectByID(e.Params["ID"].Get<int>());
+                m.HasSearch = e.Params["HasSearch"].Get<bool>();
+
+                m.Save();
+
+                tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.ChangeCaptionOfMetaView")]
+        protected void Magix_MetaView_ChangeCaptionOfMetaView(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView m = MetaView.SelectByID(e.Params["ID"].Get<int>());
+                m.Caption = e.Params["MetaViewCaption"].Get<string>();
+
+                m.Save();
+
+                tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.ChangePropertyDescription")]
+        protected void Magix_MetaView_ChangePropertyDescription(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView.MetaViewProperty m = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+                m.Description = e.Params["MetaViewDescription"].Get<string>();
+
+                m.Save();
+
+                tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
+        protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaView).FullName)
+                ActiveEvents.Instance.RaiseClearControls("content4");
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.LoadWysiwyg")]
+        protected void Magix_MetaView_LoadWysiwyg(object sender, ActiveEventArgs e)
+        {
+            MetaView m = MetaView.SelectByID(e.Params["ID"].Get<int>());
+
+            Node node = new Node();
+
+            node["Padding"].Value = 6;
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["Top"].Value = 2;
+            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 8;
+            node["CssClass"].Value = "yellow-background";
+            node["MetaViewTypeName"].Value = m.TypeName;
+            node["MetaViewName"].Value = m.Name;
+
+            foreach (MetaView.MetaViewProperty idx in m.Properties)
+            {
+                node["Properties"]["p-" + idx.ID]["ID"].Value = idx.ID;
+                node["Properties"]["p-" + idx.ID]["Name"].Value = idx.Name;
+                node["Properties"]["p-" + idx.ID]["ReadOnly"].Value = idx.ReadOnly;
+                node["Properties"]["p-" + idx.ID]["Description"].Value = idx.Description;
+                node["Properties"]["p-" + idx.ID]["Action"].Value = idx.Action;
+            }
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.MetaView.SingleView",
+                "content5",
+                node);
         }
     }
 }

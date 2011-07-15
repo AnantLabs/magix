@@ -27,3 +27,42 @@
     OnTextChanged="type_TextChanged"
     id="type" />
 
+<div class="span-3">
+    <mux:CheckBox
+        runat="server"
+        OnCheckedChanged="hasSearch_CheckedChanged"
+        id="hasSearch" />
+    <mux:Label
+        runat="server"
+        id="lblS"
+        Tag="label"
+        Text="Has Search ..." />
+</div>
+
+<mux:InPlaceTextAreaEdit
+    runat="server"
+    CssClass="mux-in-place-edit span-4 type-editor down-1 clear-left push-2"
+    ToolTip="Caption of Form"
+    OnTextChanged="caption_TextChanged"
+    id="caption" />
+
+<mux:Panel
+    runat="server"
+    CssClass="span-21 last clear-left"
+    id="properties" />
+
+<mux:Button
+    runat="server"
+    id="create"
+    CssClass="span-6 down-1 clear-left"
+    OnClick="create_Click"
+    Text="New Property ..." />
+
+<mux:Button
+    runat="server"
+    id="view"
+    CssClass="span-6 down-1"
+    OnClick="view_Click"
+    Text="View ..." />
+
+

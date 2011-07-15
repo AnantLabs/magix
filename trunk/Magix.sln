@@ -116,7 +116,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Publishing.Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.ApplicationPool", "Magix-Brix\Magix.Brix.ApplicationPool\Magix.Brix.ApplicationPool.csproj", "{EA9F95FD-6606-4FD8-8895-7C2EBAB7399E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.MetaType", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaType\Magix.Brix.Components.ActiveControllers.MetaType.csproj", "{6F72A0D1-66F2-4840-97B5-42D262F32B45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.MetaTypes", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaType\Magix.Brix.Components.ActiveControllers.MetaTypes.csproj", "{6F72A0D1-66F2-4840-97B5-42D262F32B45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.MetaTypes", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaTypes\Magix.Brix.Components.ActiveModules.MetaTypes.csproj", "{D94C69FF-23CB-498E-A880-90FC369AD268}"
 EndProject
