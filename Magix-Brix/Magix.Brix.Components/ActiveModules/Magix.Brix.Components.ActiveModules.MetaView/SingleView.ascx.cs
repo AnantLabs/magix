@@ -33,6 +33,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             base.OnLoad(e);
             if (DataSource != null)
                 DataBindCtrls();
+
+            Button b = Selector.SelectFirst<Button>(ctrls);
+            if (b != null)
+                ctrls.DefaultWidget = b.ID;
         }
 
         private void DataBindCtrls()
@@ -58,8 +62,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         {
             Button b = new Button();
             b.Text = idx["Name"].Get<string>();
+            b.ID = "b-" + idx["ID"].Get<int>();
             b.CssClass = "span-4 action-button";
             b.Info = idx["Name"].Get<string>();
+            b.ToolTip = idx["Description"].Get<string>();
             b.Click +=
                 delegate
                 {
@@ -67,9 +73,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
 
                     GetPropertyValues();
 
-                    RaiseSafeEvent(
-                        idx["Action"].Get<string>(),
-                        DataSource);
+                    foreach (string idxS in idx["Action"].Get<string>().Split('|'))
+                    {
+                        // Settings Event Specific Features ...
+                        DataSource["EventTime"].Value = DateTime.Now;
+                        DataSource["EventReference"].Value = idxS;
+
+                        RaiseSafeEvent(
+                            idxS,
+                            DataSource);
+                    }
                 };
             ctrls.Controls.Add(b);
         }
@@ -84,13 +97,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                     if (w is TextBox)
                     {
                         DataSource["PropertyValues"][w.Info]["Value"].Value = (w as TextBox).Text;
+                        DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
                     }
-                    else if (w is TextBox)
+                    else if (w is Label)
                     {
                         DataSource["PropertyValues"][w.Info]["Value"].Value = (w as Label).Text;
+                        DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
                     }
                 }
-                DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
             }
         }
 
@@ -112,6 +126,23 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.Info = idx["Name"].Get<string>();
             b.CssClass = "meta-view-form-element meta-view-form-textbox";
             ctrls.Controls.Add(b);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.Actions.EmptyForm")]
+        protected void Magix_Meta_Actions_EmptyForm(object sender, ActiveEventArgs e)
+        {
+            foreach (Control idx in ctrls.Controls)
+            {
+                BaseWebControl b = idx as BaseWebControl;
+                if (b != null)
+                {
+                    TextBox t = b as TextBox;
+                    if (t != null)
+                    {
+                        t.Text = "";
+                    }
+                }
+            }
         }
     }
 }

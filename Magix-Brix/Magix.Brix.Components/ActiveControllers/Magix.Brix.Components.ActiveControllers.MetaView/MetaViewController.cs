@@ -77,7 +77,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             Node node = new Node();
 
             node["Width"].Value = 21;
-            node["Down"].Value = 2;
+            node["Top"].Value = 2;
             node["Last"].Value = true;
             node["Padding"].Value = 3;
             node["ID"].Value = m.ID;
@@ -292,6 +292,33 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.MetaView.SingleView",
                 "content5",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.AppendAction")]
+        protected void Magix_Meta_AppendAction(object sender, ActiveEventArgs e)
+        {
+            MetaView.MetaViewProperty p = null;
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                p = MetaView.MetaViewProperty.SelectByID(e.Params["Parameters"]["MetaTypeID"].Get<int>());
+                if (string.IsNullOrEmpty(p.Action))
+                    p.Action = "";
+                else
+                    p.Action += "|";
+                p.Action += e.Params["Action"].Get<string>();
+
+                p.Save();
+
+                tr.Commit();
+            }
+
+            ActiveEvents.Instance.RaiseClearControls("content5");
+
+            Node node = new Node();
+            node["ID"].Value = p.MetaView.ID;
+            RaiseEvent(
+                "Magix.MetaView.EditMetaView",
                 node);
         }
     }

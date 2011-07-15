@@ -552,11 +552,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         SelectedID = id;
                         n["ID"].Value = id;
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                        n["DataSource"] = DataSource;
                         RaiseSafeEvent(
                             DataSource.Contains("IDColumnEvent") ? 
                                 DataSource["IDColumnEvent"].Get<string>() : 
                                 "DBAdmin.Form.ViewComplexObject",
                             n);
+                        n["DataSource"].UnTie();
                     };
                 li.Controls.Add(lb);
                 row.Controls.Add(li);

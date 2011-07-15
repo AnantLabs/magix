@@ -15,13 +15,13 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
     [ActiveType]
     public class Action : ActiveType<Action>
     {
-        [ActiveEvent]
+        [ActiveField]
         public string Name { get; set; }
 
-        [ActiveEvent]
+        [ActiveField]
         public string Description { get; set; }
 
-        [ActiveEvent]
+        [ActiveField]
         public string EventName { get; set; }
     }
 }

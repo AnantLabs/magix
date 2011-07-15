@@ -20,11 +20,24 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                Action a = new Action();
-                a.Name = "SaveObject";
-                a.EventName = "Magix.Meta.Actions.SaveObject";
-                a.Description = "Will save the active form";
-                a.Save();
+                if (Action.CountWhere(
+                    Criteria.Eq("EventName", "Magix.Meta.Actions.SaveObject")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "SaveObject";
+                    a.EventName = "Magix.Meta.Actions.SaveObject";
+                    a.Description = "Will save the currently active Single-View form";
+                    a.Save();
+                }
+                if (Action.CountWhere(
+                    Criteria.Eq("EventName", "Magix.Meta.Actions.EmptyForm")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "EmptyForm";
+                    a.EventName = "Magix.Meta.Actions.EmptyForm";
+                    a.Description = "Will empty the currrently active Single-View form";
+                    a.Save();
+                }
 
                 tr.Commit();
             }
@@ -49,9 +62,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 MetaType t = new MetaType();
 
                 t.Name = e.Params["MetaViewTypeName"].Get<string>();
-                t.Reference = e.Params["MetaViewName"].Get<string>() + 
-                    "|" + 
-                    e.Params["ActionEventName"].Get<string>();
+                t.Reference = e.Params["EventReference"].Get<string>();
+                t.Created = e.Params["EventTime"].Get<DateTime>();
 
                 foreach (Node idx in e.Params["PropertyValues"])
                 {

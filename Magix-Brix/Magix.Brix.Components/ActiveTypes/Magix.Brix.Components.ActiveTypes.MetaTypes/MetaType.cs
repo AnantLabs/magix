@@ -37,6 +37,9 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         public string Reference { get; set; }
 
         [ActiveField]
+        public DateTime Created { get; set; }
+
+        [ActiveField]
         public LazyList<Value> Values { get; set; }
     }
 }

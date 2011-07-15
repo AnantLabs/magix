@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action.cs" />
     <Compile Include="MetaType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
