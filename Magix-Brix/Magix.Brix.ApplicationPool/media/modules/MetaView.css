@@ -16,5 +16,58 @@ div.type-editor textarea
 
 
 
+.meta-view-form-element,
+input[type=text].meta-view-form-element
+{
+	display:block;
+	min-width:350px;
+}
 
+.meta-view-form-label
+{
+}
+
+textarea.meta-view-form-textbox,
+input[type=text].meta-view-form-textbox
+{
+	font-size:28px;
+	border-left:none 0;
+	border-right:none 0;
+	border-top:solid 1px #999;
+	border-bottom:solid 1px #999;
+	background-color:rgba(225, 225, 225, .5);
+	margin:0 0 18px 0;
+	padding-left:40px;
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
+}
+
+textarea.meta-view-form-textbox:focus,
+input[type=text].meta-view-form-textbox:focus,
+textarea.meta-view-form-textbox:hover,
+input[type=text].meta-view-form-textbox:hover
+{
+	background-color:rgba(255, 255, 255, 1);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
+}
+
+input[type=button].action-button
+{
+	float:right;
+	display:block;
+	margin-right:0;
+	margin-bottom:18px;
+	margin-left:10px;
+}
 

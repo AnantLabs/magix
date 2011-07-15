@@ -71,6 +71,39 @@ div.spcBottom-30, .spcBottom-30 {margin-bottom:46em;}
 
 
 
+div.pullTop-1, .pullTop-1 {margin-top:-1.5em;}
+div.pullTop-2, .pullTop-2 {margin-top:-3em;}
+div.pullTop-3, .pullTop-3 {margin-top:-4.5em;}
+div.pullTop-4, .pullTop-4 {margin-top:-6em;}
+div.pullTop-5, .pullTop-5 {margin-top:-7.5em;}
+div.pullTop-6, .pullTop-6 {margin-top:-9em;}
+div.pullTop-7, .pullTop-7 {margin-top:-10.5em;}
+div.pullTop-8, .pullTop-8 {margin-top:-12em;}
+div.pullTop-9, .pullTop-9 {margin-top:-13.5em;}
+div.pullTop-10, .pullTop-10 {margin-top:-15em;}
+div.pullTop-11, .pullTop-11 {margin-top:-16.5em;}
+div.pullTop-12, .pullTop-12 {margin-top:-18em;}
+div.pullTop-13, .pullTop-13 {margin-top:-19.5em;}
+div.pullTop-14, .pullTop-14 {margin-top:-21em;}
+div.pullTop-15, .pullTop-15 {margin-top:-22.5em;}
+div.pullTop-16, .pullTop-16 {margin-top:-24em;}
+div.pullTop-17, .pullTop-17 {margin-top:-25.5em;}
+div.pullTop-18, .pullTop-18 {margin-top:-27em;}
+div.pullTop-19, .pullTop-19 {margin-top:-28.5em;}
+div.pullTop-20, .pullTop-20 {margin-top:-30em;}
+div.pullTop-21, .pullTop-21 {margin-top:-31.5em;}
+div.pullTop-22, .pullTop-22 {margin-top:-33em;}
+div.pullTop-23, .pullTop-23 {margin-top:-34.5em;}
+div.pullTop-24, .pullTop-24 {margin-top:-36em;}
+div.pullTop-25, .pullTop-25 {margin-top:-37.5em;}
+div.pullTop-26, .pullTop-26 {margin-top:-39em;}
+div.pullTop-27, .pullTop-27 {margin-top:-41.5em;}
+div.pullTop-28, .pullTop-28 {margin-top:-43em;}
+div.pullTop-29, .pullTop-29 {margin-top:-44.5em;}
+div.pullTop-30, .pullTop-30 {margin-top:-46em;}
+
+
+
 div.height-1, .height-1 {height:1.5em;}
 div.height-2, .height-2 {height:3em;}
 div.height-3, .height-3 {height:4.5em;}
@@ -449,6 +482,17 @@ input[type=checkbox].gridSelect
 	opacity:1;
 	overflow-x:hidden;
 	overflow-y:auto;
+}
+
+.clear-left,
+input[type=button].clear-left
+{
+	clear:left;
+}
+
+.yellow-background
+{
+	background:Transparent url(../images/actual-size.png) repeat 0 0;
 }
 
 

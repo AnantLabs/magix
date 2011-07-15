@@ -25,8 +25,16 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             public string Val { get; set; }
         }
 
+        public MetaType()
+        {
+            Values = new LazyList<Value>();
+        }
+
         [ActiveField]
         public string Name { get; set; }
+
+        [ActiveField]
+        public string Reference { get; set; }
 
         [ActiveField]
         public LazyList<Value> Values { get; set; }

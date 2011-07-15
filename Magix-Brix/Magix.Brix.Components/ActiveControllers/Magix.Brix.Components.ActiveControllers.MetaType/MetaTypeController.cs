@@ -25,7 +25,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (!e.Params["Items"]["Admin"]["Items"].Contains("MetaType"))
             {
                 e.Params["Items"]["Admin"]["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
-                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Types ...";
+                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Objects ...";
                 e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
             }
         }
@@ -114,6 +114,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["Padding"].Value = 6;
+            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 10;
 
             node["ID"].Value = e.Params["ID"].Value;
 
@@ -176,6 +178,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 tr.Commit();
             }
+
+            Node node = new Node();
+            node["FullTypeName"].Value = typeof(MetaType).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
         }
 
         [ActiveEvent(Name = "Magix.MetaType.ChangeNameOfMetaType")]
@@ -223,6 +232,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             RaiseEvent(
                 "Magix.Core.UpdateGrids",
                 node);
+        }
+
+        [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
+        protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaType).FullName)
+            {
+                ActiveEvents.Instance.RaiseClearControls("content4");
+            }
         }
     }
 }

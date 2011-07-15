@@ -14,6 +14,27 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
     [ActiveType]
     public class MetaView : ActiveType<MetaView>
     {
+        [ActiveType]
+        public class MetaViewProperty : ActiveType<MetaViewProperty>
+        {
+            [ActiveField]
+            public string Name { get; set; }
+
+            [ActiveField]
+            public bool ReadOnly { get; set; }
+
+            [ActiveField]
+            public string Description { get; set; }
+
+            [ActiveField]
+            public string Action { get; set; }
+        }
+
+        public MetaView()
+        {
+            Properties = new LazyList<MetaViewProperty>();
+        }
+
         [ActiveField]
         public string Name { get; set; }
 
@@ -22,5 +43,14 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
 
         [ActiveField]
         public bool IsList { get; set; }
+
+        [ActiveField]
+        public bool HasSearch { get; set; }
+
+        [ActiveField]
+        public string Caption { get; set; }
+
+        [ActiveField]
+        public LazyList<MetaViewProperty> Properties { get; set; }
     }
 }
