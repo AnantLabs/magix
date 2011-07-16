@@ -41,14 +41,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
 
         private void DataBindCtrls()
         {
-            bool lastWasButton = false;
             foreach (Node idx in DataSource["Properties"])
             {
-                lastWasButton = false;
                 if (!string.IsNullOrEmpty(idx["Action"].Get<string>()))
                 {
                     CreateActionControl(idx);
-                    lastWasButton = true;
                 }
                 else if (idx["ReadOnly"].Get<bool>())
                 {
@@ -66,6 +63,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             Button b = new Button();
             b.Text = idx["Name"].Get<string>();
             b.ID = "b-" + idx["ID"].Get<int>();
+            if (idx.Contains("ReadOnly"))
+                b.Enabled = !idx["ReadOnly"].Get<bool>();
             b.CssClass = "span-4 action-button";
             b.Info = idx["Name"].Get<string>();
             b.ToolTip = idx["Description"].Get<string>();
@@ -120,8 +119,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                     }
                     else if (w is Label)
                     {
-                        DataSource["PropertyValues"][w.Info]["Value"].Value = (w as Label).Text;
-                        DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
+                        // Labels are ReadOnly, hence we skip them entirely, since they couldn't
+                        // by their very definition have been 'updated' in any ways ...
+                        
+                        // However, for future references, IF we were to include them, they
+                        // would look like the below ...
+
+                        //DataSource["PropertyValues"][w.Info]["Value"].Value = (w as Label).Text;
+                        //DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
                     }
                 }
             }

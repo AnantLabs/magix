@@ -47,6 +47,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 4;
             node["WhiteListColumns"]["EventName"].Value = true;
             node["WhiteListColumns"]["EventName"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Params"].Value = true;
+            node["WhiteListColumns"]["Params"]["ForcedWidth"].Value = 2;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
@@ -60,6 +62,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Description"]["MaxLength"].Value = 20;
+            node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -84,29 +89,123 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         protected void Magix_Meta_EditAction(object sender, ActiveEventArgs e)
         {
             Action a = Action.SelectByID(e.Params["ID"].Get<int>());
-            EditActionItem(a, e.Params);
             EditActionItemParams(a, e.Params);
+            EditActionItem(a, e.Params);
+            CreateCreateParamButton(a);
+            CreateDeleteParamButton(a);
+
+            ActiveEvents.Instance.RaiseClearControls("content6");
         }
 
-        private void EditActionItemParams(Action a, Node e)
+        private void CreateCreateParamButton(Action a)
         {
             Node node = new Node();
-            node["PropertyName"].Value = "Params";
-            node["Container"].Value = "content5";
-            node["ID"].Value = a.ID;
-            node["Padding"].Value = 6;
-            node["Width"].Value = 18;
-            node["Last"].Value = true;
-            node["MarginBottom"].Value = 10;
-            node["PullTop"].Value = 8;
-            node["ParentFullTypeName"].Value = typeof(Action).FullName;
-            node["FullTypeName"].Value = typeof(Action).FullName;
-            node["ReUseNode"].Value = true;
-            node["IsList"].Value = true;
+
+            node["Text"].Value = "New Param ...";
+            node["ButtonCssClass"].Value = "span-5 pushLeft-4";
+            node["Append"].Value = true;
+            node["Event"].Value = "Magix.Meta.CreateParameter";
+            node["Event"]["ID"].Value = a.ID;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content5",
+                node);
+        }
+
+        private void CreateDeleteParamButton(Action a)
+        {
+            Node node = new Node();
+
+            node["Text"].Value = "Delete";
+            node["Seed"].Value = "delete-button";
+            node["ButtonCssClass"].Value = "span-5";
+            node["Append"].Value = true;
+            node["Enabled"].Value = false;
+            node["Event"].Value = "Magix.Meta.DeleteParameter";
+            node["Event"]["ID"].Value = a.ID;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content5",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.DeleteParameter")]
+        protected void Magix_Meta_DeleteParameter(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                Node node2 = new Node();
+
+                RaiseEvent(
+                    "Magix.Core.GetSelectedTreeItem",
+                    node2);
+
+                Action.ActionParams p = Action.ActionParams.SelectByID(node2["ID"].Get<int>());
+                p.Delete();
+
+                tr.Commit();
+            }
+
+            Node node = new Node();
+            node["Seed"].Value = "delete-button";
+            node["Enabled"].Value = false;
+            RaiseEvent(
+                "Magix.Core.EnabledClickable",
+                node);
+
+            // Signalizing to Grids that they need to update ...
+            Node n = new Node();
+            n["FullTypeName"].Value = typeof(Action).FullName +
+                "|" +
+                typeof(Action.ActionParams).FullName;
 
             RaiseEvent(
-                "DBAdmin.Form.ViewListOrComplexPropertyValue",
-                node);
+                "Magix.Core.UpdateGrids",
+                n);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.CreateParameter")]
+        protected void Magix_Meta_CreateParameter(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                Action a = Action.SelectByID(e.Params["ID"].Get<int>());
+
+                Node tmp = new Node();
+                RaiseEvent(
+                    "Magix.Core.GetTreeSelectedID",
+                    tmp);
+
+                Action.ActionParams p = new Action.ActionParams();
+                p.Value = "Default, please change ...";
+                p.Name = "Default Name";
+
+                if (!tmp.Contains("ID"))
+                {
+                    a.Params.Add(p);
+                    a.Save();
+                }
+                else
+                {
+                    Action.ActionParams p2 = Action.ActionParams.SelectByID(tmp["ID"].Get<int>());
+                    p2.Children.Add(p);
+                    p2.Save();
+                }
+
+                tr.Commit();
+            }
+
+            // Signalizing to Grids that they need to update ...
+            Node n = new Node();
+            n["FullTypeName"].Value = typeof(Action).FullName + 
+                "|" +
+                typeof(Action.ActionParams).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                n);
         }
 
         private void EditActionItem(Action a, Node node)
@@ -120,6 +219,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Value"].Value = true;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
@@ -127,14 +227,116 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
 
-            node["Padding"].Value = 6;
             node["Width"].Value = 18;
-            node["Container"].Value = "content4";
+            node["Last"].Value = true;
+            node["Container"].Value = "content5";
+            node["Top"].Value = 2;
             node["MarginBottom"].Value = 10;
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
+        }
+
+        private void EditActionItemParams(Action a, Node e)
+        {
+            Node node = new Node();
+
+            node["CssClass"].Value = "clear-left";
+            node["Width"].Value = 6;
+            node["MarginBottom"].Value = 10;
+            node["Top"].Value = 1;
+            node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
+            node["ActionItemID"].Value = a.ID;
+            node["ItemSelectedEvent"].Value = "Magix.Meta.EditParam";
+
+            RaiseEvent(
+                "Magix.Meta.GetActionItemTree",
+                node);
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Tree",
+                "content4",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.EditParam")]
+        private void Magix_Meta_EditParam(object sender, ActiveEventArgs e)
+        {
+            Action.ActionParams p = Action.ActionParams.SelectByID(e.Params["SelectedItemID"].Get<int>());
+
+            Node ch = new Node();
+            ch["ID"].Value = p.ID;
+            RaiseEvent(
+                "Magix.Core.CheckIfIDIsBeingSingleEdited",
+                ch);
+            if (ch.Contains("Yes"))
+                return;
+
+            Node node = new Node();
+            
+            // First filtering OUT columns ...!
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Value"].Value = true;
+
+            node["WhiteListProperties"]["Name"].Value = true;
+            node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
+            node["WhiteListProperties"]["Value"].Value = true;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 4;
+
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Value"]["ReadOnly"].Value = false;
+
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["Container"].Value = "content6";
+            node["IsList"].Value = false;
+            node["CssClass"].Value = "small-editer";
+            node["PullTop"].Value = 8;
+            node["MarginBottom"].Value = 10;
+            node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
+            node["ID"].Value = p.ID;
+
+            Node xx = new Node();
+            xx["Container"].Value = "content6";
+            RaiseEvent(
+                "Magix.Core.GetNumberOfChildrenOfContainer",
+                xx);
+
+            node["Append"].Value = xx["Count"].Get<int>() < 3;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewComplexObject",
+                node);
+
+            node = new Node();
+            node["Seed"].Value = "delete-button";
+            node["Enabled"].Value = true;
+            RaiseEvent(
+                "Magix.Core.EnabledClickable",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.GetActionItemTree")]
+        private void Magix_Meta_GetActionItemTree(object sender, ActiveEventArgs e)
+        {
+            Action a = Action.SelectByID(e.Params["ActionItemID"].Get<int>());
+            foreach (Action.ActionParams idx in a.Params)
+            {
+                AddParamToNode(idx, e.Params);
+            }
+        }
+
+        private void AddParamToNode(Action.ActionParams par, Node node)
+        {
+            node["Items"]["i-" + par.ID]["ID"].Value = par.ID;
+            node["Items"]["i-" + par.ID]["Name"].Value = par.Name;
+            node["Items"]["i-" + par.ID]["ToolTip"].Value = par.Value;
+
+            foreach (Action.ActionParams idx in par.Children)
+            {
+                AddParamToNode(idx, node["Items"]["i-" + par.ID]);
+            }
         }
     }
 }
