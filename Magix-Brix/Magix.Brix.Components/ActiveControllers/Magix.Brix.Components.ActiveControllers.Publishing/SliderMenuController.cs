@@ -30,7 +30,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 root = idx;
 
-                GetOneMenuItem(e.Params, idx);
+                foreach (PageObject idxP in idx.Children)
+                {
+                    GetOneMenuItem(e.Params, idxP);
+                }
             }
             if (!e.Params.Contains("Items"))
             {

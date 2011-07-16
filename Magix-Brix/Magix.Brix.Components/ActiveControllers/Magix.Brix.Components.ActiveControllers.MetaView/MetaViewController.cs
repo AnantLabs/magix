@@ -301,6 +301,23 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 node);
         }
 
+        [ActiveEvent(Name = "Magix.MetaView.GetViewData")]
+        protected void Magix_MetaView_GetViewData(object sender, ActiveEventArgs e)
+        {
+            MetaView m = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
+            e.Params["MetaViewTypeName"].Value = m.TypeName;
+
+            foreach (MetaView.MetaViewProperty idx in m.Properties)
+            {
+                e.Params["Properties"]["p-" + idx.ID]["ID"].Value = idx.ID;
+                e.Params["Properties"]["p-" + idx.ID]["Name"].Value = idx.Name;
+                e.Params["Properties"]["p-" + idx.ID]["ReadOnly"].Value = idx.ReadOnly;
+                e.Params["Properties"]["p-" + idx.ID]["Description"].Value = idx.Description;
+                e.Params["Properties"]["p-" + idx.ID]["Action"].Value = idx.Action;
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Meta.AppendAction")]
         protected void Magix_Meta_AppendAction(object sender, ActiveEventArgs e)
         {
