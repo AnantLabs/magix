@@ -501,7 +501,17 @@ input[type=button].clear-both
 	background:Transparent url(../images/actual-size.png) repeat 0 0;
 }
 
+.small-editer .panelSingleObject
+{
+	float:left;
+	margin-right:-10px;
+	margin-left:10px;
+}
 
+.small-editer .panelSingleObject:nth-child(9n+1)
+{
+	margin-left:0;
+}
 
 
 

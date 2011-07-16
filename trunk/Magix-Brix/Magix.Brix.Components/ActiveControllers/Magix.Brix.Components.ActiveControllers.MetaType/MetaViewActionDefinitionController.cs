@@ -38,6 +38,21 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     a.Description = "Will empty the currrently active Single-View form";
                     a.Save();
                 }
+                if (Action.CountWhere(
+                    Criteria.Eq("EventName", "Magix.Core.ShowMessage")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "ShowMessage";
+                    a.EventName = "Magix.Core.ShowMessage";
+                    a.Description = "Will show a default message to the User";
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Message";
+                    m.Value = "Hello World 2.0 ...";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
 
                 tr.Commit();
             }

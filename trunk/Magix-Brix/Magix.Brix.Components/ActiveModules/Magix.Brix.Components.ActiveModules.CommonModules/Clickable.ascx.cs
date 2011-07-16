@@ -16,55 +16,35 @@ using Magix.UX.Effects;
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
     [ActiveModule]
-    public class Clickable : UserControl, IModule
+    public class Clickable : ActiveModule, IModule
     {
         protected Button btn;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
             Load += delegate
             {
                 btn.Text = node["Text"].Get<string>();
-                Event = node["Event"];
+                if (node.Contains("ButtonCssClass"))
+                    btn.CssClass = node["ButtonCssClass"].Get<string>();
+                if (node.Contains("Enabled"))
+                    btn.Enabled = node["Enabled"].Get<bool>();
             };
         }
 
         protected void btn_Click(object sender, EventArgs e)
         {
-            Node node = Event;
             RaiseSafeEvent(
-                Event.Get<string>(),
-                node);
+                DataSource["Event"].Get<string>(),
+                DataSource["Event"]);
         }
 
-        protected bool RaiseSafeEvent(string eventName, Node node)
+        [ActiveEvent(Name = "Magix.Core.EnabledClickable")]
+        protected void Magix_Core_EnabledClickable(object sender, ActiveEventArgs e)
         {
-            try
-            {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    eventName,
-                    node);
-                return true;
-            }
-            catch (Exception err)
-            {
-                Node n = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                n["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Magix.Core.ShowMessage",
-                    n);
-                return false;
-            }
-        }
-
-        private Node Event
-        {
-            get { return ViewState["Event"] as Node; }
-            set { ViewState["Event"] = value; }
+            if (DataSource["Seed"].Get<string>() == e.Params["Seed"].Get<string>())
+                btn.Enabled = e.Params["Enabled"].Get<bool>();
         }
     }
 }

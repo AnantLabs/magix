@@ -100,6 +100,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 "Magix.Brix.Components.ActiveModules.MetaView.EditView",
                 "content4",
                 node);
+
+            ActiveEvents.Instance.RaiseClearControls("content5");
         }
 
         [ActiveEvent(Name = "Magix.MetaView.ChangeTypeOfMetaView")]
@@ -150,6 +152,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             RaiseEvent(
                 "Magix.Core.UpdateGrids",
                 node);
+
+            ActiveEvents.Instance.RaiseClearControls("content5");
         }
 
         [ActiveEvent(Name = "Magix.MetaView.DeleteProperty")]
@@ -170,6 +174,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             RaiseEvent(
                 "Magix.MetaView.EditMetaView",
                 node);
+
+            ActiveEvents.Instance.RaiseClearControls("content5");
         }
 
         [ActiveEvent(Name = "Magix.MetaView.ChangePropertyName")]

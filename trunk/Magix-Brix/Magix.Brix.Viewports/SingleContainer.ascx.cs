@@ -371,6 +371,18 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        [ActiveEvent(Name = "Magix.Core.GetNumberOfChildrenOfContainer")]
+        protected void Magix_Core_GetNumberOfChildrenOfContainer(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["Container"].Get<string>().StartsWith("content"))
+            {
+                e.Params["Count"].Value = 
+                    Selector.FindControl<DynamicPanel>(
+                        this, 
+                        e.Params["Container"].Get<string>()).Controls.Count;
+            }
+        }
+
         [ActiveEvent(Name = "LoadControl")]
         protected void LoadControl(object sender, ActiveEventArgs e)
         {

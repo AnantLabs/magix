@@ -471,6 +471,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
         }
 
+        [ActiveEvent(Name = "Magix.Core.CheckIfIDIsBeingSingleEdited")]
+        protected void Magix_Core_CheckIfIDIsBeingSingleEdited(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["ID"].Get<int>() == DataSource["ID"].Get<int>())
+                e.Params["Yes"].Value = true;
+        }
+
         protected override void ReDataBind()
         {
             if (DataSource.Contains("ParentID") && 

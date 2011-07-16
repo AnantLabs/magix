@@ -42,6 +42,10 @@
       <DependentUpon>Clickable.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Tree.ascx.cs">
+      <DependentUpon>Tree.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="GetShortNote.ascx.cs">
       <DependentUpon>GetShortNote.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -123,6 +127,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GetShortNote.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Tree.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
