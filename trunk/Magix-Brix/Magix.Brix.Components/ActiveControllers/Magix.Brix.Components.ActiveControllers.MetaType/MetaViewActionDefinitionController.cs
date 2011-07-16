@@ -9,6 +9,7 @@ using Magix.Brix.Loader;
 using Magix.Brix.Types;
 using Magix.Brix.Data;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
+using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -69,7 +70,27 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             foreach (Action.ActionParams idx in action.Params)
             {
-                node[idx.Name].Value = idx.Value;
+                switch (idx.TypeName)
+                {
+                    case "System.String":
+                        node[idx.Name].Value = idx.Value;
+                        break;
+                    case "System.Int32":
+                        node[idx.Name].Value = int.Parse(idx.Value, CultureInfo.InvariantCulture);
+                        break;
+                    case "System.Decimal":
+                        node[idx.Name].Value = decimal.Parse(idx.Value, CultureInfo.InvariantCulture);
+                        break;
+                    case "System.DateTime":
+                        node[idx.Name].Value = DateTime.ParseExact(idx.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        break;
+                    case "System.Boolean":
+                        node[idx.Name].Value = bool.Parse(idx.Value);
+                        break;
+                    default:
+                        node[idx.Name].Value = idx.Value;
+                        break;
+                }
             }
 
             RaiseEvent(

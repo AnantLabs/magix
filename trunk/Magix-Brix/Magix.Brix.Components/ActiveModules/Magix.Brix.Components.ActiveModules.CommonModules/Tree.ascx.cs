@@ -95,6 +95,16 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 e.Params["ID"].Value = int.Parse(tree.SelectedItem.Info);
         }
 
+        [ActiveEvent(Name = "Magix.Core.ExpandTreeSelectedID")]
+        protected void Magix_Core_ExpandTreeSelectedID(object sender, ActiveEventArgs e)
+        {
+            if (tree.SelectedItem != null)
+            {
+                tree.SelectedItem.Expanded = true;
+                tree.SelectedItem.CssClass = tree.SelectedItem.CssClass.Replace(" mux-tree-collapsed", " mux-tree-expanded");
+            }
+        }
+
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
         protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
         {

@@ -6,21 +6,31 @@
 
 using System;
 using System.Web.UI;
+using Magix.UX;
 using Magix.UX.Widgets;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
-using Magix.UX;
 using Magix.UX.Widgets.Core;
+using Magix.Brix.Publishing.Common;
 
 namespace Magix.Brix.Components.ActiveModules.MetaView
 {
     [ActiveModule]
+    [PublisherPlugin]
     public class SingleView : ActiveModule
     {
         protected Panel ctrls;
 
         public override void InitialLoading(Node node)
         {
+            if (!node.Contains("MetaViewTypeName"))
+            {
+                // Probably in 'production mode' and hence need to get our data ...
+                node["MetaViewName"].Value = ViewName;
+                RaiseSafeEvent(
+                    "Magix.MetaView.GetViewData",
+                    node);
+            }
             base.InitialLoading(node);
             Load +=
                 delegate
@@ -117,17 +127,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                         DataSource["PropertyValues"][w.Info]["Value"].Value = (w as TextBox).Text;
                         DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
                     }
-                    else if (w is Label)
-                    {
-                        // Labels are ReadOnly, hence we skip them entirely, since they couldn't
-                        // by their very definition have been 'updated' in any ways ...
-                        
-                        // However, for future references, IF we were to include them, they
-                        // would look like the below ...
-
-                        //DataSource["PropertyValues"][w.Info]["Value"].Value = (w as Label).Text;
-                        //DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
-                    }
                 }
             }
         }
@@ -171,6 +170,13 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                     }
                 }
             }
+        }
+
+        [ModuleSetting]
+        public string ViewName
+        {
+            get { return ViewState["ViewName"] as string; }
+            set { ViewState["ViewName"] = value; }
         }
     }
 }

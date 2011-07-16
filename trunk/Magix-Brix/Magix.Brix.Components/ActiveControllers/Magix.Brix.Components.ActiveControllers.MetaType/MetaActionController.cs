@@ -9,6 +9,7 @@ using Magix.Brix.Loader;
 using Magix.Brix.Types;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using Magix.Brix.Data;
+using Magix.UX.Widgets;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -52,7 +53,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
-            node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.Meta.EditAction";
             node["CreateEventName"].Value = "Magix.Meta.CreateAction";
 
@@ -91,10 +91,30 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             Action a = Action.SelectByID(e.Params["ID"].Get<int>());
             EditActionItemParams(a, e.Params);
             EditActionItem(a, e.Params);
+
+            CreateRunParamButton(a);
+
             CreateCreateParamButton(a);
+
             CreateDeleteParamButton(a);
 
             ActiveEvents.Instance.RaiseClearControls("content6");
+        }
+
+        private void CreateRunParamButton(Action a)
+        {
+            Node node = new Node();
+
+            node["Text"].Value = "Run!";
+            node["ButtonCssClass"].Value = "span-4";
+            node["Append"].Value = true;
+            node["Event"].Value = "Magix.Meta.RaiseEvent";
+            node["Event"]["ActionID"].Value = a.ID;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content5",
+                node);
         }
 
         private void CreateCreateParamButton(Action a)
@@ -102,7 +122,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             Node node = new Node();
 
             node["Text"].Value = "New Param ...";
-            node["ButtonCssClass"].Value = "span-5 pushLeft-4";
+            node["ButtonCssClass"].Value = "span-5";
             node["Append"].Value = true;
             node["Event"].Value = "Magix.Meta.CreateParameter";
             node["Event"]["ID"].Value = a.ID;
@@ -119,7 +139,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Text"].Value = "Delete";
             node["Seed"].Value = "delete-button";
-            node["ButtonCssClass"].Value = "span-5";
+            node["ButtonCssClass"].Value = "span-4 last";
             node["Append"].Value = true;
             node["Enabled"].Value = false;
             node["Event"].Value = "Magix.Meta.DeleteParameter";
@@ -148,6 +168,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 tr.Commit();
             }
 
+            ActiveEvents.Instance.RaiseClearControls("content6");
+
             Node node = new Node();
             node["Seed"].Value = "delete-button";
             node["Enabled"].Value = false;
@@ -174,9 +196,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 Action a = Action.SelectByID(e.Params["ID"].Get<int>());
 
                 Node tmp = new Node();
+
                 RaiseEvent(
                     "Magix.Core.GetTreeSelectedID",
                     tmp);
+
+                RaiseEvent(
+                    "Magix.Core.ExpandTreeSelectedID");
 
                 Action.ActionParams p = new Action.ActionParams();
                 p.Value = "Default, please change ...";
@@ -278,6 +304,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // First filtering OUT columns ...!
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Value"].Value = true;
+            node["WhiteListColumns"]["TypeName"].Value = true;
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
@@ -286,6 +313,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Value"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.Publishing.GetMetaTypeName";
 
             node["Width"].Value = 18;
             node["Last"].Value = true;
@@ -315,6 +343,62 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             RaiseEvent(
                 "Magix.Core.EnabledClickable",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetMetaTypeName")]
+        private void Magix_Publishing_GetMetaTypeName(object sender, ActiveEventArgs e)
+        {
+            Action.ActionParams p = Action.ActionParams.SelectByID(e.Params["ID"].Get<int>());
+
+            SelectList ls = new SelectList();
+            ls.CssClass = "gridSelect";
+
+            ls.SelectedIndexChanged +=
+                delegate
+                {
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
+                    {
+                        p.TypeName = ls.SelectedItem.Value;
+
+                        p.Save();
+
+                        tr.Commit();
+                    }
+                };
+
+
+            ls.Items.Add(new ListItem("String", "System.String"));
+            ls.Items.Add(new ListItem("Integer", "System.Int32"));
+            ls.Items.Add(new ListItem("Decimal", "System.Decimal"));
+            ls.Items.Add(new ListItem("DateTime", "System.DateTime"));
+            ls.Items.Add(new ListItem("Bool", "System.Boolean"));
+
+            switch (p.TypeName)
+            {
+                case "System.String":
+                    ls.SelectedIndex = 0;
+                    break;
+                case "System.Int32":
+                    ls.SelectedIndex = 1;
+                    break;
+                case "System.Decimal":
+                    ls.SelectedIndex = 2;
+                    break;
+                case "System.DateTime":
+                    ls.SelectedIndex = 3;
+                    break;
+                case "System.Boolean":
+                    ls.SelectedIndex = 4;
+                    break;
+                default:
+                    ls.Enabled = false;
+                    ls.ToolTip = "Some Custom type I cannot infer ...";
+                    break;
+            }
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = ls;
         }
 
         [ActiveEvent(Name = "Magix.Meta.GetActionItemTree")]

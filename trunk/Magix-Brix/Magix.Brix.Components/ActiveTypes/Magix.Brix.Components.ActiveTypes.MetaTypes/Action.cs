@@ -30,7 +30,17 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             public string Value { get; set; }
 
             [ActiveField]
+            public string TypeName { get; set; }
+
+            [ActiveField]
             public LazyList<ActionParams> Children { get; set; }
+
+            public override void Save()
+            {
+                if (string.IsNullOrEmpty(TypeName))
+                    TypeName = "System.String";
+                base.Save();
+            }
         }
 
         public Action()
