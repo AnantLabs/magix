@@ -13,6 +13,7 @@
 <mux:SelectList
     runat="server"
     CssClass="span-4"
+    Enabled="false"
     OnSelectedIndexChanged="lst_SelectedIndexChanged"
     id="lst">
     <mux:ListItem Text="List view ..." Value="ListView" />
@@ -31,6 +32,7 @@
     <mux:CheckBox
         runat="server"
         OnCheckedChanged="hasSearch_CheckedChanged"
+        Enabled="false"
         id="hasSearch" />
     <mux:Label
         runat="server"
@@ -42,13 +44,14 @@
 <mux:InPlaceTextAreaEdit
     runat="server"
     CssClass="mux-in-place-edit span-4 type-editor down-1 clear-left push-2"
+    style="display:none;"
     ToolTip="Caption of Form"
     OnTextChanged="caption_TextChanged"
     id="caption" />
 
 <mux:Panel
     runat="server"
-    CssClass="span-21 last clear-left"
+    CssClass="span-21 last clear-left down-1"
     id="properties" />
 
 <mux:Button

@@ -13,6 +13,7 @@ using Magix.Brix.Loader;
 using Magix.UX;
 using System.Collections.Generic;
 
+// TODO: Use TreeView.ascx in common modules instead ...
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     [ActiveModule]
@@ -52,9 +53,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                     CreateSingleItem(idxChild, i);
                 }
             }
-            else
-            {
-            }
 
             if (ixC is TreeView)
                 ixC.Controls.Add(i);
@@ -77,6 +75,25 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         protected void Magix_Publishing_PageWasDeleted(object sender, ActiveEventArgs e)
         {
             ReDataBind();
+        }
+
+        [ActiveEvent(Name = "Magix.Core.SetTreeSelectedID")]
+        protected void Magix_Core_SetTreeSelectedID(object sender, ActiveEventArgs e)
+        {
+            ChangeTreeViewSelectedNode(e.Params);
+        }
+
+        private void ChangeTreeViewSelectedNode(Node node)
+        {
+            tree.SelectedItem.Expanded = true;
+            tree.SelectedItem.CssClass +=
+                tree.SelectedItem.CssClass.Replace(" mux-tree-collapsed", " mux-tree-expanded");
+            tree.SelectedItem.CssClass =
+                tree.SelectedItem.CssClass.Replace(" mux-tree-selected", "");
+
+            tree.SelectedItem = Selector.FindControl<TreeItem>(tree, "i" + node["ID"].Get<int>());
+
+            tree.SelectedItem.CssClass += " mux-tree-selected";
         }
 
         [ActiveEvent(Name = "Magix.Publishing.PageWasUpdated")]

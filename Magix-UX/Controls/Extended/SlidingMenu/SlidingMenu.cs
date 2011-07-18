@@ -44,6 +44,8 @@ namespace Magix.UX.Widgets
          */
         public event EventHandler LeafMenuItemClicked;
 
+        public event EventHandler BackClicked;
+
         public SlidingMenu()
         {
             CssClass = "mux-sliding-menu";
@@ -58,6 +60,14 @@ namespace Magix.UX.Widgets
         {
             get { return ViewState["ActiveMenuItem"] == null ? "" : (string)ViewState["ActiveMenuItem"]; }
             private set { ViewState["ActiveMenuItem"] = value; }
+        }
+
+        internal bool noSlide;
+
+        public bool SlideOnIcon
+        {
+            get { return ViewState["SlideOnIcon"] == null ? false : (bool)ViewState["SlideOnIcon"]; }
+            set { ViewState["SlideOnIcon"] = value; }
         }
 
         protected override void OnInit(EventArgs e)
@@ -80,13 +90,15 @@ namespace Magix.UX.Widgets
             Controls.AddAt(0, _back);
         }
 
+        private bool backButtonClicked;
         private void BackButtonClicked(object sender, EventArgs e)
         {
+            backButtonClicked = true;
             string idOfLevel = (sender as LinkButton).Info;
             SlidingMenuItem item = Selector.FindControl<SlidingMenuItem>(this, idOfLevel);
             int noLevels = -1;
             Control idx = item.Parent;
-            SlidingMenuItem toBecomeActive = null;
+            SlidingMenuItem toBecomeActive = item;
             while (!(idx is SlidingMenu))
             {
                 if (idx is SlidingMenuLevel)
@@ -110,6 +122,8 @@ namespace Magix.UX.Widgets
                 ActiveMenuItem = "";
             else
                 ActiveMenuItem = toBecomeActive.ID;
+            if (BackClicked != null)
+                BackClicked(this, new EventArgs());
         }
 
         internal SlidingMenuLevel SlidingMenuLevel
@@ -144,33 +158,55 @@ namespace Magix.UX.Widgets
             }
             else
             {
-                if (string.IsNullOrEmpty(ActiveMenuItem))
+                if (!noSlide)
                 {
-                    _back.Style[Styles.visibility] = "hidden";
-                }
-                else
-                {
-                    SlidingMenuItem item = Selector.FindControl<SlidingMenuItem>(this, ActiveMenuItem);
-                    if (item.SlidingMenuLevel != null)
+                    if (string.IsNullOrEmpty(ActiveMenuItem))
                     {
-                        _back.Text = item.Text;
-                        _back.Info = item.ID;
-                        _back.Style[Styles.visibility] = "visible";
+                        _back.Style[Styles.visibility] = "hidden";
                     }
                     else
                     {
-                        Control idx = item.Parent;
-                        int noLevels = 0;
-                        while (!(idx is SlidingMenu))
+                        SlidingMenuItem item = Selector.FindControl<SlidingMenuItem>(this, ActiveMenuItem);
+                        if (item.SlidingMenuLevel != null)
                         {
-                            if (idx is SlidingMenuLevel)
-                                noLevels += 1;
-                            idx = idx.Parent;
+                            if (backButtonClicked)
+                            {
+                                SlidingMenuItem it2 = item.Parent.Parent as SlidingMenuItem;
+                                if (it2 != null)
+                                {
+                                    _back.Text = "< " + it2.Text;
+                                    _back.Info = it2.ID;
+                                    _back.Style[Styles.visibility] = "visible";
+                                }
+                                else
+                                {
+                                    _back.Text = "&nbsp;";
+                                    _back.Info = "";
+                                    _back.Style[Styles.visibility] = "visible";
+                                }
+                            }
+                            else
+                            {
+                                _back.Text = "< " + item.Text;
+                                _back.Info = item.ID;
+                                _back.Style[Styles.visibility] = "visible";
+                            }
                         }
-                        if (noLevels >= 2)
-                            _back.Style[Styles.visibility] = "visible";
                         else
-                            _back.Style[Styles.visibility] = "hidden";
+                        {
+                            Control idx = item.Parent;
+                            int noLevels = 0;
+                            while (!(idx is SlidingMenu))
+                            {
+                                if (idx is SlidingMenuLevel)
+                                    noLevels += 1;
+                                idx = idx.Parent;
+                            }
+                            if (noLevels >= 2)
+                                _back.Style[Styles.visibility] = "visible";
+                            else
+                                _back.Style[Styles.visibility] = "hidden";
+                        }
                     }
                 }
             }

@@ -18,8 +18,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Views"]["Caption"].Value = "View Views ...";
-            e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Views"]["Event"]["Name"].Value = "Magix.MetaView.ViewMetaViews";
+            e.Params["Items"]["MetaType"]["Items"]["Views"]["Caption"].Value = "View Views ...";
+            e.Params["Items"]["MetaType"]["Items"]["Views"]["Event"]["Name"].Value = "Magix.MetaView.ViewMetaViews";
         }
 
         [ActiveEvent(Name = "Magix.MetaView.ViewMetaViews")]

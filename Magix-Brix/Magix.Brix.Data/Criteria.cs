@@ -72,7 +72,15 @@ namespace Magix.Brix.Data
          */
         public static Criteria Id(int id)
         {
-            return new CritID(id);
+            return new CritNoID(id);
+        }
+
+        /**
+         * Static constructor to create a criteria of type CritID.
+         */
+        public static Criteria NotId(int id)
+        {
+            return new CritNoID(id);
         }
 
         /**
@@ -298,6 +306,16 @@ namespace Magix.Brix.Data
     public class CritID : Criteria
     {
         public CritID(int id)
+            : base(null, id)
+        { }
+    }
+
+    /**
+     * Specific ID for instance ...
+     */
+    public class CritNoID : Criteria
+    {
+        public CritNoID(int id)
             : base(null, id)
         { }
     }

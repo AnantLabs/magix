@@ -22,15 +22,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.GetSliderMenuItems")]
         protected void Magix_Publishing_GetSliderMenuItems(object sender, ActiveEventArgs e)
         {
-            PageObject root = null;
-            foreach (PageObject idx in PageObject.Select())
+            WebPage root = null;
+            foreach (WebPage idx in WebPage.Select())
             {
                 if (idx.Parent != null)
                     continue; // Looking for Root Page and starting traversal from it ...
 
                 root = idx;
 
-                foreach (PageObject idxP in idx.Children)
+                foreach (WebPage idxP in idx.Children)
                 {
                     GetOneMenuItem(e.Params, idxP);
                 }
@@ -43,13 +43,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 RaiseEvent(
                     "Magix.Publishing.FindFirstPageRequestCanAccess",
                     node);
-                if (!node.Contains("AccessToID"))
-                    throw new ArgumentException("You don't have access to this website ...");
-                GetOneMenuItem(e.Params, PageObject.SelectByID(node["AccessToID"].Get<int>()));
+                if (node.Contains("AccessToID"))
+                {
+                    // First [breadth-first] page menu object user has access too ...
+                    GetOneMenuItem(e.Params, WebPage.SelectByID(node["AccessToID"].Get<int>()));
+                }
             }
         }
 
-        private void GetOneMenuItem(Node node, PageObject po)
+        private void GetOneMenuItem(Node node, WebPage po)
         {
             bool canAccess = true;
             if (User.Current != null)
@@ -92,7 +94,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["Items"]["i" + po.ID]["Caption"].Value = po.Name;
                 node["Items"]["i" + po.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
                 node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
-                foreach (PageObject idx in po.Children)
+                foreach (WebPage idx in po.Children)
                 {
                     GetOneMenuItem(node["Items"]["i" + po.ID], idx);
                 }
@@ -102,7 +104,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.SliderMenuItemClicked")]
         protected void Magix_Publishing_SliderMenuItemClicked(object sender, ActiveEventArgs e)
         {
-            PageObject o = PageObject.SelectFirst(Criteria.Eq("URL", e.Params["MenuItemID"].Get<string>()));
+            WebPage o = WebPage.SelectFirst(Criteria.Eq("URL", e.Params["MenuItemID"].Get<string>()));
 
             Node node = new Node();
 

@@ -13,13 +13,22 @@ using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
+    /**
+     * Gives access to a page according to a specific role. 
+     */
     [ActiveType]
-    public class PageObjectAccess : ActiveType<PageObjectAccess>
+    public class WebPageRoleAccess : ActiveType<WebPageRoleAccess>
     {
+        /**
+         * Role to grant access to
+         */
         [ActiveField(IsOwner = false)]
         public Role Role { get; set; }
 
+        /**
+         * Page to grant role access to ...
+         */
         [ActiveField(IsOwner = false)]
-        public PageObject Page { get; set; }
+        public WebPage Page { get; set; }
     }
 }

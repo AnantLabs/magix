@@ -10,6 +10,8 @@
 
 <mux:SlidingMenu 
     runat="server" 
+    SlideOnIcon="true"
+    OnBackClicked="slid_BackClicked"
     OnMenuItemClicked="slid_MenuItemClicked"
     ID="slid">
     <mux:SlidingMenuLevel 

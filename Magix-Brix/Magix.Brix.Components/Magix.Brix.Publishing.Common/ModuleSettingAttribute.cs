@@ -12,5 +12,7 @@ namespace Magix.Brix.Publishing.Common
     public class ModuleSettingAttribute : Attribute
     {
         public string ModuleEditorName = "";
+
+        public string DefaultValue = "Default";
     }
 }

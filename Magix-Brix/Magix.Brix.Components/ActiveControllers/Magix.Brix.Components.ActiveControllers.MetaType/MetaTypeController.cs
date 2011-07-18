@@ -18,16 +18,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
-            if (!e.Params["Items"].Contains("Admin"))
-            {
-                e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
-            }
-            if (!e.Params["Items"]["Admin"]["Items"].Contains("MetaType"))
-            {
-                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
-                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Objects ...";
-                e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
-            }
+            e.Params["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
+            e.Params["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Objects ...";
+            e.Params["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
         }
 
         [ActiveEvent(Name = "Magix.MetaType.OpenMetaTypeDashboard")]
@@ -35,35 +28,51 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             Node node = new Node();
 
+            if (e.Params != null && 
+                e.Params.Contains("ReUseNodeX") &&
+                e.Params["ReUseNodeX"].Get<bool>())
+            {
+                node = e.Params;
+            }
+
             node["FullTypeName"].Value = typeof(MetaType).FullName;
-            node["Container"].Value = "content3";
-            node["Width"].Value = 18;
-            node["Last"].Value = true;
+            if (!node.Contains("Container"))
+                node["Container"].Value = "content3";
+            if (!node.Contains("Width"))
+                node["Width"].Value = 18;
+            if (!node.Contains("Last"))
+                node["Last"].Value = true;
 
-            node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
-            node["WhiteListColumns"]["Reference"].Value = true;
-            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 5;
-            node["WhiteListColumns"]["Created"].Value = true;
-            node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 3;
-            node["WhiteListColumns"]["Values"].Value = true;
-            node["WhiteListColumns"]["Values"]["ForcedWidth"].Value = 2;
+            if (!node.Contains("WhiteListColumns"))
+            {
+                node["WhiteListColumns"]["Name"].Value = true;
+                node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
+                node["WhiteListColumns"]["Reference"].Value = true;
+                node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 5;
+                node["WhiteListColumns"]["Created"].Value = true;
+                node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 3;
+                node["WhiteListColumns"]["Values"].Value = true;
+                node["WhiteListColumns"]["Values"]["ForcedWidth"].Value = 2;
+            }
 
-            node["FilterOnId"].Value = false;
-            node["IDColumnName"].Value = "Edit";
-            node["IDColumnValue"].Value = "Edit";
-            node["IDColumnEvent"].Value = "Magix.MetaType.EditType";
+            if (!node.Contains("FilterOnId"))
+            {
+                node["FilterOnId"].Value = false;
+                node["IDColumnName"].Value = "Edit";
+                node["IDColumnEvent"].Value = "Magix.MetaType.EditType";
 
-            node["ReuseNode"].Value = true;
-            node["CreateEventName"].Value = "Magix.MetaType.CreateType";
+                node["ReuseNode"].Value = true;
+                node["CreateEventName"].Value = "Magix.MetaType.CreateType";
+            }
 
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Values"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Values"]["NoFilter"].Value = true;
-
-            node["Container"].Value = "content3";
+            if (!node.Contains("Type"))
+            {
+                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["Values"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["Values"]["NoFilter"].Value = true;
+            }
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,

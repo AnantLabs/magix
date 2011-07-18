@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonActionController.cs" />
     <Compile Include="MetaActionController.cs" />
     <Compile Include="MetaTypeController.cs" />
     <Compile Include="MetaViewActionDefinitionController.cs" />

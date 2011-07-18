@@ -29,22 +29,22 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                if (PageTemplate.Count == 0)
+                if (WebPageTemplate.Count == 0)
                 {
                     // Creating a default template ...
-                    PageTemplate t1 = new PageTemplate();
+                    WebPageTemplate t1 = new WebPageTemplate();
                     t1.Name = "Menu Left";
                     
-                    PageTemplateContainer c1 = new PageTemplateContainer();
+                    WebPartTemplate c1 = new WebPartTemplate();
                     c1.Name = "Menu";
                     c1.ViewportContainer = "content1";
                     c1.Width = 6;
                     c1.Height = 20;
-                    c1.Top = 8;
+                    c1.MarginTop = 8;
                     c1.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.SliderMenu";
                     t1.Containers.Add(c1);
 
-                    PageTemplateContainer c2 = new PageTemplateContainer();
+                    WebPartTemplate c2 = new WebPartTemplate();
                     c2.Name = "Header";
                     c2.ViewportContainer = "content2";
                     c2.Width = 18;
@@ -53,45 +53,45 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     c2.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.Header";
                     t1.Containers.Add(c2);
 
-                    PageTemplateContainer c3 = new PageTemplateContainer();
+                    WebPartTemplate c3 = new WebPartTemplate();
                     c3.Name = "Content";
                     c3.ViewportContainer = "content3";
                     c3.Width = 18;
                     c3.Height = 30;
-                    c3.BottomMargin = 10;
-                    c3.Top = 2;
+                    c3.MarginBottom = 10;
+                    c3.MarginTop = 2;
                     c3.Last = true;
                     c3.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.Content";
                     t1.Containers.Add(c3);
 
                     t1.Save();
                 }
-                if (PageObject.Count == 0)
+                if (WebPage.Count == 0)
                 {
                     // Creating a default page ...
-                    PageObject o = new PageObject();
-                    o.Name = "Defaut Home Page";
-                    o.Template = PageTemplate.SelectFirst(Criteria.Eq("Name", "Menu Left"));
+                    WebPage o = new WebPage();
+                    o.Name = "Default Home Page";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "Menu Left"));
 
-                    PageObjectTemplate t1 = new PageObjectTemplate();
-                    t1.Container = PageTemplateContainer.SelectFirst(Criteria.Eq("Name", "Menu"));
-                    o.ObjectTemplates.Add(t1);
+                    WebPart t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu"));
+                    o.WebParts.Add(t1);
 
-                    PageObjectTemplate t2 = new PageObjectTemplate();
-                    t2.Container = PageTemplateContainer.SelectFirst(Criteria.Eq("Name", "Header"));
-                    PageObjectTemplate.PageObjectTemplateSetting s1 = new PageObjectTemplate.PageObjectTemplateSetting();
+                    WebPart t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header"));
+                    WebPart.WebPartSetting s1 = new WebPart.WebPartSetting();
                     s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
                     s1.Value = "Welcome to Magix";
                     t2.Settings.Add(s1);
-                    o.ObjectTemplates.Add(t2);
+                    o.WebParts.Add(t2);
 
-                    PageObjectTemplate t3 = new PageObjectTemplate();
-                    t3.Container = PageTemplateContainer.SelectFirst(Criteria.Eq("Name", "Content"));
-                    PageObjectTemplate.PageObjectTemplateSetting s2 = new PageObjectTemplate.PageObjectTemplateSetting();
+                    WebPart t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Content"));
+                    WebPart.WebPartSetting s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = "<p>Hello there world ...</p>";
                     t3.Settings.Add(s2);
-                    o.ObjectTemplates.Add(t3);
+                    o.WebParts.Add(t3);
 
                     o.Save();
                 }
@@ -128,7 +128,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.GetEditPagesDataSource")]
         protected void Magix_Publishing_GetEditPagesDataSource(object sender, ActiveEventArgs e)
         {
-            foreach (PageObject idx in PageObject.Select())
+            foreach (WebPage idx in WebPage.Select())
             {
                 if (idx.Parent != null)
                     continue; // Only 'Root' objects ...
@@ -141,9 +141,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        private void DoChildren(PageObject parent, Node node)
+        private void DoChildren(WebPage parent, Node node)
         {
-            foreach (PageObject idx in parent.Children)
+            foreach (WebPage idx in parent.Children)
             {
                 node["P" + idx.ID]["Caption"].Value = idx.Name;
                 node["P" + idx.ID]["ID"].Value = idx.ID;
@@ -156,7 +156,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.EditSpecificPage")]
         protected void Magix_Publishing_EditSpecificPage(object sender, ActiveEventArgs e)
         {
-            PageObject p = PageObject.SelectByID(e.Params["ID"].Get<int>());
+            WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
             Node node = new Node();
 
@@ -189,11 +189,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
-        private static void GetTemplates(PageObject p, Node node)
+        private static void GetTemplates(WebPage p, Node node)
         {
-            foreach (PageObjectTemplate idx in p.ObjectTemplates)
+            foreach (WebPart idx in p.WebParts)
             {
-                foreach (PageObjectTemplate.PageObjectTemplateSetting idxI in idx.Settings)
+                foreach (WebPart.WebPartSetting idxI in idx.Settings)
                 {
                     Type moduleType = Adapter.ActiveModules.Find(
                         delegate(Type idxT)
@@ -243,15 +243,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                PageObject o = PageObject.SelectByID(e.Params["ID"].Get<int>());
+                WebPage o = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
                 if (e.Params.Contains("Text"))
                     o.Name = e.Params["Text"].Get<string>();
                 if (e.Params.Contains("URL"))
-                    o.SetURL(e.Params["URL"].Get<string>());
+                    o.ChangeURL(e.Params["URL"].Get<string>());
                 if (e.Params.Contains("PageTemplateID"))
                 {
-                    o.Template = PageTemplate.SelectByID(e.Params["PageTemplateID"].Get<int>());
+                    o.Template = WebPageTemplate.SelectByID(e.Params["PageTemplateID"].Get<int>());
                 }
                 o.Save();
                 if (e.Params.Contains("PageTemplateID"))
@@ -273,9 +273,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                PageObject o = PageObject.SelectByID(e.Params["ID"].Get<int>());
+                WebPage o = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
-                PageObject n = new PageObject();
+                WebPage n = new WebPage();
                 n.Parent = o;
                 o.Children.Add(n);
 
@@ -286,6 +286,17 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 // Signalizing that Pages has been changed, in case other modules are
                 // dependent upon knowing ...
                 RaiseEvent("Magix.Publishing.PageWasUpdated");
+
+                Node node = new Node();
+                node["ID"].Value = n.ID;
+
+                RaiseEvent(
+                    "Magix.Core.SetTreeSelectedID",
+                    node);
+
+                RaiseEvent(
+                    "Magix.Publishing.EditSpecificPage",
+                    node);
             }
         }
 
@@ -294,7 +305,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                PageObject o = PageObject.SelectByID(e.Params["ID"].Get<int>());
+                WebPage o = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
                 if (o.Parent == null)
                 {
@@ -320,19 +331,19 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                PageTemplateContainer t = PageTemplateContainer.SelectByID(e.Params["ID"].Get<int>());
+                WebPartTemplate t = WebPartTemplate.SelectByID(e.Params["ID"].Get<int>());
                 string propertyName = e.Params["PropertyName"].Get<string>();
 
-                PageObject o = PageObject.SelectByID(e.Params["PageObjectID"].Get<int>());
+                WebPage o = WebPage.SelectByID(e.Params["PageObjectID"].Get<int>());
 
-                PageObjectTemplate ot = o.ObjectTemplates.Find(
-                    delegate(PageObjectTemplate idx)
+                WebPart ot = o.WebParts.Find(
+                    delegate(WebPart idx)
                     {
                         return idx.Container == t;
                     });
 
-                PageObjectTemplate.PageObjectTemplateSetting set = ot.Settings.Find(
-                    delegate(PageObjectTemplate.PageObjectTemplateSetting idx)
+                WebPart.WebPartSetting set = ot.Settings.Find(
+                    delegate(WebPart.WebPartSetting idx)
                     {
                         return propertyName == idx.Name;
                     });
@@ -357,14 +368,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                PageObject po = PageObject.SelectByID(objId);
-                PageObjectTemplate pot = po.ObjectTemplates.Find(
-                    delegate(PageObjectTemplate idx)
+                WebPage po = WebPage.SelectByID(objId);
+                WebPart pot = po.WebParts.Find(
+                    delegate(WebPart idx)
                     {
                         return idx.Container.ID == potId;
                     });
-                PageObjectTemplate.PageObjectTemplateSetting set = pot.Settings.Find(
-                    delegate(PageObjectTemplate.PageObjectTemplateSetting idx)
+                WebPart.WebPartSetting set = pot.Settings.Find(
+                    delegate(WebPart.WebPartSetting idx)
                     {
                         return idx.Name == propertyName;
                     });
@@ -388,8 +399,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                foreach (PageObject idx in 
-                    PageObject.Select(
+                foreach (WebPage idx in 
+                    WebPage.Select(
                         Criteria.ExistsIn(e.Params["ID"].Get<int>(), true)))
                 {
                     idx.Save();

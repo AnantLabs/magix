@@ -41,5 +41,12 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
         [ActiveField]
         public LazyList<Value> Values { get; set; }
+
+        public override void Save()
+        {
+            if (ID == 0)
+                Created = DateTime.Now;
+            base.Save();
+        }
     }
 }

@@ -103,12 +103,22 @@ namespace Magix.UX.Widgets
         {
             _text.ID = "txt";
             _text.CssClass = "mux-sliding-menu-item-text";
-            _text.Click += MenuItemClicked;
             _icon.ID = "icon";
             _icon.Text = "&gt;";
             _icon.CssClass = "mux-sliding-menu-item-icon";
             if (SlidingMenuLevel != null)
                 SlidingMenuLevel.Style[Styles.display] = "none";
+
+            if (SlidingMenu.SlideOnIcon)
+            {
+                _icon.Click += MenuItemClicked;
+                _text.Click += MenuItemClicked2;
+            }
+            else
+            {
+                _text.Click += MenuItemClicked;
+            }
+            
             _text.Controls.Add(_icon);
             Controls.AddAt(0, _text);
         }
@@ -117,6 +127,13 @@ namespace Magix.UX.Widgets
         {
             // Raising event handler for item clicked...
             SlidingMenu.RaiseMenuItemClicked(this, SlidingMenuLevel == null ? null : SlidingMenuLevel);
+        }
+
+        protected void MenuItemClicked2(object sender, EventArgs e)
+        {
+            SlidingMenu.noSlide = true;
+            // Raising event handler for item clicked...
+            SlidingMenu.RaiseMenuItemClicked(this, null);
         }
 
         protected override void OnPreRender(EventArgs e)

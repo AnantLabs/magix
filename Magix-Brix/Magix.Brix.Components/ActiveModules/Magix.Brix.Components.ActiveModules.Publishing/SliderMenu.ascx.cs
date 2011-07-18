@@ -106,10 +106,42 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             item.CssClass += " selected";
         }
 
+        protected void slid_BackClicked(object sender, EventArgs e)
+        {
+            SlidingMenuItem item = Selector.FindControl<SlidingMenuItem>(
+                slid,
+                slid.ActiveMenuItem);
+            string eventName = item.Info.Split('|')[0];
+            string menuItemId = item.Info.Split('|')[1];
+
+            Node node = new Node();
+
+            node["MenuItemID"].Value = menuItemId;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                eventName,
+                node);
+
+            SlidingMenuItem old = Selector.SelectFirst<SlidingMenuItem>(
+                root,
+                delegate(Control idx)
+                {
+                    return (idx is BaseWebControl) &&
+                        (idx as BaseWebControl).CssClass.Contains(" selected");
+                });
+
+            if (old != null)
+                old.CssClass = old.CssClass.Replace(" selected", "");
+
+            item.CssClass += " selected";
+        }
+
         [ActiveEvent(Name = "Magix.Publishing.ShouldReloadWebPart")]
         protected void Magix_Publishing_ShouldReloadWebPart(object sender, ActiveEventArgs e)
         {
-            if (e.Params["ModuleName"].Get<string>() == typeof(SliderMenu).FullName)
+            if (e.Params["ModuleName"].Get<string>() == typeof(SliderMenu).FullName &&
+                e.Params["Container"].Get<string>() == Parent.ID)
             {
                 e.Params["Stop"].Value = true;
             }

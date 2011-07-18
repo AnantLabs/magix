@@ -19,17 +19,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
-            if (!e.Params["Items"].Contains("Admin"))
-            {
-                e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
-            }
-            e.Params["Items"]["Admin"]["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
+            e.Params["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
 
-            e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Objects ...";
-            e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
+            e.Params["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Objects ...";
+            e.Params["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
 
-            e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Actions"]["Caption"].Value = "View Actions ...";
-            e.Params["Items"]["Admin"]["Items"]["MetaType"]["Items"]["Actions"]["Event"]["Name"].Value = "Magix.MetaType.ViewActions";
+            e.Params["Items"]["MetaType"]["Items"]["Actions"]["Caption"].Value = "View Actions ...";
+            e.Params["Items"]["MetaType"]["Items"]["Actions"]["Event"]["Name"].Value = "Magix.MetaType.ViewActions";
         }
 
         [ActiveEvent(Name = "Magix.MetaType.ViewActions")]
