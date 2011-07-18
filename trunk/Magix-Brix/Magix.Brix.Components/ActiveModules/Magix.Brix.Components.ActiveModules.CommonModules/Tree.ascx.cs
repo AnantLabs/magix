@@ -95,6 +95,15 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 e.Params["ID"].Value = int.Parse(tree.SelectedItem.Info);
         }
 
+        [ActiveEvent(Name = "Magix.Core.SetTreeSelectedID")]
+        protected void Magix_Core_SetTreeSelectedID(object sender, ActiveEventArgs e)
+        {
+            tree.SelectedItem = Selector.FindControl<TreeItem>(tree, "i-" + e.Params["ID"].Get<int>());
+            tree.SelectedItem.Expanded = true;
+            tree.SelectedItem.CssClass =
+                tree.SelectedItem.CssClass.Replace(" mux-tree-collapsed", " mux-tree-expanded");
+        }
+
         [ActiveEvent(Name = "Magix.Core.ExpandTreeSelectedID")]
         protected void Magix_Core_ExpandTreeSelectedID(object sender, ActiveEventArgs e)
         {

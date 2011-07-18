@@ -57,6 +57,22 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 e.Params["Items"]["Publishing"]["Caption"].Value = "Publishing";
             }
+            if (!e.Params["Items"]["Publishing"]["Items"].Contains("Pages"))
+            {
+                e.Params["Items"]["Publishing"]["Items"]["Pages"]["Caption"].Value = "Pages ...";
+                e.Params["Items"]["Publishing"]["Items"]["Pages"]["Event"]["Name"].Value = "Magix.Publishing.EditPages";
+            }
+            if (!e.Params["Items"]["Publishing"]["Items"].Contains("Templates"))
+            {
+                e.Params["Items"]["Publishing"]["Items"]["Templates"]["Caption"].Value = "Templates ...";
+                e.Params["Items"]["Publishing"]["Items"]["Templates"]["Event"]["Name"].Value = "Magix.Publishing.EditTemplates";
+            }
+
+            // Putting plugins just beneath Publishing menu item ...
+            RaiseEvent(
+                "Magix.Publishing.GetPluginMenuItems",
+                e.Params);
+
             if (!e.Params["Items"].Contains("Admin"))
             {
                 e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
@@ -65,6 +81,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 e.Params["Items"]["Admin"]["Items"]["DBAdmin"]["Caption"].Value = "Database ...";
                 e.Params["Items"]["Admin"]["Items"]["DBAdmin"]["Event"]["Name"].Value = "Magix.Publishing.ViewClasses";
+            }
+            if (!e.Params["Items"]["Admin"]["Items"].Contains("Explorer"))
+            {
+                e.Params["Items"]["Admin"]["Items"]["Explorer"]["Caption"].Value = "File system ...";
+                e.Params["Items"]["Admin"]["Items"]["Explorer"]["Event"]["Name"].Value = "Magix.Publishing.ViewFileSystem";
             }
             if (!e.Params["Items"]["Admin"]["Items"].Contains("Roles"))
             {
@@ -76,25 +97,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 e.Params["Items"]["Admin"]["Items"]["Users"]["Caption"].Value = "Users ...";
                 e.Params["Items"]["Admin"]["Items"]["Users"]["Event"]["Name"].Value = "Magix.Publishing.EditUsers";
             }
-            if (!e.Params["Items"]["Publishing"]["Items"].Contains("Pages"))
-            {
-                e.Params["Items"]["Publishing"]["Items"]["Pages"]["Caption"].Value = "Pages ...";
-                e.Params["Items"]["Publishing"]["Items"]["Pages"]["Event"]["Name"].Value = "Magix.Publishing.EditPages";
-            }
-            if (!e.Params["Items"]["Publishing"]["Items"].Contains("Templates"))
-            {
-                e.Params["Items"]["Publishing"]["Items"]["Templates"]["Caption"].Value = "Templates ...";
-                e.Params["Items"]["Publishing"]["Items"]["Templates"]["Event"]["Name"].Value = "Magix.Publishing.EditTemplates";
-            }
+
             if (!e.Params["Items"].Contains("LogOut"))
             {
                 e.Params["Items"]["LogOut"]["Caption"].Value = "Logout!";
                 e.Params["Items"]["LogOut"]["Event"]["Name"].Value = "Magix.Core.UserLoggedOut";
             }
-
-            RaiseEvent(
-                "Magix.Publishing.GetPluginMenuItems",
-                e.Params);
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Menu.Slider",

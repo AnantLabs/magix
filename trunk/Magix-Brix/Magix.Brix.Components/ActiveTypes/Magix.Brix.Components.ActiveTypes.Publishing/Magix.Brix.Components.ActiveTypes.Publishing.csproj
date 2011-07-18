@@ -36,11 +36,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PageObjectAccess.cs" />
-    <Compile Include="PageObjectTemplate.cs" />
-    <Compile Include="PageTemplateContainer.cs" />
-    <Compile Include="PageTemplate.cs" />
-    <Compile Include="PageObject.cs" />
+    <Compile Include="WebPageRoleAccess.cs" />
+    <Compile Include="WebPart.cs" />
+    <Compile Include="WebPartTemplate.cs" />
+    <Compile Include="WebPageTemplate.cs" />
+    <Compile Include="WebPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>

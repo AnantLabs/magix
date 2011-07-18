@@ -70,32 +70,41 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             foreach (Action.ActionParams idx in action.Params)
             {
-                switch (idx.TypeName)
-                {
-                    case "System.String":
-                        node[idx.Name].Value = idx.Value;
-                        break;
-                    case "System.Int32":
-                        node[idx.Name].Value = int.Parse(idx.Value, CultureInfo.InvariantCulture);
-                        break;
-                    case "System.Decimal":
-                        node[idx.Name].Value = decimal.Parse(idx.Value, CultureInfo.InvariantCulture);
-                        break;
-                    case "System.DateTime":
-                        node[idx.Name].Value = DateTime.ParseExact(idx.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        break;
-                    case "System.Boolean":
-                        node[idx.Name].Value = bool.Parse(idx.Value);
-                        break;
-                    default:
-                        node[idx.Name].Value = idx.Value;
-                        break;
-                }
+                GetActionParameters(node, idx);
             }
 
             RaiseEvent(
                 action.EventName,
                 node);
+        }
+
+        private static void GetActionParameters(Node node, Action.ActionParams a)
+        {
+            switch (a.TypeName)
+            {
+                case "System.String":
+                    node[a.Name].Value = a.Value;
+                    break;
+                case "System.Int32":
+                    node[a.Name].Value = int.Parse(a.Value, CultureInfo.InvariantCulture);
+                    break;
+                case "System.Decimal":
+                    node[a.Name].Value = decimal.Parse(a.Value, CultureInfo.InvariantCulture);
+                    break;
+                case "System.DateTime":
+                    node[a.Name].Value = DateTime.ParseExact(a.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    break;
+                case "System.Boolean":
+                    node[a.Name].Value = bool.Parse(a.Value);
+                    break;
+                default:
+                    node[a.Name].Value = a.Value;
+                    break;
+            }
+            foreach (Action.ActionParams idx in a.Children)
+            {
+                GetActionParameters(node[a.Name], idx);
+            }
         }
 
         [ActiveEvent(Name = "Magix.Meta.Actions.SaveObject")]

@@ -84,9 +84,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 // Creating property rows
                 foreach (Node idxProp in DataSource["Type"]["Properties"])
                 {
-                    if (DataSource.Contains("WhiteListColumns") &&
-                        DataSource["WhiteListColumns"].Contains(idxProp.Name) &&
-                        DataSource["WhiteListColumns"][idxProp.Name].Get<bool>())
+                    if (!DataSource.Contains("WhiteListColumns") ||
+                        (DataSource["WhiteListColumns"].Contains(idxProp.Name) &&
+                        DataSource["WhiteListColumns"][idxProp.Name].Get<bool>()))
                     {
                         tb.Controls.Add(CreateRow(DataSource["Object"]["Properties"][idxProp.Name]));
                     }
@@ -373,7 +373,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                                 n["NewValue"].Value = edit.Text;
                                                 n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                                                 RaiseSafeEvent(
-                                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                                    DataSource.Contains("ChangeSimplePropertyValue") ? 
+                                                        DataSource["ChangeSimplePropertyValue"].Get<string>() :
+                                                        "DBAdmin.Data.ChangeSimplePropertyValue",
                                                     n);
                                             };
                                         c1.Controls.Add(ed);
@@ -502,7 +504,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["Object"].UnTie();
                 //DataSource["Type"].UnTie(); // TODO; Remove ALL of these UnTies [Type unties] since they destroy architecture by not allowing DRY ...
                 if (RaiseSafeEvent(
-                    "DBAdmin.Data.GetObject",
+                    DataSource.Contains("GetObjectEvent") ?
+                        DataSource["GetObjectEvent"].Get<string>() :
+                        "DBAdmin.Data.GetObject",
                     DataSource))
                 {
                     pnl.Controls.Clear();

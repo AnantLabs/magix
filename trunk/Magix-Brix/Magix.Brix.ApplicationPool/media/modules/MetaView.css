@@ -20,24 +20,30 @@ div.type-editor textarea
 input[type=text].meta-view-form-element
 {
 	display:block;
-	min-width:350px;
+	width:100%;
+	min-width:100%;
+	margin-bottom:18px;
 }
 
 .meta-view-form-label
 {
+	margin-top:18px;
+	font-size:1.5em;
 }
 
 textarea.meta-view-form-textbox,
 input[type=text].meta-view-form-textbox
 {
+	width:100%;
+	min-width:100%;
+	margin-bottom:18px;
+
 	font-size:28px;
 	border-left:none 0;
 	border-right:none 0;
 	border-top:solid 1px #999;
 	border-bottom:solid 1px #999;
 	background-color:rgba(225, 225, 225, .5);
-	margin:0 0 18px 0;
-	padding-left:40px;
 
 	-moz-transition-property:background-color;
 	-moz-transition-duration:0.2s;
@@ -67,7 +73,7 @@ input[type=button].action-button
 	float:right;
 	display:block;
 	margin-right:0;
-	margin-bottom:18px;
 	margin-left:10px;
+	min-width:110px;
 }
 

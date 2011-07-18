@@ -75,7 +75,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.ID = "b-" + idx["ID"].Get<int>();
             if (idx.Contains("ReadOnly"))
                 b.Enabled = !idx["ReadOnly"].Get<bool>();
-            b.CssClass = "span-4 action-button";
+            b.CssClass = "action-button";
             b.Info = idx["Name"].Get<string>();
             b.ToolTip = idx["Description"].Get<string>();
             b.Click +=
@@ -149,10 +149,17 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.PlaceHolder = idx["Description"].Get<string>();
             b.ToolTip = b.PlaceHolder;
             b.Info = idx["Name"].Get<string>();
+            b.CssClass = "meta-view-form-element meta-view-form-textbox";
             if (shouldClear)
                 b.CssClass += " clear-both";
-            b.CssClass = "meta-view-form-element meta-view-form-textbox";
             ctrls.Controls.Add(b);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.GetContainerIDOfApplicationWebPart")]
+        protected void Magix_Meta_GetContainerIDOfApplicationWebPart(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["PageObjectTemplateID"].Get<int>() == DataSource["PageObjectTemplateID"].Get<int>())
+                e.Params["ID"].Value = this.Parent.ID;
         }
 
         [ActiveEvent(Name = "Magix.Meta.Actions.EmptyForm")]

@@ -62,5 +62,16 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
         [ActiveField]
         public bool StripInput { get; set; }
+
+        public override void Save()
+        {
+            foreach (Action idx in Action.Select(
+                Criteria.Eq("Name", Name)))
+            {
+                if (idx.ID != ID)
+                    throw new ArgumentException("Ooops, the Name for that Action seems to be already taken by another View in the system, either change the name of the previously named Action, or choose another name for this Action ...");
+            }
+            base.Save();
+        }
     }
 }

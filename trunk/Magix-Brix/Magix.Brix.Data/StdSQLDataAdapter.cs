@@ -357,7 +357,11 @@ order by Value{8}) as Tbl2 order by Value{7}",
                     }
                     else if (idx is ParentIdEquals)
                     {
-                        where += " and Parent=" + idx.Value;
+                        where += " and Parent = " + idx.Value;
+                    }
+                    else if (idx is CritNoID)
+                    {
+                        where += " and ID != " + idx.Value;
                     }
                     else if (idx is HasChildId)
                     {

@@ -10,10 +10,5 @@
 
 <mux:Panel
     runat="server"
-    id="wrp"
-    CssClass="span-10">
-    <mux:Panel
-        runat="server"
-        CssClass="span-10 padding-6 last down-1 clear-left"
-        id="ctrls" />
-</mux:Panel>
+    CssClass="magix-web-part-content"
+    id="ctrls" />

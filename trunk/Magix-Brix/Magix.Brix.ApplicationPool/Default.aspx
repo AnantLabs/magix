@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html xmlns:og="http://ogp.me/ns#">
     <head id="Head1" runat="server">
-        <title>Winergy, Inc.</title>
+        <title>Magix - Where Dreams Come Through ... !</title>
         <link rel="stylesheet" href="media/blueprint/screen.css" type="text/css" media="screen, projection" />
     </head>
     <body>

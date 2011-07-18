@@ -203,6 +203,92 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        [ActiveEvent(Name = "Magix.Core.SetTitleOfPage")]
+        protected void Magix_Core_SetTitleOfPage(object sender, ActiveEventArgs e)
+        {
+            string caption = e.Params["Caption"].Get<string>();
+            if (string.IsNullOrEmpty(caption))
+                throw new ArgumentException("Cannot set title to nothing. Try being more creative than such ... ;)");
+            Page.Title = caption; // TODO: Implement support for changing Browser Title bar during Ajax Callbacks ...
+        }
+
+        [ActiveEvent(Name = "Magix.Core.SetViewPortContainerSettings")]
+        protected void Magix_Core_SetViewPortContainerSettings(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["Container"].Get<string>().StartsWith("content"))
+            {
+                // Ours ...
+                DynamicPanel p = Selector.FindControl<DynamicPanel>(
+                    this,
+                    e.Params["Container"].Get<string>());
+                if (p != null)
+                {
+                    PutInSpan(e.Params, p, "Width", "span");
+                    PutInSpan(e.Params, p, "Top", "down");
+                    PutInSpan(e.Params, p, "MarginBottom", "spcBottom");
+                    PutInSpan(e.Params, p, "PullTop", "pullTop");
+                    PutInSpan(e.Params, p, "Height", "height");
+                    PutInSpan(e.Params, p, "PushLeft", "pushLeft");
+                    PutInSpan(e.Params, p, "PushRight", "pushRight");
+                    PutInSpan(e.Params, p, "Padding", "prepend");
+                    if(e.Params.Contains("Last"))
+                        p.CssClass = p.CssClass.Replace(" last", (
+                            e.Params["Last"].Get<bool>() ? " last" : ""));
+                }
+            }
+        }
+
+        private void PutInSpan(Node node, DynamicPanel p, string nodeName, string cssName)
+        {
+            string css = p.CssClass;
+            if (css.Contains(cssName + "-"))
+            {
+                string no = (" " + css).Split(new string[] { cssName }, StringSplitOptions.RemoveEmptyEntries)[1].Substring(1);
+                no = no.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[0];
+                int value = int.Parse(no);
+                css = css.Replace(" " + cssName + "-" + value, "");
+                p.CssClass = css;
+            }
+
+            if (node.Contains(nodeName))
+                p.CssClass += " " + cssName + "-" + node[nodeName].Value.ToString();
+        }
+
+        [ActiveEvent(Name = "Magix.Core.GetViewPortSettings")]
+        protected void Magix_Core_GetViewPortSettings(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["Container"].Get<string>().StartsWith("content"))
+            {
+                // Ours ...
+                DynamicPanel p = Selector.FindControl<DynamicPanel>(
+                    this,
+                    e.Params["Container"].Get<string>());
+                if (p != null)
+                {
+                    ExtractSpan(e.Params, p, "Width", "span");
+                    ExtractSpan(e.Params, p, "Top", "down");
+                    ExtractSpan(e.Params, p, "MarginBottom", "spcBottom");
+                    ExtractSpan(e.Params, p, "PullTop", "pullTop");
+                    ExtractSpan(e.Params, p, "Height", "height");
+                    ExtractSpan(e.Params, p, "PushLeft", "pushLeft");
+                    ExtractSpan(e.Params, p, "PushRight", "pushRight");
+                    ExtractSpan(e.Params, p, "Padding", "prepend");
+                }
+            }
+        }
+
+        private void ExtractSpan(Node node, DynamicPanel p, string nodeName, string cssName)
+        {
+            string css = p.CssClass;
+            if (css.Contains(cssName))
+            {
+                string no = css.Split(new string[] { cssName }, StringSplitOptions.RemoveEmptyEntries)[1];
+                no = no.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[0];
+                int value = int.Parse(no);
+                node[nodeName].Value = value;
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Core.TimeOut")]
         protected void Magix_Core_TimeOut(object sender, ActiveEventArgs e)
         {
@@ -303,28 +389,36 @@ namespace Magix.Brix.Viewports
                     Selector.FindControl<DynamicPanel>(
                     this, 
                     container);
-                ClearControls(pnl);
+                ClearControls(pnl, true);
+                if (pnl.ID == "content2")
+                {
+                    ClearControls(content3, true);
+                    ClearControls(content4, true);
+                    ClearControls(content5, true);
+                    ClearControls(content6, true);
+                    ClearControls(content7, true);
+                }
                 if (pnl.ID == "content3")
                 {
-                    ClearControls(content4);
-                    ClearControls(content5);
-                    ClearControls(content6);
-                    ClearControls(content7);
+                    ClearControls(content4, true);
+                    ClearControls(content5, true);
+                    ClearControls(content6, true);
+                    ClearControls(content7, true);
                 }
                 else if (pnl.ID == "content4")
                 {
-                    ClearControls(content5);
-                    ClearControls(content6);
-                    ClearControls(content7);
+                    ClearControls(content5, true);
+                    ClearControls(content6, true);
+                    ClearControls(content7, true);
                 }
                 else if (pnl.ID == "content5")
                 {
-                    ClearControls(content6);
-                    ClearControls(content7);
+                    ClearControls(content6, true);
+                    ClearControls(content7, true);
                 }
                 else if (pnl.ID == "content6")
                 {
-                    ClearControls(content7);
+                    ClearControls(content7, true);
                 }
             }
             else if (e.Params["Position"].Get<string>() == "child")
@@ -336,19 +430,20 @@ namespace Magix.Brix.Viewports
                         toEmpty = idxChild;
                 }
                 (toEmpty.Parent.Parent as Window).CloseWindow();
-                ClearControls(toEmpty);
+                ClearControls(toEmpty, true);
             }
             else if (e.Params["Position"].Get<string>() == "fullScreen")
             {
-                ClearControls(fullScreen);
+                ClearControls(fullScreen, true);
                 new EffectFadeOut(fullScreen, 500)
                     .Render();
             }
         }
 
-        private void ClearControls(DynamicPanel dynamic)
+        private void ClearControls(DynamicPanel dynamic, bool clearCss)
         {
-            dynamic.CssClass = "";
+            if (clearCss)
+                dynamic.CssClass = "";
             foreach (Control idx in dynamic.Controls)
             {
                 ActiveEvents.Instance.RemoveListener(idx);
@@ -401,7 +496,8 @@ namespace Magix.Brix.Viewports
                     e.Params["Position"].Get<string>());
 
                 if (!e.Params["Parameters"].Contains("Append") || !e.Params["Parameters"]["Append"].Get<bool>())
-                    ClearControls(dyn);
+                    ClearControls(dyn, !e.Params["Parameters"].Contains("FreezeContainer") ||
+                        !e.Params["Parameters"]["FreezeContainer"].Get<bool>());
 
                 if (dyn.ID == "content3")
                 {
@@ -409,22 +505,22 @@ namespace Magix.Brix.Viewports
                     // applications ...
                     if (!(e.Params["Parameters"].Contains("FREEZE4") && e.Params["Parameters"]["FREEZE4"].Get<bool>()))
                     {
-                        ClearControls(content4);
+                        ClearControls(content4, true);
                         e.Params["FREEZE4"].UnTie(); // To be sure ...!
                     }
                     if (!(e.Params["Parameters"].Contains("FREEZE5") && e.Params["Parameters"]["FREEZE5"].Get<bool>()))
                     {
-                        ClearControls(content5);
+                        ClearControls(content5, true);
                         e.Params["FREEZE5"].UnTie(); // To be sure ...!
                     }
                     if (!(e.Params["Parameters"].Contains("FREEZE6") && e.Params["Parameters"]["FREEZE6"].Get<bool>()))
                     {
-                        ClearControls(content6);
+                        ClearControls(content6, true);
                         e.Params["FREEZE6"].UnTie(); // To be sure ...!
                     }
                     if (!(e.Params["Parameters"].Contains("FREEZE7") && e.Params["Parameters"]["FREEZE7"].Get<bool>()))
                     {
-                        ClearControls(content7);
+                        ClearControls(content7, true);
                         e.Params["FREEZE7"].UnTie(); // To be sure ...!
                     }
                 }
@@ -445,97 +541,101 @@ namespace Magix.Brix.Viewports
                     !e.Params["Parameters"].Contains("Append") ||
                     !e.Params["Parameters"]["Append"].Get<bool>())
                 {
-                    if (e.Params["Parameters"].Contains("ParentIsRelative"))
+                    if (!e.Params["Parameters"].Contains("FreezeContainer") ||
+                        !e.Params["Parameters"]["FreezeContainer"].Get<bool>())
                     {
-                        wrp.Style[Styles.position] = "relative";
+                        if (e.Params["Parameters"].Contains("ParentIsRelative"))
+                        {
+                            wrp.Style[Styles.position] = "relative";
+                        }
+                        else
+                        {
+                            wrp.Style[Styles.position] = "";
+                        }
+                        if (e.Params["Parameters"].Contains("Padding"))
+                        {
+                            cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("PushRight")
+                            && e.Params["Parameters"]["PushRight"].Get<int>() > 0)
+                        {
+                            cssClass += " pushRight-" + e.Params["Parameters"]["PushRight"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("PushLeft") &&
+                            e.Params["Parameters"]["PushLeft"].Get<int>() > 0)
+                        {
+                            cssClass += " pushLeft-" + e.Params["Parameters"]["PushLeft"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("SpcBottom") &&
+                            e.Params["Parameters"]["SpcBottom"].Get<int>() > 0)
+                        {
+                            cssClass += " spcBottom-" + e.Params["Parameters"]["SpcBottom"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("CssClass"))
+                        {
+                            cssClass += " " + e.Params["Parameters"]["CssClass"].Get<string>();
+                        }
+                        if (e.Params["Parameters"].Contains("Width"))
+                        {
+                            cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Height"))
+                        {
+                            cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Top"))
+                        {
+                            cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("MarginBottom"))
+                        {
+                            cssClass += " spcBottom-" + e.Params["Parameters"]["MarginBottom"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("PullTop"))
+                        {
+                            cssClass += " pullTop-" + e.Params["Parameters"]["PullTop"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Pull"))
+                        {
+                            cssClass += " pull-" + e.Params["Parameters"]["Pull"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Push"))
+                        {
+                            cssClass += " push-" + e.Params["Parameters"]["Push"].Get<int>();
+                        }
+                        if (e.Params["Parameters"].Contains("Absolute"))
+                        {
+                            cssClass += " absolutized";
+                        }
+                        if (e.Params["Parameters"].Contains("Clear"))
+                        {
+                            cssClass += " cleared";
+                        }
+                        if (e.Params["Parameters"].Contains("Relativize"))
+                        {
+                            cssClass += " relativized";
+                        }
+                        if (e.Params["Parameters"].Contains("Last"))
+                        {
+                            cssClass += " last";
+                        }
+                        if (e.Params["Parameters"].Contains("Overflow"))
+                        {
+                            cssClass += " overflowized";
+                        }
+                        if (string.IsNullOrEmpty(cssClass))
+                        {
+                            // Defaulting to down-1 ...
+                            cssClass = "down-1";
+                        }
+                        if (e.Params["Parameters"].Contains("DynCssClass"))
+                        {
+                            string cssClass2 = e.Params["Parameters"]["DynCssClass"].Get<string>();
+                            if (!string.IsNullOrEmpty(cssClass2.Trim()))
+                                cssClass += " " + cssClass2;
+                        }
+                        dyn.CssClass = cssClass.Trim(); 
                     }
-                    else
-                    {
-                        wrp.Style[Styles.position] = "";
-                    }
-                    if (e.Params["Parameters"].Contains("Padding"))
-                    {
-                        cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("PushRight")
-                        && e.Params["Parameters"]["PushRight"].Get<int>() > 0)
-                    {
-                        cssClass += " pushRight-" + e.Params["Parameters"]["PushRight"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("PushLeft") &&
-                        e.Params["Parameters"]["PushLeft"].Get<int>() > 0)
-                    {
-                        cssClass += " pushLeft-" + e.Params["Parameters"]["PushLeft"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("SpcBottom") &&
-                        e.Params["Parameters"]["SpcBottom"].Get<int>() > 0)
-                    {
-                        cssClass += " spcBottom-" + e.Params["Parameters"]["SpcBottom"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("CssClass"))
-                    {
-                        cssClass += " " + e.Params["Parameters"]["CssClass"].Get<string>();
-                    }
-                    if (e.Params["Parameters"].Contains("Width"))
-                    {
-                        cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("Height"))
-                    {
-                        cssClass += " height-" + e.Params["Parameters"]["Height"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("Top"))
-                    {
-                        cssClass += " down-" + e.Params["Parameters"]["Top"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("MarginBottom"))
-                    {
-                        cssClass += " spcBottom-" + e.Params["Parameters"]["MarginBottom"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("PullTop"))
-                    {
-                        cssClass += " pullTop-" + e.Params["Parameters"]["PullTop"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("Pull"))
-                    {
-                        cssClass += " pull-" + e.Params["Parameters"]["Pull"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("Push"))
-                    {
-                        cssClass += " push-" + e.Params["Parameters"]["Push"].Get<int>();
-                    }
-                    if (e.Params["Parameters"].Contains("Absolute"))
-                    {
-                        cssClass += " absolutized";
-                    }
-                    if (e.Params["Parameters"].Contains("Clear"))
-                    {
-                        cssClass += " cleared";
-                    }
-                    if (e.Params["Parameters"].Contains("Relativize"))
-                    {
-                        cssClass += " relativized";
-                    }
-                    if (e.Params["Parameters"].Contains("Last"))
-                    {
-                        cssClass += " last";
-                    }
-                    if (e.Params["Parameters"].Contains("Overflow"))
-                    {
-                        cssClass += " overflowized";
-                    }
-                    if (string.IsNullOrEmpty(cssClass))
-                    {
-                        // Defaulting to down-1 ...
-                        cssClass = "down-1";
-                    }
-                    if (e.Params["Parameters"].Contains("DynCssClass"))
-                    {
-                        string cssClass2 = e.Params["Parameters"]["DynCssClass"].Get<string>();
-                        if (!string.IsNullOrEmpty(cssClass2.Trim()))
-                            cssClass += " " + cssClass2;
-                    }
-                    dyn.CssClass = cssClass.Trim();
                     if (AjaxManager.Instance.IsCallback)
                     {
                         dyn.Style[Styles.display] = "none";
@@ -569,7 +669,7 @@ namespace Magix.Brix.Viewports
             }
             else if (e.Params["Position"].Get<string>() == "fullScreen")
             {
-                ClearControls(fullScreen);
+                ClearControls(fullScreen, true);
                 new EffectFadeIn(fullScreen, 500)
                     .Render();
                 fullScreen.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
@@ -769,7 +869,7 @@ namespace Magix.Brix.Viewports
                 }
                 else
                 {
-                    ClearControls(toAddInto);
+                    ClearControls(toAddInto, true);
                     toAddInto.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
             }
@@ -834,7 +934,7 @@ namespace Magix.Brix.Viewports
                     w.Info);
                 w.Info = "";
             }
-            ClearControls(w.Content.Controls[0] as DynamicPanel);
+            ClearControls(w.Content.Controls[0] as DynamicPanel, true);
             int closingWindowID = int.Parse(w.ID.Replace("wd", ""));
             if (closingWindowID == 0)
             {

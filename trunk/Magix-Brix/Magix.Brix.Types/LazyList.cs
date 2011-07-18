@@ -96,6 +96,16 @@ namespace Magix.Brix.Types
             return default(T);
         }
 
+        public IEnumerable<T> FindAll(Predicate<T> functor)
+        {
+            FillList();
+            foreach (T idx in _list)
+            {
+                if (functor(idx))
+                    yield return idx;
+            }
+        }
+
         /**
          * Adds a range of new items to the list collection
          */

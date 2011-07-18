@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="AdministratorDashboardController.cs" />
     <Compile Include="AccessController.cs" />
+    <Compile Include="FileSystemController.cs" />
     <Compile Include="RolesController.cs" />
     <Compile Include="PageController.cs" />
     <Compile Include="EditTemplatesController.cs" />

@@ -20,6 +20,8 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         [ActiveField]
         public string AvatarURL { get; set; }
 
+        #region [ -- Business Logic -- ]
+
         // TODO: Check up if these are redundant ...!
         /**
          * Returns the object with the given ID from your data storage.
@@ -155,5 +157,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             }
             base.Save();
         }
+
+        #endregion
     }
 }

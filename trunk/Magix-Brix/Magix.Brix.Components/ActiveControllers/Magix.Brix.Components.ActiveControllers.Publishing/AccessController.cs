@@ -29,12 +29,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (e.Params.Contains("UserID"))
                 user = User.SelectByID(e.Params["ID"].Get<int>());
 
-            bool? haveAccess = HaveAccess(PageObject.SelectByID(e.Params["ID"].Get<int>()), user);
+            bool? haveAccess = HaveAccess(WebPage.SelectByID(e.Params["ID"].Get<int>()), user);
             if (haveAccess.HasValue)
                 e.Params["STOP"].Value = !haveAccess.Value;
         }
 
-        private bool? HaveAccess(PageObject po, User user)
+        private bool? HaveAccess(WebPage po, User user)
         {
             if (user != null)
             {
@@ -54,12 +54,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             return null;
         }
 
-        private static bool? RoleHaveAccess(PageObject po, Role role)
+        private static bool? RoleHaveAccess(WebPage po, Role role)
         {
             while (po != null)
             {
-                foreach (PageObjectAccess idx in 
-                    PageObjectAccess.Select(Criteria.ExistsIn(po.ID, true)))
+                foreach (WebPageRoleAccess idx in 
+                    WebPageRoleAccess.Select(Criteria.ExistsIn(po.ID, true)))
                 {
                     if (role == null)
                         return false;
@@ -68,7 +68,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                         return true;
                     }
                 }
-                if (PageObjectAccess.CountWhere(Criteria.ExistsIn(po.ID, true)) > 0)
+                if (WebPageRoleAccess.CountWhere(Criteria.ExistsIn(po.ID, true)) > 0)
                     return false;
                 po = po.Parent;
             }
@@ -78,7 +78,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.GetRolesListForPage")]
         protected void Magix_Publishing_GetRolesListForPage(object sender, ActiveEventArgs e)
         {
-            PageObject p = PageObject.SelectByID(e.Params["ID"].Get<int>());
+            WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
             foreach (Role idx in Role.Select())
             {
                 bool? hasAccess = RoleHaveAccess(p, idx);
@@ -88,7 +88,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     e.Params["ActiveRoles"]["r-" + idx.ID]["Name"].Value = idx.Name;
                     e.Params["ActiveRoles"]["r-" + idx.ID]["HasAccess"].Value = hasAccess.Value;
 
-                    if (PageObjectAccess.CountWhere(
+                    if (WebPageRoleAccess.CountWhere(
                         Criteria.ExistsIn(p.ID, true),
                         Criteria.ExistsIn(idx.ID, true)) > 0)
                         e.Params["ActiveRoles"]["r-" + idx.ID]["Explicitly"].Value = true;
@@ -103,16 +103,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                PageObject p = PageObject.SelectByID(e.Params["ID"].Get<int>());
+                WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
                 Role r = Role.SelectByID(e.Params["RoleID"].Get<int>());
-                PageObjectAccess t = PageObjectAccess.SelectFirst(
+                WebPageRoleAccess t = WebPageRoleAccess.SelectFirst(
                     Criteria.ExistsIn(p.ID, true),
                     Criteria.ExistsIn(r.ID, true));
                 if (e.Params["Access"].Get<bool>())
                 {
                     if (t == null)
                     {
-                        t = new PageObjectAccess();
+                        t = new WebPageRoleAccess();
                         t.Page = p;
                         t.Role = r;
                         t.Save();
@@ -125,7 +125,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     else
                     {
                         // Implcitily giving it access, assuming user behavior ...
-                        t = new PageObjectAccess();
+                        t = new WebPageRoleAccess();
                         t.Page = p;
                         t.Role = r;
                         t.Save();
@@ -138,7 +138,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.PageObjectDeleted")]
         protected void Magix_Publishing_PageObjectDeleted(object sender, ActiveEventArgs e)
         {
-            foreach (PageObjectAccess idx in PageObjectAccess.Select(
+            foreach (WebPageRoleAccess idx in WebPageRoleAccess.Select(
                 Criteria.ExistsIn(e.Params["ID"].Get<int>(), true)))
             {
                 idx.Delete();

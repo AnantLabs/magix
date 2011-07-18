@@ -23,7 +23,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.InitializePublishingPlugin")]
         protected void Magix_Publishing_InitializePublishingPlugin(object sender, ActiveEventArgs e)
         {
-            PageObjectTemplate t = PageObjectTemplate.SelectByID(e.Params["ID"].Get<int>());
+            WebPart t = WebPart.SelectByID(e.Params["ID"].Get<int>());
             Type moduleType = Adapter.ActiveModules.Find(
                 delegate(Type idx)
                 {
@@ -41,7 +41,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 if (atrs != null && atrs.Length > 0)
                 {
                     string propName = idx.Name;
-                    foreach (PageObjectTemplate.PageObjectTemplateSetting idxSet in t.Settings)
+                    foreach (WebPart.WebPartSetting idxSet in t.Settings)
                     {
                         if (idxSet.Name == moduleType.FullName + idx.Name)
                         {
@@ -58,7 +58,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             string url = e.Params["URL"].Get<string>();
 
-            PageObject p = PageObject.SelectFirst(Criteria.Eq("URL", url));
+            WebPage p = WebPage.SelectFirst(Criteria.Eq("URL", url));
 
             Node node = new Node();
             node["ID"].Value = p.ID;
@@ -71,10 +71,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.FindFirstPageRequestCanAccess")]
         protected void Magix_Publishing_FindFirstPageRequestCanAccess(object sender, ActiveEventArgs e)
         {
-            PageObject p = PageObject.SelectByID(e.Params["ID"].Get<int>());
+            WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
             // Assuming already checked for access against this bugger ...
-            foreach (PageObject idx in p.Children)
+            foreach (WebPage idx in p.Children)
             {
                 if (CheckAccess(p, e.Params))
                 {
@@ -83,7 +83,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        private bool CheckAccess(PageObject p, Node node)
+        private bool CheckAccess(WebPage p, Node node)
         {
             Node ch1 = new Node();
             ch1["ID"].Value = p.ID;
@@ -97,7 +97,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["AccessToID"].Value = p.ID;
                 return true;
             }
-            foreach (PageObject idx in p.Children)
+            foreach (WebPage idx in p.Children)
             {
                 if (CheckAccess(idx, node))
                 {
@@ -110,7 +110,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.OpenPage")]
         protected void Magix_Publishing_OpenPage(object sender, ActiveEventArgs e)
         {
-            PageObject p = PageObject.SelectByID(e.Params["ID"].Get<int>());
+            WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
             if (p == null)
             {
@@ -137,7 +137,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                             node);
                         if(!node.Contains("AccessToID"))
                             throw new ArgumentException("You don't have access to this website ...");
-                        OpenPage(PageObject.SelectByID(node["AccessToID"].Get<int>()));
+                        OpenPage(WebPage.SelectByID(node["AccessToID"].Get<int>()));
                     }
                     else
                     {
@@ -151,61 +151,142 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        private void OpenPage(PageObject p)
+        private void OpenPage(WebPage page)
         {
+            SetCaptionOfPage(page);
+
             string lastModule = "content1";
 
-            foreach (PageObjectTemplate idx in p.ObjectTemplates)
+            foreach (WebPart idx in page.WebParts)
             {
                 if (idx.Container.ViewportContainer.CompareTo(lastModule) > 0)
                     lastModule = idx.Container.ViewportContainer;
 
-                // Checking to see if we're supposed to 'fall through'
-                // Some modules [e.g. Menu] doesn't need re-initialization
-                // upon loadups ...
+                Node tmp = new Node();
 
-                Node ch = new Node();
-
-                ch["ModuleName"].Value = idx.Container.ModuleName;
+                tmp["ID"].Value = idx.ID;
 
                 RaiseEvent(
-                    "Magix.Publishing.ShouldReloadWebPart",
-                    ch);
+                    "Magix.Publishing.InjectPlugin",
+                    tmp);
 
-                if (!ch.Contains("Stop") || !ch["Stop"].Get<bool>())
-                {
-                    Node node = new Node();
-
-                    if (idx.Container.BottomMargin > 0)
-                        node["BottomMargin"].Value = idx.Container.BottomMargin;
-                    if (!string.IsNullOrEmpty(idx.Container.CssClass))
-                        node["CssClass"].Value = idx.Container.CssClass;
-                    if (idx.Container.Height > 0)
-                        node["Height"].Value = idx.Container.Height;
-                    if (idx.Container.Last)
-                        node["Last"].Value = idx.Container.Last;
-                    if (idx.Container.Padding > 0)
-                        node["PushRight"].Value = idx.Container.Padding;
-                    if (idx.Container.Push > 0)
-                        node["PushLeft"].Value = idx.Container.Push;
-                    if (idx.Container.BottomMargin > 0)
-                        node["SpcBottom"].Value = idx.Container.BottomMargin;
-                    if (idx.Container.Top > 0)
-                        node["Top"].Value = idx.Container.Top;
-                    if (idx.Container.Width > 0)
-                        node["Width"].Value = idx.Container.Width;
-                    node["ID"].Value = idx.ID;
-                    node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
-
-                    LoadModule(
-                        idx.Container.ModuleName,
-                        idx.Container.ViewportContainer,
-                        node);
-                }
                 int cl = int.Parse(lastModule.Replace("content", ""));
                 if (cl < 7)
                     ActiveEvents.Instance.RaiseClearControls("content" + (cl + 1));
             }
+        }
+
+        private void SetCaptionOfPage(WebPage page)
+        {
+            Node node = new Node();
+
+            node["Caption"].Value = page.Name;
+
+            RaiseEvent(
+                "Magix.Core.SetTitleOfPage",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.InjectPlugin")]
+        private void Magix_Publishing_InjectPlugin(object sender, ActiveEventArgs e)
+        {
+            WebPart page = WebPart.SelectByID(e.Params["ID"].Get<int>());
+
+            Node ch = new Node();
+
+            ch["ModuleName"].Value = page.Container.ModuleName;
+            ch["Container"].Value = page.Container.ViewportContainer;
+
+            RaiseEvent(
+                "Magix.Publishing.ShouldReloadWebPart",
+                ch);
+
+            if (!ch.Contains("Stop") || !ch["Stop"].Get<bool>())
+            {
+                Node node = new Node();
+
+                if (page.Container.MarginBottom > 0)
+                    node["BottomMargin"].Value = page.Container.MarginBottom;
+                if (!string.IsNullOrEmpty(page.Container.CssClass))
+                    node["CssClass"].Value = page.Container.CssClass;
+                if (page.Container.Height > 0)
+                    node["Height"].Value = page.Container.Height;
+                if (page.Container.Last)
+                    node["Last"].Value = page.Container.Last;
+                if (page.Container.MarginRight > 0)
+                    node["PushRight"].Value = page.Container.MarginRight;
+                if (page.Container.MarginLeft > 0)
+                    node["PushLeft"].Value = page.Container.MarginLeft;
+                if (page.Container.MarginBottom > 0)
+                    node["SpcBottom"].Value = page.Container.MarginBottom;
+                if (page.Container.MarginTop > 0)
+                    node["Top"].Value = page.Container.MarginTop;
+                if (page.Container.Width > 0)
+                    node["Width"].Value = page.Container.Width;
+                node["ID"].Value = page.ID;
+                node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
+                node["PageObjectTemplateID"].Value = page.ID;
+
+                LoadModule(
+                    page.Container.ModuleName,
+                    page.Container.ViewportContainer,
+                    node);
+            }
+            else
+            {
+                // Don't need to Inject Module for some reasons. It might be a Sliding Menu for instance ...
+                // Though we DO need to UPDATE SETTINGS for module, since it might still be a different template ...
+                Node node = new Node();
+
+                if (page.Container.MarginBottom > 0)
+                    node["BottomMargin"].Value = page.Container.MarginBottom;
+
+                if (!string.IsNullOrEmpty(page.Container.CssClass))
+                    node["CssClass"].Value = page.Container.CssClass;
+
+                if (page.Container.Height > 0)
+                    node["Height"].Value = page.Container.Height;
+
+                if (page.Container.Last)
+                    node["Last"].Value = page.Container.Last;
+
+                if (page.Container.MarginRight > 0)
+                    node["PushRight"].Value = page.Container.MarginRight;
+
+                if (page.Container.MarginLeft > 0)
+                    node["PushLeft"].Value = page.Container.MarginLeft;
+
+                if (page.Container.MarginBottom > 0)
+                    node["SpcBottom"].Value = page.Container.MarginBottom;
+
+                if (page.Container.MarginTop > 0)
+                    node["Top"].Value = page.Container.MarginTop;
+
+                if (page.Container.Width > 0)
+                    node["Width"].Value = page.Container.Width;
+
+                node["Container"].Value = page.Container.ViewportContainer;
+
+                RaiseEvent(
+                    "Magix.Core.SetViewPortContainerSettings",
+                    node);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.ReloadWebPart")]
+        protected void Magix_Publishing_ReloadWebPart(object sender, ActiveEventArgs e)
+        {
+            WebPart t = WebPart.SelectByID(e.Params["PageObjectTemplateID"].Get<int>());
+
+            Node node = new Node();
+
+            node["Container"].Value = e.Params["Parameters"]["Container"].Value;
+            node["FreezeContainer"].Value = true;
+            node["ID"].Value = t.ID;
+
+            RaiseEvent(
+                "Magix.Publishing.InjectPlugin",
+                node);
         }
     }
 }

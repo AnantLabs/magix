@@ -62,6 +62,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                             bottomMargin, 
                             moduleName, 
                             w);
+                        w.CssClass += " ";
 
                         CreateActionButtons(id, w);
 
@@ -85,8 +86,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                 RaiseSafeEvent(
                                     "Magix.Publishing.ChangeTemplateProperty",
                                     nx);
-
-                                ReDataBind();
                             };
 
                         Label lbl = new Label();
@@ -159,17 +158,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                     RaiseSafeEvent(
                         "Magix.Publishing.ChangeTemplateProperty",
                         node);
-
-                    DataSource["Templates"].UnTie();
-                    DataSource["AllModules"].UnTie();
-
-                    RaiseEvent(
-                        "Magix.Publishing.GetTemplates",
-                        DataSource);
-
-                    parts.Controls.Clear();
-                    DataBindWebParts();
-                    parts.ReRender();
                 };
             w.Content.Controls.Add(nameI);
         }
@@ -347,7 +335,49 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 "Magix.Publishing.ChangeTemplateProperty",
                 node);
 
-            ReDataBind();
+            Panel p = lbn.Parent.Parent as Window;
+
+            if (node.Contains("NewWidth"))
+                p.CssClass = p.CssClass.Replace(
+                    " span-" +
+                    node["OldWidth"].Get<int>(), "") +
+                    " span-" +
+                    node["NewWidth"].Get<int>();
+
+            if (node.Contains("NewHeight"))
+                p.CssClass = p.CssClass.Replace(
+                    " height-" +
+                    node["OldHeight"].Get<int>(), "") +
+                    " height-" +
+                    node["NewHeight"].Get<int>();
+
+            if (node.Contains("NewTop"))
+                p.CssClass = p.CssClass.Replace(
+                    " down-" +
+                    node["OldTop"].Get<int>(), "") +
+                    " down-" +
+                    node["NewTop"].Get<int>();
+
+            if (node.Contains("NewPadding"))
+                p.CssClass = p.CssClass.Replace(
+                    " pushRight-" +
+                    node["OldPadding"].Get<int>(), "") +
+                    " pushRight-" +
+                    node["NewPadding"].Get<int>();
+
+            if (node.Contains("NewPush"))
+                p.CssClass = p.CssClass.Replace(
+                    " pushLeft-" +
+                    node["OldPush"].Get<int>(), "") +
+                    " pushLeft-" +
+                    node["NewPush"].Get<int>();
+
+            if (node.Contains("NewMarginBottom"))
+                p.CssClass = p.CssClass.Replace(
+                    " spcBottom-" +
+                    node["OldMarginBottom"].Get<int>(), "") +
+                    " spcBottom-" +
+                    node["NewMarginBottom"].Get<int>();
         }
 
         private void ReDataBind()

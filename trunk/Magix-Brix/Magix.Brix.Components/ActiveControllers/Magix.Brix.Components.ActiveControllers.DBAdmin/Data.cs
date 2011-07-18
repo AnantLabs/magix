@@ -119,7 +119,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 
         public void GetObjectNode(Node node, int id, string typeName, Node root)
         {
-            object obj = GetObject(id, typeName);
+            object obj = GetObject(id, typeName, root);
             if (obj != null)
                 GetObjectNode(obj, typeName, node, root);
         }
@@ -143,7 +143,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object obj = GetObject(id, typeName);
+                object obj = GetObject(id, typeName, null);
                 PropertyInfo prop = type.GetProperty(
                     propertyName,
                     BindingFlags.NonPublic |
@@ -189,7 +189,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object obj = GetObject(id, typeName);
+                object obj = GetObject(id, typeName, null);
                 PropertyInfo prop = type.GetProperty(
                     propertyName,
                     BindingFlags.NonPublic |
@@ -412,7 +412,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object obj = GetObject(idOfObject, typeOfObject);
+                object obj = GetObject(idOfObject, typeOfObject, null);
                 MethodInfo setter =
                     type.GetProperty(
                         propertyName,
@@ -478,7 +478,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                         BindingFlags.Instance |
                         BindingFlags.NonPublic)
                     .GetSetMethod(true);
-                object obj = GetObject(id, fullTypeName);
+                object obj = GetObject(id, fullTypeName, null);
                 object valueChanged = Convert.ChangeType(
                     newValue,
                     setter.GetParameters()[0].ParameterType);
@@ -697,7 +697,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object obj = GetObject(id, fullTypeName);
+                object obj = GetObject(id, fullTypeName, null);
                 type.GetMethod(
                     "Delete",
                     BindingFlags.Public |
@@ -755,8 +755,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object parent = GetObject(parentId, parentFullTypeName);
-                object n = GetObject(id, fullTypeName);
+                object parent = GetObject(parentId, parentFullTypeName, null);
+                object n = GetObject(id, fullTypeName, null);
                 object list =
                     parentType.GetProperty(
                         parentPropertyName,
@@ -806,8 +806,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object parent = GetObject(parentId, parentFullTypeName);
-                object n = GetObject(id, fullTypeName);
+                object parent = GetObject(parentId, parentFullTypeName, null);
+                object n = GetObject(id, fullTypeName, null);
                 parentType.GetProperty(
                     parentPropertyName,
                     BindingFlags.Public |
@@ -850,8 +850,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object parent = GetObject(parentId, parentFullTypeName);
-                object n = GetObject(id, fullTypeName);
+                object parent = GetObject(parentId, parentFullTypeName, null);
+                object n = GetObject(id, fullTypeName, null);
                 object list =
                     parentType.GetProperty(
                         parentPropertyName,
@@ -899,7 +899,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
             else
             {
-                object parent = GetObject(parentId, parentFullTypeName);
+                object parent = GetObject(parentId, parentFullTypeName, null);
                 parentType.GetProperty(
                     parentPropertyName,
                     BindingFlags.Public |
@@ -967,19 +967,20 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             return retVal;
         }
 
-        private object GetObject(int id, string typeName)
+        private object GetObject(int id, string typeName, Node node)
         {
             Type type = GetType(typeName);
             if (type == null)
             {
-                Node node = new Node();
+                if (node == null)
+                    node = new Node();
                 node["FullTypeName"].Value = typeName;
                 node["ID"].Value = id;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.GetObject",
                     node);
-                return node["Value"].Value;
+                return null;
             }
             else
             {

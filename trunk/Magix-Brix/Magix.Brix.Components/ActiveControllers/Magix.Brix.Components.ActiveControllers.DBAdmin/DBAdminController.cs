@@ -89,8 +89,13 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 e.Params["End"].Get<int>(Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10)),
                 pars.ToArray());
             e.Params["End"].Value = e.Params["Start"].Get<int>(0) + e.Params["Objects"].Count;
-            int count = Data.Instance.GetCount(fullTypeName, pars.ToArray(), e.Params);
-            e.Params["SetCount"].Value = count;
+            if (!e.Params.Contains("SetCount") ||
+                !e.Params.Contains("LockSetCount") ||
+                !e.Params["LockSetCount"].Get<bool>())
+            {
+                int count = Data.Instance.GetCount(fullTypeName, pars.ToArray(), e.Params);
+                e.Params["SetCount"].Value = count;
+            }
         }
 
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
@@ -443,9 +448,14 @@ model while trying to create object, and it was never created for some reasons."
             node["Start"].Value = 0;
             node["End"].Value = node["Objects"].Count;
 
-            int count = Data.Instance.GetCount(fullTypeName, pars.ToArray(), xx);
+            if (!node.Contains("SetCount") || 
+                !node.Contains("LockSetCount") || 
+                !node["LockSetCount"].Get<bool>())
+            {
+                int count = Data.Instance.GetCount(fullTypeName, pars.ToArray(), xx);
+                node["SetCount"].Value = count;
+            }
 
-            node["SetCount"].Value = count;
             string container = "child";
             if (node.Contains("Container"))
                 container = node["Container"].Get<string>();
