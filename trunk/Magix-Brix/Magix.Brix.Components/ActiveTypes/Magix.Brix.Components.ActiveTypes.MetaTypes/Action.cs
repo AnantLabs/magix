@@ -67,6 +67,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         public Action()
         {
             Params = new LazyList<ActionParams>();
+            StripInput = true;
         }
 
         [ActiveField]
@@ -84,8 +85,13 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         [ActiveField]
         public bool StripInput { get; set; }
 
+        [ActiveField]
+        public DateTime Created { get; set; }
+
         public override void Save()
         {
+            if (ID == 0)
+                Created = DateTime.Now;
             string name = Name;
 
             int idxNo = 2;

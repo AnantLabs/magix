@@ -75,7 +75,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Last"].Value = true;
 
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 6;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 9;
             node["WhiteListColumns"]["Params"].Value = true;
             node["WhiteListColumns"]["Params"]["ForcedWidth"].Value = 2;
             node["WhiteListColumns"]["Copy"].Value = true;
@@ -86,11 +86,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["IDColumnEvent"].Value = "Magix.Meta.EditAction";
             node["CreateEventName"].Value = "Magix.Meta.CreateAction";
 
+            node["Criteria"]["C1"]["Name"].Value = "Sort";
+            node["Criteria"]["C1"]["Value"].Value = "Created";
+            node["Criteria"]["C1"]["Ascending"].Value = false;
+
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 10;
+            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyActionTemplateColumn";
 
             ActiveEvents.Instance.RaiseActiveEvent(
@@ -346,6 +351,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetStripInputTemplateColumn";
             node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
 
@@ -380,6 +386,55 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 "Magix.Brix.Components.ActiveModules.CommonModules.Tree",
                 "content4",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaAction.GetStripInputTemplateColumn")]
+        protected void Magix_MetaAction_GetStripInputTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            bool value = bool.Parse(e.Params["Value"].Get<string>());
+
+            // Fetching specific user
+            Action a = Action.SelectByID(id);
+
+            Panel p = new Panel();
+
+            // Creating our SelectList
+            CheckBox ch = new CheckBox();
+            ch.Checked = a.StripInput;
+            ch.CheckedChanged +=
+                delegate
+                {
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
+                    {
+                        Action a2 = Action.SelectByID(id);
+                        a2.StripInput = ch.Checked;
+                        a2.Save();
+
+                        tr.Commit();
+                    }
+                };
+
+            Label lbl = new Label();
+            lbl.Text = "&nbsp;";
+            lbl.Style[Styles.display] = "block";
+            lbl.Style[Styles.width] = "100%";
+            lbl.Tag = "label";
+            lbl.Load +=
+                delegate
+                {
+                    lbl.For = ch.ClientID;
+                };
+            p.Controls.Add(lbl);
+
+            p.Controls.Add(ch);
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = p;
         }
 
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
