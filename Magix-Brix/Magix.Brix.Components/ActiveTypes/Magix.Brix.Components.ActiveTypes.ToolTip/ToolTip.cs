@@ -15,7 +15,7 @@ namespace Magix.Brix.Components.ActiveTypes
     public sealed class ToolTip
     {
         [ActiveType]
-        private class Tip : ActiveType<Tip>
+        public class Tip : ActiveType<Tip>
         {
             [ActiveField]
             public string Value { get; set; }
@@ -25,7 +25,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         [ActiveType]
-        private class TipPosition : ActiveType<TipPosition>
+        public class TipPosition : ActiveType<TipPosition>
         {
             [ActiveField]
             public int Position { get; set; }
@@ -80,11 +80,14 @@ namespace Magix.Brix.Components.ActiveTypes
                 pos.Position = 0 - addition;
                 pos.Seed = seed;
             }
-            pos.Position = pos.Position + addition;
-            if (pos.Position >= Tip.Count)
-                pos.Position = 0;
-            if (pos.Position < 0)
-                pos.Position = Tip.Count - 1;
+            if (addition != 0)
+            {
+                pos.Position = pos.Position + addition;
+                if (pos.Position >= Tip.Count)
+                    pos.Position = 0;
+                if (pos.Position < 0)
+                    pos.Position = Tip.Count - 1;
+            }
             Tip retVal = Tip.SelectFirst(Criteria.Eq("No", pos.Position));
             if (retVal == null)
             {
@@ -109,6 +112,11 @@ namespace Magix.Brix.Components.ActiveTypes
         public string Next(string seed)
         {
             return GetToolTip(seed, 1);
+        }
+
+        public string Current(string seed)
+        {
+            return GetToolTip(seed, 0);
         }
     }
 }

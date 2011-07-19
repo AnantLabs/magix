@@ -16,6 +16,7 @@ using System.Reflection;
 using Magix.Brix.Publishing.Common;
 using System.Web;
 using Magix.Brix.Components.ActiveTypes.Users;
+using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -33,10 +34,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 {
                     // Creating a default template ...
                     WebPageTemplate t1 = new WebPageTemplate();
-                    t1.Name = "Menu Left";
+                    t1.Name = "M+H+C";
                     
                     WebPartTemplate c1 = new WebPartTemplate();
                     c1.Name = "Menu";
+                    c1.CssClass = "menu";
                     c1.ViewportContainer = "content1";
                     c1.Width = 6;
                     c1.Height = 20;
@@ -46,15 +48,17 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                     WebPartTemplate c2 = new WebPartTemplate();
                     c2.Name = "Header";
+                    c2.CssClass = "header";
                     c2.ViewportContainer = "content2";
                     c2.Width = 18;
-                    c2.Height = 6;
+                    c2.Height = 7;
                     c2.Last = true;
                     c2.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.Header";
                     t1.Containers.Add(c2);
 
                     WebPartTemplate c3 = new WebPartTemplate();
                     c3.Name = "Content";
+                    c3.CssClass = "content";
                     c3.ViewportContainer = "content3";
                     c3.Width = 18;
                     c3.Height = 30;
@@ -394,17 +398,50 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.TemplateWasModified")]
-        protected void Magix_Publishing_TemplateWasModified(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.WebPartTemplateWasModified")]
+        protected void Magix_Publishing_WebPartTemplateWasModified(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
+                // We must 're-touch' all Pages effected by the change of our template
+                // This to create default values for newly inserted type of
+                // modules and such ...
+                List<WebPage> pages = new List<WebPage>();
+                foreach (WebPart idx in
+                    WebPart.Select(
+                        Criteria.ExistsIn(e.Params["ID"].Get<int>(), false)))
+                {
+                    if (!pages.Exists(
+                        delegate(WebPage idx2)
+                        {
+                            return idx.WebPage == idx2;
+                        }))
+                        pages.Add(idx.WebPage);
+                }
+                foreach (WebPage idx in pages)
+                {
+                    idx.Save();
+                }
+
+                tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.WebPageTemplateWasModified")]
+        protected void Magix_Publishing_WebPageTemplateWasModified(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                // We must 're-touch' all Pages effected by the change of our template
+                // This to create default values for newly inserted type of
+                // modules and such ...
                 foreach (WebPage idx in 
                     WebPage.Select(
                         Criteria.ExistsIn(e.Params["ID"].Get<int>(), true)))
                 {
                     idx.Save();
                 }
+
                 tr.Commit();
             }
         }

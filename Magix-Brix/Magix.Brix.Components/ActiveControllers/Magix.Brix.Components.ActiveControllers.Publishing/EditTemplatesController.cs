@@ -35,7 +35,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
             node["WhiteListColumns"]["Containers"].Value = true;
-            node["WhiteListColumns"]["Containers"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Containers"]["ForcedWidth"].Value = 3;
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 4;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
@@ -48,7 +50,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Containers"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Containers"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Containers"]["Header"].Value = "WebParts";
             node["Type"]["Properties"]["Containers"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetContainersTemplateColumn";
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetCopyTemplateColumn";
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
 
             node["Container"].Value = "content3";
 
@@ -83,6 +88,81 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 p.Save();
 
                 tr.Commit();
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publisher.GetCopyTemplateColumn")]
+        private void Magix_Publisher_GetCopyTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            // Creating our SelectList
+            LinkButton ls = new LinkButton();
+            ls.Info = id.ToString();
+            ls.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.Publishing.CopyTemplate",
+                        node);
+                };
+            ls.Text = name;
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = ls;
+        }
+
+        [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
+        protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(WebPageTemplate).FullName)
+            {
+                // In case it's the one being edited ...
+                ActiveEvents.Instance.RaiseClearControls("content4");
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.CopyTemplate")]
+        protected void Magix_Publishing_CopyTemplate(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                WebPageTemplate original = WebPageTemplate.SelectByID(e.Params["ID"].Get<int>());
+                WebPageTemplate clone = original.Clone();
+                clone.Save();
+
+                tr.Commit();
+
+                Node n = new Node();
+
+                n["FullTypeName"].Value = typeof(WebPageTemplate).FullName;
+                n["ID"].Value = clone.ID;
+
+                RaiseEvent(
+                    "DBAdmin.Grid.SetActiveRow",
+                    n);
+
+                n = new Node();
+                n["FullTypeName"].Value = typeof(WebPageTemplate).FullName;
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    n);
+
+                n = new Node();
+                n["ID"].Value = clone.ID;
+
+                RaiseEvent(
+                    "Magix.Publishing.EditTemplate",
+                    n);
             }
         }
 
@@ -168,7 +248,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["ID"].Value = t.ID;
 
                 RaiseEvent(
-                    "Magix.Publishing.TemplateWasModified",
+                    "Magix.Publishing.WebPartTemplateWasModified",
                     node);
             }
         }
@@ -183,73 +263,109 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 if (e.Params["Action"].Get<string>() == "IncreaseWidth")
                 {
                     e.Params["OldWidth"].Value = t.Width;
-                    t.Width = Math.Min(24, t.Width + 1);
+                    t.Width = Math.Min(24, (
+                        e.Params.Contains("NewValue") ? 
+                            e.Params["NewValue"].Get<int>() : 
+                            t.Width + 1));
                     e.Params["NewWidth"].Value = t.Width;
                 }
                 else if (e.Params["Action"].Get<string>() == "DecreaseWidth")
                 {
                     e.Params["OldWidth"].Value = t.Width;
-                    t.Width = Math.Max(6, t.Width - 1);
+                    t.Width = Math.Max(6, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.Width - 1));
                     e.Params["NewWidth"].Value = t.Width;
                 }
                 else if (e.Params["Action"].Get<string>() == "IncreaseHeight")
                 {
                     e.Params["OldHeight"].Value = t.Height;
-                    t.Height = Math.Min(30, t.Height + 1);
+                    t.Height = Math.Min(30, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.Height + 1));
                     e.Params["NewHeight"].Value = t.Height;
                 }
                 else if (e.Params["Action"].Get<string>() == "DecreaseHeight")
                 {
                     e.Params["OldHeight"].Value = t.Height;
-                    t.Height = Math.Max(6, t.Height - 1);
-                    e.Params["OldHeight"].Value = t.Height;
+                    t.Height = Math.Max(6, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.Height - 1));
+                    e.Params["NewHeight"].Value = t.Height;
                 }
                 else if (e.Params["Action"].Get<string>() == "IncreaseDown")
                 {
                     e.Params["OldTop"].Value = t.MarginTop;
-                    t.MarginTop = Math.Min(30, t.MarginTop + 1);
+                    t.MarginTop = Math.Min(30, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginTop + 1));
                     e.Params["NewTop"].Value = t.MarginTop;
                 }
                 else if (e.Params["Action"].Get<string>() == "DecreaseDown")
                 {
                     e.Params["OldTop"].Value = t.MarginTop;
-                    t.MarginTop = Math.Max(0, t.MarginTop - 1);
+                    t.MarginTop = Math.Max(0, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginTop - 1));
                     e.Params["NewTop"].Value = t.MarginTop;
                 }
                 else if (e.Params["Action"].Get<string>() == "IncreaseBottom")
                 {
                     e.Params["OldMarginBottom"].Value = t.MarginBottom;
-                    t.MarginBottom = Math.Min(30, t.MarginBottom + 1);
+                    t.MarginBottom = Math.Min(30, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginBottom + 1));
                     e.Params["NewMarginBottom"].Value = t.MarginBottom;
                 }
                 else if (e.Params["Action"].Get<string>() == "DecreaseBottom")
                 {
                     e.Params["OldMarginBottom"].Value = t.MarginBottom;
-                    t.MarginBottom = Math.Max(0, t.MarginBottom - 1);
+                    t.MarginBottom = Math.Max(0, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginBottom - 1));
                     e.Params["NewMarginBottom"].Value = t.MarginBottom;
                 }
                 else if (e.Params["Action"].Get<string>() == "IncreaseLeft")
                 {
                     e.Params["OldPush"].Value = t.MarginLeft;
-                    t.MarginLeft = Math.Min(18, t.MarginLeft + 1);
+                    t.MarginLeft = Math.Min(18, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginLeft + 1));
                     e.Params["NewPush"].Value = t.MarginLeft;
                 }
                 else if (e.Params["Action"].Get<string>() == "DecreaseLeft")
                 {
                     e.Params["OldPush"].Value = t.MarginLeft;
-                    t.MarginLeft = Math.Max(0, t.MarginLeft - 1);
+                    t.MarginLeft = Math.Max(0, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginLeft - 1));
                     e.Params["NewPush"].Value = t.MarginLeft;
                 }
                 else if (e.Params["Action"].Get<string>() == "IncreasePadding")
                 {
                     e.Params["OldPadding"].Value = t.MarginRight;
-                    t.MarginRight = Math.Min(18, t.MarginRight + 1);
+                    t.MarginRight = Math.Min(18, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginRight + 1));
                     e.Params["NewPadding"].Value = t.MarginRight;
                 }
                 else if (e.Params["Action"].Get<string>() == "DecreasePadding")
                 {
                     e.Params["OldPadding"].Value = t.MarginRight;
-                    t.MarginRight = Math.Max(0, t.MarginRight - 1);
+                    t.MarginRight = Math.Max(0, (
+                        e.Params.Contains("NewValue") ?
+                            e.Params["NewValue"].Get<int>() :
+                            t.MarginRight - 1));
                     e.Params["NewPadding"].Value = t.MarginRight;
                 }
                 else if (e.Params["Action"].Get<string>() == "ChangeName")
@@ -317,7 +433,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                         node["ID"].Value = t.ID;
 
                         RaiseEvent(
-                            "Magix.Publishing.TemplateWasModified", 
+                            "Magix.Publishing.WebPageTemplateWasModified", 
                             node);
                     }
 

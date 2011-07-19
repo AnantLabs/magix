@@ -41,6 +41,27 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
                     TypeName = "System.String";
                 base.Save();
             }
+
+            public ActionParams Clone()
+            {
+                return DeepCopy(this);
+            }
+
+            private ActionParams DeepCopy(ActionParams actionParams)
+            {
+                ActionParams ret = new ActionParams();
+
+                ret.Name = Name;
+                ret.TypeName = TypeName;
+                ret.Value = Value;
+
+                foreach (ActionParams idx in Children)
+                {
+                    ret.Children.Add(idx.Clone());
+                }
+
+                return ret;
+            }
         }
 
         public Action()
@@ -65,13 +86,37 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
         public override void Save()
         {
-            foreach (Action idx in Action.Select(
-                Criteria.Eq("Name", Name)))
+            string name = Name;
+
+            int idxNo = 2;
+            while (CountWhere(
+                Criteria.Eq("Name", name),
+                Criteria.NotId(ID)) > 0)
             {
-                if (idx.ID != ID)
-                    throw new ArgumentException("Ooops, the Name for that Action seems to be already taken by another View in the system, either change the name of the previously named Action, or choose another name for this Action ...");
+                name = Name + " - " + idxNo.ToString();
+                idxNo += 1;
             }
+            Name = name;
             base.Save();
+        }
+
+        public Action Copy()
+        {
+            return DeepCopy(this);
+        }
+
+        private Action DeepCopy(Action action)
+        {
+            Action ret = new Action();
+            ret.Description = Description;
+            ret.EventName = EventName;
+            ret.Name = "Copy - " + Name;
+            foreach (ActionParams idx in Params)
+            {
+                ret.Params.Add(idx.Clone());
+            }
+            ret.StripInput = ret.StripInput;
+            return ret;
         }
     }
 }

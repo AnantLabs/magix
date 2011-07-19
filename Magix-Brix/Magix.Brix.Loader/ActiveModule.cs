@@ -8,6 +8,7 @@ using System;
 using System.Web.UI;
 using System.Web;
 using Magix.Brix.Types;
+using System.Diagnostics;
 
 namespace Magix.Brix.Loader
 {
@@ -64,6 +65,7 @@ namespace Magix.Brix.Loader
          * Shorthand for raising events. Will return a node, initially created empty, 
          * but passed onto the Event Handler(s)
          */
+        [DebuggerStepThrough]
         public Node RaiseSafeEvent(string eventName)
         {
             Node node = new Node();
@@ -74,6 +76,7 @@ namespace Magix.Brix.Loader
         /**
          * Shorthand for raising events.
          */
+        [DebuggerStepThrough]
         protected bool RaiseSafeEvent(string eventName, Node node)
         {
             try

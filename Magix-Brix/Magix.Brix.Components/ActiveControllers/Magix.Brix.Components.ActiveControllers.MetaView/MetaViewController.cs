@@ -349,6 +349,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 "Magix.MetaView.EditMetaView",
                 node);
         }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
+        protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
+        {
+            e.Params["WhiteListColumns"]["MetaViewCount"].Value = true;
+            e.Params["Type"]["Properties"]["MetaViewCount"]["ReadOnly"].Value = true;
+            e.Params["Type"]["Properties"]["MetaViewCount"]["Header"].Value = "Views";
+            e.Params["Object"]["Properties"]["MetaViewCount"].Value = MetaView.Count.ToString();
+        }
     }
 }
 

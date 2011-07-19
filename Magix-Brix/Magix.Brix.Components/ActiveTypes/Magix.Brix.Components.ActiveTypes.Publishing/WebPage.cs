@@ -212,6 +212,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         {
             RemoveAllWebPartsNotExistingInTemplates();
             CreateDefaultEmptyTemplatesForNewTemplates();
+            MakeSureAllWebPartsHaveTheirSettingsIntact();
         }
 
         private IEnumerable<WebPartTemplate> InTemplateButNotInWebParts
@@ -244,7 +245,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         {
             WebPart webPart = new WebPart();
             webPart.Container = template;
-            InitializeWebPart(webPart);
+            InitializeWebPartSettings(webPart);
             WebParts.Add(webPart);
         }
 
@@ -291,7 +292,15 @@ WebPageTemplate '{1}', and didn't care to edit the Template, could it have been 
             }
         }
 
-        private void InitializeWebPart(WebPart webPart)
+        private void MakeSureAllWebPartsHaveTheirSettingsIntact()
+        {
+            foreach (WebPart idx in WebParts)
+            {
+                InitializeWebPartSettings(idx);
+            }
+        }
+
+        private void InitializeWebPartSettings(WebPart webPart)
         {
             Type moduleType = FindModuleName(webPart.Container);
 
@@ -306,10 +315,10 @@ WebPageTemplate '{1}', and didn't care to edit the Template, could it have been 
                 {
                     set = new WebPart.WebPartSetting();
                     set.Name = moduleType.FullName + idx.Left.Name;
+                    set.Value = webPart.Container.GetDefaultValueForSetting(idx.Left.Name);
                     webPart.Settings.Add(set);
                     set.Parent = webPart; // To not mess up our Cache ...
                 }
-                set.Value = webPart.Container.GetDefaultValueForSetting(idx.Left.Name);
             }
         }
 
@@ -328,6 +337,9 @@ WebPageTemplate '{1}', and didn't care to edit the Template, could it have been 
 
         public override void Delete()
         {
+            if (Count == 1 || URL == "")
+                throw new ArgumentException("You cannot delete the Root Page ...");
+
             Node node = new Node();
             node["ID"].Value = ID;
 
@@ -346,7 +358,7 @@ WebPageTemplate '{1}', and didn't care to edit the Template, could it have been 
             if (!string.IsNullOrEmpty(URL))
             {
                 string lastParts = URL;
-                if (lastParts.IndexOf('/') != null)
+                if (lastParts.Contains("/"))
                     lastParts = URL.Substring(URL.LastIndexOf("/") + 1);
                 tmpUrl += lastParts;
             }

@@ -227,6 +227,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
                 node["PageObjectTemplateID"].Value = page.ID;
 
+                string cssClass = node["CssClass"].Get<string>() ?? "";
+                cssClass += " web-part";
+                node["CssClass"].Value = cssClass;
+
                 LoadModule(
                     page.Container.ModuleName,
                     page.Container.ViewportContainer,

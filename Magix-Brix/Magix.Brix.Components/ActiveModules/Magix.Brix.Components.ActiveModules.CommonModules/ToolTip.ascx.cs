@@ -19,12 +19,15 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
     public class ToolTip : UserControl, IModule
     {
         protected Label lbl;
+        protected Panel pnl;
 
         public void InitialLoading(Node node)
         {
             Load += delegate
             {
-                lbl.Text = node["Text"].Get<string>();
+                SetText(node);
+                if (node.Contains("ChildCssClass"))
+                    pnl.CssClass += " " + node["ChildCssClass"].Get<string>();
             };
         }
 
@@ -35,7 +38,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 this,
                 "Magix.Core.GetPreviousToolTip",
                 node);
-            lbl.Text = node["Text"].Get<string>();
+            SetText(node);
             new EffectHighlight(lbl, 500)
                 .Render();
         }
@@ -47,9 +50,20 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 this,
                 "Magix.Core.GetNextToolTip",
                 node);
-            lbl.Text = node["Text"].Get<string>();
+            SetText(node);
             new EffectHighlight(lbl, 500)
                 .Render();
+        }
+
+        private void SetText(Node node)
+        {
+            if (!node.Contains("Text") ||
+                string.IsNullOrEmpty(node["Text"].Get<string>()))
+                throw new ArgumentException("Ooops, empty tooltip ...!");
+            string str = node["Text"].Get<string>();
+            if (!str.Contains("<p"))
+                str = "<p>" + str + "</p>";
+            lbl.Text = str;
         }
     }
 }

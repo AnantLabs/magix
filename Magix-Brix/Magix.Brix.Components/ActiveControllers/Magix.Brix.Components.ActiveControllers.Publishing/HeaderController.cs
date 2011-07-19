@@ -42,6 +42,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     node);
             }
 
+            e.Params["Lock"].Value = true;
             RaiseEvent(
                 "Magix.Core.SetFormCaption",
                 e.Params);

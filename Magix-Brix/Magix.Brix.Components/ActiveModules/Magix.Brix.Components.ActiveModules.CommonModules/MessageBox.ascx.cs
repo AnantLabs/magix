@@ -16,26 +16,15 @@ using Magix.UX.Effects;
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
     [ActiveModule]
-    public class MessageBox : UserControl, IModule
+    public class MessageBox : ActiveModule, IModule
     {
         protected Label lbl;
         protected Button ok;
         protected Button cancel;
 
-        private Node OkNode
+        public override void InitialLoading(Node node)
         {
-            get { return ViewState["OkNode"] as Node; }
-            set { ViewState["OkNode"] = value; }
-        }
-
-        private Node CancelNode
-        {
-            get { return ViewState["CancelNode"] as Node; }
-            set { ViewState["CancelNode"] = value; }
-        }
-
-        public void InitialLoading(Node node)
-        {
+            base.InitialLoading(node);
             Load += delegate
             {
                 string message = node["Text"].Get<string>();
@@ -44,9 +33,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     message = "<p>" + message + "</p>";
                 }
                 lbl.Text = message;
-                OkNode = node["OK"].UnTie();
-                CancelNode = node["Cancel"].UnTie();
-                if (!CancelNode["Visible"].Get(true))
+                if (!DataSource["Cancel"]["Visible"].Get(true))
                 {
                     cancel.Visible = false;
                     ok.CssClass = "cancel";
@@ -60,23 +47,23 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
 
         protected void ok_Click(object sender, EventArgs e)
         {
-            if (OkNode != null && OkNode["Event"].Value != null)
+            if (DataSource.Contains("OK") &&
+                DataSource["OK"].Contains("Event"))
             {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    OkNode["Event"].Get<string>(),
-                    OkNode);
+                RaiseSafeEvent(
+                    DataSource["OK"]["Event"].Get<string>(),
+                    DataSource["OK"]);
             }
         }
 
         protected void cancel_Click(object sender, EventArgs e)
         {
-            if (CancelNode != null && CancelNode["Event"].Value != null)
+            if (DataSource.Contains("Cancel") &&
+                DataSource["Cancel"].Contains("Event"))
             {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    CancelNode["Event"].Get<string>(),
-                    CancelNode);
+                RaiseSafeEvent(
+                    DataSource["Cancel"]["Event"].Get<string>(),
+                    DataSource["Cancel"]);
             }
         }
     }

@@ -39,13 +39,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Last"].Value = true;
 
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
-            node["WhiteListColumns"]["Description"].Value = true;
-            node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 4;
-            node["WhiteListColumns"]["EventName"].Value = true;
-            node["WhiteListColumns"]["EventName"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 6;
             node["WhiteListColumns"]["Params"].Value = true;
             node["WhiteListColumns"]["Params"]["ForcedWidth"].Value = 2;
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 3;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
@@ -54,18 +52,79 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 10;
-            node["Type"]["Properties"]["EventName"]["Header"].Value = "Action";
-            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Description"]["MaxLength"].Value = 20;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyActionTemplateColumn";
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.GetCopyActionTemplateColumn")]
+        protected void Magix_Meta_GetCopyActionTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            // Creating our SelectList
+            LinkButton ls = new LinkButton();
+            ls.Text = "Copy";
+            ls.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+                    RaiseEvent(
+                        "Magix.Meta.CopyAction",
+                        node);
+                };
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = ls;
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.CopyAction")]
+        protected void Magix_Meta_CopyAction(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                Action a = Action.SelectByID(e.Params["ID"].Get<int>());
+                Action clone = a.Copy();
+
+                clone.Save();
+
+                tr.Commit();
+
+                Node n = new Node();
+
+                n["FullTypeName"].Value = typeof(Action).FullName;
+                n["ID"].Value = clone.ID;
+
+                RaiseEvent(
+                    "DBAdmin.Grid.SetActiveRow",
+                    n);
+
+                n = new Node();
+                n["FullTypeName"].Value = typeof(Action).FullName;
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    n);
+
+                n = new Node();
+                n["ID"].Value = clone.ID;
+
+                RaiseEvent(
+                    "Magix.Meta.EditAction",
+                    n);
+            }
         }
 
         [ActiveEvent(Name = "Magix.Meta.CreateAction")]
@@ -85,8 +144,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         protected void Magix_Meta_EditAction(object sender, ActiveEventArgs e)
         {
             Action a = Action.SelectByID(e.Params["ID"].Get<int>());
-            EditActionItemParams(a, e.Params);
-            EditActionItem(a, e.Params);
+            
+            Node node = new Node();
+            node["ID"].Value = e.Params["ID"].Value;
+            node["FullTypeName"].Value = typeof(Action).FullName;
+
+            EditActionItemParams(a, node);
+            EditActionItem(a, node);
 
             CreateRunParamButton(a);
 
@@ -282,6 +346,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
+        [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
+        protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(Action).FullName)
+            {
+                // In case it's the one being edited ...
+                ActiveEvents.Instance.RaiseClearControls("content4");
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Meta.EditParam")]
         private void Magix_Meta_EditParam(object sender, ActiveEventArgs e)
         {
@@ -417,6 +491,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 AddParamToNode(idx, node["Items"]["i-" + par.ID]);
             }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
+        protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
+        {
+            e.Params["WhiteListColumns"]["MetaActionCount"].Value = true;
+            e.Params["Type"]["Properties"]["MetaActionCount"]["ReadOnly"].Value = true;
+            e.Params["Type"]["Properties"]["MetaActionCount"]["Header"].Value = "Actions";
+            e.Params["Object"]["Properties"]["MetaActionCount"].Value = Action.Count.ToString();
         }
     }
 }
