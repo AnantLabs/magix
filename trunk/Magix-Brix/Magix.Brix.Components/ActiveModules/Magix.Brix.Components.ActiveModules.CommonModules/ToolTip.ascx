@@ -11,6 +11,7 @@
 <mux:Panel
     runat="server"
     id="pnl"
+    OnClick="pnl_Click"
     CssClass="navigation">
     <mux:Button
         runat="server"

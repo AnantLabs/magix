@@ -112,7 +112,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                MetaType t = new MetaType();
+                MetaObject t = new MetaObject();
 
                 t.Name = e.Params["MetaViewTypeName"].Get<string>();
                 t.Reference = e.Params["EventReference"].Get<string>();
@@ -120,7 +120,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 foreach (Node idx in e.Params["PropertyValues"])
                 {
-                    MetaType.Value v = new MetaType.Value();
+                    MetaObject.Value v = new MetaObject.Value();
                     v.Name = idx["Name"].Get<string>();
                     v.Val = idx["Value"].Get<string>();
                     t.Values.Add(v);

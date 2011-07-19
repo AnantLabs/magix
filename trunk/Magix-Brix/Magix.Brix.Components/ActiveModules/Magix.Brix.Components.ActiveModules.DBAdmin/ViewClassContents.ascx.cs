@@ -191,22 +191,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["Start"].Get<int>() +
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
             }
-            if (setSelectedRow)
-            {
-                // Now the logical thing to do, is to page to the end, since that's the likely
-                // place we'll find this object within our grid ...
-                if (DataSource["SetCount"].Get<int>() >=
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
-                {
-                    // We have more items in our SetCount, than we have space for at
-                    // the time being within our Grid component ...
-                    DataSource["End"].Value =
-                        DataSource["SetCount"].Get<int>() + 1;
-                    DataSource["Start"].Value =
-                        DataSource["SetCount"].Get<int>() -
-                        (Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) - 1);
-                }
-            }
+            //if (setSelectedRow)
+            //{
+            //    // Now the logical thing to do, is to page to the end, since that's the likely
+            //    // place we'll find this object within our grid ...
+            //    if (DataSource["SetCount"].Get<int>() >=
+            //        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+            //    {
+            //        // We have more items in our SetCount, than we have space for at
+            //        // the time being within our Grid component ...
+            //        DataSource["End"].Value =
+            //            DataSource["SetCount"].Get<int>() + 1;
+            //        DataSource["Start"].Value =
+            //            DataSource["SetCount"].Get<int>() -
+            //            (Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) - 1);
+            //    }
+            //}
             if (RaiseSafeEvent(
                 "DBAdmin.Data.GetContentsOfClass",
                 DataSource))

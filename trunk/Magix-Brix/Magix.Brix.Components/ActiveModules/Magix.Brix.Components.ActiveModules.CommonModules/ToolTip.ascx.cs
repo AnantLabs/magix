@@ -20,6 +20,8 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
     {
         protected Label lbl;
         protected Panel pnl;
+        protected Button next;
+        protected Button previous;
 
         public void InitialLoading(Node node)
         {
@@ -64,6 +66,11 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             if (!str.Contains("<p"))
                 str = "<p>" + str + "</p>";
             lbl.Text = str;
+        }
+
+        protected void pnl_Click(object sender, EventArgs e)
+        {
+            next.Focus();
         }
     }
 }

@@ -21,11 +21,47 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             e.Params["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
 
-            e.Params["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Objects ...";
-            e.Params["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.OpenMetaTypeDashboard";
-
             e.Params["Items"]["MetaType"]["Items"]["Actions"]["Caption"].Value = "View Actions ...";
             e.Params["Items"]["MetaType"]["Items"]["Actions"]["Event"]["Name"].Value = "Magix.MetaType.ViewActions";
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.FindAction")]
+        protected void Magix_Meta_FindAction(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["FullTypeName"].Value = typeof(Action).FullName;
+            node["Container"].Value = "content5";
+            node["Width"].Value = 21;
+            node["Last"].Value = true;
+            node["Padding"].Value = 3;
+            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 8;
+            node["IsDelete"].Value = false;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["EventName"].Value = true;
+            node["WhiteListColumns"]["EventName"]["ForcedWidth"].Value = 5;
+            node["WhiteListColumns"]["Description"].Value = true;
+            node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 8;
+
+            node["FilterOnId"].Value = false;
+            node["IDColumnName"].Value = "Select";
+            node["IDColumnValue"].Value = "Select";
+            node["IDColumnEvent"].Value = "Magix.Meta.SelectAction";
+            node["CreateEventName"].Value = "Magix.Meta.CreateAction";
+            node["MetaTypeID"].Value = e.Params["ID"].Get<int>();
+
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["EventName"]["Header"].Value = "Action";
+            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewClass",
+                node);
         }
 
         [ActiveEvent(Name = "Magix.MetaType.ViewActions")]

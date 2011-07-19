@@ -548,14 +548,18 @@ input[type=button].clear-both
 	width:390px;
 	padding:18px 40px 18px 40px;
 	overflow:hidden;
-	max-height:90px;
+	height:90px;
+	
+	background-image:url(../images/facts.png);
+	background-position:top center;
+	background-repeat:no-repeat;
 
-	-moz-transition-property:-moz-box-shadow, background-color, max-height;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-color, max-height;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-color, max-height;
-	transition-duration:0.2s;
+	-moz-transition-property:-moz-box-shadow, background-color, height;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:-webkit-box-shadow, background-color, height;
+	-webkit-transition-duration:1s;
+	transition-property:box-shadow, background-color, height;
+	transition-duration:1s;
 
 	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.0);
 	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.0);
@@ -568,14 +572,14 @@ input[type=button].clear-both
 
 .tool-tip:hover
 {
-	max-height:inherit;
+	height:540px;
 
-	-moz-transition-property:-moz-box-shadow, background-color, max-height;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-color, max-height;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-color, max-height;
-	transition-duration:0.2s;
+	-moz-transition-property:-moz-box-shadow, background-color, height;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:-webkit-box-shadow, background-color, height;
+	-webkit-transition-duration:1s;
+	transition-property:box-shadow, background-color, height;
+	transition-duration:1s;
 
 	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
 	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
@@ -618,9 +622,29 @@ input[type=button].clear-both
 
 .tool-tip .navButton
 {
-	width:70px;
+	opacity:0;
+	width:30px;
 	margin:0 0 18px 10px;
 	float:right;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:.5s;
+	transition-property:opacity;
+	transition-duration:.5s;
+}
+
+.tool-tip:hover .navButton
+{
+	opacity:1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:3.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:3.5s;
+	transition-property:opacity;
+	transition-duration:3.5s;
 }
 
 .tool-tip .tip-text em
