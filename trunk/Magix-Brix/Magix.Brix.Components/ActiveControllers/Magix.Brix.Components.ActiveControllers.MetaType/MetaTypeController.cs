@@ -312,6 +312,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 "Magix.Meta.AppendAction",
                 e.Params);
         }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
+        protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
+        {
+            e.Params["WhiteListColumns"]["MetaTypesCount"].Value = true;
+            e.Params["Type"]["Properties"]["MetaTypesCount"]["ReadOnly"].Value = true;
+            e.Params["Type"]["Properties"]["MetaTypesCount"]["Header"].Value = "Objects";
+            e.Params["Object"]["Properties"]["MetaTypesCount"].Value = MetaType.Count.ToString();
+        }
     }
 }
 

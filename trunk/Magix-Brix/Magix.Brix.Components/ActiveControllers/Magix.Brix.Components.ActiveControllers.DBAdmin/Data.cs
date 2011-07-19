@@ -980,7 +980,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     this,
                     "DBAdmin.DynamicType.GetObject",
                     node);
-                return null;
+                return typeof(object);
             }
             else
             {

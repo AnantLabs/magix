@@ -76,6 +76,10 @@
       <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.ToolTip\Magix.Brix.Components.ActiveTypes.ToolTip.csproj">
+      <Project>{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.ToolTip</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Users\Magix.Brix.Components.ActiveTypes.Users.csproj">
       <Project>{72BD8731-239E-463D-A66C-556ED55A4578}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Users</Name>

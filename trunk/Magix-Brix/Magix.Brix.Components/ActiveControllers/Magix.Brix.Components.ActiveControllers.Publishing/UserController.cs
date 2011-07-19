@@ -36,6 +36,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     User admin = new User();
                     admin.Username = "admin";
                     admin.Password = "admin";
+                    admin.AvatarURL = "media/images/avatars/marvin-headshot.png";
                     admin.Roles.Add(Role.SelectFirst(Criteria.Eq("Name", "Administrator")));
                     admin.SaveNoVerification();
                 }
@@ -215,9 +216,20 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.CreateUser")]
         protected void Magix_Publishing_CreateUser(object sender, ActiveEventArgs e)
         {
-            User u = new User();
-            u.Save();
-            ActiveEvents.Instance.RaiseClearControls("content4");
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                User u = new User();
+                u.Save();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["ID"].Value = u.ID;
+                node["FullTypeName"].Value = typeof(User).FullName;
+                RaiseEvent(
+                    "Magix.Publishing.EditUser",
+                    node);
+            }
         }
 
         [ActiveEvent(Name = "Magix.Publishing.ChangeAvatarForUser")]

@@ -399,7 +399,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["WhiteListProperties"]["Name"].Get<bool>()))
             {
                 HtmlTableCell c1 = new HtmlTableCell();
-                c1.InnerHtml = "Name";
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"].Contains("Name") &&
+                    DataSource["WhiteListProperties"]["Name"].Contains("Header"))
+                {
+                    c1.InnerHtml = 
+                        DataSource["WhiteListProperties"]["Name"]["Header"].Get<string>();
+                }
+                else
+                {
+                    c1.InnerHtml = "Name";
+                }
                 if (DataSource.Contains("WhiteListProperties") &&
                     DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
                     c1.Attributes.Add(
@@ -450,7 +460,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["WhiteListProperties"]["Value"].Get<bool>()))
             {
                 HtmlTableCell c1 = new HtmlTableCell();
-                c1.InnerHtml = "Value";
+                if (DataSource.Contains("WhiteListProperties") &&
+                    DataSource["WhiteListProperties"].Contains("Value") &&
+                    DataSource["WhiteListProperties"]["Value"].Contains("Header"))
+                {
+                    c1.InnerHtml =
+                        DataSource["WhiteListProperties"]["Value"]["Header"].Get<string>();
+                }
+                else
+                {
+                    c1.InnerHtml = "Value";
+                }
                 if (DataSource.Contains("WhiteListProperties") && 
                     DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                     c1.Attributes.Add(

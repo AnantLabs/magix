@@ -8,23 +8,27 @@
 
 <link href="media/modules/ToolTip.css" rel="stylesheet" type="text/css" />
 
-<div class="navigation">
+<mux:Panel
+    runat="server"
+    id="pnl"
+    CssClass="navigation">
     <mux:Button
         runat="server"
         id="next"
-        style="float:right;"
         OnClick="next_Click"
-        CssClass="span-3 navButton"
+        ToolTip="Next Carpe Diem ..."
+        CssClass="navButton"
         Text="&gt;" />
     <mux:Button
         runat="server"
         id="previous"
-        style="float:right;margin-left:10px;"
         OnClick="previous_Click"
-        CssClass="span-3 navButton"
+        ToolTip="Previous Carpe Diem ..."
+        CssClass="navButton"
         Text="&lt;" />
     <mux:Label
         runat="server"
         Tag="div"
+        CssClass="tip-text"
         id="lbl" />
-</div>
+</mux:Panel>

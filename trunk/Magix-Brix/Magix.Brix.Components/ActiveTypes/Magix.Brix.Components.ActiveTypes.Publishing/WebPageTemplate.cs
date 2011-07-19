@@ -37,5 +37,40 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
          */
         [ActiveField]
         public LazyList<WebPartTemplate> Containers { get; set; }
+
+        public WebPageTemplate Clone()
+        {
+            WebPageTemplate ret = new WebPageTemplate();
+            ret.Name = "Copy - " + Name;
+            foreach (WebPartTemplate idx in Containers)
+            {
+                WebPartTemplate t = new WebPartTemplate();
+                t.CssClass = idx.CssClass;
+                t.Height = idx.Height;
+                t.Last = idx.Last;
+                t.MarginBottom = idx.MarginBottom;
+                t.MarginLeft = idx.MarginLeft;
+                t.MarginRight = idx.MarginRight;
+                t.MarginTop = idx.MarginTop;
+                t.ModuleName = idx.ModuleName;
+                t.Name = idx.Name;
+                t.PageTemplate = idx.PageTemplate;
+                t.ViewportContainer = idx.ViewportContainer;
+                t.Width = idx.Width;
+                ret.Containers.Add(t);
+            }
+            return ret;
+        }
+
+        public override void Delete()
+        {
+            foreach (WebPage idx in 
+                WebPage.Select(
+                    Criteria.ExistsIn(this.ID, true)))
+            {
+                idx.Delete(); // Will force a retrigger of its template container
+            }
+            base.Delete();
+        }
     }
 }

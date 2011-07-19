@@ -1,9 +1,7 @@
-﻿
 
 
 html, body, form
 {
-	width:700px;
 }
 
 html
@@ -16,21 +14,21 @@ body
 
 a
 {
-	color:#aaf;
+   color:#aaf;
 }
 
 table tr th,
 table tr td
 {
-	border:none 0;
+   border:none 0;
 }
 
 
 
 .dynamic
 {
-	width:auto;
-	height:auto;
+   width:auto;
+   height:auto;
 }
 
 
@@ -39,24 +37,24 @@ table tr td
 /* Rating page... */
 .wine-rater-main-all
 {
-	overflow:visible;
-	text-shadow:2px 2px 4px #999;
-	margin:9px;
+   overflow:visible;
+   text-shadow:2px 2px 4px #999;
+   margin:9px;
 }
 
 .wine-rater-main-content
 {
-	width:100%;
-	position:relative;
-	overflow:visible;
+   width:100%;
+   position:relative;
+   overflow:visible;
 }
 
 .wine-rater-paging
 {
-	width:320px;
-	margin-left:auto;
-	margin-right:auto;
-	position:relative;
+   width:320px;
+   margin-left:auto;
+   margin-right:auto;
+   position:relative;
 }
 
 .wine-rater-previous
@@ -73,25 +71,25 @@ table tr td
 
 .wine-rater-wrapper
 {
-	width:100%;
-	height:100%;
-	margin:0;
-	padding:0;
+   width:100%;
+   height:100%;
+   margin:0;
+   padding:0;
 }
 
 .wine-rater-item
 {
-	width:100%;
-	overflow:hidden;
-	margin:25px 0;
-	position:relative;
+   width:100%;
+   overflow:hidden;
+   margin:25px 0;
+   position:relative;
 }
 
 .wine-rater-item-image-wrapper
 {
-	float:left;
-	margin-right:10px;
-	position:relative;
+   float:left;
+   margin-right:10px;
+   position:relative;
 }
 
 .wine-rater-item-image
@@ -100,21 +98,21 @@ table tr td
 
 .wine-rater-item-text
 {
-	width:300px;
-	display:block;
-	float:left;
+   width:300px;
+   display:block;
+   float:left;
 }
 
 .wine-rater-item-header
 {
-	font-weight:600;
-	font-size: 1.5em;
-	margin-bottom:15px;
+   font-weight:600;
+   font-size: 1.5em;
+   margin-bottom:15px;
 }
 
 .wine-rater-item-winemakers-notes
 {
-	display:block;
+   display:block;
 }
 
 .wine-rater-rate-label
@@ -123,48 +121,48 @@ table tr td
 
 .wine-rater-rater-wrapper
 {
-	width:300px;
+   width:300px;
 }
 
 input.wine-rater-rating-clear
 {
-	position:absolute;
-	display:block;
-	bottom:0px;
-	right:15px;
-	font-size:8px;
-	margin-top:-5px;
-	margin-right:0;
-	opacity:0.3;
+   position:absolute;
+   display:block;
+   bottom:0px;
+   right:15px;
+   font-size:8px;
+   margin-top:-5px;
+   margin-right:0;
+   opacity:0.3;
 
-	-moz-transition-property:opacity;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:0.2s;
-	transition-property:opacity;
-	transition-duration:0.2s;
+   -moz-transition-property:opacity;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:opacity;
+   -webkit-transition-duration:0.2s;
+   transition-property:opacity;
+   transition-duration:0.2s;
 }
 
 input.wine-rater-rating-clear:hover
 {
-	opacity:1;
+   opacity:1;
 }
 
 .wine-rater-rater
 {
-	float:left;
-	width:300px;
+   float:left;
+   width:300px;
 }
 
 .wine-rater-item-price
 {
-	clear:both;
-	font-size:larger;
+   clear:both;
+   font-size:larger;
 }
 
 .wine-rater-comment-wrapper
 {
-	margin:10px 0 10px 0;
+   margin:10px 0 10px 0;
 }
 
 .wine-rater-comment-wrapper-inner
@@ -173,14 +171,14 @@ input.wine-rater-rating-clear:hover
 
 .wine-rater-comment-text
 {
-	width: 100%;
-	height: 100px;
+   width: 100%;
+   height: 100px;
 }
 
 .wine-rater-email-input
 {
-	margin:15px;
-	font-size:large;
+   margin:15px;
+   font-size:large;
 }
 
 .wine-rater-email-input input[type=email],
@@ -188,109 +186,109 @@ input.wine-rater-rating-clear:hover
 .wine-rater-email-input input[type=phone],
 .wine-rater-email-input input[type=text]
 {
-	margin-bottom:15px;
+   margin-bottom:15px;
 }
 
 .wine-rater-email-wrapper
 {
-	font-size:x-small;
+   font-size:x-small;
 }
 
 .wine-rater-help-image
 {
-	background-color:Transparent;
-	background-repeat:no-repeat;
-	background-position:0 0;
-	width:700px;
-	height:327px;
-	display:block;
-	margin-left:auto;
-	margin-right:auto;
+   background-color:Transparent;
+   background-repeat:no-repeat;
+   background-position:0 0;
+   width:700px;
+   height:327px;
+   display:block;
+   margin-left:auto;
+   margin-right:auto;
 }
 
 input.wine-rater-email-button
 {
-	font-size:large;
-	margin:15px auto 15px auto;
-	display:block;
+   font-size:large;
+   margin:15px auto 15px auto;
+   display:block;
 }
 
 .wine-window
 {
-	color:Black;
-	width:250px;
-	z-index:500;
-	position:absolute;
-	top:50px;
-	left:250px;
+   color:Black;
+   width:250px;
+   z-index:500;
+   position:absolute;
+   top:50px;
+   left:250px;
 }
 
 .wine-window-visible
 {
-	position:absolute;
-	color:Black;
-	z-index:500;
-	position:absolute;
+   position:absolute;
+   color:Black;
+   z-index:500;
+   position:absolute;
 }
 
 .wine-obscurer
 {
-	position:fixed;
-	top:0;
-	left:0;
-	width:1000%;
-	height:1000%;
-	background-color:Black;
-	z-index:450;
+   position:fixed;
+   top:0;
+   left:0;
+   width:1000%;
+   height:1000%;
+   background-color:Black;
+   z-index:450;
 }
 
 /* Profile page ... */
 .wine-rating-whole-page
 {
-	width:100%;
-	height:100%;
-	overflow:auto;
-	background-color:#ffffff;
-	color:Black;
-	text-shadow:2px 2px 4px #999;
+   width:100%;
+   height:100%;
+   overflow:auto;
+   background-color:#ffffff;
+   color:Black;
+   text-shadow:2px 2px 4px #999;
 }
 
 .wine-rating-separator
 {
-	clear:both;
-	display:block;
-	margin:25px;
+   clear:both;
+   display:block;
+   margin:25px;
 }
 
 .wine-rating-whole-content
 {
-	width:750px;
-	padding:25px 25px 75px 25px;
-	margin-left:auto;
-	margin-right:auto;
-	margin-top:25px;
-	margin-bottom:25px;
-	position:relative;
-	overflow:auto;
+   width:750px;
+   padding:25px 25px 75px 25px;
+   margin-left:auto;
+   margin-right:auto;
+   margin-top:25px;
+   margin-bottom:25px;
+   position:relative;
+   overflow:auto;
 }
 
 .wine-rating-profile-link-to-buy
 {
-	color:#33d;
-	font-size:larger;
-	margin-top:10px;
-	display:block;
+   color:#33d;
+   font-size:larger;
+   margin-top:10px;
+   display:block;
 }
 
 .wine-rating-profile-header
 {
-	margin:25px 0 20px 125px;
+   margin:25px 0 20px 125px;
 }
 
 .wine-rating-profile-logo-link
 {
-	display:block;
-	text-align:center;
+   display:block;
+   text-align:center;
 }
 
 .wine-rating-profile-logo-image
@@ -299,346 +297,346 @@ input.wine-rater-email-button
 
 .wine-rating-profile-logo-gravatar-link
 {
-	position:absolute;
-	top:25px;
-	right:25px;
+   position:absolute;
+   top:25px;
+   right:25px;
 }
 
 .wine-rating-profile-logo-gravatar-image
 {
-	-moz-border-radius:15px 15px 15px 15px;
-	-webkit-border-radius:15px 15px 15px 15px;
-	border-radius:15px 15px 15px 15px;
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   -moz-border-radius:15px 15px 15px 15px;
+   -webkit-border-radius:15px 15px 15px 15px;
+   border-radius:15px 15px 15px 15px;
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 }
 
 .wine-rater-profile-password-wrapper
 {
-	position:absolute;
-	top:160px;
-	right:25px;
+   position:absolute;
+   top:160px;
+   right:25px;
 }
 
 .wine-rater-email-text
 {
-	display:block;
+   display:block;
 }
 
 .wine-rater-profile-password-wrapper input[type=text]
 {
-	width:50px;
+   width:50px;
 }
 
 .wine-rating-profile-one-wine
 {
-	clear:both;
-	padding:15px;
-	width:90%;
-	margin-left:auto;
-	margin-right:auto;
-	overflow:auto;
+   clear:both;
+   padding:15px;
+   width:90%;
+   margin-left:auto;
+   margin-right:auto;
+   overflow:auto;
 }
 
 .wine-rating-profile-image
 {
-	float:left;
-	margin-right:25px;
+   float:left;
+   margin-right:25px;
 }
 
 .wine-profile-rater .mux-rating-star
 {
-	height:55px;
+   height:55px;
 }
 
 .wine-rating-profile
 {
-	float:left;
-	width:350px;
+   float:left;
+   width:350px;
 }
 
 .mux-calendar
 {
-	color:Black;
+   color:Black;
 }
 
 .wine-rater-social-wrapper
 {
-	width:600px;
-	height:80px;
-	padding:20px;
-	margin:0px auto 0px auto;
-	overflow:visible;
+   width:600px;
+   height:80px;
+   padding:20px;
+   margin:0px auto 0px auto;
+   overflow:visible;
 }
 
 /* FaceBook share link... */
 .fb_share_link
 {
-	border:none;
-	margin:10px;
+   border:none;
+   margin:10px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+   -moz-border-radius:5px 5px 5px 5px;
+   -webkit-border-radius:5px 5px 5px 5px;
+   border-radius:5px 5px 5px 5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+   background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow;
+   transition-duration:0.2s;
 
-	color:Black;
-	padding:8px;
+   color:Black;
+   padding:8px;
 }
 
 .fb_share_link:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+   -webkit-box-shadow: 2px 2px 10px #444;
+   -moz-box-shadow: 2px 2px 10px #444;
+   box-shadow: 2px 2px 10px #444;
 }
 
 .fb_share_link span
 {
-	background:url(http://static.ak.facebook.com/images/share/facebook_share_icon.gif?12:26981) no-repeat top left;
-	display:inline-block;
-	width:16px;
+   background:url(http://static.ak.facebook.com/images/share/facebook_share_icon.gif?12:26981) no-repeat top left;
+   display:inline-block;
+   width:16px;
 }
 
 
 /* Twitter share link... */
 .tw_share_link
 {
-	border:none;
-	margin:10px;
+   border:none;
+   margin:10px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+   -moz-border-radius:5px 5px 5px 5px;
+   -webkit-border-radius:5px 5px 5px 5px;
+   border-radius:5px 5px 5px 5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+   background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow;
+   transition-duration:0.2s;
 
-	color:Black;
-	padding:8px;
+   color:Black;
+   padding:8px;
 }
 
 .tw_share_link:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+   -webkit-box-shadow: 2px 2px 10px #444;
+   -moz-box-shadow: 2px 2px 10px #444;
+   box-shadow: 2px 2px 10px #444;
 }
 
 .tw_share_link span
 {
-	background:url(images/twitter.png) no-repeat top left;
-	display:inline-block;
-	width:16px;
+   background:url(images/twitter.png) no-repeat top left;
+   display:inline-block;
+   width:16px;
 }
 
 /* View all button ... */
 .view_all
 {
-	border:none;
-	margin:10px;
+   border:none;
+   margin:10px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+   -moz-border-radius:5px 5px 5px 5px;
+   -webkit-border-radius:5px 5px 5px 5px;
+   border-radius:5px 5px 5px 5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+   background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow;
+   transition-duration:0.2s;
 
-	color:Black;
-	padding:8px;
+   color:Black;
+   padding:8px;
 }
 
 .view_all:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+   -webkit-box-shadow: 2px 2px 10px #444;
+   -moz-box-shadow: 2px 2px 10px #444;
+   box-shadow: 2px 2px 10px #444;
 }
 
 /* Embedd button ... */
 .embedWidget
 {
-	border:none;
-	margin:10px;
+   border:none;
+   margin:10px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+   -moz-border-radius:5px 5px 5px 5px;
+   -webkit-border-radius:5px 5px 5px 5px;
+   border-radius:5px 5px 5px 5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+   background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow;
+   transition-duration:0.2s;
 
-	color:Black;
-	padding:8px;
+   color:Black;
+   padding:8px;
 }
 
 .embedWidget:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+   -webkit-box-shadow: 2px 2px 10px #444;
+   -moz-box-shadow: 2px 2px 10px #444;
+   box-shadow: 2px 2px 10px #444;
 }
 
 .favoritesSent
 {
-	width:180px;
-	height:150px;
-	overflow:hidden;
-	text-shadow:2px 2px 4px #999;
+   width:180px;
+   height:150px;
+   overflow:hidden;
+   text-shadow:2px 2px 4px #999;
 }
 
 .favoritesSentBackground
 {
-	background:url('images/widget-bg.png') no-repeat 0 -100px;
-	position:absolute;
-	opacity:0.1;
-	width:100%;
-	height:100%;
-	margin-top:-37px;
-	margin-left:-15px;
-	z-index:0;
+   background:url('images/widget-bg.png') no-repeat 0 -100px;
+   position:absolute;
+   opacity:0.1;
+   width:100%;
+   height:100%;
+   margin-top:-37px;
+   margin-left:-15px;
+   z-index:0;
 }
 
 .extraButton
 {
-	display:block;
-	margin-left:auto;
-	margin-right:auto;
+   display:block;
+   margin-left:auto;
+   margin-right:auto;
 }
 
 .wine-club-signup
 {
-	text-shadow:1px 1px 4px rgba(180, 180, 180, 100);
+   text-shadow:1px 1px 4px rgba(180, 180, 180, 100);
 }
 
 .wine-club-info
 {
-	margin:5px 25px 5px 25px;
-	font-size:11px;
-	font-style:italic;
+   margin:5px 25px 5px 25px;
+   font-size:11px;
+   font-style:italic;
 }
 
 .tdRight
 {
-	text-align:right;
+   text-align:right;
 }
 
 select.halfSize
 {
-	width:6.125em;
+   width:6.125em;
 }
 
 .wineClubSelectorWrapper
 {
-	margin:15px;
+   margin:15px;
 }
 
 .wineClubTypeChoice
 {
-	margin:5px 5px 25px 5px;
-	padding:15px;
-	width:150px;
-	min-height:160px;
-	float:left;
-	font-size:10px;
-	cursor:pointer;
-	text-shadow:2px 2px 4px #999;
+   margin:5px 5px 25px 5px;
+   padding:15px;
+   width:150px;
+   min-height:160px;
+   float:left;
+   font-size:10px;
+   cursor:pointer;
+   text-shadow:2px 2px 4px #999;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+   -moz-border-radius:5px 5px 5px 5px;
+   -webkit-border-radius:5px 5px 5px 5px;
+   border-radius:5px 5px 5px 5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+   background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow;
+   transition-duration:0.2s;
 }
 
 .wineClubTypeChoice:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+   -webkit-box-shadow: 2px 2px 10px #444;
+   -moz-box-shadow: 2px 2px 10px #444;
+   box-shadow: 2px 2px 10px #444;
 }
 
 
 .wine-club-bg-image
 {
-	position:absolute;
-	width:180px;
-	height:190px;
-	margin-top:-15px;
-	margin-left:-15px;
-	opacity:0.1;
+   position:absolute;
+   width:180px;
+   height:190px;
+   margin-top:-15px;
+   margin-left:-15px;
+   opacity:0.1;
 }
 
 .screensaver
 {
-	z-index:10000;
-	position:absolute;
-	top:0px;
-	left:0px;
-	width:100%;
-	height:100%;
-	background-color:Red;
-	background-repeat:no-repeat;
+   z-index:10000;
+   position:absolute;
+   top:0px;
+   left:0px;
+   width:100%;
+   height:100%;
+   background-color:Red;
+   background-repeat:no-repeat;
 }
 
 .wine-guest-book
@@ -647,32 +645,32 @@ select.halfSize
 
 .wine-guest-book-textarea
 {
-	width:100%;
-	height:120px;
-	display:block;
+   width:100%;
+   height:120px;
+   display:block;
 }
 
 .wine-guest-book-view
 {
-	margin:55px;
-	margin-top:25px;
+   margin:55px;
+   margin-top:25px;
 }
 
 table.viewObjects .mux-in-place-edit
 {
-	position:relative;
+   position:relative;
 }
 
 table.viewObjects .mux-in-place-edit textarea
 {
-	margin-left:16px;
-	width:190px;
-	min-width:100%;
-	display:inline-block;
-	height:120px;
-	border:solid 1px #aaf;
-	position:absolute;
-	z-index:500;
+   margin-left:16px;
+   width:190px;
+   min-width:100%;
+   display:inline-block;
+   height:120px;
+   border:solid 1px #aaf;
+   position:absolute;
+   z-index:500;
 }
 
 table.viewObjects
@@ -681,100 +679,100 @@ table.viewObjects
 
 table.viewObjects>tbody>tr>td
 {
-	vertical-align:top;
-	/*background-color:rgba(0, 0, 0, 0.05);*/
+   vertical-align:top;
+   /*background-color:rgba(0, 0, 0, 0.05);*/
 }
 
 table.viewObjects tr.header td
 {
-	font-size:large;
-	white-space:nowrap;
-	color:#999;
+   font-size:large;
+   white-space:nowrap;
+   color:#999;
 }
 
 table.viewObjects tr.header td a
 {
-	color:#9595cc;
-	font-style:normal;
+   color:#9595cc;
+   font-style:normal;
 }
 
 table.viewObjects tr td a.belongsTo
 {
-	color:#cc9595;
+   color:#cc9595;
 }
 
 table.viewObjects tr.header td
 {
-	padding-right:15px;
-	padding-bottom:15px;
-	text-shadow:1px 1px 2px rgba(100, 100, 100, 0.4);
+   padding-right:15px;
+   padding-bottom:15px;
+   text-shadow:1px 1px 2px rgba(100, 100, 100, 0.4);
 }
 
 table.viewObjects tr.header td .filtered
 {
-	padding-left:16px;
-	background:transparent url(images/filter.png) no-repeat 0 0;
-	font-weight:bold;
-	color:#88f;
+   padding-left:16px;
+   background:transparent url(images/filter.png) no-repeat 0 0;
+   font-weight:bold;
+   color:#88f;
 }
 
 table.viewObjects tr.header td .filteredOverridden
 {
-	padding-left:16px;
-	background:transparent url(images/filter-overridden.png) no-repeat 0 0;
+   padding-left:16px;
+   background:transparent url(images/filter-overridden.png) no-repeat 0 0;
 }
 
 table.viewObjects tr.header td .overridden
 {
-	color:#e88;
+   color:#e88;
 }
 
 table.viewObjects>tbody>tr>td
 {
-	padding:0;
+   padding:0;
 }
 
 table.viewObjects>tbody>tr>td>a
 {
-	color:#06a;
+   color:#06a;
 }
 
 table.viewObjects tr td>a,
 table.viewObjects tr td>div>a
 {
-	font-style:italic;
-	padding-left:16px;
-	padding-right:16px;
-	padding-bottom:3px;
-	display:table-cell;
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+   font-style:italic;
+   padding-left:16px;
+   padding-right:16px;
+   padding-bottom:3px;
+   display:table-cell;
+   -moz-border-radius:5px 5px 5px 5px;
+   -webkit-border-radius:5px 5px 5px 5px;
+   border-radius:5px 5px 5px 5px;
 
-	-moz-transition-property:background-color, -webkit-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:background-color, -webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:background-color, box-shadow;
-	transition-duration:0.2s;
+   -moz-transition-property:background-color, -webkit-box-shadow;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:background-color, -webkit-box-shadow;
+   -webkit-transition-duration:0.2s;
+   transition-property:background-color, box-shadow;
+   transition-duration:0.2s;
 }
 
 table.viewObjects tr td>a:hover,
 table.viewObjects tr td>div>a:hover
 {
-	background-color:rgba(0, 0, 0, 0.1);
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   background-color:rgba(0, 0, 0, 0.1);
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 }
 
 table.viewObjects tr td .mux-in-place-edit a
 {
-	font-style:normal;
-	color:#00a;
-	height:inherit;
-	white-space:nowrap;
-	display:block;
+   font-style:normal;
+   color:#00a;
+   height:inherit;
+   white-space:nowrap;
+   display:block;
 }
 
 .window-left-buttons
@@ -783,220 +781,220 @@ table.viewObjects tr td .mux-in-place-edit a
 
 .window-left-buttons .mux-window-caption
 {
-	background-color:rgba(0, 0, 0, 0.04);
-	margin:0;
+   background-color:rgba(0, 0, 0, 0.04);
+   margin:0;
 }
 
 .window-left-buttons .mux-window-close
 {
-	display:block;
-	position:absolute;
-	top:10px;
-	left:9px;
-	right:auto;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
+   display:block;
+   position:absolute;
+   top:10px;
+   left:9px;
+   right:auto;
+   width:9px;
+   height:8px;
+   padding-left:3px;
+   padding-bottom:4px;
+   font-size:10px;
+   color:rgba(0, 0, 0, 0);
 
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
+   -moz-border-radius:6px;
+   -webkit-border-radius:6px;
+   border-radius:6px;
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
+   -webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
+   -moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
+   box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 0, 0, 0.2)), to(rgba(255, 180, 180, 0.2)));
-	background-image: -moz-linear-gradient(rgba(255, 0, 0, 0.2) 0%, rgba(255, 180, 180, 0.2) 100%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 0, 0, 0.2)), to(rgba(255, 180, 180, 0.2)));
+   background-image: -moz-linear-gradient(rgba(255, 0, 0, 0.2) 0%, rgba(255, 180, 180, 0.2) 100%);
 
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow, background-image, color;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow, background-image, color;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow, background-image, color;
+   transition-duration:0.2s;
 }
 
 .window-left-buttons .mux-window-close:hover
 {
-	color:rgba(0, 0, 0, 1);
+   color:rgba(0, 0, 0, 1);
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
+   -webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   -moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 0, 0, 1)), to(rgba(255, 180, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(255, 0, 0, 1) 0%, rgba(255, 180, 180, 1) 100%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 0, 0, 1)), to(rgba(255, 180, 180, 1)));
+   background-image: -moz-linear-gradient(rgba(255, 0, 0, 1) 0%, rgba(255, 180, 180, 1) 100%);
 }
 
 .window-left-buttons .window-remove-columns
 {
-	display:block;
-	position:absolute;
-	top:10px;
-	left:28px;
-	right:auto;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
+   display:block;
+   position:absolute;
+   top:10px;
+   left:28px;
+   right:auto;
+   width:9px;
+   height:8px;
+   padding-left:3px;
+   padding-bottom:4px;
+   font-size:10px;
+   color:rgba(0, 0, 0, 0);
 
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
+   -moz-border-radius:6px;
+   -webkit-border-radius:6px;
+   border-radius:6px;
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
+   -webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
+   -moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
+   box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 0.2)), to(rgba(180, 255, 180, 0.2)));
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 0.2) 0%, rgba(180, 255, 180, 0.2) 100%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 0.2)), to(rgba(180, 255, 180, 0.2)));
+   background-image: -moz-linear-gradient(rgba(0, 255, 0, 0.2) 0%, rgba(180, 255, 180, 0.2) 100%);
 
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow, background-image, color;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow, background-image, color;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow, background-image, color;
+   transition-duration:0.2s;
 }
 
 .window-left-buttons .window-remove-columns:hover
 {
-	color:rgba(0, 0, 0, 1);
+   color:rgba(0, 0, 0, 1);
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
+   -webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   -moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 1)), to(rgba(180, 255, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 1)), to(rgba(180, 255, 180, 1)));
+   background-image: -moz-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
 }
 
 .window-restore-columns
 {
-	display:block;
-	position:absolute;
-	top:10px;
-	left:28px;
-	right:auto;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
+   display:block;
+   position:absolute;
+   top:10px;
+   left:28px;
+   right:auto;
+   width:9px;
+   height:8px;
+   padding-left:3px;
+   padding-bottom:4px;
+   font-size:10px;
+   color:rgba(0, 0, 0, 0);
 
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
+   -moz-border-radius:6px;
+   -webkit-border-radius:6px;
+   border-radius:6px;
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
+   -webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
+   -moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
+   box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(120, 120, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
-	background-image: -moz-linear-gradient(rgba(120, 120, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(120, 120, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
+   background-image: -moz-linear-gradient(rgba(120, 120, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
 
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:0.2s;
+   -moz-transition-property:-moz-box-shadow, background-image, color;
+   -moz-transition-duration:0.2s;
+   -webkit-transition-property:-webkit-box-shadow, background-image, color;
+   -webkit-transition-duration:0.2s;
+   transition-property:box-shadow, background-image, color;
+   transition-duration:0.2s;
 }
 
 .window-left-buttons .window-restore-columns:hover
 {
-	color:rgba(0, 0, 0, 1);
+   color:rgba(0, 0, 0, 1);
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
+   -webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   -moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
-	background-image: -moz-linear-gradient(rgba(0, 0, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
+   background-image: -moz-linear-gradient(rgba(0, 0, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
 }
 
 .window-left-buttons .mux-window-caption
 {
-	font-size:138.5%;
-	display:block;
-	padding:5px 0 5px 50px;
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
-	user-select: none; 
-	-khtml-user-select: none; 
-	-moz-user-select: none;
-	padding-right:50px;
+   font-size:138.5%;
+   display:block;
+   padding:5px 0 5px 50px;
+   text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
+   user-select: none; 
+   -khtml-user-select: none; 
+   -moz-user-select: none;
+   padding-right:50px;
 }
 
 .grid-selected
 {
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
+   -webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   -moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
+   box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
 
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
+   -moz-border-radius:6px;
+   -webkit-border-radius:6px;
+   border-radius:6px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.8)), to(rgba(180, 180, 180, 0.8)));
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(180, 180, 180, 0.8) 100%);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.8)), to(rgba(180, 180, 180, 0.8)));
+   background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(180, 180, 180, 0.8) 100%);
 }
 
 
 .grid-selected-cell
 {
-	font-weight:bold;
+   font-weight:bold;
 }
 
 .grid-selected-cell a
 {
-	background-color:rgba(0, 0, 0, 0.1);
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+   background-color:rgba(0, 0, 0, 0.1);
+   -webkit-box-shadow: 2px 2px 5px #666;
+   -moz-box-shadow: 2px 2px 5px #666;
+   box-shadow: 2px 2px 5px #666;
 }
 
 .wine-admin-message-box .ok,
 .ok
 {
-	position:absolute;
-	bottom:10px;
-	right:80px;
+   position:absolute;
+   bottom:10px;
+   right:80px;
 }
 
 .wine-admin-message-box .cancel,
 .cancel
 {
-	position:absolute;
-	bottom:10px;
-	right:10px;
+   position:absolute;
+   bottom:10px;
+   right:10px;
 }
 
 .mux-in-place-edit a
 {
-	min-width:inherit;
+   min-width:inherit;
 }
 
 .window-left-buttons .mux-window-content
 {
-	padding:15px 170px 60px 15px;
+   padding:15px 170px 60px 15px;
 }
 
 div.larger textarea
 {
-	width:350px !important;
+   width:350px !important;
 }
 
 div.larger a
 {
-	white-space:normal !important;
-	width:350px !important;
+   white-space:normal !important;
+   width:350px !important;
 }
 
 .singleInstance
@@ -1005,28 +1003,28 @@ div.larger a
 
 table.singleInstance>tbody>tr>td
 {
-	padding:1px 5px 1px 5px;
+   padding:1px 5px 1px 5px;
 }
 
 table.singleInstance tr td>a
 {
-	width:350px !important;
+   width:350px !important;
 }
 
 .singleInstance .columnName
 {
-	text-shadow:1px 1px 2px rgba(100, 100, 100, 0.5);
-	color:#666;
-	font-weight:bold;
-	font-size:15px;
-	height:22px;
+   text-shadow:1px 1px 2px rgba(100, 100, 100, 0.5);
+   color:#666;
+   font-weight:bold;
+   font-size:15px;
+   height:22px;
 }
 
 .singleInstance .columnType
 {
-	text-shadow:1px 1px 2px rgba(100, 100, 100, 0.5);
-	font-style:italic;
-	color:#888;
+   text-shadow:1px 1px 2px rgba(100, 100, 100, 0.5);
+   font-style:italic;
+   color:#888;
 }
 
 .firstPagingButton
@@ -1035,68 +1033,68 @@ table.singleInstance tr td>a
 
 .pagingButton
 {
-	font-weight:bold;
-	width:50px !important;
-	margin-left:-10px !important;
-	font-weight:bold;
-	text-shadow:4px 4px 3px rgba(0, 0, 0, 0.3) !important;
-	color:rgba(0, 0, 0, 0.5);
+   font-weight:bold;
+   width:50px !important;
+   margin-left:-10px !important;
+   font-weight:bold;
+   text-shadow:4px 4px 3px rgba(0, 0, 0, 0.3) !important;
+   color:rgba(0, 0, 0, 0.5);
 
-	-moz-transition-property:color, text-shadow;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-property:color, text-shadow;
-	-webkit-transition-duration:0.5s;
-	transition-property:color, text-shadow;
-	transition-duration:0.5s;
+   -moz-transition-property:color, text-shadow;
+   -moz-transition-duration:0.5s;
+   -webkit-transition-property:color, text-shadow;
+   -webkit-transition-duration:0.5s;
+   transition-property:color, text-shadow;
+   transition-duration:0.5s;
 }
 
 .pagingButton:hover
 {
-	text-shadow:4px 4px 2px rgba(0, 0, 0, 0.6) !important;
-	color:rgba(0, 0, 0, 1.0);
+   text-shadow:4px 4px 2px rgba(0, 0, 0, 0.6) !important;
+   color:rgba(0, 0, 0, 1.0);
 }
 
 .pagingButton:disabled
 {
-	font-weight:bold;
-	width:50px !important;
-	margin-left:-10px !important;
-	color:rgba(0, 0, 0, 0.1);
+   font-weight:bold;
+   width:50px !important;
+   margin-left:-10px !important;
+   color:rgba(0, 0, 0, 0.1);
 
-	-moz-transition-property:color;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:0.5s;
-	transition-property:color;
-	transition-duration:0.5s;
+   -moz-transition-property:color;
+   -moz-transition-duration:0.5s;
+   -webkit-transition-property:color;
+   -webkit-transition-duration:0.5s;
+   transition-property:color;
+   transition-duration:0.5s;
 }
 
 .pagingButton:disabled:hover
 {
-	color:rgba(255, 0, 0, 1.0);
+   color:rgba(255, 0, 0, 1.0);
 }
 
 
 .createButton
 {
-	font-weight:bold;
-	width:50px !important;
-	margin-left:-10px !important;
-	color:rgba(0, 0, 0, 0.5);
-	text-shadow:4px 4px 3px rgba(0, 0, 0, 0.3) !important;
+   font-weight:bold;
+   width:50px !important;
+   margin-left:-10px !important;
+   color:rgba(0, 0, 0, 0.5);
+   text-shadow:4px 4px 3px rgba(0, 0, 0, 0.3) !important;
 
-	-moz-transition-property:color, text-shadow;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-property:color, text-shadow;
-	-webkit-transition-duration:0.5s;
-	transition-property:color, text-shadow;
-	transition-duration:0.5s;
+   -moz-transition-property:color, text-shadow;
+   -moz-transition-duration:0.5s;
+   -webkit-transition-property:color, text-shadow;
+   -webkit-transition-duration:0.5s;
+   transition-property:color, text-shadow;
+   transition-duration:0.5s;
 }
 
 .createButton:hover
 {
-	color:rgba(0, 0, 0, 1.0);
-	text-shadow:4px 4px 2px rgba(0, 0, 0, 0.6) !important;
+   color:rgba(0, 0, 0, 1.0);
+   text-shadow:4px 4px 2px rgba(0, 0, 0, 0.6) !important;
 }
 
 

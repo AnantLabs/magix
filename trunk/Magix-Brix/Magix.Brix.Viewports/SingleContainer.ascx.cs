@@ -240,14 +240,14 @@ namespace Magix.Brix.Viewports
 
         private void PutInSpan(Node node, DynamicPanel p, string nodeName, string cssName)
         {
-            string css = p.CssClass;
+            string css = " " + p.CssClass;
             if (css.Contains(cssName + "-"))
             {
-                string no = (" " + css).Split(new string[] { cssName }, StringSplitOptions.RemoveEmptyEntries)[1].Substring(1);
+                string no = css.Split(new string[] { cssName }, StringSplitOptions.RemoveEmptyEntries)[1].Substring(1);
                 no = no.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[0];
                 int value = int.Parse(no);
                 css = css.Replace(" " + cssName + "-" + value, "");
-                p.CssClass = css;
+                p.CssClass = css.Replace("mumbo-jumbo##", "");
             }
 
             if (node.Contains(nodeName))

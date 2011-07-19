@@ -170,6 +170,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             incWidth.CssClass = "magix-publishing-increase-width";
             incWidth.Info = id.ToString();
             incWidth.Click += incWidth_Click;
+            incWidth.DblClick += incWidth_DblClick;
             w.Content.Controls.Add(incWidth);
 
             LinkButton decWidth = new LinkButton();
@@ -178,6 +179,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             decWidth.CssClass = "magix-publishing-decrease-width";
             decWidth.Info = id.ToString();
             decWidth.Click += decWidth_Click;
+            decWidth.DblClick += decWidth_DblClick;
             w.Content.Controls.Add(decWidth);
 
             LinkButton incHeight = new LinkButton();
@@ -186,6 +188,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             incHeight.CssClass = "magix-publishing-increase-height";
             incHeight.Info = id.ToString();
             incHeight.Click += incHeight_Click;
+            incHeight.DblClick += incHeight_DblClick;
             w.Content.Controls.Add(incHeight);
 
             LinkButton decHeight = new LinkButton();
@@ -194,6 +197,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             decHeight.CssClass = "magix-publishing-decrease-height";
             decHeight.Info = id.ToString();
             decHeight.Click += decHeight_Click;
+            decHeight.DblClick += decHeight_DblClick;
             w.Content.Controls.Add(decHeight);
 
             LinkButton incDown = new LinkButton();
@@ -202,6 +206,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             incDown.CssClass = "magix-publishing-increase-down";
             incDown.Info = id.ToString();
             incDown.Click += incDown_Click;
+            incDown.DblClick += incDown_DblClick;
             w.Content.Controls.Add(incDown);
 
             LinkButton decDown = new LinkButton();
@@ -210,6 +215,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             decDown.CssClass = "magix-publishing-decrease-down";
             decDown.Info = id.ToString();
             decDown.Click += decDown_Click;
+            decDown.DblClick += decDown_DblClick;
             w.Content.Controls.Add(decDown);
 
             LinkButton incBottom = new LinkButton();
@@ -218,6 +224,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             incBottom.CssClass = "magix-publishing-increase-bottom";
             incBottom.Info = id.ToString();
             incBottom.Click += incBottom_Click;
+            incBottom.DblClick += incBottom_DblClick;
             w.Content.Controls.Add(incBottom);
 
             LinkButton decBottom = new LinkButton();
@@ -226,6 +233,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             decBottom.CssClass = "magix-publishing-decrease-bottom";
             decBottom.Info = id.ToString();
             decBottom.Click += decBottom_Click;
+            decBottom.DblClick += decBottom_DblClick;
             w.Content.Controls.Add(decBottom);
 
             LinkButton incLeft = new LinkButton();
@@ -234,6 +242,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             incLeft.CssClass = "magix-publishing-increase-left";
             incLeft.Info = id.ToString();
             incLeft.Click += incLeft_Click;
+            incLeft.DblClick += incLeft_DblClick;
             w.Content.Controls.Add(incLeft);
 
             LinkButton decLeft = new LinkButton();
@@ -242,6 +251,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             decLeft.CssClass = "magix-publishing-decrease-left";
             decLeft.Info = id.ToString();
             decLeft.Click += decLeft_Click;
+            decLeft.DblClick += decLeft_DblClick;
             w.Content.Controls.Add(decLeft);
 
             LinkButton incPadding = new LinkButton();
@@ -250,6 +260,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             incPadding.CssClass = "magix-publishing-increase-padding";
             incPadding.Info = id.ToString();
             incPadding.Click += incPadding_Click;
+            incPadding.DblClick += incPadding_DblClick;
             w.Content.Controls.Add(incPadding);
 
             LinkButton decPadding = new LinkButton();
@@ -258,70 +269,71 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             decPadding.CssClass = "magix-publishing-decrease-padding";
             decPadding.Info = id.ToString();
             decPadding.Click += decPadding_Click;
+            decPadding.DblClick += decPadding_DblClick;
             w.Content.Controls.Add(decPadding);
         }
 
         void incWidth_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "IncreaseWidth");
+            ChangeProperty(sender, "IncreaseWidth", -1);
         }
 
         void decWidth_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "DecreaseWidth");
+            ChangeProperty(sender, "DecreaseWidth", -1);
         }
 
         void incHeight_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "IncreaseHeight");
+            ChangeProperty(sender, "IncreaseHeight", -1);
         }
 
         void decHeight_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "DecreaseHeight");
+            ChangeProperty(sender, "DecreaseHeight", -1);
         }
 
         void incDown_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "IncreaseDown");
+            ChangeProperty(sender, "IncreaseDown", -1);
         }
 
         void decDown_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "DecreaseDown");
+            ChangeProperty(sender, "DecreaseDown", -1);
         }
 
         void incBottom_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "IncreaseBottom");
+            ChangeProperty(sender, "IncreaseBottom", -1);
         }
 
         void decBottom_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "DecreaseBottom");
+            ChangeProperty(sender, "DecreaseBottom", -1);
         }
 
         void incLeft_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "IncreaseLeft");
+            ChangeProperty(sender, "IncreaseLeft", -1);
         }
 
         void decLeft_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "DecreaseLeft");
+            ChangeProperty(sender, "DecreaseLeft", -1);
         }
 
         void incPadding_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "IncreasePadding");
+            ChangeProperty(sender, "IncreasePadding", -1);
         }
 
         void decPadding_Click(object sender, EventArgs e)
         {
-            ChangeProperty(sender, "DecreasePadding");
+            ChangeProperty(sender, "DecreasePadding", -1);
         }
 
-        private void ChangeProperty(object sender, string action)
+        private void ChangeProperty(object sender, string action, int value)
         {
             LinkButton lbn = sender as LinkButton;
             int idPart = int.Parse(lbn.Info);
@@ -330,6 +342,11 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             node["ID"].Value = idPart;
             node["Action"].Value = action;
+
+            if (value != -1)
+            {
+                node["NewValue"].Value = value;
+            }
 
             RaiseSafeEvent(
                 "Magix.Publishing.ChangeTemplateProperty",
@@ -378,6 +395,66 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                     node["OldMarginBottom"].Get<int>(), "") +
                     " spcBottom-" +
                     node["NewMarginBottom"].Get<int>();
+        }
+
+        void incWidth_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreaseWidth", 100);
+        }
+
+        void decWidth_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreaseWidth", 0);
+        }
+
+        void incHeight_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreaseHeight", 100);
+        }
+
+        void decHeight_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreaseHeight", 0);
+        }
+
+        void incDown_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreaseDown", 100);
+        }
+
+        void decDown_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreaseDown", 0);
+        }
+
+        void incBottom_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreaseBottom", 100);
+        }
+
+        void decBottom_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreaseBottom", 0);
+        }
+
+        void incLeft_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreaseLeft", 100);
+        }
+
+        void decLeft_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreaseLeft", 0);
+        }
+
+        void incPadding_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "IncreasePadding", 100);
+        }
+
+        void decPadding_DblClick(object sender, EventArgs e)
+        {
+            ChangeProperty(sender, "DecreasePadding", 0);
         }
 
         private void ReDataBind()
@@ -455,8 +532,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.TemplateWasModified")]
-        protected void Magix_Publishing_TemplateWasModified(object sender, EventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.WebPartTemplateWasModified")]
+        protected void Magix_Publishing_WebPartTemplateWasModified(object sender, EventArgs e)
         {
             ReDataBind();
         }

@@ -159,6 +159,7 @@
 
 .magix-publishing-wysiwyg
 {
+	overflow:auto;
 	cursor:pointer;
 
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 128, 0.1)), to(rgba(200, 200, 128, 0.1))) !important;

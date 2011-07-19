@@ -29,6 +29,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["Container"].Value = "content3";
+            node["Filter"].Value = "*.png;*.jpeg;*.jpg;*.gif;*.css;";
+            node["IsCreate"].Value = true;
+            node["CanCreateNewCssFile"].Value = true;
 
             RaiseEvent(
                 "FileExplorer.Form.LaunchFileExplorer",
