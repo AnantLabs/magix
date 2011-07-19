@@ -25,31 +25,43 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     Criteria.Eq("EventName", "Magix.Meta.Actions.SaveObject")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "SaveObject";
+                    a.Name = "Magix.DynamicEvent.SaveActiveForm";
                     a.EventName = "Magix.Meta.Actions.SaveObject";
-                    a.Description = "Will save the currently active Single-View form";
+                    a.Description = @"Will save the currently active Single-View Form.
+Will determine which form raised the event originally, and explicitly save the field values
+from that Form into a new Meta Object with the TypeName from the View ...";
                     a.Save();
                 }
                 if (Action.CountWhere(
                     Criteria.Eq("EventName", "Magix.Meta.Actions.EmptyForm")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "EmptyForm";
+                    a.Name = "Magix.DynamicEvent.EmptyActiveForm";
                     a.EventName = "Magix.Meta.Actions.EmptyForm";
-                    a.Description = "Will empty the currrently active Single-View form";
+                    a.Description = @"Will empty the currrently active Editable Form. 
+Will determine which form raised the event originally, and explicitly empty that 
+form only. Useful for things such as 'Clear Buttons' and such ...";
                     a.Save();
                 }
                 if (Action.CountWhere(
                     Criteria.Eq("EventName", "Magix.Core.ShowMessage")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "ShowMessage";
+                    a.Name = "Magix.DynamicEvent.ShowMessage";
                     a.EventName = "Magix.Core.ShowMessage";
-                    a.Description = "Will show a default message to the User";
+                    a.Description = @"Will show a default message to the User. 
+Mostly here for Reference Reasons so that you can have an Example Action to 
+copy for your own messages. For your convenience ... :)";
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "Message";
                     m.Value = "Hello World 2.0 ...";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Interval";
+                    m.Value = "1500";
+                    m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);
 
                     a.Save();

@@ -160,7 +160,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 tr.Commit();
 
                 Node node = new Node();
+                node["Start"].Value = 0;
+                node["End"].Value = 10;
+                node["FullTypeName"].Value = typeof(MetaObject).FullName;
+                RaiseEvent(
+                    "Magix.Core.SetGridPageStart",
+                    node);
+
+                node = new Node();
                 node["ID"].Value = m.ID;
+
                 RaiseEvent(
                     "Magix.MetaType.EditObjectRaw",
                     node);

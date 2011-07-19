@@ -357,6 +357,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             set { ViewState["SelectedID"] = value; }
         }
 
+        [ActiveEvent(Name = "Magix.Core.SetGridPageStart")]
+        public void Magix_Core_SetGridPageStart(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
+            {
+                DataSource["Start"].Value = e.Params["Start"].Get<int>();
+                DataSource["End"].Value = e.Params["End"].Get<int>();
+                ReDataBind();
+            }
+        }
+
         [ActiveEvent(Name = "DBAdmin.Grid.SetActiveRow")]
         public void DBAdmin_Grid_SetActiveRow(object sender, ActiveEventArgs e)
         {
