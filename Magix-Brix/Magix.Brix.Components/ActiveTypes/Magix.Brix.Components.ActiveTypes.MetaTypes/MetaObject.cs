@@ -13,7 +13,7 @@ using Magix.Brix.Loader;
 namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 {
     [ActiveType]
-    public class MetaType : ActiveType<MetaType>
+    public class MetaObject : ActiveType<MetaObject>
     {
         [ActiveType]
         public class Value : ActiveType<Value>
@@ -23,9 +23,17 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
             [ActiveField]
             public string Val { get; set; }
+
+            internal Value Clone()
+            {
+                Value ret = new Value();
+                ret.Name = Name;
+                ret.Val = Val;
+                return ret;
+            }
         }
 
-        public MetaType()
+        public MetaObject()
         {
             Values = new LazyList<Value>();
         }
@@ -47,6 +55,24 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             if (ID == 0)
                 Created = DateTime.Now;
             base.Save();
+        }
+
+        public MetaObject Clone()
+        {
+            return DeepClone(this);
+        }
+
+        private MetaObject DeepClone(MetaObject metaObject)
+        {
+            MetaObject ret = new MetaObject();
+            ret.Name = Name;
+            ret.Reference = "cloned: " + ID;
+            foreach (Value idx in Values)
+            {
+                Value v = idx.Clone();
+                ret.Values.Add(v);
+            }
+            return ret;
         }
     }
 }

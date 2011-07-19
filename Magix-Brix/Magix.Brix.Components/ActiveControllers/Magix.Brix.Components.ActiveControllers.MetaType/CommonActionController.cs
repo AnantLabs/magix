@@ -39,13 +39,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             else
             {
                 // Finding first Meta Object of type
-                MetaType t = MetaType.SelectFirst(
+                MetaObject t = MetaObject.SelectFirst(
                     Criteria.Eq("Name", e.Params["MetaTypeName"].Get<string>()));
                 node["MetaTemplateObjectID"].Value = t.ID;
             }
 
             node["FreezeContainer"].Value = true;
-            node["FullTypeName"].Value = typeof(MetaType).FullName + "-META";
+            node["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
 
             if (e.Params.Contains("WhiteListColumns"))
             {
@@ -89,9 +89,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["ReuseNode"].Value = true;
 
-            MetaType t2 = MetaType.SelectByID(node["MetaTemplateObjectID"].Get<int>());
+            MetaObject t2 = MetaObject.SelectByID(node["MetaTemplateObjectID"].Get<int>());
 
-            node["SetCount"].Value = MetaType.CountWhere(
+            node["SetCount"].Value = MetaObject.CountWhere(
                 Criteria.Eq("Name", t2.Name));
             node["LockSetCount"].Value = true;
 
@@ -104,20 +104,20 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
         protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaType).FullName + "-META")
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
             {
                 using (Transaction tr = Adapter.Instance.BeginTransaction())
                 {
-                    MetaType t = MetaType.SelectByID(e.Params["ID"].Get<int>());
+                    MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
-                    MetaType.Value v = t.Values.Find(
-                        delegate(MetaType.Value idx)
+                    MetaObject.Value v = t.Values.Find(
+                        delegate(MetaObject.Value idx)
                         {
                             return idx.Name == e.Params["PropertyName"].Get<string>();
                         });
                     if (v == null)
                     {
-                        v = new MetaType.Value();
+                        v = new MetaObject.Value();
                         v.Name = e.Params["PropertyName"].Get<string>();
                         v.Val = e.Params["NewValue"].Get<string>();
                         t.Values.Add(v);
@@ -137,11 +137,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
         protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaType).FullName + "-META")
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
             {
-                MetaType t = MetaType.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
+                MetaObject t = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
 
-                foreach (MetaType.Value idx in t.Values)
+                foreach (MetaObject.Value idx in t.Values)
                 {
                     if (!e.Params.Contains("WhiteListColumns") ||
                         (e.Params["WhiteListColumns"].Contains(idx.Name)) &&
@@ -154,15 +154,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
         protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaType).FullName + "-META")
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
             {
-                MetaType templ = MetaType.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
+                MetaObject templ = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
 
-                e.Params["SetCount"].Value = MetaType.CountWhere(
+                e.Params["SetCount"].Value = MetaObject.CountWhere(
                     Criteria.Eq("Name", templ.Name));
                 e.Params["LockSetCount"].Value = true;
 
-                foreach (MetaType idxO in MetaType.Select(
+                foreach (MetaObject idxO in MetaObject.Select(
                     Criteria.Eq("Name", templ.Name),
                     Criteria.Range(
                         e.Params["Start"].Get<int>(),
@@ -171,10 +171,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         false)))
                 {
                     e.Params["Objects"]["o-" + idxO.ID]["ID"].Value = idxO.ID;
-                    foreach (MetaType.Value idx in idxO.Values)
+                    foreach (MetaObject.Value idx in idxO.Values)
                     {
                         if (idxO.Values.Exists(
-                            delegate(MetaType.Value ixx)
+                            delegate(MetaObject.Value ixx)
                             {
                                 return ixx.Name == idx.Name;
                             }))
@@ -182,11 +182,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     }
 
                     // Looping through, 'touching' all the items with no values ...
-                    foreach (MetaType.Value idx in templ.Values.FindAll(
-                        delegate(MetaType.Value idxI)
+                    foreach (MetaObject.Value idx in templ.Values.FindAll(
+                        delegate(MetaObject.Value idxI)
                         {
                             return !idxO.Values.Exists(
-                                delegate(MetaType.Value idxI2)
+                                delegate(MetaObject.Value idxI2)
                                 {
                                     return idxI2.Name == idxI.Name;
                                 });
@@ -202,18 +202,18 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObject")]
         protected void DBAdmin_DynamicType_GetObject(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() != typeof(MetaType).FullName + "-META")
+            if (e.Params["FullTypeName"].Get<string>() != typeof(MetaObject).FullName + "-META")
                 return;
-            MetaType t = MetaType.SelectByID(e.Params["ID"].Get<int>());
+            MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             e.Params["Object"]["ID"].Value = t.ID;
 
-            MetaType templ = MetaType.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
+            MetaObject templ = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
 
-            foreach (MetaType.Value idx in t.Values)
+            foreach (MetaObject.Value idx in t.Values)
             {
                 if (templ.Values.Exists(
-                    delegate(MetaType.Value ixx)
+                    delegate(MetaObject.Value ixx)
                     {
                         return ixx.Name == idx.Name;
                     }))
@@ -223,11 +223,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
 
             // Looping through, 'touching' all the items with no values ...
-            foreach (MetaType.Value idx in templ.Values.FindAll(
-                delegate(MetaType.Value idxI)
+            foreach (MetaObject.Value idx in templ.Values.FindAll(
+                delegate(MetaObject.Value idxI)
                 {
                     return !t.Values.Exists(
-                        delegate(MetaType.Value idxI2)
+                        delegate(MetaObject.Value idxI2)
                         {
                             return idxI2.Name == idxI.Name;
                         });
@@ -241,7 +241,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.Meta.EditMetaObject")]
         protected void Magix_Meta_EditMetaObject(object sender, ActiveEventArgs e)
         {
-            MetaType t = MetaType.SelectByID(e.Params["ID"].Get<int>());
+            MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             string container = e.Params["Parameters"]["Container"].Get<string>();
 
@@ -250,14 +250,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Container"].Value = container;
             node["MetaTemplateObjectID"].Value = e.Params["Parameters"]["MetaTemplateObjectID"].Value;
             node["FreezeContainer"].Value = true;
-            node["FullTypeName"].Value = typeof(MetaType) + "-META";
+            node["FullTypeName"].Value = typeof(MetaObject) + "-META";
             node["ReuseNode"].Value = true;
             node["ID"].Value = t.ID;
 
             if (!node.Contains("WhiteListColumns"))
             {
-                MetaType templ = MetaType.SelectByID(node["MetaTemplateObjectID"].Get<int>());
-                foreach (MetaType.Value idx in templ.Values)
+                MetaObject templ = MetaObject.SelectByID(node["MetaTemplateObjectID"].Get<int>());
+                foreach (MetaObject.Value idx in templ.Values)
                 {
                     node["WhiteListColumns"][idx.Name].Value = true;
                 }
@@ -279,15 +279,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                MetaType t = MetaType.SelectByID(e.Params["ID"].Get<int>());
-                MetaType.Value val = t.Values.Find(
-                    delegate(MetaType.Value idx)
+                MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+                MetaObject.Value val = t.Values.Find(
+                    delegate(MetaObject.Value idx)
                     {
                         return t.Name == e.Params["PropertyName"].Get<string>();
                     });
                 if (val == null)
                 {
-                    val = new MetaType.Value();
+                    val = new MetaObject.Value();
                     val.Name = e.Params["PropertyName"].Get<string>();
                     val.Val = e.Params["NewValue"].Get<string>();
                     t.Values.Add(val);

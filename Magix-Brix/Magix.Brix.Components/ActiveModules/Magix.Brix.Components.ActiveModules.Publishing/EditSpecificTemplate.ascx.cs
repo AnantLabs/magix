@@ -86,6 +86,11 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                 RaiseSafeEvent(
                                     "Magix.Publishing.ChangeTemplateProperty",
                                     nx);
+
+                                if (ch.Checked)
+                                    w.CssClass += " last";
+                                else
+                                    w.CssClass = w.CssClass.Replace(" last", "");
                             };
 
                         Label lbl = new Label();

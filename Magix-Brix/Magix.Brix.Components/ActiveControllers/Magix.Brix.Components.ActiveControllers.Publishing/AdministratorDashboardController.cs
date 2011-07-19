@@ -61,19 +61,55 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 ");
                 ToolTip.Instance.CreateTip(@"
 <p>When positioning your WebPart Templates, realize that you're not really 'positioning' them, but rather you are changing their <em>width, height and margins</em>. In the beginning this might feel a little bit cumbersome, though after some time you'll hopefully appreciate this 'floating layout' and become used to is ...</p>
-<p>Realize also that especially the bottom and right margins might create funny looking WebParts since they're not really visible while editing. If you're having weird results, make sure your right and bottom margins are 0 by <em>double click</em> them, which should set them back to zero ... ;)</p>
+<p>Realize also that especially the bottom and right margins might create funny looking WebParts since they're not really visible while editing. If you're having weird results, make sure your right and bottom margins are 0 by <em>double clicking</em> them, which should set them back to zero ... ;)</p>
 <p>Double clicking any of the arrows will either maximize or minimize their associated property ...</p>
 ");
                 ToolTip.Instance.CreateTip(@"
-A Template may contain many WebPart Templates. A WebPart Template is a 'container' for your WebPart. Every WebPart Template is based upon one plugin type. Meaning if you have one page, based upon a WebPage Template, with 5 WebPart Templates, you'll have a WebPage with 5 WebParts where each WebPart can be different 'applications'. This might be any combination of 'applications', including Publishing Applications, such as Text Fragments, Headers, CRUD Forms and such ...");
+<p>A WebPage Template must contain  at least one WebPart Template. A WebPart Template is also a 'Type Definition' for your WebParts. WebPart Templates have names such as 'Content' and 'Header', which are publishing modules for showing large letters and rich text fragments. Every WebPart Template is based upon one plugin type. </p>
+<p>Meaning if you have one page, based upon a WebPage Template, with 5 WebPart Templates, you'll have a WebPage with 5 WebParts where each WebPart can be different '<em>Applications'</em>. This might be any combination of Applications, such as Text Fragments, Headers, CRUD Forms and such ...</p>
+<p>However, we'll stick to 'Publishing' as we promised in the beginning, and focus on the Publishing Modules ...</p>
+<p>If you edit the default Template created by the system for you, you can see how it has Menu, Header and Content as <em>'Module Names'</em></p>
+<p>Go check it out while I hang around here ...</p>
+");
                 ToolTip.Instance.CreateTip(@"
-A WebPart is the container of one <em>'Plugin'</em>. There are many plugins in Magix, and you can easily create Plugins yourself. When you create a WebPart Template, then you have to choose which Plugin to base your Template upon. This means that every page you build from your Template 'Recipe' will have a WebPart, containing one instance of whatever 'Application' you chose while defining your template, at the place where you positioned your WebPart Template ...");
+<p>The Menu is similar to the Sliding Menu to the left which you're using yourself, while the Header will show an H1 HTML element [Header Element] and the Content module will show Rich Editable Content.</p>
+<p>If you have more types of Modules in your installation of Magix, these might also show up as selections in the DropDownBoxes visible while editing your Templates ...</p>
+<p>No go to Templates and change the Name of Template 'M+H+C'. Change it to 'Testing'. This can be done by clicking directly on the text where it says 'M+H+C'. Then open up 'Pages ...' and click your root page.</p>
+<p>Do you see how the name of the module in the DropDown box, roughly at the middle of the screen has changed now to 'Testing'. This is because that DropDown box is being used to select a Template for your WebPage.</p>
+<p>Then try to change the Name of your Templates by clicking e.g. Header while editing your Template, and type in 'Header2'. Now edit your Page and see how this change reflects from the Template and to the Page.</p>
+<p>Go take a look, while I chill ...</p>
+");
                 ToolTip.Instance.CreateTip(@"
-Most Plugins have <em>Properties</em>. These properties can be changed when editing your page. The type of properties are dependent upon the Template the page is created from. Every different type of Module has different type of Properties. Like for instance a module called 'Header' might have only a 'Text' property, which enables you to change the Header of individual pages. While a module called 'Application' might have 'Application Name' as its only input ...");
+<p><em>Important:</em> If you change the number of WebParts in your Template, or you change the type of Module of your WebPart Template, then <em>all pages</em> built upon that Template will have to be resaved, and you'll probably loose data. </p>
+<p>It is therefor important that you create your templates first, and then don't edit these two properties while they're already in 'Production' ...</p>
+");
                 ToolTip.Instance.CreateTip(@"
-If you delete a Template, then all Pages created from that Template will also become deleted. In general you should be <em>very careful about deleting anything</em> in Magix. If you'd like to modify a Template it's probably easier to copy it, and create your new page upon the copied Template instead of the original ... ");
+<p>Try to Create several different Templates, and have slightly different values for their width, height, margins and such.</p>
+<p>Make especially care of that you've added different widths of your Menu Containers and different <em>Left Margins</em></p>
+<p>Make sure they've got the same type of modules in the same container</p>
+<p>Then use these different Templates for different pages which you create in your Pages hierarchy</p>
+<p>If you now access the root of your website, and try to browse around by clicking different buttons, you can see how the WebPart Containers are 'jumping around' on the screen ...</p>
+");
                 ToolTip.Instance.CreateTip(@"
-<p>If you make something cool with Magix, that you want to share, then we'd love to get to know about it. It can be an instructional YouTube video about how to Get Started, Tips and Tricks etc. It can be a Tutorial Blog you've written about how to install Magix on your server. It can be a book you have written about the O2 Architecture. Anything really! </p>
+<p>WebParts Initialization...</p>
+<p>WebParts initializes differently depending upon where you're coming from, and from which Template type you're coming from dependent upon to which Template type you're entering. And also according to which type of WebParts, or Modules they are ... </p>
+<p>For instance the sliding menu will not reload as long as the container it is within on one page template, is the same container it is within on the next page template ...</p>
+<p>Too confusing ...?</p>
+<p>Just remember; <em>always have a Menu</em> positioned in the same container [first one for instance?] on all of your templates, unless you really know what you're doing ...</p>
+");
+                ToolTip.Instance.CreateTip(@"
+<p><em>Play around</em> with the system by creating some new Templates, copying them, change their weparts type between Header, Content and SliderMenu. Then when you come back, we'll start diving into Applications ... ;)</p>
+");
+                ToolTip.Instance.CreateTip(@"
+<h1>Applications ...</h1>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+");
+                ToolTip.Instance.CreateTip(@"
+<h3>Talk to CEO</h3>
+<p>If you make something cool with Magix, that you want to share, then we'd love to get to know about it. It can be an instructional YouTube video about how to Get Started, Tips and Tricks etc. It can be a Tutorial Blog you've written about how to install Magix on your server. It can be a book you have written about the O2 Architecture. It can be an Action, or a collection of Actions, which you think is awesome. Anything really! </p>
 <p>As long as it has Value for our Community somehow, we'd love to know about it, so that we could help you promote it, and more importantly; Helping our Community out ... :)</p>
 <p>Our CEO's Name and Email address is; Lissa Millspaugh - <a href=""mailto:lissa.millspaugh@winergyinc.com"">lissa.millspaugh@winergyinc.com</a></p>
 <p>Our CTO's Name and Email address is; Thomas Hansen - <a href=""mailto:thomas.hansen@winergyinc.com"">thomas.hansen@winergyinc.com</a></p>

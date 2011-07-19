@@ -509,7 +509,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         SelectedID = id;
                         n["ID"].Value = int.Parse((b.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                        if (RaiseSafeEvent("DBAdmin.Data.DeleteObject", n))
+                        if (RaiseSafeEvent(
+                            DataSource.Contains("DeleteColumnEvent") ? 
+                                DataSource["DeleteColumnEvent"].Get<string>() : 
+                                "DBAdmin.Data.DeleteObject", 
+                            n))
                             ReDataBind();
                     };
                 cS.Controls.Add(lb2);

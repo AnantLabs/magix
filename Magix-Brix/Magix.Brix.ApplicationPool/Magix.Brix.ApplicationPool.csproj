@@ -77,6 +77,7 @@
     <Content Include="media\images\avatars\marvin-headshot.png" />
     <Content Include="media\images\css.png" />
     <Content Include="media\images\delete.png" />
+    <Content Include="media\images\facts.png" />
     <Content Include="media\images\filter-overridden.png" />
     <Content Include="media\images\filter.png" />
     <Content Include="media\images\folder-up.png" />
@@ -265,10 +266,6 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Menu\Magix.Brix.Components.ActiveModules.Menu.csproj">
       <Project>{654A39FC-51E7-492D-BE57-39DC99CB8686}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Menu</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaTypes\Magix.Brix.Components.ActiveModules.MetaTypes.csproj">
-      <Project>{D94C69FF-23CB-498E-A880-90FC369AD268}</Project>
-      <Name>Magix.Brix.Components.ActiveModules.MetaTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaView\Magix.Brix.Components.ActiveModules.MetaView.csproj">
       <Project>{498CBC4B-E81C-462F-AFD6-DD9A6AA60633}</Project>
