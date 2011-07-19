@@ -200,7 +200,7 @@ namespace Magix.UX.Widgets
             switch (idx)
             {
                 case Styles.floating:
-                    tmp = "clear";
+                    tmp = "float";
                     break;
                 default:
                     tmp = idx.ToString();
