@@ -804,7 +804,7 @@ namespace Magix.Brix.Viewports
                             w.Style[Styles.height] = "500px";
                             if (AjaxManager.Instance.IsCallback)
                             {
-                                new EffectFadeIn(w, 750)
+                                new EffectFadeIn(w, 250)
                                     .JoinThese(
                                         new EffectSize(width, height))
                                     .Render();
@@ -812,7 +812,7 @@ namespace Magix.Brix.Viewports
                             else
                             {
                                 w.Style[Styles.display] = "";
-                                new EffectSize(w, 750, width, height)
+                                new EffectSize(w, 250, width, height)
                                     .Render();
                             }
                         }
@@ -822,7 +822,7 @@ namespace Magix.Brix.Viewports
                             w.Style[Styles.width] = width + "px";
                             if (AjaxManager.Instance.IsCallback)
                             {
-                                new EffectFadeIn(w, 750)
+                                new EffectFadeIn(w, 250)
                                     .JoinThese(
                                         new EffectRollDown())
                                     .Render();

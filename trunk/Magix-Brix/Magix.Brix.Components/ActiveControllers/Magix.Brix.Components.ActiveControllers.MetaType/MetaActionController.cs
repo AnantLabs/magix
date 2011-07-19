@@ -178,6 +178,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 a.Save();
 
                 tr.Commit();
+
+                Node node = new Node();
+
+                node["Start"].Value = 0;
+                node["End"].Value = 10;
+                node["FullTypeName"].Value = typeof(Action).FullName;
+
+                RaiseEvent(
+                    "Magix.Core.SetGridPageStart",
+                    node);
             }
         }
 
@@ -405,6 +415,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // Creating our SelectList
             CheckBox ch = new CheckBox();
             ch.Checked = a.StripInput;
+            ch.Style[Styles.floating] = "left";
             ch.CheckedChanged +=
                 delegate
                 {
@@ -418,10 +429,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     }
                 };
 
+            p.Controls.Add(ch);
+
             Label lbl = new Label();
             lbl.Text = "&nbsp;";
             lbl.Style[Styles.display] = "block";
-            lbl.Style[Styles.width] = "100%";
+            lbl.Style[Styles.floating] = "left";
+            lbl.Style[Styles.width] = "375px";
             lbl.Tag = "label";
             lbl.Load +=
                 delegate
@@ -429,8 +443,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     lbl.For = ch.ClientID;
                 };
             p.Controls.Add(lbl);
-
-            p.Controls.Add(ch);
 
             // Stuffing our newly created control into the return parameters, so
             // our Grid control can put it where it feels for it ... :)
