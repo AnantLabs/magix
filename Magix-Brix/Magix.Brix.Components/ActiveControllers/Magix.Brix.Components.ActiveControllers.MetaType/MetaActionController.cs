@@ -361,6 +361,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // First filtering OUT columns ...!
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["EventName"].Value = true;
+            node["WhiteListColumns"]["EventName"]["Header"].Value = "Action Name";
             node["WhiteListColumns"]["StripInput"].Value = true;
             node["WhiteListColumns"]["Description"].Value = true;
             node["WhiteListColumns"]["Params"].Value = true;
