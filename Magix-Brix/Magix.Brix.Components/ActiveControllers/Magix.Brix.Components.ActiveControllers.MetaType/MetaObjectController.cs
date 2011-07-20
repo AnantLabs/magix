@@ -14,7 +14,7 @@ using Magix.UX.Widgets;
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
     [ActiveController]
-    public class MetaTypeController : ActiveController
+    public class MetaObjectController : ActiveController
     {
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
@@ -46,14 +46,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             if (!node.Contains("WhiteListColumns"))
             {
-                node["WhiteListColumns"]["Name"].Value = true;
-                node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
+                node["WhiteListColumns"]["TypeName"].Value = true;
+                node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
                 node["WhiteListColumns"]["Reference"].Value = true;
-                node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 3;
-                node["WhiteListColumns"]["Created"].Value = true;
-                node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 3;
-                node["WhiteListColumns"]["Values"].Value = true;
-                node["WhiteListColumns"]["Values"]["ForcedWidth"].Value = 2;
+                node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
                 node["WhiteListColumns"]["Copy"].Value = true;
                 node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             }
@@ -71,12 +67,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             if (!node.Contains("Type"))
             {
-                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-                node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
-                node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
-                node["Type"]["Properties"]["Created"]["NoFilter"].Value = true;
-                node["Type"]["Properties"]["Values"]["ReadOnly"].Value = true;
-                node["Type"]["Properties"]["Values"]["NoFilter"].Value = true;
+                node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
+                node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
                 node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
                 node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetCopyMetaTypeTemplateColumn";
             }
@@ -154,7 +147,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject m = new MetaObject();
-                m.Name = "[Anonymous-Coward]";
+                m.TypeName = "[Anonymous-Coward]";
                 m.Save();
 
                 tr.Commit();
@@ -181,13 +174,47 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.MetaType.EditObjectRaw")]
         protected void Magix_MetaType_EditObjectRaw(object sender, ActiveEventArgs e)
         {
+            MetaObject m = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
             Node node = new Node();
 
-            node["Width"].Value = 18;
+            node["FullTypeName"].Value = typeof(MetaObject).FullName;
+            node["ID"].Value = m.ID;
+
+            // First filtering OUT columns ...!
+            node["WhiteListColumns"]["TypeName"].Value = true;
+            node["WhiteListColumns"]["Reference"].Value = true;
+            node["WhiteListColumns"]["Created"].Value = true;
+            node["WhiteListColumns"]["Values"].Value = true;
+
+            node["WhiteListProperties"]["Name"].Value = true;
+            node["WhiteListProperties"]["Value"].Value = true;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
+
+            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
+            node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Created"]["Header"].Value = "When";
+            node["Type"]["Properties"]["Values"]["ReadOnly"].Value = true;
+
+            node["Width"].Value = 16;
             node["Last"].Value = true;
-            node["Padding"].Value = 6;
+            node["Padding"].Value = 8;
+            node["Container"].Value = "content5";
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewComplexObject",
+                node);
+
+            node = new Node();
+
+            node["Width"].Value = 16;
+            node["Last"].Value = true;
+            node["Padding"].Value = 8;
             node["MarginBottom"].Value = 10;
-            node["Container"].Value = "content4";
+            node["Top"].Value = 2;
+            node["Container"].Value = "content6";
 
             node["PropertyName"].Value = "Values";
             node["IsList"].Value = true;

@@ -361,10 +361,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // First filtering OUT columns ...!
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["EventName"].Value = true;
-            node["WhiteListColumns"]["EventName"]["Header"].Value = "Action Name";
             node["WhiteListColumns"]["StripInput"].Value = true;
             node["WhiteListColumns"]["Description"].Value = true;
-            node["WhiteListColumns"]["Params"].Value = true;
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Value"].Value = true;
@@ -372,10 +370,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["EventName"]["Header"].Value = "Action Name";
+            node["Type"]["Properties"]["EventName"]["Bold"].Value = true;
             node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["StripInput"]["Header"].Value = "Strip Input Node";
             node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetStripInputTemplateColumn";
             node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
 
             node["Width"].Value = 18;
             node["Last"].Value = true;

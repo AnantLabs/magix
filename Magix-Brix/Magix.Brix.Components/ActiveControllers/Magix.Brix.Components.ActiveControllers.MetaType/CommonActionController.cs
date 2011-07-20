@@ -92,7 +92,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             MetaObject t2 = MetaObject.SelectByID(node["MetaTemplateObjectID"].Get<int>());
 
             node["SetCount"].Value = MetaObject.CountWhere(
-                Criteria.Eq("Name", t2.Name));
+                Criteria.Eq("Name", t2.TypeName));
             node["LockSetCount"].Value = true;
 
             ActiveEvents.Instance.RaiseActiveEvent(
@@ -159,11 +159,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 MetaObject templ = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
 
                 e.Params["SetCount"].Value = MetaObject.CountWhere(
-                    Criteria.Eq("Name", templ.Name));
+                    Criteria.Eq("Name", templ.TypeName));
                 e.Params["LockSetCount"].Value = true;
 
                 foreach (MetaObject idxO in MetaObject.Select(
-                    Criteria.Eq("Name", templ.Name),
+                    Criteria.Eq("Name", templ.TypeName),
                     Criteria.Range(
                         e.Params["Start"].Get<int>(),
                         e.Params["End"].Get<int>(),
@@ -283,7 +283,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 MetaObject.Value val = t.Values.Find(
                     delegate(MetaObject.Value idx)
                     {
-                        return t.Name == e.Params["PropertyName"].Get<string>();
+                        return t.TypeName == e.Params["PropertyName"].Get<string>();
                     });
                 if (val == null)
                 {

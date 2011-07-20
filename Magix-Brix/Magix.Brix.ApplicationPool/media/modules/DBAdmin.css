@@ -294,6 +294,8 @@ table.noMargin .checkboxWithText
 {
 	padding:0;
 	float:left;
+	width:70px;
+	margin-right:10px;
 }
 
 /* The actual Paging button itself inside a list view form ... */
@@ -316,7 +318,8 @@ table.noMargin .checkboxWithText
 }
 
 /* Disabled HOVER state of the above Paging Button */
-.pagingButton input[type=button]:disabled:hover
+.pagingButton input[type=button]:disabled:hover,
+.pagingButton input[type=button]:disabled:focus
 {
 	color:#CC6600;
 }

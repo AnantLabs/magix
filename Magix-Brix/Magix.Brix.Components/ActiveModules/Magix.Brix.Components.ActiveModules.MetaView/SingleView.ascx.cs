@@ -27,10 +27,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             {
                 // Probably in 'production mode' and hence need to get our data ...
                 node["MetaViewName"].Value = ViewName;
+
                 RaiseSafeEvent(
                     "Magix.MetaView.GetViewData",
                     node);
             }
+
             base.InitialLoading(node);
             Load +=
                 delegate
