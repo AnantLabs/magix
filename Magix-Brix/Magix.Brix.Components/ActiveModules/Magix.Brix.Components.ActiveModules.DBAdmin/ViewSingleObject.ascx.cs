@@ -500,6 +500,30 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 e.Params["Yes"].Value = true;
         }
 
+        [ActiveEvent(Name = "Magix.Core.ChangeCssClassOfModule")]
+        protected void Magix_Core_ChangeCssClassOfModule(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == 
+                DataSource["FullTypeName"].Get<string>())
+            {
+                if (!e.Params.Contains("ID") || 
+                    e.Params["ID"].Get<int>() == DataSource["ID"].Get<int>())
+                {
+                    if (e.Params.Contains("Replace"))
+                    {
+                        pnl.CssClass =
+                            pnl.CssClass.Replace(
+                                e.Params["Replace"].Get<string>(),
+                                e.Params["CssClass"].Get<string>());
+                    }
+                    else
+                    {
+                        pnl.CssClass += e.Params["CssClass"].Get<string>();
+                    }
+                }
+            }
+        }
+
         protected override void ReDataBind()
         {
             if (DataSource.Contains("ParentID") && 
