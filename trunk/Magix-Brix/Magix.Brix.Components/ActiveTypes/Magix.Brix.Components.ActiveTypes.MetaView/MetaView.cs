@@ -45,27 +45,26 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
         public string TypeName { get; set; }
 
         [ActiveField]
-        public bool IsList { get; set; }
-
-        [ActiveField]
-        public bool HasSearch { get; set; }
-
-        [ActiveField]
-        public string Caption { get; set; }
-
-        [ActiveField]
         public LazyList<MetaViewProperty> Properties { get; set; }
+
+        [ActiveField]
+        public DateTime Created { get; set; }
 
         public override void Save()
         {
-            foreach (MetaView idx in MetaView.Select(
-                Criteria.Eq("Name", Name)))
+            if (ID == 0)
+                Created = DateTime.Now;
+            string name = Name;
+
+            int idxNo = 2;
+            while (CountWhere(
+                Criteria.Eq("Name", name),
+                Criteria.NotId(ID)) > 0)
             {
-                if (idx.ID != ID)
-                    throw new ArgumentException("Ooops, the Name for that View seems to be already taken by another View in the system, either change the name of the previously named view, or choose another name for this view ...");
+                name = Name + " - " + idxNo.ToString();
+                idxNo += 1;
             }
-            if (string.IsNullOrEmpty(TypeName))
-                TypeName = "[nulled]";
+            Name = name;
             base.Save();
         }
     }

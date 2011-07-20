@@ -39,7 +39,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         }
 
         [ActiveField]
-        public string Name { get; set; }
+        public string TypeName { get; set; }
 
         [ActiveField]
         public string Reference { get; set; }
@@ -65,7 +65,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         private MetaObject DeepClone(MetaObject metaObject)
         {
             MetaObject ret = new MetaObject();
-            ret.Name = Name;
+            ret.TypeName = TypeName;
             ret.Reference = "cloned: " + ID;
             foreach (Value idx in Values)
             {

@@ -126,7 +126,7 @@ copy for your own messages. For your convenience ... :)";
             {
                 MetaObject t = new MetaObject();
 
-                t.Name = e.Params["MetaViewTypeName"].Get<string>();
+                t.TypeName = e.Params["MetaViewTypeName"].Get<string>();
                 t.Reference = e.Params["EventReference"].Get<string>();
                 t.Created = e.Params["EventTime"].Get<DateTime>();
 
