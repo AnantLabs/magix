@@ -162,26 +162,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 cS.CssClass = "wide-2 noFilter";
                 row.Controls.Add(cS);
             }
-            if (DataSource["IsRemove"].Get<bool>())
-            {
-                Label cS = new Label();
-                cS.Tag = "td";
-                cS.Text = "Remove";
-                cS.CssClass = "wide-2 noFilter";
-                row.Controls.Add(cS);
-            }
-            if (DataSource["IsDelete"].Get<bool>())
-            {
-                Label cS = new Label();
-                cS.Tag = "td";
-                string header = "Delete";
-                if (DataSource.Contains("DeleteHeader"))
-                    header = DataSource["DeleteHeader"].Get<string>();
-                cS.Text = header;
-                cS.CssClass = "wide-2 noFilter";
-                row.Controls.Add(cS);
-            }
-
             bool hasIdFilter = false;
             if (!(DataSource.Contains("NoIdColumn")
                 && DataSource["NoIdColumn"].Get<bool>()))
@@ -209,9 +189,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     b.Text = "ID";
                     b.ToolTip = "Click to filter ";
                     Node fNode = new Node();
-                    fNode["Key"].Value = 
-                        "DBAdmin.Filter." + 
-                        DataSource["FullTypeName"].Get<string>() + 
+                    fNode["Key"].Value =
+                        "DBAdmin.Filter." +
+                        DataSource["FullTypeName"].Get<string>() +
                         ":ID";
                     fNode["Default"].Value = "";
                     ActiveEvents.Instance.RaiseActiveEvent(
@@ -232,6 +212,25 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     li.Controls.Add(b);
                 }
                 row.Controls.Add(li);
+            }
+            if (DataSource["IsRemove"].Get<bool>())
+            {
+                Label cS = new Label();
+                cS.Tag = "td";
+                cS.Text = "Remove";
+                cS.CssClass = "wide-2 noFilter";
+                row.Controls.Add(cS);
+            }
+            if (DataSource["IsDelete"].Get<bool>())
+            {
+                Label cS = new Label();
+                cS.Tag = "td";
+                string header = "Delete";
+                if (DataSource.Contains("DeleteHeader"))
+                    header = DataSource["DeleteHeader"].Get<string>();
+                cS.Text = header;
+                cS.CssClass = "wide-2 noFilter";
+                row.Controls.Add(cS);
             }
 
             foreach (Node idx in DataSource["Type"]["Properties"])
@@ -446,6 +445,54 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 cS.Controls.Add(lb2);
                 row.Controls.Add(cS);
             }
+            if (!(DataSource.Contains("NoIdColumn")
+    && DataSource["NoIdColumn"].Get<bool>()))
+            {
+                Label li = new Label();
+                li.Tag = "td";
+                LinkButton lb = new LinkButton();
+                if (DataSource.Contains("IDColumnValue"))
+                {
+                    lb.Text = DataSource["IDColumnValue"].Get<string>();
+                }
+                else
+                {
+                    lb.Text = node["ID"].Value.ToString();
+                }
+                lb.Click +=
+                    delegate(object sender, EventArgs e)
+                    {
+                        LinkButton b = sender as LinkButton;
+                        Node n = new Node();
+                        int id = int.Parse((b.Parent.Parent as Label).Info);
+                        (b.Parent.Parent as Label).CssClass = "grid-selected";
+                        if (SelectedID != -1)
+                        {
+                            if (id != SelectedID)
+                            {
+                                Label l = Selector.SelectFirst<Label>(this,
+                                    delegate(Control idxCtrl)
+                                    {
+                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                    });
+                                if (l != null)
+                                    l.CssClass = "";
+                            }
+                        }
+                        SelectedID = id;
+                        n["ID"].Value = id;
+                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                        n["DataSource"] = DataSource;
+                        RaiseSafeEvent(
+                            DataSource.Contains("IDColumnEvent") ?
+                                DataSource["IDColumnEvent"].Get<string>() :
+                                "DBAdmin.Form.ViewComplexObject",
+                            n);
+                        n["DataSource"].UnTie();
+                    };
+                li.Controls.Add(lb);
+                row.Controls.Add(li);
+            }
             if (DataSource["IsRemove"].Get<bool>())
             {
                 Label cS = new Label();
@@ -530,55 +577,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 cS.Controls.Add(lb2);
                 row.Controls.Add(cS);
             }
-            if (!(DataSource.Contains("NoIdColumn")
-                && DataSource["NoIdColumn"].Get<bool>()))
-            {
-                Label li = new Label();
-                li.Tag = "td";
-                LinkButton lb = new LinkButton();
-                if (DataSource.Contains("IDColumnValue"))
-                {
-                    lb.Text = DataSource["IDColumnValue"].Get<string>();
-                }
-                else
-                {
-                    lb.Text = node["ID"].Value.ToString();
-                }
-                lb.Click +=
-                    delegate(object sender, EventArgs e)
-                    {
-                        LinkButton b = sender as LinkButton;
-                        Node n = new Node();
-                        int id = int.Parse((b.Parent.Parent as Label).Info);
-                        (b.Parent.Parent as Label).CssClass = "grid-selected";
-                        if (SelectedID != -1)
-                        {
-                            if (id != SelectedID)
-                            {
-                                Label l = Selector.SelectFirst<Label>(this,
-                                    delegate(Control idxCtrl)
-                                    {
-                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                    });
-                                if (l != null)
-                                    l.CssClass = "";
-                            }
-                        }
-                        SelectedID = id;
-                        n["ID"].Value = id;
-                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                        n["DataSource"] = DataSource;
-                        RaiseSafeEvent(
-                            DataSource.Contains("IDColumnEvent") ? 
-                                DataSource["IDColumnEvent"].Get<string>() : 
-                                "DBAdmin.Form.ViewComplexObject",
-                            n);
-                        n["DataSource"].UnTie();
-                    };
-                li.Controls.Add(lb);
-                row.Controls.Add(li);
-            }
-            
+
             foreach (Node idxType in DataSource["Type"]["Properties"])
             {
                 Node idx = node["Properties"][idxType.Name];

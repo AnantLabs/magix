@@ -572,7 +572,7 @@ input[type=button].clear-both
 
 .tool-tip:hover
 {
-	height:540px;
+	height:504px;
 
 	-moz-transition-property:-moz-box-shadow, background-color, height;
 	-moz-transition-duration:1s;
@@ -652,24 +652,24 @@ input[type=button].clear-both
 	color:rgba(0, 0, 0, 0.2);
 
 	-moz-transition-property:color;
-	-moz-transition-duration:1s;
+	-moz-transition-duration:3s;
 	-webkit-transition-property:color;
-	-webkit-transition-duration:1s;
+	-webkit-transition-duration:3s;
 	transition-property:color;
-	transition-duration:1s;
+	transition-duration:3s;
 	
 }
 
 .tool-tip:hover .tip-text em
 {
-	color:rgba(155, 55, 0, 1);
+	color:rgba(105, 5, 0, 1);
 
 	-moz-transition-property:color;
-	-moz-transition-duration:1s;
+	-moz-transition-duration:3s;
 	-webkit-transition-property:color;
-	-webkit-transition-duration:1s;
+	-webkit-transition-duration:3s;
 	transition-property:color;
-	transition-duration:1s;
+	transition-duration:3s;
 }
 
 .tool-tip .tip-text a

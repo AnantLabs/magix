@@ -20,15 +20,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
-            // TODO: Throw away while testing ToolTip functionality ....
-            foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
-            {
-                idx.Delete();
-            }
-            foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
-            {
-                idx.Delete();
-            }
             if (ToolTip.Instance.Count == 0)
             {
                 ToolTip.Instance.CreateTip(@"
@@ -44,8 +35,30 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p>So Pages can be thought of as Views in your Applications if you want to, or your entire hierarchy of Pages can be viewed as a gigantic plugin Application, which it actually in fact is ... ;)</p>
 <p>It is actually quite useful to <em>stop separating</em> between 'Old-Time Constructs' such as 'code', 'data', 'input' and 'output'. </p>
 <p>Old World thinking, trying to categorize things into different types, are much less useful in Magix than what you think. In Magix, everything is kind of 'mushy'. Or <em>'everything is everything'</em> I guess you can say. This is what makes it possible for you to Stay in Control and deliver Secure and Stable Systems, regardless of the Complexity of your Domain Problem ...</p>
-<p>Anyway ...</p>
 <p>We recommend people to <em>Start with Learning Publishing</em> and how the WebPages work. Then later, only when a firm grasp of Pages and Templates are understood, we recommend moving onto Applications ...</p>");
+                ToolTip.Instance.CreateTip(@"
+<h2>Basics ...</h2>
+<p>But before we can do anything else, we need to learn the <em>Basics</em> ...</p>
+<p>Most of Magix is made up of 'Basic Components', which are tied together to create a whole.</p>
+<p>For instance, a button will mostly look the same everywhere. By default a button will be Gray and use Bold, Black and Big Fonts ...</p>
+<p>A good example of a Button is the Top/Right corner of this tooltip, which has two Buttons. One Paging forward, and another paging Backwards in the Hierarchy of Tips and Tricks ...</p>
+<p>A 'Grid' is when you see a list of items. A good example of a Grid would be MetaTypes/Meta Actions ...</p>
+<p>There are many types of 'Basic Components' like these in Magix. Over the next couple of pages, we'll be walking through some of them which you'll need to understand to be able to get the <em>most out of Magix</em> ...</p>
+");
+                ToolTip.Instance.CreateTip(@"
+<p>Most Grids in Magix have tons of features. These features includes; Paging, In Place Editing of Values, Filtering, and so on ...</p>
+<p>To Filter according to a Column, all you've got to do is to click the header of your Grid, choose which type of Filter you want to apply, type in its value, and click OK ...</p>
+<p>The arrow buttons, normally at the bottom of your grids makes it possible to traverse forward and backwards in your list of items. The double arrows [""&lt;&lt;""] takes you <em>'all the way'</em> in its direction ...</p>
+<p><em>Open up Meta Types/Meta Actions</em> and play around with that grid by filtering, creating a couple of new items and so on.</p>
+<p>Make sure you <em>don't change any</em> of the existing items, since some things are dependent upon 'System Actions' which must be defined for your system to properly work ...!</p>
+<p>To see Paging you'll normally need to have more than 10 items in your grid. To see 'all the way paging', you'll normally need more than 20 items ...</p>
+<p>Make sure you also click the 'Edit' column. Sometimes this column will say 'Edit' while sometimes it'll show a number like in the Action view. However, clicking the Edit Column, will always somehow bring you to a View where that object can be edited in 'full version' ...</p>
+");
+                ToolTip.Instance.CreateTip(@"
+<p>Some things should be very similar for mostly all grids like this in Magix. For instance ...</p>
+<p>Clicking the '+' button will almost always create a new object of that type ...</p>
+<p>If the Text of a Grid Cell is Blue, this means that you can edit the value directly by <em>clicking the Blue Text</em>, which will exchange it with a 'textbox', from where you can edit its value ...</p>
+");
                 ToolTip.Instance.CreateTip(@"
 <h2>Publishing ...</h2>
 <p>A Website consists of Pages. Every Page is the equivalent of one 'URL'. Although URLs doesn't really exist in Magix, it helps to think of a page as such. Beside, creating a URL based Navigation Plugin would be piece of cake anyway, due to the Architectural Principles Magix is built on ...</p>
@@ -60,7 +73,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p>Go check out <em>'Publishing-&gt;Templates ...'</em> one more time, and see how you can move stuff around on your 'surface' by clicking the Arrow Buttons ... </p>
 ");
                 ToolTip.Instance.CreateTip(@"
-<p>When positioning your WebPart Templates, realize that you're not really 'positioning' them, but rather you are changing their <em>width, height and margins</em>. In the beginning this might feel a little bit cumbersome, though after some time you'll hopefully appreciate this 'floating layout' and become used to is ...</p>
+<p>When positioning your WebPart Templates, realize that you're not really 'positioning' them, but rather you are changing their <em>width, height and margins</em>. In the beginning this might feel a little bit cumbersome, though after some time you'll hopefully appreciate this 'floating layout' and become used to it ...</p>
 <p>Realize also that especially the bottom and right margins might create funny looking WebParts since they're not really visible while editing. If you're having weird results, make sure your right and bottom margins are 0 by <em>double clicking</em> them, which should set them back to zero ... ;)</p>
 <p>Double clicking any of the arrows will either maximize or minimize their associated property ...</p>
 ");
@@ -85,7 +98,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 ");
                 ToolTip.Instance.CreateTip(@"
 <p>Try to Create several different Templates, and have slightly different values for their width, height, margins and such.</p>
-<p>Make especially care of that you've added different widths of your Menu Containers and different <em>Left Margins</em></p>
+<p>Be certain of that you've added different widths of your Menu Containers and different <em>Left Margins</em></p>
 <p>Make sure they've got the same type of modules in the same container</p>
 <p>Then use these different Templates for different pages which you create in your Pages hierarchy</p>
 <p>If you now access the root of your website, and try to browse around by clicking different buttons, you can see how the WebPart Containers are 'jumping around' on the screen ...</p>
@@ -101,11 +114,42 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p><em>Play around</em> with the system by creating some new Templates, copying them, change their weparts type between Header, Content and SliderMenu. Then when you come back, we'll start diving into Applications ... ;)</p>
 ");
                 ToolTip.Instance.CreateTip(@"
-<h1>Applications ...</h1>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
+<h2>Applications ...</h2>
+<p>Most applications will be WebParts. This means that you can inject them into any WebPart onto any WebPage you wish.</p>
+<p>Let's create an Application ... :)</p>
+<p>First make sure you have one Template in use in one of your pages which has one WebPart Template with the Module Type of <em>'SingleView'</em> ...</p>
+<p>Then click on <em>'MetaTypes/Meta Views'</em> ...</p>
+<p>Create a new View called 'CollectEmails' ...</p>
+");
+                ToolTip.Instance.CreateTip(@"
+<p>Add three properties to your form, name them</p>
+<ul>
+<li>Name</li>
+<li>Email</li>
+<li>Subscribe</li>
+</ul>
+<p>Change their description to something meaningful ...</p>
+<p>Make sure you change the 'Type Name' of your object to <em>'EmailSubscription'</em></p>
+");
+                ToolTip.Instance.CreateTip(@"
+<p>Attach two Actions to your 'Save' property.</p>
+<ul>
+<li>Magix.DynamicEvent.SaveActiveForm</li>
+<li>Magix.DynamicEvent.EmptyActiveForm</li>
+</ul>
+<p>The first Action will save your form, while the second one will empty it.</p>
+<p>Now try to <em>View your form in preview</em> mode, and test it out by typing in your email and name, and clicking Submit to save your Object ...</p>
+<p>PS!<br/>
+Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in case you wondered ... ;)</p>
+");
+                ToolTip.Instance.CreateTip(@"
+<p>Meta Objects and Type Names ...</p>
+<p>If you take a look at your <em>Meta Objects</em> now you will see a new object with the Type Name of 'EmailSubscription'. The <em>'Type Name'</em> property from your MetaView decides the Type Name of your Objects ...</p>
+<p>These 'Type Names' are important to distinguish from different types of Objects.</p>
+<p>One Object might be of type 'Customer', while another object might be of type 'Email', and so on. What names you give your Types is <em>crucial</em>! Name clashes here might create very hard to track down bugs and such ...</p>
+<p>Take some care when naming your Types!</p>
+<p>It's probably a good practice to some how make sure they've got unique names, also across your organization if you want to use plugins made by others.</p>
+<p>We encourage people to use type names such as; ""CompanyName.Department.Customer"", and never 'Customer' directly. In fact, your <em>homework</em> for this lesson is to go and rename your 'Customer' TypeName, and rename the Type Name to; 'CompanyName.Department.Customer'. Where Company Name and Department are <em>your</em> company name and your department ...</p>
 ");
                 ToolTip.Instance.CreateTip(@"
 <h3>Talk to CEO</h3>
