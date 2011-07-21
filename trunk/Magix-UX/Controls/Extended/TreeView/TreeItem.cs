@@ -162,11 +162,15 @@ namespace Magix.UX.Widgets
             if (ContentHasTreeItems)
             {
                 Content.Visible = true;
-                new EffectToggle(Content, 500)
-                    .JoinThese(
-                        new EffectCssClass(this, "mux-tree-collapsed"),
-                        new EffectCssClass(this, "mux-tree-expanded"))
-                    .Render();
+                if (!TreeView.NoCollapseOfItems ||
+                    !Expanded)
+                {
+                    new EffectToggle(Content, 500)
+                        .JoinThese(
+                            new EffectCssClass(this, "mux-tree-collapsed"),
+                            new EffectCssClass(this, "mux-tree-expanded"))
+                        .Render();
+                }
             }
             TreeItem old = TreeView.SelectedItem;
             if (old != null)

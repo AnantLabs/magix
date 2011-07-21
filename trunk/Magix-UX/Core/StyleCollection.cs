@@ -165,10 +165,10 @@ namespace Magix.UX.Widgets
 
                 if (_styleValues.ContainsKey(idx))
                 {
-                    if (_styleValues[idx].OnlyViewStateValue != null)
-                        return _styleValues[idx].OnlyViewStateValue;
-                    else if (_styleValues[idx].AfterViewStateTrackingValue != null)
+                    if (_styleValues[idx].AfterViewStateTrackingValue != null)
                         return _styleValues[idx].AfterViewStateTrackingValue;
+                    else if (_styleValues[idx].OnlyViewStateValue != null)
+                        return _styleValues[idx].OnlyViewStateValue;
                     else if (_styleValues[idx].ViewStateValue != null)
                         return _styleValues[idx].ViewStateValue;
                     else

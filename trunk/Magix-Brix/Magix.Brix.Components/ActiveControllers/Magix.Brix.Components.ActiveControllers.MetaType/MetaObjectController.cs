@@ -148,6 +148,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 MetaObject m = new MetaObject();
                 m.TypeName = "[Anonymous-Coward]";
+                m.Reference = e.Name;
                 m.Save();
 
                 tr.Commit();

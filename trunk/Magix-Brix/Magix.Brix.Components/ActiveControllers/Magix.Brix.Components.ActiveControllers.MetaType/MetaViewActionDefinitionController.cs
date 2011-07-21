@@ -55,11 +55,16 @@ copy for your own messages. For your convenience ... :)";
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "Message";
-                    m.Value = "Hello World 2.0 ...";
+                    m.Value = "Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
-                    m.Name = "Interval";
+                    m.Name = "Header";
+                    m.Value = "Knock, knock ...";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Milliseconds";
                     m.Value = "1500";
                     m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);

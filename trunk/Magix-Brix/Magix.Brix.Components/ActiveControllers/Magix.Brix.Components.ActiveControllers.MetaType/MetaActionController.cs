@@ -399,6 +399,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             node["ActionItemID"].Value = a.ID;
             node["ItemSelectedEvent"].Value = "Magix.Meta.EditParam";
+            node["NoClose"].Value = true;
 
             RaiseEvent(
                 "Magix.Meta.GetActionItemTree",
