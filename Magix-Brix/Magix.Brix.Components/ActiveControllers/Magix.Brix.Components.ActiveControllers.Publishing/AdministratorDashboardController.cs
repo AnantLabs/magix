@@ -20,13 +20,23 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
+            // TODO: Throw away while testing ToolTip functionality ....
+            foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
+            {
+                idx.Delete();
+            }
+            foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
+            {
+                idx.Delete();
+            }
             if (ToolTip.Instance.Count == 0)
             {
                 ToolTip.Instance.CreateTip(@"
 <h2>Welcome to Magix!</h2>
 <p>Truly a Strange and Wonderful World ...</p>
+<p>A place where you can become literate in regards to computers. A place where you can express yourself, creating what you want out of your computer. A place where you are in charge, a place which is fun!</p>
 <p>This is your First tip of the day. <em>Leave These Tips On</em> to make sure you get Useful Tips and Tricks as you proceed deeper and deeper into the Rabbit Hole ...</p>
-<p>In fact, your first Tip is to use the Arrow Keys in the Top/Right corner of this window to navigate forward and fast read the next upcoming 3 tips. They are all crucial for getting started with Magix ...</p>
+<p>In fact, your first Tip is to use the Arrow Keys in the Top/Right corner of this window to navigate forward and fast read the next upcoming 5-10 tips. They are all crucial for getting started with Magix ...</p>
 <p>If you need to re-read a previous tip, you can click the previous button ...</p>
 ");
                 ToolTip.Instance.CreateTip(@"

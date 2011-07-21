@@ -51,6 +51,12 @@ namespace Magix.UX.Widgets
             }
         }
 
+        public bool NoCollapseOfItems
+        {
+            get { return ViewState["NoCollapseOfItems"] == null ? false : (bool)ViewState["NoCollapseOfItems"]; }
+            set { ViewState["NoCollapseOfItems"] = value; }
+        }
+
         protected override void RenderMuxControl(HtmlBuilder builder)
         {
             using (Element el = builder.CreateElement(Tag))

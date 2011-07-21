@@ -72,9 +72,9 @@
         id="pnlAll" />
     <mux:Window 
         runat="server" 
-        CssClass="mux-shaded mux-rounded mux-window message last msg-center"
+        CssClass="mux-shaded mux-rounded mux-window magix-message last"
         Caption="Message from Marvin ..."
-        style="position:fixed;display:none;top:54px;left:190px;"
+        style="display:none;"
         Closable="false"
         id="message">
         <Content>

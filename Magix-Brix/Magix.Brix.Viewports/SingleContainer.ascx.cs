@@ -364,6 +364,7 @@ namespace Magix.Brix.Viewports
             }
             if (firstMessage)
             {
+                message.Caption = "Message from Marvin ...";
                 msgLbl.Text = "";
                 new EffectFadeIn(message, 250)
                     .JoinThese(new EffectRollDown())
@@ -373,6 +374,8 @@ namespace Magix.Brix.Viewports
                             .JoinThese(new EffectRollUp()))
                     .Render();
                 firstMessage = false;
+                if (e.Params.Contains("Header"))
+                    message.Caption = e.Params["Header"].Get<string>();
             }
             msgLbl.Text += string.Format("<p>{0}</p>", e.Params["Message"].Get<string>());
         }
