@@ -37,10 +37,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 {
                     if (node.Contains("ChildCssClass"))
                         pnlWrp.CssClass = node["ChildCssClass"].Get<string>();
-                    if (node.Contains("SetFocus") && node["SetFocus"].Get<bool>())
+                    if (node.Contains("SetFocus") && 
+                        node["SetFocus"].Get<bool>())
                     {
                         // Defaulting ....
-                        query.Text = "Your Query goes Here ...";
+                        query.Text = "Query ...";
                         new EffectTimeout(500)
                             .ChainThese(
                                 new EffectFocusAndSelect(query))

@@ -19,8 +19,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
-            e.Params["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "View Objects ...";
+            e.Params["Items"]["MetaType"]["Caption"].Value = "Meta Types";
+            e.Params["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "Meta Objects ...";
             e.Params["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.ViewMetaObjectsRaw";
         }
 

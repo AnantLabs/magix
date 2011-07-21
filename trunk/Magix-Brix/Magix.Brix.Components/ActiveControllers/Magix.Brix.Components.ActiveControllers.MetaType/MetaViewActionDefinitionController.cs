@@ -30,6 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     a.Description = @"Will save the currently active Single-View Form.
 Will determine which form raised the event originally, and explicitly save the field values
 from that Form into a new Meta Object with the TypeName from the View ...";
+                    a.StripInput = false;
                     a.Save();
                 }
                 if (Action.CountWhere(
@@ -41,6 +42,7 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                     a.Description = @"Will empty the currrently active Editable Form. 
 Will determine which form raised the event originally, and explicitly empty that 
 form only. Useful for things such as 'Clear Buttons' and such ...";
+                    a.StripInput = false;
                     a.Save();
                 }
                 if (Action.CountWhere(
@@ -79,11 +81,18 @@ copy for your own messages. For your convenience ... :)";
         [ActiveEvent(Name = "Magix.Meta.RaiseEvent")]
         protected void Magix_Meta_RaiseEvent(object sender, ActiveEventArgs e)
         {
-            Action action = Action.SelectByID(e.Params["ActionID"].Get<int>());
+            Action action = null;
+            if (e.Params.Contains("ActionName"))
+                action = Action.SelectFirst(
+                    Criteria.Eq("Name", e.Params["ActionName"].Get<string>()));
+            else
+                action = Action.SelectByID(e.Params["ActionID"].Get<int>());
 
             Node node = e.Params;
             if (action.StripInput)
+            {
                 node = new Node();
+            }
 
             foreach (Action.ActionParams idx in action.Params)
             {
@@ -132,8 +141,11 @@ copy for your own messages. For your convenience ... :)";
                 MetaObject t = new MetaObject();
 
                 t.TypeName = e.Params["MetaViewTypeName"].Get<string>();
-                t.Reference = e.Params["EventReference"].Get<string>();
-                t.Created = e.Params["EventTime"].Get<DateTime>();
+                t.Reference = 
+                    e.Params["MetaViewName"].Get<string>() +
+                    "|" + 
+                    e.Params["ActionSenderName"].Get<string>();
+                t.Created = DateTime.Now;
 
                 foreach (Node idx in e.Params["PropertyValues"])
                 {
