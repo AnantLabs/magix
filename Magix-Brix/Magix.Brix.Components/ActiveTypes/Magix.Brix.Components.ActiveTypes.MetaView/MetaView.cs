@@ -31,6 +31,16 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
 
             [ActiveField(BelongsTo=true)]
             public MetaView MetaView { get; set; }
+
+            internal MetaViewProperty Clone()
+            {
+                MetaViewProperty ret = new MetaViewProperty();
+                ret.Action = Action;
+                ret.Description = Description;
+                ret.Name = Name;
+                ret.ReadOnly = ReadOnly;
+                return ret;
+            }
         }
 
         public MetaView()
@@ -47,13 +57,8 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
         [ActiveField]
         public LazyList<MetaViewProperty> Properties { get; set; }
 
-        [ActiveField]
-        public DateTime Created { get; set; }
-
         public override void Save()
         {
-            if (ID == 0)
-                Created = DateTime.Now;
             string name = Name;
 
             int idxNo = 2;
@@ -66,6 +71,25 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
             }
             Name = name;
             base.Save();
+        }
+
+        public MetaView Copy()
+        {
+            return DeepCopy(this);
+        }
+
+        private MetaView DeepCopy(MetaView mv)
+        {
+            MetaView ret = new MetaView();
+            ret.Name = mv.Name;
+            ret.TypeName = mv.TypeName;
+            foreach (MetaViewProperty idx in Properties)
+            {
+                MetaViewProperty p = idx.Clone();
+                ret.Properties.Add(p);
+                p.MetaView = ret;
+            }
+            return ret;
         }
     }
 }

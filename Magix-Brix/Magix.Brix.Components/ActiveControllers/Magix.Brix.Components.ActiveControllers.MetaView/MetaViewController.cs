@@ -9,6 +9,7 @@ using Magix.Brix.Loader;
 using Magix.Brix.Types;
 using Magix.Brix.Components.ActiveTypes.MetaViews;
 using Magix.Brix.Data;
+using Magix.UX.Widgets;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
@@ -37,22 +38,145 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["WhiteListColumns"]["TypeName"].Value = true;
             node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
             node["WhiteListColumns"]["TypeName"]["MaxLength"].Value = 50;
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 3;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.MetaView.EditMetaView";
             node["CreateEventName"].Value = "Magix.MetaView.CreateMetaView";
+            node["DeleteColumnEvent"].Value = "Magix.MetaAction.DeleteMetaView";
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
+            node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type Name";
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyMetaViewTemplateColumn";
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.GetCopyMetaViewTemplateColumn")]
+        protected void Magix_Meta_GetCopyMetaViewTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            // Creating our SelectList
+            LinkButton ls = new LinkButton();
+            ls.Text = "Copy";
+            ls.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+                    RaiseEvent(
+                        "Magix.Meta.CopyMetaView",
+                        node);
+                };
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = ls;
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.CopyMetaView")]
+        protected void Magix_Meta_CopyMetaView(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView a = MetaView.SelectByID(e.Params["ID"].Get<int>());
+                MetaView clone = a.Copy();
+
+                clone.Save();
+
+                tr.Commit();
+
+                Node n = new Node();
+
+                n["FullTypeName"].Value = typeof(MetaView).FullName;
+                n["ID"].Value = clone.ID;
+
+                RaiseEvent(
+                    "DBAdmin.Grid.SetActiveRow",
+                    n);
+
+                n = new Node();
+                n["FullTypeName"].Value = typeof(MetaView).FullName;
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    n);
+
+                n = new Node();
+                n["ID"].Value = clone.ID;
+
+                RaiseEvent(
+                    "Magix.MetaView.EditMetaView",
+                    n);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaView")]
+        protected void Magix_MetaAction_DeleteMetaView(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string typeName = fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1);
+            Node node = e.Params;
+            if (node == null)
+            {
+                node = new Node();
+                node["ForcedSize"]["width"].Value = 550;
+                node["WindowCssClass"].Value =
+                    "mux-shaded mux-rounded push-5 down-2";
+            }
+            node["Caption"].Value = @"
+Please confirm deletion of " + typeName + " with ID of " + id;
+            node["Text"].Value = @"
+<p>Are you sure you wish to delete this View? 
+This View might be in use in several forms or other parts of your system. 
+Deleting it may break these parts.</p>";
+            node["OK"]["ID"].Value = id;
+            node["OK"]["FullTypeName"].Value = fullTypeName;
+            node["OK"]["Event"].Value = "Magix.MetaAction.DeleteMetaView-Confirmed";
+            node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
+            node["Cancel"]["FullTypeName"].Value = fullTypeName;
+            node["Width"].Value = 15;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaView-Confirmed")]
+        protected void Magix_MetaAction_DeleteMetaView_Confirmed(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaView).FullName)
+            {
+                // In case it's the one being edited ...
+                Node n = new Node();
+
+                n["Position"].Value = "content4";
+
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "ClearControls",
+                    n);
+
+                RaiseEvent(
+                    "DBAdmin.Common.ComplexInstanceDeletedConfirmed",
+                    e.Params);
+            }
         }
 
         [ActiveEvent(Name = "Magix.MetaView.CreateMetaView")]
@@ -78,10 +202,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         [ActiveEvent(Name = "Magix.MetaView.EditMetaView")]
         protected void Magix_MetaView_EditMetaView(object sender, ActiveEventArgs e)
         {
+            ActiveEvents.Instance.RaiseClearControls("content6");
+
             MetaView m = MetaView.SelectByID(e.Params["ID"].Get<int>());
 
             Node node = new Node();
 
+            // MetaView Single View Editing ...
             node["FullTypeName"].Value = typeof(MetaView).FullName;
             node["ID"].Value = m.ID;
 
@@ -89,7 +216,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["TypeName"].Value = true;
             node["WhiteListColumns"]["Properties"].Value = true;
-            node["WhiteListColumns"]["Created"].Value = true;
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Value"].Value = true;
@@ -98,8 +224,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type Name";
-            node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Created"]["Header"].Value = "When";
             node["Type"]["Properties"]["Properties"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Properties"]["Header"].Value = "Props";
 
@@ -112,6 +236,142 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
+
+            // Properties ...
+            node = new Node();
+
+            node["Width"].Value = 18;
+            node["Padding"].Value = 6;
+            node["Last"].Value = true;
+            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 9;
+            node["Container"].Value = "content5";
+
+            node["PropertyName"].Value = "Properties";
+            node["IsList"].Value = true;
+            node["FullTypeName"].Value = typeof(MetaView).FullName;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
+            node["WhiteListColumns"]["ReadOnly"].Value = true;
+            node["WhiteListColumns"]["ReadOnly"]["ForcedWidth"].Value = 3;
+            node["WhiteListColumns"]["Description"].Value = true;
+            node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 5;
+            node["WhiteListColumns"]["Action"].Value = true;
+            node["WhiteListColumns"]["Action"]["ForcedWidth"].Value = 5;
+
+            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["ReadOnly"]["Header"].Value = "Read On.";
+            node["Type"]["Properties"]["ReadOnly"]["TemplateColumnEvent"].Value = "Magix.DataPlugins.GetTemplateColumns.CheckBox";
+            node["Type"]["Properties"]["Description"]["Header"].Value = "Desc.";
+            node["Type"]["Properties"]["Description"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["Action"]["Header"].Value = "Action";
+            node["Type"]["Properties"]["Action"]["TemplateColumnEvent"].Value = "Magix.MetaView.GetMetaViewActionTemplateColumn";
+
+            node["ID"].Value = e.Params["ID"].Value;
+            node["NoIdColumn"].Value = true;
+            node["ReUseNode"].Value = true;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                node);
+
+            // Wysiwyg button ...
+            node = new Node();
+
+            node["Text"].Value = "Preview ...";
+            node["ButtonCssClass"].Value = "span-4";
+            node["Append"].Value = true;
+            node["Event"].Value = "Magix.MetaView.LoadWysiwyg";
+            node["Event"]["ID"].Value = m.ID;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content5",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.DataPlugins.GetTemplateColumns.CheckBox")]
+        protected void Magix_DataPlugins_GetTemplateColumns_CheckBox(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+
+            Panel pnl = new Panel();
+
+            CheckBox ch = new CheckBox();
+            ch.Style[Styles.floating] = "left";
+            ch.Style[Styles.width] = "15px";
+            ch.Style[Styles.display] = "block";
+            ch.Checked = bool.Parse(e.Params["Value"].Value.ToString());
+            ch.CheckedChanged +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = e.Params["ID"].Value;
+                    node["FullTypeName"].Value = e.Params["FullTypeName"].Value;
+                    node["NewValue"].Value = ch.Checked.ToString();
+                    node["PropertyName"].Value = e.Params["Name"].Value;
+
+                    RaiseEvent(
+                        "DBAdmin.Data.ChangeSimplePropertyValue",
+                        node);
+                };
+            pnl.Controls.Add(ch);
+
+            Label l = new Label();
+            l.Text = "&nbsp;";
+            l.CssClass += "span-2";
+            l.Tag = "label";
+            l.Load +=
+                delegate
+                {
+                    l.For = ch.ClientID;
+                };
+            pnl.Controls.Add(l);
+
+            e.Params["Control"].Value = pnl;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.GetMetaViewActionTemplateColumn")]
+        protected void Magix_MetaView_GetMetaViewActionTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+
+            Panel pnl = new Panel();
+            pnl.CssClass = "action-wrapper";
+
+            MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+
+            if (!string.IsNullOrEmpty(p.Action))
+            {
+                pnl.CssClass += " has-action";
+            }
+            else
+            {
+                pnl.CssClass += " has-no-action";
+            }
+
+            Panel grow = new Panel();
+            grow.CssClass = "grower";
+
+            string[] actions = 
+                (p.Action ?? "")
+                .Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string idxA in actions)
+            {
+                string actionName = idxA;
+                if (actionName.Contains("("))
+                    actionName = actionName.Substring(0, actionName.IndexOf('('));
+                Label l = new Label();
+                l.Text = actionName;
+                l.CssClass = "clear-left span-4 last";
+                grow.Controls.Add(l);
+            }
+
+            pnl.Controls.Add(grow);
+
+            e.Params["Control"].Value = pnl;
         }
 
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
@@ -130,8 +390,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
 
             Node node = new Node();
 
-            node["Padding"].Value = 6;
-            node["Width"].Value = 18;
+            node["Width"].Value = 24;
             node["Last"].Value = true;
             node["Top"].Value = 2;
             node["MarginBottom"].Value = 10;
@@ -151,7 +410,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.MetaView.SingleView",
-                "content5",
+                "content6",
                 node);
         }
 
