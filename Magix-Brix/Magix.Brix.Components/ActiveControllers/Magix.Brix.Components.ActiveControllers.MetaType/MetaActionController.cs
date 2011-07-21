@@ -19,9 +19,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["MetaType"]["Caption"].Value = "MetaTypes";
+            e.Params["Items"]["MetaType"]["Caption"].Value = "Meta Types";
 
-            e.Params["Items"]["MetaType"]["Items"]["Actions"]["Caption"].Value = "View Actions ...";
+            e.Params["Items"]["MetaType"]["Items"]["Actions"]["Caption"].Value = "Meta Actions ...";
             e.Params["Items"]["MetaType"]["Items"]["Actions"]["Event"]["Name"].Value = "Magix.MetaType.ViewActions";
         }
 
@@ -104,6 +104,81 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaActions.SearchActions")]
+        protected void Magix_MetaActions_SearchActions(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["FullTypeName"].Value = typeof(Action).FullName;
+            node["Container"].Value = "content6";
+            node["Width"].Value = 18;
+            node["Padding"].Value = 6;
+            node["PullTop"].Value = 8;
+            node["MarginBottom"].Value = 10;
+            node["Last"].Value = true;
+            if (e.Params.Contains("ParentID"))
+                node["ParentID"].Value = e.Params["ParentID"].Value;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 9;
+            node["WhiteListColumns"]["Params"].Value = true;
+            node["WhiteListColumns"]["Params"]["ForcedWidth"].Value = 2;
+
+            node["NoIdColumn"].Value = true;
+            node["IsCreate"].Value = false;
+            node["IsDelete"].Value = false;
+            node["IsFind"].Value = true;
+            node["IsSelect"].Value = true;
+            node["GetContentsEventName"].Value = "Magix.MetaAction.GetContentsEventName";
+            node["SetFocus"].Value = true;
+            node["SelectEvent"].Value = "Magix.MetaAction.ActionWasSelected";
+            node["ParentPropertyName"].Value = e.Params["SelectEvent"].Value;
+
+
+            node["Criteria"]["C1"]["Name"].Value = "Sort";
+            node["Criteria"]["C1"]["Value"].Value = "Created";
+            node["Criteria"]["C1"]["Ascending"].Value = false;
+
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaAction.ActionWasSelected")]
+        protected void Magix_MetaAction_ActionWasSelected(object sender, ActiveEventArgs e)
+        {
+            Action a = Action.SelectByID(e.Params["ID"].Get<int>());
+            e.Params["ActionName"].Value = a.Name;
+
+            RaiseEvent(
+                e.Params["ParentPropertyName"].Get<string>(),
+                e.Params);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaAction.GetContentsEventName")]
+        protected void Magix_MetaAction_GetContentsEventName(object sender, ActiveEventArgs e)
+        {
+            if (e.Params.Contains("Filter"))
+            {
+                e.Params["Criteria"]["C3"]["Name"].Value = "Like";
+                e.Params["Criteria"]["C3"]["Value"].Value = "%" + e.Params["Filter"].Get<string>() + "%";
+                e.Params["Criteria"]["C3"]["Column"].Value = "Name";
+            }
+            else if (e.Params.Contains("Criteria") &&
+                e.Params["Criteria"].Contains("C3"))
+                e.Params["Criteria"]["C3"].UnTie();
+            RaiseEvent(
+                "DBAdmin.Data.GetContentsOfClass",
+                e.Params);
         }
 
         [ActiveEvent(Name = "Magix.Meta.GetCopyActionTemplateColumn")]

@@ -10,6 +10,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Components.ActiveTypes.MetaViews;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
+using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
@@ -19,7 +20,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["MetaType"]["Items"]["Views"]["Caption"].Value = "View Views ...";
+            e.Params["Items"]["MetaType"]["Items"]["Views"]["Caption"].Value = "Meta Views ...";
             e.Params["Items"]["MetaType"]["Items"]["Views"]["Event"]["Name"].Value = "Magix.MetaView.ViewMetaViews";
         }
 
@@ -46,7 +47,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.MetaView.EditMetaView";
             node["CreateEventName"].Value = "Magix.MetaView.CreateMetaView";
-            node["DeleteColumnEvent"].Value = "Magix.MetaAction.DeleteMetaView";
+            node["DeleteColumnEvent"].Value = "Magix.MetaView.DeleteMetaView";
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
@@ -125,8 +126,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaView")]
-        protected void Magix_MetaAction_DeleteMetaView(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.MetaView.DeleteMetaView")]
+        protected void Magix_MetaView_DeleteMetaView(object sender, ActiveEventArgs e)
         {
             int id = e.Params["ID"].Get<int>();
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
@@ -147,7 +148,7 @@ This View might be in use in several forms or other parts of your system.
 Deleting it may break these parts.</p>";
             node["OK"]["ID"].Value = id;
             node["OK"]["FullTypeName"].Value = fullTypeName;
-            node["OK"]["Event"].Value = "Magix.MetaAction.DeleteMetaView-Confirmed";
+            node["OK"]["Event"].Value = "Magix.MetaView.DeleteMetaView-Confirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Cancel"]["FullTypeName"].Value = fullTypeName;
             node["Width"].Value = 15;
@@ -158,8 +159,8 @@ Deleting it may break these parts.</p>";
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaView-Confirmed")]
-        protected void Magix_MetaAction_DeleteMetaView_Confirmed(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.MetaView.DeleteMetaView-Confirmed")]
+        protected void Magix_MetaView_DeleteMetaView_Confirmed(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() == typeof(MetaView).FullName)
             {
@@ -240,8 +241,8 @@ Deleting it may break these parts.</p>";
             // Properties ...
             node = new Node();
 
-            node["Width"].Value = 18;
-            node["Padding"].Value = 6;
+            node["Width"].Value = 20;
+            node["Padding"].Value = 4;
             node["Last"].Value = true;
             node["MarginBottom"].Value = 10;
             node["PullTop"].Value = 9;
@@ -258,7 +259,7 @@ Deleting it may break these parts.</p>";
             node["WhiteListColumns"]["Description"].Value = true;
             node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 5;
             node["WhiteListColumns"]["Action"].Value = true;
-            node["WhiteListColumns"]["Action"]["ForcedWidth"].Value = 5;
+            node["WhiteListColumns"]["Action"]["ForcedWidth"].Value = 7;
 
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["ReadOnly"]["Header"].Value = "Read On.";
@@ -337,10 +338,22 @@ Deleting it may break these parts.</p>";
         {
             int id = e.Params["ID"].Get<int>();
 
+            MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+
             Panel pnl = new Panel();
             pnl.CssClass = "action-wrapper";
+            pnl.Click +=
+                delegate
+                {
+                    pnl.CssClass += " action-wrapper-hover";
 
-            MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
+                    Node node = new Node();
+                    node["ID"].Value = p.ID;
+
+                    RaiseEvent(
+                        "Magix.MetaView.AppendAction",
+                        node);
+                };
 
             if (!string.IsNullOrEmpty(p.Action))
             {
@@ -353,6 +366,11 @@ Deleting it may break these parts.</p>";
 
             Panel grow = new Panel();
             grow.CssClass = "grower";
+            grow.Click +=
+                delegate
+                {
+                    pnl.CssClass = pnl.CssClass.Replace(" action-wrapper-hover", "");
+                };
 
             string[] actions = 
                 (p.Action ?? "")
@@ -363,15 +381,89 @@ Deleting it may break these parts.</p>";
                 string actionName = idxA;
                 if (actionName.Contains("("))
                     actionName = actionName.Substring(0, actionName.IndexOf('('));
+
+                LinkButton btn = new LinkButton();
+                btn.Text = "X";
+                btn.CssClass = "clear-left span-1 delete-action";
+                btn.Click +=
+                    delegate
+                    {
+                        ActiveEvents.Instance.RaiseClearControls("content6");
+                        using (Transaction tr = Adapter.Instance.BeginTransaction())
+                        {
+                            string na = p.Action.Substring(0, p.Action.IndexOf(actionName));
+                            na += p.Action.Substring(p.Action.IndexOf(actionName) + actionName.Length);
+                            p.Action = na.Replace("||", "|").Trim('|').Trim();
+                            p.Save();
+
+                            tr.Commit();
+                        }
+
+                        Node n = new Node();
+                        n["FullTypeName"].Value = typeof(MetaView.MetaViewProperty).FullName;
+
+                        RaiseEvent(
+                            "Magix.Core.UpdateGrids",
+                            n);
+
+                    };
+                grow.Controls.Add(btn);
+
                 Label l = new Label();
                 l.Text = actionName;
-                l.CssClass = "clear-left span-4 last";
+                l.Tag = "div";
+                l.CssClass = "span-3 last";
                 grow.Controls.Add(l);
             }
+
+            Button bt = new Button();
+            bt.Text = "Close";
+            bt.CssClass = "bottom-right span-3";
+            bt.Click +=
+                delegate
+                {
+                    pnl.CssClass = pnl.CssClass.Replace(" action-wrapper-hover", "");
+                    ActiveEvents.Instance.RaiseClearControls("content6");
+                };
+            grow.Controls.Add(bt);
 
             pnl.Controls.Add(grow);
 
             e.Params["Control"].Value = pnl;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.AppendAction")]
+        protected void Magix_MetaView_AppendAction(object sender, ActiveEventArgs e)
+        {
+            e.Params["SelectEvent"].Value = "Magix.MetaView.ActionWasChosenForAppending";
+            e.Params["ParentID"].Value = e.Params["ID"].Value;
+            RaiseEvent(
+                "Magix.MetaActions.SearchActions",
+                e.Params);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.ActionWasChosenForAppending")]
+        protected void Magix_MetaView_ActionWasChosenForAppending(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("content6");
+
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ParentID"].Get<int>());
+                if (!string.IsNullOrEmpty(p.Action))
+                    p.Action += "|";
+                p.Action += e.Params["ActionName"].Get<string>();
+                p.Save();
+
+                tr.Commit();
+            }
+
+            Node n = new Node();
+            n["FullTypeName"].Value = typeof(MetaView.MetaViewProperty).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                n);
         }
 
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]

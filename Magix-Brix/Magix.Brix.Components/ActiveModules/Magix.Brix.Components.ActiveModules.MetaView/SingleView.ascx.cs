@@ -83,41 +83,29 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.Click +=
                 delegate
                 {
-                    DataSource["ActionEventName"].Value = b.Text;
+                    Node node = new Node();
+                    node["ActionSenderName"].Value = b.Text;
+                    node["MetaViewName"].Value = DataSource["MetaViewName"].Value;
+                    node["MetaViewTypeName"].Value = DataSource["MetaViewTypeName"].Value;
 
-                    GetPropertyValues();
+                    GetPropertyValues(node);
 
                     foreach (string idxS in idx["Action"].Get<string>().Split('|'))
                     {
                         // Settings Event Specific Features ...
-                        DataSource["EventTime"].Value = DateTime.Now;
-                        DataSource["EventReference"].Value = idxS;
+                        node["ActionName"].Value = idxS ;
 
-                        string eventName = idxS;
+                        string eventName = "Magix.Meta.RaiseEvent";
 
-                        if (eventName.Contains("("))
-                        {
-                            int eventId = int.Parse(eventName.Split('(')[1].Split(')')[0]);
-                            eventName = eventName.Substring(0, eventName.IndexOf("("));
-
-                            DataSource["ActionID"].Value = eventId;
-
-                            RaiseSafeEvent(
-                                eventName,
-                                DataSource);
-                        }
-                        else
-                        {
-                            RaiseSafeEvent(
-                                eventName,
-                                DataSource);
-                        }
+                        RaiseSafeEvent(
+                            eventName,
+                            node);
                     }
                 };
             ctrls.Controls.Add(b);
         }
 
-        private void GetPropertyValues()
+        private void GetPropertyValues(Node node)
         {
             foreach (Control idx in ctrls.Controls)
             {
@@ -126,8 +114,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                 {
                     if (w is TextBox)
                     {
-                        DataSource["PropertyValues"][w.Info]["Value"].Value = (w as TextBox).Text;
-                        DataSource["PropertyValues"][w.Info]["Name"].Value = w.Info;
+                        node["PropertyValues"][w.Info]["Value"].Value = (w as TextBox).Text;
+                        node["PropertyValues"][w.Info]["Name"].Value = w.Info;
                     }
                 }
             }
