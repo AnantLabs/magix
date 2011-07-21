@@ -149,6 +149,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 MetaObject m = new MetaObject();
                 m.TypeName = "[Anonymous-Coward]";
                 m.Reference = e.Name;
+
+                MetaObject.Value val = new MetaObject.Value();
+                val.Name = "Default Name";
+                val.Val = "Default Value";
+                m.Values.Add(val);
+
                 m.Save();
 
                 tr.Commit();
