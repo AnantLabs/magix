@@ -10,6 +10,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
+using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -761,6 +762,87 @@ Deleting it may break these parts.</p>";
             e.Params["Type"]["Properties"]["MetaActionCount"]["Header"].Value = "Actions";
             e.Params["Type"]["Properties"]["MetaActionCount"]["ClickLabelEvent"].Value = "Magix.MetaType.ViewActions";
             e.Params["Object"]["Properties"]["MetaActionCount"].Value = Action.Count.ToString();
+        }
+
+        [ActiveEvent(Name = "Magix.Core.EventClickedWhileDebugging")]
+        protected void Magix_Core_EventClickedWhileDebugging(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                string eventName = e.Params["EventName"].Get<string>();
+                Node eventNode = new Node();
+
+                if(e.Params.Contains("EventNode"))
+                    eventNode = e.Params["EventNode"].Value as Node;
+                
+                Action a = new Action();
+                a.EventName = eventName;
+                a.Name = "Debug-Copy-" + eventName;
+
+                FillActionParams(eventNode, a.Params);
+                
+                
+                a.Save();
+
+                tr.Commit();
+
+                
+                Node node = new Node();
+                node["ID"].Value = a.ID;
+
+                RaiseEvent("Magix.MetaType.ViewActions");
+
+                RaiseEvent(
+                    "Magix.Meta.EditAction",
+                    node);
+
+                node = new Node();
+                node["ID"].Value = a.ID;
+                node["FullTypeName"].Value = typeof(Action).FullName;
+
+                RaiseEvent(
+                    "DBAdmin.Grid.SetActiveRow",
+                    node);
+            }
+        }
+
+        private void FillActionParams(Node eventNode, LazyList<Action.ActionParams> lazyList)
+        {
+            foreach (Node idx in eventNode)
+            {
+                Action.ActionParams a = new Action.ActionParams();
+                a.Name = idx.Name;
+                switch ((idx.Value == null ? "" : idx.Value.GetType().FullName))
+                {
+                    case "System.Int32":
+                        a.TypeName = idx.Value.GetType().FullName;
+                        a.Value = idx.Value.ToString();
+                        break;
+                    case "System.DateTime":
+                        a.TypeName = idx.Value.GetType().FullName;
+                        a.Value = ((DateTime)idx.Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        break;
+                    case "System.Boolean":
+                        a.TypeName = idx.Value.GetType().FullName;
+                        a.Value = idx.Value.ToString();
+                        break;
+                    case "System.Decimal":
+                        a.TypeName = idx.Value.GetType().FullName;
+                        a.Value = ((decimal)idx.Value).ToString(CultureInfo.InvariantCulture);
+                        break;
+                    case "System.String":
+                        a.TypeName = idx.Value.GetType().FullName;
+                        a.Value = idx.Value.ToString();
+                        break;
+                    default:
+                        a.TypeName = "[Anonymous-Coward-Type]";
+                        a.Value = (idx.Value ?? "").ToString();
+                        break;
+                }
+                lazyList.Add(a);
+                if (eventNode.Contains("Children"))
+                    FillActionParams(eventNode["Children"], a.Children);
+            }
         }
     }
 }

@@ -40,9 +40,8 @@ namespace Magix.Brix.Viewports
         protected DynamicPanel[] child;
         protected AspectSmartScroll scroll;
         protected Image ajaxWait;
-        protected Label debug;
+        protected Panel debug;
         protected Timer timer;
-        private string debugText = "";
 
         private bool IsDebug()
         {
@@ -55,11 +54,88 @@ namespace Magix.Brix.Viewports
         {
             base.OnInit(e);
             EnsureChildControls();
+        }
 
-            AjaxManager.Instance.IncludeScriptFromResource(
-                typeof(SingleContainer),
-                "Magix.Brix.Viewports.iscroll.js",
-                false);
+        protected override void CreateChildControls()
+        {
+            base.CreateChildControls();
+            CreateChildContainers();
+            ReCreateDebugControls();
+            DebuggingEvents = new List<Tuple<string, Node>>();
+        }
+
+        private void ReCreateDebugControls()
+        {
+            if (IsDebug())
+            {
+                int idxNo = 0;
+                foreach (Tuple<string, Node> idx in DebuggingEvents)
+                {
+                    LinkButton b = new LinkButton();
+                    b.Text = idx.Left;
+                    b.ID = "bb-" + idxNo;
+                    b.CssClass = "clear-left span-6";
+                    Tuple<string, Node> tmp = idx;
+                    //b.ToolTip = idx.Right == null ? "" : idx.Right.ToJSONString();
+                    b.Click += delegate(object sender, EventArgs e)
+                    {
+                        LinkButton b2 = sender as LinkButton;
+                        Node node = new Node();
+                        node["EventName"].Value = tmp.Left;
+                        node["EventNode"].Value = tmp.Right;
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            "Magix.Core.EventClickedWhileDebugging",
+                            node);
+                    };
+                    debug.Controls.Add(b);
+                    idxNo += 1;
+                }
+            }
+        }
+
+        private List<Tuple<string, Node>> DebuggingEvents
+        {
+            get
+            {
+                if (Session["Magix.Brix.DebuggingEvents"] == null)
+                    Session["Magix.Brix.DebuggingEvents"] = new List<Tuple<string, Node>>();
+                return Session["Magix.Brix.DebuggingEvents"] as List<Tuple<string, Node>>;
+            }
+            set
+            {
+                Session["Magix.Brix.DebuggingEvents"] = value;
+            }
+        }
+
+        [ActiveEvent] // Null event handler for logging in debug cases ...
+        //[DebuggerStepThrough]
+        protected void NULLEventHandler(object sender, ActiveEventArgs e)
+        {
+            if (IsDebug())
+            {
+                DebuggingEvents.Add(new Tuple<string, Node>(e.Name, e.Params));
+            }
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            if (IsDebug())
+            {
+                if (!wrp.CssClass.Contains("showgrid"))
+                    wrp.CssClass += " showgrid";
+                debug.Visible = true;
+            }
+            else
+            {
+                if (wrp.CssClass.Contains(" showgrid"))
+                    wrp.CssClass = wrp.CssClass.Replace(" showgrid", "");
+                debug.Visible = false;
+            }
+            debug.Controls.Clear();
+            ReCreateDebugControls();
+            debug.ReRender();
+            base.OnPreRender(e);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -89,25 +165,6 @@ namespace Magix.Brix.Viewports
             }
         }
 
-        protected override void OnPreRender(EventArgs e)
-        {
-            if (IsDebug())
-            {
-                debug.Text = string.IsNullOrEmpty(debugText) ? "Next request will show trace ..." : debugText;
-                debug.ClickEffect = new EffectSize(debug, 125, 640, -1);
-                debug.MouseOutEffect = new EffectSize(debug, 125, 30, -1);
-                if (!wrp.CssClass.Contains("showgrid"))
-                    wrp.CssClass += " showgrid";
-            }
-            else
-            {
-                if (wrp.CssClass.Contains(" showgrid"))
-                    wrp.CssClass = wrp.CssClass.Replace(" showgrid", "");
-            }
-            debug.Visible = IsDebug();
-            base.OnPreRender(e);
-        }
-
         protected void timer_Tick(object sender, EventArgs e)
         {
             // ORDER COUNTS!!!
@@ -124,12 +181,6 @@ namespace Magix.Brix.Viewports
             {
                 IncludeCssFile(idx);
             }
-        }
-
-        protected override void CreateChildControls()
-        {
-            base.CreateChildControls();
-            CreateChildContainers();
         }
 
         private void CreateChildContainers()
@@ -170,31 +221,6 @@ namespace Magix.Brix.Viewports
                 w.Controls.Add(m);
 
                 pnlAll.Controls.Add(w);
-            }
-        }
-
-        private bool firstEvent = true;
-
-        [ActiveEvent] // Null event handler for logging in debug cases ...
-        [DebuggerStepThrough]
-        protected void NULLEventHandler(object sender, ActiveEventArgs e)
-        {
-            if (firstEvent)
-            {
-                debugText = "";
-                firstEvent = false;
-            }
-            if (IsDebug())
-            {
-                debugText += string.Format(@"
-<p><strong>Event Name:</strong> {0}
-{1}
-</p>
-<hr />",
-                    e.Name,
-                    (e.Params == null ? 
-                        "" : 
-                        ("<br /><strong>e.Params:</strong> " + e.Params.ToJSONString().Replace("<", "&lt;").Replace("&gt;", ""))));
             }
         }
 
