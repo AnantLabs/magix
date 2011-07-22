@@ -472,17 +472,18 @@ input[type=checkbox].gridSelect
 	display:block;
 	bottom:9px;
 	right:0;
+	width:30px;
 	z-index:100000;
 	padding:18px 40px 18px 40px;
 	overflow-x:hidden;
 	overflow-y:hidden;
 	opacity:0.1;
 
-	-moz-transition-property:opacity;
+	-moz-transition-property:opacity, width;
 	-moz-transition-duration:0.2s;
-	-webkit-transition-property:opacity;
+	-webkit-transition-property:opacity, width;
 	-webkit-transition-duration:0.2s;
-	transition-property:opacity;
+	transition-property:opacity, width;
 	transition-duration:0.2s;
 }
 
@@ -491,6 +492,14 @@ input[type=checkbox].gridSelect
 	opacity:1;
 	overflow-x:hidden;
 	overflow-y:auto;
+	width:630px;
+
+	-moz-transition-property:opacity, width;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity, width;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity, width;
+	transition-duration:0.2s;
 }
 
 .clear-left,

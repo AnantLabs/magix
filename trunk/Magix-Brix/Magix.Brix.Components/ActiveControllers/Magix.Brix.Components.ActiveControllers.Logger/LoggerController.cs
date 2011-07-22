@@ -39,20 +39,28 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
-            UserBase u =
-                UserBase.SelectFirst(
-                    Criteria.Eq("Username", e.Params["Username"].Get<string>()));
             Node node = new Node();
             node["LogItemType"].Value = "Magix.Core.ShowMessage";
-            if (u != null)
+            if (e.Params.Contains("Username"))
             {
+                UserBase u =
+                    UserBase.SelectFirst(
+                        Criteria.Eq("Username", e.Params["Username"].Get<string>()));
                 node["ObjectID"].Value = u.ID;
                 node["Header"].Value = u.Username + " - " + u.RolesString;
             }
             else
             {
-                node["ObjectID"].Value = -1;
-                node["Header"].Value = "anonymous";
+                if (UserBase.Current != null)
+                {
+                    node["ObjectID"].Value = UserBase.Current.ID;
+                    node["Header"].Value = UserBase.Current.Username + " - " + UserBase.Current.RolesString;
+                }
+                else
+                {
+                    node["ObjectID"].Value = -1;
+                    node["Header"].Value = "anonymous";
+                }
             }
 
             node["Message"].Value = e.Params["Message"].Get<string>();

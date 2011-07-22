@@ -26,10 +26,9 @@
     OnTick="timer_Tick"
     Enabled="false" />
 
-<mux:Label
+<mux:Panel
     runat="server"
-    CssClass="mux-shaded mux-rounded span-1 height-10 mux-debug"
-    Tag="div"
+    CssClass="mux-shaded mux-rounded height-10 mux-debug"
     Visible="false"
     id="debug" />
 
