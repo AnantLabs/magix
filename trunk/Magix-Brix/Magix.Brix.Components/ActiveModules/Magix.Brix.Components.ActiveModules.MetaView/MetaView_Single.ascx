@@ -4,7 +4,7 @@
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magix.Brix.Components.ActiveModules.MetaView.SingleView" %>
+    Inherits="Magix.Brix.Components.ActiveModules.MetaView.MetaView_Single" %>
 
 <link href="media/modules/MetaView.css" rel="stylesheet" type="text/css" />
 

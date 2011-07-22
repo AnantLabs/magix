@@ -22,7 +22,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 if (Action.CountWhere(
-                    Criteria.Eq("EventName", "Magix.Meta.Actions.SaveObject")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SaveActiveForm")) == 0)
                 {
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.SaveActiveForm";
@@ -33,8 +33,9 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                     a.StripInput = false;
                     a.Save();
                 }
+
                 if (Action.CountWhere(
-                    Criteria.Eq("EventName", "Magix.Meta.Actions.EmptyForm")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.EmptyActiveForm")) == 0)
                 {
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.EmptyActiveForm";
@@ -45,11 +46,12 @@ form only. Useful for things such as 'Clear Buttons' and such ...";
                     a.StripInput = false;
                     a.Save();
                 }
+
                 if (Action.CountWhere(
-                    Criteria.Eq("EventName", "Magix.Core.ShowMessage")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ShowDefaultMessage")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "Magix.DynamicEvent.ShowMessage";
+                    a.Name = "Magix.DynamicEvent.ShowDefaultMessage";
                     a.EventName = "Magix.Core.ShowMessage";
                     a.Description = @"Will show a default message to the User. 
 Mostly here for Reference Reasons so that you can have an Example Action to 
@@ -69,6 +71,58 @@ copy for your own messages. For your convenience ... :)";
                     m.Name = "Milliseconds";
                     m.Value = "1500";
                     m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Meta.Actions.TurnOnDebugging")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.Meta.Actions.TurnOnDebugging";
+                    a.EventName = "Magix.Meta.Actions.SetSessionVariable";
+                    a.Description = @"Will turn on 'Debugging', meaning you'll have a wire-grid
+covering your screen to see the 40x18 pixel 'grid-lock', plus you'll also get to see every single Action 
+ever raised on the server shown in an 'Action Stack Trace' Window. This only affects your session, 
+meaning it should be safe to do in production to track down errors and such in live software ...";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Name";
+                    m.Value = "Magix.Core.IsDebug";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Value";
+                    m.Value = "True";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Meta.Actions.TurnOffDebugging")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.Meta.Actions.TurnOffDebugging";
+                    a.EventName = "Magix.Meta.Actions.SetSessionVariable";
+                    a.Description = @"Will turn _OFF_ 'Debugging', meaning you'll no longer 
+have a wire-grid covering your screen, plus the stack tracing of actions on the 
+server will disappear. Only affects your session, and no other logged on users ability to 
+see debugging information ...";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Name";
+                    m.Value = "Magix.Core.IsDebug";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Value";
+                    m.Value = "False";
+                    m.TypeName = typeof(bool).FullName;
                     a.Params.Add(m);
 
                     a.Save();
@@ -131,6 +185,12 @@ copy for your own messages. For your convenience ... :)";
             {
                 GetActionParameters(node[a.Name], idx);
             }
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.Actions.SetSessionVariable")]
+        protected void Magix_Meta_Actions_SetSessionVariable(object sender, ActiveEventArgs e)
+        {
+            Page.Session[e.Params["Name"].Get<string>()] = e.Params["Value"].Value;
         }
 
         [ActiveEvent(Name = "Magix.Meta.Actions.SaveObject")]

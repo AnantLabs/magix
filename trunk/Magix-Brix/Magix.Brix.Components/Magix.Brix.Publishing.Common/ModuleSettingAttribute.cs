@@ -13,6 +13,8 @@ namespace Magix.Brix.Publishing.Common
     {
         public string ModuleEditorName = "";
 
+        public string ModuleEditorEventName = "";
+
         public string DefaultValue = "Default";
     }
 }

@@ -157,6 +157,20 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.ChangeWebPartSetting")]
+        protected void Magix_Publishing_ChangeWebPartSetting(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                WebPart.WebPartSetting s = WebPart.WebPartSetting.SelectByID(e.Params["ID"].Get<int>());
+
+                s.Value = e.Params["Value"].Get<string>();
+                s.Save();
+
+                tr.Commit();
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Publishing.EditSpecificPage")]
         protected void Magix_Publishing_EditSpecificPage(object sender, ActiveEventArgs e)
         {
@@ -227,6 +241,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                                 if (!string.IsNullOrEmpty(atr.ModuleEditorName))
                                 {
                                     node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["Editor"].Value = atr.ModuleEditorName;
+                                }
+                                else if (!string.IsNullOrEmpty(atr.ModuleEditorEventName))
+                                {
+                                    node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["EditorEvent"].Value = atr.ModuleEditorEventName;
                                 }
                             }
                         }

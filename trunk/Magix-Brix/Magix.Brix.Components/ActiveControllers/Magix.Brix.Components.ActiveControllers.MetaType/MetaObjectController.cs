@@ -44,6 +44,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (!node.Contains("Last"))
                 node["Last"].Value = true;
 
+            if (!node.Contains("CssClass"))
+                node["CssClass"].Value = "edit-objects";
+
             if (!node.Contains("WhiteListColumns"))
             {
                 node["WhiteListColumns"]["TypeName"].Value = true;
@@ -230,10 +233,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
             node["WhiteListColumns"]["Val"].Value = true;
-            node["WhiteListColumns"]["Val"]["ForcedWidth"].Value = 7;
+            node["WhiteListColumns"]["Val"]["ForcedWidth"].Value = 9;
 
             node["Type"]["Properties"]["Name"].Value = null; // just to touch it ...
             node["Type"]["Properties"]["Val"]["Header"].Value = "Value";
+            node["Type"]["Properties"]["Val"]["MaxLength"].Value = 40;
 
             node["ID"].Value = e.Params["ID"].Value;
             node["NoIdColumn"].Value = true;
@@ -330,6 +334,7 @@ have relationships towards other instances in your database.</p>";
             e.Params["WhiteListColumns"]["MetaTypesCount"].Value = true;
             e.Params["Type"]["Properties"]["MetaTypesCount"]["ReadOnly"].Value = true;
             e.Params["Type"]["Properties"]["MetaTypesCount"]["Header"].Value = "Objects";
+            e.Params["Type"]["Properties"]["MetaTypesCount"]["ClickLabelEvent"].Value = "Magix.MetaType.ViewMetaObjectsRaw";
             e.Params["Object"]["Properties"]["MetaTypesCount"].Value = MetaObject.Count.ToString();
         }
     }

@@ -44,19 +44,15 @@ namespace Magix.Brix.Viewports
         protected Timer timer;
         private string debugText = "";
 
-        private bool _isDebug;
+        private bool IsDebug()
+        {
+            return Session["Magix.Core.IsDebug"] != null ?
+                (bool)Session["Magix.Core.IsDebug"] :
+                false;
+        }
 
         protected override void OnInit(EventArgs e)
         {
-            _isDebug = bool.Parse(ConfigurationManager.AppSettings["IsDebug"] ?? "false");
-            if (_isDebug)
-            {
-                debug.ClickEffect = new EffectSize(debug, 125, 640, -1);
-                debug.MouseOutEffect = new EffectSize(debug, 125, 30, -1);
-                if (!wrp.CssClass.Contains("showgrid"))
-                    wrp.CssClass += " showgrid";
-            }
-
             base.OnInit(e);
             EnsureChildControls();
 
@@ -68,7 +64,6 @@ namespace Magix.Brix.Viewports
 
         protected override void OnLoad(EventArgs e)
         {
-            debug.Visible = _isDebug;
             base.OnLoad(e);
 
             // Re-including all previously embedded CSS files
@@ -92,13 +87,25 @@ namespace Magix.Brix.Viewports
                     "Magix.Core.NewUserIDCookieCreated",
                     node);
             }
-
-            Page.LoadComplete += Page_LoadComplete;
         }
 
-        void Page_LoadComplete(object sender, EventArgs e)
+        protected override void OnPreRender(EventArgs e)
         {
-            debug.Text = debugText;
+            if (IsDebug())
+            {
+                debug.Text = string.IsNullOrEmpty(debugText) ? "Next request will show trace ..." : debugText;
+                debug.ClickEffect = new EffectSize(debug, 125, 640, -1);
+                debug.MouseOutEffect = new EffectSize(debug, 125, 30, -1);
+                if (!wrp.CssClass.Contains("showgrid"))
+                    wrp.CssClass += " showgrid";
+            }
+            else
+            {
+                if (wrp.CssClass.Contains(" showgrid"))
+                    wrp.CssClass = wrp.CssClass.Replace(" showgrid", "");
+            }
+            debug.Visible = IsDebug();
+            base.OnPreRender(e);
         }
 
         protected void timer_Tick(object sender, EventArgs e)
@@ -177,7 +184,7 @@ namespace Magix.Brix.Viewports
                 debugText = "";
                 firstEvent = false;
             }
-            if (_isDebug)
+            if (IsDebug())
             {
                 debugText += string.Format(@"
 <p><strong>Event Name:</strong> {0}
