@@ -3,6 +3,7 @@ html, body
 {
 	-webkit-user-select:none;
     -webkit-text-size-adjust:none;
+    height:110%;
 }
 
 
@@ -807,6 +808,32 @@ div.has-no-action
 	right:10px;
 }
 
+
+
+.edit-templates
+{
+	min-height:180px;
+	background:Transparent url(../images/architecture.png) no-repeat 0 0;
+}
+
+
+.edit-actions
+{
+	min-height:180px;
+	background:Transparent url(../images/lightning.png) no-repeat 0 0;
+}
+
+.edit-objects
+{
+	min-height:180px;
+	background:Transparent url(../images/file-cabinet.png) no-repeat 0 0;
+}
+
+.edit-views
+{
+	min-height:180px;
+	background:Transparent url(../images/view.png) no-repeat 0 0;
+}
 
 
 

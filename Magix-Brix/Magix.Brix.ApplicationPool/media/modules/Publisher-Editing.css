@@ -3,8 +3,12 @@
 
 
 
+
+
 .edit-pages-tree-view
 {
+	min-height:180px;
+	background:Transparent url(../images/publishing.png) no-repeat 0 0;
 }
 
 .edit-pages-templates

@@ -21,14 +21,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
             // TODO: Throw away while testing ToolTip functionality ....
-            foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
-            {
-                idx.Delete();
-            }
-            foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
-            {
-                idx.Delete();
-            }
+            //foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
+            //{
+            //    idx.Delete();
+            //}
+            //foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
+            //{
+            //    idx.Delete();
+            //}
             if (ToolTip.Instance.Count == 0)
             {
                 ToolTip.Instance.CreateTip(@"
@@ -127,7 +127,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <h2>Applications ...</h2>
 <p>Most applications will be WebParts. This means that you can inject them into any WebPart onto any WebPage you wish.</p>
 <p>Let's create an Application ... :)</p>
-<p>First make sure you have one Template in use in one of your pages which has one WebPart Template with the Module Type of <em>'SingleView'</em> ...</p>
+<p>First make sure you have one Template in use in one of your pages which has one WebPart Template with the Module Type of <em>'MetaView_Single'</em> ...</p>
 <p>Then click on <em>'MetaTypes/Meta Views'</em> ...</p>
 <p>Create a new View called 'CollectEmails' ...</p>
 ");
@@ -227,8 +227,10 @@ Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in
 
             node["Type"]["Properties"]["PagesCount"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["PagesCount"]["Header"].Value = "Pages";
+            node["Type"]["Properties"]["PagesCount"]["ClickLabelEvent"].Value = "Magix.Publishing.EditPages";
             node["Type"]["Properties"]["TemplatesCount"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["TemplatesCount"]["Header"].Value = "Templates";
+            node["Type"]["Properties"]["TemplatesCount"]["ClickLabelEvent"].Value = "Magix.Publishing.EditTemplates";
 
             node["Object"]["ID"].Value = -1;
             node["Object"]["Properties"]["PagesCount"].Value = WebPage.Count.ToString();

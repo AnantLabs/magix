@@ -167,28 +167,69 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 (DataSource["WhiteListProperties"].Contains("Name") &&
                 DataSource["WhiteListProperties"]["Name"].Get<bool>()))
             {
-                Label c1 = new Label();
-                if (DataSource.Contains("WhiteListProperties") &&
-                    DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
+                if (DataSource["Type"]["Properties"][node.Name].Contains("ClickLabelEvent")
+                    && !string.IsNullOrEmpty(DataSource["Type"]["Properties"][node.Name]["ClickLabelEvent"].Get<string>()))
                 {
-                    c1.CssClass += "wide-" +
-                        DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
-                }
-                bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
-                    DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
-                if (bold)
-                    c1.Style[Styles.fontWeight] = "bold";
-                c1.Tag = "td";
-                c1.CssClass = "columnName";
-                if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
-                {
-                    c1.Text = DataSource["Type"]["Properties"][node.Name]["Header"].Get<string>();
+                    string evtName = DataSource["Type"]["Properties"][node.Name]["ClickLabelEvent"].Get<string>();
+
+                    Panel c1 = new Panel();
+                    if (DataSource.Contains("WhiteListProperties") &&
+                        DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
+                    {
+                        c1.CssClass += "wide-" +
+                            DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
+                    }
+                    bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
+                        DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
+                    if (bold)
+                        c1.Style[Styles.fontWeight] = "bold";
+                    c1.Tag = "td";
+                    c1.CssClass = "columnName";
+
+                    LinkButton clicker = new LinkButton();
+                    if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
+                    {
+                        clicker.Text = DataSource["Type"]["Properties"][node.Name]["Header"].Get<string>();
+                    }
+                    else
+                    {
+                        clicker.Text = node.Name;
+                    }
+                    clicker.Click +=
+                        delegate
+                        {
+                            RaiseSafeEvent(
+                                evtName,
+                                DataSource["Type"]["Properties"][node.Name]["ClickLabelEvent"]);
+                        };
+                    c1.Controls.Add(clicker);
+                    row.Controls.Add(c1);
                 }
                 else
                 {
-                    c1.Text = node.Name;
+                    Label c1 = new Label();
+                    if (DataSource.Contains("WhiteListProperties") &&
+                        DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
+                    {
+                        c1.CssClass += "wide-" +
+                            DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
+                    }
+                    bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
+                        DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
+                    if (bold)
+                        c1.Style[Styles.fontWeight] = "bold";
+                    c1.Tag = "td";
+                    c1.CssClass = "columnName";
+                    if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
+                    {
+                        c1.Text = DataSource["Type"]["Properties"][node.Name]["Header"].Get<string>();
+                    }
+                    else
+                    {
+                        c1.Text = node.Name;
+                    }
+                    row.Controls.Add(c1);
                 }
-                row.Controls.Add(c1);
             }
 
             if (!DataSource.Contains("WhiteListProperties") ||

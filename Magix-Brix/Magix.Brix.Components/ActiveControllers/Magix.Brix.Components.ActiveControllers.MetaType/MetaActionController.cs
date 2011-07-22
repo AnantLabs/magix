@@ -71,6 +71,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["FullTypeName"].Value = typeof(Action).FullName;
             node["Container"].Value = "content3";
+            node["CssClass"].Value = "edit-actions";
             node["Width"].Value = 18;
             node["Last"].Value = true;
 
@@ -758,6 +759,7 @@ Deleting it may break these parts.</p>";
             e.Params["WhiteListColumns"]["MetaActionCount"].Value = true;
             e.Params["Type"]["Properties"]["MetaActionCount"]["ReadOnly"].Value = true;
             e.Params["Type"]["Properties"]["MetaActionCount"]["Header"].Value = "Actions";
+            e.Params["Type"]["Properties"]["MetaActionCount"]["ClickLabelEvent"].Value = "Magix.MetaType.ViewActions";
             e.Params["Object"]["Properties"]["MetaActionCount"].Value = Action.Count.ToString();
         }
     }

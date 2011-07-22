@@ -17,7 +17,7 @@
     OnSelectedIndexChanged="lst_SelectedIndexChanged"
     id="lst">
     <mux:ListItem Text="List view ..." Value="ListView" />
-    <mux:ListItem Text="Single view ..." Value="SingleView" />
+    <mux:ListItem Text="Single view ..." Value="MetaView_Single" />
 </mux:SelectList>
 
 <label class="span-2 pushLeft-1">MetaType: </label>

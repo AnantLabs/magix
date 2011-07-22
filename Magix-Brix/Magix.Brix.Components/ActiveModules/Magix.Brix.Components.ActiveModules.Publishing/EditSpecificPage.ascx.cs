@@ -179,10 +179,22 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                     string propName = idxT["i-" + id][0].Name;
                                     string value = idxT["i-" + id][0].Get<string>();
                                     string editor = idxT["i-" + id][0]["Editor"].Get<string>();
-                                    if (!string.IsNullOrEmpty(editor))
+                                    string editorEvent = idxT["i-" + id][0]["EditorEvent"].Get<string>();
+                                    if (!string.IsNullOrEmpty(editorEvent))
+                                    {
+                                        Node node = new Node();
+                                        node["PotID"].Value = id;
+                                        node["Value"].Value = value;
+                                        node["ID"].Value = DataSource["ID"].Value;
+                                        RaiseEvent(
+                                            editorEvent,
+                                            node);
+                                        w.Content.Controls.Add(node["Control"].Value as Control);
+                                    }
+                                    else if (!string.IsNullOrEmpty(editor))
                                     {
                                         Label ed = new Label();
-                                        ed.ToolTip = 
+                                        ed.ToolTip =
                                             string.Format("Click to edit '{0}'",
                                                 propName);
                                         ed.Text = value;

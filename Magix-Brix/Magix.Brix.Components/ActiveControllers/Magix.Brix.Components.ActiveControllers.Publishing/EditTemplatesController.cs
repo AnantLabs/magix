@@ -30,7 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Container"].Value = "content3";
             node["Width"].Value = 18;
             node["Last"].Value = true;
-            node["CssClass"].Value = "large-bottom-margin";
+            node["CssClass"].Value = "large-bottom-margin edit-templates";
 
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;

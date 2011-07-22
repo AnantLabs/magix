@@ -17,7 +17,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
 {
     [ActiveModule]
     [PublisherPlugin]
-    public class SingleView : ActiveModule
+    public class MetaView_Single : ActiveModule
     {
         protected Panel ctrls;
 
@@ -169,7 +169,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             }
         }
 
-        [ModuleSetting]
+        [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.GetTemplateColumnSelectView")]
         public string ViewName
         {
             get { return ViewState["ViewName"] as string; }

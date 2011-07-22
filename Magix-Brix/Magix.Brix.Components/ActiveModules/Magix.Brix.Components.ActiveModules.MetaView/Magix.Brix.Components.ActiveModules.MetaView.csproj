@@ -37,8 +37,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SingleView.ascx.cs">
-      <DependentUpon>SingleView.ascx</DependentUpon>
+    <Compile Include="MetaView_Single.ascx.cs">
+      <DependentUpon>MetaView_Single.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="EditView.ascx.cs">
@@ -71,7 +71,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SingleView.ascx">
+    <EmbeddedResource Include="MetaView_Single.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

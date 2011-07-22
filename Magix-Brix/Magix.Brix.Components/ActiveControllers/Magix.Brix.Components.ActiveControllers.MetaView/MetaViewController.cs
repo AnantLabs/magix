@@ -11,6 +11,7 @@ using Magix.Brix.Components.ActiveTypes.MetaViews;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
 using Magix.UX.Effects;
+using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
@@ -33,6 +34,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["Container"].Value = "content3";
             node["Width"].Value = 18;
             node["Last"].Value = true;
+            node["CssClass"].Value = "edit-views";
 
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 6;
@@ -60,6 +62,42 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.GetTemplateColumnSelectView")]
+        protected void Magix_MetaView_GetTemplateColumnSelectView(object sender, ActiveEventArgs e)
+        {
+            SelectList ls = new SelectList();
+            e.Params["Control"].Value = ls;
+
+            ls.CssClass = "span-5";
+            ls.Style[Styles.display] = "block";
+
+            ls.SelectedIndexChanged +=
+                delegate
+                {
+                    Node tx = new Node();
+
+                    tx["Params"]["ID"].Value = e.Params["ID"].Value;
+                    tx["Params"]["PropertyName"].Value = "Magix.Brix.Components.ActiveModules.MetaView.MetaView_SingleViewName";
+                    tx["Params"]["PotID"].Value = e.Params["PotID"].Value;
+                    tx["Text"].Value = ls.SelectedItem.Text;
+
+                    RaiseEvent(
+                        "Magix.Publishing.SavePageObjectIDSetting",
+                        tx);
+                };
+
+            ListItem item = new ListItem("Select a MetaView ...", "");
+            ls.Items.Add(item);
+
+            foreach (MetaView idx in MetaView.Select())
+            {
+                ListItem it = new ListItem(idx.Name, idx.TypeName + idx.Name.ToString());
+                if (idx.Name == e.Params["Value"].Get<string>())
+                    it.Selected = true;
+                ls.Items.Add(it);
+            }
         }
 
         [ActiveEvent(Name = "Magix.Meta.GetCopyMetaViewTemplateColumn")]
@@ -501,7 +539,7 @@ Deleting it may break these parts.</p>";
             }
 
             LoadModule(
-                "Magix.Brix.Components.ActiveModules.MetaView.SingleView",
+                "Magix.Brix.Components.ActiveModules.MetaView.MetaView_Single",
                 "content6",
                 node);
         }
@@ -529,6 +567,7 @@ Deleting it may break these parts.</p>";
             e.Params["WhiteListColumns"]["MetaViewCount"].Value = true;
             e.Params["Type"]["Properties"]["MetaViewCount"]["ReadOnly"].Value = true;
             e.Params["Type"]["Properties"]["MetaViewCount"]["Header"].Value = "Views";
+            e.Params["Type"]["Properties"]["MetaViewCount"]["ClickLabelEvent"].Value = "Magix.MetaView.ViewMetaViews";
             e.Params["Object"]["Properties"]["MetaViewCount"].Value = MetaView.Count.ToString();
         }
     }
