@@ -282,7 +282,7 @@ Deleting it may break these parts.</p>";
             node["Width"].Value = 20;
             node["Padding"].Value = 4;
             node["Last"].Value = true;
-            node["MarginBottom"].Value = 10;
+            node["MarginBottom"].Value = 30;
             node["PullTop"].Value = 9;
             node["Container"].Value = "content5";
 
@@ -390,6 +390,14 @@ Deleting it may break these parts.</p>";
 
                     RaiseEvent(
                         "Magix.MetaView.AppendAction",
+                        node);
+
+                    node = new Node();
+                    node["ID"].Value = p.ID;
+                    node["FullTypeName"].Value = typeof(MetaView.MetaViewProperty).FullName;
+
+                    RaiseEvent(
+                        "DBAdmin.Grid.SetActiveRow",
                         node);
                 };
 
