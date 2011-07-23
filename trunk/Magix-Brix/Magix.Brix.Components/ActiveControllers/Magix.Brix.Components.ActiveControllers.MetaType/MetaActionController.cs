@@ -844,6 +844,61 @@ Deleting it may break these parts.</p>";
                     FillActionParams(eventNode["Children"], a.Children);
             }
         }
+
+        [ActiveEvent(Name = "Magix.Meta.RaiseEvent")]
+        protected void Magix_Meta_RaiseEvent(object sender, ActiveEventArgs e)
+        {
+            Action action = null;
+            if (e.Params.Contains("ActionName"))
+                action = Action.SelectFirst(
+                    Criteria.Eq("Name", e.Params["ActionName"].Get<string>()));
+            else
+                action = Action.SelectByID(e.Params["ActionID"].Get<int>());
+
+            Node node = e.Params;
+            if (action.StripInput)
+            {
+                node = new Node();
+            }
+
+            foreach (Action.ActionParams idx in action.Params)
+            {
+                GetActionParameters(node, idx);
+            }
+
+            RaiseEvent(
+                action.EventName,
+                node);
+        }
+
+        private static void GetActionParameters(Node node, Action.ActionParams a)
+        {
+            switch (a.TypeName)
+            {
+                case "System.String":
+                    node[a.Name].Value = a.Value;
+                    break;
+                case "System.Int32":
+                    node[a.Name].Value = int.Parse(a.Value, CultureInfo.InvariantCulture);
+                    break;
+                case "System.Decimal":
+                    node[a.Name].Value = decimal.Parse(a.Value, CultureInfo.InvariantCulture);
+                    break;
+                case "System.DateTime":
+                    node[a.Name].Value = DateTime.ParseExact(a.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    break;
+                case "System.Boolean":
+                    node[a.Name].Value = bool.Parse(a.Value);
+                    break;
+                default:
+                    node[a.Name].Value = a.Value;
+                    break;
+            }
+            foreach (Action.ActionParams idx in a.Children)
+            {
+                GetActionParameters(node[a.Name], idx);
+            }
+        }
     }
 }
 

@@ -725,7 +725,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                 n["NewValue"].Value = ed.Text;
                                 n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                                 RaiseSafeEvent(
-                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                    DataSource.Contains("ChangeSimplePropertyValue") ?
+                                        DataSource["ChangeSimplePropertyValue"].Get<string>() :
+                                        "DBAdmin.Data.ChangeSimplePropertyValue",
                                     n);
                             };
                         edit.Text = idx.Get<string>();

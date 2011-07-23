@@ -16,6 +16,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     [ActiveController]
     public class MetaViewActionDefinitionController : ActiveController
     {
+        #region [ -- Application Startup. Creation of default, 'built-in' events ... -- ]
+
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
@@ -128,64 +130,39 @@ see debugging information ...";
                     a.Save();
                 }
 
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Meta.Actions.ViewMetaType")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.Meta.Actions.ViewMetaType";
+                    a.EventName = "Magix.MetaType.ViewMetaType";
+                    a.Description = @"Will load a grid of all Meta Objects of type already loaded
+in current activating WebPart. If you want to load a specific type, then you can override the 
+type being loaded by adding 'MetaViewTypeName' as a parameter, containing the name of the view. 
+There are many other properties you can override...";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "NoIdColumn";
+                    m.Value = "True";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "IsDelete";
+                    m.Value = "False";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
                 tr.Commit();
             }
         }
 
-        [ActiveEvent(Name = "Magix.Meta.RaiseEvent")]
-        protected void Magix_Meta_RaiseEvent(object sender, ActiveEventArgs e)
-        {
-            Action action = null;
-            if (e.Params.Contains("ActionName"))
-                action = Action.SelectFirst(
-                    Criteria.Eq("Name", e.Params["ActionName"].Get<string>()));
-            else
-                action = Action.SelectByID(e.Params["ActionID"].Get<int>());
-
-            Node node = e.Params;
-            if (action.StripInput)
-            {
-                node = new Node();
-            }
-
-            foreach (Action.ActionParams idx in action.Params)
-            {
-                GetActionParameters(node, idx);
-            }
-
-            RaiseEvent(
-                action.EventName,
-                node);
-        }
-
-        private static void GetActionParameters(Node node, Action.ActionParams a)
-        {
-            switch (a.TypeName)
-            {
-                case "System.String":
-                    node[a.Name].Value = a.Value;
-                    break;
-                case "System.Int32":
-                    node[a.Name].Value = int.Parse(a.Value, CultureInfo.InvariantCulture);
-                    break;
-                case "System.Decimal":
-                    node[a.Name].Value = decimal.Parse(a.Value, CultureInfo.InvariantCulture);
-                    break;
-                case "System.DateTime":
-                    node[a.Name].Value = DateTime.ParseExact(a.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    break;
-                case "System.Boolean":
-                    node[a.Name].Value = bool.Parse(a.Value);
-                    break;
-                default:
-                    node[a.Name].Value = a.Value;
-                    break;
-            }
-            foreach (Action.ActionParams idx in a.Children)
-            {
-                GetActionParameters(node[a.Name], idx);
-            }
-        }
+        #endregion
 
         [ActiveEvent(Name = "Magix.Meta.Actions.SetSessionVariable")]
         protected void Magix_Meta_Actions_SetSessionVariable(object sender, ActiveEventArgs e)

@@ -23,8 +23,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             // To help our Publishing Module to refresh ...
             // TODO: Refactor ...
-            int po = e.Params["PageObjectTemplateID"].Get<int>();
-            node["PageObjectTemplateID"].Value = po;
+            node["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Get<int>();
 
             if (e.Params.Contains("NoIdColumn"))
                 node["NoIdColumn"].Value = e.Params["NoIdColumn"].Value;
@@ -40,7 +39,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 // Finding first Meta Object of type
                 MetaObject t = MetaObject.SelectFirst(
-                    Criteria.Eq("Name", e.Params["MetaTypeName"].Get<string>()));
+                    Criteria.Eq("TypeName", e.Params["MetaViewTypeName"].Get<string>()));
                 node["MetaTemplateObjectID"].Value = t.ID;
             }
 
@@ -50,17 +49,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (e.Params.Contains("WhiteListColumns"))
             {
                 node["WhiteListColumns"] = e.Params["WhiteListColumns"];
-            }
-            else
-            {
-                node["WhiteListColumns"]["Name"].Value = true;
-                node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
-                node["WhiteListColumns"]["Reference"].Value = true;
-                node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 5;
-
-                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
-                node["Type"]["Properties"]["Name"]["NoFilter"].Value = true;
-                node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
             }
 
             if (e.Params.Contains("Type"))
@@ -72,7 +60,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 Node xx = new Node();
 
-                xx["PageObjectTemplateID"].Value = po;
+                xx["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Get<int>();
                 
                 RaiseEvent(
                     "Magix.Meta.GetContainerIDOfApplicationWebPart",
@@ -84,16 +72,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["IDColumnName"].Value = "Edit";
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.Meta.EditMetaObject";
+            node["DeleteColumnEvent"].Value = "Magix.Meta.DeleteMetaObject";
+            node["ChangeSimplePropertyValue"].Value = "Magix.Meta.ChangeMetaObjectValue";
 
             node["IsCreate"].Value = false;
 
             node["ReuseNode"].Value = true;
-
-            MetaObject t2 = MetaObject.SelectByID(node["MetaTemplateObjectID"].Get<int>());
-
-            node["SetCount"].Value = MetaObject.CountWhere(
-                Criteria.Eq("Name", t2.TypeName));
-            node["LockSetCount"].Value = true;
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -146,7 +130,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     if (!e.Params.Contains("WhiteListColumns") ||
                         (e.Params["WhiteListColumns"].Contains(idx.Name)) &&
                         e.Params["WhiteListColumns"][idx.Name].Get<bool>())
+                    {
                         e.Params["Type"]["Properties"][idx.Name]["Header"].Value = idx.Name;
+                        e.Params["Type"]["Properties"][idx.Name]["NoFilter"].Value = true;
+                    }
                 }
             }
         }
@@ -159,11 +146,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 MetaObject templ = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
 
                 e.Params["SetCount"].Value = MetaObject.CountWhere(
-                    Criteria.Eq("Name", templ.TypeName));
+                    Criteria.Eq("TypeName", templ.TypeName));
+
                 e.Params["LockSetCount"].Value = true;
 
                 foreach (MetaObject idxO in MetaObject.Select(
-                    Criteria.Eq("Name", templ.TypeName),
+                    Criteria.Eq("TypeName", templ.TypeName),
                     Criteria.Range(
                         e.Params["Start"].Get<int>(),
                         e.Params["End"].Get<int>(),
@@ -274,6 +262,59 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
+        [ActiveEvent(Name = "Magix.Meta.DeleteMetaObject")]
+        protected void Magix_Meta_DeleteMetaObject(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string typeName = fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1);
+            Node node = e.Params;
+            if (node == null)
+            {
+                node = new Node();
+                node["ForcedSize"]["width"].Value = 550;
+                node["WindowCssClass"].Value =
+                    "mux-shaded mux-rounded push-5 down-2";
+            }
+            node["Caption"].Value = @"Please confirm!";
+            node["Text"].Value = @"I hope you know what you're doing when deleting this object,
+many things can go wrong if it's in use in other places, such as being used as a template 
+for your views and such. Please confirm that you really know what you're doing, and that 
+you'd still like to have this object deleted ...";
+            node["OK"]["ID"].Value = id;
+            node["OK"]["FullTypeName"].Value = fullTypeName;
+            node["OK"]["Event"].Value = "Magix.Meta.DeleteMetaObject-Confirmed";
+            node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
+            node["Cancel"]["FullTypeName"].Value = fullTypeName;
+            node["Width"].Value = 15;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.DeleteMetaObject-Confirmed")]
+        protected void Magix_Meta_DeleteMetaObject_Confirmed(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+                t.Delete();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    node);
+
+                ActiveEvents.Instance.RaiseClearControls("child"); // Assuming message box still visible ...
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Meta.ChangeMetaObjectValue")]
         protected void Magix_Meta_ChangeMetaObjectValue(object sender, ActiveEventArgs e)
         {
@@ -283,7 +324,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 MetaObject.Value val = t.Values.Find(
                     delegate(MetaObject.Value idx)
                     {
-                        return t.TypeName == e.Params["PropertyName"].Get<string>();
+                        return idx.Name == e.Params["PropertyName"].Get<string>();
                     });
                 if (val == null)
                 {
