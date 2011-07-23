@@ -772,6 +772,10 @@ div.action-wrapper .grower
 	-webkit-transition-duration:.5s;
 	transition-property:width, height, background-color, opacity;
 	transition-duration:.5s;
+
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 div.action-wrapper-hover .grower

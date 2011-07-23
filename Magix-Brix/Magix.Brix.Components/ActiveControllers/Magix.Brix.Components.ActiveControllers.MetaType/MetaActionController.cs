@@ -117,8 +117,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Container"].Value = "content6";
             node["Width"].Value = 18;
             node["Padding"].Value = 6;
-            node["PullTop"].Value = 8;
-            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 28;
+            node["MarginBottom"].Value = 30;
             node["Last"].Value = true;
             if (e.Params.Contains("ParentID"))
                 node["ParentID"].Value = e.Params["ParentID"].Value;
@@ -447,7 +447,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["EventName"]["Header"].Value = "Action Name";
+            node["Type"]["Properties"]["EventName"]["Header"].Value = "Event Name";
             node["Type"]["Properties"]["EventName"]["Bold"].Value = true;
             node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["StripInput"]["Header"].Value = "Strip Input Node";
