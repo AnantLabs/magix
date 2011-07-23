@@ -155,6 +155,12 @@ There are many other properties you can override...";
                     m.TypeName = typeof(bool).FullName;
                     a.Params.Add(m);
 
+                    m = new Action.ActionParams();
+                    m.Name = "IsInlineEdit";
+                    m.Value = "True";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
                     a.Save();
                 }
 

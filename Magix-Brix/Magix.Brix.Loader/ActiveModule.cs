@@ -96,6 +96,8 @@ namespace Magix.Brix.Loader
                 Node m = new Node();
                 
                 m["Message"].Value = tmp.Message;
+                m["Milliseconds"].Value = 10000;
+                m["IsError"].Value = true;
                 
                 RaiseEvent(
                     "Magix.Core.ShowMessage",
