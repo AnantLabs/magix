@@ -93,12 +93,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                     foreach (string idxS in idx["Action"].Get<string>().Split('|'))
                     {
                         // Settings Event Specific Features ...
-                        node["ActionName"].Value = idxS ;
-
-                        string eventName = "Magix.Meta.RaiseEvent";
+                        node["ActionName"].Value = idxS;
+                        node["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;
 
                         RaiseSafeEvent(
-                            eventName,
+                            "Magix.Meta.RaiseEvent",
                             node);
                     }
                 };
