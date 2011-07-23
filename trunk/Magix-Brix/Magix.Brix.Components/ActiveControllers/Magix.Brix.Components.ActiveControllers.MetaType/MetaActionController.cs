@@ -457,8 +457,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["Container"].Value = "content5";
-            node["Top"].Value = 2;
-            node["MarginBottom"].Value = 10;
+            node["MarginBottom"].Value = 20;
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
@@ -630,8 +629,7 @@ Deleting it may break these parts.</p>";
                 node["Container"].Value = "content6";
                 node["IsList"].Value = false;
                 node["CssClass"].Value = "small-editer";
-                node["PullTop"].Value = 8;
-                node["MarginBottom"].Value = 10;
+                node["PullTop"].Value = 18;
                 node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
                 node["ID"].Value = p.ID;
 

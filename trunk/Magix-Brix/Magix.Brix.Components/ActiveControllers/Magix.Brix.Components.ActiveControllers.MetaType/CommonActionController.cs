@@ -31,15 +31,37 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (e.Params.Contains("IsDelete"))
                 node["IsDelete"].Value = e.Params["IsDelete"].Value;
 
+            if (e.Params.Contains("IsInlineEdit"))
+                node["IsInlineEdit"].Value = e.Params["IsInlineEdit"].Value;
+
             if (e.Params.Contains("MetaTemplateObjectID"))
             {
-                node["MetaTemplateObjectID"].Value = e.Params["MetaTemplateObjectID"].Value;
+                MetaObject t = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
+                if (t == null)
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            @"Seems like some wize-guy have deleted the Meta Object ['{0}'] being 
+used as a Template for this Meta View ...", 
+                            e.Params["MetaTemplateObjectID"].Get<int>()));
+                }
+                node["MetaTemplateObjectID"].Value = t.ID;
             }
             else
             {
                 // Finding first Meta Object of type
                 MetaObject t = MetaObject.SelectFirst(
-                    Criteria.Eq("TypeName", e.Params["MetaViewTypeName"].Get<string>()));
+                    Criteria.Eq(
+                        "TypeName", 
+                        e.Params["MetaViewTypeName"].Get<string>()));
+                if (t == null)
+                {
+                    throw new ArgumentException(
+                        @"You don't have <em>any Objects with the TypeName</em> you'd like to show. 
+This poses a problem for the grid system since it can't know anything about the object, not
+even which columns to show for it. Create at least <em>One Object</em> by hand to inform the Grid 
+System about how your objects actually looks like ...");
+                }
                 node["MetaTemplateObjectID"].Value = t.ID;
             }
 
@@ -133,6 +155,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     {
                         e.Params["Type"]["Properties"][idx.Name]["Header"].Value = idx.Name;
                         e.Params["Type"]["Properties"][idx.Name]["NoFilter"].Value = true;
+                        if (e.Params.Contains("IsInlineEdit") &&
+                            !e.Params["IsInlineEdit"].Get<bool>())
+                            e.Params["Type"]["Properties"][idx.Name]["ReadOnly"].Value = true;
                     }
                 }
             }

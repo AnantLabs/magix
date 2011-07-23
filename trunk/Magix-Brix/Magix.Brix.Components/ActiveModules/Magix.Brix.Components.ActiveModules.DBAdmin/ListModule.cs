@@ -256,12 +256,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         case "Boolean":
                             break;
                         case "DateTime":
-                            wide += 2;
+                            wide = 4;
                             break;
                         case "String":
-                            wide += 3;
-                            break;
                         default:
+                            wide = 4;
                             break;
                     }
                     wide = Math.Max((int)(((double)idx.Name.Length) / 2.5), wide);

@@ -142,6 +142,10 @@ namespace Magix.Brix.Viewports
         {
             base.OnLoad(e);
 
+            message.ClickEffect = new EffectFadeOut(message, 250)
+                .JoinThese(
+                    new EffectRollUp());
+
             // Re-including all previously embedded CSS files
             // Need to preserve CSS files for those scenarios where 
             // you're doing a 'conventional postback' ...
@@ -392,12 +396,19 @@ namespace Magix.Brix.Viewports
         {
             int timeOut = 2500;
             if (e.Params.Contains("Milliseconds"))
-            {
                 timeOut = e.Params["Milliseconds"].Get<int>();
+
+            if (e.Params.Contains("IsError"))
+            {
+                message.CssClass += " error-message";
             }
+            else
+            {
+                message.CssClass = message.CssClass.Replace(" error-message", "");
+            }
+
             if (firstMessage)
             {
-                message.Caption = "Message from Marvin ...";
                 msgLbl.Text = "";
                 new EffectFadeIn(message, 250)
                     .JoinThese(new EffectRollDown())
@@ -409,6 +420,8 @@ namespace Magix.Brix.Viewports
                 firstMessage = false;
                 if (e.Params.Contains("Header"))
                     message.Caption = e.Params["Header"].Get<string>();
+                else
+                    message.Caption = "Message from Marvin ...";
             }
             msgLbl.Text += string.Format("<p>{0}</p>", e.Params["Message"].Get<string>());
         }
