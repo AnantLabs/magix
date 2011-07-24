@@ -50,12 +50,6 @@
       <DependentUpon>FindObject.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Module.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ListModule.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BrowseClasses.ascx.cs">
       <DependentUpon>BrowseClasses.ascx</DependentUpon>

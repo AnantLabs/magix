@@ -100,6 +100,42 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             }
         }
 
+        [ActiveEvent(Name = "Magix.MetaView.GetTemplateColumnSelectViewMultiple")]
+        protected void Magix_MetaView_GetTemplateColumnSelectViewMultiple(object sender, ActiveEventArgs e)
+        {
+            SelectList ls = new SelectList();
+            e.Params["Control"].Value = ls;
+
+            ls.CssClass = "span-5";
+            ls.Style[Styles.display] = "block";
+
+            ls.SelectedIndexChanged +=
+                delegate
+                {
+                    Node tx = new Node();
+
+                    tx["Params"]["ID"].Value = e.Params["ID"].Value;
+                    tx["Params"]["PropertyName"].Value = "Magix.Brix.Components.ActiveModules.MetaView.MetaView_MultipleViewName";
+                    tx["Params"]["PotID"].Value = e.Params["PotID"].Value;
+                    tx["Text"].Value = ls.SelectedItem.Text;
+
+                    RaiseEvent(
+                        "Magix.Publishing.SavePageObjectIDSetting",
+                        tx);
+                };
+
+            ListItem item = new ListItem("Select a MetaView ...", "");
+            ls.Items.Add(item);
+
+            foreach (MetaView idx in MetaView.Select())
+            {
+                ListItem it = new ListItem(idx.Name, idx.TypeName + idx.Name.ToString());
+                if (idx.Name == e.Params["Value"].Get<string>())
+                    it.Selected = true;
+                ls.Items.Add(it);
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Meta.GetCopyMetaViewTemplateColumn")]
         protected void Magix_Meta_GetCopyMetaViewTemplateColumn(object sender, ActiveEventArgs e)
         {
@@ -521,6 +557,45 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        [ActiveEvent(Name = "Magix.MetaType.RaiseViewMetaTypeFromMultipleView")]
+        protected void Magix_MetaType_RaiseViewMetaTypeFromMultipleView(object sender, ActiveEventArgs e)
+        {
+            MetaView view = MetaView.SelectFirst(
+                Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
+            e.Params["IsDelete"].Value = false;
+            e.Params["NoIdColumn"].Value = true;
+
+            foreach (MetaView.MetaViewProperty idx in view.Properties)
+            {
+                if (idx.Name == "Delete")
+                {
+                    e.Params["IsDelete"].Value = true;
+                    continue;
+                }
+                if (idx.Name == "Edit")
+                {
+                    e.Params["NoIdColumn"].Value = false;
+                    continue;
+                }
+
+                // TODO: Somehow load BUTTONS for every 'Action Item' in the View, and append them
+                // at the bottom of the grid, or something ...
+
+                if (!string.IsNullOrEmpty(idx.Action))
+                    continue; // Button thing ...
+                e.Params["WhiteListColumns"][idx.Name].Value = true;
+                e.Params["Type"]["Properties"][idx.Name]["ReadOnly"].Value = idx.ReadOnly;
+                e.Params["Type"]["Properties"][idx.Name]["Header"].Value = idx.Description;
+            }
+
+            e.Params["MetaViewTypeName"].Value = view.TypeName;
+
+            RaiseEvent(
+                "Magix.MetaType.ViewMetaTypeFromTemplate",
+                e.Params);
+        }
+
         [ActiveEvent(Name = "Magix.MetaView.LoadWysiwyg")]
         protected void Magix_MetaView_LoadWysiwyg(object sender, ActiveEventArgs e)
         {
@@ -531,8 +606,8 @@ Deleting it may break these parts.</p>";
             node["Width"].Value = 24;
             node["Last"].Value = true;
             node["Top"].Value = 2;
-            node["MarginBottom"].Value = 10;
-            node["PullTop"].Value = 8;
+            node["MarginBottom"].Value = 20;
+            node["PullTop"].Value = 28;
             node["CssClass"].Value = "yellow-background";
             node["MetaViewTypeName"].Value = m.TypeName;
             node["MetaViewName"].Value = m.Name;

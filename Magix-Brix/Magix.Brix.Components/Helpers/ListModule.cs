@@ -11,11 +11,11 @@ using Magix.UX.Effects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.UX.Widgets.Core;
-using Magix.Brix.Components.ActiveTypes;
 using System.Collections.Generic;
 using Magix.UX;
+using Magix.Brix.Components.ActiveTypes;
 
-namespace Magix.Brix.Components.ActiveModules.DBAdmin
+namespace Magix.Brix.Components
 {
     public abstract class ListModule : Module
     {

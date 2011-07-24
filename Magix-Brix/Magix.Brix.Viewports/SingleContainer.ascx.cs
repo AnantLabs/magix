@@ -109,7 +109,7 @@ namespace Magix.Brix.Viewports
         }
 
         [ActiveEvent] // Null event handler for logging in debug cases ...
-        //[DebuggerStepThrough]
+        [DebuggerStepThrough]
         protected void NULLEventHandler(object sender, ActiveEventArgs e)
         {
             if (IsDebug())
