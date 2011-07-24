@@ -88,6 +88,7 @@
     <Content Include="media\images\folder-up.png" />
     <Content Include="media\images\folder.png" />
     <Content Include="media\images\html.png" />
+    <Content Include="media\images\lava.jpg" />
     <Content Include="media\images\lightning.png" />
     <Content Include="media\images\marvin-headshot.png" />
     <Content Include="media\images\Marvin-the-smart-and-sad-robot.png" />
