@@ -3,9 +3,9 @@
 
 
 
-
-
-
+/*
+ * Header Templates ...
+ */
 .Header-Fat
 {
 	font-family:Arial Black;
@@ -316,31 +316,55 @@
 	-webkit-animation-direction: alternate;
 }
 
-@-webkit-keyframes freak-flag {
- 0% {
-   color: red;
- }
- 14% {
-   color: orange;
- }
- 28% {
-   color: yellow;
- }
- 42% {
-   color: green;
- }
- 57% {
+@-webkit-keyframes freak-flag 
+{
+0%
+{
    -webkit-transform: scale(1) rotate(0deg);
-   color: blue;
- }
- 71% {
-   color:rgba(128, 0, 255, 1);
+   color:Red;
+}
+10%
+{
    -webkit-transform: scale(1.5) rotate(15deg);
- }
- 85% {
+   color:Orange;
+}
+20%
+{
    -webkit-transform: scale(1) rotate(0deg);
-   color:rgba(255, 0, 255, 1);
- }
+   color:Yellow;
+}
+30%
+{
+   color:Green;
+}
+40%
+{
+   color:Blue;
+}
+50%
+{
+   color:rgba(255, 0, 128, 1);
+}
+60%
+{
+   color:rgba(255, 0, 255, 0);
+}
+70%
+{
+   color:rgba(0, 0, 0, 1);
+}
+80%
+{
+   color:rgba(0, 0, 0, 1);
+}
+90%
+{
+   color:rgba(255, 255, 0, 1);
+}
+100%
+{
+   color:rgba(0, 0, 0, 1);
+}
 }
 
 .Header-Freak-Flag
@@ -470,32 +494,101 @@
 	-webkit-animation-duration: 11.7s;
 }
 
-@-webkit-keyframes flying {
-0% {
-	-webkit-animation-timing-function: ease-in;
+@-webkit-keyframes flying 
+{
+0%
+{
 	-webkit-transform: scale(.9) rotate(5deg);
 }
-40% {
-	text-shadow:-135px -135px 2px rgba(0, 0, 0, 0);
+10%
+{
+	-webkit-transform: scale(1.1) rotate(2deg);
 }
-60% {
-	text-shadow:0px 0px 2px rgba(0, 0, 0, 0.2);
-	-webkit-transform: scale(1.5) rotate(-5deg);
+20%
+{
+	-webkit-transform: scale(1.3) rotate(0deg);
 }
-90% {
-	text-shadow:435px 435px 2px rgba(0, 0, 0, 0);
+30%
+{
+	-webkit-transform: scale(1.5) rotate(-15deg);
 }
-100% {
+40%
+{
+	-webkit-transform: scale(1.7) rotate(-25deg);
+	text-shadow:-100px -100px 4px rgba(0, 0, 0, 0.0);
+	color:Black;
+}
+50%
+{
+	-webkit-transform: scale(1.5) rotate(-15deg);
+	text-shadow:0px 0px 4px rgba(0, 0, 0, 0.3);
+	color:rgba(200, 200, 0, 1);
+}
+60%
+{
+	-webkit-transform: scale(1.3) rotate(0deg);
+	text-shadow:200px 200px 4px rgba(0, 0, 0, 0);
+	color:Black;
+}
+70%
+{
+	-webkit-transform: scale(1.1) rotate(-15deg);
+}
+80%
+{
+	-webkit-transform: scale(.9) rotate(2deg);
+}
+90%
+{
+	-webkit-transform: scale(1) rotate(0deg);
+}
+100%
+{
 	-webkit-transform: scale(.9) rotate(5deg);
 }
+}
+
+.Header-Almost-Blind-People
+{
+	position:relative;
+}
+
+.Header-Almost-Blind-People h1
+{
+	position:absolute;
+   -webkit-transform: scale(1);
+   -webkit-transform-origin:top left;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:1.2s;
+	transition-property:transform;
+	transition-duration:1.2s;
+	z-index:1000;
+}
+
+.Header-Almost-Blind-People h1:hover
+{
+   -webkit-transform: scale(2.2);
+   -webkit-transform-origin:top left;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.2s;
+	transition-property:transform;
+	transition-duration:.2s;
 }
 
 .Header-Flying
 {
+	position:relative;
 }
 
 .Header-Flying h1
 {
+	position:absolute;
 	-webkit-animation-name: flying;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: normal;
@@ -642,6 +735,273 @@
 	-webkit-transform: skew(35deg);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * Menu Templates ...
+ */
+.Menu-Yellow-Steel
+{
+}
+
+.Menu-Yellow-Steel .mux-sliding-menu
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 128, 0.4)), to(rgba(210, 210, 80, 0.4)));
+	background-image: -moz-linear-gradient(rgba(255, 255, 128, 0.4) 0%, rgba(210, 210, 80, 0.4) 100%);
+}
+
+.Menu-Air
+{
+}
+
+.Menu-Air .mux-sliding-menu
+{
+	background-image: none;
+	font-family:'Ultra Classic';
+	font-size:24px;
+	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .05);
+	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, .05);
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, .05);
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:3.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:3.2s;
+	transition-property:box-shadow;
+	transition-duration:3.2s;
+}
+
+.Menu-Air .mux-sliding-menu a
+{
+	text-shadow:15px 15px 4px rgba(0, 0, 0, 0);
+}
+
+.Menu-Air .mux-sliding-menu:hover
+{
+	background-image: none;
+	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:1.2s;
+	transition-property:box-shadow;
+	transition-duration:1.2s;
+}
+
+.Menu-From-Hell
+{
+}
+
+.Menu-From-Hell .mux-sliding-menu
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0.6)));
+	background-image: -moz-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.Menu-From-Hell .mux-sliding-menu a
+{
+	color:rgba(255, 50, 0, .5);
+	text-shadow:15px 15px 4px rgba(255, 0, 0, 0.3);
+	
+	-moz-transition-property:color, text-shadow;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:color, text-shadow;
+	-webkit-transition-duration:1s;
+	transition-property:color, text-shadow;
+	transition-duration:1s;
+}
+
+.Menu-From-Hell .mux-sliding-menu a:hover
+{
+	color:rgba(255, 0, 0, 1);
+	text-shadow:0px 0px 15px rgba(255, 0, 0, 1);
+	
+	-moz-transition-property:color, text-shadow;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:color, text-shadow;
+	-webkit-transition-duration:1s;
+	transition-property:color, text-shadow;
+	transition-duration:1s;
+}
+
+.Menu-From-Hell .mux-sliding-menu .mux-sliding-menu-item-icon
+{
+	font-family:Arial;
+}
+
+@-webkit-keyframes crazy-menu 
+{
+0%
+{
+}
+91%
+{
+	-webkit-transform: scale(1) rotate(0deg);
+}
+92%
+{
+	-webkit-transform: scale(1.5) rotate(45deg);
+}
+93%
+{
+	-webkit-transform: scale(1) rotate(0deg);
+}
+94%
+{
+	-webkit-transform: scale(1.5) rotate(45deg);
+}
+95%
+{
+	-webkit-transform: scale(1) rotate(0deg);
+}
+96%
+{
+	-webkit-transform: scale(1.5) rotate(45deg);
+}
+97%
+{
+	-webkit-transform: scale(1) rotate(0deg);
+}
+98%
+{
+	-webkit-transform: scale(1.5) rotate(45deg);
+}
+99%
+{
+	-webkit-transform: scale(1) rotate(0deg);
+}
+}
+
+.Menu-Crazy
+{
+	position:relative;
+}
+
+.Menu-Crazy .mux-sliding-menu
+{
+	-webkit-animation-name: crazy-menu;
+	-webkit-animation-duration: 9s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: normal;
+}
+
+
+
+
+
+
+
+@-webkit-keyframes flipping-menu
+{
+0%
+{
+}
+70%
+{
+   -webkit-transform: rotate(0deg);
+}
+80%
+{
+   -webkit-transform: rotate(720deg);
+}
+90%
+{
+   -webkit-transform: rotate(0deg);
+}
+}
+
+.Menu-Flipping
+{
+}
+
+.Menu-Flipping .mux-sliding-menu
+{
+	-webkit-animation-name: flipping-menu;
+	-webkit-animation-duration: 9s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: normal;
+}
+
+.Menu-Bubble
+{
+}
+
+.Menu-Bubble .mux-sliding-menu
+{
+   -webkit-transform: scale(0.8);
+   -webkit-transform-origin:top left;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:1.2s;
+	transition-property:transform;
+	transition-duration:1.2s;
+}
+
+.Menu-Bubble .mux-sliding-menu:hover
+{
+   -webkit-transform: scale(1.2);
+   -webkit-transform-origin:top left;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.2s;
+	transition-property:transform;
+	transition-duration:.2s;
+}
+
+.Menu-Almost-Blind-People
+{
+	position:relative;
+}
+
+.Menu-Almost-Blind-People .mux-sliding-menu
+{
+	position:absolute;
+   -webkit-transform: scale(1);
+   -webkit-transform-origin:top left;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:1.2s;
+	transition-property:transform;
+	transition-duration:1.2s;
+	z-index:1000;
+}
+
+.Menu-Almost-Blind-People .mux-sliding-menu a
+{
+	text-shadow:3px 3px 5px rgba(0, 0, 0, 0);
+}
+
+.Menu-Almost-Blind-People .mux-sliding-menu:hover
+{
+   -webkit-transform: scale(2.2);
+   -webkit-transform-origin:top left;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.2s;
+	transition-property:transform;
+	transition-duration:.2s;
+}
 
 
 
