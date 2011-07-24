@@ -10,10 +10,11 @@ using Magix.Brix.Loader;
 using Magix.Brix.Types;
 using Magix.UX.Widgets;
 using Magix.UX.Effects;
+using System.Diagnostics;
 
-namespace Magix.Brix.Components.ActiveModules.DBAdmin
+namespace Magix.Brix.Components
 {
-    public abstract class Module : UserControl, IModule
+    public abstract class Module : ActiveModule, IModule
     {
         protected abstract void ReDataBind();
 
@@ -77,30 +78,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 {
                     ReDataBind();
                 }
-            }
-        }
-
-        protected bool RaiseSafeEvent(string eventName, Node node)
-        {
-            try
-            {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    eventName,
-                    node);
-                return true;
-            }
-            catch(Exception err)
-            {
-                Node n = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                n["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Magix.Core.ShowMessage",
-                    n);
-                return false;
             }
         }
 

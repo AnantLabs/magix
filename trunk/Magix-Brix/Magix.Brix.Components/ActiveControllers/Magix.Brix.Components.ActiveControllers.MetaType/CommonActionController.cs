@@ -34,6 +34,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (e.Params.Contains("IsInlineEdit"))
                 node["IsInlineEdit"].Value = e.Params["IsInlineEdit"].Value;
 
+            if (e.Params.Contains("Container"))
+                node["Container"].Value = e.Params["Container"].Value;
+
             if (e.Params.Contains("MetaTemplateObjectID"))
             {
                 MetaObject t = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
@@ -57,10 +60,11 @@ used as a Template for this Meta View ...",
                 if (t == null)
                 {
                     throw new ArgumentException(
-                        @"You don't have <em>any Objects with the TypeName</em> you'd like to show. 
+                        string.Format(@"You don't have <em>any Objects with the TypeName</em> you'd like to show. 
 This poses a problem for the grid system since it can't know anything about the object, not
 even which columns to show for it. Create at least <em>One Object</em> by hand to inform the Grid 
-System about how your objects actually looks like ...");
+System about how your objects actually looks like. Create at least on item of type '{0}'",
+                        e.Params["MetaViewTypeName"].Get<string>()));
                 }
                 node["MetaTemplateObjectID"].Value = t.ID;
             }
@@ -105,6 +109,14 @@ System about how your objects actually looks like ...");
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.ViewMetaTypeFromTemplate")]
+        protected void Magix_MetaType_ViewMetaTypeFromTemplate(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "Magix.MetaType.ViewMetaType",
+                e.Params);
         }
 
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]

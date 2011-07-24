@@ -37,20 +37,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetaView_Multiple.ascx.cs">
+      <DependentUpon>MetaView_Multiple.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="MetaView_Single.ascx.cs">
       <DependentUpon>MetaView_Single.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditView.ascx.cs">
-      <DependentUpon>EditView.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="EditView.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">
@@ -65,6 +60,14 @@
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
       <Name>Magix.Brix.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Settings\Magix.Brix.Components.ActiveTypes.Settings.csproj">
+      <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
+      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
+      <Name>Magix.Brix.Components %28Brix\Magix.Brix.Components\Helpers\Magix.Brix.Components%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Magix.Brix.Publishing.Common\Magix.Brix.Publishing.Common.csproj">
       <Project>{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}</Project>
       <Name>Magix.Brix.Publishing.Common</Name>
@@ -72,6 +75,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MetaView_Single.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MetaView_Multiple.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
