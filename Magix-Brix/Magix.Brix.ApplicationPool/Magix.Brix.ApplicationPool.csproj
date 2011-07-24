@@ -72,6 +72,7 @@
     <Content Include="media\blueprint\src\print.css" />
     <Content Include="media\blueprint\src\reset.css" />
     <Content Include="media\blueprint\src\typography.css" />
+    <Content Include="media\Fonts\ReadMe.txt" />
     <Content Include="media\images\actual-size.png" />
     <Content Include="media\images\ajax.gif" />
     <Content Include="media\images\architecture.png" />
@@ -179,6 +180,7 @@
     <Content Include="media\modules\signature.css" />
     <Content Include="media\modules\SingleContainer.css" />
     <Content Include="media\modules\SlidingMenu.css" />
+    <Content Include="media\modules\web-part-templates.css" />
     <Content Include="server-error.html" />
     <Content Include="Tmp\dont_delete_me.txt" />
     <Content Include="Web.config" />
@@ -195,6 +197,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="media\Fonts\Bleeding Cowboys.ttf" />
+    <None Include="media\Fonts\CHOPS___.TTF" />
+    <None Include="media\Fonts\Hawaii_Killer.ttf" />
+    <None Include="media\Fonts\kberry.ttf" />
+    <None Include="media\Fonts\lexograph.ttf" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
   </ItemGroup>
   <ItemGroup>

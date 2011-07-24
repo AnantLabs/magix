@@ -20,6 +20,7 @@
 	top:0;
 	right:0;
 	background-position:0 -600px;
+	z-index:99;
 }
 
 .magix-publishing-decrease-width
@@ -27,6 +28,7 @@
 	top:0;
 	right:40px;
 	background-position:0 -550px;
+	z-index:99;
 }
 
 .magix-publishing-increase-height
@@ -34,6 +36,7 @@
 	bottom:0;
 	right:0;
 	background-position:0 -800px;
+	z-index:100;
 }
 
 .magix-publishing-decrease-height
@@ -41,6 +44,7 @@
 	bottom:18px;
 	right:0;
 	background-position:0 -750px;
+	z-index:100;
 }
 
 .magix-publishing-increase-down
@@ -62,6 +66,7 @@
 	bottom:0;
 	left:0;
 	background-position:0 -800px;
+	z-index:99;
 }
 
 .magix-publishing-decrease-bottom
@@ -69,6 +74,7 @@
 	bottom:20px;
 	left:0;
 	background-position:0 -750px;
+	z-index:99;
 }
 
 .magix-publishing-increase-left
@@ -116,7 +122,6 @@
 	width:40px;
 	height:20px;
 	text-decoration:none;
-	z-index:1;
 	background-color:Transparent;
 	background-image:url(editor/assets/skins/sam/sprite.png);
 	background-repeat:no-repeat;
@@ -157,7 +162,7 @@
 
 .web-part .mux-window-caption
 {
-	visibility:hidden;
+	display:none;
 }
 
 

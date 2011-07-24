@@ -8,6 +8,8 @@
 
 <link href="media/modules/SlidingMenu.css" rel="stylesheet" type="text/css" />
 
+<link href="media/modules/web-part-templates.css" rel="stylesheet" type="text/css" />
+
 <mux:SlidingMenu 
     runat="server" 
     SlideOnIcon="true"
