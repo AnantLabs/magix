@@ -66,11 +66,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         CreateActionButtons(id, w);
 
-                        CreateModuleSelectListForWebPart(id, moduleName, w);
-
                         CreateNameInPlaceEdit(name, id, w);
 
-                        CreateChangeCssClassInPlaceEdit(id, cssClass, w);
+                        InPlaceTextAreaEdit tx = CreateChangeCssClassInPlaceEdit(id, cssClass, w);
+
+                        CreateChangeCssClassTemplate(id, name, w, cssClass, tx);
+
+                        CreateModuleSelectListForWebPart(id, moduleName, w);
 
                         CheckBox ch = new CheckBox();
                         ch.Checked = last;
@@ -104,9 +106,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         lbl.Tag = "label";
                         
                         Panel pnl = new Panel();
-                        pnl.CssClass = "span-3";
+                        pnl.CssClass = "span-2 last";
                         pnl.Controls.Add(ch);
                         pnl.Controls.Add(lbl);
+                        pnl.ToolTip = "Whether or not this WebPart is to the very far right or not ... [Try experiementing if you experience unwanted 'jumping' while moving WebPart around or resizing it ...]";
 
                         w.Content.Controls.Add(pnl);
 
@@ -116,11 +119,53 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
-        private void CreateChangeCssClassInPlaceEdit(int id, string cssClass, Window w)
+        private void CreateChangeCssClassTemplate(int id, string name, Window w, string cssClass, InPlaceTextAreaEdit tx)
+        {
+            Node node = new Node();
+            node["ID"].Value = id;
+            node["Name"].Value = name;
+
+            RaiseSafeEvent(
+                "Magix.Publishing.GetCssTemplatesForWebPartTemplate",
+                node);
+
+            if (node.Contains("Classes"))
+            {
+                SelectList ls = new SelectList();
+                ls.ID = "selTem-" + id;
+                ls.CssClass = "span-3";
+                ls.ToolTip = "Changes CSS class according to which templates the system have found in 'media/modules/web-part-templates.css' file ...";
+                ls.SelectedIndexChanged +=
+                    delegate
+                    {
+                        Node nx = new Node();
+                        nx["ID"].Value = id;
+                        nx["Value"].Value = ls.SelectedItem.Value;
+
+                        RaiseSafeEvent(
+                            "Magix.Publishing.ChangeTemplateOfWebPartTemplate",
+                            nx);
+
+                        tx.Text = ls.SelectedItem.Value;
+                    };
+                ls.Items.Add(new ListItem("Choose Template ...", "-1"));
+
+                foreach (Node idx in node["Classes"])
+                {
+                    ListItem li = new ListItem(idx["Name"].Get<string>(), idx["Value"].Get<string>());
+                    if (li.Value == cssClass)
+                        li.Selected = true;
+                    ls.Items.Add(li);
+                }
+                w.Content.Controls.Add(ls);
+            }
+        }
+
+        private InPlaceTextAreaEdit CreateChangeCssClassInPlaceEdit(int id, string cssClass, Window w)
         {
             InPlaceTextAreaEdit tx = new InPlaceTextAreaEdit();
             tx.Text = cssClass;
-            tx.CssClass += " span-5  editer";
+            tx.CssClass += " span-4 editer";
             tx.Info = id.ToString();
             tx.TextChanged +=
                 delegate(object sender, EventArgs e)
@@ -137,8 +182,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         "Magix.Publishing.ChangeTemplateProperty",
                         node);
                 };
-            tx.ToolTip = "Css Class of WebPart";
+            tx.ToolTip = "Css Class of WebPart [better changed with 'Template Change DropBox, unless you _know_ what you do ...!]";
             w.Content.Controls.Add(tx);
+
+            return tx;
         }
 
         private void CreateNameInPlaceEdit(string name, int id, Window w)
@@ -146,8 +193,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             InPlaceTextAreaEdit nameI = new InPlaceTextAreaEdit();
             nameI.Text = name;
             nameI.Info = id.ToString();
-            nameI.CssClass += " span-5 editer";
-            nameI.ToolTip = "Name of WebPart";
+            nameI.CssClass += " span-3 editer";
+            nameI.ToolTip = "Name of WebPart [also helps determine which CSS Templates to use ...]";
             nameI.TextChanged +=
                 delegate(object sender, EventArgs e)
                 {
@@ -508,6 +555,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 sel.CssClass = "span-3";
                 sel.Info = id.ToString();
                 sel.ToolTip = "Module Type of WebPart";
+                sel.ID = "selMod-" + id;
                 sel.SelectedIndexChanged +=
                     delegate(object sender, EventArgs e)
                     {

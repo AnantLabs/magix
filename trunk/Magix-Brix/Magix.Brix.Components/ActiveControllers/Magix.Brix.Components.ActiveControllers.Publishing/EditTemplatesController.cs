@@ -15,6 +15,7 @@ using Magix.Brix.Components.ActiveTypes.Publishing;
 using System.Reflection;
 using Magix.Brix.Publishing.Common;
 using System.Web;
+using System.IO;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -72,8 +73,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 p.Name = "Template...";
 
                 WebPartTemplate c = new WebPartTemplate();
-                c.Width = 6;
-                c.Height = 6;
+                c.Width = 10;
+                c.Height = 8;
                 c.Name = "Name";
                 c.ModuleName = Adapter.ActiveModules.Find(
                     delegate(Type idx)
@@ -127,6 +128,43 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 // In case it's the one being edited ...
                 ActiveEvents.Instance.RaiseClearControls("content4");
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetCssTemplatesForWebPartTemplate")]
+        protected void Magix_Publishing_GetCssTemplatesForWebPartTemplate(object sender, ActiveEventArgs e)
+        {
+            string fullCssFileName = Page.Server.MapPath("~/media/modules/web-part-templates.css");
+            using (TextReader reader = new StreamReader(File.OpenRead(fullCssFileName)))
+            {
+                string wholeContent = reader.ReadToEnd();
+                wholeContent = wholeContent.Replace("\r\n", "\n");
+                int idxNo = 0;
+                foreach (string idx in wholeContent.Split(
+                    new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (idx.StartsWith("." + e.Params["Name"].Get<string>()) && 
+                        !idx.Contains(" ") &&
+                        !idx.Contains(":"))
+                    {
+                        e.Params["Classes"]["i-" + idxNo]["Name"].Value = idx.Substring(("." + e.Params["Name"].Get<string>()).Length + 1);
+                        e.Params["Classes"]["i-" + idxNo]["Value"].Value = idx.Trim('.').Trim(',');
+                        idxNo += 1;
+                    }
+                }
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.ChangeTemplateOfWebPartTemplate")]
+        protected void Magix_Publishing_ChangeTemplateOfWebPartTemplate(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                WebPartTemplate template = WebPartTemplate.SelectByID(e.Params["ID"].Get<int>());
+                template.CssClass = e.Params["Value"].Get<string>();
+                template.Save();
+
+                tr.Commit();
             }
         }
 
@@ -272,7 +310,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 else if (e.Params["Action"].Get<string>() == "DecreaseWidth")
                 {
                     e.Params["OldWidth"].Value = t.Width;
-                    t.Width = Math.Max(6, (
+                    t.Width = Math.Max(2, (
                         e.Params.Contains("NewValue") ?
                             e.Params["NewValue"].Get<int>() :
                             t.Width - 1));
@@ -290,7 +328,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 else if (e.Params["Action"].Get<string>() == "DecreaseHeight")
                 {
                     e.Params["OldHeight"].Value = t.Height;
-                    t.Height = Math.Max(6, (
+                    t.Height = Math.Max(2, (
                         e.Params.Contains("NewValue") ?
                             e.Params["NewValue"].Get<int>() :
                             t.Height - 1));
@@ -407,8 +445,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                             {
                                 WebPartTemplate c = new WebPartTemplate();
                                 c.Name = "Default Name";
-                                c.Width = 6;
-                                c.Height = 6;
+                                c.Width = 10;
+                                c.Height = 9;
                                 c.ViewportContainer = "content" + (t.Containers.Count + 1);
                                 c.ModuleName = Adapter.ActiveModules.Find(
                                     delegate(Type idx)

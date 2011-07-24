@@ -107,8 +107,8 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             {
                 Name = "default WebPartTemplate Name";
             }
-            Width = Math.Max(Math.Min(Width, 24), 6);
-            Height = Math.Max(Math.Min(Height, 30), 6);
+            Width = Math.Max(Math.Min(Width, 24), 2);
+            Height = Math.Max(Math.Min(Height, 30), 2);
             MarginLeft = Math.Max(Math.Min(MarginLeft, 23), 0);
             MarginRight = Math.Max(Math.Min(MarginRight, 23), 0);
             MarginBottom = Math.Max(Math.Min(MarginBottom, 30), 0);
