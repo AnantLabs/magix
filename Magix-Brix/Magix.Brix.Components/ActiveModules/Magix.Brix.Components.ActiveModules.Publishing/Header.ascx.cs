@@ -37,6 +37,28 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             get { return ViewState["Caption"] as string; }
             set { ViewState["Caption"] = value; }
         }
+
+        [ActiveEvent(Name = "Magix.Publishing.ShouldReloadWebPart")]
+        protected void Magix_Publishing_ShouldReloadWebPart(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["ModuleName"].Get<string>() == typeof(Header).FullName &&
+                e.Params["Container"].Get<string>() == Parent.ID)
+            {
+                e.Params["Stop"].Value = true;
+
+                // We can get our next item without having to do a 'full reload' ... ;)
+                Node node = new Node();
+                node["WebPartID"].Value = e.Params["WebPartID"].Value;
+                node["Name"].Value = "Caption";
+
+                RaiseSafeEvent(
+                    "Magix.Publishing.GetWebPartValue",
+                    node);
+
+                Caption = node["Value"].Get<string>();
+                lbl.Text = Caption;
+            }
+        }
     }
 }
 

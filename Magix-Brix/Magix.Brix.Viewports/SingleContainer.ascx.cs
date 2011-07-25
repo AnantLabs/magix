@@ -260,6 +260,7 @@ namespace Magix.Brix.Viewports
                     e.Params["Container"].Get<string>());
                 if (p != null)
                 {
+                    p.CssClass = e.Params["CssClass"].Get<string>() + " web-part";
                     PutInSpan(e.Params, p, "Width", "span");
                     PutInSpan(e.Params, p, "Top", "down");
                     PutInSpan(e.Params, p, "MarginBottom", "spcBottom");
@@ -268,25 +269,15 @@ namespace Magix.Brix.Viewports
                     PutInSpan(e.Params, p, "PushLeft", "pushLeft");
                     PutInSpan(e.Params, p, "PushRight", "pushRight");
                     PutInSpan(e.Params, p, "Padding", "prepend");
-                    if(e.Params.Contains("Last"))
-                        p.CssClass = p.CssClass.Replace(" last", (
-                            e.Params["Last"].Get<bool>() ? " last" : ""));
+                    if(e.Params.Contains("Last") &&
+                        e.Params["Last"].Get<bool>())
+                        p.CssClass += " last";
                 }
             }
         }
 
         private void PutInSpan(Node node, DynamicPanel p, string nodeName, string cssName)
         {
-            string css = " " + p.CssClass;
-            if (css.Contains(cssName + "-"))
-            {
-                string no = css.Split(new string[] { cssName }, StringSplitOptions.RemoveEmptyEntries)[1].Substring(1);
-                no = no.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)[0];
-                int value = int.Parse(no);
-                css = css.Replace(" " + cssName + "-" + value, "");
-                p.CssClass = css.Replace("mumbo-jumbo##", "");
-            }
-
             if (node.Contains(nodeName))
                 p.CssClass += " " + cssName + "-" + node[nodeName].Value.ToString();
         }
@@ -685,15 +676,11 @@ namespace Magix.Brix.Viewports
                         }
                         dyn.CssClass = cssClass.Trim(); 
                     }
-                    if (AjaxManager.Instance.IsCallback)
+                    if (!AjaxManager.Instance.IsCallback)
                     {
                         dyn.Style[Styles.display] = "none";
                         new EffectFadeIn(dyn, 750)
                             .Render();
-                    }
-                    else
-                    {
-                        dyn.Style[Styles.display] = "";
                     }
                 }
 
