@@ -157,6 +157,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             string lastModule = "content1";
 
+            int cl = 0;
             foreach (WebPart idx in page.WebParts)
             {
                 if (idx.Container.ViewportContainer.CompareTo(lastModule) > 0)
@@ -170,10 +171,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     "Magix.Publishing.InjectPlugin",
                     tmp);
 
-                int cl = int.Parse(lastModule.Replace("content", ""));
-                if (cl < 7)
-                    ActiveEvents.Instance.RaiseClearControls("content" + (cl + 1));
+                cl = int.Parse(lastModule.Replace("content", ""));
             }
+            if (cl < 7)
+                ActiveEvents.Instance.RaiseClearControls("content" + (cl + 1));
         }
 
         private void SetCaptionOfPage(WebPage page)
@@ -187,6 +188,21 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.GetWebPartValue")]
+        private void Magix_Publishing_GetWebPartValue(object sender, ActiveEventArgs e)
+        {
+            WebPart part = WebPart.SelectByID(e.Params["WebPartID"].Get<int>());
+
+            foreach (WebPart.WebPartSetting idx in part.Settings)
+            {
+                if (idx.Name == part.Container.ModuleName + e.Params["Name"].Get<string>())
+                {
+                    e.Params["Value"].Value = idx.Value;
+                    break;
+                }
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Publishing.InjectPlugin")]
         private void Magix_Publishing_InjectPlugin(object sender, ActiveEventArgs e)
         {
@@ -196,6 +212,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             ch["ModuleName"].Value = page.Container.ModuleName;
             ch["Container"].Value = page.Container.ViewportContainer;
+            ch["WebPartID"].Value = page.ID;
 
             RaiseEvent(
                 "Magix.Publishing.ShouldReloadWebPart",
@@ -268,6 +285,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 if (page.Container.Width > 0)
                     node["Width"].Value = page.Container.Width;
+
+                node["CssClass"].Value = page.Container.CssClass ?? "";
 
                 node["Container"].Value = page.Container.ViewportContainer;
 

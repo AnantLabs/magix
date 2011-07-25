@@ -198,11 +198,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="media\Fonts\Bleeding Cowboys.ttf" />
-    <None Include="media\Fonts\CHOPS___.TTF" />
-    <None Include="media\Fonts\Hawaii_Killer.ttf" />
-    <None Include="media\Fonts\kberry.ttf" />
-    <None Include="media\Fonts\lexograph.ttf" />
+    <Content Include="media\Fonts\Bleeding Cowboys.ttf" />
+    <Content Include="media\Fonts\CHOPS___.TTF" />
+    <Content Include="media\Fonts\Hawaii_Killer.ttf" />
+    <Content Include="media\Fonts\kberry.ttf" />
+    <Content Include="media\Fonts\lexograph.ttf" />
+    <Content Include="media\images\snow.png" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
   </ItemGroup>
   <ItemGroup>
