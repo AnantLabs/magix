@@ -611,10 +611,6 @@ namespace Magix.Brix.Viewports
                         {
                             cssClass += " spcBottom-" + e.Params["Parameters"]["SpcBottom"].Get<int>();
                         }
-                        if (e.Params["Parameters"].Contains("CssClass"))
-                        {
-                            cssClass += " " + e.Params["Parameters"]["CssClass"].Get<string>();
-                        }
                         if (e.Params["Parameters"].Contains("Width"))
                         {
                             cssClass += " span-" + e.Params["Parameters"]["Width"].Get<int>();
@@ -663,6 +659,10 @@ namespace Magix.Brix.Viewports
                         {
                             cssClass += " overflowized";
                         }
+                        if (e.Params["Parameters"].Contains("CssClass"))
+                        {
+                            cssClass += " " + e.Params["Parameters"]["CssClass"].Get<string>();
+                        }
                         if (string.IsNullOrEmpty(cssClass))
                         {
                             // Defaulting to down-1 ...
@@ -674,7 +674,7 @@ namespace Magix.Brix.Viewports
                             if (!string.IsNullOrEmpty(cssClass2.Trim()))
                                 cssClass += " " + cssClass2;
                         }
-                        dyn.CssClass = cssClass.Trim(); 
+                        dyn.CssClass = cssClass.Trim();
                     }
                     if (!AjaxManager.Instance.IsCallback)
                     {

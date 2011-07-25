@@ -14,6 +14,8 @@ using Magix.Brix.Components.ActiveTypes.Publishing;
 using Magix.Brix.Data;
 using System.Reflection;
 using Magix.Brix.Publishing.Common;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -45,7 +47,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     {
                         if (idxSet.Name == moduleType.FullName + idx.Name)
                         {
-                            idx.GetSetMethod(true).Invoke(e.Params["_ctrl"].Value, new object[] { idxSet.Value });
+                            object nValue = Convert.ChangeType(idxSet.Value, idx.PropertyType, CultureInfo.InvariantCulture);
+                            idx.GetSetMethod(true).Invoke(e.Params["_ctrl"].Value, new object[] { nValue });
                             break;
                         }
                     }
@@ -203,6 +206,82 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.GetChildExcerptAdditionalControls")]
+        private void Magix_Publishing_GetChildExcerptAdditionalControls(object sender, ActiveEventArgs e)
+        {
+            WebPage wp = WebPage.SelectByID(e.Params["ID"].Get<int>());
+
+            foreach (WebPart idx in wp.WebParts)
+            {
+                string moduleName = idx.Container.ModuleName;
+                switch (moduleName)
+                {
+                    case "Magix.Brix.Components.ActiveModules.Publishing.Content":
+                        {
+                            Label lbl = new Label();
+                            lbl.Tag = "p";
+                            lbl.CssClass = "excerpt-excerpt";
+                            string text = idx.Settings.Find(
+                                delegate(WebPart.WebPartSetting idxI)
+                                {
+                                    return idxI.Name == moduleName + "Text";
+                                }).Value;
+                            text = Regex.Replace(text, "<(.|\n)*?>", string.Empty);
+                            if (text.Length > 150)
+                                text = text.Substring(0, 147) + "...";
+                            lbl.Text = text;
+                            e.Params["Controls"]["Magix.Brix.Components.ActiveModules.Publishing.Content"].Value = lbl;
+                        } break;
+                }
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.BuildOneChildExcerptControl")]
+        private void Magix_Publishing_BuildOneChildExcerptControl(object sender, ActiveEventArgs e)
+        {
+            WebPage wp = WebPage.SelectByID(e.Params["ID"].Get<int>());
+
+            Panel pnl = new Panel();
+            pnl.CssClass = "excerpt-item";
+
+            Label lb = new Label();
+            lb.Tag = "h3";
+            lb.Text = wp.Name;
+            pnl.Controls.Add(lb);
+
+            Node node = new Node();
+            node["ID"].Value = wp.ID;
+
+            RaiseEvent(
+                "Magix.Publishing.GetChildExcerptAdditionalControls",
+                node);
+            if (node.Contains("Controls"))
+            {
+                foreach (Node idx in node["Controls"])
+                {
+                    pnl.Controls.Add(idx.Value as System.Web.UI.Control);
+                }
+            }
+
+            e.Params["Control"].Value = pnl;
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetLastChildrenPages")]
+        private void Magix_Publishing_GetLastChildrenPages(object sender, ActiveEventArgs e)
+        {
+            WebPart part = WebPart.SelectByID(e.Params["ID"].Get<int>());
+
+            WebPage page = part.WebPage;
+
+            // Doing it the hard way, in case there are 'millions' of pages .......
+            foreach (WebPage idx in WebPage.Select(
+                Criteria.ParentId(page.ID),
+                Criteria.Range(0, 10, "Created", false)))
+            {
+                e.Params["Items"]["i" + idx.ID]["ID"].Value = idx.ID;
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Publishing.InjectPlugin")]
         private void Magix_Publishing_InjectPlugin(object sender, ActiveEventArgs e)
         {
@@ -244,9 +323,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
                 node["PageObjectTemplateID"].Value = page.ID;
 
-                string cssClass = node["CssClass"].Get<string>() ?? "";
-                cssClass += " web-part";
-                node["CssClass"].Value = cssClass;
+                node["CssClass"].Value = "web-part" + " " + page.Container.CssClass;
+
+                if (page.Container.Overflow)
+                    node["OverflowWebPart"].Value = true;
 
                 LoadModule(
                     page.Container.ModuleName,
@@ -286,7 +366,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 if (page.Container.Width > 0)
                     node["Width"].Value = page.Container.Width;
 
-                node["CssClass"].Value = page.Container.CssClass ?? "";
+                string cssClass = "web-part";
+                if (page.Container.Overflow)
+                    cssClass += " web-part-overflow";
+                cssClass += " " + page.Container.CssClass;
+                node["CssClass"].Value = cssClass;
 
                 node["Container"].Value = page.Container.ViewportContainer;
 

@@ -242,6 +242,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     tmp["i-" + idxC.ID]["Name"].Value = idxC.Name;
                     tmp["i-" + idxC.ID]["Height"].Value = idxC.Height;
                     tmp["i-" + idxC.ID]["Last"].Value = idxC.Last;
+                    tmp["i-" + idxC.ID]["Overflow"].Value = idxC.Overflow;
                     tmp["i-" + idxC.ID]["Padding"].Value = idxC.MarginRight;
                     tmp["i-" + idxC.ID]["Top"].Value = idxC.MarginTop;
                     tmp["i-" + idxC.ID]["Width"].Value = idxC.Width;
@@ -412,6 +413,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     t.CssClass = e.Params["Value"].Get<string>();
                 else if (e.Params["Action"].Get<string>() == "ChangeLast")
                     t.Last = e.Params["Value"].Get<bool>();
+                else if (e.Params["Action"].Get<string>() == "ChangeOverflow")
+                    t.Overflow = e.Params["Value"].Get<bool>();
                 t.Save();
                 tr.Commit();
             }

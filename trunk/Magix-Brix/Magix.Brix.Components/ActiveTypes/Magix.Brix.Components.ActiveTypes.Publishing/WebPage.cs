@@ -44,6 +44,9 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         [ActiveField]
         public string URL { get; private set; }
 
+        [ActiveField]
+        public DateTime Created { get; private set; }
+
         /**
          * The Template the Page is built upon
          */
@@ -106,6 +109,9 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             // Defaulting Name of Page to something ...
             if (string.IsNullOrEmpty(Name))
                 Name = "Newly Created";
+
+            if (ID == 0)
+                Created = DateTime.Now;
 
             // Can't have more than one top level page ...
             CheckToSeIfMoreThanOneTopLevelPageIsCreated();

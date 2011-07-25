@@ -1387,6 +1387,7 @@
 
 .Menu-Two-Sided
 {
+	-webkit-perspective: 200;
 }
 
 .Menu-Two-Sided .mux-sliding-menu
@@ -1415,6 +1416,11 @@
 	-webkit-transition-duration:.5s;
 	transition-property:transform;
 	transition-duration:.5s;
+}
+
+.Header-Two-Sided
+{
+	-webkit-perspective: 200;
 }
 
 .Header-Two-Sided h1
@@ -1448,6 +1454,7 @@
 
 .Content-Two-Sided
 {
+	-webkit-perspective: 200;
 }
 
 .Content-Two-Sided p
@@ -1478,6 +1485,89 @@
 
 
 
+.Content-News
+{
+	font-family:Times New Roman;
+	text-align:justify;
+	-moz-column-width:190px;
+	-moz-column-gap:1em;
+	-webkit-column-width:190px;
+	-webkit-column-gap:1em;
+}
 
+.Content-News p:first-letter
+{
+	padding-left:20px;
+	font-size:24px;
+	line-height:18px;
+	color:#999;
+}
+
+
+.Excerpt-Shady-Fady
+{
+}
+
+.Excerpt-Shady-Fady .excerpt-item
+{
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:1.2s;
+	transition-property:box-shadow;
+	transition-duration:1.2s;
+}
+
+.Excerpt-Shady-Fady .excerpt-item:hover
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.6s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.6s;
+	transition-property:box-shadow;
+	transition-duration:.6s;
+}
+
+.Excerpt-Coin-Flip
+{
+}
+
+.Excerpt-Coin-Flip .excerpt-item *
+{
+	-webkit-transform: rotateY(0deg);
+	-moz-transform: rotate(0deg 0deg);
+	
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.7s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.7s;
+	transition-property:transform;
+	transition-duration:.7s;
+}
+
+.Excerpt-Coin-Flip .excerpt-item:hover *
+{
+	-webkit-transform: rotateY(360deg);
+	-moz-transform: rotate(360deg 0deg);
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:1.6s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:1.6s;
+	transition-property:transform;
+	transition-duration:1.6s;
+}
 
 

@@ -41,6 +41,10 @@
       <DependentUpon>Content.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ChildExcerpt.ascx.cs">
+      <DependentUpon>ChildExcerpt.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="EditSpecificTemplate.ascx.cs">
       <DependentUpon>EditSpecificTemplate.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -108,6 +112,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditSpecificTemplate.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ChildExcerpt.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

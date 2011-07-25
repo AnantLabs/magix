@@ -38,6 +38,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         int width = idxC["Width"].Get<int>();
                         int height = idxC["Height"].Get<int>();
                         bool last = idxC["Last"].Get<bool>();
+                        bool overflow = idxC["Overflow"].Get<bool>();
                         string name = idxC["Name"].Get<string>() ?? "[Unknown]";
                         int id = idxC["ID"].Get<int>();
                         int padding = idxC["Padding"].Get<int>();
@@ -50,6 +51,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         // Creating Window ...
                         Window w = new Window();
                         w.CssClass += " web-part";
+                        if (overflow)
+                            w.CssClass += " overflow-design";
                         SetCommonWebPartProperties(
                             width, 
                             height, 
@@ -74,8 +77,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         CreateModuleSelectListForWebPart(id, moduleName, w);
 
+                        // Last CheckBox
                         CheckBox ch = new CheckBox();
                         ch.Checked = last;
+                        ch.ID = "lch-" + id;
                         ch.CheckedChanged +=
                             delegate
                             {
@@ -96,6 +101,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                             };
 
                         Label lbl = new Label();
+                        lbl.ID = "llbl-" + id;
                         lbl.Text = "Last";
                         lbl.Load
                             +=
@@ -104,12 +110,56 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                 lbl.For = ch.ClientID;
                             };
                         lbl.Tag = "label";
-                        
+
                         Panel pnl = new Panel();
-                        pnl.CssClass = "span-2 last";
+                        ch.ID = "lpnl-" + id;
+                        pnl.CssClass = "span-2";
                         pnl.Controls.Add(ch);
                         pnl.Controls.Add(lbl);
                         pnl.ToolTip = "Whether or not this WebPart is to the very far right or not ... [Try experiementing if you experience unwanted 'jumping' while moving WebPart around or resizing it ...]";
+
+                        w.Content.Controls.Add(pnl);
+
+                        // Overflow CheckBox
+                        ch = new CheckBox();
+                        ch.Checked = overflow;
+                        ch.ID = "och-" + id;
+                        ch.CheckedChanged +=
+                            delegate
+                            {
+                                Node nx = new Node();
+
+                                nx["ID"].Value = id;
+                                nx["Action"].Value = "ChangeOverflow";
+                                nx["Value"].Value = ch.Checked;
+
+                                RaiseSafeEvent(
+                                    "Magix.Publishing.ChangeTemplateProperty",
+                                    nx);
+
+                                if (ch.Checked)
+                                    w.CssClass += " overflow-design";
+                                else
+                                    w.CssClass = w.CssClass.Replace(" overflow-design", "");
+                            };
+
+                        lbl = new Label();
+                        lbl.ID = "olbl-" + id;
+                        lbl.Text = "Overflow";
+                        lbl.Load
+                            +=
+                            delegate
+                            {
+                                lbl.For = ch.ClientID;
+                            };
+                        lbl.Tag = "label";
+
+                        pnl = new Panel();
+                        ch.ID = "opnl-" + id;
+                        pnl.CssClass = "span-3 last";
+                        pnl.Controls.Add(ch);
+                        pnl.Controls.Add(lbl);
+                        pnl.ToolTip = "Whether or not this will allow its content to overflow in the vertical direction";
 
                         w.Content.Controls.Add(pnl);
 
