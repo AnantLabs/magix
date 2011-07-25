@@ -93,6 +93,12 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         [ActiveField]
         public bool Last { get; set; }
 
+        /**
+         * If true, will allow the element to overflow in the vertical direction
+         */
+        [ActiveField]
+        public bool Overflow { get; set; }
+
         #region [ -- Business logic and overrides ... -- ]
 
         public override void Save()

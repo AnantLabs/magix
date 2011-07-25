@@ -565,6 +565,12 @@ input[type=button].clear-both
 	transition-duration:1s;
 }
 
+.web-part-overflow
+{
+	overflow-y:auto;
+	height:auto !important;
+}
+
 .dashboard
 {
 }
@@ -855,7 +861,26 @@ div.has-no-action
 	color:rgba(90, 0, 0, 1);
 }
 
+.excerpts-all div.excerpt-item:nth-child(3n+3)
+{
+	margin-right:0;
+}
 
+.excerpt-item
+{
+	width:190px;
+	height:144px;
+	float:left;
+	margin-right:10px;
+	overflow:hidden;
+	cursor:pointer;
+}
+
+.excerpt-excerpt
+{
+	color:rgba(160, 160, 160, .8);
+	font-style:italic;
+}
 
 
 

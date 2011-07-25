@@ -28,6 +28,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 delegate
                 {
                     lbl.Text = Text;
+                    if (node.Contains("OverflowWebPart"))
+                        (this.Parent as DynamicPanel).CssClass += " web-part-overflow";
                 };
         }
 
