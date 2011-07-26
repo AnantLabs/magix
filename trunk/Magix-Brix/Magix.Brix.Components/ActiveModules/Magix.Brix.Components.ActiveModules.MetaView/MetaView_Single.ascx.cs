@@ -32,12 +32,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                     "Magix.MetaView.GetViewData",
                     node);
             }
-
-            base.InitialLoading(node);
-            Load +=
-                delegate
-                {
-                };
         }
 
         protected override void OnLoad(EventArgs e)

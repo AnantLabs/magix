@@ -11,5 +11,6 @@ namespace Magix.Brix.Publishing.Common
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class PublisherPluginAttribute : Attribute
     {
+        public bool CanBeEmpty = false;
     }
 }

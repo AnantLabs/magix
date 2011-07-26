@@ -656,7 +656,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         }
 
         [ActiveEvent(Name = "Magix.Publishing.WebPartTemplateWasModified")]
-        protected void Magix_Publishing_WebPartTemplateWasModified(object sender, EventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.WebPageTemplateWasModified")]
+        protected void Magix_Publishing_MultiHandler(object sender, EventArgs e)
         {
             ReDataBind();
         }
