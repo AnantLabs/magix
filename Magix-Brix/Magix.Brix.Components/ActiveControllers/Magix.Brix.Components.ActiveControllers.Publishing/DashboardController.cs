@@ -29,8 +29,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Core.LogInUser")]
-        protected void Magix_Core_LogInUser(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
+        protected void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {
             // Getting relative URL ...
             string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
@@ -39,6 +39,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (User.Current.InRole("Administrator"))
             {
                 AjaxManager.Instance.Redirect("~/?dashboard=true");
+            }
+            else
+            {
+                AjaxManager.Instance.Redirect("~/");
             }
         }
     }

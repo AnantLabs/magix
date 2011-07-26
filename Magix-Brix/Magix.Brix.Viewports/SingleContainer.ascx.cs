@@ -389,7 +389,8 @@ namespace Magix.Brix.Viewports
             if (e.Params.Contains("Milliseconds"))
                 timeOut = e.Params["Milliseconds"].Get<int>();
 
-            if (e.Params.Contains("IsError"))
+            if (e.Params.Contains("IsError") &&
+                e.Params["IsError"].Get<bool>())
             {
                 message.CssClass += " error-message";
             }
