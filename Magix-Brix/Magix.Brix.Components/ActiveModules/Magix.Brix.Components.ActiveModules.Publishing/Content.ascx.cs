@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 };
         }
 
-        [ModuleSetting(ModuleEditorName = "Magix.Brix.Components.ActiveModules.Editor.RichEdit")]
+        [ModuleSetting(ModuleEditorName = "Magix.Brix.Components.ActiveModules.Editor.RichEdit", DefaultValue = "<p>The Content for your Rich Content WebPart ...</p>")]
         public string Text
         {
             get { return ViewState["Text"] as string; }

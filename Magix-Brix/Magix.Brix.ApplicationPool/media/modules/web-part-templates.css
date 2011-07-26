@@ -367,6 +367,57 @@
 }
 }
 
+@-moz-keyframes freak-flag 
+{
+0%
+{
+   -moz-transform: scale(1) rotate(0deg);
+   color:Red;
+}
+10%
+{
+   -moz-transform: scale(1.5) rotate(15deg);
+   color:Orange;
+}
+20%
+{
+   -moz-transform: scale(1) rotate(0deg);
+   color:Yellow;
+}
+30%
+{
+   color:Green;
+}
+40%
+{
+   color:Blue;
+}
+50%
+{
+   color:rgba(255, 0, 128, 1);
+}
+60%
+{
+   color:rgba(255, 0, 255, 0);
+}
+70%
+{
+   color:rgba(0, 0, 0, 1);
+}
+80%
+{
+   color:rgba(0, 0, 0, 1);
+}
+90%
+{
+   color:rgba(255, 255, 0, 1);
+}
+100%
+{
+   color:rgba(0, 0, 0, 1);
+}
+}
+
 .Header-Freak-Flag
 {
 }
@@ -378,106 +429,99 @@
 	-webkit-animation-direction: normal;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-name: freak-flag;
+	-moz-animation-duration: 4s;
+	-moz-animation-direction: normal;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: ease-in-out;
 }
 
+
 @-webkit-keyframes bouncing-ball {
-0% {
+0%
+{
 	top: 0px;
-	-webkit-animation-timing-function: ease-in;
 	left:0;
+	-webkit-animation-timing-function: ease-in;
 }
-5% {
+17%
+{
 	top: 54px;
 	-webkit-animation-timing-function: ease-out;
-	left:25px;
 }
-10% {
+34%
+{
 	top: 0px;
 	-webkit-animation-timing-function: ease-in;
+}
+50%
+{
+}
+51%
+{
+	top: 54px;
+	left:120px;
+	-webkit-animation-timing-function: ease-out;
+}
+67%
+{
+	top: 0px;
+	-webkit-animation-timing-function: ease-in;
+}
+84%
+{
+	top: 54px;
+	-webkit-animation-timing-function: ease-out;
+}
+100%
+{
+	top: 0;
+	left:190px;
+	-webkit-animation-timing-function: ease-out;
+}
+}
+
+@-moz-keyframes bouncing-ball {
+0%
+{
+	top: 0px;
 	left:0;
+	-moz-animation-timing-function: ease-in;
 }
-15% {
+17%
+{
 	top: 54px;
-	-webkit-animation-timing-function: ease-out;
+	-moz-animation-timing-function: ease-out;
 }
-20% {
+34%
+{
 	top: 0px;
-	-webkit-animation-timing-function: ease-in;
+	-moz-animation-timing-function: ease-in;
 }
-25% {
+50%
+{
+}
+51%
+{
 	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-	left:75px;
+	left:120px;
+	-moz-animation-timing-function: ease-out;
 }
-30% {
+67%
+{
 	top: 0px;
-	-webkit-animation-timing-function: ease-in;
+	-moz-animation-timing-function: ease-in;
 }
-35% {
+84%
+{
 	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-	left:0;
+	-moz-animation-timing-function: ease-out;
 }
-40% {
-	top: 0px;
-	-webkit-animation-timing-function: ease-in;
-}
-45% {
-	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-	left:110px;
-}
-50% {
-	top: 0px;
-	-webkit-animation-timing-function: ease-in;
-}
-55% {
-	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-}
-60% {
-	top: 0px;
-	-webkit-animation-timing-function: ease-in;
-	left:70px;
-	left:0;
-}
-65% {
-	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-}
-70% {
-	top: 0px;
-	-webkit-animation-timing-function: ease-in;
-	left:70px;
-}
-75% {
-	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-}
-80% {
-	top: 0px;
-	-webkit-animation-timing-function: ease-in;
-	left:0;
-}
-85% {
-	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-	left:30px;
-}
-90% {
-	top: 0px;
-	-webkit-animation-timing-function: ease-in;
-	left:0;
-}
-95% {
-	top: 54px;
-	-webkit-animation-timing-function: ease-out;
-	left:5px;
-}
-100% {
-	top: 0px;
-	-webkit-animation-timing-function: ease-in;
-	left:0;
+100%
+{
+	top: 0;
+	left:190px;
+	-moz-animation-timing-function: ease-out;
 }
 }
 
@@ -491,7 +535,12 @@
 	position: absolute;
 	-webkit-animation-name: bouncing-ball;
 	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-duration: 11.7s;
+	-webkit-animation-duration: 4.7s;
+	-webkit-animation-direction: alternate;
+	-moz-animation-name: bouncing-ball;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-duration: 4.7s;
+	-moz-animation-direction: alternate;
 }
 
 @-webkit-keyframes flying 
@@ -511,23 +560,23 @@
 30%
 {
 	-webkit-transform: scale(1.5) rotate(-15deg);
+	text-shadow:-100px -100px 4px rgba(0, 0, 0, 0.0);
 }
 40%
 {
 	-webkit-transform: scale(1.7) rotate(-25deg);
-	text-shadow:-100px -100px 4px rgba(0, 0, 0, 0.0);
+	text-shadow:0px 0px 4px rgba(0, 0, 0, 0.3);
 	color:Black;
 }
 50%
 {
 	-webkit-transform: scale(1.5) rotate(-15deg);
-	text-shadow:0px 0px 4px rgba(0, 0, 0, 0.3);
+	text-shadow:200px 200px 4px rgba(0, 0, 0, 0);
 	color:rgba(200, 200, 0, 1);
 }
 60%
 {
 	-webkit-transform: scale(1.3) rotate(0deg);
-	text-shadow:200px 200px 4px rgba(0, 0, 0, 0);
 	color:Black;
 }
 70%
@@ -540,7 +589,7 @@
 }
 90%
 {
-	-webkit-transform: scale(1) rotate(0deg);
+	-webkit-transform: scale(.5) rotate(0deg);
 }
 100%
 {
@@ -548,37 +597,58 @@
 }
 }
 
-.Header-Almost-Blind-People
+@-moz-keyframes flying 
 {
-	position:relative;
+0%
+{
+	-moz-transform: scale(.9) rotate(5deg);
 }
-
-.Header-Almost-Blind-People h1
+10%
 {
-	position:absolute;
-   -webkit-transform: scale(1);
-   -webkit-transform-origin:top left;
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:1.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:1.2s;
-	transition-property:transform;
-	transition-duration:1.2s;
-	z-index:1000;
+	-moz-transform: scale(1.1) rotate(2deg);
 }
-
-.Header-Almost-Blind-People h1:hover
+20%
 {
-   -webkit-transform: scale(2.2);
-   -webkit-transform-origin:top left;
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:.2s;
-	transition-property:transform;
-	transition-duration:.2s;
+	-moz-transform: scale(1.3) rotate(0deg);
+}
+30%
+{
+	-moz-transform: scale(1.5) rotate(-15deg);
+	text-shadow:-100px -100px 4px rgba(0, 0, 0, 0.0);
+}
+40%
+{
+	-moz-transform: scale(1.7) rotate(-25deg);
+	text-shadow:0px 0px 4px rgba(0, 0, 0, 0.3);
+	color:Black;
+}
+50%
+{
+	-moz-transform: scale(1.5) rotate(-15deg);
+	text-shadow:200px 200px 4px rgba(0, 0, 0, 0);
+	color:rgba(200, 200, 0, 1);
+}
+60%
+{
+	-moz-transform: scale(1.3) rotate(0deg);
+	color:Black;
+}
+70%
+{
+	-moz-transform: scale(1.1) rotate(-15deg);
+}
+80%
+{
+	-moz-transform: scale(.9) rotate(2deg);
+}
+90%
+{
+	-moz-transform: scale(.5) rotate(0deg);
+}
+100%
+{
+	-moz-transform: scale(.9) rotate(5deg);
+}
 }
 
 .Header-Flying
@@ -593,6 +663,45 @@
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: normal;
 	-webkit-animation-duration: 11.7s;
+	-moz-animation-name: flying;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: normal;
+	-moz-animation-duration: 11.7s;
+}
+
+.Header-Almost-Blind-People
+{
+	position:relative;
+}
+
+.Header-Almost-Blind-People h1
+{
+	position:absolute;
+   -webkit-transform: scale(1);
+   -webkit-transform-origin:top left;
+   -moz-transform: scale(1);
+   -moz-transform-origin:top left;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:1.2s;
+	transition-property:transform;
+	transition-duration:1.2s;
+	z-index:1000;
+}
+
+.Header-Almost-Blind-People h1:hover
+{
+   -webkit-transform: scale(2.2);
+   -moz-transform: scale(2.2);
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.2s;
+	transition-property:transform;
+	transition-duration:.2s;
 }
 
 
@@ -695,6 +804,105 @@
 }
 }
 
+@-moz-keyframes hell {
+0% 
+{
+	-moz-transform: scale(1) rotate(0deg);
+	color:rgba(0, 0, 0, 1);
+}
+14% {
+	color:rgba(0, 0, 0, .01);
+}
+28% {
+	color:rgba(255, 0, 0, .5);
+}
+41% {
+	font-family: 'Bleeding Cowboys';
+}
+42% {
+	color:rgba(0, 0, 0, 1);
+	font-family: Arial;
+	/*text-shadow:3px 3px 5px rgba(0, 0, 0, 0);*/
+}
+57% {
+	-moz-transform: scale(1.5) rotate(5deg);
+	left:0px;
+	/*text-shadow:25px 25px 2px rgba(0, 0, 0, 0.5);*/
+}
+71% {
+	background-color:Transparent;
+	left:125px;
+	/*text-shadow:3px 3px 5px rgba(0, 0, 0, 0);*/
+	font-family: 'Bleeding Cowboys';
+}
+75% 
+{
+	background-color:rgba(128, 0, 0, .1);
+	left:75px;
+}
+80% {
+	background-color:Transparent;
+	left:25px;
+}
+85% {
+	color:rgba(0, 0, 0, 1);
+	left:25px;
+	margin-left:0;
+	-moz-transform: scale(1) rotate(0deg);
+}
+86% {
+	color:rgba(255, 0, 0, .5);
+	left:0px;
+	margin-left:-15px;
+}
+87% {
+	color:rgba(0, 0, 0, 1);
+	margin-left:0;
+}
+88% {
+	color:rgba(255, 128, 0, .5);
+}
+89% {
+	color:rgba(0, 0, 0, 1);
+}
+90% {
+	color:rgba(255, 255, 0, .5);
+}
+91% {
+	color:rgba(0, 0, 0, 1);
+}
+92% {
+	color:rgba(255, 128, 0, .5);
+}
+93% {
+	color:rgba(0, 0, 0, 1);
+}
+94% {
+	color:rgba(255, 0, 0, .5);
+}
+95% {
+	color:rgba(0, 0, 0, 1);
+	-moz-transform: scale(1) rotate(0deg);
+	-moz-transform-origin: center left;
+}
+96% {
+	-moz-transform: scale(1) rotate(15deg);
+	-moz-transform-origin: center left;
+}
+98% {
+	-moz-transform: scale(1) rotate(0deg);
+	-moz-transform-origin: center left;
+}
+99% {
+	-moz-transform: scale(1) rotate(15deg);
+	-moz-transform-origin: center left;
+}
+100% {
+	-moz-transform: scale(1) rotate(0deg);
+	-moz-transform-origin: center left;
+}
+}
+
 .Header-Hell
 {
 }
@@ -709,6 +917,11 @@
 	-webkit-animation-direction: normal;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-name: hell;
+	-moz-animation-duration: 12s;
+	-moz-animation-direction: normal;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: ease-in-out;
 	font-family: 'Bleeding Cowboys';
 }
 
@@ -885,6 +1098,49 @@
 }
 }
 
+@-moz-keyframes crazy-menu 
+{
+0%
+{
+}
+91%
+{
+	-moz-transform: scale(1) rotate(0deg);
+}
+92%
+{
+	-moz-transform: scale(1.5) rotate(45deg);
+}
+93%
+{
+	-moz-transform: scale(1) rotate(0deg);
+}
+94%
+{
+	-moz-transform: scale(1.5) rotate(45deg);
+}
+95%
+{
+	-moz-transform: scale(1) rotate(0deg);
+}
+96%
+{
+	-moz-transform: scale(1.5) rotate(45deg);
+}
+97%
+{
+	-moz-transform: scale(1) rotate(0deg);
+}
+98%
+{
+	-moz-transform: scale(1.5) rotate(45deg);
+}
+99%
+{
+	-moz-transform: scale(1) rotate(0deg);
+}
+}
+
 .Menu-Crazy
 {
 	position:relative;
@@ -896,6 +1152,10 @@
 	-webkit-animation-duration: 9s;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: normal;
+	-moz-animation-name: crazy-menu;
+	-moz-animation-duration: 9s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: normal;
 }
 
 
@@ -923,6 +1183,25 @@
 }
 }
 
+@-moz-keyframes flipping-menu
+{
+0%
+{
+}
+70%
+{
+   -moz-transform: rotate(0deg);
+}
+80%
+{
+   -moz-transform: rotate(720deg);
+}
+90%
+{
+   -moz-transform: rotate(0deg);
+}
+}
+
 .Menu-Flipping
 {
 }
@@ -933,6 +1212,10 @@
 	-webkit-animation-duration: 9s;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: normal;
+	-moz-animation-name: flipping-menu;
+	-moz-animation-duration: 9s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: normal;
 }
 
 .Menu-Bubble
@@ -1032,12 +1315,35 @@
 }
 }
 
+@-moz-keyframes breadthing-content
+{
+0%
+{
+   -moz-transform: scale(1);
+   -moz-transform-origin:top left;
+}
+50%
+{
+   -moz-transform: scale(1.05);
+   -moz-transform-origin:top left;
+}
+100%
+{
+   -moz-transform: scale(1);
+   -moz-transform-origin:top left;
+}
+}
+
 .Content-Breadthing
 {
 	-webkit-animation-name: breadthing-content;
 	-webkit-animation-duration: 14s;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: normal;
+	-moz-animation-name: breadthing-content;
+	-moz-animation-duration: 14s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: normal;
 }
 
 
@@ -1060,12 +1366,35 @@
 }
 }
 
+@-moz-keyframes breadthing-deep-content
+{
+0%
+{
+   -moz-transform: scale(1);
+   -moz-transform-origin:top left;
+}
+50%
+{
+   -moz-transform: scale(1.2);
+   -moz-transform-origin:top left;
+}
+100%
+{
+   -moz-transform: scale(1);
+   -moz-transform-origin:top left;
+}
+}
+
 .Content-Breadthing-Deep
 {
 	-webkit-animation-name: breadthing-deep-content;
 	-webkit-animation-duration: 28s;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: normal;
+	-moz-animation-name: breadthing-deep-content;
+	-moz-animation-duration: 28s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: normal;
 }
 
 .Content-Romantic
@@ -1105,8 +1434,6 @@
 {
 	font-family:Arial;
 }
-
-
 
 .Content-Comic-Ally
 {

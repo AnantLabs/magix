@@ -82,8 +82,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         ch.Checked = last;
                         ch.ID = "lch-" + id;
                         ch.CheckedChanged +=
-                            delegate
+                            delegate(object sender, EventArgs e)
                             {
+                                ch = sender as CheckBox;
                                 Node nx = new Node();
 
                                 nx["ID"].Value = id;
@@ -121,11 +122,11 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         w.Content.Controls.Add(pnl);
 
                         // Overflow CheckBox
-                        ch = new CheckBox();
-                        ch.Checked = overflow;
-                        ch.ID = "och-" + id;
-                        ch.CheckedChanged +=
-                            delegate
+                        CheckBox ch1 = new CheckBox();
+                        ch1.Checked = overflow;
+                        ch1.ID = "och-" + id;
+                        ch1.CheckedChanged +=
+                            delegate(object sender, EventArgs e)
                             {
                                 Node nx = new Node();
 
@@ -143,25 +144,25 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                     w.CssClass = w.CssClass.Replace(" overflow-design", "");
                             };
 
-                        lbl = new Label();
-                        lbl.ID = "olbl-" + id;
-                        lbl.Text = "Overflow";
-                        lbl.Load
+                        Label lbl1 = new Label();
+                        lbl1.ID = "olbl-" + id;
+                        lbl1.Text = "Overflow";
+                        lbl1.Load
                             +=
                             delegate
                             {
-                                lbl.For = ch.ClientID;
+                                lbl1.For = ch1.ClientID;
                             };
-                        lbl.Tag = "label";
+                        lbl1.Tag = "label";
 
-                        pnl = new Panel();
-                        ch.ID = "opnl-" + id;
-                        pnl.CssClass = "span-3";
-                        pnl.Controls.Add(ch);
-                        pnl.Controls.Add(lbl);
-                        pnl.ToolTip = "Whether or not this will allow its content to overflow in the vertical direction";
+                        Panel pnl1 = new Panel();
+                        ch1.ID = "opnl-" + id;
+                        pnl1.CssClass = "span-3";
+                        pnl1.Controls.Add(ch1);
+                        pnl1.Controls.Add(lbl1);
+                        pnl1.ToolTip = "Whether or not this will allow its content to overflow in the vertical direction";
 
-                        w.Content.Controls.Add(pnl);
+                        w.Content.Controls.Add(pnl1);
 
                         // Delete 'this' button
                         LinkButton b = new LinkButton();

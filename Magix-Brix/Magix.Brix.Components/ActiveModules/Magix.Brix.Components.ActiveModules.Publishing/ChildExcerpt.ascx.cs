@@ -64,7 +64,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
-        [ModuleSetting]
+        [ModuleSetting(ModuleEditorEventName = "Magix.Publishing.GetTemplateColumnSelectChildExcerptNo", DefaultValue="10")]
         public int PagesCount
         {
             get { return ViewState["PagesCount"] == null ? 10 : (int)ViewState["PagesCount"]; }
