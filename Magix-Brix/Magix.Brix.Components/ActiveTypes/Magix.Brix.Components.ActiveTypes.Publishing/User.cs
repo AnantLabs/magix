@@ -22,6 +22,23 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
 
         [ActiveField(BelongsTo = true)]
         public User User { get; set; }
+
+        public override void Save()
+        {
+            if (!string.IsNullOrEmpty(Name) &&
+                Name.Length > 0)
+            {
+                if (CountWhere(
+                    Criteria.Eq("Name", Name),
+                    Criteria.NotId(ID)) > 0)
+                {
+                    throw new ArgumentException(
+                        @"Sorry, but that OpenID is already registered on this 
+site. Try to log in using it ...");
+                }
+            }
+            base.Save();
+        }
     }
 
     [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Publishing.User")]
