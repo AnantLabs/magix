@@ -35,10 +35,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             // Getting relative URL ...
             string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
             string relUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "").Replace(baseUrl, "");
+            string redirect = Page.Request.Params["ret"];
 
-            if (User.Current.InRole("Administrator"))
+            if (!string.IsNullOrEmpty(redirect))
             {
-                AjaxManager.Instance.Redirect("~/?dashboard=true");
+                AjaxManager.Instance.Redirect(redirect);
             }
             else
             {
