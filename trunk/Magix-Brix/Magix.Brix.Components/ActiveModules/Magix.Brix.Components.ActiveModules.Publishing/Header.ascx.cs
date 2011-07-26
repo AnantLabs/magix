@@ -31,7 +31,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 };
         }
 
-        [ModuleSetting]
+        [ModuleSetting(DefaultValue = "Caption for your Caption WebPart ...")]
         public string Caption
         {
             get { return ViewState["Caption"] as string; }

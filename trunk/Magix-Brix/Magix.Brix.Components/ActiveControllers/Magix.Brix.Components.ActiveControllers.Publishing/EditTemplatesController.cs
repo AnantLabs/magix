@@ -234,18 +234,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 WebPartTemplate templ = WebPartTemplate.SelectByID(e.Params["ID"].Get<int>());
-                WebPageTemplate pageTempl = templ.PageTemplate;
-                pageTempl.Containers.Remove(templ);
-                pageTempl.Save();
-
-                pageTempl.Save();
-
-                // Need to delete all WebParts built upon this WebPartTemplate ...
-                foreach (WebPart idx in WebPart.Select(
-                    Criteria.ExistsIn(templ.ID, true)))
-                {
-                    idx.Delete();
-                }
+                templ.Delete();
 
                 tr.Commit();
             }

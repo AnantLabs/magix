@@ -101,6 +101,22 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
 
         #region [ -- Business logic and overrides ... -- ]
 
+        public override void Delete()
+        {
+            WebPageTemplate pageTempl = this.PageTemplate;
+            pageTempl.Containers.Remove(this);
+
+            pageTempl.Save();
+
+            // Need to delete all WebParts built upon this WebPartTemplate ...
+            foreach (WebPart idx in WebPart.Select(
+                Criteria.ExistsIn(this.ID, true)))
+            {
+                idx.Delete();
+            }
+            base.Delete();
+        }
+
         public override void Save()
         {
             KeepAllValuesWithinLegality();

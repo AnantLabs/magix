@@ -302,6 +302,58 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.GetTemplateColumnSelectChildExcerptNo")]
+        protected void Magix_Publishing_GetTemplateColumnSelectChildExcerptNo(object sender, ActiveEventArgs e)
+        {
+            SelectList ls = new SelectList();
+            e.Params["Control"].Value = ls;
+
+            ls.CssClass = "span-5";
+            ls.Style[Styles.display] = "block";
+
+            ls.SelectedIndexChanged +=
+                delegate
+                {
+                    Node tx = new Node();
+
+                    tx["Params"]["ID"].Value = e.Params["ID"].Value;
+                    tx["Params"]["PropertyName"].Value = "Magix.Brix.Components.ActiveModules.Publishing.ChildExcerptPagesCount";
+                    tx["Params"]["PotID"].Value = e.Params["PotID"].Value;
+                    tx["Text"].Value = ls.SelectedItem.Text;
+
+                    RaiseEvent(
+                        "Magix.Publishing.SavePageObjectIDSetting",
+                        tx);
+                };
+
+            ls.Items.Add(new ListItem("5", "5"));
+            ls.Items.Add(new ListItem("10", "10"));
+            ls.Items.Add(new ListItem("15", "15"));
+            ls.Items.Add(new ListItem("20", "20"));
+            ls.Items.Add(new ListItem("25", "25"));
+            switch (e.Params["Value"].Value.ToString())
+            {
+                case "5":
+                    ls.SelectedIndex = 0;
+                    break;
+                case "10":
+                    ls.SelectedIndex = 1;
+                    break;
+                case "15":
+                    ls.SelectedIndex = 2;
+                    break;
+                case "20":
+                    ls.SelectedIndex = 3;
+                    break;
+                case "25":
+                    ls.SelectedIndex = 4;
+                    break;
+                default:
+                    ls.Enabled = false;
+                    break;
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Publishing.InjectPlugin")]
         private void Magix_Publishing_InjectPlugin(object sender, ActiveEventArgs e)
         {
