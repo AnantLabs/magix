@@ -30,6 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
 
             node["Message"].Value = "Sender: " + sender.ToString() + ".";
             node["ObjectID"].Value = u.ID;
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 sender,
                 "Magix.Core.Log",

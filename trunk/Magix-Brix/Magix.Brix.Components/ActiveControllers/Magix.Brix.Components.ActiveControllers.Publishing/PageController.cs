@@ -467,6 +467,19 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 "Magix.Publishing.InjectPlugin",
                 node);
         }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetStateForLoginControl")]
+        protected void Magix_Publishing_GetStateForLoginControl(object sender, ActiveEventArgs e)
+        {
+            if (User.Current != null)
+            {
+                e.Params["ShouldLoadLogout"].Value = true;
+            }
+            else
+            {
+                e.Params["ShouldLoadLogin"].Value = true;
+            }
+        }
     }
 }
 

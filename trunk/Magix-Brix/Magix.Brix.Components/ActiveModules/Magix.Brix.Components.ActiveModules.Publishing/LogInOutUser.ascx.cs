@@ -39,6 +39,43 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
         private void DataBindControls()
         {
+            Node n = new Node();
+            RaiseSafeEvent(
+                "Magix.Publishing.GetStateForLoginControl",
+                n);
+            if (n.Contains("ShouldLoadLogin") &&
+                n["ShouldLoadLogin"].Get<bool>())
+            {
+                CreateLogInControls();
+            }
+            else if (n.Contains("ShouldLoadLogout") &&
+                n["ShouldLoadLogout"].Get<bool>())
+            {
+                CreateLogOutControls();
+            }
+        }
+
+        private void CreateLogOutControls()
+        {
+            Button b = new Button();
+            b.ID = "loginBtn";
+            b.CssClass = "logout-btn";
+            b.Text = "Logout";
+            b.Click +=
+                delegate
+                {
+                    Node node = new Node();
+
+                    ActiveEvents.Instance.RaiseActiveEvent(
+                        this,
+                        "Magix.Core.UserLoggedOut",
+                        node);
+                };
+            pnl.Controls.Add(b);
+        }
+
+        private void CreateLogInControls()
+        {
             TextBox t = new TextBox();
             t.PlaceHolder = "Username ...";
             t.ID = "unm";

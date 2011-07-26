@@ -62,8 +62,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
             UserBase.Current = null;
 
             // Redirecting back to landing page, to 'invalidate' DOM ...!
-            AjaxManager.Instance.Redirect(
-                HttpContext.Current.Request.Url.ToString().ToLower().Replace("default.aspx", ""));
+            AjaxManager.Instance.Redirect("~/");
         }
 
         [ActiveField]

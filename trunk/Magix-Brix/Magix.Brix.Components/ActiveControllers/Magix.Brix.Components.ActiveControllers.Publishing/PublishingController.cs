@@ -49,7 +49,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 if (Page.Request.Params["dashboard"] == "true")
                 {
-                    AjaxManager.Instance.Redirect("~/?login=true");
+                    string nUrl = "~/?login=true";
+
+                    string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
+                    string curUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "");
+
+                    if (baseUrl != curUrl)
+                    {
+                        nUrl += "&ret=" + Page.Server.UrlEncode(curUrl);
+                    }
+                    AjaxManager.Instance.Redirect(nUrl);
                 }
                 else
                 {

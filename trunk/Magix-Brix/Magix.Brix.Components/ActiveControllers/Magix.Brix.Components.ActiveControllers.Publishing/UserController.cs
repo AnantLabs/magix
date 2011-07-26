@@ -44,12 +44,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
-        protected void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
-        {
-            RaiseEvent("Magix.Publishing.LoadDashboard");
-        }
-
         [ActiveEvent(Name = "Magix.Core.LogInUser")]
         protected void Magix_Core_LogInUser(object sender, ActiveEventArgs e)
         {
