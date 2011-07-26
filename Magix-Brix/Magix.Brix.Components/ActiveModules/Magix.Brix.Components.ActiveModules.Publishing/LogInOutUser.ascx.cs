@@ -66,8 +66,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 {
                     Node node = new Node();
 
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
+                    RaiseSafeEvent(
                         "Magix.Core.UserLoggedOut",
                         node);
                 };
@@ -77,7 +76,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         private void CreateLogInControls()
         {
             TextBox t = new TextBox();
-            t.PlaceHolder = "Username ...";
+            t.PlaceHolder = "Username/OpenID ...";
             t.ID = "unm";
             t.CssClass = "username";
             pnl.Controls.Add(t);
@@ -101,8 +100,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                     node["Username"].Value = t.Text;
                     node["Password"].Value = p.Text;
 
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
+                    RaiseSafeEvent(
                         "Magix.Core.LogInUser",
                         node);
 

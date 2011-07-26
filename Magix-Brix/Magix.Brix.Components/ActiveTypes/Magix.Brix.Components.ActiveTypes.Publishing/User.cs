@@ -14,11 +14,29 @@ using System.Web;
 
 namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
+    [ActiveType]
+    public class OpenIDToken : ActiveType<OpenIDToken>
+    {
+        [ActiveField]
+        public string Name { get; set; }
+
+        [ActiveField(BelongsTo = true)]
+        public User User { get; set; }
+    }
+
     [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Publishing.User")]
     public class User : U.UserBase
     {
+        public User()
+        {
+            OpenIDTokens = new LazyList<OpenIDToken>();
+        }
+
         [ActiveField]
         public string AvatarURL { get; set; }
+
+        [ActiveField]
+        public LazyList<OpenIDToken> OpenIDTokens { get; set; }
 
         #region [ -- Business Logic -- ]
 
