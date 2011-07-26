@@ -35,6 +35,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["Push"].Value = 8;
                 node["Last"].Value = true;
                 node["Top"].Value = 5;
+                node["Focus"].Value = true;
 
                 RaiseEvent(
                     "Magix.Core.LoadLoginModule",

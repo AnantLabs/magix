@@ -45,6 +45,10 @@
       <DependentUpon>ChildExcerpt.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="LogInOutUser.ascx.cs">
+      <DependentUpon>LogInOutUser.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="EditSpecificTemplate.ascx.cs">
       <DependentUpon>EditSpecificTemplate.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -117,6 +121,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ChildExcerpt.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LogInOutUser.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

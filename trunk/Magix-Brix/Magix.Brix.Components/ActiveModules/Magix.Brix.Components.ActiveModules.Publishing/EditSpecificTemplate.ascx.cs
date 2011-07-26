@@ -132,13 +132,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                                 nx["ID"].Value = id;
                                 nx["Action"].Value = "ChangeOverflow";
-                                nx["Value"].Value = ch.Checked;
+                                nx["Value"].Value = ch1.Checked;
 
                                 RaiseSafeEvent(
                                     "Magix.Publishing.ChangeTemplateProperty",
                                     nx);
 
-                                if (ch.Checked)
+                                if (ch1.Checked)
                                     w.CssClass += " overflow-design";
                                 else
                                     w.CssClass = w.CssClass.Replace(" overflow-design", "");
@@ -156,7 +156,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         lbl1.Tag = "label";
 
                         Panel pnl1 = new Panel();
-                        ch1.ID = "opnl-" + id;
+                        pnl1.ID = "opnl-" + id;
                         pnl1.CssClass = "span-3";
                         pnl1.Controls.Add(ch1);
                         pnl1.Controls.Add(lbl1);
