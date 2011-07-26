@@ -874,11 +874,11 @@ div.has-no-action
 	margin-right:10px;
 	overflow:hidden;
 	cursor:pointer;
+	padding-top:18px;
 }
 
 .excerpt-excerpt
 {
-	color:rgba(160, 160, 160, .8);
 	font-style:italic;
 }
 

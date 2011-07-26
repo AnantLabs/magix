@@ -103,13 +103,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         Label lbl = new Label();
                         lbl.ID = "llbl-" + id;
                         lbl.Text = "Last";
+                        lbl.Tag = "label";
                         lbl.Load
                             +=
                             delegate
                             {
                                 lbl.For = ch.ClientID;
                             };
-                        lbl.Tag = "label";
 
                         Panel pnl = new Panel();
                         ch.ID = "lpnl-" + id;
@@ -156,12 +156,31 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         pnl = new Panel();
                         ch.ID = "opnl-" + id;
-                        pnl.CssClass = "span-3 last";
+                        pnl.CssClass = "span-3";
                         pnl.Controls.Add(ch);
                         pnl.Controls.Add(lbl);
                         pnl.ToolTip = "Whether or not this will allow its content to overflow in the vertical direction";
 
                         w.Content.Controls.Add(pnl);
+
+                        // Delete 'this' button
+                        LinkButton b = new LinkButton();
+                        b.Text = "Delete";
+                        b.CssClass = "span-2 last";
+                        b.Style[Styles.display] = "block";
+                        b.Click +=
+                            delegate
+                            {
+                                Node dl = new Node();
+                                dl["ID"].Value = id;
+
+                                RaiseSafeEvent(
+                                    "Magix.Publishing.DeleteWebPartTemplateFromWebPageTemplate",
+                                    dl);
+
+                                ReDataBind();
+                            };
+                        w.Content.Controls.Add(b);
 
                         parts.Controls.Add(w);
                     }
