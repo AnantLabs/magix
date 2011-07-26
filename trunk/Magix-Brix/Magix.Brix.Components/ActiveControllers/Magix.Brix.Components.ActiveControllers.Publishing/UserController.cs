@@ -12,6 +12,11 @@ using Magix.Brix.Data;
 using Magix.Brix.Components.ActiveTypes;
 using Magix.Brix.Types;
 using Magix.UX.Widgets;
+using System.Net;
+using System.IO;
+using DotNetOpenAuth.OpenId.RelyingParty;
+using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -49,17 +54,82 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             string username = e.Params["Username"].Get<string>();
             string password = e.Params["Password"].Get<string>();
-
-            User u = User.SelectFirst(
-                Criteria.Eq("Username", username),
-                Criteria.Eq("Password", password));
-
-            if (u != null)
+            if (string.IsNullOrEmpty(password))
             {
-                e.Params["Success"].Value = true;
-                User.Current = u;
+                // Assuming OpenID ...
+                LogInWithOpenID(username);
+            }
+            else
+            {
+                User u = User.SelectFirst(
+                    Criteria.Eq("Username", username),
+                    Criteria.Eq("Password", password));
 
-                RaiseEvent("Magix.Core.UserLoggedIn");
+                if (u != null)
+                {
+                    e.Params["Success"].Value = true;
+                    User.Current = u;
+
+                    RaiseEvent("Magix.Core.UserLoggedIn");
+                }
+            }
+        }
+
+        [ActiveEvent(Name = "Brix.Core.Page_Init")]
+        protected void Brix_Core_Page_Init(object sender, ActiveEventArgs e)
+        {
+            OpenIdRelyingParty openid = new OpenIdRelyingParty();
+            IAuthenticationResponse r = openid.GetResponse();
+            if (r != null)
+            {
+                switch (r.Status)
+                {
+                    case AuthenticationStatus.Authenticated:
+                        ClaimsResponse claimsResponse = r.GetExtension<ClaimsResponse>();
+                        OpenIDToken token = OpenIDToken.SelectFirst(Criteria.Eq("Name", r.ClaimedIdentifier));
+                        if (token == null)
+                        {
+                            throw new ArgumentException("That OpenID Token is not registered anywhere on this site ...");
+                        }
+                        User.Current = token.User;
+
+                        RaiseEvent("Magix.Core.UserLoggedIn");
+
+                        break;
+                    case AuthenticationStatus.Canceled:
+                        break; // Silently fall through ...?
+                    case AuthenticationStatus.Failed:
+                        throw new ArgumentException("Failed to log you in on your chosen OpenID Provider ...");
+                        break;
+                }
+            }
+        }
+
+        private void LogInWithOpenID(string username)
+        {
+            username = username.Trim();
+            if (username.IndexOf('.') == -1)
+                throw new ArgumentException("That's not a Valid OpenID token ...");
+
+            using (OpenIdRelyingParty openId = new OpenIdRelyingParty())
+            {
+                IAuthenticationRequest request = openId.CreateRequest(username);
+
+                ClaimsRequest claim = new ClaimsRequest();
+                claim.BirthDate = DemandLevel.Request;
+                claim.Country = DemandLevel.Request;
+                claim.Email = DemandLevel.Request;
+                claim.FullName = DemandLevel.Request;
+                claim.Gender = DemandLevel.Request;
+                claim.Language = DemandLevel.Request;
+                claim.Nickname = DemandLevel.Request;
+                claim.PostalCode = DemandLevel.Request;
+                claim.TimeZone = DemandLevel.Request;
+
+                request.AddExtension(claim);
+
+                string oUrl = request.RedirectingResponse.Headers["Location"];
+                AjaxManager.Instance.Redirect(oUrl);
             }
         }
 
@@ -145,7 +215,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["WhiteListColumns"]["Password"].Value = true;
             e.Params["WhiteListColumns"]["Roles"].Value = true;
             e.Params["WhiteListColumns"]["Email"].Value = true;
-            e.Params["WhiteListColumns"]["Settings"].Value = true;
 
             e.Params["WhiteListProperties"]["Name"].Value = true;
             e.Params["WhiteListProperties"]["Value"].Value = true;
@@ -153,9 +222,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Type"]["Properties"]["Username"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Password"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Roles"]["ReadOnly"].Value = false;
-            e.Params["Type"]["Properties"]["Email"]["ReadOnly"].Value = false;
-            e.Params["Type"]["Properties"]["Settings"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value = "Magix.Publishing.GetRoleTemplateColumn";
+            e.Params["Type"]["Properties"]["Email"]["ReadOnly"].Value = false;
 
             e.Params["Padding"].Value = 6;
             e.Params["Width"].Value = 18;
@@ -170,6 +238,71 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 sender,
                 "DBAdmin.Form.ViewComplexObject",
                 e.Params);
+
+            EditUserSettings(user.ID);
+            EditUserOpenIDs(user.ID);
+        }
+
+        private void EditUserOpenIDs(int id)
+        {
+            Node node = new Node();
+
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["Padding"].Value = 6;
+            node["MarginBottom"].Value = 20;
+            node["PullTop"].Value = 18;
+            node["Container"].Value = "content6";
+
+            node["PropertyName"].Value = "OpenIDTokens";
+            node["IsList"].Value = true;
+            node["FullTypeName"].Value = typeof(User).FullName;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 10;
+
+            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+
+            node["ID"].Value = id;
+            node["NoIdColumn"].Value = true;
+            node["ReUseNode"].Value = true;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                node);
+        }
+
+        protected void EditUserSettings(int id)
+        {
+            Node node = new Node();
+
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["Padding"].Value = 6;
+            node["MarginBottom"].Value = 20;
+            node["PullTop"].Value = 18;
+            node["Container"].Value = "content5";
+
+            node["PropertyName"].Value = "Settings";
+            node["IsList"].Value = true;
+            node["FullTypeName"].Value = typeof(User).FullName;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
+            node["WhiteListColumns"]["Value"].Value = true;
+            node["WhiteListColumns"]["Value"]["ForcedWidth"].Value = 9;
+
+            node["Type"]["Properties"]["Name"].Value = null; // just to touch it ...
+            node["Type"]["Properties"]["Value"]["Header"].Value = "Value";
+            node["Type"]["Properties"]["Value"]["MaxLength"].Value = 40;
+
+            node["ID"].Value = id;
+            node["NoIdColumn"].Value = true;
+            node["ReUseNode"].Value = true;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                node);
         }
 
         protected void ls_SelectedIndexChanged(object sender, EventArgs e)
@@ -283,6 +416,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Seed"].Value = user.ID;
             node["Padding"].Value = 6;
             node["Top"].Value = 1;
+            node["MarginBottom"].Value = 18;
             node["Width"].Value = 18;
             node["Container"].Value = "content4";
             node["AlternateText"].Value = "Avatar of User";

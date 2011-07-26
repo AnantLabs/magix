@@ -23,7 +23,7 @@ namespace Magix.Brix.ApplicationPool
             InitializeViewport();
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
-                "Page_Init");
+                "Brix.Core.Page_Init");
             if (!IsPostBack)
             {
                 Node node = new Node();
