@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     [ActiveModule]
-    [PublisherPlugin]
+    [PublisherPlugin(CanBeEmpty = true)]
     public class ChildExcerpt : ActiveModule
     {
         protected Panel pnl;

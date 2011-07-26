@@ -412,7 +412,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 Node node = new Node();
 
                 if (page.Container.MarginBottom > 0)
-                    node["BottomMargin"].Value = page.Container.MarginBottom;
+                    node["MarginBottom"].Value = page.Container.MarginBottom;
 
                 if (!string.IsNullOrEmpty(page.Container.CssClass))
                     node["CssClass"].Value = page.Container.CssClass;

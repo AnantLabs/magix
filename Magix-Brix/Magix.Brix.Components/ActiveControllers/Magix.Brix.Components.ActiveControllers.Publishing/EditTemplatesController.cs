@@ -439,60 +439,121 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             // Extracting necessary variables ...
             int id = e.Params["ID"].Get<int>();
 
-            WebPageTemplate pt = WebPageTemplate.SelectByID(id);
+            WebPageTemplate t = WebPageTemplate.SelectByID(id);
 
-            InPlaceTextAreaEdit txt = new InPlaceTextAreaEdit();
-            txt.Text = pt.Containers.Count.ToString();
-            txt.Info = id.ToString();
-            txt.TextChanged +=
-                delegate(object sender2, EventArgs e2)
+            SelectList ls = new SelectList();
+            ls.CssClass = "span-3";
+            ls.Style[Styles.display] = "block";
+
+            ls.SelectedIndexChanged +=
+                delegate
                 {
-                    InPlaceTextAreaEdit t2 = sender2 as InPlaceTextAreaEdit;
-                    using (Transaction tr = Adapter.Instance.BeginTransaction())
-                    {
-                        WebPageTemplate t = WebPageTemplate.SelectByID(int.Parse(t2.Info));
-                        int countInt = int.Parse(t2.Text);
-                        if (countInt > 7 || countInt < 1)
-                            throw new ArgumentException("Between 1 and 7 please ...");
-                        int count = Math.Max(1, Math.Min(7, countInt));
-                        if (t.Containers.Count < count)
-                        {
-                            while (t.Containers.Count < count)
-                            {
-                                WebPartTemplate c = new WebPartTemplate();
-                                c.Name = "Default Name";
-                                c.Width = 10;
-                                c.Height = 9;
-                                c.ViewportContainer = "content" + (t.Containers.Count + 1);
-                                c.ModuleName = Adapter.ActiveModules.Find(
-                                    delegate(Type idx)
-                                    {
-                                        PublisherPluginAttribute[] atrs = idx.GetCustomAttributes(typeof(PublisherPluginAttribute), true) as PublisherPluginAttribute[];
-                                        return atrs != null && atrs.Length > 0;
-                                    }).FullName;
-                                t.Containers.Add(c);
-                            }
-                        }
-                        else if (t.Containers.Count > count)
-                        {
-                            while (t.Containers.Count - count > 0)
-                            {
-                                t.Containers.RemoveAt(t.Containers.Count - 1);
-                            }
-                        }
-                        t.Save();
-                        tr.Commit();
-
-                        Node node = new Node();
-                        node["ID"].Value = t.ID;
-
-                        RaiseEvent(
-                            "Magix.Publishing.WebPageTemplateWasModified", 
-                            node);
-                    }
-
+                    int count = int.Parse(ls.SelectedItem.Value);
+                    RaiseTryToChangeNumberOfWebParts(t, count);
                 };
-            e.Params["Control"].Value = txt;
+
+            for (int n = 1; n < 8; n++)
+            {
+                ListItem i = new ListItem(n.ToString() + " parts", n.ToString());
+                if (n == t.Containers.Count)
+                    i.Selected = true;
+                ls.Items.Add(i);
+            }
+
+            e.Params["Control"].Value = ls;
+        }
+
+        private void RaiseTryToChangeNumberOfWebParts(WebPageTemplate t, int count)
+        {
+            if (count == t.Containers.Count)
+                return;
+
+            int affectedPages = WebPage.CountWhere(Criteria.ExistsIn(t.ID, true));
+
+            if (count > t.Containers.Count || affectedPages == 0)
+            {
+                TryToChangeNumberOfWebParts(t, count);
+            }
+            else
+            {
+                Node node = new Node();
+                node["ForcedSize"]["width"].Value = 550;
+                node["WindowCssClass"].Value =
+                    "mux-shaded mux-rounded push-5 down-2";
+
+                node["Caption"].Value = @"Are you CERTAIN ...?";
+                node["Text"].Value = string.Format(@"
+<p>Are you sure you wish to do this? Reducing the number of WebParts on your Template will 
+irrevocably delete every single WebPart on every sigle WebPage built upon that WebPart Template ...</p>
+<p>This will affect {0} different pages ...</p>",
+                    affectedPages);
+                node["OK"]["ID"].Value = t.ID;
+                node["OK"]["Event"].Value = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-Confirmed";
+                node["OK"]["Count"].Value = count;
+                node["Cancel"]["Event"].Value = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-NotConfirmed";
+                node["Width"].Value = 15;
+
+                LoadModule(
+                    "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                    "child",
+                    node);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-Confirmed")]
+        protected void Magix_Publisher_ChangeNumberOFContainersOnTemplates_Confirmed(object sender, ActiveEventArgs e)
+        {
+            TryToChangeNumberOfWebParts(
+                WebPageTemplate.SelectByID(e.Params["ID"].Get<int>()), 
+                e.Params["Count"].Get<int>());
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        [ActiveEvent(Name = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-NotConfirmed")]
+        protected void Magix_Publisher_ChangeNumberOFContainersOnTemplates_NotConfirmed(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        private void TryToChangeNumberOfWebParts(WebPageTemplate t, int count)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                if (t.Containers.Count < count)
+                {
+                    while (t.Containers.Count < count)
+                    {
+                        WebPartTemplate c = new WebPartTemplate();
+                        c.Name = "Default Name";
+                        c.Width = 10;
+                        c.Height = 9;
+                        c.ViewportContainer = "content" + (t.Containers.Count + 1);
+                        c.ModuleName = Adapter.ActiveModules.Find(
+                            delegate(Type idx)
+                            {
+                                PublisherPluginAttribute[] atrs = idx.GetCustomAttributes(typeof(PublisherPluginAttribute), true) as PublisherPluginAttribute[];
+                                return atrs != null && atrs.Length > 0 && atrs[0].CanBeEmpty;
+                            }).FullName;
+                        t.Containers.Add(c);
+                    }
+                }
+                else if (t.Containers.Count > count)
+                {
+                    while (t.Containers.Count - count > 0)
+                    {
+                        t.Containers.RemoveAt(t.Containers.Count - 1);
+                    }
+                }
+                t.Save();
+                tr.Commit();
+
+                Node node = new Node();
+                node["ID"].Value = t.ID;
+
+                RaiseEvent(
+                    "Magix.Publishing.WebPageTemplateWasModified",
+                    node);
+            }
         }
     }
 }

@@ -72,5 +72,16 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             }
             base.Delete();
         }
+
+        public override void Save()
+        {
+            int idxNo = 1;
+            foreach (WebPartTemplate idx in Containers)
+            {
+                idx.ViewportContainer = "content" + idxNo;
+                idxNo += 1;
+            }
+            base.Save();
+        }
     }
 }
