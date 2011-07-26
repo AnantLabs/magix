@@ -16,6 +16,7 @@ using System.Reflection;
 using Magix.Brix.Publishing.Common;
 using System.Web;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -225,6 +226,28 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 "Magix.Brix.Components.ActiveModules.Publishing.EditSpecificTemplate",
                 "content4",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.DeleteWebPartTemplateFromWebPageTemplate")]
+        protected void Magix_Publishing_DeleteWebPartTemplateFromWebPageTemplate(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                WebPartTemplate templ = WebPartTemplate.SelectByID(e.Params["ID"].Get<int>());
+                WebPageTemplate pageTempl = templ.PageTemplate;
+                pageTempl.Containers.Remove(templ);
+
+                pageTempl.Save();
+
+                // Need to delete all WebParts built upon this WebPartTemplate ...
+                foreach (WebPart idx in WebPart.Select(
+                    Criteria.ExistsIn(templ.ID, true)))
+                {
+                    idx.Delete();
+                }
+
+                tr.Commit();
+            }
         }
 
         [ActiveEvent(Name = "Magix.Publishing.GetTemplates")]

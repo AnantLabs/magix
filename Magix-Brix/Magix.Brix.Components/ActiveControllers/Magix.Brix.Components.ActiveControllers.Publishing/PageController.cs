@@ -241,29 +241,49 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             WebPage wp = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
-            Panel pnl = new Panel();
-            pnl.CssClass = "excerpt-item";
-
-            Label lb = new Label();
-            lb.Tag = "h3";
-            lb.Text = wp.Name;
-            pnl.Controls.Add(lb);
-
-            Node node = new Node();
-            node["ID"].Value = wp.ID;
+            Node ch = new Node();
+            ch["ID"].Value = wp.ID;
 
             RaiseEvent(
-                "Magix.Publishing.GetChildExcerptAdditionalControls",
-                node);
-            if (node.Contains("Controls"))
-            {
-                foreach (Node idx in node["Controls"])
-                {
-                    pnl.Controls.Add(idx.Value as System.Web.UI.Control);
-                }
-            }
+                "Magix.Publishing.CanLoadPageObject",
+                ch);
 
-            e.Params["Control"].Value = pnl;
+            if (!ch.Contains("STOP") ||
+                !ch["STOP"].Get<bool>())
+            {
+                Panel pnl = new Panel();
+                pnl.CssClass = "excerpt-item";
+                pnl.Click +=
+                    delegate
+                    {
+                        Node x = new Node();
+                        x["ID"].Value = wp.ID;
+
+                        RaiseEvent(
+                            "Magix.Publishing.OpenPage",
+                            x);
+                    };
+
+                Label lb = new Label();
+                lb.Tag = "h3";
+                lb.Text = wp.Name;
+                pnl.Controls.Add(lb);
+
+                Node node = new Node();
+                node["ID"].Value = wp.ID;
+
+                RaiseEvent(
+                    "Magix.Publishing.GetChildExcerptAdditionalControls",
+                    node);
+                if (node.Contains("Controls"))
+                {
+                    foreach (Node idx in node["Controls"])
+                    {
+                        pnl.Controls.Add(idx.Value as System.Web.UI.Control);
+                    }
+                }
+                e.Params["Control"].Value = pnl;
+            }
         }
 
         [ActiveEvent(Name = "Magix.Publishing.GetLastChildrenPages")]
@@ -276,7 +296,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             // Doing it the hard way, in case there are 'millions' of pages .......
             foreach (WebPage idx in WebPage.Select(
                 Criteria.ParentId(page.ID),
-                Criteria.Range(0, 10, "Created", false)))
+                Criteria.Range(0, e.Params["Count"].Get<int>(), "Created", false)))
             {
                 e.Params["Items"]["i" + idx.ID]["ID"].Value = idx.ID;
             }
