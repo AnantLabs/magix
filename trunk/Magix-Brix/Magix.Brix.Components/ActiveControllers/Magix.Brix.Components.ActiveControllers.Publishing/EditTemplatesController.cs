@@ -236,6 +236,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 WebPartTemplate templ = WebPartTemplate.SelectByID(e.Params["ID"].Get<int>());
                 WebPageTemplate pageTempl = templ.PageTemplate;
                 pageTempl.Containers.Remove(templ);
+                pageTempl.Save();
 
                 pageTempl.Save();
 

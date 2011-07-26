@@ -91,6 +91,7 @@ namespace Magix.UX.Widgets
         }
 
         private bool backButtonClicked;
+        private Effect _onPreRenderEffect = null;
         private void BackButtonClicked(object sender, EventArgs e)
         {
             backButtonClicked = true;
@@ -111,13 +112,12 @@ namespace Magix.UX.Widgets
                 }
                 idx = idx.Parent;
             }
-            new EffectSlide(
+            _onPreRenderEffect = new EffectSlide(
                 SlidingMenuLevel, 
                 500, 
                 -noLevels)
                 .JoinThese(
-                    new EffectFadeOut(item.SlidingMenuLevel, 500))
-                .Render();
+                    new EffectFadeOut(item.SlidingMenuLevel, 500));
             if (toBecomeActive == null)
                 ActiveMenuItem = "";
             else
@@ -142,6 +142,8 @@ namespace Magix.UX.Widgets
 
         protected override void OnPreRender(EventArgs e)
         {
+            if (_onPreRenderEffect != null)
+                _onPreRenderEffect.Render();
             if (NoEventHandlerDefined)
             {
                 _back.Style[Styles.visibility] = "visible";
@@ -244,9 +246,8 @@ namespace Magix.UX.Widgets
                         noLevels += 1;
                     tmp = tmp.Parent;
                 }
-                new EffectSlide(SlidingMenuLevel, 500, -noLevels)
-                    .JoinThese(new EffectFadeIn(slideIn, 500))
-                    .Render();
+                _onPreRenderEffect = new EffectSlide(SlidingMenuLevel, 500, -noLevels)
+                    .JoinThese(new EffectFadeIn(slideIn, 500));
             }
         }
 
