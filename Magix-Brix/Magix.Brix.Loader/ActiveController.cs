@@ -100,7 +100,7 @@ namespace Magix.Brix.Loader
                 HttpContext.Current.Request.ServerVariables["HTTP_HOST"],
                 (Page.Request.ApplicationPath.Equals("/")) ? 
                     "/" : 
-                    HttpContext.Current.Request.ApplicationPath + "/");
+                    HttpContext.Current.Request.ApplicationPath + "/").ToLowerInvariant();
         }
 
         /**

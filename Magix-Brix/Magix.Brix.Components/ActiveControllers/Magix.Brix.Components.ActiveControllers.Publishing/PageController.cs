@@ -71,10 +71,19 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
 
             node = new Node();
-            node["CSSFile"].Value = e.Params["BaseURL"].Get<string>() + "media/main.css";
+            node["CSSFile"].Value = e.Params["BaseURL"].Get<string>() + "media/front-end.css";
 
             RaiseEvent(
                 "Magix.Core.AddCustomCssFile",
+                node);
+
+            node = new Node();
+            node["WebPageID"].Value = p.ID;
+            node["URL"].Value = p.URL;
+
+            // To create hooks for adding custom CSS/JS and such later ...
+            RaiseEvent(
+                "Magix.Publishing.FrontEndPostbackInitializationDone", // puhh ...! ;)
                 node);
         }
 
@@ -380,24 +389,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 Node node = new Node();
 
-                if (page.Container.MarginBottom > 0)
-                    node["BottomMargin"].Value = page.Container.MarginBottom;
-                if (!string.IsNullOrEmpty(page.Container.CssClass))
-                    node["CssClass"].Value = page.Container.CssClass;
-                if (page.Container.Height > 0)
-                    node["Height"].Value = page.Container.Height;
-                if (page.Container.Last)
-                    node["Last"].Value = page.Container.Last;
-                if (page.Container.MarginRight > 0)
-                    node["PushRight"].Value = page.Container.MarginRight;
-                if (page.Container.MarginLeft > 0)
-                    node["PushLeft"].Value = page.Container.MarginLeft;
-                if (page.Container.MarginBottom > 0)
-                    node["SpcBottom"].Value = page.Container.MarginBottom;
-                if (page.Container.MarginTop > 0)
-                    node["Top"].Value = page.Container.MarginTop;
-                if (page.Container.Width > 0)
-                    node["Width"].Value = page.Container.Width;
+                node["BottomMargin"].Value = page.Container.MarginBottom;
+                node["CssClass"].Value = page.Container.CssClass;
+                node["Height"].Value = page.Container.Height;
+                node["Last"].Value = page.Container.Last;
+                node["PushRight"].Value = page.Container.MarginRight;
+                node["PushLeft"].Value = page.Container.MarginLeft;
+                node["SpcBottom"].Value = page.Container.MarginBottom;
+                node["Top"].Value = page.Container.MarginTop;
+                node["Width"].Value = page.Container.Width;
                 node["ID"].Value = page.ID;
                 node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
                 node["PageObjectTemplateID"].Value = page.ID;

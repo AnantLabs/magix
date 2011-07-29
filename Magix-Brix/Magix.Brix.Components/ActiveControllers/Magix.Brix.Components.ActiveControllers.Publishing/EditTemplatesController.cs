@@ -360,7 +360,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 else if (e.Params["Action"].Get<string>() == "DecreaseDown")
                 {
                     e.Params["OldTop"].Value = t.MarginTop;
-                    t.MarginTop = Math.Max(0, (
+                    t.MarginTop = Math.Max(-30, (
                         e.Params.Contains("NewValue") ?
                             e.Params["NewValue"].Get<int>() :
                             t.MarginTop - 1));
@@ -378,7 +378,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 else if (e.Params["Action"].Get<string>() == "DecreaseBottom")
                 {
                     e.Params["OldMarginBottom"].Value = t.MarginBottom;
-                    t.MarginBottom = Math.Max(0, (
+                    t.MarginBottom = Math.Max(-30, (
                         e.Params.Contains("NewValue") ?
                             e.Params["NewValue"].Get<int>() :
                             t.MarginBottom - 1));
@@ -396,7 +396,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 else if (e.Params["Action"].Get<string>() == "DecreaseLeft")
                 {
                     e.Params["OldPush"].Value = t.MarginLeft;
-                    t.MarginLeft = Math.Max(0, (
+                    t.MarginLeft = Math.Max(-30, (
                         e.Params.Contains("NewValue") ?
                             e.Params["NewValue"].Get<int>() :
                             t.MarginLeft - 1));

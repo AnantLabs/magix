@@ -13,11 +13,18 @@ using Magix.Brix.Loader;
 using Magix.Brix.Types;
 using Magix.Brix.Data;
 using Magix.UX;
+using System.Web;
 
 namespace Magix.Brix.ApplicationPool
 {
     public partial class MainWebPage : Page
     {
+        protected override void OnInit(EventArgs e)
+        {
+            HttpContext.Current.RewritePath(
+                HttpContext.Current.Request.ApplicationPath.ToLowerInvariant() + "/", false);
+            base.OnInit(e);
+        }
         protected void Page_Init(object sender, EventArgs e)
         {
             InitializeViewport();
@@ -43,7 +50,7 @@ namespace Magix.Brix.ApplicationPool
                     this,
                     "Brix.Core.LoadComplete_InitialLoading");
             }
-            Form.Action = Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "");
+            Form.Action = Request.Url.ToString();
 
             if (!AjaxManager.Instance.IsCallback)
             {

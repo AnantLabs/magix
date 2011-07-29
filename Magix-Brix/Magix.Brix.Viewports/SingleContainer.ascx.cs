@@ -240,6 +240,16 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        private List<string> HeaderElements
+        {
+            get
+            {
+                if (ViewState["HeaderElements"] == null)
+                    ViewState["HeaderElements"] = new List<string>();
+                return ViewState["HeaderElements"] as List<string>;
+            }
+        }
+
         [ActiveEvent(Name = "Magix.Core.SetTitleOfPage")]
         protected void Magix_Core_SetTitleOfPage(object sender, ActiveEventArgs e)
         {
@@ -324,6 +334,19 @@ namespace Magix.Brix.Viewports
             timer.Info = e.Params["EventName"].Get<string>();
         }
 
+        [ActiveEvent(Name = "Magix.Core.AddLinkInHeader")]
+        protected void Magix_Core_AddLinkInHeader(object sender, ActiveEventArgs e)
+        {
+            string headerStr = "<link";
+            foreach (Node idx in e.Params)
+            {
+                headerStr += " " + idx.Name + "=\"" + idx.Get<string>() + "\"";
+            }
+            headerStr += " />";
+            HeaderElements.Add(headerStr);
+            IncludeHeaderFile(headerStr);
+        }
+
         [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]
         protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
         {
@@ -379,6 +402,19 @@ namespace Magix.Brix.Viewports
                         cssFile);
                     Page.Header.Controls.Add(lit);
                 }
+            }
+        }
+
+        private void IncludeHeaderFile(string headerFile)
+        {
+            if (!string.IsNullOrEmpty(headerFile))
+            {
+                LiteralControl lit = new LiteralControl();
+                lit.Text = string.Format(@"
+{0}
+",
+                    headerFile);
+                Page.Header.Controls.Add(lit);
             }
         }
 
@@ -597,18 +633,15 @@ namespace Magix.Brix.Viewports
                         {
                             cssClass += " prepend-" + e.Params["Parameters"]["Padding"].Get<int>();
                         }
-                        if (e.Params["Parameters"].Contains("PushRight")
-                            && e.Params["Parameters"]["PushRight"].Get<int>() > 0)
+                        if (e.Params["Parameters"].Contains("PushRight"))
                         {
                             cssClass += " pushRight-" + e.Params["Parameters"]["PushRight"].Get<int>();
                         }
-                        if (e.Params["Parameters"].Contains("PushLeft") &&
-                            e.Params["Parameters"]["PushLeft"].Get<int>() > 0)
+                        if (e.Params["Parameters"].Contains("PushLeft"))
                         {
                             cssClass += " pushLeft-" + e.Params["Parameters"]["PushLeft"].Get<int>();
                         }
-                        if (e.Params["Parameters"].Contains("SpcBottom") &&
-                            e.Params["Parameters"]["SpcBottom"].Get<int>() > 0)
+                        if (e.Params["Parameters"].Contains("SpcBottom"))
                         {
                             cssClass += " spcBottom-" + e.Params["Parameters"]["SpcBottom"].Get<int>();
                         }

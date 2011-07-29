@@ -1052,7 +1052,7 @@ select Name, Value from {0} where FK_Document={1}",
         public void Save(string sessionId, string pageUrl, string content)
         {
             // Deleting *OLD* ViewState from table...
-            string key = sessionId + "|" + pageUrl;
+            string key = sessionId + "|" + pageUrl.GetHashCode();
             SqlCommand sql = CreateSqlCommand(
                 "delete from " + TablePrefix + "ViewStateStorage where ID='" + key + "' or Created < @dateNow");
             sql.Parameters.Add(new SqlParameter("@dateNow", DateTime.Now.AddHours(-4)));
@@ -1070,7 +1070,7 @@ select Name, Value from {0} where FK_Document={1}",
         public string Load(string sessionId, string pageUrl)
         {
             // Retrieving ViewState
-            string key = sessionId + "|" + pageUrl;
+            string key = sessionId + "|" + pageUrl.GetHashCode();
             SqlCommand sql = CreateSqlCommand(
                 "select content from " + TablePrefix + "ViewStateStorage where ID=@id");
             sql.Parameters.Add(new SqlParameter("@id", key));

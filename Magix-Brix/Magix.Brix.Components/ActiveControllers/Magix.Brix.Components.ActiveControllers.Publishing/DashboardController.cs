@@ -33,8 +33,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {
             // Getting relative URL ...
-            string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
-            string relUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "").Replace(baseUrl, "");
+            string baseUrl = GetApplicationBaseUrl();
+            string relUrl = Page.Request.Url.ToString().Replace("default.aspx", "").Replace(baseUrl, "");
             string redirect = Page.Request.Params["ret"];
 
             if (!string.IsNullOrEmpty(redirect))

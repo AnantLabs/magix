@@ -30,10 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 root = idx;
 
-                foreach (WebPage idxP in idx.Children)
-                {
-                    GetOneMenuItem(e.Params, idxP);
-                }
+                GetOneMenuItem(e.Params, idx, true);
             }
             if (!e.Params.Contains("Items"))
             {
@@ -46,12 +43,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 if (node.Contains("AccessToID"))
                 {
                     // First [breadth-first] page menu object user has access too ...
-                    GetOneMenuItem(e.Params, WebPage.SelectByID(node["AccessToID"].Get<int>()));
+                    GetOneMenuItem(e.Params, WebPage.SelectByID(node["AccessToID"].Get<int>()), true);
                 }
             }
         }
 
-        private void GetOneMenuItem(Node node, WebPage po)
+        private void GetOneMenuItem(Node node, WebPage po, bool isRoot)
         {
             bool canAccess = true;
             if (User.Current != null)
@@ -96,7 +93,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
                 foreach (WebPage idx in po.Children)
                 {
-                    GetOneMenuItem(node["Items"]["i" + po.ID], idx);
+                    if (isRoot) // We inject root on the same node as the children of root ...
+                        GetOneMenuItem(node, idx, false);
+                    else
+                        GetOneMenuItem(node["Items"]["i" + po.ID], idx, false);
                 }
             }
         }
