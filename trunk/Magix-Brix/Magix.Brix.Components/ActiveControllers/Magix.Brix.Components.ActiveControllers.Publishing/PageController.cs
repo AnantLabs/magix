@@ -69,6 +69,13 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             RaiseEvent(
                 "Magix.Publishing.OpenPage",
                 node);
+
+            node = new Node();
+            node["CSSFile"].Value = e.Params["BaseURL"].Get<string>() + "media/main.css";
+
+            RaiseEvent(
+                "Magix.Core.AddCustomCssFile",
+                node);
         }
 
         [ActiveEvent(Name = "Magix.Publishing.FindFirstPageRequestCanAccess")]

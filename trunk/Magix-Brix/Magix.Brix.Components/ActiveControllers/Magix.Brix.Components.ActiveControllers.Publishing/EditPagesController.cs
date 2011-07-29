@@ -93,7 +93,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Content"));
                     WebPart.WebPartSetting s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
-                    s2.Value = "<p>Hello there world ...</p>";
+                    s2.Value = "<p>By default a user has been created with the username/password of admin/admin</p>";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
 
@@ -110,6 +110,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             if (e.Params == null)
                 e.Params = new Node();
+            e.Params["NoClose"].Value = true;
             if (!e.Params.Contains("Width"))
                 e.Params["Width"].Value = 18;
             if (!e.Params.Contains("Last"))
@@ -180,7 +181,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             node["Width"].Value = 24;
             node["Last"].Value = true;
-            node["Top"].Value = 2;
+            node["Top"].Value = 1;
+
 
             node["ID"].Value = p.ID;
             node["Header"].Value = p.Name;

@@ -21,6 +21,18 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
     {
         protected TreeView tree;
 
+        public override void InitialLoading(Node node)
+        {
+            base.InitialLoading(node);
+            Load += delegate
+            {
+                if (node.Contains("TreeCssClass"))
+                    tree.CssClass += " " + node["TreeCssClass"].Get<string>();
+                if (node.Contains("NoClose"))
+                    tree.NoCollapseOfItems = node["NoClose"].Get<bool>();
+            };
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);

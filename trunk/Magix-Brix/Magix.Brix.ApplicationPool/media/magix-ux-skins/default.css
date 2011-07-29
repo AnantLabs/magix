@@ -651,13 +651,37 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	right:0;
 	text-align:right;
 	padding-right:20px;
-	width:60%;
+	width:40px;
 	display:block;
-	height:36px;
+	height:32px;
+	margin:2px 0 2px 0;
 	line-height:36px;
-	margin-top:-2px;
 	font-size:26px;
 	z-index:1;
+	background-color:rgba(0, 0, 0, .05);
+
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.8s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.8s;
+	transition-property:background-color;
+	transition-duration:0.8s;
+}
+
+.mux-sliding-menu .mux-sliding-menu-has-children .mux-sliding-menu-item-icon:hover
+{
+	background-color:rgba(0, 0, 0, .2);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item
