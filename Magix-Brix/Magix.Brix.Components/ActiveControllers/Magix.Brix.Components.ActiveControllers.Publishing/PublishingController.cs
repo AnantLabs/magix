@@ -74,6 +74,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     Node node = new Node();
 
                     node["URL"].Value = relUrl;
+                    node["BaseURL"].Value = baseUrl;
 
                     RaiseEvent(
                         "Magix.Publishing.UrlRequested",

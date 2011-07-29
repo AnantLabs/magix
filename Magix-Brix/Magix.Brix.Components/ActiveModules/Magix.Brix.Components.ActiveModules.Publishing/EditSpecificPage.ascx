@@ -52,7 +52,7 @@
 
 <mux:Panel
     runat="server"
-    CssClass="span-24 last down-2"
+    CssClass="span-24 last down-1 yellow-background"
     id="parts" />
 
 
