@@ -131,10 +131,10 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             }
             Width = Math.Max(Math.Min(Width, 24), 2);
             Height = Math.Max(Math.Min(Height, 30), 2);
-            MarginLeft = Math.Max(Math.Min(MarginLeft, 23), 0);
-            MarginRight = Math.Max(Math.Min(MarginRight, 23), 0);
-            MarginBottom = Math.Max(Math.Min(MarginBottom, 30), 0);
-            MarginTop = Math.Max(Math.Min(MarginTop, 30), 0);
+            MarginLeft = Math.Max(Math.Min(MarginLeft, 23), -23);
+            MarginRight = Math.Max(Math.Min(MarginRight, 23), -23);
+            MarginBottom = Math.Max(Math.Min(MarginBottom, 30), -30);
+            MarginTop = Math.Max(Math.Min(MarginTop, 30), -30);
         }
 
         internal string GetDefaultValueForSetting(string settingName)

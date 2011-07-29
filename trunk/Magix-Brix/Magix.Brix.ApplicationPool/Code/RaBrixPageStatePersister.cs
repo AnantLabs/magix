@@ -46,7 +46,8 @@ namespace Magix.Brix.ApplicationPool
         {
             IPersistViewState state = Magix.Brix.Data.Adapter.Instance as IPersistViewState;
             LosFormatter formatter = new LosFormatter();
-            Pair pair = formatter.Deserialize(state.Load(_session.ToString(), Page.Request.Url.ToString())) as Pair;
+            string obj = state.Load(_session.ToString(), Page.Request.Url.ToString());
+            Pair pair = formatter.Deserialize(obj) as Pair;
             ViewState = pair.First;
             ControlState = pair.Second;
         }

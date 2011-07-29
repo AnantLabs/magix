@@ -17,6 +17,9 @@ using System.IO;
 using DotNetOpenAuth.OpenId.RelyingParty;
 using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 using Magix.UX;
+using DotNetOpenAuth.OpenId;
+using DotNetOpenAuth.OpenId.Provider;
+using System.Web;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -75,6 +78,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        [ActiveEvent(Name = "Brix.Core.UserLoggedIn")]
+        protected void Brix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
+        {
+            if (Page.Session["Magix.Publishing.UserController.IRequest"] != null)
+            {
+                IRequest request = Page.Session["Magix.Publishing.UserController.IRequest"] as IRequest;
+            }
+        }
+
         [ActiveEvent(Name = "Brix.Core.Page_Init")]
         protected void Brix_Core_Page_Init(object sender, ActiveEventArgs e)
         {
@@ -108,12 +120,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         private void LogInWithOpenID(string username)
         {
             username = username.Trim();
-            if (username.IndexOf('.') == -1)
-                throw new ArgumentException("That's not a Valid OpenID token ...");
 
             using (OpenIdRelyingParty openId = new OpenIdRelyingParty())
             {
-                IAuthenticationRequest request = openId.CreateRequest(username);
+                //Identifier id = new 
+                DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest request = openId.CreateRequest(username, GetApplicationBaseUrl());
 
                 ClaimsRequest claim = new ClaimsRequest();
                 claim.BirthDate = DemandLevel.Request;
@@ -130,6 +141,40 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 string oUrl = request.RedirectingResponse.Headers["Location"];
                 AjaxManager.Instance.Redirect(oUrl);
+            }
+        }
+
+        [ActiveEvent(Name = "Brix.Core.InitialLoading")]
+        protected void Brix_Core_InitialLoading(object sender, ActiveEventArgs e)
+        {
+            DotNetOpenAuth.OpenId.Provider.OpenIdProvider provider = new DotNetOpenAuth.OpenId.Provider.OpenIdProvider();
+            IRequest request = provider.GetRequest();
+            if (request != null)
+            {
+                Page.Session["Magix.Publishing.UserController.IRequest"] = request;
+            }
+            else if (!string.IsNullOrEmpty(Page.Request.Params["openID"]))
+            {
+                // Injecting our link files into the header document since we now have a username ...
+                // TODO: Check to see if that username actually EXISTS on this server before
+                // retunring anything at all ...
+                Node node = new Node();
+
+                node["rel"].Value = "openid.server";
+                node["href"].Value = GetApplicationBaseUrl() + "?openID=" + Page.Request.Params["openID"];
+
+                RaiseEvent(
+                    "Magix.Core.AddLinkInHeader",
+                    node);
+
+                node = new Node();
+
+                node["rel"].Value = "openid.delegate";
+                node["href"].Value = GetApplicationBaseUrl() + "?openID=" + Page.Request.Params["openID"];
+
+                RaiseEvent(
+                    "Magix.Core.AddLinkInHeader",
+                    node);
             }
         }
 

@@ -107,7 +107,7 @@
     <Content Include="media\magix-ux-skins\star-min.png" />
     <Content Include="media\magix-ux-skins\star.png" />
     <Content Include="media\magix-ux-skins\tree-sprites.png" />
-    <Content Include="media\main.css" />
+    <Content Include="media\front-end.css" />
     <Content Include="media\modules\auto-sponder.css" />
     <Content Include="media\modules\Calendar.css" />
     <Content Include="media\modules\MetaType-Editing.css" />

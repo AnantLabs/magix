@@ -597,22 +597,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         {
             w.ToolTip = string.Format("Module is of type '{0}'", moduleName);
             w.CssClass += " mux-shaded mux-rounded";
-            if (width > 0)
-                w.CssClass += " span-" + width;
-            if (height > 0)
-                w.CssClass += " height-" + height;
-            if (last)
-                w.CssClass += " last";
+            w.CssClass += " span-" + width;
+            w.CssClass += " height-" + height;
+            w.CssClass += " last";
             w.Caption = name;
             w.Info = id.ToString();
-            if (padding > 0)
-                w.CssClass += " pushRight-" + padding;
-            if (push > 0)
-                w.CssClass += " pushLeft-" + push;
-            if (top > 0)
-                w.CssClass += " down-" + top;
-            if (bottomMargin > 0)
-                w.CssClass += " spcBottom-" + bottomMargin;
+            w.CssClass += " pushRight-" + padding;
+            w.CssClass += " pushLeft-" + push;
+            w.CssClass += " down-" + top;
+            w.CssClass += " spcBottom-" + bottomMargin;
             w.Draggable = false;
             w.Closable = false;
         }

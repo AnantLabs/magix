@@ -51,8 +51,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 {
                     string nUrl = "~/?login=true";
 
-                    string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
-                    string curUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "");
+                    string baseUrl = GetApplicationBaseUrl();
+                    string curUrl = Page.Request.Url.ToString();
 
                     if (baseUrl != curUrl)
                     {
@@ -63,8 +63,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 else
                 {
                     // Getting relative URL ...
-                    string baseUrl = GetApplicationBaseUrl().ToLowerInvariant();
-                    string relUrl = Page.Request.Url.ToString().ToLowerInvariant().Replace("default.aspx", "").Replace(baseUrl, "");
+                    string baseUrl = GetApplicationBaseUrl();
+                    string relUrl = Page.Request.Url.ToString().Replace(baseUrl, "");
 
                     if (relUrl.IndexOf('?') != -1)
                     {
@@ -92,8 +92,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
         private bool ShouldShowLoginBox()
         {
-            return User.Current == null &&
-                Page.Request.Params["login"] == "true";
+            return (User.Current == null &&
+                Page.Request.Params["login"] == "true") || 
+                !string.IsNullOrEmpty(Page.Request.Params["openID"]);
         }
 
         private void IncludeCssFiles()
