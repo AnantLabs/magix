@@ -161,7 +161,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             t.CssClass = "username open-id";
             pnl.Controls.Add(t);
 
-            Button b = new Button();
+            System.Web.UI.WebControls.Button b = new System.Web.UI.WebControls.Button();
             b.ID = "loginBtn";
             b.CssClass = "login-btn";
             b.Text = "Login";
@@ -212,7 +212,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             p.CssClass = "password";
             pnl.Controls.Add(p);
 
-            Button b = new Button();
+            System.Web.UI.WebControls.Button b = new System.Web.UI.WebControls.Button();
             b.ID = "loginBtn";
             b.CssClass = "login-btn";
             b.Text = "Login";
