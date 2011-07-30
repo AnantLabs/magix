@@ -144,6 +144,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             username = username.Trim();
 
+            if (string.IsNullOrEmpty(username))
+            {
+                Node node = new Node();
+                node["Message"].Value = "We could really need some help here, maybe a suggestion of what it might have been ...?";
+                RaiseEvent(
+                    "Magix.Core.ShowMessage",
+                    node);
+                return;
+            }
+
             // We're now a 'Relying Party', meaning, we need an OpenID verification from
             // whatever provider was given ...
 
