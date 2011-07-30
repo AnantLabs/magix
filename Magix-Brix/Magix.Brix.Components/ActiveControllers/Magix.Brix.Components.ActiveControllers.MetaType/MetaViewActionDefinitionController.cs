@@ -172,8 +172,11 @@ There are many other properties you can override...";
                     a.Name = "Magix.Meta.Actions.SendEmail";
                     a.EventName = "Magix.MetaType.SendEmail";
                     a.Description = @"Will send yourself an email to the Email address you've associated
-with your user. The email will contain a default header and a default body default body. Override the 
-settings if you wish to send other emails, to other recipes ...";
+with your user. The email will contain a default header and a default body. Override the 
+settings if you wish to send other emails, to other recipes, with another subject and/or body. 
+PS! This Action is dependent upon that you've configured your web.config to point towards a valid 'mailSettings'.
+You _CANNOT_ use rasoftwarefactory.com for this! You might however be able to use for instance your 
+Google Account if you do some 'Googling' ... ;)";
                     a.StripInput = true;
 
                     Action.ActionParams m = new Action.ActionParams();
@@ -202,10 +205,10 @@ settings if you wish to send other emails, to other recipes ...";
 
                     m = new Action.ActionParams();
                     m.Name = "To";
-                    m.Value = null; // Intentionally - Template Action ...!
+                    m.Value = "[not here silly ...!]";
 
                     Action.ActionParams m2 = new Action.ActionParams();
-                    m2.Name = "only";
+                    m2.Name = "email-adr-1";
                     m2.Value = null; // Intentionally - Template Action ...!
                     m2.TypeName = typeof(string).FullName;
                     m.Children.Add(m2);
