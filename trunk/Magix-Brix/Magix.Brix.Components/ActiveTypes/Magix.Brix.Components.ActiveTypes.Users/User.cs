@@ -55,16 +55,6 @@ namespace Magix.Brix.Components.ActiveTypes.Users
         [ActiveField(IsOwner = false)]
         public LazyList<Role> Roles { get; set; }
 
-        [ActiveEvent(Name = "Magix.Core.UserLoggedOut")]
-        private static void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
-        {
-            // Logging out...
-            UserBase.Current = null;
-
-            // Redirecting back to landing page, to 'invalidate' DOM ...!
-            AjaxManager.Instance.Redirect("~/");
-        }
-
         [ActiveField]
         internal LazyList<UserSettings> Settings { get; set; }
 
