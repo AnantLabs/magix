@@ -1050,12 +1050,21 @@ namespace Magix.Brix.Viewports
             Control ctrl = PluginLoader.Instance.LoadActiveModule(e.Key);
             if (e.FirstReload)
             {
+                Node nn = e.Extra as Node;
                 ctrl.Init +=
                     delegate
                     {
-                        Node nn = e.Extra as Node;
-                        if (nn != null && 
-                            nn.Contains("ModuleInitializationEvent") && 
+                        IModule module = ctrl as IModule;
+                        if (module != null)
+                        {
+                            module.InitialLoading(nn);
+                        }
+                    };
+                ctrl.Load +=
+                    delegate
+                    {
+                        if (nn != null &&
+                            nn.Contains("ModuleInitializationEvent") &&
                             !string.IsNullOrEmpty(nn["ModuleInitializationEvent"].Get<string>()))
                         {
                             nn["_ctrl"].Value = ctrl;
@@ -1064,11 +1073,6 @@ namespace Magix.Brix.Viewports
                                 nn["ModuleInitializationEvent"].Get<string>(),
                                 nn);
                             nn["_ctrl"].UnTie();
-                        }
-                        IModule module = ctrl as IModule;
-                        if (module != null)
-                        {
-                            module.InitialLoading(nn);
                         }
                     };
             }

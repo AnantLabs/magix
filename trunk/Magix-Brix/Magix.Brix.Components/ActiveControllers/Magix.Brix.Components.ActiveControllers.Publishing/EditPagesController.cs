@@ -93,7 +93,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Content"));
                     WebPart.WebPartSetting s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
-                    s2.Value = "<p>By default a user has been created with the username/password of admin/admin</p>";
+                    s2.Value = @"
+<p>By default a user has been created with the username/password of admin/admin</p>
+<p>You can login with this user to the Back-End form <a href=""?dashboard=true"">here</a> ...</p>";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
 

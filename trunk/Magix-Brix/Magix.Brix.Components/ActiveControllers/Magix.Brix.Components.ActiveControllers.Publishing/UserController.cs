@@ -387,5 +387,49 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             e.Params["URL"].Value = "media/images/avatars/marvin-headshot.png";
         }
+
+        [ActiveEvent(Name = "Magix.Publishing.GetTemplateColumnSelectTypeOfLoginControl")]
+        protected void Magix_Publishing_GetTemplateColumnSelectTypeOfLoginControl(object sender, ActiveEventArgs e)
+        {
+            SelectList ls = new SelectList();
+            e.Params["Control"].Value = ls;
+
+            ls.CssClass = "span-5";
+            ls.Style[Styles.display] = "block";
+
+            ls.SelectedIndexChanged +=
+                delegate
+                {
+                    Node tx = new Node();
+
+                    tx["Params"]["ID"].Value = e.Params["ID"].Value;
+                    tx["Params"]["PropertyName"].Value = "Magix.Brix.Components.ActiveModules.Publishing.LogInOutUserLoginMode";
+                    tx["Params"]["PotID"].Value = e.Params["PotID"].Value;
+                    tx["Text"].Value = ls.SelectedItem.Value;
+
+                    RaiseEvent(
+                        "Magix.Publishing.SavePageObjectIDSetting",
+                        tx);
+                };
+
+            ls.Items.Add(new ListItem("Both", "Both"));
+            ls.Items.Add(new ListItem("OpenID Only", "OpenID"));
+            ls.Items.Add(new ListItem("Native Only", "Native"));
+            switch (e.Params["Value"].Value.ToString())
+            {
+                case "Both":
+                    ls.SelectedIndex = 0;
+                    break;
+                case "OpenID":
+                    ls.SelectedIndex = 1;
+                    break;
+                case "Native":
+                    ls.SelectedIndex = 2;
+                    break;
+                default:
+                    ls.Enabled = false;
+                    break;
+            }
+        }
     }
 }

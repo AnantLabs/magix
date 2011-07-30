@@ -207,6 +207,7 @@
     <Content Include="media\Fonts\Hawaii_Killer.ttf" />
     <Content Include="media\Fonts\kberry.ttf" />
     <Content Include="media\Fonts\lexograph.ttf" />
+    <Content Include="media\images\openid_small.png" />
     <Content Include="media\images\snow.png" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
   </ItemGroup>
