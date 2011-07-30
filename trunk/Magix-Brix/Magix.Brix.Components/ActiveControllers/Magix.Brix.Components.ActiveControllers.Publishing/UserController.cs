@@ -14,11 +14,7 @@ using Magix.Brix.Types;
 using Magix.UX.Widgets;
 using System.Net;
 using System.IO;
-using DotNetOpenAuth.OpenId.RelyingParty;
-using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 using Magix.UX;
-using DotNetOpenAuth.OpenId;
-using DotNetOpenAuth.OpenId.Provider;
 using System.Web;
 using System.Web.Security;
 using DotNetOpenAuth.Messaging;
@@ -215,6 +211,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 10;
 
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["Name"]["Header"].Value = "OpenID";
 
             node["ID"].Value = id;
             node["NoIdColumn"].Value = true;
@@ -245,8 +242,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["WhiteListColumns"]["Value"].Value = true;
             node["WhiteListColumns"]["Value"]["ForcedWidth"].Value = 9;
 
-            node["Type"]["Properties"]["Name"].Value = null; // just to touch it ...
-            node["Type"]["Properties"]["Value"]["Header"].Value = "Value";
+            node["Type"]["Properties"]["Name"]["Header"].Value = "Name";
+            node["Type"]["Properties"]["Value"]["Header"].Value = "Setting Value";
             node["Type"]["Properties"]["Value"]["MaxLength"].Value = 40;
 
             node["ID"].Value = id;
