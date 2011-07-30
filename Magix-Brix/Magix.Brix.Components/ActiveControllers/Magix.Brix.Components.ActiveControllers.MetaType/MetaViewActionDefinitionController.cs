@@ -164,6 +164,57 @@ There are many other properties you can override...";
                     a.Save();
                 }
 
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Meta.Actions.SendEmail")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.Meta.Actions.SendEmail";
+                    a.EventName = "Magix.MetaType.SendEmail";
+                    a.Description = @"Will send yourself an email to the Email address you've associated
+with your user. The email will contain a default header and a default body default body. Override the 
+settings if you wish to send other emails, to other recipes ...";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Header";
+                    m.Value = null; // Intentionally - Template Action ...!
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Body";
+                    m.Value = null; // Intentionally - Template Action ...!
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Email";
+                    m.Value = null; // Intentionally - Template Action ...!
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "From";
+                    m.Value = null; // Intentionally - Template Action ...!
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "To";
+                    m.Value = null; // Intentionally - Template Action ...!
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "only";
+                    m2.Value = null; // Intentionally - Template Action ...!
+                    m2.TypeName = typeof(string).FullName;
+                    m.Children.Add(m2);
+
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
                 tr.Commit();
             }
         }

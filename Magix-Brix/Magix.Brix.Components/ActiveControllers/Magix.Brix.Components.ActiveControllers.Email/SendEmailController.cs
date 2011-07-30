@@ -18,10 +18,10 @@ using System;
 namespace Magix.Brix.Components.ActiveControllers.Email
 {
     [ActiveController]
-    public class SendEmails : ActiveController
+    public class SendEmailController : ActiveController
     {
-        [ActiveEvent(Name = "WineTasting.SendEmailLocally", Async = true)]
-        protected void SendEmail(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.SendEmailLocally", Async = true)]
+        protected void Magix_Core_SendEmailLocally(object sender, ActiveEventArgs e)
         {
             try
             {

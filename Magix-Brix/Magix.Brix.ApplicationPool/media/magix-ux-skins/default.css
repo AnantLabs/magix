@@ -676,8 +676,10 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	display:block;
 	height:32px;
 	margin:2px 0 2px 0;
-	line-height:36px;
+	line-height:26px;
 	font-size:26px;
+	padding-top:3px;
+	vertical-align:middle;
 	z-index:1;
 	background-color:rgba(0, 0, 0, .05);
 

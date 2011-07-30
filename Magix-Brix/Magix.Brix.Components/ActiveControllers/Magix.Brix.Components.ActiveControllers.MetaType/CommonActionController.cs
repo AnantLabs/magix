@@ -10,6 +10,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
+using Magix.Brix.Components.ActiveTypes.Publishing;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -395,6 +396,52 @@ you'd still like to have this object deleted ...";
 
             RaiseEvent(
                 "Magix.Publishing.ReloadWebPart",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.SendEmail")]
+        protected void Magix_MetaType_SendEmail(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["Header"].Value =
+                e.Params.Contains("Header") && !string.IsNullOrEmpty(e.Params["Header"].Get<string>()) ?
+                    e.Params["Header"].Get<string>() :
+                    "Message from Marvin ...";
+
+            node["Body"].Value =
+                e.Params.Contains("Body") && !string.IsNullOrEmpty(e.Params["Body"].Get<string>()) ?
+                    e.Params["Body"].Get<string>() :
+                    "Opps, someone forgot to attach the message ...";
+
+            node["AdminEmail"].Value =
+                e.Params.Contains("Email") && !string.IsNullOrEmpty(e.Params["Email"].Get<string>()) ?
+                    e.Params["Email"].Get<string>() :
+                    User.Current.Email;
+
+            node["AdminEmailFrom"].Value =
+                e.Params.Contains("From") && !string.IsNullOrEmpty(e.Params["From"].Get<string>()) ?
+                    e.Params["From"].Get<string>() :
+                    User.Current.FullName;
+
+            if (e.Params.Contains("To"))
+            {
+                node["EmailAddresses"].AddRange(e.Params["To"].UnTie());
+                if (node["EmailAddresses"][0].Value == null)
+                {
+                    // Just in case this is a 'template action' with empty placeholders for end-user
+                    // to fill in ...
+                    node["EmailAddresses"][0].Value = User.Current.Email;
+                }
+            }
+            else
+            {
+                // Sending yourself an email ...
+                node["EmailAddresses"]["only"].Value = User.Current.Email;
+            }
+
+            RaiseEvent(
+                "Magix.Core.SendEmailLocally",
                 node);
         }
     }

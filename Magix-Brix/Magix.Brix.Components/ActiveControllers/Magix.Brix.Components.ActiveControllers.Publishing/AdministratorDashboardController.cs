@@ -21,14 +21,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
             // TODO: Throw away while testing ToolTip functionality ....
-            foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
-            {
-                idx.Delete();
-            }
-            foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
-            {
-                idx.Delete();
-            }
+            //foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
+            //{
+            //    idx.Delete();
+            //}
+            //foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
+            //{
+            //    idx.Delete();
+            //}
             if (ToolTip.Instance.Count == 0)
             {
                 ToolTip.Instance.CreateTip(@"
