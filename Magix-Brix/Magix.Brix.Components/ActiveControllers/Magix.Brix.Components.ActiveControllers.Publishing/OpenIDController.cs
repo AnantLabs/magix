@@ -41,17 +41,19 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             OpenIdProvider provider = new OpenIdProvider();
 
-            DotNetOpenAuth.OpenId.Provider.IAuthenticationRequest request =
-                provider.GetRequest() as
-                DotNetOpenAuth.OpenId.Provider.IAuthenticationRequest;
+            IRequest request = provider.GetRequest() as IRequest;
 
-            if (request != null)
-                Page.Session["Magix.Publishing.OpenID.IAuthenticationRequest"] = request;
-
-            DotNetOpenAuth.OpenId.Provider.IRequest req = provider.GetRequest();
-            if (req != null && req.IsResponseReady)
+            if (request as DotNetOpenAuth.OpenId.Provider.IAuthenticationRequest != null)
             {
-                provider.SendResponse(req);
+                // Need to store it till user is done with loggin in ...
+                Page.Session["Magix.Publishing.OpenID.IAuthenticationRequest"] = request;
+            }
+
+            if (request != null && request.IsResponseReady)
+            {
+                Page.Session["Magix.Publishing.OpenID.IAuthenticationRequest"] = null;
+                provider.SendResponse(request);
+                Page.Response.End();
             }
 
             // Since this is a requet for a specific user's OpenID page [maybe]
@@ -105,7 +107,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                                 "Magix.Publishing.NewUserRegisteredThroughOpenID",
                                 node);
 
-                            AjaxManager.Instance.Redirect(GetApplicationBaseUrl());
+                            Page.Response.Redirect(GetApplicationBaseUrl(), true);
                         }
                         else
                         {
@@ -162,12 +164,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 //Identifier id = new 
                 DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest request =
                     openId.CreateRequest(username, GetApplicationBaseUrl(), Page.Request.Url);
-
-                // Some 'slightly messy' tricking to get our URL ... ;)
-                string oUrl = request.RedirectingResponse.Headers["Location"];
-
-                // Re-directing to OpenID Provider ...
-                AjaxManager.Instance.Redirect(oUrl);
+                request.RedirectToProvider();
             }
         }
 
