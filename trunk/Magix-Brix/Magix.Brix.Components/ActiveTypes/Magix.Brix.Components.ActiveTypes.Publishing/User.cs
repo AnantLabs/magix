@@ -14,33 +14,6 @@ using System.Web;
 
 namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
-    [ActiveType]
-    public class OpenIDToken : ActiveType<OpenIDToken>
-    {
-        [ActiveField]
-        public string Name { get; set; }
-
-        [ActiveField(BelongsTo = true)]
-        public User User { get; set; }
-
-        public override void Save()
-        {
-            if (!string.IsNullOrEmpty(Name) &&
-                Name.Length > 0)
-            {
-                if (CountWhere(
-                    Criteria.Eq("Name", Name),
-                    Criteria.NotId(ID)) > 0)
-                {
-                    throw new ArgumentException(
-                        @"Sorry, but that OpenID is already registered on this 
-site. Try to log in using it ...");
-                }
-            }
-            base.Save();
-        }
-    }
-
     [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Publishing.User")]
     public class User : U.UserBase
     {
@@ -51,6 +24,27 @@ site. Try to log in using it ...");
 
         [ActiveField]
         public string AvatarURL { get; set; }
+
+        [ActiveField]
+        public string Phone { get; set; }
+
+        [ActiveField]
+        public string Address { get; set; }
+
+        [ActiveField]
+        public string City { get; set; }
+
+        [ActiveField]
+        public string Zip { get; set; }
+
+        [ActiveField]
+        public string State { get; set; }
+
+        [ActiveField]
+        public string Twitter { get; set; }
+
+        [ActiveField]
+        public string Facebook { get; set; }
 
         [ActiveField]
         public LazyList<OpenIDToken> OpenIDTokens { get; set; }
