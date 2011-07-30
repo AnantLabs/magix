@@ -165,6 +165,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["WhiteListColumns"]["Roles"].Value = true;
             e.Params["WhiteListColumns"]["Email"].Value = true;
 
+            e.Params["WhiteListColumns"]["Phone"].Value = true;
+            e.Params["WhiteListColumns"]["Address"].Value = true;
+            e.Params["WhiteListColumns"]["City"].Value = true;
+            e.Params["WhiteListColumns"]["Zip"].Value = true;
+            e.Params["WhiteListColumns"]["State"].Value = true;
+            e.Params["WhiteListColumns"]["Twitter"].Value = true;
+            e.Params["WhiteListColumns"]["Facebook"].Value = true;
+
             e.Params["WhiteListProperties"]["Name"].Value = true;
             e.Params["WhiteListProperties"]["Value"].Value = true;
 
@@ -173,6 +181,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Type"]["Properties"]["Roles"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value = "Magix.Publishing.GetRoleTemplateColumn";
             e.Params["Type"]["Properties"]["Email"]["ReadOnly"].Value = false;
+
+            e.Params["Type"]["Properties"]["Phone"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Address"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["City"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Zip"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["State"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Twitter"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Facebook"]["ReadOnly"].Value = false;
 
             e.Params["Padding"].Value = 6;
             e.Params["Width"].Value = 18;

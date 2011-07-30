@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OpenIDToken.cs" />
     <Compile Include="WebPageRoleAccess.cs" />
     <Compile Include="WebPart.cs" />
     <Compile Include="WebPartTemplate.cs" />
