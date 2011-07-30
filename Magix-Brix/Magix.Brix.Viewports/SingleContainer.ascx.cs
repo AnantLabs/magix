@@ -43,6 +43,7 @@ namespace Magix.Brix.Viewports
         protected Panel debug;
         protected Timer timer;
 
+        [DebuggerStepThrough]
         private bool IsDebug()
         {
             return Session["Magix.Core.IsDebug"] != null ?
@@ -141,6 +142,12 @@ namespace Magix.Brix.Viewports
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            if (Session["Magix.Core.ShowMessage-Delayed"] != null)
+            {
+                Magix_Core_ShowMessage(this, Session["Magix.Core.ShowMessage-Delayed"] as ActiveEventArgs);
+                Session["Magix.Core.ShowMessage-Delayed"] = null;
+            }
 
             message.ClickEffect = new EffectFadeOut(message, 250)
                 .JoinThese(
@@ -421,37 +428,47 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
-            int timeOut = 2500;
-            if (e.Params.Contains("Milliseconds"))
-                timeOut = e.Params["Milliseconds"].Get<int>();
-
-            if (e.Params.Contains("IsError") &&
-                e.Params["IsError"].Get<bool>())
+            if (e.Params.Contains("Delayed"))
             {
-                message.CssClass += " error-message";
+                // Postponing till 'next page cycle', probably due to refresh of page, while
+                // still having something important to say ...
+                e.Params["Delayed"].UnTie();
+                Session["Magix.Core.ShowMessage-Delayed"] = e;
             }
             else
             {
-                message.CssClass = message.CssClass.Replace(" error-message", "");
-            }
+                int timeOut = 2500;
+                if (e.Params.Contains("Milliseconds"))
+                    timeOut = e.Params["Milliseconds"].Get<int>();
 
-            if (firstMessage)
-            {
-                msgLbl.Text = "";
-                new EffectFadeIn(message, 250)
-                    .JoinThese(new EffectRollDown())
-                    .ChainThese(
-                        new EffectTimeout(timeOut),
-                        new EffectFadeOut(message, 250)
-                            .JoinThese(new EffectRollUp()))
-                    .Render();
-                firstMessage = false;
-                if (e.Params.Contains("Header"))
-                    message.Caption = e.Params["Header"].Get<string>();
+                if (e.Params.Contains("IsError") &&
+                    e.Params["IsError"].Get<bool>())
+                {
+                    message.CssClass += " error-message";
+                }
                 else
-                    message.Caption = "Message from Marvin ...";
+                {
+                    message.CssClass = message.CssClass.Replace(" error-message", "");
+                }
+
+                if (firstMessage)
+                {
+                    msgLbl.Text = "";
+                    new EffectFadeIn(message, 250)
+                        .JoinThese(new EffectRollDown())
+                        .ChainThese(
+                            new EffectTimeout(timeOut),
+                            new EffectFadeOut(message, 250)
+                                .JoinThese(new EffectRollUp()))
+                        .Render();
+                    firstMessage = false;
+                    if (e.Params.Contains("Header"))
+                        message.Caption = e.Params["Header"].Get<string>();
+                    else
+                        message.Caption = "Message from Marvin ...";
+                }
+                msgLbl.Text += string.Format("<p>{0}</p>", e.Params["Message"].Get<string>());
             }
-            msgLbl.Text += string.Format("<p>{0}</p>", e.Params["Message"].Get<string>());
         }
 
         [ActiveEvent(Name = "ClearControls")]

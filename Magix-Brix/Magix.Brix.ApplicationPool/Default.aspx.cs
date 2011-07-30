@@ -25,15 +25,19 @@ namespace Magix.Brix.ApplicationPool
                 HttpContext.Current.Request.ApplicationPath.ToLowerInvariant() + "/", false);
             base.OnInit(e);
         }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             InitializeViewport();
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "Brix.Core.Page_Init");
+
             if (!IsPostBack)
             {
                 Node node = new Node();
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "Brix.Core.InitialLoading",

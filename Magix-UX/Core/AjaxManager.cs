@@ -339,7 +339,9 @@ namespace Magix.UX
                 ((Page)HttpContext.Current.CurrentHandler).Response.Redirect(url);
             else
             {
-                ((Page)HttpContext.Current.CurrentHandler).Response.AddHeader("Location", ((Page)HttpContext.Current.CurrentHandler).Response.ApplyAppPathModifier(url));
+                ((Page)HttpContext.Current.CurrentHandler).Response.AddHeader(
+                    "Location", 
+                    ((Page)HttpContext.Current.CurrentHandler).Response.ApplyAppPathModifier(url));
 
                 // Note that due to w3c standardizing the XHR should TRANSPARENTLY
                 // do 301 and 302 redirects we need another mechanism to inform client side that

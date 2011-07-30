@@ -20,6 +20,8 @@ using Magix.UX;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Provider;
 using System.Web;
+using System.Web.Security;
+using DotNetOpenAuth.Messaging;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -57,12 +59,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             string username = e.Params["Username"].Get<string>();
             string password = e.Params["Password"].Get<string>();
-            if (string.IsNullOrEmpty(password))
-            {
-                // Assuming OpenID ...
-                LogInWithOpenID(username);
-            }
-            else
+
+            if (!string.IsNullOrEmpty(password))
             {
                 User u = User.SelectFirst(
                     Criteria.Eq("Username", username),
@@ -73,109 +71,19 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     e.Params["Success"].Value = true;
                     User.Current = u;
 
-                    RaiseEvent("Magix.Core.UserLoggedIn");
+                    RaiseEvent("Magix.Core.UserLoggedIn-Override");
                 }
             }
         }
 
-        [ActiveEvent(Name = "Brix.Core.UserLoggedIn")]
-        protected void Brix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.UserLoggedOut")]
+        private void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {
-            if (Page.Session["Magix.Publishing.UserController.IRequest"] != null)
-            {
-                IRequest request = Page.Session["Magix.Publishing.UserController.IRequest"] as IRequest;
-            }
-        }
+            // Logging out...
+            UserBase.Current = null;
 
-        [ActiveEvent(Name = "Brix.Core.Page_Init")]
-        protected void Brix_Core_Page_Init(object sender, ActiveEventArgs e)
-        {
-            OpenIdRelyingParty openid = new OpenIdRelyingParty();
-            IAuthenticationResponse r = openid.GetResponse();
-            if (r != null)
-            {
-                switch (r.Status)
-                {
-                    case AuthenticationStatus.Authenticated:
-                        ClaimsResponse claimsResponse = r.GetExtension<ClaimsResponse>();
-                        OpenIDToken token = OpenIDToken.SelectFirst(Criteria.Eq("Name", r.ClaimedIdentifier));
-                        if (token == null)
-                        {
-                            throw new ArgumentException("That OpenID Token is not registered anywhere on this site ...");
-                        }
-                        User.Current = token.User;
-
-                        RaiseEvent("Magix.Core.UserLoggedIn");
-
-                        break;
-                    case AuthenticationStatus.Canceled:
-                        break; // Silently fall through ...?
-                    case AuthenticationStatus.Failed:
-                        throw new ArgumentException("Failed to log you in on your chosen OpenID Provider ...");
-                        break;
-                }
-            }
-        }
-
-        private void LogInWithOpenID(string username)
-        {
-            username = username.Trim();
-
-            using (OpenIdRelyingParty openId = new OpenIdRelyingParty())
-            {
-                //Identifier id = new 
-                DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest request = openId.CreateRequest(username, GetApplicationBaseUrl());
-
-                ClaimsRequest claim = new ClaimsRequest();
-                claim.BirthDate = DemandLevel.Request;
-                claim.Country = DemandLevel.Request;
-                claim.Email = DemandLevel.Request;
-                claim.FullName = DemandLevel.Request;
-                claim.Gender = DemandLevel.Request;
-                claim.Language = DemandLevel.Request;
-                claim.Nickname = DemandLevel.Request;
-                claim.PostalCode = DemandLevel.Request;
-                claim.TimeZone = DemandLevel.Request;
-
-                request.AddExtension(claim);
-
-                string oUrl = request.RedirectingResponse.Headers["Location"];
-                AjaxManager.Instance.Redirect(oUrl);
-            }
-        }
-
-        [ActiveEvent(Name = "Brix.Core.InitialLoading")]
-        protected void Brix_Core_InitialLoading(object sender, ActiveEventArgs e)
-        {
-            DotNetOpenAuth.OpenId.Provider.OpenIdProvider provider = new DotNetOpenAuth.OpenId.Provider.OpenIdProvider();
-            IRequest request = provider.GetRequest();
-            if (request != null)
-            {
-                Page.Session["Magix.Publishing.UserController.IRequest"] = request;
-            }
-            else if (!string.IsNullOrEmpty(Page.Request.Params["openID"]))
-            {
-                // Injecting our link files into the header document since we now have a username ...
-                // TODO: Check to see if that username actually EXISTS on this server before
-                // retunring anything at all ...
-                Node node = new Node();
-
-                node["rel"].Value = "openid.server";
-                node["href"].Value = GetApplicationBaseUrl() + "?openID=" + Page.Request.Params["openID"];
-
-                RaiseEvent(
-                    "Magix.Core.AddLinkInHeader",
-                    node);
-
-                node = new Node();
-
-                node["rel"].Value = "openid.delegate";
-                node["href"].Value = GetApplicationBaseUrl() + "?openID=" + Page.Request.Params["openID"];
-
-                RaiseEvent(
-                    "Magix.Core.AddLinkInHeader",
-                    node);
-            }
+            // Redirecting back to landing page, to 'invalidate' DOM ...!
+            AjaxManager.Instance.Redirect(GetApplicationBaseUrl());
         }
 
         [ActiveEvent(Name = "Magix.Publishing.EditUsers")]
