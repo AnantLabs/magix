@@ -21,14 +21,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
             // TODO: Throw away while testing ToolTip functionality ....
-            //foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
-            //{
-            //    idx.Delete();
-            //}
-            //foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
-            //{
-            //    idx.Delete();
-            //}
+            foreach (ToolTip.Tip idx in ToolTip.Tip.Select())
+            {
+                idx.Delete();
+            }
+            foreach (ToolTip.TipPosition idx in ToolTip.TipPosition.Select())
+            {
+                idx.Delete();
+            }
             if (ToolTip.Instance.Count == 0)
             {
                 ToolTip.Instance.CreateTip(@"
@@ -160,6 +160,17 @@ Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in
 <p>Take some care when naming your Types!</p>
 <p>It's probably a good practice to some how make sure they've got unique names, also across your organization if you want to use plugins made by others.</p>
 <p>We encourage people to use type names such as; ""CompanyName.Department.Customer"", and never 'Customer' directly. In fact, your <em>homework</em> for this lesson is to go and rename your 'Customer' TypeName, and rename the Type Name to; 'CompanyName.Department.Customer'. Where Company Name and Department are <em>your</em> company name and your department ...</p>
+");
+                ToolTip.Instance.CreateTip(@"
+<h3>OpenID</h3>
+<p>Did you know that you can use Magix as both a Relying Party and OpenID Provider?</p>
+<p>[ Read more about Open ID <a href=""http://openid.net/"" target=""_blank"">here</a> ... ]</p>
+<p>If you need an OpenID token to log into some website somewhere, then you can append ?openID=admin after the root URL to your website, if the admin user is the User you'd like to log in with.</p>
+<p>[ Full example; yourdomain.com/?openID=admin ]</p>
+<p>This will redirect from the website you're trying to log into, and back to your website, which in turn will ask you for admin's password.</p>
+<p>Once successfully logged into your own Magix website, your website will redirect back to the website you're trying to log into, and tell it that it 'has prof of that you are who you claimed you were'.</p>
+<p>You can also associate other OpenID tokens, such as your Yahoo account or Blogger account, with your Magix User internally. This will allow you to log into Magix with that OpenID Account.</p>
+<p>If your blogger account is 'magix' for instance, then your OpenID 'username' [claim] would become 'magix.blogspot.com'</p>
 ");
                 ToolTip.Instance.CreateTip(@"
 <h3>Talk to CEO</h3>
