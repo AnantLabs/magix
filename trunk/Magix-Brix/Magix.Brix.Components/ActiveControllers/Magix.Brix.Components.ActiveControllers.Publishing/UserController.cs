@@ -160,6 +160,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             LoadUserImage(user);
 
             // First filtering OUT columns ...!
+            e.Params["WhiteListColumns"]["FullName"].Value = true;
             e.Params["WhiteListColumns"]["Username"].Value = true;
             e.Params["WhiteListColumns"]["Password"].Value = true;
             e.Params["WhiteListColumns"]["Roles"].Value = true;
@@ -176,6 +177,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["WhiteListProperties"]["Name"].Value = true;
             e.Params["WhiteListProperties"]["Value"].Value = true;
 
+            e.Params["Type"]["Properties"]["FullName"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["FullName"]["Bold"].Value = true;
             e.Params["Type"]["Properties"]["Username"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Password"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Roles"]["ReadOnly"].Value = false;

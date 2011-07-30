@@ -23,6 +23,9 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         }
 
         [ActiveField]
+        public string FullName { get; set; }
+
+        [ActiveField]
         public string AvatarURL { get; set; }
 
         [ActiveField]
