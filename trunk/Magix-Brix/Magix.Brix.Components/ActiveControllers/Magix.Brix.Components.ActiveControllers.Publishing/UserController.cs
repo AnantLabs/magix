@@ -217,6 +217,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Width"].Value = 18;
             e.Params["Append"].Value = true;
             e.Params["Container"].Value = "content4";
+
             e.Params["Caption"].Value =
                 string.Format(
                     "Editing User: {0}",
