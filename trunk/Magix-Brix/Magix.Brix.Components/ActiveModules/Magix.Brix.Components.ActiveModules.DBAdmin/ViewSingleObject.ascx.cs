@@ -207,28 +207,64 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 }
                 else
                 {
-                    Label c1 = new Label();
-                    if (DataSource.Contains("WhiteListProperties") &&
-                        DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
+                    if (DataSource["Type"]["Properties"][node.Name].Contains("TemplateColumnHeaderEvent") &&
+                        !string.IsNullOrEmpty(
+                            DataSource["Type"]["Properties"][node.Name]["TemplateColumnHeaderEvent"].Get<string>()))
                     {
-                        c1.CssClass += "wide-" +
-                            DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
-                    }
-                    bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
-                        DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
-                    if (bold)
-                        c1.Style[Styles.fontWeight] = "bold";
-                    c1.Tag = "td";
-                    c1.CssClass = "columnName";
-                    if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
-                    {
-                        c1.Text = DataSource["Type"]["Properties"][node.Name]["Header"].Get<string>();
+                        Label c1 = new Label();
+                        c1.Tag = "td";
+                        c1.Info = node.Name;
+
+                        if (DataSource.Contains("WhiteListProperties") &&
+                            DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
+                        {
+                            c1.CssClass += "wide-" +
+                                DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
+                        }
+
+                        string eventName =
+                            DataSource["Type"]["Properties"][node.Name]["TemplateColumnHeaderEvent"].Get<string>();
+
+                        Node colNode = new Node();
+
+                        colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>(); ;
+                        colNode["Name"].Value = node.Name;
+                        colNode["Value"].Value = node.Get<string>();
+                        colNode["ID"].Value = DataSource["Object"]["ID"].Get<int>();
+
+                        ActiveEvents.Instance.RaiseActiveEvent(
+                            this,
+                            eventName,
+                            colNode);
+
+                        c1.Controls.Add(colNode["Control"].Get<Control>());
+                        row.Controls.Add(c1);
                     }
                     else
                     {
-                        c1.Text = node.Name;
+                        Label c1 = new Label();
+                        if (DataSource.Contains("WhiteListProperties") &&
+                            DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
+                        {
+                            c1.CssClass += "wide-" +
+                                DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
+                        }
+                        bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
+                            DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
+                        if (bold)
+                            c1.Style[Styles.fontWeight] = "bold";
+                        c1.Tag = "td";
+                        c1.CssClass = "columnName";
+                        if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
+                        {
+                            c1.Text = DataSource["Type"]["Properties"][node.Name]["Header"].Get<string>();
+                        }
+                        else
+                        {
+                            c1.Text = node.Name;
+                        }
+                        row.Controls.Add(c1);
                     }
-                    row.Controls.Add(c1);
                 }
             }
 
@@ -283,7 +319,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     !string.IsNullOrEmpty(
                         DataSource["Type"]["Properties"][node.Name]["TemplateColumnEvent"].Get<string>()))
                 {
-
                     Label c1 = new Label();
                     c1.Tag = "td";
                     c1.Info = node.Name;

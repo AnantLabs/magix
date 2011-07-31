@@ -184,6 +184,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.MetaType.EditObjectRaw")]
         protected void Magix_MetaType_EditObjectRaw(object sender, ActiveEventArgs e)
         {
+            ActiveEvents.Instance.RaiseClearControls("content5");
+
             MetaObject m = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             Node node = new Node();
@@ -195,7 +197,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListColumns"]["TypeName"].Value = true;
             node["WhiteListColumns"]["Reference"].Value = true;
             node["WhiteListColumns"]["Created"].Value = true;
-            node["WhiteListColumns"]["Values"].Value = true;
+            node["WhiteListColumns"]["Children"].Value = true;
+
+            foreach (var idx in m.Values)
+            {
+                node["WhiteListColumns"][idx.Name].Value = true;
+            }
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Value"].Value = true;
@@ -206,46 +213,237 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Created"]["Header"].Value = "When";
-            node["Type"]["Properties"]["Values"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Children"]["Header"].Value = "Children";
+            node["Type"]["Properties"]["Children"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetChildrenTemplateColumn";
+
+            foreach (var idx in m.Values)
+            {
+                node["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Value = "Magix.MetaType.GetValuesTemplateColumn";
+                node["Type"]["Properties"][idx.Name]["TemplateColumnHeaderEvent"].Value = "Magix.MetaType.GetHeaderTemplateColumn";
+                node["Type"]["Properties"][idx.Name]["ReadOnly"].Value = false;
+                node["Object"]["Properties"][idx.Name].Value = idx.Val;
+            }
 
             node["Width"].Value = 16;
             node["Last"].Value = true;
             node["Padding"].Value = 8;
-            node["Container"].Value = "content5";
+            node["Container"].Value = "content4";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
 
+            // Must append a 'New Property Button' after our object editing view
             node = new Node();
 
-            node["Width"].Value = 16;
-            node["Last"].Value = true;
-            node["Padding"].Value = 8;
-            node["MarginBottom"].Value = 10;
-            node["Top"].Value = 2;
-            node["Container"].Value = "content6";
+            node["Text"].Value = "+";
+            node["ButtonCssClass"].Value = "span-2 clear-left push-8";
+            node["Append"].Value = true;
+            node["Event"].Value = "Magix.MetaType.CreateNewProperty";
+            node["Event"]["ObjectID"].Value = m.ID;
 
-            node["PropertyName"].Value = "Values";
-            node["IsList"].Value = true;
-            node["FullTypeName"].Value = typeof(MetaObject).FullName;
-
-            node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 3;
-            node["WhiteListColumns"]["Val"].Value = true;
-            node["WhiteListColumns"]["Val"]["ForcedWidth"].Value = 9;
-
-            node["Type"]["Properties"]["Name"].Value = null; // just to touch it ...
-            node["Type"]["Properties"]["Val"]["Header"].Value = "Value";
-            node["Type"]["Properties"]["Val"]["MaxLength"].Value = 40;
-
-            node["ID"].Value = e.Params["ID"].Value;
-            node["NoIdColumn"].Value = true;
-            node["ReUseNode"].Value = true;
-
-            RaiseEvent(
-                "DBAdmin.Form.ViewListOrComplexPropertyValue",
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content5",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.CreateNewProperty")]
+        protected void Magix_MetaType_CreateNewProperty(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject o = MetaObject.SelectByID(e.Params["ObjectID"].Get<int>());
+                MetaObject.Value v = new MetaObject.Value();
+                o.Values.Add(v);
+
+                o.Save();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["ID"].Value = o.ID;
+
+                RaiseEvent(
+                    "Magix.MetaType.EditObjectRaw",
+                    node);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.GetChildrenTemplateColumn")]
+        protected void Magix_Meta_GetChildrenTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            // Creating our SelectList
+            LinkButton ls = new LinkButton();
+            ls.Text = value;
+
+            // Supplying our Event Handler for the Changed Event ...
+            ls.Click +=
+                delegate
+                {
+                    Node node = new Node();
+
+                    node["Container"].Value = "content5";
+                    node["Top"].Value = 1;
+                    node["Width"].Value = 16;
+                    node["Padding"].Value = 8;
+                    node["Last"].Value = true;
+
+                    node["ID"].Value = id;
+                    node["PropertyName"].Value = "Children";
+                    node["IsList"].Value = true;
+                    node["FullTypeName"].Value = typeof(MetaObject).FullName;
+                    node["ReUseNode"].Value = true;
+                    node["IDColumnName"].Value = "Edit";
+                    node["IDColumnEvent"].Value = "Magix.MetaType.EditObjectRaw";
+
+                    node["WhiteListColumns"]["TypeName"].Value = true;
+                    node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
+                    node["WhiteListColumns"]["Reference"].Value = true;
+                    node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
+
+                    node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+                    node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
+                    node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
+
+                    RaiseEvent(
+                        "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                        node);
+                };
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = ls;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.GetValuesTemplateColumn")]
+        protected void Magix_Meta_GetValuesTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            // Creating our SelectList
+            InPlaceTextAreaEdit inplace = new InPlaceTextAreaEdit();
+            inplace.Text = value;
+            inplace.CssClass = "mux-in-place-edit larger left-float";
+
+            // Supplying our Event Handler for the Changed Event ...
+            inplace.TextChanged +=
+                delegate
+                {
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
+                    {
+                        MetaObject o = MetaObject.SelectByID(id);
+                        MetaObject.Value va = o.Values.Find(
+                            delegate(MetaObject.Value idxS)
+                            {
+                                return idxS.Name == name;
+                            });
+                        va.Val = inplace.Text;
+
+                        va.Save();
+
+                        tr.Commit();
+                    }
+                };
+
+            System.Web.UI.WebControls.PlaceHolder p = new System.Web.UI.WebControls.PlaceHolder();
+            p.Controls.Add(inplace);
+
+            LinkButton lb = new LinkButton();
+            lb.Text = "&nbsp;";
+            lb.CssClass = "remove-property";
+            lb.Click +=
+                delegate
+                {
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
+                    {
+                        MetaObject o = MetaObject.SelectByID(id);
+                        MetaObject.Value va = o.Values.Find(
+                            delegate(MetaObject.Value idxS)
+                            {
+                                return idxS.Name == name;
+                            });
+                        va.Delete();
+
+                        o.Values.Remove(va);
+
+                        tr.Commit();
+
+                        // Since the property was deleted, we will
+                        // re-databind the whole grid for simplicity ...
+
+                        Node node = new Node();
+                        node["ID"].Value = id;
+
+                        RaiseEvent(
+                            "Magix.MetaType.EditObjectRaw",
+                            node);
+                    }
+                };
+            p.Controls.Add(lb);
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = p;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.GetHeaderTemplateColumn")]
+        protected void Magix_Meta_GetHeaderTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            // Creating our Edit Name of property editer ...
+            InPlaceTextAreaEdit ls = new InPlaceTextAreaEdit();
+            ls.Text = name;
+            ls.CssClass = "mux-in-place-edit larger";
+
+            // Supplying our Event Handler for the Changed Event ...
+            ls.TextChanged +=
+                delegate
+                {
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
+                    {
+                        MetaObject o = MetaObject.SelectByID(id);
+                        MetaObject.Value va = o.Values.Find(
+                            delegate(MetaObject.Value idxS)
+                            {
+                                return idxS.Name == name;
+                            });
+                        va.Name = ls.Text;
+
+                        va.Save();
+
+                        tr.Commit();
+
+                        // Since the Name of the Property has changed, we
+                        // re-databind the whole grid for simplicity ...
+
+                        Node node = new Node();
+                        node["ID"].Value = id;
+
+                        RaiseEvent(
+                            "Magix.MetaType.EditObjectRaw",
+                            node);
+                    }
+                };
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = ls;
         }
 
         [ActiveEvent(Name = "Magix.MetaType.DeleteObjectRaw")]

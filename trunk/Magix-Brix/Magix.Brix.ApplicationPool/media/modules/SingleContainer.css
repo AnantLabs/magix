@@ -991,7 +991,47 @@ div.has-no-action
 	width:110px;
 }
 
+.remove-property
+{
+	width:30px;
+	height:18px;
+	float:right;
+	background:Transparent url(../images/delete.png) no-repeat top right;
+	opacity:.1;
 
+	-moz-transition-property:opacity;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:1s;
+	transition-property:opacity;
+	transition-duration:1s;
+}
+
+.remove-property:hover
+{
+	opacity:1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:1s;
+	transition-property:opacity;
+	transition-duration:1s;
+}
+
+.left-float
+{
+	float:left;
+	width:370px;
+	position:relative;
+}
+
+.left-float textarea
+{
+	position:absolute;
+	top:0;
+	left:0;
+}
 
 
 
