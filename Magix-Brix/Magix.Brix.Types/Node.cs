@@ -274,7 +274,7 @@ namespace Magix.Brix.Types
                     return true;
                 if (flat)
                     continue;
-                bool tmp = idx.Exists(functor);
+                bool tmp = idx.Exists(functor, flat);
                 if (tmp)
                     return true;
             }
@@ -387,7 +387,16 @@ namespace Magix.Brix.Types
         [DebuggerStepThrough]
         public void Add(Node item)
         {
-            _children.Add(item);
+            string itemName = item.Name;
+            if (!this.Exists(
+                delegate(Node idx2)
+                {
+                    return itemName == idx2.Name;
+                },
+                true))
+                _children.Add(item);
+            else
+                this[item.Name] = item;
             item._parent = this;
         }
 
@@ -396,15 +405,7 @@ namespace Magix.Brix.Types
         {
             foreach (Node idx in items)
             {
-                if (!this.Exists(
-                    delegate(Node idx2)
-                    {
-                        return idx.Name == idx2.Name;
-                    },
-                    true))
-                    Add(idx);
-                else
-                    this[idx.Name] = idx;
+                Add(idx);
             }
         }
 

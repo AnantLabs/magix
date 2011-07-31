@@ -249,6 +249,8 @@ Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in
             node["Object"]["Properties"]["PagesCount"].Value = WebPage.Count.ToString();
             node["Object"]["Properties"]["TemplatesCount"].Value = WebPageTemplate.Count.ToString();
 
+            node["DoNotRebind"].Value = true;
+
             // Getting plugins ...
             RaiseEvent(
                 "Magix.Publishing.GetDataForAdministratorDashboard",

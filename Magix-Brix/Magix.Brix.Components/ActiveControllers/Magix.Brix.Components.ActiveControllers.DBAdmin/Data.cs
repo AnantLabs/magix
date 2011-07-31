@@ -239,6 +239,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             if (type == null)
             {
                 node["FullTypeName"].Value = typeName;
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.GetObjectNode",

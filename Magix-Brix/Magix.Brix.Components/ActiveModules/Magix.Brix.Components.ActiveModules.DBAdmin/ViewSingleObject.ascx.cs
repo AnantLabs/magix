@@ -565,6 +565,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void ReDataBind()
         {
+            if (DataSource.Contains("DoNotRebind") &&
+                DataSource["DoNotRebind"].Get<bool>())
+                return;
             if (DataSource.Contains("ParentID") && 
                 DataSource["ParentID"].Get<int>() > 0)
             {
