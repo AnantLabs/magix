@@ -626,6 +626,7 @@ Deleting it may break these parts.</p>";
 
                 node["Width"].Value = 18;
                 node["Last"].Value = true;
+                node["Padding"].Value = 6;
                 node["Container"].Value = "content6";
                 node["IsList"].Value = false;
                 node["CssClass"].Value = "small-editer";
