@@ -331,8 +331,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             int id = e.Params["ID"].Get<int>();
             string value = e.Params["Value"].Get<string>();
 
-            // Creating our SelectList
-            InPlaceTextAreaEdit inplace = new InPlaceTextAreaEdit();
+            // Creating our Edit Value
+            TextAreaEdit inplace = new TextAreaEdit();
             inplace.Text = value;
             inplace.CssClass = "mux-in-place-edit larger left-float";
 
@@ -407,7 +407,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             string value = e.Params["Value"].Get<string>();
 
             // Creating our Edit Name of property editer ...
-            InPlaceTextAreaEdit ls = new InPlaceTextAreaEdit();
+            InPlaceEdit ls = new InPlaceEdit();
             ls.Text = name;
             ls.CssClass = "mux-in-place-edit larger";
 
@@ -423,6 +423,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             {
                                 return idxS.Name == name;
                             });
+                        if (ls.Text == va.Name)
+                            return;
                         va.Name = ls.Text;
 
                         va.Save();
