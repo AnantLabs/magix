@@ -153,15 +153,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                         OpenIDToken token = 
                             OpenIDToken.SelectFirst(Criteria.Eq("Name", r.ClaimedIdentifier));
 
-                        Node m = new Node();
-
-                        m["Message"].Value = string.Format("Yup, seems like you own '{0}'", r.ClaimedIdentifier);
-                        m["Delayed"].Value = true;
-
-                        RaiseEvent(
-                            "Magix.Core.ShowMessage",
-                            m);
-
                         if (token == null)
                         {
                             User.Current = null; // Weird, I know, but for circular cases, where you use yourself as both provider and relying party ...
@@ -207,15 +198,35 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                                 "Magix.Publishing.NewUserRegisteredThroughOpenID",
                                 node);
 
+                            Node m = new Node();
+
+                            m["Message"].Value = string.Format("Yup, seems like you own '{0}'", r.ClaimedIdentifier);
+                            m["Delayed"].Value = true;
+
+                            RaiseEvent(
+                                "Magix.Core.ShowMessage",
+                                m);
+
                             Page.Response.Redirect(GetApplicationBaseUrl(), true);
                         }
                         else
                         {
                             User.Current = token.User;
 
+                            Node m = new Node();
+
+                            m["Message"].Value = string.Format("Yup, seems like you own '{0}'", r.ClaimedIdentifier);
+                            m["Delayed"].Value = true;
+
+                            RaiseEvent(
+                                "Magix.Core.ShowMessage",
+                                m);
+
                             // User logged in, using his OpenID provider
                             RaiseEvent("Magix.Core.UserLoggedIn");
-                        } break;
+
+                        }
+                        break;
                     case AuthenticationStatus.Canceled:
                         break; // Silently fall through ...?
                     case AuthenticationStatus.Failed:

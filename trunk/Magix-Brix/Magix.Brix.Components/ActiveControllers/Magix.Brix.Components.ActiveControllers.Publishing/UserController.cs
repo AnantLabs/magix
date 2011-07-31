@@ -180,6 +180,13 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["WhiteListColumns"]["Twitter"].Value = true;
             e.Params["WhiteListColumns"]["Facebook"].Value = true;
 
+            e.Params["WhiteListColumns"]["BirthDate"].Value = true;
+            e.Params["WhiteListColumns"]["Country"].Value = true;
+            e.Params["WhiteListColumns"]["Gender"].Value = true;
+            e.Params["WhiteListColumns"]["Language"].Value = true;
+            e.Params["WhiteListColumns"]["Nickname"].Value = true;
+            e.Params["WhiteListColumns"]["TimeZone"].Value = true;
+
             e.Params["WhiteListProperties"]["Name"].Value = true;
             e.Params["WhiteListProperties"]["Value"].Value = true;
 
@@ -198,6 +205,13 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Type"]["Properties"]["State"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Twitter"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Facebook"]["ReadOnly"].Value = false;
+
+            e.Params["Type"]["Properties"]["BirthDate"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Country"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Gender"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Language"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["Nickname"]["ReadOnly"].Value = false;
+            e.Params["Type"]["Properties"]["TimeZone"]["ReadOnly"].Value = false;
 
             e.Params["Padding"].Value = 6;
             e.Params["Width"].Value = 18;

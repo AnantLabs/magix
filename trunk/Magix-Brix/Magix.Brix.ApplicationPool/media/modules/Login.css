@@ -30,6 +30,16 @@ table.loginTable>tbody>tr>td
 }
 
 
+input[type=text].open-id
+{
+	background-image:url(../images/openid_tiny.png);
+	background-repeat:no-repeat;
+	background-position:0 0;
+	padding-left:20px;
+	min-width:210px;
+	width:210px;
+}
+
 
 
 

@@ -18,6 +18,7 @@ namespace Magix.Brix.Components.ActiveModules.Users
     {
         protected TextBox username;
         protected TextBox password;
+        protected TextBox openID;
         protected Label err;
 
         public void InitialLoading(Node node)
@@ -37,8 +38,20 @@ namespace Magix.Brix.Components.ActiveModules.Users
         {
             Node node = new Node();
 
-            node["Username"].Value = username.Text;
-            node["Password"].Value = password.Text;
+            if (!string.IsNullOrEmpty(username.Text) &&
+                !string.IsNullOrEmpty(password.Text))
+            {
+                node["Username"].Value = username.Text;
+                node["Password"].Value = password.Text;
+            }
+            else if (!string.IsNullOrEmpty(username.Text))
+            {
+                node["Username"].Value = username.Text;
+            }
+            else
+            {
+                node["Username"].Value = openID.Text;
+            }
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,

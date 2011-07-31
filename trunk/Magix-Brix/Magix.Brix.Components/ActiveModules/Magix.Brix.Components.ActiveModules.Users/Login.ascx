@@ -24,6 +24,7 @@
                     <mux:TextBox 
                         runat="server" 
                         AutoCapitalize="false"
+                        PlaceHolder="Username"
                         CssClass="span-4 txt"
                         id="username" />
                 </td>
@@ -36,8 +37,19 @@
                     <mux:TextBox 
                         runat="server" 
                         TextMode="Password" 
+                        PlaceHolder="Password"
                         CssClass="span-4 txt"
                         id="password" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <mux:TextBox 
+                        runat="server" 
+                        AutoCapitalize="false"
+                        PlaceHolder="OpenID"
+                        CssClass="span-6 open-id"
+                        id="openID" />
                 </td>
             </tr>
             <tr>

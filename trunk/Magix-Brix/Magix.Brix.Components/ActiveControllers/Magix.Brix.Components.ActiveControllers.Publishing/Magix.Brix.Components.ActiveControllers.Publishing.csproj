@@ -73,6 +73,10 @@
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
       <Name>Magix.Brix.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Logging\Magix.Brix.Components.ActiveTypes.Logging.csproj">
+      <Project>{58466D6B-928F-4932-B1AC-913AD28EB8A2}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Publishing\Magix.Brix.Components.ActiveTypes.Publishing.csproj">
       <Project>{175455B9-43D0-4190-A2AE-8033BD3D62A1}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Publishing</Name>
