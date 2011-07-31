@@ -31,10 +31,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 // Creating a couple of default User/Role objects, so our CMS users
                 // can log in ...
-                if (Role.Count == 0)
+                if (Role.CountWhere(Criteria.Eq("Name", "Administrator")) == 0)
                 {
                     Role role = new Role();
                     role.Name = "Administrator";
+                    role.Save();
+                }
+                if (Role.CountWhere(Criteria.Eq("Name", "User")) == 0)
+                {
+                    Role role = new Role();
+                    role.Name = "User";
                     role.Save();
                 }
                 if (User.Count == 0)

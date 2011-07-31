@@ -50,6 +50,24 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         public string Facebook { get; set; }
 
         [ActiveField]
+        public DateTime BirthDate { get; set; }
+
+        [ActiveField]
+        public string Country { get; set; }
+
+        [ActiveField]
+        public string Gender { get; set; }
+
+        [ActiveField]
+        public string Language { get; set; }
+
+        [ActiveField]
+        public string Nickname { get; set; }
+
+        [ActiveField]
+        public string TimeZone { get; set; }
+
+        [ActiveField]
         public LazyList<OpenIDToken> OpenIDTokens { get; set; }
 
         #region [ -- Business Logic -- ]
