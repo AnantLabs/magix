@@ -61,7 +61,7 @@ namespace Magix.Brix.Components.ActiveControllers.Email
                 SmtpClient smtp = new SmtpClient();
                 smtp.Send(msg);
             }
-            catch (Exception err)
+            catch (Exception)
             {
                 //Node n = new Node();
                 //n["Message"].Value = "Something went wrong while trying to send email, message from server was; " + err.Message;

@@ -525,15 +525,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return row;
         }
 
-        [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
-        protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
-        {
-            if (e.Params["FullTypeName"].Get<string>().Contains(DataSource["FullTypeName"].Get<string>()))
-            {
-                ReDataBind();
-            }
-        }
-
         [ActiveEvent(Name = "Magix.Core.CheckIfIDIsBeingSingleEdited")]
         protected void Magix_Core_CheckIfIDIsBeingSingleEdited(object sender, ActiveEventArgs e)
         {

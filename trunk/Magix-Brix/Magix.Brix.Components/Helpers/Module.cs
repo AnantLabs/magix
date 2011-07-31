@@ -18,21 +18,6 @@ namespace Magix.Brix.Components
     {
         protected abstract void ReDataBind();
 
-        public virtual void InitialLoading(Node node)
-        {
-            Load +=
-                delegate
-                {
-                    DataSource = node;
-                };
-        }
-
-        protected Node DataSource
-        {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
-        }
-
         protected bool CheckForTypeHit(ActiveEventArgs e)
         {
             if (DataSource.Contains("FullTypeName") && 

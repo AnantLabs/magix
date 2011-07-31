@@ -23,15 +23,21 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
 
         public override void InitialLoading(Node node)
         {
-            if (!node.Contains("MetaViewTypeName"))
-            {
-                // Probably in 'production mode' and hence need to get our data ...
-                node["MetaViewName"].Value = ViewName;
+            base.InitialLoading(node);
 
-                RaiseSafeEvent(
-                    "Magix.MetaView.GetViewData",
-                    node);
-            }
+            Load +=
+                delegate
+                {
+                    if (!node.Contains("MetaViewTypeName"))
+                    {
+                        // Probably in 'production mode' and hence need to get our data ...
+                        node["MetaViewName"].Value = ViewName;
+
+                        RaiseSafeEvent(
+                            "Magix.MetaView.GetViewData",
+                            node);
+                    }
+                };
         }
 
         protected override void OnLoad(EventArgs e)
@@ -82,7 +88,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                     node["MetaViewName"].Value = DataSource["MetaViewName"].Value;
                     node["MetaViewTypeName"].Value = DataSource["MetaViewTypeName"].Value;
 
-                    GetPropertyValues(node);
+                    GetPropertyValues(node["PropertyValues"], false);
 
                     foreach (string idxS in idx["Action"].Get<string>().Split('|'))
                     {
@@ -98,7 +104,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             ctrls.Controls.Add(b);
         }
 
-        private void GetPropertyValues(Node node)
+        private void GetPropertyValues(Node node, bool flat)
         {
             foreach (Control idx in ctrls.Controls)
             {
@@ -107,8 +113,15 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                 {
                     if (w is TextBox)
                     {
-                        node["PropertyValues"][w.Info]["Value"].Value = (w as TextBox).Text;
-                        node["PropertyValues"][w.Info]["Name"].Value = w.Info;
+                        if (flat)
+                        {
+                            node[w.Info].Value = (w as TextBox).Text;
+                        }
+                        else
+                        {
+                            node[w.Info]["Value"].Value = (w as TextBox).Text;
+                            node[w.Info]["Name"].Value = w.Info;
+                        }
                     }
                 }
             }
@@ -143,6 +156,15 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         {
             if (e.Params["PageObjectTemplateID"].Get<int>() == DataSource["PageObjectTemplateID"].Get<int>())
                 e.Params["ID"].Value = this.Parent.ID;
+        }
+
+        [ActiveEvent(Name = "Magix.Meta.GetActiveFormData")]
+        protected void Magix_Meta_GetActiveFormData(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["PageObjectTemplateID"].Get<int>() == DataSource["PageObjectTemplateID"].Get<int>())
+            {
+                GetPropertyValues(e.Params, true);
+            }
         }
 
         [ActiveEvent(Name = "Magix.Meta.Actions.EmptyForm")]
