@@ -217,7 +217,7 @@ namespace Magix.Brix.Components
             {
                 Label cS = new Label();
                 cS.Tag = "td";
-                cS.Text = "Remove";
+                cS.Text = "Rem.";
                 cS.CssClass = "wide-2 noFilter";
                 row.Controls.Add(cS);
             }
