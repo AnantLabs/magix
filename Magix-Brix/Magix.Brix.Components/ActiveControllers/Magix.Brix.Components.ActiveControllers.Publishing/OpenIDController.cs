@@ -37,6 +37,72 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 DoRelyingPartyStuff();
         }
 
+        [ActiveEvent(Name = "Magix.Publishing.GetSettings")]
+        protected void Magix_Publishing_GetSettings(object sender, ActiveEventArgs e)
+        {
+            e.Params["OpenID"]["Header"].Value = "OpenID";
+            e.Params["OpenID"]["DefaultRoleName"]["Name"].Value = "Default Role";
+            e.Params["OpenID"]["DefaultRoleName"]["SettingsValue"].Value = "Magix.Publishing.OpenID.DefaultRoleName";
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.NewUserRegisteredThroughOpenID")]
+        protected void Magix_Publishing_NewUserRegisteredThroughOpenID(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                User user = new User();
+                user.Username = e.Params["OpenID"].Get<string>();
+                user.Password = "pass" + Guid.NewGuid().ToString();
+
+                OpenIDToken token = new OpenIDToken();
+                token.Name = e.Params["OpenID"].Get<string>();
+                user.OpenIDTokens.Add(token);
+
+                user.OpenIDTokens.Add(token);
+
+                string defaultRole = Settings.Instance.Get("Magix.Publishing.OpenID.DefaultRoleName", "User");
+
+                if (!string.IsNullOrEmpty(defaultRole))
+                {
+                    Role r = Role.SelectFirst(Criteria.Eq("Name", defaultRole));
+                    if (r == null)
+                        throw new ArgumentException("Your default role for OpenID users doesn't exists ...");
+                    user.Roles.Add(r);
+                }
+
+                if (e.Params.Contains("BirthDate"))
+                    user.BirthDate = e.Params["BirthDate"].Get<DateTime>();
+
+                if (e.Params.Contains("Country"))
+                    user.Country = e.Params["Country"].Get<string>();
+
+                if (e.Params.Contains("Email"))
+                    user.Email = e.Params["Email"].Get<string>();
+
+                if (e.Params.Contains("FullName"))
+                    user.FullName = e.Params["FullName"].Get<string>();
+
+                if (e.Params.Contains("Gender"))
+                    user.Gender = e.Params["Gender"].Get<string>();
+
+                if (e.Params.Contains("Language"))
+                    user.Language = e.Params["Language"].Get<string>();
+
+                if (e.Params.Contains("Nickname"))
+                    user.Nickname = e.Params["Nickname"].Get<string>();
+
+                if (e.Params.Contains("PostalCode"))
+                    user.Zip = e.Params["PostalCode"].Get<string>();
+
+                if (e.Params.Contains("TimeZone"))
+                    user.TimeZone = e.Params["TimeZone"].Get<string>();
+
+                user.SaveNoVerification();
+
+                tr.Commit();
+            }
+        }
+
         private void DoOpenProviderStuff()
         {
             OpenIdProvider provider = new OpenIdProvider();
@@ -88,8 +154,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                             OpenIDToken.SelectFirst(Criteria.Eq("Name", r.ClaimedIdentifier));
 
                         Node m = new Node();
+
                         m["Message"].Value = string.Format("Yup, seems like you own '{0}'", r.ClaimedIdentifier);
                         m["Delayed"].Value = true;
+
                         RaiseEvent(
                             "Magix.Core.ShowMessage",
                             m);
@@ -100,7 +168,39 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                             Node node = new Node();
 
-                            node["OpenID"].Value = r.ClaimedIdentifier;
+                            node["OpenID"].Value = r.ClaimedIdentifier.ToString();
+
+                            ClaimsResponse claim = r.GetExtension<ClaimsResponse>();
+
+                            if (claim != null)
+                            {
+                                if (claim.BirthDate.HasValue)
+                                    node["BirthDate"].Value = claim.BirthDate.Value;
+
+                                if (!string.IsNullOrEmpty(claim.Country))
+                                    node["Country"].Value = claim.Country;
+
+                                if (!string.IsNullOrEmpty(claim.Email))
+                                    node["Email"].Value = claim.Email;
+
+                                if (!string.IsNullOrEmpty(claim.FullName))
+                                    node["FullName"].Value = claim.FullName;
+
+                                if (claim.Gender.HasValue)
+                                    node["Gender"].Value = claim.Gender.Value.ToString();
+
+                                if (!string.IsNullOrEmpty(claim.Language))
+                                    node["Language"].Value = claim.Language;
+
+                                if (!string.IsNullOrEmpty(claim.Nickname))
+                                    node["Nickname"].Value = claim.Nickname;
+
+                                if (!string.IsNullOrEmpty(claim.PostalCode))
+                                    node["PostalCode"].Value = claim.PostalCode;
+
+                                if (!string.IsNullOrEmpty(claim.TimeZone))
+                                    node["TimeZone"].Value = claim.TimeZone;
+                            }
 
                             // New user came to site, through OpenID login ...
                             RaiseEvent(
@@ -149,7 +249,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (string.IsNullOrEmpty(username))
             {
                 Node node = new Node();
-                node["Message"].Value = "We could really need some help here, maybe a suggestion of what it might have been ...?";
+                node["Message"].Value = @"We could really need some help here, 
+maybe a suggestion of what it might have been ...?";
+
                 RaiseEvent(
                     "Magix.Core.ShowMessage",
                     node);
@@ -164,6 +266,22 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 //Identifier id = new 
                 DotNetOpenAuth.OpenId.RelyingParty.IAuthenticationRequest request =
                     openId.CreateRequest(username, GetApplicationBaseUrl(), Page.Request.Url);
+
+                ClaimsRequest claim = new ClaimsRequest();
+
+                // Aiming for _everything_ ...
+                claim.BirthDate = DemandLevel.Request;
+                claim.Country = DemandLevel.Request;
+                claim.Email = DemandLevel.Request;
+                claim.FullName = DemandLevel.Request;
+                claim.Gender = DemandLevel.Request;
+                claim.Language = DemandLevel.Request;
+                claim.Nickname = DemandLevel.Request;
+                claim.PostalCode = DemandLevel.Request;
+                claim.TimeZone = DemandLevel.Request;
+
+                request.AddExtension(claim);
+
                 request.RedirectToProvider();
             }
         }
