@@ -188,7 +188,7 @@ namespace Magix.Brix.Types
             [DebuggerStepThrough]
             get { return _name; }
             [DebuggerStepThrough]
-            private set { _name = value; }
+            set { _name = value; }
         }
 
         /**
@@ -396,7 +396,15 @@ namespace Magix.Brix.Types
         {
             foreach (Node idx in items)
             {
-                Add(idx);
+                if (!this.Exists(
+                    delegate(Node idx2)
+                    {
+                        return idx.Name == idx2.Name;
+                    },
+                    true))
+                    Add(idx);
+                else
+                    this[idx.Name] = idx;
             }
         }
 

@@ -11,6 +11,8 @@ using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
 using Magix.Brix.Components.ActiveTypes.Publishing;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -110,6 +112,195 @@ System about how your objects actually looks like. Create at least on item of ty
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.SendEmail")]
+        protected void Magix_MetaType_SendEmail(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["Header"].Value =
+                e.Params.Contains("Header") && !string.IsNullOrEmpty(e.Params["Header"].Get<string>()) ?
+                    e.Params["Header"].Get<string>() :
+                    "Message from Marvin ...";
+
+            node["Body"].Value =
+                e.Params.Contains("Body") && !string.IsNullOrEmpty(e.Params["Body"].Get<string>()) ?
+                    e.Params["Body"].Get<string>() :
+                    "Opps, someone forgot to attach the message ...";
+
+            node["AdminEmail"].Value =
+                e.Params.Contains("Email") && !string.IsNullOrEmpty(e.Params["Email"].Get<string>()) ?
+                    e.Params["Email"].Get<string>() :
+                    User.Current.Email;
+
+            node["AdminEmailFrom"].Value =
+                e.Params.Contains("From") && !string.IsNullOrEmpty(e.Params["From"].Get<string>()) ?
+                    e.Params["From"].Get<string>() :
+                    User.Current.FullName;
+
+            if (e.Params.Contains("To"))
+            {
+                if (!string.IsNullOrEmpty(e.Params["To"].Get<string>()))
+                {
+                    node["EmailAddresses"]["only"].Value = e.Params["To"].Get<string>();
+                }
+                else
+                {
+                    node["EmailAddresses"].AddRange(e.Params["To"].UnTie());
+                    if (node["EmailAddresses"][0].Value == null)
+                    {
+                        // Just in case this is a 'template action' with empty placeholders for end-user
+                        // to fill in ...
+                        node["EmailAddresses"][0].Value = User.Current.Email;
+                    }
+                }
+            }
+            else
+            {
+                // Sending yourself an email ...
+                node["EmailAddresses"]["only"].Value = User.Current.Email;
+            }
+
+            RaiseEvent(
+                "Magix.Core.SendEmailLocally",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.ReplaceStringValue")]
+        protected void Magix_MetaType_ReplaceStringValue(object sender, ActiveEventArgs e)
+        {
+            string source = 
+                e.Params.Contains("Source") ? 
+                    e.Params["Source"].Get<string>() : 
+                    e.Params[e.Params["SourceNode"].Get<string>()].Get<string>();
+            string oldString =
+                e.Params.Contains("OldString") ?
+                    e.Params["OldString"].Get<string>() :
+                    e.Params[e.Params["OldStringNode"].Get<string>()].Get<string>();
+            string newString =
+                e.Params.Contains("NewString") ?
+                    e.Params["NewString"].Get<string>() :
+                    e.Params[e.Params["NewStringNode"].Get<string>()].Get<string>();
+
+            string transformed = source.Replace(oldString, newString);
+
+            if (e.Params.Contains("ResultNode"))
+                e.Params[e.Params["ResultNode"].Get<string>()].Value = transformed;
+            else
+                e.Params["Result"].Value = transformed;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.MultiAction")]
+        protected void Magix_MetaType_MultiAction(object sender, ActiveEventArgs e)
+        {
+            foreach (Node idx in e.Params["Actions"])
+            {
+                string eventName = idx["Name"].Get<string>();
+
+                Node eventNodes = e.Params;
+
+                Action action = Action.SelectFirst(Criteria.Eq("Name", eventName));
+                if (action != null)
+                {
+                    foreach (Action.ActionParams idx2 in action.Params)
+                    {
+                        GetActionParameters(e.Params, idx2);
+                    }
+                    eventName = action.EventName;
+                }
+
+                if (idx.Contains("Params"))
+                {
+                    eventNodes.AddRange(idx["Params"]);
+                }
+
+                RaiseEvent(
+                    eventName,
+                    eventNodes);
+            }
+        }
+
+        private static void GetActionParameters(Node node, Action.ActionParams a)
+        {
+            switch (a.TypeName)
+            {
+                case "System.String":
+                    node[a.Name].Value = a.Value;
+                    break;
+                case "System.Int32":
+                    node[a.Name].Value = int.Parse(a.Value, CultureInfo.InvariantCulture);
+                    break;
+                case "System.Decimal":
+                    node[a.Name].Value = decimal.Parse(a.Value, CultureInfo.InvariantCulture);
+                    break;
+                case "System.DateTime":
+                    node[a.Name].Value = DateTime.ParseExact(a.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    break;
+                case "System.Boolean":
+                    node[a.Name].Value = bool.Parse(a.Value);
+                    break;
+                default:
+                    node[a.Name].Value = a.Value;
+                    break;
+            }
+            foreach (Action.ActionParams idx in a.Children)
+            {
+                GetActionParameters(node[a.Name], idx);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.RenameNode")]
+        protected void Magix_MetaType_RenameNode(object sender, ActiveEventArgs e)
+        {
+            string fromName = e.Params["FromName"].Get<string>();
+            string toName = e.Params["ToName"].Get<string>();
+            e.Params[fromName].Name = toName;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.StripEverythingBut")]
+        protected void Magix_MetaType_StripEverythingBut(object sender, ActiveEventArgs e)
+        {
+            string but = e.Params["But"].Get<string>();
+            if (!string.IsNullOrEmpty(but))
+            {
+                List<Node> nodes = new List<Node>();
+                foreach (Node ix in e.Params)
+                {
+                    if (ix.Name != but)
+                        nodes.Add(ix);
+                }
+                foreach (Node idx in nodes)
+                {
+                    idx.UnTie();
+                }
+            }
+            else
+            {
+                // Array of stuff to keep ...
+                List<Node> nodes = new List<Node>();
+                foreach (Node ix in e.Params["But"])
+                {
+                    if (ix.Name != but)
+                        nodes.Add(ix);
+                }
+                foreach (Node idx in nodes)
+                {
+                    idx.UnTie();
+                }
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.GetObjectIntoNode")]
+        protected void Magix_MetaType_GetObjectIntoNode(object sender, ActiveEventArgs e)
+        {
+            MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+            if (o == null)
+                throw new ArgumentException("Some wize-guy have deleted your object dude. Update the MetaObjectID property of your Action to another Meta Object ...");
+            foreach (MetaObject.Value idx in o.Values)
+            {
+                e.Params[idx.Name].Value = idx.Val;
+            }
         }
 
         [ActiveEvent(Name = "Magix.MetaType.ViewMetaTypeFromTemplate")]
@@ -396,52 +587,6 @@ you'd still like to have this object deleted ...";
 
             RaiseEvent(
                 "Magix.Publishing.ReloadWebPart",
-                node);
-        }
-
-        [ActiveEvent(Name = "Magix.MetaType.SendEmail")]
-        protected void Magix_MetaType_SendEmail(object sender, ActiveEventArgs e)
-        {
-            Node node = new Node();
-
-            node["Header"].Value =
-                e.Params.Contains("Header") && !string.IsNullOrEmpty(e.Params["Header"].Get<string>()) ?
-                    e.Params["Header"].Get<string>() :
-                    "Message from Marvin ...";
-
-            node["Body"].Value =
-                e.Params.Contains("Body") && !string.IsNullOrEmpty(e.Params["Body"].Get<string>()) ?
-                    e.Params["Body"].Get<string>() :
-                    "Opps, someone forgot to attach the message ...";
-
-            node["AdminEmail"].Value =
-                e.Params.Contains("Email") && !string.IsNullOrEmpty(e.Params["Email"].Get<string>()) ?
-                    e.Params["Email"].Get<string>() :
-                    User.Current.Email;
-
-            node["AdminEmailFrom"].Value =
-                e.Params.Contains("From") && !string.IsNullOrEmpty(e.Params["From"].Get<string>()) ?
-                    e.Params["From"].Get<string>() :
-                    User.Current.FullName;
-
-            if (e.Params.Contains("To"))
-            {
-                node["EmailAddresses"].AddRange(e.Params["To"].UnTie());
-                if (node["EmailAddresses"][0].Value == null)
-                {
-                    // Just in case this is a 'template action' with empty placeholders for end-user
-                    // to fill in ...
-                    node["EmailAddresses"][0].Value = User.Current.Email;
-                }
-            }
-            else
-            {
-                // Sending yourself an email ...
-                node["EmailAddresses"]["only"].Value = User.Current.Email;
-            }
-
-            RaiseEvent(
-                "Magix.Core.SendEmailLocally",
                 node);
         }
     }
