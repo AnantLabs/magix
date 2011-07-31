@@ -407,6 +407,193 @@ with the Name/Value as the Node Name/Value pair.";
                     a.Save();
                 }
 
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SendEmail")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.SendEmail";
+                    a.EventName = "Magix.MetaType.MultiAction";
+                    a.StripInput = false;
+                    a.Description = @"Can be used from a Form which has two fields, 
+Name and Email, which will be used to create the recipient parts. Expects to have
+the ...GetObjectIntoNode/Params/MetaObjectID changed to an ID of a MetaObject which at the very least
+contains the columns 'Subject' and 'Body'. Which again can contain the field Name, which will
+be substituded with whatever name the End-User typed in at his form, before the Email is being sent.
+This Action is also dependent upon having the Web.Config settings changed under 'mailSettings'
+to an SMTP server which you have access to ...";
+
+                    Action.ActionParams rootA = new Action.ActionParams();
+                    rootA.Name = "Actions";
+                    a.Params.Add(rootA);
+
+                    // GetEmailTemplate
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "...GetObjectIntoNode";
+                    rootA.Children.Add(m);
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "Name";
+                    m2.Value = "Magix.MetaType.GetObjectIntoNode";
+                    m2.TypeName = typeof(string).FullName;
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Params";
+                    m.Children.Add(m2);
+
+                    Action.ActionParams m3 = new Action.ActionParams();
+                    m3.Name = "MetaObjectID";
+                    m3.Value = "103 - CHANGE THIS!";
+                    m3.TypeName = typeof(int).FullName;
+                    m2.Children.Add(m3);
+
+                    // GetActiveFormData
+                    m = new Action.ActionParams();
+                    m.Name = "...GetActiveFormData";
+                    rootA.Children.Add(m);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Name";
+                    m2.Value = "Magix.DynamicEvent.GetActiveFormData";
+                    m2.TypeName = typeof(string).FullName;
+                    m.Children.Add(m2);
+
+                    // Magix.MetaType.RenameNode
+                    m = new Action.ActionParams();
+                    m.Name = "...RenameNode";
+                    rootA.Children.Add(m);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Name";
+                    m2.Value = "Magix.MetaType.RenameNode";
+                    m2.TypeName = typeof(string).FullName;
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Params";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "FromName";
+                    m3.Value = "Email";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "ToName";
+                    m3.Value = "To";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    // Magix.MetaType.ReplaceStringValue-Header
+                    m = new Action.ActionParams();
+                    m.Name = "...ReplaceStringValue-Header";
+                    rootA.Children.Add(m);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Name";
+                    m2.TypeName = typeof(string).FullName;
+                    m2.Value = "Magix.MetaType.ReplaceStringValue";
+                    m.Children.Add(m2);
+
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Params";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "SourceNode";
+                    m3.Value = "Header";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "OldString";
+                    m3.Value = "[Name]";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "NewStringNode";
+                    m3.Value = "Name";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "ResultNode";
+                    m3.Value = "Header";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    // Magix.MetaType.ReplaceStringValue-Body
+                    m = new Action.ActionParams();
+                    m.Name = "...ReplaceStringValue-Body";
+                    rootA.Children.Add(m);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Name";
+                    m2.TypeName = typeof(string).FullName;
+                    m2.Value = "Magix.MetaType.ReplaceStringValue";
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Params";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "SourceNode";
+                    m3.Value = "Body";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "OldString";
+                    m3.Value = "[Name]";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "NewStringNode";
+                    m3.Value = "Name";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "ResultNode";
+                    m3.Value = "Body";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    // Magix.Meta.Actions.SendEmail
+                    m = new Action.ActionParams();
+                    m.Name = "Magix.Meta.Actions.SendEmail";
+                    rootA.Children.Add(m);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Name";
+                    m2.TypeName = typeof(string).FullName;
+                    m2.Value = "Magix.MetaType.SendEmail";
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Params";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "Email";
+                    m3.Value = "youremailaddress@yourdomain.com";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "From";
+                    m3.Value = "Your-Full-Name";
+                    m3.TypeName = typeof(string).FullName;
+                    m2.Children.Add(m3);
+
+                    a.Save();
+                }
+
                 tr.Commit();
             }
         }
