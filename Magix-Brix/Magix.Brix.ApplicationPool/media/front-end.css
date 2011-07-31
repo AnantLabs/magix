@@ -24,10 +24,10 @@ p
 
 input[type=text].open-id
 {
-	background-image:url(images/openid_small.png);
-	background-repeat:no-repeat;
-	background-position:0 0;
-	padding-left:40px;
-	min-width:350px;
-	width:350px;
+   background-image:url(images/openid_small.png);
+   background-repeat:no-repeat;
+   background-position:0 0;
+   padding-left:40px;
+   min-width:350px;
+   width:350px;
 }

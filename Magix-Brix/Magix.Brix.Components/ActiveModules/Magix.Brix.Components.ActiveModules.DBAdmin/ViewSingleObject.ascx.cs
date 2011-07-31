@@ -332,6 +332,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         {
                             Label ed = new Label();
                             ed.Text = node.Value.ToString();
+                            if (DataSource["Type"]["Properties"][node.Name].Contains("MaxLength"))
+                            {
+                                if (ed.Text.Length > DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>())
+                                {
+                                    ed.Text = ed.Text.Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
+                                }
+                            }
                             if (DataSource.Contains("WhiteListProperties") &&
                                 DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                             {

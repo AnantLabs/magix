@@ -192,7 +192,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
             }
             if (RaiseSafeEvent(
-                "DBAdmin.Data.GetContentsOfClass",
+                DataSource.Contains("GetObjectsEvent") ?
+                    DataSource["GetObjectsEvent"].Get<string>() :
+                    "DBAdmin.Data.GetContentsOfClass",
                 DataSource))
             {
                 if (setSelectedRow)
