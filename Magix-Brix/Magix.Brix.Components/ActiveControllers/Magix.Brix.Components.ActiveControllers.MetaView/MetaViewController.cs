@@ -682,16 +682,26 @@ Deleting it may break these parts.</p>";
                     {
                         string gridPropertyName = p.Name.Split(':')[1];
 
+                        MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+                        string propertyName = e.Params["Name"].Get<string>();
+                        MetaObject.Value val = o.Values.Find(
+                            delegate(MetaObject.Value idx)
+                            {
+                                return idx.Name == propertyName;
+                            });
+
                         Panel panel = new Panel();
+                        panel.ID = "pnl" + id;
                         panel.CssClass = "calendar-wrapper";
 
                         Calendar c = new Calendar();
+                        c.ID = "cal" + id;
                         c.CssClass += " mux-shaded mux-rounded";
-                        c.DateSelected +=
-                            delegate
-                            {
-                                new EffectFadeOut(c, 250).Render();
-                            };
+                        if (val != null && 
+                            !string.IsNullOrEmpty(val.Val))
+                        {
+                            c.Value = DateTime.ParseExact(val.Val, "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                        }
                         c.Style[Styles.display] = "none";
                         c.Style[Styles.position] = "absolute";
                         c.Style[Styles.top] = "0";
@@ -700,7 +710,39 @@ Deleting it may break these parts.</p>";
                         panel.Controls.Add(c);
 
                         LinkButton but = new LinkButton();
-                        but.Text = "xxx";
+
+                        c.DateSelected +=
+                            delegate(object sender2, EventArgs e2)
+                            {
+                                new EffectFadeOut(c, 250).Render();
+                                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                                {
+                                    if (val == null)
+                                    {
+                                        val = new MetaObject.Value();
+                                        val.Name = propertyName;
+                                        o.Values.Add(val);
+                                        o.Save();
+                                    }
+                                    val.Val = c.Value.ToString("yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+                                    val.Save();
+
+                                    tr.Commit();
+
+                                    but.Text = DateTime.ParseExact(
+                                        val.Val, "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                                        .ToString("ddd d MMM yy", System.Globalization.CultureInfo.InvariantCulture);
+                                }
+                            };
+
+                        but.Text = "???";
+                        if (val != null &&
+                            !string.IsNullOrEmpty(val.Val))
+                            but.Text = DateTime.ParseExact(
+                                val.Val, "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                                .ToString("ddd d MMM yy", System.Globalization.CultureInfo.InvariantCulture);
+                        but.ID = "but" + id;
                         but.Click +=
                             delegate
                             {
