@@ -102,7 +102,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             ls.Click +=
                 delegate
                 {
-                    CopyMetaObject(id);
+                    Node tmp = new Node();
+                    tmp["ID"].Value = id;
+                    RaiseEvent(
+                        "Magix.MetaType.CopyMetaObject",
+                        tmp);
                 };
 
 
@@ -111,8 +115,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Control"].Value = ls;
         }
 
-        private void CopyMetaObject(int id)
+        [ActiveEvent(Name = "Magix.MetaType.CopyMetaObject")]
+        private void Magix_MetaType_CopyMetaObject(object sender, ActiveEventArgs e)
         {
+            int id = e.Params["ID"].Get<int>();
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject n = MetaObject.SelectByID(id).Clone();
@@ -188,6 +194,43 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             MetaObject m = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             Node node = new Node();
+
+            string cssClass = m.TypeName ?? "";
+
+            if (cssClass == "")
+            {
+                cssClass = "no-typename";
+            }
+            else
+            {
+                int rnd = Math.Abs(m.TypeName.GetHashCode());
+                switch (rnd % 7)
+                {
+                    case 0:
+                        cssClass = "type-1";
+                        break;
+                    case 1:
+                        cssClass = "type-2";
+                        break;
+                    case 2:
+                        cssClass = "type-3";
+                        break;
+                    case 3:
+                        cssClass = "type-4";
+                        break;
+                    case 4:
+                        cssClass = "type-5";
+                        break;
+                    case 5:
+                        cssClass = "type-6";
+                        break;
+                    case 6:
+                        cssClass = "type-7";
+                        break;
+                }
+            }
+
+            node["CssClass"].Value = cssClass;
 
             node["FullTypeName"].Value = typeof(MetaObject).FullName;
             node["ID"].Value = m.ID;
