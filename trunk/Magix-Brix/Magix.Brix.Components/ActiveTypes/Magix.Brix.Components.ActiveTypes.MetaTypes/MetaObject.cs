@@ -63,6 +63,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         public MetaObject()
         {
             Values = new LazyList<Value>();
+            Children = new LazyList<MetaObject>();
         }
 
         [ActiveField]
@@ -91,6 +92,23 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             foreach (Value idx in Values)
             {
                 idx.ParentMetaObject = this;
+            }
+
+            if (Children.ListRetrieved)
+            {
+                // Making sure no children are not twice. And also
+                // that this is not added into Children ...
+                Dictionary<int, bool> others = new Dictionary<int, bool>();
+                others[ID] = true;
+                foreach (MetaObject idx in Children)
+                {
+                    if (others.ContainsKey(idx.ID) && 
+                        idx.ID != 0)
+                    {
+                        throw new ArgumentException("You can't have a child be added twice. Nor can you add an object to itself as its own child ...");
+                    }
+                    others[idx.ID] = true;
+                }
             }
 
             // Making sure the reference at the very least says; Anonymous Coward ...

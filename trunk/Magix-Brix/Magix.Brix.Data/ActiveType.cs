@@ -177,12 +177,23 @@ namespace Magix.Brix.Data
             Adapter.Instance.Delete(ID);
         }
 
+        private bool _isSaving;
         /**
          * Save the object to your data storage.
          */
         override public void Save()
         {
-            Adapter.Instance.Save(this);
+            if (_isSaving)
+                return; // To avoid recursive relationships where this is a child of a child of this or something ....
+            _isSaving = true;
+            try
+            {
+                Adapter.Instance.Save(this);
+            }
+            finally
+            {
+                _isSaving = false;
+            }
         }
 
         /**

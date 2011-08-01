@@ -24,6 +24,7 @@
         <mux:Button
             runat="server"
             OnClick="CreateItem"
+            ToolTip="Click to create a New Object ..."
             Text="+"
             id="create" />
     </mux:Panel>

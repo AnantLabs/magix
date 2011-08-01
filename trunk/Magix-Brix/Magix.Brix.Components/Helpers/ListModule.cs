@@ -526,7 +526,9 @@ namespace Magix.Brix.Components
                         n["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
 
                         RaiseSafeEvent(
-                            "DBAdmin.Form.RemoveObjectFromParentPropertyList", 
+                            DataSource.Contains("RemoveEvent") ? 
+                                DataSource["RemoveEvent"].Get<string>() :
+                                "DBAdmin.Form.RemoveObjectFromParentPropertyList", 
                             n);
                     };
                 cS.Controls.Add(lb2);
