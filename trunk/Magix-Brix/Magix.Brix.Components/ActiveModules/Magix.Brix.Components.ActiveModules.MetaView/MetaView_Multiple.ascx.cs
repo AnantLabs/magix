@@ -26,11 +26,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             Load +=
                 delegate
                 {
-                    node["MetaViewName"].Value = ViewName;
-                    node["Container"].Value = this.Parent.ID;
+                    DataSource["MetaViewName"].Value = ViewName;
+                    DataSource["Container"].Value = this.Parent.ID;
+
                     RaiseSafeEvent(
                         "Magix.MetaType.RaiseViewMetaTypeFromMultipleView",
-                        node);
+                        DataSource);
                 };
         }
 

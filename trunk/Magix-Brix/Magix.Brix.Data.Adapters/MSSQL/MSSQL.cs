@@ -167,6 +167,11 @@ is *seriously* wrong with your Data Adapter ...!");
             // Populating native fields of object...
             PopulateFields(type, id, retVal);
 
+            // We must stuff things into cache BEFORE we start traversing child objects
+            // since this object might be referenced by itself somehow in a circular
+            // fashion ...
+            Cache[id] = retVal;
+
             // Then the 'shared objects' ...
             PopulateComposition(type, id, retVal);
 

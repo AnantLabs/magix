@@ -390,12 +390,18 @@ System about how your objects actually looks like. Create at least on item of ty
                     e.Params["Objects"]["o-" + idxO.ID]["ID"].Value = idxO.ID;
                     foreach (MetaObject.Value idx in idxO.Values)
                     {
+                        string propertyName = idx.Name;
+                        if (propertyName.IndexOf(":") != -1)
+                        {
+                            string[] splits = propertyName.Split(':');
+                            propertyName = splits[splits.Length - 1];
+                        }
                         if (idxO.Values.Exists(
                             delegate(MetaObject.Value ixx)
                             {
-                                return ixx.Name == idx.Name;
+                                return ixx.Name == propertyName;
                             }))
-                            e.Params["Objects"]["o-" + idxO.ID]["Properties"][idx.Name].Value = idx.Val;
+                            e.Params["Objects"]["o-" + idxO.ID]["Properties"][propertyName].Value = idx.Val;
                     }
 
                     // Looping through, 'touching' all the items with no values ...
