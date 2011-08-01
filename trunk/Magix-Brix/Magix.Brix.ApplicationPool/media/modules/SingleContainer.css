@@ -1050,7 +1050,45 @@ div.has-no-action
 	width:140px;
 }
 
+.no-typename .singleInstance
+{
+	background-color:rgba(255, 0, 0, .2);
+}
 
+.type-1 .singleInstance
+{
+	background-color:rgba(0, 128, 0, .03);
+}
+
+.type-2 .singleInstance
+{
+	background-color:rgba(128, 0, 0, .03);
+}
+
+.type-3 .singleInstance
+{
+	background-color:rgba(0, 0, 128, .03);
+}
+
+.type-4 .singleInstance
+{
+	background-color:rgba(128, 128, 0, .03);
+}
+
+.type-5 .singleInstance
+{
+	background-color:rgba(0, 128, 128, .03);
+}
+
+.type-6 .singleInstance
+{
+	background-color:rgba(128, 0, 128, .03);
+}
+
+.type-7 .singleInstance
+{
+	background-color:rgba(128, 255, 128, .03);
+}
 
 
 
