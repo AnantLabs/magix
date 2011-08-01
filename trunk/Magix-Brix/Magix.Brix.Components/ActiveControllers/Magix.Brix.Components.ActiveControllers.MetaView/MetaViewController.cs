@@ -566,6 +566,7 @@ Deleting it may break these parts.</p>";
 
             e.Params["IsDelete"].Value = false;
             e.Params["NoIdColumn"].Value = true;
+            e.Params["IsFilter"].Value = false;
 
             foreach (MetaView.MetaViewProperty idx in view.Properties)
             {
@@ -599,6 +600,7 @@ Deleting it may break these parts.</p>";
                 e.Params["WhiteListColumns"][name].Value = true;
                 e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
                 e.Params["Type"]["Properties"][name]["Header"].Value = name;
+                e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
             }
 
             e.Params["MetaViewTypeName"].Value = view.TypeName;
