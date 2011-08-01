@@ -134,7 +134,7 @@ namespace Magix.Brix.Data
         public abstract void ResetTransaction();
 
         private Dictionary<int, object> _cache = new Dictionary<int, object>();
-        private Dictionary<int, object> Cache
+        protected Dictionary<int, object> Cache
         {
             get
             {
@@ -155,8 +155,6 @@ namespace Magix.Brix.Data
             if (Cache.ContainsKey(id) && Cache[id].GetType() == type)
                 return Cache[id];
             object retVal = SelectObjectByID(type, id);
-            if (retVal != null)
-                Cache[id] = retVal;
             return retVal;
         }
 

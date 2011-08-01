@@ -12,6 +12,7 @@ using Magix.Brix.Data;
 using Magix.UX.Widgets;
 using Magix.UX.Effects;
 using System.Collections.Generic;
+using Magix.Brix.Components.ActiveTypes.MetaTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
@@ -568,12 +569,12 @@ Deleting it may break these parts.</p>";
 
             foreach (MetaView.MetaViewProperty idx in view.Properties)
             {
-                if (idx.Name == "Delete")
+                if (idx.Name == ":Delete")
                 {
                     e.Params["IsDelete"].Value = true;
                     continue;
                 }
-                if (idx.Name == "Edit")
+                else if (idx.Name == ":Edit")
                 {
                     e.Params["NoIdColumn"].Value = false;
                     continue;
@@ -584,16 +585,97 @@ Deleting it may break these parts.</p>";
 
                 if (!string.IsNullOrEmpty(idx.Action))
                     continue; // Button thing ...
-                e.Params["WhiteListColumns"][idx.Name].Value = true;
-                e.Params["Type"]["Properties"][idx.Name]["ReadOnly"].Value = idx.ReadOnly;
-                e.Params["Type"]["Properties"][idx.Name]["Header"].Value = idx.Description;
+
+                string name = idx.Name;
+
+                if (name.Contains(":"))
+                {
+                    string[] splits = name.Split(':');
+                    name = splits[splits.Length - 1];
+                    e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value = 
+                        "Magix.MetaView.MultiViewTemplateColumn";
+                }
+
+                e.Params["WhiteListColumns"][name].Value = true;
+                e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
+                e.Params["Type"]["Properties"][name]["Header"].Value = name;
             }
 
             e.Params["MetaViewTypeName"].Value = view.TypeName;
 
+            Page.Session["Magix.MetaView.EditingView"] = view;
+
             RaiseEvent(
                 "Magix.MetaType.ViewMetaTypeFromTemplate",
                 e.Params);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.MultiViewTemplateColumn")]
+        protected void Magix_MetaView_MultiViewTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
+            MetaView.MetaViewProperty p = v.Properties.Find(
+                delegate(MetaView.MetaViewProperty idx)
+                {
+                    return idx.Name.Contains(":" + e.Params["Name"].Get<string>());
+                });
+
+            string typeOfControl = p.Name.Split(':')[0];
+            switch (typeOfControl)
+            {
+                case "select":
+                    SelectList ls = new SelectList();
+                    int id = e.Params["ID"].Get<int>();
+
+                    ls.CssClass = "span-2 gridSelect";
+                    ls.Style[Styles.display] = "block";
+
+                    string typeProperty = p.Name.Split(':')[1];
+                    string type = typeProperty.Split('.')[0];
+                    string propertyName = typeProperty.Split('.')[1];
+                    string gridPropertyName = p.Name.Split(':')[2];
+
+                    ls.SelectedIndexChanged +=
+                        delegate
+                        {
+                            using (Transaction tr = Adapter.Instance.BeginTransaction())
+                            {
+                                MetaObject o = MetaObject.SelectByID(id);
+                                MetaObject.Value val = o.Values.Find(
+                                    delegate(MetaObject.Value idxI)
+                                    {
+                                        return idxI.Name == gridPropertyName;
+                                    });
+                                val.Val = ls.SelectedItem.Value;
+                                val.Save();
+
+                                tr.Commit();
+                            }
+                        };
+
+                    ListItem i = new ListItem();
+                    i.Value = "";
+                    i.Text = "Please Select ...";
+                    ls.Items.Add(i);
+
+                    foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+                    {
+                        ListItem it = new ListItem();
+                        MetaObject.Value val = idx.Values.Find(
+                            delegate(MetaObject.Value idxI)
+                            {
+                                return idxI.Name == propertyName;
+                            });
+                        it.Text = val.Val;
+                        it.Value = val.Val;
+                        if (val.Val == e.Params["Value"].Get<string>())
+                            it.Selected = true;
+                        ls.Items.Add(it);
+                    }
+
+                    e.Params["Control"].Value = ls;
+                    break;
+            }
         }
 
         [ActiveEvent(Name = "Magix.MetaView.LoadWysiwyg")]
