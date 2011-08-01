@@ -231,6 +231,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         colNode["Name"].Value = node.Name;
                         colNode["Value"].Value = node.Get<string>();
                         colNode["ID"].Value = DataSource["Object"]["ID"].Get<int>();
+                        if (DataSource.Contains("Container"))
+                            colNode["Container"].Value = DataSource["Container"].Value;
 
                         ActiveEvents.Instance.RaiseActiveEvent(
                             this,

@@ -30,6 +30,8 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     btn.CssClass = node["ButtonCssClass"].Get<string>();
                 if (node.Contains("Enabled"))
                     btn.Enabled = node["Enabled"].Get<bool>();
+                if (node.Contains("ToolTip"))
+                    btn.ToolTip = node["ToolTip"].Get<string>();
             };
         }
 

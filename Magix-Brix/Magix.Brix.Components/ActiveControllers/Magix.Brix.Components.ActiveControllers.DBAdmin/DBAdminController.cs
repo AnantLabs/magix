@@ -382,16 +382,6 @@ have relationships towards other instances in your database.</p>";
                 throw new ApplicationException(
                     @"Couldn't create object, something went wrong in your
 model while trying to create object, and it was never created for some reasons.");
-            Node node = new Node();
-            node["IsChange"].Value = false;
-            node["IsRemove"].Value = false;
-            node["IsDelete"].Value = false;
-            node["FullTypeName"].Value = fullTypeName;
-            node["ID"].Value = id;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.Form.ViewComplexObject",
-                node);
         }
 
         [ActiveEvent(Name = "DBAdmin.Common.CreateObjectAsChild")]
@@ -473,6 +463,11 @@ model while trying to create object, and it was never created for some reasons."
             string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
             string parentFullTypeName = e.Params["ParentFullTypeName"].Get<string>();
             Node node = new Node();
+
+            if (e.Params.Contains("ReUseNode") &&
+                e.Params["ReUseNode"].Get<bool>())
+                node = e.Params;
+
             node["FullTypeName"].Value = fullTypeName;
             node["ParentID"].Value = parentId;
             node["IsSelect"].Value = true;

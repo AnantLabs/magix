@@ -184,8 +184,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.MetaType.EditObjectRaw")]
         protected void Magix_MetaType_EditObjectRaw(object sender, ActiveEventArgs e)
         {
-            ActiveEvents.Instance.RaiseClearControls("content5");
-
             MetaObject m = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             Node node = new Node();
@@ -227,25 +225,97 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Width"].Value = 16;
             node["Last"].Value = true;
             node["Padding"].Value = 8;
-            node["Container"].Value = "content4";
+            node["MarginBottom"].Value = 20;
+            if (e.Params != null && 
+                e.Params.Contains("Container") &&
+                e.Params["Container"].Get<string>() != "content4")
+            {
+                node["Container"].Value = e.Params["Container"].Value;
+                node["PullTop"].Value = 18;
+            }
+            else
+            {
+                node["Container"].Value = "content4";
+                ActiveEvents.Instance.RaiseClearControls("content5");
+            }
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
 
+            string container = node["Container"].Get<string>();
+
             // Must append a 'New Property Button' after our object editing view
             node = new Node();
 
             node["Text"].Value = "+";
-            node["ButtonCssClass"].Value = "span-2 clear-left push-8";
+            node["ToolTip"].Value = "Click to create a New Property for your Object ...";
+            node["ButtonCssClass"].Value = "span-2 clear-left";
             node["Append"].Value = true;
             node["Event"].Value = "Magix.MetaType.CreateNewProperty";
             node["Event"]["ObjectID"].Value = m.ID;
+            node["Event"]["Container"].Value = container;
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
-                "content5",
+                container,
                 node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.AppendObjectToParentPropertyList")]
+        protected void Magix_MetaType_AppendObjectToParentPropertyList(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("content6");
+
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject parent = MetaObject.SelectByID(e.Params["ParentID"].Get<int>());
+                MetaObject child = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+                MetaObject idx = parent.ParentMetaObject;
+
+                while (idx != null)
+                {
+                    if (idx == child)
+                        throw new ArgumentException("You can't have cyclic relationships with your objects ... Sorry ... :(");
+                    idx = idx.ParentMetaObject;
+                }
+
+                parent.Children.Add(child);
+
+                parent.Save();
+
+                tr.Commit();
+
+                Node node = new Node();
+
+                node["ID"].Value = parent.ID;
+
+                RaiseEvent(
+                    "Magix.MetaType.EditObjectRaw",
+                    node);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.AppendMetaTypeValue")]
+        protected void DBAdmin_Form_AppendObject(object sender, ActiveEventArgs e)
+        {
+            e.Params["Container"].Value = "content6";
+            e.Params["ReUseNode"].Value = true;
+            e.Params["Padding"].Value = 8;
+            e.Params["Width"].Value = 16;
+            e.Params["PullTop"].Value = 18;
+            e.Params["Last"].Value = true;
+            e.Params["SelectEvent"].Value = "Magix.MetaType.AppendObjectToParentPropertyList";
+
+            e.Params["WhiteListColumns"]["TypeName"].Value = true;
+            e.Params["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 4;
+            e.Params["WhiteListColumns"]["Reference"].Value = true;
+            e.Params["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
+
+            RaiseEvent(
+                "DBAdmin.Form.AppendObject",
+                e.Params);
         }
 
         [ActiveEvent(Name = "Magix.MetaType.CreateNewProperty")]
@@ -263,11 +333,21 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 Node node = new Node();
                 node["ID"].Value = o.ID;
+                node["Container"].Value = e.Params["Container"].Value;
 
                 RaiseEvent(
                     "Magix.MetaType.EditObjectRaw",
                     node);
             }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaType.EditObjectRaw-2")]
+        protected void Magix_MetaType_EditObjectRaw_2(object sender, ActiveEventArgs e)
+        {
+            e.Params["Container"].Value = "content6";
+            RaiseEvent(
+                "Magix.MetaType.EditObjectRaw",
+                e.Params);
         }
 
         [ActiveEvent(Name = "Magix.MetaType.GetChildrenTemplateColumn")]
@@ -294,6 +374,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     node["Width"].Value = 16;
                     node["Padding"].Value = 8;
                     node["Last"].Value = true;
+                    node["PullTop"].Value = 18;
+                    node["MarginBottom"].Value = 20;
 
                     node["ID"].Value = id;
                     node["PropertyName"].Value = "Children";
@@ -301,7 +383,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     node["FullTypeName"].Value = typeof(MetaObject).FullName;
                     node["ReUseNode"].Value = true;
                     node["IDColumnName"].Value = "Edit";
-                    node["IDColumnEvent"].Value = "Magix.MetaType.EditObjectRaw";
+                    node["IDColumnEvent"].Value = "Magix.MetaType.EditObjectRaw-2";
+                    node["AppendEventName"].Value = "Magix.MetaType.AppendMetaTypeValue";
+                    node["RemoveEvent"].Value = "Magix.Publishing.RemoveChildObject";
 
                     node["WhiteListColumns"]["TypeName"].Value = true;
                     node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
@@ -315,11 +399,36 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     RaiseEvent(
                         "DBAdmin.Form.ViewListOrComplexPropertyValue",
                         node);
+
+                    ActiveEvents.Instance.RaiseClearControls("content6");
                 };
 
             // Stuffing our newly created control into the return parameters, so
             // our Grid control can put it where it feels for it ... :)
             e.Params["Control"].Value = ls;
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.RemoveChildObject")]
+        protected void Magix_Publishing_RemoveChildObject(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject parent = MetaObject.SelectByID(e.Params["ParentID"].Get<int>());
+                MetaObject child = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+                parent.Children.Remove(child);
+
+                parent.Save();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["ID"].Value = parent.ID;
+
+                RaiseEvent(
+                    "Magix.MetaType.EditObjectRaw",
+                    node);
+            }
         }
 
         [ActiveEvent(Name = "Magix.MetaType.GetValuesTemplateColumn")]
@@ -362,6 +471,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             LinkButton lb = new LinkButton();
             lb.Text = "&nbsp;";
             lb.CssClass = "remove-property";
+            lb.ToolTip = "Click to Permanently Remove Property ...";
             lb.Click +=
                 delegate
                 {
@@ -405,6 +515,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             int id = e.Params["ID"].Get<int>();
             string value = e.Params["Value"].Get<string>();
+            string container = e.Params["Container"].Get<string>();
 
             // Creating our Edit Name of property editer ...
             InPlaceEdit ls = new InPlaceEdit();
@@ -436,6 +547,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                         Node node = new Node();
                         node["ID"].Value = id;
+                        node["Container"].Value = container;
 
                         RaiseEvent(
                             "Magix.MetaType.EditObjectRaw",
