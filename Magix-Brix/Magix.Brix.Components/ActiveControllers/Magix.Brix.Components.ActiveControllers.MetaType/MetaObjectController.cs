@@ -116,9 +116,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject n = MetaObject.SelectByID(id).Clone();
-                n.Save();
 
                 tr.Commit();
+
+                ActiveEvents.Instance.RaiseClearControls("content5");
 
                 Node node = new Node();
                 node["FullTypeName"].Value = typeof(MetaObject).FullName;

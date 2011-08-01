@@ -132,6 +132,14 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
                 Value v = idx.Clone();
                 ret.Values.Add(v);
             }
+
+            foreach (MetaObject idx in Children)
+            {
+                MetaObject n = idx.Clone();
+                ret.Children.Add(n);
+            }
+
+            ret.Save();
             return ret;
         }
     }
