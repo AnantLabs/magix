@@ -599,7 +599,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             w.CssClass += " mux-shaded mux-rounded";
             w.CssClass += " span-" + width;
             w.CssClass += " height-" + height;
-            w.CssClass += " last";
+            if (last)
+                w.CssClass += " last";
             w.Caption = name;
             w.Info = id.ToString();
             w.CssClass += " pushRight-" + padding;

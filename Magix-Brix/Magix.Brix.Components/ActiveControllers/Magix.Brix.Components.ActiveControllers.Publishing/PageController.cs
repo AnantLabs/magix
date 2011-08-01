@@ -392,7 +392,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["BottomMargin"].Value = page.Container.MarginBottom;
                 node["CssClass"].Value = page.Container.CssClass;
                 node["Height"].Value = page.Container.Height;
-                node["Last"].Value = page.Container.Last;
+                if (page.Container.Last)
+                    node["Last"].Value = true;
                 node["PushRight"].Value = page.Container.MarginRight;
                 node["PushLeft"].Value = page.Container.MarginLeft;
                 node["SpcBottom"].Value = page.Container.MarginBottom;
