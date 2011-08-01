@@ -649,6 +649,13 @@ Deleting it may break these parts.</p>";
                                         {
                                             return idxI.Name == gridPropertyName;
                                         });
+                                    if (val == null)
+                                    {
+                                        val = new MetaObject.Value();
+                                        val.Name = gridPropertyName;
+                                        o.Values.Add(val);
+                                        o.Save();
+                                    }
                                     val.Val = ls.SelectedItem.Value;
                                     val.Save();
 

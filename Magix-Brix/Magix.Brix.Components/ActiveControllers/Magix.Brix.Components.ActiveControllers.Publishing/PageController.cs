@@ -419,32 +419,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 // Though we DO need to UPDATE SETTINGS for module, since it might still be a different template ...
                 Node node = new Node();
 
-                if (page.Container.MarginBottom > 0)
-                    node["MarginBottom"].Value = page.Container.MarginBottom;
-
-                if (!string.IsNullOrEmpty(page.Container.CssClass))
-                    node["CssClass"].Value = page.Container.CssClass;
-
-                if (page.Container.Height > 0)
-                    node["Height"].Value = page.Container.Height;
-
-                if (page.Container.Last)
-                    node["Last"].Value = page.Container.Last;
-
-                if (page.Container.MarginRight > 0)
-                    node["PushRight"].Value = page.Container.MarginRight;
-
-                if (page.Container.MarginLeft > 0)
-                    node["PushLeft"].Value = page.Container.MarginLeft;
-
-                if (page.Container.MarginBottom > 0)
-                    node["SpcBottom"].Value = page.Container.MarginBottom;
-
-                if (page.Container.MarginTop > 0)
-                    node["Top"].Value = page.Container.MarginTop;
-
-                if (page.Container.Width > 0)
-                    node["Width"].Value = page.Container.Width;
+                node["MarginBottom"].Value = page.Container.MarginBottom;
+                node["CssClass"].Value = page.Container.CssClass;
+                node["Height"].Value = page.Container.Height;
+                node["Last"].Value = page.Container.Last;
+                node["PushRight"].Value = page.Container.MarginRight;
+                node["PushLeft"].Value = page.Container.MarginLeft;
+                node["SpcBottom"].Value = page.Container.MarginBottom;
+                node["Top"].Value = page.Container.MarginTop;
+                node["Width"].Value = page.Container.Width;
 
                 string cssClass = "web-part";
                 if (page.Container.Overflow)
