@@ -621,60 +621,203 @@ Deleting it may break these parts.</p>";
                 });
 
             string typeOfControl = p.Name.Split(':')[0];
+
+            int id = e.Params["ID"].Get<int>();
+
             switch (typeOfControl)
             {
                 case "select":
-                    SelectList ls = new SelectList();
-                    int id = e.Params["ID"].Get<int>();
-
-                    ls.CssClass = "span-2 gridSelect";
-                    ls.Style[Styles.display] = "block";
-
-                    string typeProperty = p.Name.Split(':')[1];
-                    string type = typeProperty.Split('.')[0];
-                    string propertyName = typeProperty.Split('.')[1];
-                    string gridPropertyName = p.Name.Split(':')[2];
-
-                    ls.SelectedIndexChanged +=
-                        delegate
-                        {
-                            using (Transaction tr = Adapter.Instance.BeginTransaction())
-                            {
-                                MetaObject o = MetaObject.SelectByID(id);
-                                MetaObject.Value val = o.Values.Find(
-                                    delegate(MetaObject.Value idxI)
-                                    {
-                                        return idxI.Name == gridPropertyName;
-                                    });
-                                val.Val = ls.SelectedItem.Value;
-                                val.Save();
-
-                                tr.Commit();
-                            }
-                        };
-
-                    ListItem i = new ListItem();
-                    i.Value = "";
-                    i.Text = "Please Select ...";
-                    ls.Items.Add(i);
-
-                    foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
                     {
-                        ListItem it = new ListItem();
-                        MetaObject.Value val = idx.Values.Find(
+                        SelectList ls = new SelectList();
+
+                        ls.CssClass = "span-2 gridSelect";
+                        ls.Style[Styles.display] = "block";
+
+                        string typeProperty = p.Name.Split(':')[1];
+                        string type = typeProperty.Split('.')[0];
+                        string propertyName = typeProperty.Split('.')[1];
+                        string gridPropertyName = p.Name.Split(':')[2];
+
+                        ls.SelectedIndexChanged +=
+                            delegate
+                            {
+                                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                                {
+                                    MetaObject o = MetaObject.SelectByID(id);
+                                    MetaObject.Value val = o.Values.Find(
+                                        delegate(MetaObject.Value idxI)
+                                        {
+                                            return idxI.Name == gridPropertyName;
+                                        });
+                                    val.Val = ls.SelectedItem.Value;
+                                    val.Save();
+
+                                    tr.Commit();
+                                }
+                            };
+
+                        ListItem i = new ListItem();
+                        i.Value = "";
+                        i.Text = "Please Select ...";
+                        ls.Items.Add(i);
+
+                        foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+                        {
+                            ListItem it = new ListItem();
+                            MetaObject.Value val = idx.Values.Find(
+                                delegate(MetaObject.Value idxI)
+                                {
+                                    return idxI.Name == propertyName;
+                                });
+                            it.Text = val.Val;
+                            it.Value = val.Val;
+                            if (val.Val == e.Params["Value"].Get<string>())
+                                it.Selected = true;
+                            ls.Items.Add(it);
+                        }
+
+                        e.Params["Control"].Value = ls;
+                    } break;
+                case "date":
+                    {
+                        string gridPropertyName = p.Name.Split(':')[1];
+
+                        Panel panel = new Panel();
+                        panel.CssClass = "calendar-wrapper";
+
+                        Calendar c = new Calendar();
+                        c.CssClass += " mux-shaded mux-rounded";
+                        c.DateSelected +=
+                            delegate
+                            {
+                                new EffectFadeOut(c, 250).Render();
+                            };
+                        c.Style[Styles.display] = "none";
+                        c.Style[Styles.position] = "absolute";
+                        c.Style[Styles.top] = "0";
+                        c.Style[Styles.left] = "0";
+                        c.Style[Styles.zIndex] = "100";
+                        panel.Controls.Add(c);
+
+                        LinkButton but = new LinkButton();
+                        but.Text = "xxx";
+                        but.Click +=
+                            delegate
+                            {
+                                new EffectFadeIn(c, 250).Render();
+                            };
+                        panel.Controls.Add(but);
+
+                        e.Params["Control"].Value = panel;
+                    } break;
+                case "choice":
+                    {
+                        string typeProperty = p.Name.Split(':')[1];
+                        string type = typeProperty.Split('.')[0];
+                        string propertyName = typeProperty.Split('.')[1].Split(',')[0];
+                        string propertyCss = typeProperty.Split('.')[1].Split(',')[1];
+                        string gridPropertyName = p.Name.Split(':')[2];
+
+                        LinkButton b = new LinkButton();
+
+                        MetaObject o = MetaObject.SelectByID(id);
+                        MetaObject.Value val = o.Values.Find(
                             delegate(MetaObject.Value idxI)
                             {
-                                return idxI.Name == propertyName;
+                                return idxI.Name == gridPropertyName;
                             });
-                        it.Text = val.Val;
-                        it.Value = val.Val;
-                        if (val.Val == e.Params["Value"].Get<string>())
-                            it.Selected = true;
-                        ls.Items.Add(it);
-                    }
+                        MetaObject o4 = null;
+                        string cssClass = "status-unknown";
+                        if (val != null)
+                        {
+                            foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+                            {
+                                MetaObject.Value val2 = idx.Values.Find(
+                                    delegate(MetaObject.Value idxI)
+                                    {
+                                        return idxI.Name == propertyName && idxI.Val == val.Val;
+                                    });
+                                if (val2 != null)
+                                {
+                                    o4 = idx;
+                                    break;
+                                }
+                            }
+                            MetaObject.Value propCss = o4.Values.Find(
+                                delegate(MetaObject.Value idxI)
+                                {
+                                    return idxI.Name == propertyCss;
+                                });
+                            cssClass = propCss.Val;
+                        }
 
-                    e.Params["Control"].Value = ls;
-                    break;
+                        b.Text = "&nbsp;";
+                        b.CssClass = "multi-choice " + cssClass;
+                        string choiceVal = val == null ? "" : val.Val;
+
+                        b.Text = choiceVal;
+
+                        b.Click +=
+                            delegate
+                            {
+                                MetaObject next = null;
+                                bool found = false;
+                                foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+                                {
+                                    if (found)
+                                    {
+                                        next = idx;
+                                        break;
+                                    }
+                                    MetaObject.Value val2 = idx.Values.Find(
+                                        delegate(MetaObject.Value idxI)
+                                        {
+                                            return idxI.Name == propertyName && 
+                                                choiceVal == idxI.Val;
+                                        });
+                                    if (val2 != null && val2.Val == choiceVal)
+                                        found = true;
+                                }
+                                if (next == null)
+                                    next = MetaObject.SelectFirst(Criteria.Eq("TypeName", type));
+                                b.CssClass = "multi-choice " + next.Values.Find(
+                                    delegate(MetaObject.Value idxI)
+                                    {
+                                        return idxI.Name == propertyCss;
+                                    }).Val;
+                                b.Text = next.Values.Find(
+                                    delegate(MetaObject.Value idxI)
+                                    {
+                                        return idxI.Name == propertyName;
+                                    }).Val;
+                                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                                {
+                                    MetaObject o2 = MetaObject.SelectByID(id);
+                                    MetaObject.Value val3 = o.Values.Find(
+                                        delegate(MetaObject.Value idxI)
+                                        {
+                                            return idxI.Name == gridPropertyName;
+                                        });
+                                    if (val3 == null)
+                                    {
+                                        val3 = new MetaObject.Value();
+                                        val3.Name = gridPropertyName;
+                                        o2.Values.Add(val3);
+                                        o2.Save();
+                                    }
+                                    val3.Val = next.Values.Find(
+                                        delegate(MetaObject.Value idxI)
+                                        {
+                                            return idxI.Name == propertyName;
+                                        }).Val;
+                                    val3.Save();
+
+                                    tr.Commit();
+                                }
+                            };
+
+                        e.Params["Control"].Value = b;
+                    } break;
             }
         }
 

@@ -1090,12 +1090,44 @@ div.has-no-action
 	background-color:rgba(128, 255, 128, .03);
 }
 
+.multi-choice
+{
+	width:110px;
+	height:16px;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+	font-size:.9em;
+}
+
+.status-unknown
+{
+	background-color:rgba(128, 128, 128, .07);
+}
+
+.status-red
+{
+	background-color:rgba(128, 0, 0, .1);
+}
+
+.status-yellow
+{
+	background-color:rgba(128, 128, 0, .1);
+}
+
+.status-green
+{
+	background-color:rgba(0, 128, 0, .1);
+}
 
 
-
-
-
-
+.calendar-wrapper
+{
+	position:relative;
+}
 
 
 
