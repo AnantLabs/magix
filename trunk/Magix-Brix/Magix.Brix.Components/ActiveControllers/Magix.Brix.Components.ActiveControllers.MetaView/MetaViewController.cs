@@ -700,7 +700,7 @@ Deleting it may break these parts.</p>";
                         if (val != null && 
                             !string.IsNullOrEmpty(val.Val))
                         {
-                            c.Value = DateTime.ParseExact(val.Val, "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                            c.Value = DateTime.ParseExact(val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
                         }
                         c.Style[Styles.display] = "none";
                         c.Style[Styles.position] = "absolute";
@@ -724,15 +724,15 @@ Deleting it may break these parts.</p>";
                                         o.Values.Add(val);
                                         o.Save();
                                     }
-                                    val.Val = c.Value.ToString("yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                    val.Val = c.Value.ToString("yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
 
                                     val.Save();
 
                                     tr.Commit();
 
                                     but.Text = DateTime.ParseExact(
-                                        val.Val, "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
-                                        .ToString("ddd d MMM yy", System.Globalization.CultureInfo.InvariantCulture);
+                                        val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
+                                        .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                 }
                             };
 
@@ -740,8 +740,8 @@ Deleting it may break these parts.</p>";
                         if (val != null &&
                             !string.IsNullOrEmpty(val.Val))
                             but.Text = DateTime.ParseExact(
-                                val.Val, "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
-                                .ToString("ddd d MMM yy", System.Globalization.CultureInfo.InvariantCulture);
+                                val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
+                                .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
                         but.ID = "but" + id;
                         but.Click +=
                             delegate
