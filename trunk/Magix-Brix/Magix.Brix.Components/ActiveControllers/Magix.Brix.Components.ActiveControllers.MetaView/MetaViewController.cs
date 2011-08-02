@@ -291,7 +291,6 @@ Deleting it may break these parts.</p>";
             // First filtering OUT columns ...!
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["TypeName"].Value = true;
-            node["WhiteListColumns"]["Properties"].Value = true;
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Value"].Value = true;
@@ -300,8 +299,6 @@ Deleting it may break these parts.</p>";
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type Name";
-            node["Type"]["Properties"]["Properties"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Properties"]["Header"].Value = "Props";
 
             node["Width"].Value = 18;
             node["Last"].Value = true;
@@ -334,7 +331,7 @@ Deleting it may break these parts.</p>";
             node["WhiteListColumns"]["Description"].Value = true;
             node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 5;
             node["WhiteListColumns"]["Action"].Value = true;
-            node["WhiteListColumns"]["Action"]["ForcedWidth"].Value = 7;
+            node["WhiteListColumns"]["Action"]["ForcedWidth"].Value = 2;
 
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["ReadOnly"]["Header"].Value = "Read On.";
@@ -417,6 +414,7 @@ Deleting it may break these parts.</p>";
 
             Panel pnl = new Panel();
             pnl.CssClass = "action-wrapper";
+            pnl.ToolTip = "Click to append an Action to this Property of the Form. Effectively rendering the contro a button, that'll raise whatever action(s) you choose to give it ...";
             pnl.Click +=
                 delegate
                 {
@@ -449,6 +447,7 @@ Deleting it may break these parts.</p>";
 
             Panel grow = new Panel();
             grow.CssClass = "grower";
+            grow.ToolTip = "These are the Actions you've already assigned to this Property. Click the 'x' to remove any of these actions.";
             grow.Click +=
                 delegate
                 {
@@ -467,6 +466,7 @@ Deleting it may break these parts.</p>";
 
                 LinkButton btn = new LinkButton();
                 btn.Text = "X";
+                btn.ToolTip = "Click to remove Action from the property";
                 btn.CssClass = "clear-left span-1 delete-action";
                 btn.Click +=
                     delegate
@@ -494,6 +494,7 @@ Deleting it may break these parts.</p>";
 
                 Label l = new Label();
                 l.Text = actionName;
+                l.ToolTip = "Name of Action";
                 l.Tag = "div";
                 l.CssClass = "span-3 last";
                 grow.Controls.Add(l);
@@ -501,6 +502,7 @@ Deleting it may break these parts.</p>";
 
             Button bt = new Button();
             bt.Text = "Close";
+            bt.ToolTip = "Close this Action Popup Window";
             bt.CssClass = "bottom-right span-3";
             bt.Click +=
                 delegate
