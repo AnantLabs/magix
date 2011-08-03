@@ -1,5 +1,11 @@
-﻿<%@ Assembly Name="Magix.Brix.Components.ActiveModules.Signature" %>
-<%@ Control Language="C#" AutoEventWireup="true" Inherits="Magix.Brix.Components.ActiveModules.Signature.Sign" %>
+﻿<%@ Assembly 
+    Name="Magix.Brix.Components.ActiveModules.Signature" %>
+
+<%@ Control 
+    Language="C#" 
+    AutoEventWireup="true" 
+    Inherits="Magix.Brix.Components.ActiveModules.Signature.Sign" %>
+
 <link href="media/modules/signature.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
@@ -139,25 +145,23 @@ setTimeout(function(){loaded();}, 500);
 
 </script>
 
-<div class="signature span-18 last">
-    <mux:Label
-        runat="server"
-        id="waver"
-        CssClass="waver span-18 last"
-        Tag="div" />
-    <canvas id="surface" class="surface last" width="710" height="360">
-    </canvas>
+<div class="signature">
+    <canvas 
+        id="surface" 
+        width='<%=GetWidth() %>'
+        height='<%=GetHeight() %>'
+        class="surface"></canvas>
     <input
         runat="server"
         id="sub"
         type="button"
-        class="span-13 submitSignature"
+        class="submitSignature"
         onclick="MUX.submitSign();"
-        value="I have read and understood the above!" />
+        value="Sign!" />
     <mux:Button
         runat="server"
         id="cancel"
-        CssClass="span-3 last submitSignature"
+        CssClass="submitSignatureCancel"
         OnClick="cancel_Click"
         Text="Cancel" />
 </div>

@@ -83,15 +83,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.Click +=
                 delegate
                 {
-                    Node node = new Node();
-                    node["ActionSenderName"].Value = b.Text;
-                    node["MetaViewName"].Value = DataSource["MetaViewName"].Value;
-                    node["MetaViewTypeName"].Value = DataSource["MetaViewTypeName"].Value;
-
-                    GetPropertyValues(node["PropertyValues"], false);
-
                     foreach (string idxS in idx["Action"].Get<string>().Split('|'))
                     {
+                        Node node = new Node();
+
+                        node["ActionSenderName"].Value = b.Text;
+                        node["MetaViewName"].Value = DataSource["MetaViewName"].Value;
+                        node["MetaViewTypeName"].Value = DataSource["MetaViewTypeName"].Value;
+
+                        GetPropertyValues(node["PropertyValues"], false);
+
                         // Settings Event Specific Features ...
                         node["ActionName"].Value = idxS;
                         node["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;

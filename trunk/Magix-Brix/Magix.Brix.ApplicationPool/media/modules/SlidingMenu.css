@@ -14,6 +14,15 @@
 	border-radius:2px;
 }
 
+.has-value
+{
+	color:#99c;
+	font-style:italic;
+}
 
+.has-no-value
+{
+	color:#33e;
+}
 
 

@@ -583,20 +583,24 @@ Deleting it may break these parts.</p>";
                     continue;
                 }
 
-                // TODO: Somehow load BUTTONS for every 'Action Item' in the View, and append them
-                // at the bottom of the grid, or something ...
-
-                if (!string.IsNullOrEmpty(idx.Action))
-                    continue; // Button thing ...
-
                 string name = idx.Name;
 
                 if (name.Contains(":"))
                 {
                     string[] splits = name.Split(':');
                     name = splits[splits.Length - 1];
-                    e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value = 
+                    e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
                         "Magix.MetaView.MultiViewTemplateColumn";
+                }
+
+                if (!string.IsNullOrEmpty(idx.Action))
+                {
+                    e.Params["WhiteListColumns"][name].Value = true;
+                    e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
+                    e.Params["Type"]["Properties"][name]["Header"].Value = name;
+                    e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
+                    e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
+                        "Magix.MetaView.MultiViewTemplateColumnButton";
                 }
 
                 e.Params["WhiteListColumns"][name].Value = true;
@@ -612,6 +616,86 @@ Deleting it may break these parts.</p>";
             RaiseEvent(
                 "Magix.MetaType.ViewMetaTypeFromTemplate",
                 e.Params);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.MultiViewTemplateColumnButton")]
+        protected void Magix_MetaView_MultiViewTemplateColumnButton(object sender, ActiveEventArgs e)
+        {
+            MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
+            MetaView.MetaViewProperty p = v.Properties.Find(
+                delegate(MetaView.MetaViewProperty idx)
+                {
+                    return idx.Name.Contains(":" + e.Params["Name"].Get<string>());
+                });
+
+            int id = e.Params["ID"].Get<int>();
+            string text = e.Params["Name"].Get<string>();
+            string value = e.Params["Value"].Get<string>();
+            int pageObj = e.Params["PageObjectTemplateID"].Get<int>();
+
+            LinkButton b = new LinkButton();
+            b.Text = text;
+            if (!string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
+            {
+                b.CssClass += "has-value";
+            }
+            else
+            {
+                b.CssClass += "has-no-value";
+            }
+            b.Click +=
+                delegate
+                {
+                    Node node = new Node();
+
+                    node["ID"].Value = id;
+                    node["Name"].Value = text;
+                    node["Value"].Value = value;
+                    node["PageObjectTemplateID"].Value = pageObj;
+
+                    RaiseEvent(
+                        "Magix.MetaView.MultiViewButtonWasClick",
+                        node);
+                };
+            e.Params["Control"].Value = b;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.MultiViewButtonWasClick")]
+        protected void Magix_MetaView_MultiViewButtonWasClick(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            string name = e.Params["Name"].Get<string>();
+            string value = e.Params["Value"].Get<string>();
+            int pageObj = e.Params["PageObjectTemplateID"].Get<int>();
+
+            MetaObject o = MetaObject.SelectByID(id);
+
+            MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
+            MetaView.MetaViewProperty p = v.Properties.Find(
+                delegate(MetaView.MetaViewProperty idx)
+                {
+                    return idx.Name == e.Params["Name"].Get<string>();
+                });
+
+            foreach (string idxS in p.Action.Split('|'))
+            {
+                Node node = new Node();
+
+                node["ActionSenderName"].Value = name;
+                node["Value"].Value = value;
+                node["MetaViewName"].Value = v.Name;
+                node["MetaViewTypeName"].Value = v.TypeName;
+                node["ActionName"].Value = idxS;
+                node["MetaObjectID"].Value = id;
+
+                // Settings Event Specific Features ...
+                node["ActionName"].Value = idxS;
+                node["PageObjectTemplateID"].Value = pageObj;
+
+                RaiseEvent(
+                    "Magix.Meta.RaiseEvent",
+                    node);
+            }
         }
 
         [ActiveEvent(Name = "Magix.MetaView.MultiViewTemplateColumn")]

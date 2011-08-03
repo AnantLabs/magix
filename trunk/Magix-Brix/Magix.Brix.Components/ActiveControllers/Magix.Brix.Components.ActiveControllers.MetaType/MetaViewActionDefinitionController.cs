@@ -395,6 +395,38 @@ MultiActions or something ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Meta.SetMetaObjectValue")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.Meta.SetMetaObjectValue";
+                    a.EventName = "Magix.MetaType.SetMetaObjectValue";
+                    a.Description = @"Will set the value of the given MetaObject 
+[MetaObjectID] to the Value of your 'Value' node at the 'Name' property.";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "MetaObjectID";
+                    m.Value = "-1";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Value";
+                    m.Value = "New Value of property ...";
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Name";
+                    m.Value = "PropertyName";
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.GetActiveFormData")) == 0)
                 {
                     Action a = new Action();
@@ -594,11 +626,90 @@ to an SMTP server which you have access to ...";
                     a.Save();
                 }
 
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Meta.LoadSignatureModule")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.Meta.LoadSignatureModule";
+                    a.EventName = "Magix.MetaView.LoadSignature";
+                    a.Description = @"Will load the Signature Module in
+whatever container its being raised from. And set the 'Value' property of the given
+MetaObject Column Property Name to the signature signed on the Signature module ...";
+                    a.StripInput = false;
+
+                    Action.ActionParams  m = new Action.ActionParams();
+                    m.Name = "Width";
+                    m.Value = "710";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Height";
+                    m.Value = "360";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
                 tr.Commit();
             }
         }
 
         #endregion
+
+        [ActiveEvent(Name = "Magix.MetaView.LoadSignature")]
+        protected void Magix_Signature_LoadSignature(object sender, ActiveEventArgs e)
+        {
+            e.Params["OKEvent"].Value = "Magix.MetaView.UnLoadSignature";
+            e.Params["OKEvent"]["Params"]["MetaObjectID"].Value = e.Params["MetaObjectID"].Value;
+            e.Params["OKEvent"]["Params"]["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Value;
+            e.Params["OKEvent"]["Params"]["Name"].Value = e.Params["ActionSenderName"].Value;
+
+            e.Params["CancelEvent"].Value = "Magix.Publishing.ReloadWebPart";
+            e.Params["CancelEvent"]["Params"]["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Value;
+
+            if (e.Params.Contains("Value") && 
+                !string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
+                e.Params["Coords"].Value = e.Params["Value"].Value;
+
+            RaiseEvent(
+                "Magix.Signature.LoadSignature",
+                e.Params);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.UnLoadSignature")]
+        protected void Magix_Signature_UnLoadSignature(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+
+                MetaObject.Value val = o.Values.Find(
+                    delegate(MetaObject.Value idx)
+                    {
+                        return idx.Name == e.Params["Name"].Get<string>();
+                    });
+                if (val == null)
+                {
+                    val = new MetaObject.Value();
+                    val.Name = e.Params["Name"].Get<string>();
+                    o.Values.Add(val);
+
+                    o.Save();
+                }
+
+                val.Val = e.Params["Signature"].Get<string>();
+
+                val.Save();
+
+                tr.Commit();
+            }
+
+            RaiseEvent(
+                "Magix.Publishing.ReloadWebPart",
+                e.Params);
+        }
 
         [ActiveEvent(Name = "Magix.Meta.Actions.SetSessionVariable")]
         protected void Magix_Meta_Actions_SetSessionVariable(object sender, ActiveEventArgs e)
