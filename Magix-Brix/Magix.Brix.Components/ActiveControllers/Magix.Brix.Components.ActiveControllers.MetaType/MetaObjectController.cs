@@ -693,6 +693,33 @@ have relationships towards other instances in your database.</p>";
             e.Params["Type"]["Properties"]["MetaTypesCount"]["ClickLabelEvent"].Value = "Magix.MetaType.ViewMetaObjectsRaw";
             e.Params["Object"]["Properties"]["MetaTypesCount"].Value = MetaObject.Count.ToString();
         }
+
+        [ActiveEvent(Name = "Magix.MetaType.SetMetaObjectValue")]
+        protected void Magix_MetaType_SetMetaObjectValue(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+                MetaObject.Value val = o.Values.Find(
+                    delegate(MetaObject.Value idx)
+                    {
+                        return idx.Name == e.Params["Name"].Get<string>();
+                    });
+                if (val == null)
+                {
+                    val = new MetaObject.Value();
+                    val.Name = e.Params["Name"].Get<string>();
+                    o.Values.Add(val);
+
+                    o.Save();
+                }
+                val.Val = e.Params["Value"].Get<string>();
+
+                val.Save();
+
+                tr.Commit();
+            }
+        }
     }
 }
 

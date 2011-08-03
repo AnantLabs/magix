@@ -6,6 +6,7 @@
 
 using System;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using Magix.UX.Widgets;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
@@ -18,8 +19,7 @@ namespace Magix.Brix.Components.ActiveModules.Signature
     [ActiveModule]
     public class Sign : UserControl, IModule
     {
-        protected Label waver;
-        protected System.Web.UI.HtmlControls.HtmlInputButton sub;
+        protected HtmlInputButton sub;
         protected Button cancel;
 
         public void InitialLoading(Node node)
@@ -28,9 +28,8 @@ namespace Magix.Brix.Components.ActiveModules.Signature
                 delegate
                 {
                     DataSource = node;
-                    waver.Text = node["Waver"].Get<string>();
-                    if (DataSource.Contains("ReadOnly") &&
-                        DataSource["ReadOnly"].Get<bool>())
+                    if (DataSource.Contains("Coords") &&
+                        !string.IsNullOrEmpty(DataSource["Coords"].Get<string>()))
                     {
                         sub.Visible = false;
                         cancel.Text = "Close";
@@ -40,9 +39,24 @@ namespace Magix.Brix.Components.ActiveModules.Signature
 
         protected string GetCoords()
         {
-            if (DataSource.Contains("Coords"))
+            if (DataSource.Contains("Coords") &&
+                !string.IsNullOrEmpty(DataSource["Coords"].Get<string>()))
                 return DataSource["Coords"].Get<string>();
             return "[]";
+        }
+
+        protected int GetWidth()
+        {
+            if (DataSource.Contains("Width"))
+                return DataSource["Width"].Get<int>();
+            return 710;
+        }
+
+        protected int GetHeight()
+        {
+            if (DataSource.Contains("Height"))
+                return DataSource["Height"].Get<int>();
+            return 360;
         }
 
         private Node DataSource

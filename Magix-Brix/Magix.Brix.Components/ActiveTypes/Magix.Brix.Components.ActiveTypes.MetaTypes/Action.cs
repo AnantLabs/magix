@@ -117,11 +117,11 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             ret.Description = Description;
             ret.EventName = EventName;
             ret.Name = "Copy - " + Name;
+            ret.StripInput = StripInput;
             foreach (ActionParams idx in Params)
             {
                 ret.Params.Add(idx.Clone());
             }
-            ret.StripInput = ret.StripInput;
             return ret;
         }
     }

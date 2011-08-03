@@ -264,6 +264,10 @@
       <Project>{314FAAAA-759C-4357-BA64-985CD9EA08BE}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Signature\Magix.Brix.Components.ActiveControllers.Signature.csproj">
+      <Project>{4C5681EF-4013-4540-A05F-FF885A184AA8}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Signature</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.TalkBack\Magix.Brix.Components.ActiveControllers.TalkBack.csproj">
       <Project>{55506E9C-89C5-432E-8431-DDDD08D22A37}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.TalkBack</Name>

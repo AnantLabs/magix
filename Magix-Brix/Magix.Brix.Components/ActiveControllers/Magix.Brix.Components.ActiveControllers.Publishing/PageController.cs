@@ -471,6 +471,17 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 e.Params["ShouldLoadLogin"].Value = true;
             }
         }
+
+        [ActiveEvent(Name = "Magix.Core.GetContainerForControl")]
+        protected void Magix_Core_GetContainerForControl(object sender, ActiveEventArgs e)
+        {
+            if (e.Params.Contains("PageObjectTemplateID"))
+            {
+                e.Params["Container"].Value =
+                    WebPart.SelectByID(e.Params["PageObjectTemplateID"].Get<int>()).Container.ViewportContainer;
+                e.Params["FreezeContainer"].Value = true;
+            }
+        }
     }
 }
 
