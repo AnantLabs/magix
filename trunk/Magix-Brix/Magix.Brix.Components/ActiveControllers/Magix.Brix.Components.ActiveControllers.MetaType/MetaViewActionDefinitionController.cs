@@ -261,7 +261,7 @@ found in 'Source' into the contents of 'NewString' and return as a 'Result', out
 in the 'Actions' node. Each Action needs a 'Name' and its own set of parameters through its 'Params' node.
 All 'Params' nodes will be copied into the root node before every event is raised. This means that your
 Root node will become VERY large after subsequent actions. Be warned ...";
-                    a.StripInput = true;
+                    a.StripInput = false;
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "Actions";

@@ -854,6 +854,15 @@ Deleting it may break these parts.</p>";
             else
                 action = Action.SelectByID(e.Params["ActionID"].Get<int>());
 
+            if (action == null)
+            {
+                throw new ArgumentException(@"Sorry dude, we couldn't find that Action. 
+The 'Magix.Meta.RaiseEvent' Action needs to reference another existing Action 
+within the system, either through the 'ActionName' parameter, or the 'ActionID' parameter. 
+Name, obviously, pointing to the exact name of an Action, while ActionID obviously
+referring to the exact ID of an action, and needing to be an integer ...");
+            }
+
             Node node = e.Params;
             if (action.StripInput)
             {
@@ -865,9 +874,29 @@ Deleting it may break these parts.</p>";
                 GetActionParameters(node, idx);
             }
 
+            if (e.Params.Contains("Params"))
+            {
+                foreach (Node idx in e.Params["Params"])
+                {
+                    EmbedNodeIntoNode(idx, node);
+                }
+            }
+
             RaiseEvent(
                 action.EventName,
                 node);
+        }
+
+        private void EmbedNodeIntoNode(Node source, Node destination)
+        {
+            if (source.Value != null)
+            {
+                destination[source.Name].Value = source.Value;
+                foreach (Node idx in source)
+                {
+                    EmbedNodeIntoNode(idx, destination[source.Name]);
+                }
+            }
         }
 
         private static void GetActionParameters(Node node, Action.ActionParams a)
