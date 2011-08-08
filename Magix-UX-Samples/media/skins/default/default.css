@@ -212,9 +212,9 @@ textarea
 	-webkit-border-radius:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
 
 	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
@@ -229,9 +229,9 @@ textarea
 
 .mux-menu:hover
 {
-	-webkit-box-shadow: 2px 2px 10px #444;
-	-moz-box-shadow: 2px 2px 10px #444;
-	box-shadow: 2px 2px 10px #444;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
 }
 
 .mux-menu .mux-menu-item

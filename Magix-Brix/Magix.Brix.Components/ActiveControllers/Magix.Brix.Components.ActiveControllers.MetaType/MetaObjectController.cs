@@ -107,6 +107,31 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     RaiseEvent(
                         "Magix.MetaType.CopyMetaObject",
                         tmp);
+
+                    ActiveEvents.Instance.RaiseClearControls("content5");
+
+                    Node node = new Node();
+                    node["FullTypeName"].Value = typeof(MetaObject).FullName;
+
+                    RaiseEvent(
+                        "Magix.Core.UpdateGrids",
+                        node);
+
+                    node = new Node();
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.MetaType.EditObjectRaw",
+                        node);
+
+                    node = new Node();
+                    node["ID"].Value = id;
+                    node["FullTypeName"].Value = typeof(MetaObject).FullName;
+
+                    RaiseEvent(
+                        "DBAdmin.Grid.SetActiveRow",
+                        node);
+
                 };
 
 
@@ -122,32 +147,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject n = MetaObject.SelectByID(id).Clone();
-
                 tr.Commit();
-
-                ActiveEvents.Instance.RaiseClearControls("content5");
-
-                Node node = new Node();
-                node["FullTypeName"].Value = typeof(MetaObject).FullName;
-
-                RaiseEvent(
-                    "Magix.Core.UpdateGrids",
-                    node);
-
-                node = new Node();
-                node["ID"].Value = n.ID;
-
-                RaiseEvent(
-                    "Magix.MetaType.EditObjectRaw",
-                    node);
-
-                node = new Node();
-                node["ID"].Value = n.ID;
-                node["FullTypeName"].Value = typeof(MetaObject).FullName;
-
-                RaiseEvent(
-                    "DBAdmin.Grid.SetActiveRow",
-                    node);
             }
         }
 

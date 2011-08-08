@@ -127,15 +127,41 @@ namespace Magix.UX.Widgets
             {
                 Click += MenuItemClicked;
             }
+
+            if (string.IsNullOrEmpty(URL) &&
+                Menu.HasMenuItemClickedEventHandler)
+            {
+                Click += MenuItemClicked2;
+            }
         }
 
         private void MenuItemClicked(object sender, EventArgs e)
         {
             Menu.RaiseClickedEventHandler(this);
             SubMenu sub = this.Parent as SubMenu;
-            while (sub != null && 
-                sub.Parent != null && 
-                sub.Parent.Parent != null && 
+            while (sub != null &&
+                sub.Parent != null &&
+                sub.Parent.Parent != null &&
+                sub.Parent.Parent is SubMenu)
+            {
+                sub.Style[Styles.display] = "none";
+                sub = sub.Parent.Parent as SubMenu;
+            }
+            if (sub != null)
+            {
+                sub.Style[Styles.display] = "block";
+                new EffectRollUp(sub, 500, "visible")
+                    .Render();
+            }
+        }
+
+        private void MenuItemClicked2(object sender, EventArgs e)
+        {
+            Menu.RaiseClickedNoLeafEventHandler(this);
+            SubMenu sub = this.Parent as SubMenu;
+            while (sub != null &&
+                sub.Parent != null &&
+                sub.Parent.Parent != null &&
                 sub.Parent.Parent is SubMenu)
             {
                 sub.Style[Styles.display] = "none";

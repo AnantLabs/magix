@@ -196,27 +196,10 @@ System about how your objects actually looks like. Create at least on item of ty
         {
             foreach (Node idx in e.Params["Actions"])
             {
-                string eventName = idx["Name"].Get<string>();
-
-                Node eventNodes = e.Params;
-
-                Action action = Action.SelectFirst(Criteria.Eq("Name", eventName));
-                if (action != null)
-                {
-                    foreach (Action.ActionParams idx2 in action.Params)
-                    {
-                        GetActionParameters(e.Params, idx2);
-                    }
-                    eventName = action.EventName;
-                }
-
-                if (idx.Contains("Params"))
-                {
-                    eventNodes.AddRange(idx["Params"]);
-                }
+                Node eventNodes = idx;
 
                 RaiseEvent(
-                    eventName,
+                    "Magix.Meta.RaiseEvent",
                     eventNodes);
             }
         }

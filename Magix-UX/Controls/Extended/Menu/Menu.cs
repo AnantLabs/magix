@@ -51,6 +51,11 @@ namespace Magix.UX.Widgets
          */
         public event EventHandler LeafMenuItemClicked;
 
+        /**
+         * Raised when any MenuItem have been clicked.
+         */
+        public event EventHandler MenuItemClicked;
+
         public Menu()
         {
             CssClass = "mux-menu";
@@ -81,11 +86,24 @@ namespace Magix.UX.Widgets
             get { return LeafMenuItemClicked != null; }
         }
 
+        internal bool HasMenuItemClickedEventHandler
+        {
+            get { return MenuItemClicked != null; }
+        }
+
         internal void RaiseClickedEventHandler(MenuItem item)
         {
             if (LeafMenuItemClicked != null)
             {
                 LeafMenuItemClicked(item, new EventArgs());
+            }
+        }
+
+        internal void RaiseClickedNoLeafEventHandler(MenuItem item)
+        {
+            if (MenuItemClicked != null)
+            {
+                MenuItemClicked(item, new EventArgs());
             }
         }
     }
