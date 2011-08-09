@@ -566,56 +566,144 @@ Deleting it may break these parts.</p>";
             MetaView view = MetaView.SelectFirst(
                 Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
 
+            // Defaults ...
             e.Params["IsDelete"].Value = false;
             e.Params["NoIdColumn"].Value = true;
             e.Params["IsFilter"].Value = false;
-
-            foreach (MetaView.MetaViewProperty idx in view.Properties)
-            {
-                if (idx.Name == ":Delete")
-                {
-                    e.Params["IsDelete"].Value = true;
-                    continue;
-                }
-                else if (idx.Name == ":Edit")
-                {
-                    e.Params["NoIdColumn"].Value = false;
-                    continue;
-                }
-
-                string name = idx.Name;
-
-                if (name.Contains(":"))
-                {
-                    string[] splits = name.Split(':');
-                    name = splits[splits.Length - 1];
-                    e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
-                        "Magix.MetaView.MultiViewTemplateColumn";
-                }
-
-                if (!string.IsNullOrEmpty(idx.Action))
-                {
-                    e.Params["WhiteListColumns"][name].Value = true;
-                    e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
-                    e.Params["Type"]["Properties"][name]["Header"].Value = name;
-                    e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
-                    e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
-                        "Magix.MetaView.MultiViewTemplateColumnButton";
-                }
-
-                e.Params["WhiteListColumns"][name].Value = true;
-                e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
-                e.Params["Type"]["Properties"][name]["Header"].Value = name;
-                e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
-            }
 
             e.Params["MetaViewTypeName"].Value = view.TypeName;
 
             Page.Session["Magix.MetaView.EditingView"] = view;
 
             RaiseEvent(
-                "Magix.MetaType.ViewMetaTypeFromTemplate",
+                "Magix.MetaType.ViewMetaType",
                 e.Params);
+        }
+
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
+        protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META" &&
+                e.Params.Contains("MetaViewName"))
+            {
+                MetaView view = MetaView.SelectFirst(
+                    Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
+                foreach (MetaView.MetaViewProperty idx in view.Properties)
+                {
+                    if (idx.Name == ":Delete")
+                    {
+                        e.Params["IsDelete"].Value = true;
+                        continue;
+                    }
+                    else if (idx.Name == ":Edit")
+                    {
+                        e.Params["NoIdColumn"].Value = false;
+                        continue;
+                    }
+                    else if (idx.Name == ":Create")
+                    {
+                        e.Params["IsCreate"].Value = true;
+                        continue;
+                    }
+
+                    string name = idx.Name;
+
+                    if (name.Contains(":"))
+                    {
+                        string[] splits = name.Split(':');
+                        name = splits[splits.Length - 1];
+                        e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
+                            "Magix.MetaView.MultiViewTemplateColumn";
+                    }
+
+                    if (!string.IsNullOrEmpty(idx.Action))
+                    {
+                        e.Params["WhiteListColumns"][name].Value = true;
+                        e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
+                        e.Params["Type"]["Properties"][name]["Header"].Value = name;
+                        e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
+                        e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
+                            "Magix.MetaView.MultiViewTemplateColumnButton";
+                    }
+
+                    e.Params["WhiteListColumns"][name].Value = true;
+                    e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
+                    e.Params["Type"]["Properties"][name]["Header"].Value = name;
+                    e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
+                }
+            }
+        }
+
+        [ActiveEvent(Name = "DBAdmin.DynamicType.CreateObject")]
+        protected void DBAdmin_DynamicType_CreateObject(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
+            {
+                MetaObject obj = new MetaObject();
+                MetaView n = MetaView.SelectFirst(
+                    Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+                obj.TypeName = n.TypeName;
+                obj.Save();
+                e.Params["ID"].Value = obj.ID;
+            }
+        }
+
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
+        protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META" &&
+                e.Params.Contains("MetaViewName"))
+            {
+                MetaView templ = MetaView.SelectFirst(
+                    Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
+                e.Params["SetCount"].Value = MetaObject.CountWhere(
+                    Criteria.Eq("TypeName", templ.TypeName));
+
+                e.Params["LockSetCount"].Value = true;
+
+                foreach (MetaObject idxO in MetaObject.Select(
+                    Criteria.Eq("TypeName", templ.TypeName),
+                    Criteria.Range(
+                        e.Params["Start"].Get<int>(),
+                        e.Params["End"].Get<int>(),
+                        "Created",
+                        false)))
+                {
+                    e.Params["Objects"]["o-" + idxO.ID]["ID"].Value = idxO.ID;
+                    foreach (MetaObject.Value idx in idxO.Values)
+                    {
+                        string propertyName = idx.Name;
+                        if (propertyName.IndexOf(":") != -1)
+                        {
+                            string[] splits = propertyName.Split(':');
+                            propertyName = splits[splits.Length - 1];
+                        }
+                        if (idxO.Values.Exists(
+                            delegate(MetaObject.Value ixx)
+                            {
+                                return ixx.Name == propertyName;
+                            }))
+                            e.Params["Objects"]["o-" + idxO.ID]["Properties"][propertyName].Value = idx.Val;
+                    }
+
+                    // Looping through, 'touching' all the items with no values ...
+                    foreach (MetaView.MetaViewProperty idx in templ.Properties.FindAll(
+                        delegate(MetaView.MetaViewProperty idxI)
+                        {
+                            return !idxO.Values.Exists(
+                                delegate(MetaObject.Value idxI2)
+                                {
+                                    return idxI2.Name == idxI.Name;
+                                });
+                        }
+                        ))
+                    {
+                        e.Params["Objects"]["o-" + idxO.ID]["Properties"][idx.Name].Value = "";
+                    }
+                }
+            }
         }
 
         [ActiveEvent(Name = "Magix.MetaView.MultiViewTemplateColumnButton")]

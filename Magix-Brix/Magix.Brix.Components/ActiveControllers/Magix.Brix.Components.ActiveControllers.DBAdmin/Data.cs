@@ -707,18 +707,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
         }
 
-        public int CreateObject(string fullTypeName)
+        public int CreateObject(string fullTypeName, Node par)
         {
             Type type = GetType(fullTypeName);
             if (type == null)
             {
-                Node node = new Node();
-                node["FullTypeName"].Value = fullTypeName;
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.CreateObject",
-                    node);
-                return node["ID"].Get<int>();
+                    par);
+                return par["ID"].Get<int>();
             }
             else
             {
