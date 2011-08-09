@@ -377,7 +377,7 @@ have relationships towards other instances in your database.</p>";
         protected void DBAdmin_Common_CreateObject(object sender, ActiveEventArgs e)
         {
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
-            int id = Data.Instance.CreateObject(fullTypeName);
+            int id = Data.Instance.CreateObject(fullTypeName, e.Params);
             if (id == 0)
                 throw new ApplicationException(
                     @"Couldn't create object, something went wrong in your
@@ -391,7 +391,7 @@ model while trying to create object, and it was never created for some reasons."
             int parentId = e.Params["ParentID"].Get<int>();
             string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
             string parentFullTypeName = e.Params["ParentFullTypeName"].Get<string>();
-            int id = Data.Instance.CreateObject(fullTypeName);
+            int id = Data.Instance.CreateObject(fullTypeName, e.Params);
             if (id == 0)
                 throw new ApplicationException(
                     @"Couldn't create object, something went wrong in your

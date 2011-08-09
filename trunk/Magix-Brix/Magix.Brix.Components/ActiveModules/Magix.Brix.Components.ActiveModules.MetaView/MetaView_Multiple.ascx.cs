@@ -23,16 +23,28 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         void IModule.InitialLoading(Node node)
         {
             base.InitialLoading(node);
-            Load +=
-                delegate
-                {
-                    DataSource["MetaViewName"].Value = ViewName;
-                    DataSource["Container"].Value = this.Parent.ID;
+            if (!IsPostBack)
+                Page.LoadComplete +=
+                    delegate
+                    {
+                        LoadModule(node);
+                    };
+            else
+                Load +=
+                    delegate
+                    {
+                        LoadModule(node);
+                    };
+        }
 
-                    RaiseSafeEvent(
-                        "Magix.MetaType.RaiseViewMetaTypeFromMultipleView",
-                        DataSource);
-                };
+        private void LoadModule(Node node)
+        {
+            node["MetaViewName"].Value = ViewName;
+            node["Container"].Value = this.Parent.ID;
+
+            RaiseSafeEvent(
+                "Magix.MetaType.RaiseViewMetaTypeFromMultipleView",
+                node);
         }
 
         [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.GetTemplateColumnSelectViewMultiple")]

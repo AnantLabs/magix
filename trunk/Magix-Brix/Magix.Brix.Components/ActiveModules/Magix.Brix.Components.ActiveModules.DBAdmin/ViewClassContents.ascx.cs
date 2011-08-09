@@ -94,13 +94,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void CreateItem(object sender, EventArgs e)
         {
-            Node node = new Node();
-            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
             RaiseSafeEvent(
                 DataSource.Contains("CreateEventName") ? 
                     DataSource["CreateEventName"].Get<string>() :
                     "DBAdmin.Common.CreateObject",
-                node);
+                DataSource);
             ReDataBind(true);
         }
 

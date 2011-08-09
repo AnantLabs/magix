@@ -40,38 +40,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (e.Params.Contains("Container"))
                 node["Container"].Value = e.Params["Container"].Value;
 
-            if (e.Params.Contains("MetaTemplateObjectID"))
-            {
-                MetaObject t = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
-                if (t == null)
-                {
-                    throw new ArgumentException(
-                        string.Format(
-                            @"Seems like some wize-guy have deleted the Meta Object ['{0}'] being 
-used as a Template for this Meta View ...", 
-                            e.Params["MetaTemplateObjectID"].Get<int>()));
-                }
-                node["MetaTemplateObjectID"].Value = t.ID;
-            }
-            else
-            {
-                // Finding first Meta Object of type
-                MetaObject t = MetaObject.SelectFirst(
-                    Criteria.Eq(
-                        "TypeName", 
-                        e.Params["MetaViewTypeName"].Get<string>()));
-                if (t == null)
-                {
-                    throw new ArgumentException(
-                        string.Format(@"You don't have <em>any Objects with the TypeName</em> you'd like to show. 
-This poses a problem for the grid system since it can't know anything about the object, not
-even which columns to show for it. Create at least <em>One Object</em> by hand to inform the Grid 
-System about how your objects actually looks like. Create at least on item of type '{0}'",
-                        e.Params["MetaViewTypeName"].Get<string>()));
-                }
-                node["MetaTemplateObjectID"].Value = t.ID;
-            }
-
             node["FreezeContainer"].Value = true;
             node["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
 
@@ -107,6 +75,8 @@ System about how your objects actually looks like. Create at least on item of ty
             node["IsCreate"].Value = false;
 
             node["ReuseNode"].Value = true;
+            if (e.Params.Contains("MetaViewName"))
+                node["MetaViewName"].Value = e.Params["MetaViewName"].Value;
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -286,14 +256,6 @@ System about how your objects actually looks like. Create at least on item of ty
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.ViewMetaTypeFromTemplate")]
-        protected void Magix_MetaType_ViewMetaTypeFromTemplate(object sender, ActiveEventArgs e)
-        {
-            RaiseEvent(
-                "Magix.MetaType.ViewMetaType",
-                e.Params);
-        }
-
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
         protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
         {
@@ -327,120 +289,19 @@ System about how your objects actually looks like. Create at least on item of ty
             }
         }
 
-        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
-        protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
-        {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
-            {
-                MetaObject t = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
-
-                foreach (MetaObject.Value idx in t.Values)
-                {
-                    if (!e.Params.Contains("WhiteListColumns") ||
-                        (e.Params["WhiteListColumns"].Contains(idx.Name)) &&
-                        e.Params["WhiteListColumns"][idx.Name].Get<bool>())
-                    {
-                        e.Params["Type"]["Properties"][idx.Name]["Header"].Value = idx.Name;
-                        e.Params["Type"]["Properties"][idx.Name]["NoFilter"].Value = true;
-                        if (e.Params.Contains("IsInlineEdit") &&
-                            !e.Params["IsInlineEdit"].Get<bool>())
-                            e.Params["Type"]["Properties"][idx.Name]["ReadOnly"].Value = true;
-                    }
-                }
-            }
-        }
-
-        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
-        protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
-        {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
-            {
-                MetaObject templ = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
-
-                e.Params["SetCount"].Value = MetaObject.CountWhere(
-                    Criteria.Eq("TypeName", templ.TypeName));
-
-                e.Params["LockSetCount"].Value = true;
-
-                foreach (MetaObject idxO in MetaObject.Select(
-                    Criteria.Eq("TypeName", templ.TypeName),
-                    Criteria.Range(
-                        e.Params["Start"].Get<int>(),
-                        e.Params["End"].Get<int>(),
-                        "Created",
-                        false)))
-                {
-                    e.Params["Objects"]["o-" + idxO.ID]["ID"].Value = idxO.ID;
-                    foreach (MetaObject.Value idx in idxO.Values)
-                    {
-                        string propertyName = idx.Name;
-                        if (propertyName.IndexOf(":") != -1)
-                        {
-                            string[] splits = propertyName.Split(':');
-                            propertyName = splits[splits.Length - 1];
-                        }
-                        if (idxO.Values.Exists(
-                            delegate(MetaObject.Value ixx)
-                            {
-                                return ixx.Name == propertyName;
-                            }))
-                            e.Params["Objects"]["o-" + idxO.ID]["Properties"][propertyName].Value = idx.Val;
-                    }
-
-                    // Looping through, 'touching' all the items with no values ...
-                    foreach (MetaObject.Value idx in templ.Values.FindAll(
-                        delegate(MetaObject.Value idxI)
-                        {
-                            return !idxO.Values.Exists(
-                                delegate(MetaObject.Value idxI2)
-                                {
-                                    return idxI2.Name == idxI.Name;
-                                });
-                        }
-                        ))
-                    {
-                        e.Params["Objects"]["o-" + idxO.ID]["Properties"][idx.Name].Value = "";
-                    }
-                }
-            }
-        }
-
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObject")]
         protected void DBAdmin_DynamicType_GetObject(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() != typeof(MetaObject).FullName + "-META")
                 return;
+
             MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             e.Params["Object"]["ID"].Value = t.ID;
 
-            MetaObject templ = MetaObject.SelectByID(e.Params["MetaTemplateObjectID"].Get<int>());
-
             foreach (MetaObject.Value idx in t.Values)
             {
-                if (templ.Values.Exists(
-                    delegate(MetaObject.Value ixx)
-                    {
-                        return ixx.Name == idx.Name;
-                    }))
-                {
-                    e.Params["Object"]["Properties"][idx.Name].Value = idx.Val;
-                }
-            }
-
-            // Looping through, 'touching' all the items with no values ...
-            foreach (MetaObject.Value idx in templ.Values.FindAll(
-                delegate(MetaObject.Value idxI)
-                {
-                    return !t.Values.Exists(
-                        delegate(MetaObject.Value idxI2)
-                        {
-                            return idxI2.Name == idxI.Name;
-                        });
-                }
-                ))
-            {
-                e.Params["Object"]["Properties"][idx.Name].Value = "";
+                e.Params["Object"]["Properties"][idx.Name].Value = idx.Val;
             }
         }
 
@@ -454,20 +315,11 @@ System about how your objects actually looks like. Create at least on item of ty
             Node node = new Node();
 
             node["Container"].Value = container;
-            node["MetaTemplateObjectID"].Value = e.Params["Parameters"]["MetaTemplateObjectID"].Value;
             node["FreezeContainer"].Value = true;
             node["FullTypeName"].Value = typeof(MetaObject) + "-META";
             node["ReuseNode"].Value = true;
             node["ID"].Value = t.ID;
-
-            if (!node.Contains("WhiteListColumns"))
-            {
-                MetaObject templ = MetaObject.SelectByID(node["MetaTemplateObjectID"].Get<int>());
-                foreach (MetaObject.Value idx in templ.Values)
-                {
-                    node["WhiteListColumns"][idx.Name].Value = true;
-                }
-            }
+            node["MetaViewName"].Value = e.Params["Parameters"]["MetaViewName"].Get<string>();
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 3;
