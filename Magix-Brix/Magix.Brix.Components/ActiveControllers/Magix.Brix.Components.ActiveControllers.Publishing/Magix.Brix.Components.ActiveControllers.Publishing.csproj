@@ -43,19 +43,20 @@
   <ItemGroup>
     <Compile Include="AdministratorDashboardController.cs" />
     <Compile Include="AccessController.cs" />
+    <Compile Include="LoginOut_Controller.cs" />
     <Compile Include="WebPartController.cs" />
     <Compile Include="OpenID_Controller.cs" />
     <Compile Include="FileSystemController.cs" />
-    <Compile Include="RolesController.cs" />
+    <Compile Include="EditRoles_Controller.cs" />
     <Compile Include="PageLoader_Controller.cs" />
     <Compile Include="EditTemplatesController.cs" />
     <Compile Include="SliderMenuController.cs" />
     <Compile Include="EditPagesController.cs" />
-    <Compile Include="HeaderController.cs" />
+    <Compile Include="AdminDashboardHeader_Controller.cs" />
     <Compile Include="DashboardController.cs" />
     <Compile Include="InitialLoading_Controller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserController.cs" />
+    <Compile Include="EditUser_Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">

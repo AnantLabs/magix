@@ -20,13 +20,6 @@ namespace Magix.Brix.Components.ActiveTypes.Users
 
         public override void Save()
         {
-            Role other = Role.SelectFirst(Criteria.Eq("Name", Name));
-            if (other != null && other != this)
-            {
-                throw new ApplicationException(
-                    @"The name of that Role is already taken by another object in the system 
-and would create very hard to track-down bugs if allowed to be created ...");
-            }
             if (ID == 0)
             {
                 Node node = new Node();
@@ -40,6 +33,20 @@ and would create very hard to track-down bugs if allowed to be created ...");
                     "Magix.Core.Log",
                     node);
             }
+            if (string.IsNullOrEmpty(Name))
+                Name = "Default Name";
+
+            string name = Name;
+
+            int idxNo = 2;
+            while (CountWhere(
+                Criteria.Eq("Name", name),
+                Criteria.NotId(ID)) > 0)
+            {
+                name = Name + "-" + idxNo.ToString();
+                idxNo += 1;
+            }
+            Name = name;
             base.Save();
         }
     }
