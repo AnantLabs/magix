@@ -43,10 +43,11 @@
   <ItemGroup>
     <Compile Include="AdministratorDashboardController.cs" />
     <Compile Include="AccessController.cs" />
-    <Compile Include="OpenIDController.cs" />
+    <Compile Include="WebPartController.cs" />
+    <Compile Include="OpenID_Controller.cs" />
     <Compile Include="FileSystemController.cs" />
     <Compile Include="RolesController.cs" />
-    <Compile Include="PageController.cs" />
+    <Compile Include="PageLoader_Controller.cs" />
     <Compile Include="EditTemplatesController.cs" />
     <Compile Include="SliderMenuController.cs" />
     <Compile Include="EditPagesController.cs" />

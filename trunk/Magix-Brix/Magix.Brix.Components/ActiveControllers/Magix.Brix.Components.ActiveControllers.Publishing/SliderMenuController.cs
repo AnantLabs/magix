@@ -1,7 +1,7 @@
 ﻿/*
  * Magix - A Modular-based Framework for building Web Applications 
- * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix is licensed as GPLv3.
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -38,7 +38,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 Node node = new Node();
                 node["ID"].Value = root.ID;
                 RaiseEvent(
-                    "Magix.Publishing.FindFirstPageRequestCanAccess",
+                    "Magix.Publishing.FindFirstChildPageUserCanAccess",
                     node);
                 if (node.Contains("AccessToID"))
                 {

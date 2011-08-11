@@ -1,7 +1,7 @@
 ﻿/*
  * Magix - A Modular-based Framework for building Web Applications 
- * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix is licensed as GPLv3.
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -62,19 +62,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             string username = e.Params["Username"].Get<string>();
             string password = e.Params["Password"].Get<string>();
 
-            if (!string.IsNullOrEmpty(password))
+            User u = User.SelectFirst(
+                Criteria.Eq("Username", username),
+                Criteria.Eq("Password", password));
+
+            if (u != null)
             {
-                User u = User.SelectFirst(
-                    Criteria.Eq("Username", username),
-                    Criteria.Eq("Password", password));
+                e.Params["Success"].Value = true;
+                User.Current = u;
 
-                if (u != null)
-                {
-                    e.Params["Success"].Value = true;
-                    User.Current = u;
-
-                    RaiseEvent("Magix.Core.UserLoggedIn-Override");
-                }
+                RaiseEvent("Magix.Core.UserLoggedIn");
             }
         }
 

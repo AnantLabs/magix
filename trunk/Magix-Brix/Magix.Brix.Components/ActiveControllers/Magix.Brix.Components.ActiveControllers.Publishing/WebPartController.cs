@@ -1,7 +1,7 @@
 ﻿/*
  * Magix - A Modular-based Framework for building Web Applications 
- * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix is licensed as GPLv3.
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -16,11 +16,12 @@ using System.Reflection;
 using Magix.Brix.Publishing.Common;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Security;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     [ActiveController]
-    public class PageController : ActiveController
+    public class WebPartController : ActiveController
     {
         [ActiveEvent(Name = "Magix.Publishing.InitializePublishingPlugin")]
         protected void Magix_Publishing_InitializePublishingPlugin(object sender, ActiveEventArgs e)
@@ -56,42 +57,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.UrlRequested")]
-        protected void Magix_Publishing_UrlRequested(object sender, ActiveEventArgs e)
-        {
-            // Including static Front-End CSS file(s) ...
-            IncludeStaticFrontEndCSS();
-
-            // Figuring out the URL and 'normalizing it' in case it was shorthand
-            // typed in ...
-            string url = e.Params["URL"].Get<string>();
-            if (url.Length > 0 && url[0] != '/')
-                url = "/" + url;
-
-            // Finding the page with the given URL [which now should be e.g.; "" or "/New/App"]
-            WebPage p = WebPage.SelectFirst(Criteria.Eq("URL", url));
-
-            // Opening our 'page' ...
-            Node node = new Node();
-            node["ID"].Value = p.ID;
-
-            RaiseEvent(
-                "Magix.Publishing.OpenPage",
-                node);
-        }
-
-        private void IncludeStaticFrontEndCSS()
-        {
-            Node node = new Node();
-            node["CSSFile"].Value = GetApplicationBaseUrl() + "media/front-end.css";
-
-            RaiseEvent(
-                "Magix.Core.AddCustomCssFile",
-                node);
-        }
-
-        [ActiveEvent(Name = "Magix.Publishing.FindFirstPageRequestCanAccess")]
-        protected void Magix_Publishing_FindFirstPageRequestCanAccess(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.FindFirstChildPageUserCanAccess")]
+        protected void Magix_Publishing_FindFirstChildPageUserCanAccess(object sender, ActiveEventArgs e)
         {
             WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
 
@@ -110,7 +77,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             Node ch1 = new Node();
             ch1["ID"].Value = p.ID;
             RaiseEvent(
-                "Magix.Publishing.CanLoadPageObject",
+                "Magix.Publishing.VerifyUserHasAccessToPage",
                 ch1);
 
             if (!ch1.Contains("STOP") ||
@@ -127,87 +94,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 }
             }
             return false;
-        }
-
-        [ActiveEvent(Name = "Magix.Publishing.OpenPage")]
-        protected void Magix_Publishing_OpenPage(object sender, ActiveEventArgs e)
-        {
-            WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
-
-            if (p == null)
-            {
-                throw new ArgumentException("Page not found ...");
-            }
-            else
-            {
-                Node ch1 = new Node();
-                ch1["ID"].Value = p.ID;
-                RaiseEvent(
-                    "Magix.Publishing.CanLoadPageObject",
-                    ch1);
-
-                if (ch1.Contains("STOP") &&
-                    ch1["STOP"].Get<bool>())
-                {
-                    if (p.URL.Trim('/') == "")
-                    {
-                        // Finding first page level user [or anonymous] have access to from here ...
-                        Node node = new Node();
-                        node["ID"].Value = p.ID;
-                        RaiseEvent(
-                            "Magix.Publishing.FindFirstPageRequestCanAccess",
-                            node);
-                        if(!node.Contains("AccessToID"))
-                            throw new ArgumentException("You don't have access to this website ...");
-                        OpenPage(WebPage.SelectByID(node["AccessToID"].Get<int>()));
-                    }
-                    else
-                    {
-                        throw new ArgumentException("You don't have access to this page ...");
-                    }
-                }
-                else
-                {
-                    OpenPage(p);
-                }
-            }
-        }
-
-        private void OpenPage(WebPage page)
-        {
-            SetCaptionOfPage(page);
-
-            string lastModule = "content1";
-
-            int cl = 0;
-            foreach (WebPart idx in page.WebParts)
-            {
-                if (idx.Container.ViewportContainer.CompareTo(lastModule) > 0)
-                    lastModule = idx.Container.ViewportContainer;
-
-                Node tmp = new Node();
-
-                tmp["ID"].Value = idx.ID;
-
-                RaiseEvent(
-                    "Magix.Publishing.InjectPlugin",
-                    tmp);
-
-                cl = int.Parse(lastModule.Replace("content", ""));
-            }
-            if (cl < 7)
-                ActiveEvents.Instance.RaiseClearControls("content" + (cl + 1));
-        }
-
-        private void SetCaptionOfPage(WebPage page)
-        {
-            Node node = new Node();
-
-            node["Caption"].Value = page.Name;
-
-            RaiseEvent(
-                "Magix.Core.SetTitleOfPage",
-                node);
         }
 
         [ActiveEvent(Name = "Magix.Publishing.GetWebPartValue")]
@@ -264,7 +150,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             ch["ID"].Value = wp.ID;
 
             RaiseEvent(
-                "Magix.Publishing.CanLoadPageObject",
+                "Magix.Publishing.VerifyUserHasAccessToPage",
                 ch);
 
             if (!ch.Contains("STOP") ||

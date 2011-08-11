@@ -1,7 +1,7 @@
 ﻿/*
  * Magix - A Modular-based Framework for building Web Applications 
- * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix is licensed as GPLv3.
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -21,8 +21,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     [ActiveController]
     public class AccessController : ActiveController
     {
-        [ActiveEvent(Name = "Magix.Publishing.CanLoadPageObject")]
-        protected void Magix_Publishing_CanLoadPageObject(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.VerifyUserHasAccessToPage")]
+        protected void Magix_Publishing_VerifyUserHasAccessToPage(object sender, ActiveEventArgs e)
         {
             User user = User.Current;
 
