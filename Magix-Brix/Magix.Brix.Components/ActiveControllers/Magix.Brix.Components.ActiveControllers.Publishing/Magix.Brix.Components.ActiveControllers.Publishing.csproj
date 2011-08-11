@@ -52,7 +52,7 @@
     <Compile Include="EditPagesController.cs" />
     <Compile Include="HeaderController.cs" />
     <Compile Include="DashboardController.cs" />
-    <Compile Include="PublishingController.cs" />
+    <Compile Include="InitialLoading_Controller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserController.cs" />
   </ItemGroup>

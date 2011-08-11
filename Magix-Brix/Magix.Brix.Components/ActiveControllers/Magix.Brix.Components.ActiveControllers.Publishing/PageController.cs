@@ -59,31 +59,34 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.UrlRequested")]
         protected void Magix_Publishing_UrlRequested(object sender, ActiveEventArgs e)
         {
-            string url = e.Params["URL"].Get<string>();
+            // Including static Front-End CSS file(s) ...
+            IncludeStaticFrontEndCSS();
 
+            // Figuring out the URL and 'normalizing it' in case it was shorthand
+            // typed in ...
+            string url = e.Params["URL"].Get<string>();
+            if (url.Length > 0 && url[0] != '/')
+                url = "/" + url;
+
+            // Finding the page with the given URL [which now should be e.g.; "" or "/New/App"]
             WebPage p = WebPage.SelectFirst(Criteria.Eq("URL", url));
 
+            // Opening our 'page' ...
             Node node = new Node();
             node["ID"].Value = p.ID;
 
             RaiseEvent(
                 "Magix.Publishing.OpenPage",
                 node);
+        }
 
-            node = new Node();
-            node["CSSFile"].Value = e.Params["BaseURL"].Get<string>() + "media/front-end.css";
+        private void IncludeStaticFrontEndCSS()
+        {
+            Node node = new Node();
+            node["CSSFile"].Value = GetApplicationBaseUrl() + "media/front-end.css";
 
             RaiseEvent(
                 "Magix.Core.AddCustomCssFile",
-                node);
-
-            node = new Node();
-            node["WebPageID"].Value = p.ID;
-            node["URL"].Value = p.URL;
-
-            // To create hooks for adding custom CSS/JS and such later ...
-            RaiseEvent(
-                "Magix.Publishing.FrontEndPostbackInitializationDone", // puhh ...! ;)
                 node);
         }
 

@@ -36,8 +36,27 @@ input[type=text].open-id
 	background-repeat:no-repeat;
 	background-position:0 0;
 	padding-left:20px;
-	min-width:210px;
-	width:210px;
+	min-width:130px;
+	width:130px;
+	opacity:.3;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+input[type=text].open-id:hover,
+input[type=text].open-id:focus
+{
+	opacity:1;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
 }
 
 

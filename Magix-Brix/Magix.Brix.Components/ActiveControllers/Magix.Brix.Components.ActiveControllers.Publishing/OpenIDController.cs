@@ -28,8 +28,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     [ActiveController]
     public class OpenIDController : ActiveController
     {
-        [ActiveEvent(Name = "Brix.Core.InitialLoading")]
-        protected void Brix_Core_InitialLoading(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.InitialLoading")]
+        protected void Magix_Core_InitialLoading(object sender, ActiveEventArgs e)
         {
             if (!string.IsNullOrEmpty(Page.Request.Params["openID"]))
                 DoOpenProviderStuff();

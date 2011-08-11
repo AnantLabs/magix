@@ -40,7 +40,7 @@ namespace Magix.Brix.ApplicationPool
 
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "Brix.Core.InitialLoading",
+                    "Magix.Core.InitialLoading",
                     node);
             }
             LoadComplete += MainWebPage_LoadComplete;

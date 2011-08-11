@@ -14,11 +14,12 @@ using Magix.UX;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     [ActiveController]
-    public class PublishingController : ActiveController
+    public class InitialLoading_Controller : ActiveController
     {
-        [ActiveEvent(Name = "Brix.Core.InitialLoading")]
-        protected void Brix_Core_InitialLoading(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.InitialLoading")]
+        protected void Magix_Core_InitialLoading(object sender, ActiveEventArgs e)
         {
+            // We always log user out if he visits the 'login URL' ...
             if (Page.Request.Params["login"] == "true")
                 User.Current = null;
 
@@ -47,34 +48,27 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
             else
             {
+                // Checking to see if user is requesting dashboard
                 if (Page.Request.Params["dashboard"] == "true")
                 {
-                    string nUrl = "~/?login=true";
+                    // User is requesting Dashboard, but is not logged in as an admin ...
+                    // Redirecting to Login 'page' and giving the return URL to be the current one
 
-                    string baseUrl = GetApplicationBaseUrl();
-                    string curUrl = Page.Request.Url.ToString();
+                    string nUrl = 
+                        "~/?login=true&ret=" + 
+                        Page.Server.UrlEncode(Page.Request.Url.ToString());
 
-                    if (baseUrl != curUrl)
-                    {
-                        nUrl += "&ret=" + Page.Server.UrlEncode(curUrl);
-                    }
                     AjaxManager.Instance.Redirect(nUrl);
                 }
                 else
                 {
                     // Getting relative URL ...
-                    string baseUrl = GetApplicationBaseUrl();
-                    string relUrl = Page.Request.Url.ToString().Replace(baseUrl, "");
-
-                    if (relUrl.IndexOf('?') != -1)
-                    {
-                        relUrl = relUrl.Substring(0, relUrl.IndexOf('?'));
-                    }
+                    string relUrl = ""; // Defaulting to 'root' ...
+                    if (!string.IsNullOrEmpty(Page.Request.Params["page"]))
+                        relUrl = Page.Request.Params["page"];
 
                     Node node = new Node();
-
                     node["URL"].Value = relUrl;
-                    node["BaseURL"].Value = baseUrl;
 
                     RaiseEvent(
                         "Magix.Publishing.UrlRequested",
@@ -86,15 +80,23 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         private bool ShouldShowDashboard()
         {
             return User.Current != null &&
-                User.Current.InRole("Administrator") &&
-                Page.Request.Params["dashboard"] == "true";
+                Page.Request.Params["dashboard"] == "true" &&
+                User.Current.InRole("Administrator");
         }
 
         private bool ShouldShowLoginBox()
         {
-            return (User.Current == null &&
-                Page.Request.Params["login"] == "true") || 
-                !string.IsNullOrEmpty(Page.Request.Params["openID"]);
+            bool retVal = false;
+
+            // If user specifically asks for login page ...
+            if (Page.Request.Params["login"] == "true")
+                retVal = true;
+
+            // User [or another machine] has asked for OpenID credentials ...
+            if (!string.IsNullOrEmpty(Page.Request.Params["openID"]))
+                retVal = true;
+
+            return retVal;
         }
 
         private void IncludeCssFiles()

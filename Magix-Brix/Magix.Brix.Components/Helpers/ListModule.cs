@@ -444,8 +444,8 @@ namespace Magix.Brix.Components
                 cS.Controls.Add(lb2);
                 row.Controls.Add(cS);
             }
-            if (!(DataSource.Contains("NoIdColumn")
-    && DataSource["NoIdColumn"].Get<bool>()))
+            if (!(DataSource.Contains("NoIdColumn") &&
+                DataSource["NoIdColumn"].Get<bool>()))
             {
                 Label li = new Label();
                 li.Tag = "td";
