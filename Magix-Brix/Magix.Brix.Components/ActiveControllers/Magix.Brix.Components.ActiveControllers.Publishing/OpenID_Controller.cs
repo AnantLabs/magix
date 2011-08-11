@@ -39,7 +39,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     {
         /**
          * Overriding our default Magix Login logic here to inject our own OpenID stuff ...
-         * Overrides; 'Magix.Core.LogInUser' and 'Magix.Core.UserLoggedIn'
+         * Overrides; 'Magix.Core.LogInUser' and 'Magix.Core.UserLoggedIn' which again
+         * are being used by the Magix 'core' login logic, meaning we're basically
+         * doing effectively 'AOP' here by overriding existing events like these ...
+         * Where the 'Aspect' here would be the OpenID 'logic'
          */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
@@ -468,8 +471,9 @@ maybe a suggestion of what it might have been ...?";
         }
 
         /**
-         * Overridden to check to see if any OpenID Requests are in our 'queue', passes
-         * on if none are found. Processes the requests if any are found
+         * Overridden to check to see if we're an OpenID Provider, and if so, redirect back 
+         * to Relying Party accordingly. If we're not a Provider, it will forward the event to
+         * the overridden logic
          */
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn-Override")]
         protected void Magix_Core_UserLoggedIn_Override(object sender, ActiveEventArgs e)
