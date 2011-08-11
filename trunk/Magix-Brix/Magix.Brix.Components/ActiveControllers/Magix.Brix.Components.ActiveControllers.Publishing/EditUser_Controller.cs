@@ -21,9 +21,17 @@ using DotNetOpenAuth.Messaging;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
+    /**
+     * Here mostly for Editing User, and also to some extent creating default 
+     * users and roles upon startup if none exists
+     */
     [ActiveController]
-    public class UserController : ActiveController
+    public class EditUser_Controller : ActiveController
     {
+        /**
+         * Makes sure we have Administrator and User Roles, in addition creates a default
+         * user [admin/admin] if no user exists
+         */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
@@ -45,46 +53,24 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 }
                 if (User.Count == 0)
                 {
+                    // Oops, creating our default user [admin/admin]
                     User admin = new User();
+
                     admin.Username = "admin";
                     admin.Password = "admin";
                     admin.AvatarURL = "media/images/avatars/marvin-headshot.png";
                     admin.Roles.Add(Role.SelectFirst(Criteria.Eq("Name", "Administrator")));
+
                     admin.SaveNoVerification();
                 }
                 tr.Commit();
             }
         }
 
-        [ActiveEvent(Name = "Magix.Core.LogInUser")]
-        protected void Magix_Core_LogInUser(object sender, ActiveEventArgs e)
-        {
-            string username = e.Params["Username"].Get<string>();
-            string password = e.Params["Password"].Get<string>();
-
-            User u = User.SelectFirst(
-                Criteria.Eq("Username", username),
-                Criteria.Eq("Password", password));
-
-            if (u != null)
-            {
-                e.Params["Success"].Value = true;
-                User.Current = u;
-
-                RaiseEvent("Magix.Core.UserLoggedIn");
-            }
-        }
-
-        [ActiveEvent(Name = "Magix.Core.UserLoggedOut")]
-        private void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
-        {
-            // Logging out...
-            UserBase.Current = null;
-
-            // Redirecting back to landing page, to 'invalidate' DOM ...!
-            AjaxManager.Instance.Redirect(GetApplicationBaseUrl());
-        }
-
+        /**
+         * Allows editing of all users, and searching and changing properties and such. Shows
+         * all Users in a Grid
+         */
         [ActiveEvent(Name = "Magix.Publishing.EditUsers")]
         protected void Magix_Publishing_EditUsers(object sender, ActiveEventArgs e)
         {
@@ -111,7 +97,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Type"]["Properties"]["Password"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Roles"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Roles"]["Header"].Value = "Role"; // Singular form ...
-            node["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value = "Magix.Publishing.GetRoleTemplateColumn";
+            node["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value = 
+                "Magix.Publishing.GetRoleTemplateColumn";
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -119,6 +106,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
+        /**
+         * Get 'select Role' template column for our Grid. Creates a SelectList and returns
+         * back to caller.
+         * PS!
+         * We only allow for editing the user such that he or she can belong to only one Role. If you'd
+         * like to extend this logic to allow for more than one Role to be added, this is where you'd want to
+         * do such, probably by overriding this event, and choose some sort of 'multiple choice' control
+         * to return instead
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetRoleTemplateColumn")]
         private void Magix_Publishing_GetRoleTemplateColumn(object sender, ActiveEventArgs e)
         {
@@ -153,6 +149,51 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Control"].Value = ls;
         }
 
+        #region [ -- Event handler for SelectList SelectedIndexChanged from Template column -- ]
+
+        // TODO: Refactor to 'generalized Select List Control thingie ...'
+
+        protected void ls_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectList sl = sender as SelectList;
+            int id = int.Parse(sl.Info.Split('|')[0]);
+
+            // Getting our user
+            User user2 = User.SelectByID(id);
+
+            // Changing our user's role belonging ...
+            user2.Roles.Clear();
+            int idOfRole = int.Parse(sl.SelectedItem.Value);
+            if (idOfRole != -1)
+            {
+                user2.Roles.Add(Role.SelectByID(idOfRole));
+            }
+
+            // Saving ...
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                user2.Save();
+                tr.Commit();
+            }
+
+            // Signalizing to Grids that they need to update ...
+            Node n = new Node();
+            n["ID"].Value = id;
+            n["PropertyName"].Value = "Roles";
+            n["NewValue"].Value = sl.SelectedItem.Value;
+            n["FullTypeName"].Value = typeof(User).FullName;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Core.UpdateGrids",
+                n);
+        }
+
+        #endregion
+
+        /**
+         * Edit one specific User, and all of his properties
+         */
         [ActiveEvent(Name = "Magix.Publishing.EditUser")]
         protected void Magix_Publishing_EditUser(object sender, ActiveEventArgs e)
         {
@@ -160,8 +201,49 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             User user = User.SelectByID(e.Params["ID"].Get<int>());
 
             // Loading Avatar for User
-            LoadUserImage(user);
+            LoadEditUserImage(user);
 
+            // Loading the Edit Users properties ... [name, username etc]
+            LoadEditUserObject(sender, e, user);
+
+            // Pops up the Edit User Settings grid ...
+            LoadEditUserSettings(user.ID);
+
+            // Pops up the Edit User OpenID Tokens Grid
+            LoadEditUserOpenIDs(user.ID);
+        }
+
+        /*
+         * Used by EditUser logic
+         */
+        private static void LoadEditUserImage(User user)
+        {
+            Node node = new Node();
+            node["Append"].Value = false;
+            node["Events"]["Click"].Value = "Magix.Publishing.ChangeAvatarForUser";
+            node["Events"]["Click"]["ID"].Value = user.ID;
+            node["ChildCssClass"].Value = "span-4 height-20 blockImage blockImage-clear";
+            node["Seed"].Value = user.ID;
+            node["Padding"].Value = 6;
+            node["Top"].Value = 1;
+            node["MarginBottom"].Value = 18;
+            node["Width"].Value = 18;
+            node["Container"].Value = "content4";
+            node["AlternateText"].Value = "Avatar of User";
+            node["Description"].Value = "Click image to change it ...";
+            node["ImageUrl"].Value = user.AvatarURL;
+
+            ActiveEvents.Instance.RaiseLoadControl(
+                "Magix.Brix.Components.ActiveModules.CommonModules.ImageModule",
+                "content4",
+                node);
+        }
+
+        /*
+         * Used by EditUser logic
+         */
+        private static void LoadEditUserObject(object sender, ActiveEventArgs e, User user)
+        {
             // First filtering OUT columns ...!
             e.Params["WhiteListColumns"]["FullName"].Value = true;
             e.Params["WhiteListColumns"]["Username"].Value = true;
@@ -192,7 +274,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Type"]["Properties"]["Username"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Password"]["ReadOnly"].Value = false;
             e.Params["Type"]["Properties"]["Roles"]["ReadOnly"].Value = false;
-            e.Params["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value = "Magix.Publishing.GetRoleTemplateColumn";
+            e.Params["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value =
+                "Magix.Publishing.GetRoleTemplateColumn";
             e.Params["Type"]["Properties"]["Email"]["ReadOnly"].Value = false;
 
             e.Params["Type"]["Properties"]["Phone"]["ReadOnly"].Value = false;
@@ -224,42 +307,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 sender,
                 "DBAdmin.Form.ViewComplexObject",
                 e.Params);
-
-            EditUserSettings(user.ID);
-            EditUserOpenIDs(user.ID);
         }
 
-        private void EditUserOpenIDs(int id)
-        {
-            Node node = new Node();
-
-            node["Width"].Value = 18;
-            node["Last"].Value = true;
-            node["Padding"].Value = 6;
-            node["MarginBottom"].Value = 20;
-            node["PullTop"].Value = 18;
-            node["Container"].Value = "content6";
-
-            node["PropertyName"].Value = "OpenIDTokens";
-            node["IsList"].Value = true;
-            node["FullTypeName"].Value = typeof(User).FullName;
-
-            node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 10;
-
-            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
-            node["Type"]["Properties"]["Name"]["Header"].Value = "OpenID";
-
-            node["ID"].Value = id;
-            node["NoIdColumn"].Value = true;
-            node["ReUseNode"].Value = true;
-
-            RaiseEvent(
-                "DBAdmin.Form.ViewListOrComplexPropertyValue",
-                node);
-        }
-
-        protected void EditUserSettings(int id)
+        /*
+         * Used by EditUser logic
+         */
+        protected void LoadEditUserSettings(int id)
         {
             Node node = new Node();
 
@@ -292,41 +345,43 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
-        protected void ls_SelectedIndexChanged(object sender, EventArgs e)
+        /*
+         * Used by EditUser logic
+         */
+        private void LoadEditUserOpenIDs(int id)
         {
-            SelectList sl = sender as SelectList;
-            int id = int.Parse(sl.Info.Split('|')[0]);
+            Node node = new Node();
 
-            // Getting our user
-            User user2 = User.SelectByID(id);
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["Padding"].Value = 6;
+            node["MarginBottom"].Value = 20;
+            node["PullTop"].Value = 18;
+            node["Container"].Value = "content6";
 
-            // Changing our user's role belonging ...
-            user2.Roles.Clear();
-            int idOfRole = int.Parse(sl.SelectedItem.Value);
-            if (idOfRole != -1)
-            {
-                user2.Roles.Add(Role.SelectByID(idOfRole));
-            }
+            node["PropertyName"].Value = "OpenIDTokens";
+            node["IsList"].Value = true;
+            node["FullTypeName"].Value = typeof(User).FullName;
 
-            // Saving ...
-            using (Transaction tr = Adapter.Instance.BeginTransaction())
-            {
-                user2.Save();
-                tr.Commit();
-            }
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 10;
 
-            // Signalizing to Grids that they need to update ...
-            Node n = new Node();
-            n["ID"].Value = id;
-            n["PropertyName"].Value = "Roles";
-            n["NewValue"].Value = sl.SelectedItem.Value;
-            n["FullTypeName"].Value = typeof(User).FullName;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "Magix.Core.UpdateGrids",
-                n);
+            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["Name"]["Header"].Value = "OpenID";
+
+            node["ID"].Value = id;
+            node["NoIdColumn"].Value = true;
+            node["ReUseNode"].Value = true;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                node);
         }
 
+        /**
+         * Callback for creating a New User from Dashboard that pops up editing
+         * the specific user after his initial creation
+         */
         [ActiveEvent(Name = "Magix.Publishing.CreateUser")]
         protected void Magix_Publishing_CreateUser(object sender, ActiveEventArgs e)
         {
@@ -340,12 +395,18 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 Node node = new Node();
                 node["ID"].Value = u.ID;
                 node["FullTypeName"].Value = typeof(User).FullName;
+
                 RaiseEvent(
                     "Magix.Publishing.EditUser",
                     node);
             }
         }
 
+        /**
+         * User has requested a change of Avatar for either himself, or another user.
+         * Loads up the FileExplorer Selector, and allows for selecting a new avatar 
+         * for the admin user
+         */
         [ActiveEvent(Name = "Magix.Publishing.ChangeAvatarForUser")]
         protected void Magix_Publishing_ChangeAvatarForUser(object sender, ActiveEventArgs e)
         {
@@ -354,6 +415,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             string clientImageFolder = "media/images/avatars/";
 
             Node node = new Node();
+
             node["Top"].Value = 2;
             node["IsSelect"].Value = true;
             node["Push"].Value = 1;
@@ -363,12 +425,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["SelectEvent"].Value = "Magix.Publishing.SelectImageForUser";
             node["SelectEvent"]["Params"]["UserID"].Value = u.ID;
             node["Seed"].Value = u.ID;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+
+            RaiseEvent(
                 "FileExplorer.Form.LaunchFileExplorerWithParams",
                 node);
         }
 
+        /**
+         * New image was selected in our FileExplorer as a new Avatar for our User. Will
+         * change the User's Avatar and save it and update 
+         */
         [ActiveEvent(Name = "Magix.Publishing.SelectImageForUser")]
         protected void Magix_Publishing_SelectImageForUser(object sender, ActiveEventArgs e)
         {
@@ -387,83 +453,20 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["ImageURL"].Value = u.AvatarURL;
             node["Seed"].Value = u.ID;
 
+            // Update our Image Avatar Control
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "Magix.Core.ChangeImage",
                 node);
         }
 
-        private static void LoadUserImage(User user)
-        {
-            Node node = new Node();
-            node["Append"].Value = false;
-            node["Events"]["Click"].Value = "Magix.Publishing.ChangeAvatarForUser";
-            node["Events"]["Click"]["ID"].Value = user.ID;
-            node["ChildCssClass"].Value = "span-4 height-20 blockImage blockImage-clear";
-            node["Seed"].Value = user.ID;
-            node["Padding"].Value = 6;
-            node["Top"].Value = 1;
-            node["MarginBottom"].Value = 18;
-            node["Width"].Value = 18;
-            node["Container"].Value = "content4";
-            node["AlternateText"].Value = "Avatar of User";
-            node["Description"].Value = "Click image to change it ...";
-            node["ImageUrl"].Value = user.AvatarURL;
-
-            ActiveEvents.Instance.RaiseLoadControl(
-                "Magix.Brix.Components.ActiveModules.CommonModules.ImageModule",
-                "content4",
-                node);
-        }
-
+        /**
+         * Callback for supplying the Default Avatar for a User
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetDefaultGravatarURL")]
         protected void Magix_Publishing_GetDefaultGravatarURL(object sender, ActiveEventArgs e)
         {
             e.Params["URL"].Value = "media/images/avatars/marvin-headshot.png";
-        }
-
-        [ActiveEvent(Name = "Magix.Publishing.GetTemplateColumnSelectTypeOfLoginControl")]
-        protected void Magix_Publishing_GetTemplateColumnSelectTypeOfLoginControl(object sender, ActiveEventArgs e)
-        {
-            SelectList ls = new SelectList();
-            e.Params["Control"].Value = ls;
-
-            ls.CssClass = "span-5";
-            ls.Style[Styles.display] = "block";
-
-            ls.SelectedIndexChanged +=
-                delegate
-                {
-                    Node tx = new Node();
-
-                    tx["Params"]["ID"].Value = e.Params["ID"].Value;
-                    tx["Params"]["PropertyName"].Value = "Magix.Brix.Components.ActiveModules.Publishing.LogInOutUserLoginMode";
-                    tx["Params"]["PotID"].Value = e.Params["PotID"].Value;
-                    tx["Text"].Value = ls.SelectedItem.Value;
-
-                    RaiseEvent(
-                        "Magix.Publishing.SavePageObjectIDSetting",
-                        tx);
-                };
-
-            ls.Items.Add(new ListItem("Both", "Both"));
-            ls.Items.Add(new ListItem("OpenID Only", "OpenID"));
-            ls.Items.Add(new ListItem("Native Only", "Native"));
-            switch (e.Params["Value"].Value.ToString())
-            {
-                case "Both":
-                    ls.SelectedIndex = 0;
-                    break;
-                case "OpenID":
-                    ls.SelectedIndex = 1;
-                    break;
-                case "Native":
-                    ls.SelectedIndex = 2;
-                    break;
-                default:
-                    ls.Enabled = false;
-                    break;
-            }
         }
     }
 }
