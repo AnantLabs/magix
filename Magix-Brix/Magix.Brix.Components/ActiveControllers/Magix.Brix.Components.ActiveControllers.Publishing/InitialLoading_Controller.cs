@@ -1,7 +1,7 @@
 ﻿/*
  * Magix - A Modular-based Framework for building Web Applications 
- * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
- * Magix is licensed as GPLv3.
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -13,9 +13,26 @@ using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
+    /**
+     * Class for taking care of the Magix.Core.InitialLoading message, meaning
+     * the initialization of the page on a per User level initially as they're coming
+     * to a new 'page' or URL ...
+     * Basically just handles Magix.Core.InitialLoading and mostly delegates from that
+     * point ...
+     */
     [ActiveController]
     public class InitialLoading_Controller : ActiveController
     {
+        /**
+         * This method will handle the 'initial loading', meaning basically that the page
+         * was loaded initially by either changing the URL of the browser to the app or 
+         * doing a Refresh or something. For coders, meaning basically not IsPostBack on 
+         * the page object ...
+         * Throws a whole range of different events based upon whether or not the User
+         * is logged in or not, and which URL is being specifically requested. Its most
+         * noticable outgoing event would though be 'Magix.Publishing.LoadDashboard' and
+         * 'Magix.Publishing.UrlRequested'
+         */
         [ActiveEvent(Name = "Magix.Core.InitialLoading")]
         protected void Magix_Core_InitialLoading(object sender, ActiveEventArgs e)
         {
@@ -26,7 +43,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             // Including standard CSS files ...
             IncludeCssFiles();
 
-            if (ShouldShowLoginBox())
+            if (ShouldExplicitlyShowLoginForm())
             {
                 // Loading login module ...
                 Node node = new Node();
@@ -67,6 +84,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     if (!string.IsNullOrEmpty(Page.Request.Params["page"]))
                         relUrl = Page.Request.Params["page"];
 
+                    // Requesting our 'URL' ...
                     Node node = new Node();
                     node["URL"].Value = relUrl;
 
@@ -77,6 +95,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /*
+         * Returns true if we should show Dashboard 
+         * [meaning Admin is logged in and trying to reach Dashboard]
+         */
         private bool ShouldShowDashboard()
         {
             return User.Current != null &&
@@ -84,7 +106,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 User.Current.InRole("Administrator");
         }
 
-        private bool ShouldShowLoginBox()
+        /*
+         * Did we explicitly ask for a LoginBox ...?
+         */
+        private bool ShouldExplicitlyShowLoginForm()
         {
             bool retVal = false;
 
@@ -99,6 +124,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             return retVal;
         }
 
+        /*
+         * Includes the Static CSS files needed mostly 'all over the place' ...
+         */
         private void IncludeCssFiles()
         {
             IncludeCssFile("media/magix-ux-skins/default.css");

@@ -1,6 +1,6 @@
 ﻿/*
  * MagicBRIX - A Web Application Framework for ASP.NET
- * Copyright 2010 - Ra-Software, Inc. - info@rasoftwarefactory.com
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * MagicBRIX is licensed as GPLv3.
  */
 
