@@ -113,7 +113,7 @@ namespace Magix.Brix.Loader
                             _instance = new PluginLoader();
 
                             // Fire the "Application Startup" event. This one will only trigger
-                            // ONCE in comparison to the "Brix.Core.InitialLoading" event which will fire
+                            // ONCE in comparison to the "Magix.Core.InitialLoading" event which will fire
                             // every time the page reloads...
                             ActiveEvents.Instance.RaiseActiveEvent(
                                 null, 

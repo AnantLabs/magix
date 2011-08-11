@@ -43,12 +43,15 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td>
+                    Or ...
+                </td>
+                <td>
                     <mux:TextBox 
                         runat="server" 
                         AutoCapitalize="false"
                         PlaceHolder="OpenID"
-                        CssClass="span-6 open-id"
+                        CssClass="span-4 open-id"
                         id="openID" />
                 </td>
             </tr>

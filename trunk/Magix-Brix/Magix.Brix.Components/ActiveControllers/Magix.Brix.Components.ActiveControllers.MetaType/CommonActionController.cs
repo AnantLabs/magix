@@ -320,6 +320,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["ReuseNode"].Value = true;
             node["ID"].Value = t.ID;
             node["MetaViewName"].Value = e.Params["Parameters"]["MetaViewName"].Get<string>();
+            node["PageObjectTemplateID"].Value = e.Params["Parameters"]["PageObjectTemplateID"].Value;
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 3;

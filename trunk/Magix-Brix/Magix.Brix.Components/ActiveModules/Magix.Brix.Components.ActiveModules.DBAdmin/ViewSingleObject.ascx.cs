@@ -340,6 +340,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     colNode["Name"].Value = node.Name;
                     colNode["Value"].Value = node.Get<string>();
                     colNode["ID"].Value = DataSource["Object"]["ID"].Get<int>();
+                    colNode["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;
                     ActiveEvents.Instance.RaiseActiveEvent(
                         this,
                         eventName,

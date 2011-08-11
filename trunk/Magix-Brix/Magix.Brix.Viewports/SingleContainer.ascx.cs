@@ -360,8 +360,11 @@ namespace Magix.Brix.Viewports
             if (e.Params.Contains("CSSFile"))
             {
                 string cssFile = e.Params["CSSFile"].Get<String>();
-                CssFiles.Add(cssFile);
-                IncludeCssFile(cssFile);
+                if (!CssFiles.Contains(cssFile))
+                {
+                    CssFiles.Add(cssFile);
+                    IncludeCssFile(cssFile);
+                }
             }
             foreach (Node idx in e.Params)
             {
@@ -379,8 +382,11 @@ namespace Magix.Brix.Viewports
                     {
                         cssFile += "?back";
                     }
-                    CssFiles.Add(cssFile);
-                    IncludeCssFile(cssFile);
+                    if (!CssFiles.Contains(cssFile))
+                    {
+                        CssFiles.Add(cssFile);
+                        IncludeCssFile(cssFile);
+                    }
                 }
             }
         }
