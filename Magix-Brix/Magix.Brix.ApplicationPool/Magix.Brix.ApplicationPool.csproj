@@ -228,6 +228,10 @@
       <Project>{124E0BB5-A992-4216-9FE3-C5CBED735888}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.DBAdmin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Documentation\Magix.Brix.Components.ActiveControllers.Documentation.csproj">
+      <Project>{984DBB11-EF11-4947-AB06-63F3881DCD02}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Documentation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Editor\Magix.Brix.Components.ActiveControllers.Editor.csproj">
       <Project>{4A6D6D16-C455-4C81-8B1A-195B78F7421A}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Editor</Name>

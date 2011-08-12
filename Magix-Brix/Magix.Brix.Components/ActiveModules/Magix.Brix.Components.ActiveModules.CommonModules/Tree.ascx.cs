@@ -52,8 +52,12 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         {
             TreeItem i = new TreeItem();
             i.Text = node["Name"].Get<string>();
-            i.ID = "i-" + node["ID"].Get<int>();
-            i.Info = node["ID"].Get<int>().ToString();
+            i.ID = "i-" + node["ID"].Value;
+            i.Info = node["ID"].Value.ToString();
+            if (node.Contains("CssClass"))
+                i.CssClass += " " + node["CssClass"].Get<string>();
+            if (node.Contains("ToolTip"))
+                i.ToolTip = node["ToolTip"].Get<string>();
 
             if (node.Contains("Items"))
             {
@@ -100,7 +104,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         [ActiveEvent(Name = "Magix.Core.SetTreeSelectedID")]
         protected void Magix_Core_SetTreeSelectedID(object sender, ActiveEventArgs e)
         {
-            tree.SelectedItem = Selector.FindControl<TreeItem>(tree, "i-" + e.Params["ID"].Get<int>());
+            tree.SelectedItem = Selector.FindControl<TreeItem>(tree, "i-" + e.Params["ID"].Value);
             tree.SelectedItem.Expanded = true;
             tree.SelectedItem.CssClass =
                 tree.SelectedItem.CssClass.Replace(" mux-tree-collapsed", " mux-tree-expanded");
@@ -143,7 +147,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         {
             if (DataSource.Contains("ItemSelectedEvent"))
             {
-                DataSource["SelectedItemID"].Value = int.Parse(tree.SelectedItem.Info);
+                DataSource["SelectedItemID"].Value = tree.SelectedItem.Info;
                 RaiseEvent(
                     DataSource["ItemSelectedEvent"].Get<string>(),
                     DataSource);

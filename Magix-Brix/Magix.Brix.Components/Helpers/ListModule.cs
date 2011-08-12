@@ -670,7 +670,10 @@ namespace Magix.Brix.Components
 
                         Label ll = new Label();
 
-                        ll.ToolTip = txt; // Settings ToolTip before we shrink text ...
+                        if (idx.Contains("ToolTip"))
+                            ll.ToolTip = idx["ToolTip"].Get<string>();
+                        else
+                            ll.ToolTip = txt; // Setting ToolTip before we shrink text ...
 
                         if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
                         {
