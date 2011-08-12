@@ -1131,5 +1131,17 @@ div.has-no-action
 	position:relative;
 }
 
+/* TreItems for Class "Explorer" ... */
+li.tree-item-namespace span.mux-tree-icon
+{
+	background:transparent url(../images/tree.png) no-repeat 0 0;
+}
+
+li.tree-item-class span.mux-tree-icon
+{
+	background:transparent url(../images/tree.png) no-repeat 0 -18px;
+}
+
+
 
 

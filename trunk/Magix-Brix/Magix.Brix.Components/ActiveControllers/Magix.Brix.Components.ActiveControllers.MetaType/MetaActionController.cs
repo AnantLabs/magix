@@ -596,7 +596,7 @@ Deleting it may break these parts.</p>";
         private void Magix_Meta_EditParam(object sender, ActiveEventArgs e)
         {
             Action.ActionParams p = 
-                Action.ActionParams.SelectByID(e.Params["SelectedItemID"].Get<int>());
+                Action.ActionParams.SelectByID(int.Parse(e.Params["SelectedItemID"].Value.ToString()));
 
             Node ch = new Node();
             ch["ID"].Value = p.ID;
