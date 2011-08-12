@@ -132,6 +132,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doxygen.NET", "DoxygenDotNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.Documentation", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Documentation\Magix.Brix.Components.ActiveControllers.Documentation.csproj", "{984DBB11-EF11-4947-AB06-63F3881DCD02}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.Documentation", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Documentation\Magix.Brix.Components.ActiveModules.Documentation.csproj", "{E0129651-B67D-46EB-B107-44CD63E02ABF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -317,6 +319,10 @@ Global
 		{984DBB11-EF11-4947-AB06-63F3881DCD02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{984DBB11-EF11-4947-AB06-63F3881DCD02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{984DBB11-EF11-4947-AB06-63F3881DCD02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0129651-B67D-46EB-B107-44CD63E02ABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0129651-B67D-46EB-B107-44CD63E02ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0129651-B67D-46EB-B107-44CD63E02ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0129651-B67D-46EB-B107-44CD63E02ABF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -348,6 +354,7 @@ Global
 		{DAEAEEE8-F190-457F-A56D-2131DB6F8945} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
 		{9B9A05F6-4593-496B-80B2-C324DCC734A5} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
 		{498CBC4B-E81C-462F-AFD6-DD9A6AA60633} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
+		{E0129651-B67D-46EB-B107-44CD63E02ABF} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
 		{3807790C-726E-4870-89DB-D25D80223C8A} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{124E0BB5-A992-4216-9FE3-C5CBED735888} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{2B7F49E6-2867-4E16-AAF6-2236A0FF6402} = {A28922C8-A4CB-420D-BA01-583AA4389D75}

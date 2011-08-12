@@ -51,6 +51,17 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 node);
         }
 
+        private void AddClassToNode(Class cls, Node outerMostNamespace)
+        {
+            outerMostNamespace["Items"][cls.FullName]["ID"].Value = cls.FullName.Replace(".", "_XX_").Replace("+", "_XQ_");
+            outerMostNamespace["Items"][cls.FullName]["Name"].Value = cls.Name;
+            if (!string.IsNullOrEmpty(cls.Description))
+                outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.Description.Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "'");
+            else
+                outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.FullName;
+            outerMostNamespace["Items"][cls.FullName]["CssClass"].Value = "tree-item-class";
+        }
+
         private void AddDelegateToNode(Doxygen.NET.Delegate cls, Node outerMostNamespace)
         {
             outerMostNamespace["Items"][cls.FullName]["ID"].Value = cls.FullName.Replace(".", "_XX_").Replace("+", "_XQ_");
@@ -88,30 +99,6 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             }
         }
 
-        private void ShowClassInfo(Class cls)
-        {
-            Node node = new Node();
-
-            node["IsDelete"].Value = false;
-            node["NoIdColumn"].Value = true;
-            node["Container"].Value = "content4";
-            node["Width"].Value = 9;
-            node["MarginBottom"].Value = 10;
-            node["Top"].Value = 1;
-            node["Last"].Value = true;
-            node["IsCreate"].Value = false;
-            node["ReuseNode"].Value = true;
-
-            node["FullTypeName"].Value = typeof(DocumentationController).FullName + "-META";
-
-            node["Class"].Value = cls.FullName;
-
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.Form.ViewClass",
-                node);
-        }
-
         private void ShowNamespaceInfo(Namespace nSpc)
         {
             Node node = new Node();
@@ -134,14 +121,52 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+
+            ActiveEvents.Instance.RaiseClearControls("content5");
         }
 
-        private void AddClassToNode(Class cls, Node outerMostNamespace)
+        private void ShowClassInfo(Class cls)
         {
-            outerMostNamespace["Items"][cls.FullName]["ID"].Value = cls.FullName.Replace(".", "_XX_").Replace("+", "_XQ_");
-            outerMostNamespace["Items"][cls.FullName]["Name"].Value = cls.Name;
-            outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.FullName;
-            outerMostNamespace["Items"][cls.FullName]["CssClass"].Value = "tree-item-class";
+            Node node = new Node();
+
+            node["IsDelete"].Value = false;
+            node["NoIdColumn"].Value = true;
+            node["Container"].Value = "content4";
+            node["Width"].Value = 9;
+            node["MarginBottom"].Value = 10;
+            node["Top"].Value = 1;
+            node["Last"].Value = true;
+            node["IsCreate"].Value = false;
+            node["ReuseNode"].Value = true;
+
+            node["FullTypeName"].Value = typeof(DocumentationController).FullName + "-META";
+
+            node["Class"].Value = cls.FullName;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewClass",
+                node);
+
+
+            // Loading 'View Class Details' Module ...
+            node = new Node();
+
+            node["Width"].Value = 9;
+            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 12;
+            node["Last"].Value = true;
+            node["Description"].Value = cls.Description;
+            if (cls.FullName.IndexOf('.') > 0)
+                node["Name"].Value = cls.FullName.Substring(cls.FullName.LastIndexOf('.') + 1);
+            else
+                node["Name"].Value = cls.FullName;
+            node["FullName"].Value = cls.FullName;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.Documentation.ShowClassDetails",
+                "content5",
+                node);
         }
 
         private Node AddNamespaceToNode(Namespace idx, Node node)

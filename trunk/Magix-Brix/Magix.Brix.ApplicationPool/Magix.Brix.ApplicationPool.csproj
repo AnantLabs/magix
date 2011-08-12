@@ -292,6 +292,10 @@
       <Project>{7FC406CB-D31A-4F8E-937E-280B3F987942}</Project>
       <Name>Magix.Brix.Components.ActiveModules.DBAdmin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Documentation\Magix.Brix.Components.ActiveModules.Documentation.csproj">
+      <Project>{E0129651-B67D-46EB-B107-44CD63E02ABF}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Documentation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Editor\Magix.Brix.Components.ActiveModules.Editor.csproj">
       <Project>{9CA6EB99-8D12-4C69-B4A9-8E2649CE7D57}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Editor</Name>
