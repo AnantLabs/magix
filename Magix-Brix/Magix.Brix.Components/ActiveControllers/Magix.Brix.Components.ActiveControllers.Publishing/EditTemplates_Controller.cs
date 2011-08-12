@@ -20,9 +20,17 @@ using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
+    /**
+     * Controller for editing Templates. Contains all the relevant event handlers and
+     * logic for editing your templates
+     */
     [ActiveController]
-    public class EditTemplatesController : ActiveController
+    public class EditTemplates_Controller : ActiveController
     {
+        /**
+         * Shows the grid containing all your Templates such that you can edit them
+         * or create new Templates and such
+         */
         [ActiveEvent(Name = "Magix.Publishing.EditTemplates")]
         protected void Magix_Publishing_EditTemplates(object sender, ActiveEventArgs e)
         {
@@ -45,7 +53,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["IDColumnName"].Value = "Edit";
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.Publishing.EditTemplate";
-            node["CreateEventName"].Value = "Magix.Publishing.CreateTemplate";
 
             node["ReuseNode"].Value = true;
 
@@ -53,7 +60,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Type"]["Properties"]["Containers"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Containers"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Containers"]["Header"].Value = "WebParts";
-            node["Type"]["Properties"]["Containers"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetContainersTemplateColumn";
+            node["Type"]["Properties"]["Containers"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetNoContainersTemplateColumn";
             node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetCopyTemplateColumn";
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
 
@@ -65,34 +72,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.CreateTemplate")]
-        protected void Magix_Publishing_CreateTemplate(object sender, ActiveEventArgs e)
-        {
-            using (Transaction tr = Adapter.Instance.BeginTransaction())
-            {
-                WebPageTemplate p = new WebPageTemplate();
-                p.Name = "Template...";
-
-                WebPartTemplate c = new WebPartTemplate();
-                c.Width = 10;
-                c.Height = 8;
-                c.Name = "Name";
-                c.ModuleName = Adapter.ActiveModules.Find(
-                    delegate(Type idx)
-                    {
-                        PublisherPluginAttribute[] atrs = idx.GetCustomAttributes(typeof(PublisherPluginAttribute), true) as PublisherPluginAttribute[];
-                        return atrs != null && atrs.Length > 0;
-                    }).FullName;
-                c.ViewportContainer = "content1";
-                p.Containers.Add(c);
-                c.PageTemplate = p;
-
-                p.Save();
-
-                tr.Commit();
-            }
-        }
-
+        /**
+         * Creates the 'Copy Template' LinkButtons and returns back to the Grid system
+         * so that we can have an implementation of 'Copy Template'. LinkButton raises 
+         * 'Magix.Publishing.CopyTemplate' when clicked
+         */
         [ActiveEvent(Name = "Magix.Publisher.GetCopyTemplateColumn")]
         private void Magix_Publisher_GetCopyTemplateColumn(object sender, ActiveEventArgs e)
         {
@@ -102,7 +86,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             int id = e.Params["ID"].Get<int>();
             string value = e.Params["Value"].Get<string>();
 
-            // Creating our SelectList
+            // Creating our LinkButton
             LinkButton ls = new LinkButton();
             ls.Info = id.ToString();
             ls.Click +=
@@ -122,9 +106,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Control"].Value = ls;
         }
 
+        /**
+         * Only here to make sure that if a WebPageTemplate is being deleted
+         * from the Grid while editing it [for instance], we clear from 'content4'
+         * and out to make sure we're not allowig for editing of a deleted Template
+         */
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
         protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
         {
+            // TODO: Kind of lame, check to see what SPECIFIC template was deleted, and if not
+            // the one being edited, then do NOT fluch content4 and out ...
             if (e.Params["FullTypeName"].Get<string>() == typeof(WebPageTemplate).FullName)
             {
                 // In case it's the one being edited ...
@@ -132,6 +123,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Will return all possible 'CSS Template Values' from the 'web-part-templates.css'
+         * file within the media/module/ folders
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetCssTemplatesForWebPartTemplate")]
         protected void Magix_Publishing_GetCssTemplatesForWebPartTemplate(object sender, ActiveEventArgs e)
         {
@@ -144,11 +139,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 foreach (string idx in wholeContent.Split(
                     new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (idx.StartsWith("." + e.Params["Name"].Get<string>()) && 
+                    if (idx.StartsWith(".") && 
                         !idx.Contains(" ") &&
                         !idx.Contains(":"))
                     {
-                        e.Params["Classes"]["i-" + idxNo]["Name"].Value = idx.Substring(("." + e.Params["Name"].Get<string>()).Length + 1);
+                        e.Params["Classes"]["i-" + idxNo]["Name"].Value = idx.Substring(1);
                         e.Params["Classes"]["i-" + idxNo]["Value"].Value = idx.Trim('.').Trim(',');
                         idxNo += 1;
                     }
@@ -156,8 +151,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.ChangeTemplateOfWebPartTemplate")]
-        protected void Magix_Publishing_ChangeTemplateOfWebPartTemplate(object sender, ActiveEventArgs e)
+        /**
+         * Changes the CSS class of the WebPartTemplate instance according to the Selected Css value
+         * chosen
+         */
+        [ActiveEvent(Name = "Magix.Publishing.ChangeCssForWebPartTemplateFromCssTemplate")]
+        protected void Magix_Publishing_ChangeCssForWebPartTemplateFromCssTemplate(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
@@ -169,6 +168,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Completes a 'deep copy' of the Template and saves it and loads up the Editing of
+         * it for the user to immediately start editing it
+         */
         [ActiveEvent(Name = "Magix.Publishing.CopyTemplate")]
         protected void Magix_Publishing_CopyTemplate(object sender, ActiveEventArgs e)
         {
@@ -205,6 +208,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Edits one specific WebPageTemplate by loading up the 
+         * 'Magix.Brix.Components.ActiveModules.Publishing.EditSpecificTemplate' module
+         */
         [ActiveEvent(Name = "Magix.Publishing.EditTemplate")]
         protected void Magix_Publishing_EditTemplate(object sender, ActiveEventArgs e)
         {
@@ -214,12 +221,18 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             // Populating with Templates ...
             RaiseEvent(
-                "Magix.Publishing.GetTemplates",
+                "Magix.Publishing.GetWebPageTemplates",
+                node);
+
+            RaiseEvent(
+                "Magix.Publishing.GetPublisherPlugins",
                 node);
 
             node["ID"].Value = t.ID;
             node["Width"].Value = 24;
             node["Last"].Value = true;
+
+            // Adding some yellowish bg which reads 'full actual page size' [normally]
             node["CssClass"].Value = "yellow-background";
 
             LoadModule(
@@ -228,20 +241,27 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.DeleteWebPartTemplateFromWebPageTemplate")]
-        protected void Magix_Publishing_DeleteWebPartTemplateFromWebPageTemplate(object sender, ActiveEventArgs e)
+        /**
+         * Deletes a specific WebPartTemplate
+         */
+        [ActiveEvent(Name = "Magix.Publishing.DeleteWebPartTemplate")]
+        protected void Magix_Publishing_DeleteWebPartTemplate(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 WebPartTemplate templ = WebPartTemplate.SelectByID(e.Params["ID"].Get<int>());
+                templ.PageTemplate.Containers.Remove(templ);
                 templ.Delete();
 
                 tr.Commit();
             }
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.GetTemplates")]
-        protected void Magix_Publishing_GetTemplates(object sender, ActiveEventArgs e)
+        /**
+         * Returns a node of all WebPageTemplates in the system
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetWebPageTemplates")]
+        protected void Magix_Publishing_GetWebPageTemplates(object sender, ActiveEventArgs e)
         {
             foreach (WebPageTemplate idx in WebPageTemplate.Select())
             {
@@ -265,6 +285,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     tmp["i-" + idxC.ID]["CssClass"].Value = idxC.CssClass;
                 }
             }
+        }
+
+        /**
+         * Returns a node of all PublisherPlugins you've got available in your installation
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetPublisherPlugins")]
+        protected void Magix_Publishing_GetPublisherPlugins(object sender, ActiveEventArgs e)
+        {
             foreach (Type idx in Adapter.ActiveModules)
             {
                 PublisherPluginAttribute[] atrs =
@@ -278,14 +306,18 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.ChangeModuleForTemplate")]
-        protected void Magix_Publishing_ChangeModuleForTemplate(object sender, ActiveEventArgs e)
+        /**
+         * Changes the ModuleName [plugin type] of the WebPartTemplate and saves it
+         */
+        [ActiveEvent(Name = "Magix.Publishing.ChangeModuleTypeForWebPartTemplate")]
+        protected void Magix_Publishing_ChangeModuleTypeForWebPartTemplate(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 WebPartTemplate t = WebPartTemplate.SelectByID(e.Params["ID"].Get<int>());
                 t.ModuleName = e.Params["ModuleName"].Get<string>();
                 t.Save();
+
                 foreach (WebPage idx in WebPage.Select(
                         Criteria.ExistsIn(t.PageTemplate.ID, true)))
                 {
@@ -305,6 +337,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Changes properties of the Template and saves it
+         */
         [ActiveEvent(Name = "Magix.Publishing.ChangeTemplateProperty")]
         protected void Magix_Publishing_ChangeTemplateProperty(object sender, ActiveEventArgs e)
         {
@@ -433,8 +468,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Publisher.GetContainersTemplateColumn")]
-        protected void Magix_Publisher_GetContainersTemplateColumn(object sender, ActiveEventArgs e)
+        /**
+         * Creates the Container column [select list] for selecting different number of 
+         * WebParts for your template
+         */
+        [ActiveEvent(Name = "Magix.Publisher.GetNoContainersTemplateColumn")]
+        protected void Magix_Publisher_GetNoContainersTemplateColumn(object sender, ActiveEventArgs e)
         {
             // Extracting necessary variables ...
             int id = e.Params["ID"].Get<int>();
@@ -463,6 +502,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Control"].Value = ls;
         }
 
+        /**
+         * Checks to see if number of webparts are decreasing, if they are, warning
+         * user about that he should be careful, blah, blah, blah ...
+         */
         private void RaiseTryToChangeNumberOfWebParts(WebPageTemplate t, int count)
         {
             if (count == t.Containers.Count)
@@ -500,6 +543,18 @@ irrevocably delete every single WebPart on every sigle WebPage built upon that W
             }
         }
 
+        /*
+         * Just closes the dialog box
+         */
+        [ActiveEvent(Name = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-NotConfirmed")]
+        protected void Magix_Publisher_ChangeNumberOFContainersOnTemplates_NotConfirmed(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        /**
+         * Will change the number of WebParts in your WebPartTemplate
+         */
         [ActiveEvent(Name = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-Confirmed")]
         protected void Magix_Publisher_ChangeNumberOFContainersOnTemplates_Confirmed(object sender, ActiveEventArgs e)
         {
@@ -509,12 +564,9 @@ irrevocably delete every single WebPart on every sigle WebPage built upon that W
             ActiveEvents.Instance.RaiseClearControls("child");
         }
 
-        [ActiveEvent(Name = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-NotConfirmed")]
-        protected void Magix_Publisher_ChangeNumberOFContainersOnTemplates_NotConfirmed(object sender, ActiveEventArgs e)
-        {
-            ActiveEvents.Instance.RaiseClearControls("child");
-        }
-
+        /*
+         * Helper for above
+         */
         private void TryToChangeNumberOfWebParts(WebPageTemplate t, int count)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
@@ -541,7 +593,9 @@ irrevocably delete every single WebPart on every sigle WebPage built upon that W
                 {
                     while (t.Containers.Count - count > 0)
                     {
+                        WebPartTemplate x = t.Containers[t.Containers.Count - 1];
                         t.Containers.RemoveAt(t.Containers.Count - 1);
+                        x.Delete();
                     }
                 }
                 t.Save();

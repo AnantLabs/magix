@@ -948,6 +948,152 @@
 	-webkit-transform: skew(35deg);
 }
 
+.Header-Iso-Cube-15-10
+{
+	border:solid 1px rgba(0, 0, 0, .5);
+	-moz-transform: rotate(-45deg) skew(25deg, 25deg);
+	-moz-transform-origin:bottom left;
+	-webkit-transform: rotate(-45deg) skew(25deg, 25deg);
+	-webkit-transform-origin:bottom left;
+	width:543px;
+}
+
+.Header-Iso-Cube-15-10 h1
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(245, 245, 255, 0.8)), to(rgba(210, 210, 230, 0.8)));
+	background-image: -moz-linear-gradient(rgba(245, 245, 255, 0.8) 0%, rgba(210, 210, 230, 0.8) 100%);
+	font-family: 'Ultra Classic';
+	color:rgba(0, 0, 0, .8);
+	
+	padding-top:72px;
+	padding-bottom:72px;
+	padding-left:70px;
+}
+
+.Header-Giftwrapped
+{
+	background-image:url('../images/snow.png') !important;
+	background-position:top left;
+	background-repeat:repeat;
+	border:none;
+	-webkit-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+	-moz-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+	box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+}
+
+.Header-Giftwrapped h1
+{
+	background-image:none;
+}
+
+.Header-Animated-Iso-Cube-15-10
+{
+	border:solid 1px rgba(0, 0, 0, .5);
+	-moz-transform: rotate(-45deg) skew(25deg, 25deg);
+	-moz-transform-origin:bottom left;
+	-webkit-transform: rotate(-45deg) skew(25deg, 25deg);
+	-webkit-transform-origin:bottom left;
+	width:543px;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:3.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:3.2s;
+	transition-property:transform;
+	transition-duration:3.2s;
+}
+
+.Header-Animated-Iso-Cube-15-10:hover
+{
+	-moz-transform: rotate(0deg) skew(0deg, 0deg);
+	-webkit-transform: rotate(0deg) skew(0deg, 0deg);
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:3.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:3.2s;
+	transition-property:transform;
+	transition-duration:3.2s;
+}
+
+.Header-Animated-Iso-Cube-15-10 h1
+{
+	font-family: 'Ultra Classic';
+	color:rgba(0, 0, 0, .8);
+	
+	padding-top:72px;
+	padding-bottom:72px;
+	padding-left:70px;
+}
+
+.Header-Two-Sided
+{
+	-webkit-perspective: 200;
+}
+
+.Header-Two-Sided h1
+{
+	-webkit-transform: rotateY(-720deg);
+	-moz-transform: rotate(0deg 0deg);
+	-webkit-transform-origin:top center;
+	-moz-transform-origin:top center;
+	text-align:center;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:5.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:5.2s;
+	transition-property:transform;
+	transition-duration:5.2s;
+}
+
+.Header-Two-Sided:hover h1
+{
+	-webkit-transform: rotateY(720deg);
+	-moz-transform: rotate(0deg 720deg);
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:5.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:5.2s;
+	transition-property:transform;
+	transition-duration:5.2s;
+}
+
+.Header-Boxes
+{
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow;
+	transition-duration:0.2s;
+}
+
+.Header-Boxes:hover
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow;
+	transition-duration:0.2s;
+}
+
 
 
 
@@ -1286,6 +1432,123 @@
 	transition-duration:.2s;
 }
 
+.Menu-Iso-Cube-5-24
+{
+	-moz-transform: rotate(10deg) skew(10deg, 10deg);
+	-moz-transform-origin:top right;
+	-webkit-transform: rotate(10deg) skew(10deg, 10deg);
+	-webkit-transform-origin:top right;
+	width:195px;
+	border:solid 1px rgba(0, 0, 0, .5);
+	z-index:100;
+}
+
+.Menu-Iso-Cube-5-24:hover
+{
+}
+
+.Menu-Iso-Cube-5-24 .mux-sliding-menu
+{
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+	border-radius:0;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(245, 245, 255, 0.8)), to(rgba(210, 210, 230, 0.8)));
+	background-image: -moz-linear-gradient(rgba(245, 245, 255, 0.8) 0%, rgba(210, 210, 230, 0.8) 100%);
+}
+
+.Menu-Giftwrapped
+{
+	background-image:url('../images/snow.png') !important;
+	background-position:top left;
+	background-repeat:repeat;
+	border:none;
+	-webkit-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+	-moz-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+	box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+}
+
+.Menu-Giftwrapped .mux-sliding-menu
+{
+	background-image:none;
+}
+
+.Menu-Animated-Iso-Cube-5-24
+{
+	-moz-transform: rotate(10deg) skew(10deg, 10deg);
+	-moz-transform-origin:top right;
+	-webkit-transform: rotate(10deg) skew(10deg, 10deg);
+	-webkit-transform-origin:top right;
+	width:195px;
+	border:solid 1px rgba(0, 0, 0, .5);
+	z-index:100;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:3.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:3.2s;
+	transition-property:transform;
+	transition-duration:3.2s;
+}
+
+.Menu-Animated-Iso-Cube-5-24:hover
+{
+	-moz-transform: rotate(0deg) skew(0deg, 0deg);
+	-webkit-transform: rotate(0deg) skew(0deg, 0deg);
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:3.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:3.2s;
+	transition-property:transform;
+	transition-duration:3.2s;
+}
+
+.Menu-Animated-Iso-Cube-5-24 .mux-sliding-menu
+{
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+	border-radius:0;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.Menu-Two-Sided
+{
+	-webkit-perspective: 200;
+}
+
+.Menu-Two-Sided .mux-sliding-menu
+{
+	-webkit-transform: rotateY(-360deg);
+	-moz-transform: rotate(0deg -360deg);
+	-moz-transform-origin:top center;
+	-moz-transform-origin:top center;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:2.2s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:2.2s;
+	transition-property:transform;
+	transition-duration:2.2s;
+}
+
+.Menu-Two-Sided:hover .mux-sliding-menu
+{
+	-webkit-transform: rotateY(360deg);
+	-moz-transform: rotate(0deg 360deg);
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.5s;
+	transition-property:transform;
+	transition-duration:.5s;
+}
+
 
 
 
@@ -1475,55 +1738,6 @@
 /*
  * Iso-Cube ...
  */
-.Menu-Iso-Cube-5-24
-{
-	-moz-transform: rotate(10deg) skew(10deg, 10deg);
-	-moz-transform-origin:top right;
-	-webkit-transform: rotate(10deg) skew(10deg, 10deg);
-	-webkit-transform-origin:top right;
-	width:195px;
-	border:solid 1px rgba(0, 0, 0, .5);
-	z-index:100;
-}
-
-.Menu-Iso-Cube-5-24:hover
-{
-}
-
-.Menu-Iso-Cube-5-24 .mux-sliding-menu
-{
-	-moz-border-radius:0;
-	-webkit-border-radius:0;
-	border-radius:0;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(245, 245, 255, 0.8)), to(rgba(210, 210, 230, 0.8)));
-	background-image: -moz-linear-gradient(rgba(245, 245, 255, 0.8) 0%, rgba(210, 210, 230, 0.8) 100%);
-}
-
-.Header-Iso-Cube-15-10
-{
-	border:solid 1px rgba(0, 0, 0, .5);
-	-moz-transform: rotate(-45deg) skew(25deg, 25deg);
-	-moz-transform-origin:bottom left;
-	-webkit-transform: rotate(-45deg) skew(25deg, 25deg);
-	-webkit-transform-origin:bottom left;
-	width:543px;
-}
-
-.Header-Iso-Cube-15-10 h1
-{
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(245, 245, 255, 0.8)), to(rgba(210, 210, 230, 0.8)));
-	background-image: -moz-linear-gradient(rgba(245, 245, 255, 0.8) 0%, rgba(210, 210, 230, 0.8) 100%);
-	font-family: 'Ultra Classic';
-	color:rgba(0, 0, 0, .8);
-	
-	padding-top:72px;
-	padding-bottom:72px;
-	padding-left:70px;
-}
-
 .Content-Iso-Cube-15-24
 {
 	border:solid 1px rgba(0, 0, 0, .5);
@@ -1541,38 +1755,6 @@
 
 
 
-
-.Menu-Giftwrapped
-{
-	background-image:url('../images/snow.png') !important;
-	background-position:top left;
-	background-repeat:repeat;
-	border:none;
-	-webkit-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
-	-moz-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
-	box-shadow: 0 0 35px rgba(255, 255, 255, 1);
-}
-
-.Menu-Giftwrapped .mux-sliding-menu
-{
-	background-image:none;
-}
-
-.Header-Giftwrapped
-{
-	background-image:url('../images/snow.png') !important;
-	background-position:top left;
-	background-repeat:repeat;
-	border:none;
-	-webkit-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
-	-moz-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
-	box-shadow: 0 0 35px rgba(255, 255, 255, 1);
-}
-
-.Header-Giftwrapped h1
-{
-	background-image:none;
-}
 
 .Content-Giftwrapped
 {
@@ -1593,87 +1775,6 @@
 /*
  * Iso-Cube, Animated ...
  */
-.Menu-Animated-Iso-Cube-5-24
-{
-	-moz-transform: rotate(10deg) skew(10deg, 10deg);
-	-moz-transform-origin:top right;
-	-webkit-transform: rotate(10deg) skew(10deg, 10deg);
-	-webkit-transform-origin:top right;
-	width:195px;
-	border:solid 1px rgba(0, 0, 0, .5);
-	z-index:100;
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:3.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:3.2s;
-	transition-property:transform;
-	transition-duration:3.2s;
-}
-
-.Menu-Animated-Iso-Cube-5-24:hover
-{
-	-moz-transform: rotate(0deg) skew(0deg, 0deg);
-	-webkit-transform: rotate(0deg) skew(0deg, 0deg);
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:3.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:3.2s;
-	transition-property:transform;
-	transition-duration:3.2s;
-}
-
-.Menu-Animated-Iso-Cube-5-24 .mux-sliding-menu
-{
-	-moz-border-radius:0;
-	-webkit-border-radius:0;
-	border-radius:0;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-}
-
-.Header-Animated-Iso-Cube-15-10
-{
-	border:solid 1px rgba(0, 0, 0, .5);
-	-moz-transform: rotate(-45deg) skew(25deg, 25deg);
-	-moz-transform-origin:bottom left;
-	-webkit-transform: rotate(-45deg) skew(25deg, 25deg);
-	-webkit-transform-origin:bottom left;
-	width:543px;
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:3.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:3.2s;
-	transition-property:transform;
-	transition-duration:3.2s;
-}
-
-.Header-Animated-Iso-Cube-15-10:hover
-{
-	-moz-transform: rotate(0deg) skew(0deg, 0deg);
-	-webkit-transform: rotate(0deg) skew(0deg, 0deg);
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:3.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:3.2s;
-	transition-property:transform;
-	transition-duration:3.2s;
-}
-
-.Header-Animated-Iso-Cube-15-10 h1
-{
-	font-family: 'Ultra Classic';
-	color:rgba(0, 0, 0, .8);
-	
-	padding-top:72px;
-	padding-bottom:72px;
-	padding-left:70px;
-}
-
 .Content-Animated-Iso-Cube-15-24
 {
 	border:solid 1px rgba(0, 0, 0, .5);
@@ -1711,73 +1812,6 @@
 
 
 
-
-.Menu-Two-Sided
-{
-	-webkit-perspective: 200;
-}
-
-.Menu-Two-Sided .mux-sliding-menu
-{
-	-webkit-transform: rotateY(-360deg);
-	-moz-transform: rotate(0deg -360deg);
-	-moz-transform-origin:top center;
-	-moz-transform-origin:top center;
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:2.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:2.2s;
-	transition-property:transform;
-	transition-duration:2.2s;
-}
-
-.Menu-Two-Sided:hover .mux-sliding-menu
-{
-	-webkit-transform: rotateY(360deg);
-	-moz-transform: rotate(0deg 360deg);
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:.5s;
-	transition-property:transform;
-	transition-duration:.5s;
-}
-
-.Header-Two-Sided
-{
-	-webkit-perspective: 200;
-}
-
-.Header-Two-Sided h1
-{
-	-webkit-transform: rotateY(-720deg);
-	-moz-transform: rotate(0deg 0deg);
-	-webkit-transform-origin:top center;
-	-moz-transform-origin:top center;
-	text-align:center;
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:5.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:5.2s;
-	transition-property:transform;
-	transition-duration:5.2s;
-}
-
-.Header-Two-Sided:hover h1
-{
-	-webkit-transform: rotateY(720deg);
-	-moz-transform: rotate(0deg 720deg);
-
-	-moz-transition-property:-moz-transform;
-	-moz-transition-duration:5.2s;
-	-webkit-transition-property:-webkit-transform;
-	-webkit-transition-duration:5.2s;
-	transition-property:transform;
-	transition-duration:5.2s;
-}
 
 .Content-Two-Sided
 {
@@ -1950,40 +1984,6 @@
 	-moz-transform: scale(.8);
 }
 
-
-.Header-Boxes
-{
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
-
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
-
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
-}
-
-.Header-Boxes:hover
-{
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
-}
 
 .Content-Boxes
 {

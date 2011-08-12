@@ -191,7 +191,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["URL"].Value = p.URL;
             node["TemplateID"].Value = p.Template.ID;
 
-            GetTemplates(node);
+            RaiseEvent(
+                "Magix.Publishing.GetWebPageTemplates",
+                node);
 
             GetTemplates(p, node);
 
@@ -255,13 +257,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     }
                 }
             }
-        }
-
-        private void GetTemplates(Node node)
-        {
-            RaiseEvent(
-                "Magix.Publishing.GetTemplates",
-                node);
         }
 
         [ActiveEvent(Name = "Magix.Publishing.ChangePageProperty")]

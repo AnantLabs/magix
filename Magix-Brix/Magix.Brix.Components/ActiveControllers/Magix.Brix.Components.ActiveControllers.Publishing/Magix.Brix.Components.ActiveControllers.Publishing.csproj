@@ -46,11 +46,11 @@
     <Compile Include="LoginOut_Controller.cs" />
     <Compile Include="WebPartController.cs" />
     <Compile Include="OpenID_Controller.cs" />
-    <Compile Include="FileSystemController.cs" />
+    <Compile Include="FileSystem_Controller.cs" />
     <Compile Include="EditRoles_Controller.cs" />
     <Compile Include="PageLoader_Controller.cs" />
     <Compile Include="EditTemplatesController.cs" />
-    <Compile Include="SliderMenuController.cs" />
+    <Compile Include="SliderMenu_Controller.cs" />
     <Compile Include="EditPagesController.cs" />
     <Compile Include="AdminDashboardHeader_Controller.cs" />
     <Compile Include="DashboardController.cs" />

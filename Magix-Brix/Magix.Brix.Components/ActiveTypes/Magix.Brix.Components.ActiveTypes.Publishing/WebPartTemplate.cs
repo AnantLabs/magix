@@ -110,7 +110,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
 
             // Need to delete all WebParts built upon this WebPartTemplate ...
             foreach (WebPart idx in WebPart.Select(
-                Criteria.ExistsIn(this.ID, true)))
+                Criteria.ExistsIn(this.ID, false)))
             {
                 idx.Delete();
             }

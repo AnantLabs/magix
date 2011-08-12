@@ -143,6 +143,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             int cl = 0;
             foreach (WebPart idx in page.WebParts)
             {
+                if (idx.Container == null)
+                    continue; // Skipping these buggers ...
                 if (idx.Container.ViewportContainer.CompareTo(lastModule) > 0)
                     lastModule = idx.Container.ViewportContainer;
 
