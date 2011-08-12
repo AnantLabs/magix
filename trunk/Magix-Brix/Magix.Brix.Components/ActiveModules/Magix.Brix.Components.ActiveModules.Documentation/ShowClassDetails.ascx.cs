@@ -20,16 +20,37 @@ namespace Magix.Brix.Components.ActiveModules.Documentation
     {
         protected Label header;
         protected Label content;
+        protected System.Web.UI.WebControls.Repeater rep;
 
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
             Load += delegate
             {
-                header.Text = node["Name"].Get<string>();
-                header.ToolTip = node["FullName"].Get<string>();
+                header.Text = node["FullName"].Get<string>();
                 content.Text = node["Description"].Get<string>();
+                rep.DataSource = node["Methods"];
+                rep.DataBind();
             };
+        }
+
+        protected string GetParams(object obj)
+        {
+            Node n = obj as Node;
+
+            string retVal = "";
+
+            foreach (Node idx in n)
+            {
+                if (!string.IsNullOrEmpty(retVal))
+                    retVal += ", ";
+                retVal += idx["Type"].Get<string>() + 
+                    " " +
+                    idx["Name"].Get<string>();
+            }
+            if (!string.IsNullOrEmpty(retVal))
+                return "(" + retVal + ")";
+            return "";
         }
     }
 }
