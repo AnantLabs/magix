@@ -17,7 +17,7 @@ using Ra.Brix.Types;
 using ArticlePublisherRecords;
 using UserRecords;
 
-namespace Ra.Brix.Tests.Data
+namespace Magix.Brix.Tests.Data
 {
     [TestFixture]
     public class ArticleTests : BaseTest

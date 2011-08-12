@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using Ra.Brix.Types;
 using UserRecords;
 
-namespace Ra.Brix.Tests.Data
+namespace Magix.Brix.Tests.Data
 {
     [TestFixture]
     public class UserUnitTest : BaseTest
