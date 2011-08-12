@@ -74,7 +74,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
         /**
          * Creates the 'Copy Template' LinkButtons and returns back to the Grid system
-         * so that we can have an implementation of 'Copy Template'. LinkButton raises 
+         * so that we can have an implementation of 'Copy Template' button. LinkButton raises 
          * 'Magix.Publishing.CopyTemplate' when clicked
          */
         [ActiveEvent(Name = "Magix.Publisher.GetCopyTemplateColumn")]
