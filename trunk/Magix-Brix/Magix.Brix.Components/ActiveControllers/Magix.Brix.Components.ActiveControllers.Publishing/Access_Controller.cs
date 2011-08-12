@@ -18,9 +18,17 @@ using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
+    /**
+     * Helps out sorting out which Pages and Menu Items which Users and Roles 
+     * and such have access to
+     */
     [ActiveController]
-    public class AccessController : ActiveController
+    public class Access_Controller : ActiveController
     {
+        /**
+         * Returns 'STOP' to true unless User has access to Page, either explicitly
+         * or implicitly
+         */
         [ActiveEvent(Name = "Magix.Publishing.VerifyUserHasAccessToPage")]
         protected void Magix_Publishing_VerifyUserHasAccessToPage(object sender, ActiveEventArgs e)
         {
@@ -29,12 +37,65 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (e.Params.Contains("UserID"))
                 user = User.SelectByID(e.Params["ID"].Get<int>());
 
-            bool? haveAccess = HaveAccess(WebPage.SelectByID(e.Params["ID"].Get<int>()), user);
+            bool? haveAccess = UerHaveAccess(WebPage.SelectByID(e.Params["ID"].Get<int>()), user);
             if (haveAccess.HasValue)
                 e.Params["STOP"].Value = !haveAccess.Value;
         }
 
-        private bool? HaveAccess(WebPage po, User user)
+        /**
+         * Will recursively traverse children until it find the first page [breadth first] User has access
+         * to from given page
+         */
+        [ActiveEvent(Name = "Magix.Publishing.FindFirstChildPageUserCanAccess")]
+        protected void Magix_Publishing_FindFirstChildPageUserCanAccess(object sender, ActiveEventArgs e)
+        {
+            WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
+
+            // Assuming already checked for access against this bugger ...
+            foreach (WebPage idx in p.Children)
+            {
+                if (GetFirstAccessiblePageForUser(p, e.Params))
+                {
+                    return;
+                }
+            }
+        }
+
+        /*
+         * Checks to see if access against specific page. Will recursively traverse inwards and return
+         * the first Page the user has access to, if not this one
+         */
+        private bool GetFirstAccessiblePageForUser(WebPage p, Node node)
+        {
+            Node ch1 = new Node();
+            ch1["ID"].Value = p.ID;
+
+            RaiseEvent(
+                "Magix.Publishing.VerifyUserHasAccessToPage",
+                ch1);
+
+            if (!ch1.Contains("STOP") ||
+                !ch1["STOP"].Get<bool>())
+            {
+                node["AccessToID"].Value = p.ID;
+                return true;
+            }
+            foreach (WebPage idx in p.Children)
+            {
+                if (GetFirstAccessiblePageForUser(idx, node))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /*
+         * Returns true if user has Access to given WebPage
+         * Will traverse all Roles for user and check each role 
+         * until hit is found, or giving up
+         */
+        private bool? UerHaveAccess(WebPage po, User user)
         {
             if (user != null)
             {
@@ -54,6 +115,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             return null;
         }
 
+        /*
+         * Returns true if user has Access to given WebPage
+         */
         private static bool? RoleHaveAccess(WebPage po, Role role)
         {
             while (po != null)
@@ -75,6 +139,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             return null;
         }
 
+        /**
+         * Will return a List of Roles that have explicit access [or not] to the given Page
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetRolesListForPage")]
         protected void Magix_Publishing_GetRolesListForPage(object sender, ActiveEventArgs e)
         {
@@ -98,16 +165,22 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Will change the Access rights for a specific page
+         */
         [ActiveEvent(Name = "Magix.Publishing.ChangePageAccess")]
         protected void Magix_Publishing_ChangePageAccess(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 WebPage p = WebPage.SelectByID(e.Params["ID"].Get<int>());
+
                 Role r = Role.SelectByID(e.Params["RoleID"].Get<int>());
+
                 WebPageRoleAccess t = WebPageRoleAccess.SelectFirst(
                     Criteria.ExistsIn(p.ID, true),
                     Criteria.ExistsIn(r.ID, true));
+
                 if (e.Params["Access"].Get<bool>())
                 {
                     if (t == null)
@@ -116,20 +189,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                         t.Page = p;
                         t.Role = r;
                         t.Save();
-                    }
+                    } // No need for else here ...
                 }
                 else
                 {
                     if (t != null)
                         t.Delete();
-                    else
-                    {
-                        // Implcitily giving it access, assuming user behavior ...
-                        t = new WebPageRoleAccess();
-                        t.Page = p;
-                        t.Role = r;
-                        t.Save();
-                    }
                 }
                 tr.Commit();
             }

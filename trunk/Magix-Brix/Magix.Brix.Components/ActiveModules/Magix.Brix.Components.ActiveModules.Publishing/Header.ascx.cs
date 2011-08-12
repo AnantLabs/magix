@@ -52,7 +52,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node["Name"].Value = "Caption";
 
                 RaiseSafeEvent(
-                    "Magix.Publishing.GetWebPartValue",
+                    "Magix.Publishing.GetWebPartSettingValue",
                     node);
 
                 Caption = node["Value"].Get<string>();

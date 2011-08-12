@@ -54,7 +54,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node["Name"].Value = "Text";
 
                 RaiseSafeEvent(
-                    "Magix.Publishing.GetWebPartValue",
+                    "Magix.Publishing.GetWebPartSettingValue",
                     node);
 
                 Text = node["Value"].Get<string>();

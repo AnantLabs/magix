@@ -13,9 +13,18 @@ using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
+    /**
+     * Main 'router' in dispatching important Dashboard functionality 
+     */
     [ActiveController]
-    public class DashboardController : ActiveController
+    public class Dashboard_Controller : ActiveController
     {
+        /**
+         * Will load the Dashboard if User is of type Administrator through raising
+         * 'Magix.Publishing.LoadDashboard', otherwise raise
+         * 'Magix.Publishing.LoadUserDashboard' which isn't currently being catched 
+         * any place
+         */
         [ActiveEvent(Name = "Magix.Publishing.LoadDashboard")]
         protected void Magix_Publishing_LoadDashboard(object sender, ActiveEventArgs e)
         {
@@ -26,24 +35,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             else
             {
                 RaiseEvent("Magix.Publishing.LoadUserDashboard", e.Params);
-            }
-        }
-
-        [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
-        protected void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
-        {
-            // Getting relative URL ...
-            string baseUrl = GetApplicationBaseUrl();
-            string relUrl = Page.Request.Url.ToString().Replace("default.aspx", "").Replace(baseUrl, "");
-            string redirect = Page.Request.Params["ret"];
-
-            if (!string.IsNullOrEmpty(redirect))
-            {
-                AjaxManager.Instance.Redirect(redirect);
-            }
-            else
-            {
-                AjaxManager.Instance.Redirect("~/");
             }
         }
     }

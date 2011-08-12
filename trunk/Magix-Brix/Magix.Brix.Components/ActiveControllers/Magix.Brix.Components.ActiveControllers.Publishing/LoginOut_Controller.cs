@@ -53,16 +53,55 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
+         * Basically just Redirects the user to Root, unless another Redirect path
+         * is somehow given
+         */
+        [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
+        protected void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
+        {
+            // Getting relative URL ...
+            string baseUrl = GetApplicationBaseUrl();
+            string relUrl = Page.Request.Url.ToString().Replace("default.aspx", "").Replace(baseUrl, "");
+            string redirect = Page.Request.Params["ret"];
+
+            if (!string.IsNullOrEmpty(redirect))
+            {
+                AjaxManager.Instance.Redirect(redirect);
+            }
+            else
+            {
+                AjaxManager.Instance.Redirect("~/");
+            }
+        }
+
+        /**
          * Resets the User.Current object, and redirects user back to root
          */
         [ActiveEvent(Name = "Magix.Core.UserLoggedOut")]
-        private void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
+        private void Magix_Core_UserLoggedOut(object sender, ActiveEventArgs e)
         {
             // Logging out...
             UserBase.Current = null;
 
             // Redirecting back to landing page, to 'invalidate' DOM ...!
             AjaxManager.Instance.Redirect(GetApplicationBaseUrl());
+        }
+
+        /**
+         * Returns whether or not the User is logged in or not for the LoginInOut Module
+         * to know what types of controls to load
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetStateForLoginControl")]
+        protected void Magix_Publishing_GetStateForLoginControl(object sender, ActiveEventArgs e)
+        {
+            if (User.Current != null)
+            {
+                e.Params["ShouldLoadLogout"].Value = true;
+            }
+            else
+            {
+                e.Params["ShouldLoadLogin"].Value = true;
+            }
         }
     }
 }

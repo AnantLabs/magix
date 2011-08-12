@@ -178,6 +178,26 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 "Magix.Core.SetTitleOfPage",
                 node);
         }
+
+        /**
+         * Will return the Container ID of the 'Current Container', meaning whomever 
+         * raised whatever event we're currently within. Meaning if you've got a Button
+         * in a Grid which raises some event which is dependent upon knowing which Container
+         * its being raised from within, to load some other control [e.g. Signature Column in Grid
+         * or Edit Object]
+         * Is dependent upon that the PageObjectTemplateID is being passed around some way or
+         * another into this bugger
+         */
+        [ActiveEvent(Name = "Magix.Core.GetContainerForControl")]
+        protected void Magix_Core_GetContainerForControl(object sender, ActiveEventArgs e)
+        {
+            if (e.Params.Contains("PageObjectTemplateID"))
+            {
+                e.Params["Container"].Value =
+                    WebPart.SelectByID(e.Params["PageObjectTemplateID"].Get<int>()).Container.ViewportContainer;
+                e.Params["FreezeContainer"].Value = true;
+            }
+        }
     }
 }
 
