@@ -214,6 +214,7 @@
     <Content Include="media\Fonts\Hawaii_Killer.ttf" />
     <Content Include="media\Fonts\kberry.ttf" />
     <Content Include="media\Fonts\lexograph.ttf" />
+    <Content Include="media\images\magix-logo.png" />
     <Content Include="media\images\openid_small.png" />
     <Content Include="media\images\openid_tiny.png" />
     <Content Include="media\images\snow.png" />

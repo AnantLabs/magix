@@ -1142,6 +1142,85 @@ li.tree-item-class span.mux-tree-icon
 	background:transparent url(../images/tree.png) no-repeat 0 -18px;
 }
 
+.dox-methods
+{
+	margin-top:18px;
+	font-size:10px;
+}
 
+.one-dox-method
+{
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+	background-color:rgba(0, 0, 0, 0);
+	height:auto;
+	width:100%;
+	overflow:auto;
+	cursor:pointer;
+	clear:both;
+	
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
+}
+
+.one-dox-method:hover
+{
+	background-color:rgba(0, 128, 0, .1);
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
+}
+
+.dox-access
+{
+	display:block;
+	float:left;
+	width:70px;
+	margin-right:10px;
+	color:#999;
+}
+
+.dox-returns
+{
+	display:block;
+	float:left;
+	width:70px;
+	margin-right:10px;
+	color:#999;
+}
+
+.dox-name
+{
+	display:block;
+	float:left;
+	width:270px;
+	margin-right:10px;
+	color:#000;
+}
+
+.dox-pars
+{
+	display:block;
+	float:left;
+	width:270px;
+	color:#000;
+}
+
+.dox-description
+{
+	display:block;
+	float:left;
+	color:#999;
+	font-style:italic;
+	margin-bottom:0;
+}
 
 

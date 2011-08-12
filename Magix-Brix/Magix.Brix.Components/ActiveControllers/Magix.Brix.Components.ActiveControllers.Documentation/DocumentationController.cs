@@ -127,6 +127,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
 
         private void ShowClassInfo(Class cls)
         {
+            // Showing file(s) that contain the class
             Node node = new Node();
 
             node["IsDelete"].Value = false;
@@ -148,13 +149,13 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 "DBAdmin.Form.ViewClass",
                 node);
 
-
             // Loading 'View Class Details' Module ...
             node = new Node();
 
-            node["Width"].Value = 9;
+            node["Width"].Value = 18;
+            node["Padding"].Value = 6;
             node["MarginBottom"].Value = 10;
-            node["PullTop"].Value = 12;
+            node["PullTop"].Value = 8;
             node["Last"].Value = true;
             node["Description"].Value = cls.Description;
             if (cls.FullName.IndexOf('.') > 0)
@@ -162,6 +163,31 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             else
                 node["Name"].Value = cls.FullName;
             node["FullName"].Value = cls.FullName;
+
+            // Showing all Methods of class
+            foreach (Method idx in cls.Methods)
+            {
+                if (string.IsNullOrEmpty(idx.Description))
+                    continue; // Don't do methods not described ...
+
+                node["Methods"][idx.ID]["Name"].Value = idx.Name;
+                node["Methods"][idx.ID]["Access"].Value = idx.AccessModifier;
+                node["Methods"][idx.ID]["Returns"].Value = idx.ReturnType;
+                node["Methods"][idx.ID]["Description"].Value =
+                    idx.Description
+                    .Replace("<", "&lt;")
+                    .Replace(">", "&gt;");
+                node["Methods"][idx.ID]["DescriptionHTML"].Value =
+                    idx.Description
+                    .Replace("<para", "<p")
+                    .Replace("</para>", "</p>");
+
+                foreach (Parameter idxP in idx.Parameters)
+                {
+                    node["Methods"][idx.ID]["Pars"][idxP.Name]["Name"].Value = idxP.Name;
+                    node["Methods"][idx.ID]["Pars"][idxP.Name]["Type"].Value = idxP.Type;
+                }
+            }
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Documentation.ShowClassDetails",
