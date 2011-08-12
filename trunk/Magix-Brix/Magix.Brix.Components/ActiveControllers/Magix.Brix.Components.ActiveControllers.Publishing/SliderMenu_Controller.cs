@@ -16,9 +16,17 @@ using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
+    /**
+     * Helps feed the SliderMenu in Front-Web to get its Items to build its structure upon
+     */
     [ActiveController]
-    public class SliderMenuController : ActiveController
+    public class SliderMenu_Controller : ActiveController
     {
+        /**
+         * Will return a node containing all the menu items in your Pages hierarchy, possibly
+         * according to how you've got access to them, as long as the Access Controller is in no
+         * ways jeopardized
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetSliderMenuItems")]
         protected void Magix_Publishing_GetSliderMenuItems(object sender, ActiveEventArgs e)
         {
@@ -37,9 +45,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 // Finding first page level user [or anonymous] have access to from here ...
                 Node node = new Node();
                 node["ID"].Value = root.ID;
+
                 RaiseEvent(
                     "Magix.Publishing.FindFirstChildPageUserCanAccess",
                     node);
+
                 if (node.Contains("AccessToID"))
                 {
                     // First [breadth-first] page menu object user has access too ...
@@ -48,29 +58,35 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Will build up the Node structure for one Menu item, first verifying the User
+         * has access to that particular page by raising the
+         * 'Magix.Publishing.GetRolesListForPage' event
+         */
         private void GetOneMenuItem(Node node, WebPage po, bool isRoot)
         {
             bool canAccess = true;
             if (User.Current != null)
             {
-                foreach (Role idx in User.Current.Roles)
-                {
-                    Node xx = new Node();
-
-                    xx["ID"].Value = po.ID;
-
-                    RaiseEvent(
-                        "Magix.Publishing.GetRolesListForPage",
-                        xx);
-
-                    if (xx.Contains("ActiveRoles") &&
-                        !xx["ActiveRoles"]["r-" + idx.ID]["HasAccess"].Get<bool>())
-                    {
-                        canAccess = false;
-                    }
-                }
+                canAccess = CheckAccessForUser(po, canAccess);
             }
             else
+            {
+                canAccess = CheckAccessForAnonymous(po, canAccess);
+            }
+
+            if (canAccess)
+            {
+                BuildNodeForOneMenuItem(node, po, isRoot);
+            }
+        }
+
+        /*
+         * Verifies that the User.Current has access to the spesific WebPage
+         */
+        private bool CheckAccessForUser(WebPage po, bool canAccess)
+        {
+            foreach (Role idx in User.Current.Roles)
             {
                 Node xx = new Node();
 
@@ -80,27 +96,57 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     "Magix.Publishing.GetRolesListForPage",
                     xx);
 
-                if (xx.Contains("ActiveRoles"))
+                if (xx.Contains("ActiveRoles") &&
+                    !xx["ActiveRoles"]["r-" + idx.ID]["HasAccess"].Get<bool>())
                 {
                     canAccess = false;
                 }
             }
+            return canAccess;
+        }
 
-            if (canAccess)
+        /*
+         * Checks access to the specific page for an anonymous visitor 
+         * [not in any ways logged in]
+         */
+        private bool CheckAccessForAnonymous(WebPage po, bool canAccess)
+        {
+            Node xx = new Node();
+
+            xx["ID"].Value = po.ID;
+
+            RaiseEvent(
+                "Magix.Publishing.GetRolesListForPage",
+                xx);
+
+            if (xx.Contains("ActiveRoles"))
             {
-                node["Items"]["i" + po.ID]["Caption"].Value = po.Name;
-                node["Items"]["i" + po.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
-                node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
-                foreach (WebPage idx in po.Children)
-                {
-                    if (isRoot) // We inject root on the same node as the children of root ...
-                        GetOneMenuItem(node, idx, false);
-                    else
-                        GetOneMenuItem(node["Items"]["i" + po.ID], idx, false);
-                }
+                canAccess = false;
+            }
+            return canAccess;
+        }
+
+        /*
+         * Will build up the Node structure needed for one Menu item in the
+         * front-web
+         */
+        private void BuildNodeForOneMenuItem(Node node, WebPage po, bool isRoot)
+        {
+            node["Items"]["i" + po.ID]["Caption"].Value = po.Name;
+            node["Items"]["i" + po.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
+            node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
+            foreach (WebPage idx in po.Children)
+            {
+                if (isRoot) // We inject root on the same node as the children of root ...
+                    GetOneMenuItem(node, idx, false);
+                else
+                    GetOneMenuItem(node["Items"]["i" + po.ID], idx, false);
             }
         }
 
+        /**
+         * Will Open the specific WebPage accordingly to which SlidingMenuItem was clicked
+         */
         [ActiveEvent(Name = "Magix.Publishing.SliderMenuItemClicked")]
         protected void Magix_Publishing_SliderMenuItemClicked(object sender, ActiveEventArgs e)
         {

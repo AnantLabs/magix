@@ -27,6 +27,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     [ActiveController]
     public class LoginOut_Controller : ActiveController
     {
+        /**
+         * Basically just checks to see if the given username/password 
+         * combination exists, and if so sets the User.Current object, which
+         * is staic per request, returning the logged in user. Then if successful,
+         * raises the 'Magix.Core.UserLoggedIn' event
+         */
         [ActiveEvent(Name = "Magix.Core.LogInUser")]
         protected void Magix_Core_LogInUser(object sender, ActiveEventArgs e)
         {
@@ -46,6 +52,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Resets the User.Current object, and redirects user back to root
+         */
         [ActiveEvent(Name = "Magix.Core.UserLoggedOut")]
         private void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {

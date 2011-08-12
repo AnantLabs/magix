@@ -176,7 +176,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                 dl["ID"].Value = id;
 
                                 RaiseSafeEvent(
-                                    "Magix.Publishing.DeleteWebPartTemplateFromWebPageTemplate",
+                                    "Magix.Publishing.DeleteWebPartTemplate",
                                     dl);
 
                                 ReDataBind();
@@ -213,7 +213,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         nx["Value"].Value = ls.SelectedItem.Value;
 
                         RaiseSafeEvent(
-                            "Magix.Publishing.ChangeTemplateOfWebPartTemplate",
+                            "Magix.Publishing.ChangeCssForWebPartTemplateFromCssTemplate",
                             nx);
 
                         tx.Text = ls.SelectedItem.Value;
@@ -585,7 +585,11 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             DataSource["AllModules"].UnTie();
 
             RaiseEvent(
-                "Magix.Publishing.GetTemplates",
+                "Magix.Publishing.GetWebPageTemplates",
+                DataSource);
+
+            RaiseEvent(
+                "Magix.Publishing.GetPublisherPlugins",
                 DataSource);
 
             parts.Controls.Clear();
@@ -632,7 +636,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         nn["ModuleName"].Value = sel.SelectedItem.Value;
 
                         RaiseSafeEvent(
-                            "Magix.Publishing.ChangeModuleForTemplate",
+                            "Magix.Publishing.ChangeModuleTypeForWebPartTemplate",
                             nn);
                     };
                 foreach (Node idxN1 in DataSource["AllModules"])
@@ -649,7 +653,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.WebPartTemplateWasModified")]
         [ActiveEvent(Name = "Magix.Publishing.WebPageTemplateWasModified")]
         protected void Magix_Publishing_MultiHandler(object sender, EventArgs e)
         {

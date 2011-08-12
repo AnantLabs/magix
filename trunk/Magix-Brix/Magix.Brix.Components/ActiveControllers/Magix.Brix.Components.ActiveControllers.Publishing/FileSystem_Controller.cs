@@ -18,9 +18,16 @@ using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
+    /**
+     * Tiny helper for menu item in Administrator Dashboard to view the File System Browser
+     */
     [ActiveController]
-    public class FileSystemController : ActiveController
+    public class FileSystem_Controller : ActiveController
     {
+        /**
+         * Will call 'FileExplorer.Form.LaunchFileExplorer' with a couple of 
+         * predefined values for positioning and such. Clears all containers from 4 and out
+         */
         [ActiveEvent(Name = "Magix.Publishing.ViewFileSystem")]
         protected void Magix_Publishing_ViewFileSystem(object sender, ActiveEventArgs e)
         {
