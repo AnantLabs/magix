@@ -11,7 +11,7 @@
 using LanguageRecords;
 using NUnit.Framework;
 
-namespace Ra.Brix.Tests.Data
+namespace Magix.Brix.Tests.Data
 {
     [TestFixture]
     public class LanguageTest : BaseTest

@@ -18,7 +18,7 @@ using ArticlePublisherRecords;
 using UserRecords;
 using StackedRecords;
 
-namespace Ra.Brix.Tests.Data
+namespace Magix.Brix.Tests.Data
 {
     [TestFixture]
     public class QuestionTests : BaseTest
