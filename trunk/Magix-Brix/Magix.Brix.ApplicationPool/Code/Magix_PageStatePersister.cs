@@ -18,11 +18,11 @@ using Magix.UX;
 
 namespace Magix.Brix.ApplicationPool
 {
-    public class RaBrixPageStatePersister : PageStatePersister
+    public class Magix_PageStatePersister : PageStatePersister
     {
         private Guid _session;
 
-        public RaBrixPageStatePersister(Page page)
+        public Magix_PageStatePersister(Page page)
             : base(page)
         {
             if (page.IsPostBack)

@@ -78,13 +78,38 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             else
             {
                 // Class 
-                Class cls = Docs.GetTypeByName(fullName) as Class;
-                ShowClassInfo(cls);
+                Class cls = Docs.GetAllClasses().Find(
+                    delegate(Class idx)
+                    {
+                        return idx.FullName == fullName;
+                    });
+                if (cls != null)
+                    ShowClassInfo(cls);
             }
         }
 
         private void ShowClassInfo(Class cls)
         {
+            Node node = new Node();
+
+            node["IsDelete"].Value = false;
+            node["NoIdColumn"].Value = true;
+            node["Container"].Value = "content4";
+            node["Width"].Value = 9;
+            node["MarginBottom"].Value = 10;
+            node["Top"].Value = 1;
+            node["Last"].Value = true;
+            node["IsCreate"].Value = false;
+            node["ReuseNode"].Value = true;
+
+            node["FullTypeName"].Value = typeof(DocumentationController).FullName + "-META";
+
+            node["Class"].Value = cls.FullName;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewClass",
+                node);
         }
 
         private void ShowNamespaceInfo(Namespace nSpc)
@@ -208,14 +233,29 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                             continue;
                         if (idxT.Namespace == null)
                             continue;
-                        if (idxT.Namespace.Contains(e.Params["Namespace"].Get<string>()))
+                        if (e.Params.Contains("Namespace"))
                         {
-                            if (!asm.Exists(
-                                delegate(Assembly idxA)
-                                {
-                                    return idxA.FullName == idxT.Namespace;
-                                }))
-                                asm.Add(idx);
+                            if (idxT.Namespace.Contains(e.Params["Namespace"].Get<string>()))
+                            {
+                                if (!asm.Exists(
+                                    delegate(Assembly idxA)
+                                    {
+                                        return idxA.FullName == idxT.Namespace;
+                                    }))
+                                    asm.Add(idx);
+                            }
+                        }
+                        else if (e.Params.Contains("Class"))
+                        {
+                            if (idxT.FullName == e.Params["Class"].Get<string>())
+                            {
+                                if (!asm.Exists(
+                                    delegate(Assembly idxA)
+                                    {
+                                        return idxA.FullName == idxT.Namespace;
+                                    }))
+                                    asm.Add(idx);
+                            }
                         }
                     }
                 }
