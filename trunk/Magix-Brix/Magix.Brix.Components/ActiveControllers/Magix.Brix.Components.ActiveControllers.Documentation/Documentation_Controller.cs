@@ -13,18 +13,32 @@ using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveControllers.Documentation
 {
+    /**
+     * Contains the logic for our 'Class Browser' which can browse all the 
+     * classes in the system and make some changes to them by enabling them and
+     * disabling them by either overriding specific events or by disabling entire
+     * controllers or modules all together
+     */
     [ActiveController]
-    public class DocumentationController : ActiveController
+    public class Documentation_Controller : ActiveController
     {
+        /**
+         * Will return the menu items needed to start the class browser
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
             e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
 
-            e.Params["Items"]["Admin"]["Items"]["DoxDotNet"]["Caption"].Value = "Class Browser ...";
-            e.Params["Items"]["Admin"]["Items"]["DoxDotNet"]["Event"]["Name"].Value = "Magix.MetaType.ViewDoxygenFiles";
+            Node tmp = e.Params["Items"]["Admin"]["Items"]["DoxDotNet"];
+            tmp["Caption"].Value = "Class Browser ...";
+            tmp["Event"]["Name"].Value = "Magix.MetaType.ViewDoxygenFiles";
         }
 
+        /**
+         * Gets every namespace and class into a tree hierarchy and loads up the Tree module
+         * to display it
+         */
         [ActiveEvent(Name = "Magix.MetaType.ViewDoxygenFiles")]
         protected void Magix_MetaType_ViewDoxygenFiles(object sender, ActiveEventArgs e)
         {
@@ -51,6 +65,73 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 node);
         }
 
+        #region [ -- Helper methods for viewing doxygen files -- ]
+
+        /*
+         * Helper for above
+         */
+        private Node AddNamespaceToNode(Namespace idx, Node node)
+        {
+            string fullName = idx.FullName;
+            string[] splits = fullName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+
+            Node tmp = node;
+            string tmpFullNs = "";
+            while (splits.Length > 0)
+            {
+                string currentNamespace = splits[0];
+                if (!string.IsNullOrEmpty(tmpFullNs))
+                    tmpFullNs += ".";
+                tmpFullNs += currentNamespace;
+
+                tmp = tmp["Items"][currentNamespace];
+
+                AddMicroNamespaceToNode(
+                    idx,
+                    currentNamespace,
+                    tmp,
+                    tmpFullNs,
+                    fullName.Substring(currentNamespace.Length).Length == 0);
+
+                fullName = fullName.Substring(currentNamespace.Length);
+
+                if (fullName.Length == 0)
+                    break;
+                else
+                    fullName = fullName.Substring(1);
+
+                splits = fullName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            }
+            return tmp;
+        }
+
+        /*
+         * Helper for above
+         */
+        private void AddMicroNamespaceToNode(
+            Namespace nameSp,
+            string currentNamespace,
+            Node node,
+            string fullName,
+            bool last)
+        {
+            node["ID"].Value = fullName.Replace(".", "_XX_").Replace("+", "_XQ_");
+            node["Name"].Value = currentNamespace;
+            if (last)
+            {
+                if (!string.IsNullOrEmpty(nameSp.Description))
+                    node["ToolTip"].Value = nameSp.Description;
+                else
+                    node["ToolTip"].Value = fullName;
+            }
+            else
+                node["ToolTip"].Value = fullName;
+            node["CssClass"].Value = "tree-item-namespace";
+        }
+
+        /*
+         * Helper for above
+         */
         private void AddClassToNode(Class cls, Node outerMostNamespace)
         {
             outerMostNamespace["Items"][cls.FullName]["ID"].Value = cls.FullName.Replace(".", "_XX_").Replace("+", "_XQ_");
@@ -62,14 +143,13 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             outerMostNamespace["Items"][cls.FullName]["CssClass"].Value = "tree-item-class";
         }
 
-        private void AddDelegateToNode(Doxygen.NET.Delegate cls, Node outerMostNamespace)
-        {
-            outerMostNamespace["Items"][cls.FullName]["ID"].Value = cls.FullName.Replace(".", "_XX_").Replace("+", "_XQ_");
-            outerMostNamespace["Items"][cls.FullName]["Name"].Value = cls.Name;
-            outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.FullName;
-            outerMostNamespace["Items"][cls.FullName]["CssClass"].Value = "tree-item-delegate";
-        }
+        #endregion
 
+        /**
+         * Expects a SelectedItemID which should point to either a Namespace or
+         * a Class, and will show this namespace/class features. Such as which
+         * dll(s) implements tha namespace/class, if a class, which methods it has etc
+         */
         [ActiveEvent(Name = "Magix.Doxygen.ViewNamespaceOrClass")]
         protected void Magix_Doxygen_ViewNamespaceOrClass(object sender, ActiveEventArgs e)
         {
@@ -84,7 +164,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             if(nSpc != null)
             {
                 // Namespace
-                ShowNamespaceInfo(nSpc);
+                ViewNamespaceDlls(nSpc);
             }
             else
             {
@@ -95,11 +175,16 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                         return idx.FullName == fullName;
                     });
                 if (cls != null)
-                    ShowClassInfo(cls);
+                    ShowClassDllsAndMethods(cls);
             }
         }
 
-        private void ShowNamespaceInfo(Namespace nSpc)
+        #region [ -- Helper methods for Viewing specific class or Namespace -- ]
+
+        /*
+         * Helper for above
+         */
+        private void ViewNamespaceDlls(Namespace nSpc)
         {
             Node node = new Node();
 
@@ -113,7 +198,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             node["IsCreate"].Value = false;
             node["ReuseNode"].Value = true;
 
-            node["FullTypeName"].Value = typeof(DocumentationController).FullName + "-META";
+            node["FullTypeName"].Value = typeof(Documentation_Controller).FullName + "-META";
 
             node["Namespace"].Value = nSpc.FullName;
 
@@ -125,7 +210,19 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             ActiveEvents.Instance.RaiseClearControls("content5");
         }
 
-        private void ShowClassInfo(Class cls)
+        /*
+         * Helper for above
+         */
+        private void ShowClassDllsAndMethods(Class cls)
+        {
+            ViewClassDlls(cls);
+            ViewClassMembers(cls);
+        }
+
+        /*
+         * Shows all DLLs that implements class
+         */
+        private void ViewClassDlls(Class cls)
         {
             // Showing file(s) that contain the class
             Node node = new Node();
@@ -140,7 +237,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             node["IsCreate"].Value = false;
             node["ReuseNode"].Value = true;
 
-            node["FullTypeName"].Value = typeof(DocumentationController).FullName + "-META";
+            node["FullTypeName"].Value = typeof(Documentation_Controller).FullName + "-META";
 
             node["Class"].Value = cls.FullName;
 
@@ -148,9 +245,15 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 this,
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
 
+        /*
+         * Shows the members of the Class in a Grid plus all documentation in regards to the class
+         */
+        private void ViewClassMembers(Class cls)
+        {
             // Loading 'View Class Details' Module ...
-            node = new Node();
+            Node node = new Node();
 
             node["Width"].Value = 18;
             node["Padding"].Value = 6;
@@ -195,67 +298,17 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 node);
         }
 
-        private Node AddNamespaceToNode(Namespace idx, Node node)
-        {
-            string fullName = idx.FullName;
-            string[] splits = fullName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+        #endregion
 
-            Node tmp = node;
-            string tmpFullNs = "";
-            while (splits.Length > 0)
-            {
-                string currentNamespace = splits[0];
-                if (!string.IsNullOrEmpty(tmpFullNs))
-                    tmpFullNs += ".";
-                tmpFullNs += currentNamespace;
-
-                tmp = tmp["Items"][currentNamespace];
-
-                AddMicroNamespaceToNode(
-                    idx,
-                    currentNamespace, 
-                    tmp, 
-                    tmpFullNs, 
-                    fullName.Substring(currentNamespace.Length).Length == 0);
-
-                fullName = fullName.Substring(currentNamespace.Length);
-
-                if (fullName.Length == 0)
-                    break;
-                else 
-                    fullName = fullName.Substring(1);
-
-                splits = fullName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-            return tmp;
-        }
-
-        private void AddMicroNamespaceToNode(
-            Namespace nameSp,
-            string currentNamespace, 
-            Node node, 
-            string fullName, 
-            bool last)
-        {
-            node["ID"].Value = fullName.Replace(".", "_XX_").Replace("+", "_XQ_");
-            node["Name"].Value = currentNamespace;
-            if (last)
-            {
-                if (!string.IsNullOrEmpty(nameSp.Description))
-                    node["ToolTip"].Value = nameSp.Description;
-                else
-                    node["ToolTip"].Value = fullName;
-            }
-            else
-                node["ToolTip"].Value = fullName;
-            node["CssClass"].Value = "tree-item-namespace";
-        }
-
+        /**
+         * Handled to make sure we handle the "Documentation_Controller-META" type for the Grid system
+         * so that we can see our DLLs
+         */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
         protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() == 
-                typeof(DocumentationController).FullName + "-META")
+                typeof(Documentation_Controller).FullName + "-META")
             {
                 e.Params["WhiteListColumns"]["Name"].Value = true;
                 e.Params["WhiteListColumns"]["ForcedWidth"].Value = 9;
@@ -265,11 +318,15 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             }
         }
 
+        /**
+         * Handled to make sure we handle the "Documentation_Controller-META" type for the Grid system
+         * so that we can see our DLLs
+         */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
         protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() == 
-                typeof(DocumentationController).FullName + "-META")
+                typeof(Documentation_Controller).FullName + "-META")
             {
                 List<Assembly> asm = new List<Assembly>();
                 foreach (Assembly idx in AppDomain.CurrentDomain.GetAssemblies())
@@ -337,6 +394,9 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             }
         }
 
+        /**
+         * Will cache our Doxygen.NET objects, such that they're faster available
+         */
         public Docs Docs
         {
             get
@@ -344,7 +404,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 // Loading it ONCE and caching it for ALL users. VERY expensive operation ...!
                 if (Page.Application["Magix.Brix.Components.ActiveControllers.Documentation.Doc"] == null)
                 {
-                    lock (typeof(DocumentationController))
+                    lock (typeof(Documentation_Controller))
                     {
                         if (Page.Application["Magix.Brix.Components.ActiveControllers.Documentation.Doc"] == null)
                         {
