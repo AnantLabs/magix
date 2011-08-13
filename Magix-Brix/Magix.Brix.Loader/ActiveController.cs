@@ -33,6 +33,11 @@ namespace Magix.Brix.Loader
             return node;
         }
 
+        /**
+         * Helper for execute code that you suspect might throw exceptions. Will trap exception and
+         * show a message box back to end user instead of allowing exception to penetrate through
+         * to Yellow Screen of Death
+         */
         protected void ExecuteSafely(executor functor, string msg, params object[] args)
         {
             try

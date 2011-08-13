@@ -44,6 +44,7 @@
     <Compile Include="AdministratorDashboard_Controller.cs" />
     <Compile Include="Access_Controller.cs" />
     <Compile Include="ChildExcerpt_Controller.cs" />
+    <Compile Include="Logging_Controller.cs" />
     <Compile Include="TipOfToday_Controller.cs" />
     <Compile Include="LoginOut_Controller.cs" />
     <Compile Include="WebPart_Controller.cs" />
