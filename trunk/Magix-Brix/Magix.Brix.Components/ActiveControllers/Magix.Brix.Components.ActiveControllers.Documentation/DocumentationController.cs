@@ -21,7 +21,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         {
             e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
 
-            e.Params["Items"]["Admin"]["Items"]["DoxDotNet"]["Caption"].Value = "Doxygent.NET ...";
+            e.Params["Items"]["Admin"]["Items"]["DoxDotNet"]["Caption"].Value = "Class Browser ...";
             e.Params["Items"]["Admin"]["Items"]["DoxDotNet"]["Event"]["Name"].Value = "Magix.MetaType.ViewDoxygenFiles";
         }
 
@@ -274,40 +274,56 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 List<Assembly> asm = new List<Assembly>();
                 foreach (Assembly idx in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    if (idx.FullName.StartsWith("System") ||
-                        idx.FullName.Contains("mscorlib") ||
-                        idx.FullName.StartsWith("Microsoft"))
-                        continue;
-                    foreach (System.Type idxT in idx.GetTypes())
+                    try
                     {
-                        if (idxT.FullName.StartsWith("Microsoft"))
+                        if (idx.FullName.StartsWith("System") ||
+                            idx.FullName.Contains("mscorlib") ||
+                            idx.FullName.StartsWith("Microsoft") ||
+                            idx.FullName.StartsWith("DotNetOpenAuth"))
                             continue;
-                        if (idxT.Namespace == null)
-                            continue;
-                        if (e.Params.Contains("Namespace"))
+                        foreach (System.Type idxT in idx.GetTypes())
                         {
-                            if (idxT.Namespace.Contains(e.Params["Namespace"].Get<string>()))
+                            if (idxT.FullName.StartsWith("Microsoft"))
+                                continue;
+                            if (idxT.Namespace == null)
+                                continue;
+                            if (e.Params.Contains("Namespace"))
                             {
-                                if (!asm.Exists(
-                                    delegate(Assembly idxA)
-                                    {
-                                        return idxA.FullName == idxT.Namespace;
-                                    }))
-                                    asm.Add(idx);
+                                if (idxT.Namespace.Contains(e.Params["Namespace"].Get<string>()))
+                                {
+                                    if (!asm.Exists(
+                                        delegate(Assembly idxA)
+                                        {
+                                            return idxA.FullName == idxT.Namespace;
+                                        }))
+                                        asm.Add(idx);
+                                }
+                            }
+                            else if (e.Params.Contains("Class"))
+                            {
+                                if (idxT.FullName == e.Params["Class"].Get<string>())
+                                {
+                                    if (!asm.Exists(
+                                        delegate(Assembly idxA)
+                                        {
+                                            return idxA.FullName == idxT.Namespace;
+                                        }))
+                                        asm.Add(idx);
+                                }
                             }
                         }
-                        else if (e.Params.Contains("Class"))
-                        {
-                            if (idxT.FullName == e.Params["Class"].Get<string>())
-                            {
-                                if (!asm.Exists(
-                                    delegate(Assembly idxA)
-                                    {
-                                        return idxA.FullName == idxT.Namespace;
-                                    }))
-                                    asm.Add(idx);
-                            }
-                        }
+                    }
+                    catch (Exception err)
+                    {
+                        Node xx = new Node();
+                        xx["Message"].Value = err.Message +
+                            "File; " +
+                            idx.FullName;
+                        xx["IsError"].Value = true;
+
+                        RaiseEvent(
+                            "Magix.Core.ShowMessage",
+                            xx);
                     }
                 }
                 int idxNo = 1;

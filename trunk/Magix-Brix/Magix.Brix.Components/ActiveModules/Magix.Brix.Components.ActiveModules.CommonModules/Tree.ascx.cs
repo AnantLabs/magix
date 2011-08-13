@@ -148,7 +148,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             if (DataSource.Contains("ItemSelectedEvent"))
             {
                 DataSource["SelectedItemID"].Value = tree.SelectedItem.Info;
-                RaiseEvent(
+                RaiseSafeEvent(
                     DataSource["ItemSelectedEvent"].Get<string>(),
                     DataSource);
             }
