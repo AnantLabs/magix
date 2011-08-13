@@ -17,9 +17,16 @@ using Magix.Brix.Components.ActiveTypes.Logging;
 
 namespace Magix.Brix.Components.ActiveControllers.Logger
 {
+    /**
+     * Contains logic for Logging things
+     */
     [ActiveController]
-    public class LoggerController : ActiveController
+    public class Logger_Controller : ActiveController
     {
+        /**
+         * Handled here since it's one of the more 'common operations' and probably interesting
+         * to see in retrospect in case something goes wrong
+         */
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
         private void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {
@@ -37,6 +44,10 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 node);
         }
 
+        /**
+         * Handled here since it's one of the more 'common operations' and probably interesting
+         * to see in retrospect in case something goes wrong
+         */
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
@@ -64,7 +75,11 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 }
             }
 
-            node["Message"].Value = e.Params["Message"].Get<string>();
+            if (e.Params.Contains("IsError"))
+                node["Message"].Value = "ERROR! " +
+                    e.Params["Message"].Get<string>();
+            else
+                node["Message"].Value = e.Params["Message"].Get<string>();
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 sender,
@@ -72,6 +87,11 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 node);
         }
 
+        /**
+         * Will create one LogItem with the given LogItemType, Header, Message, 
+         * ObjectID, ParentID, StackTrace and so on, depending upon which data is actually 
+         * being passed into it. Minimu requirement is 'Header'
+         */
         [ActiveEvent(Name = "Magix.Core.Log")]
         protected void Magix_Core_Log(object sender, ActiveEventArgs e)
         {
@@ -118,9 +138,14 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             l.Save();
         }
 
+        /**
+         * Handled since it's important information since it's highly likely it's a new visitor 
+         * to the app/website
+         */
         [ActiveEvent(Name = "Magix.Core.NewUserIDCookieCreated")]
         protected void Magix_Core_NewUserIDCookieCreated(object sender, ActiveEventArgs e)
         {
+            // TODO: Fuck man! ReFACTOR ...!!
             string userID = e.Params["UserID"].Get<string>();
 
             // Running through 10 latest log requests with same IP address to determine
@@ -178,6 +203,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 sender,
                 "Magix.Core.Log",
                 n);
+
             if (noneExist)
             {
                 // Almost certainly a new visit, though not entirely certain either ...
