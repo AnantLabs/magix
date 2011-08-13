@@ -133,7 +133,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
 
             RaiseEvent(
-                "Magix.Core.SendEmailLocally",
+                "Magix.Core.SendEmail",
                 node);
         }
 

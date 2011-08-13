@@ -19,6 +19,11 @@ namespace Magix.Brix.Loader
     public abstract class ActiveController
     {
         /**
+         * Helper 
+         */
+        protected delegate void executor();
+
+        /**
          * Loads the given module and puts it into your default container.
          */
         protected Node LoadModule(string name)
@@ -26,6 +31,31 @@ namespace Magix.Brix.Loader
             Node node = new Node();
             LoadModule(name, null, node);
             return node;
+        }
+
+        protected void ExecuteSafely(executor functor, string msg, params object[] args)
+        {
+            try
+            {
+                functor();
+            }
+            catch (Exception err)
+            {
+                while (err.InnerException != null)
+                    err = err.InnerException;
+
+                Node node = new Node();
+                node["Message"].Value = 
+                    "<p>" + string.Format(msg, args) + "</p>" + 
+                    "<p>Message from Server; </p>" + 
+                    "<p>" + err.Message + "</p>";
+                node["Header"].Value = err.GetType().FullName;
+                node["IsError"].Value = true;
+
+                RaiseEvent(
+                    "Magix.Core.ShowMessage",
+                    node);
+            }
         }
 
         /**
@@ -73,6 +103,45 @@ namespace Magix.Brix.Loader
                 this,
                 eventName,
                 node);
+        }
+
+        /**
+         * Shows a Message to the user with the given body
+         */
+        protected void ShowMessage(string body)
+        {
+            ShowMessage(body, null);
+        }
+
+        /**
+         * Shows a Message to the user with the given body and header
+         */
+        protected void ShowMessage(string body, string header)
+        {
+            Node n = new Node();
+            n["Message"].Value = body;
+            if (header != null)
+                n["Header"].Value = header;
+
+            RaiseEvent(
+                "Magix.Core.ShowMessage",
+                n);
+        }
+
+        /**
+         * Shows an Error Message to the user with the given body and header
+         */
+        protected void ShowError(string body, string header)
+        {
+            Node n = new Node();
+            n["Message"].Value = body;
+            if (header != null)
+                n["Header"].Value = header;
+            n["IsError"].Value = true;
+
+            RaiseEvent(
+                "Magix.Core.ShowMessage",
+                n);
         }
 
         /**

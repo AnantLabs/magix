@@ -12,6 +12,9 @@ using Magix.Brix.Types;
 
 namespace Magix.Brix.Components.ActiveControllers.FileExplorer
 {
+    /*
+     * Helper class for File Explorer Controller. Not intended for direct usage
+     */
     public class Helper
     {
         public static void GetFilesAndFolders(
