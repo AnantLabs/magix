@@ -420,14 +420,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["IsSelect"].Value = true;
             node["Push"].Value = 1;
             node["Width"].Value = 20;
-            node["RootAccessFolder"].Value = clientImageFolder;
+            node["Folder"].Value = clientImageFolder;
             node["Filter"].Value = "*.png;*.gif;*.jpg;*.jpeg;";
             node["SelectEvent"].Value = "Magix.Publishing.SelectImageForUser";
             node["SelectEvent"]["Params"]["UserID"].Value = u.ID;
             node["Seed"].Value = u.ID;
 
             RaiseEvent(
-                "FileExplorer.Form.LaunchFileExplorerWithParams",
+                "Magix.FileExplorer.LaunchExplorer",
                 node);
         }
 

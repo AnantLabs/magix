@@ -233,10 +233,6 @@
       <Project>{984DBB11-EF11-4947-AB06-63F3881DCD02}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Documentation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Editor\Magix.Brix.Components.ActiveControllers.Editor.csproj">
-      <Project>{4A6D6D16-C455-4C81-8B1A-195B78F7421A}</Project>
-      <Name>Magix.Brix.Components.ActiveControllers.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Email\Magix.Brix.Components.ActiveControllers.Email.csproj">
       <Project>{3807790C-726E-4870-89DB-D25D80223C8A}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Email</Name>

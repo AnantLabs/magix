@@ -82,8 +82,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.Editor", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Editor\Magix.Brix.Components.ActiveModules.Editor.csproj", "{9CA6EB99-8D12-4C69-B4A9-8E2649CE7D57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.Editor", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Editor\Magix.Brix.Components.ActiveControllers.Editor.csproj", "{4A6D6D16-C455-4C81-8B1A-195B78F7421A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.TalkBack", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.TalkBack\Magix.Brix.Components.ActiveControllers.TalkBack.csproj", "{55506E9C-89C5-432E-8431-DDDD08D22A37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.TalkBack", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.TalkBack\Magix.Brix.Components.ActiveModules.TalkBack.csproj", "{72B871E5-2DD3-4294-BAE3-F80D67ACEB74}"
@@ -219,10 +217,6 @@ Global
 		{9CA6EB99-8D12-4C69-B4A9-8E2649CE7D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CA6EB99-8D12-4C69-B4A9-8E2649CE7D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CA6EB99-8D12-4C69-B4A9-8E2649CE7D57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A6D6D16-C455-4C81-8B1A-195B78F7421A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A6D6D16-C455-4C81-8B1A-195B78F7421A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A6D6D16-C455-4C81-8B1A-195B78F7421A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A6D6D16-C455-4C81-8B1A-195B78F7421A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{55506E9C-89C5-432E-8431-DDDD08D22A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55506E9C-89C5-432E-8431-DDDD08D22A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55506E9C-89C5-432E-8431-DDDD08D22A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -358,7 +352,6 @@ Global
 		{3807790C-726E-4870-89DB-D25D80223C8A} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{124E0BB5-A992-4216-9FE3-C5CBED735888} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{2B7F49E6-2867-4E16-AAF6-2236A0FF6402} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
-		{4A6D6D16-C455-4C81-8B1A-195B78F7421A} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{55506E9C-89C5-432E-8431-DDDD08D22A37} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{314FAAAA-759C-4357-BA64-985CD9EA08BE} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{4FF5FFF4-4B4E-4E7E-8978-07A94C9C494B} = {A28922C8-A4CB-420D-BA01-583AA4389D75}

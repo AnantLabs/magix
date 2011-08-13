@@ -25,7 +25,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     public class FileSystem_Controller : ActiveController
     {
         /**
-         * Will call 'FileExplorer.Form.LaunchFileExplorer' with a couple of 
+         * Will call 'Magix.FileExplorer.LaunchExplorer' with a couple of 
          * predefined values for positioning and such. Clears all containers from 4 and out
          */
         [ActiveEvent(Name = "Magix.Publishing.ViewFileSystem")]
@@ -41,7 +41,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["CanCreateNewCssFile"].Value = true;
 
             RaiseEvent(
-                "FileExplorer.Form.LaunchFileExplorer",
+                "Magix.FileExplorer.LaunchExplorer",
                 node);
 
             ActiveEvents.Instance.RaiseClearControls("content4");

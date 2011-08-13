@@ -114,7 +114,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                             DataSource["Directories"].UnTie();
                             DataSource["Files"].UnTie();
                             RaiseSafeEvent(
-                                "FileExplorer.GetFilesFromFolder",
+                                "Magix.FileExplorer.GetFilesFromFolder",
                                 DataSource);
                             DataSource["FolderToOpen"].UnTie();
                             Start = 0;
@@ -152,7 +152,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                 DataSource["Directories"].UnTie();
                                 DataSource["Files"].UnTie();
                                 RaiseSafeEvent(
-                                    "FileExplorer.GetFilesFromFolder",
+                                    "Magix.FileExplorer.GetFilesFromFolder",
                                     DataSource);
                                 ReDataBind();
                             };
@@ -217,7 +217,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                     string folderName = pp.Info;
                                     DataSource["File"].Value = folderName;
                                     RaiseSafeEvent(
-                                        "FileExplorer.FileSelectedInExplorer",
+                                        "Magix.FileExplorer.FileSelected",
                                         DataSource);
                                     UpdateSelectedFile();
                                     new EffectFadeIn(prop, 500)
@@ -273,7 +273,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                     string folderName = pp.Info;
                                     DataSource["File"].Value = folderName;
                                     RaiseSafeEvent(
-                                        "FileExplorer.FileSelectedInExplorer",
+                                        "Magix.FileExplorer.FileSelected",
                                         DataSource);
                                     UpdateSelectedFile();
                                     new EffectFadeIn(prop, 500)
@@ -307,7 +307,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 node["File"].Value =
                     DataSource["Folder"].Get<string>() + DataSource["File"]["FullName"].Get<string>();
                 RaiseSafeEvent(
-                    "FileExplorer.EditAsciiFile",
+                    "Magix.FileExplorer.EditAsciiFile",
                     node);
             }
         }
@@ -317,15 +317,20 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             Node node = new Node();
             node["Folder"].Value = DataSource["Folder"].Value;
             node["File"].Value = DataSource["File"]["FullName"].Value;
+
             DataSource["Directories"].UnTie();
             DataSource["Files"].UnTie();
+
             RaiseSafeEvent(
-                "FileExplorer.DeleteFile",
+                "Magix.FileExplorer.DeleteFile",
                 node);
+
             DataSource["FolderToOpen"].Value = "";
+
             RaiseSafeEvent(
-                "FileExplorer.GetFilesFromFolder",
+                "Magix.FileExplorer.GetFilesFromFolder",
                 DataSource);
+
             ReDataBind();
         }
 
@@ -357,14 +362,14 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 DataSource["File"].UnTie();
                 DataSource["Files"].UnTie();
                 RaiseSafeEvent(
-                    "FileExplorer.GetFilesFromFolder",
+                    "Magix.FileExplorer.GetFilesFromFolder",
                     DataSource);
                 ReDataBind();
 
                 SelectedPanelID = "empty.css";
                 DataSource["File"].Value = "empty.css";
                 RaiseSafeEvent(
-                    "FileExplorer.FileSelectedInExplorer",
+                    "Magix.FileExplorer.FileSelected",
                     DataSource);
                 UpdateSelectedFile();
                 new EffectFadeIn(prop, 500)
@@ -454,14 +459,14 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 DataSource["File"].UnTie();
                 DataSource["Files"].UnTie();
                 RaiseSafeEvent(
-                    "FileExplorer.GetFilesFromFolder",
+                    "Magix.FileExplorer.GetFilesFromFolder",
                     DataSource);
                 ReDataBind();
 
                 SelectedPanelID = fileName;
                 DataSource["File"].Value = fileName;
                 RaiseSafeEvent(
-                    "FileExplorer.FileSelectedInExplorer",
+                    "Magix.FileExplorer.FileSelected",
                     DataSource);
                 UpdateSelectedFile();
                 new EffectFadeIn(prop, 500)
@@ -566,7 +571,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             node["NewName"].Value = newName;
             node["OldName"].Value = oldName;
             RaiseSafeEvent(
-                "FileExplorer.ChangeFileName",
+                "Magix.FileExplorer.ChangeFileName",
                 node);
             node["NewName"].UnTie();
             node["OldName"].UnTie();
