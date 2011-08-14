@@ -69,8 +69,10 @@ namespace Magix.Brix.Components
             Node node = new Node();
             string fullTypeName = DataSource["FullTypeName"].Get<string>();
             node["FullTypeName"].Value = fullTypeName;
+
             if (DataSource.Contains("WhiteListColumns"))
                 node["WhiteListColumns"] = DataSource["WhiteListColumns"];
+
             RaiseSafeEvent(
                 "DBAdmin.Form.ShowAddRemoveColumns",
                 node);
@@ -143,8 +145,9 @@ namespace Magix.Brix.Components
             node["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>();
             if (DataSource.Contains("WhiteListColumns"))
                 node["WhiteListColumns"] = DataSource["WhiteListColumns"];
+
             RaiseSafeEvent(
-                "DBAdmin.Form.GetFilterForColumn",
+                "DBAdmin.Form.ConfigureFilterForColumn",
                 node);
         }
 
