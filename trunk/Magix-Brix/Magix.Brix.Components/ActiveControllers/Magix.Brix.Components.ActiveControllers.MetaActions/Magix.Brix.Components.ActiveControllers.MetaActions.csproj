@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6F72A0D1-66F2-4840-97B5-42D262F32B45}</ProjectGuid>
+    <ProjectGuid>{2A130C6E-49FC-469C-98E7-93260CEB36D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magix.Brix.Components.ActiveControllers.MetaTypes</RootNamespace>
-    <AssemblyName>Magix.Brix.Components.ActiveControllers.MetaTypes</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveControllers.MetaActions</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveControllers.MetaActions</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,7 +37,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MetaObject_Controller.cs" />
+    <Compile Include="CommonActions_Controller.cs" />
+    <Compile Include="MetaAction_Controller.cs" />
+    <Compile Include="CreateDefaultInitialActions_Controller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,10 +70,6 @@
     <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Users\Magix.Brix.Components.ActiveTypes.Users.csproj">
       <Project>{72BD8731-239E-463D-A66C-556ED55A4578}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Users</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
-      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
-      <Name>Magix.Brix.Components %28Brix\Magix.Brix.Components\Helpers\Magix.Brix.Components%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

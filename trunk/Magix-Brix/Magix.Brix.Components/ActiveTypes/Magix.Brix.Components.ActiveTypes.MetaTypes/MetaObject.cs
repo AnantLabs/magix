@@ -112,8 +112,8 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             Dictionary<string, bool> dict = new Dictionary<string, bool>();
             foreach (Value idx in Values)
             {
-                string name = idx.Name;
-                while (dict.ContainsKey(idx.Name))
+                string name = idx.Name ?? "";
+                while (dict.ContainsKey(name))
                 {
                     name += "_";
                 }

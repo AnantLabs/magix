@@ -449,47 +449,57 @@ namespace Magix.Brix.Components
             {
                 Label li = new Label();
                 li.Tag = "td";
-                LinkButton lb = new LinkButton();
-                if (DataSource.Contains("IDColumnValue"))
+                if (DataSource.Contains("IdColumnNotClickable") &&
+                    DataSource["IdColumnNotClickable"].Get<bool>())
                 {
-                    lb.Text = DataSource["IDColumnValue"].Get<string>();
+                    Label lb = new Label();
+                    lb.Text = node["ID"].Value.ToString();
+                    li.Controls.Add(lb);
                 }
                 else
                 {
-                    lb.Text = node["ID"].Value.ToString();
-                }
-                lb.Click +=
-                    delegate(object sender, EventArgs e)
+                    LinkButton lb = new LinkButton();
+                    if (DataSource.Contains("IDColumnValue"))
                     {
-                        LinkButton b = sender as LinkButton;
-                        Node n = new Node();
-                        int id = int.Parse((b.Parent.Parent as Label).Info);
-                        (b.Parent.Parent as Label).CssClass = "grid-selected";
-                        if (SelectedID != -1)
+                        lb.Text = DataSource["IDColumnValue"].Get<string>();
+                    }
+                    else
+                    {
+                        lb.Text = node["ID"].Value.ToString();
+                    }
+                    lb.Click +=
+                        delegate(object sender, EventArgs e)
                         {
-                            if (id != SelectedID)
+                            LinkButton b = sender as LinkButton;
+                            Node n = new Node();
+                            int id = int.Parse((b.Parent.Parent as Label).Info);
+                            (b.Parent.Parent as Label).CssClass = "grid-selected";
+                            if (SelectedID != -1)
                             {
-                                Label l = Selector.SelectFirst<Label>(this,
-                                    delegate(Control idxCtrl)
-                                    {
-                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                    });
-                                if (l != null)
-                                    l.CssClass = "";
+                                if (id != SelectedID)
+                                {
+                                    Label l = Selector.SelectFirst<Label>(this,
+                                        delegate(Control idxCtrl)
+                                        {
+                                            return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                        });
+                                    if (l != null)
+                                        l.CssClass = "";
+                                }
                             }
-                        }
-                        SelectedID = id;
-                        n["ID"].Value = id;
-                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                        n["DataSource"] = DataSource;
-                        RaiseSafeEvent(
-                            DataSource.Contains("IDColumnEvent") ?
-                                DataSource["IDColumnEvent"].Get<string>() :
-                                "DBAdmin.Form.ViewComplexObject",
-                            n);
-                        n["DataSource"].UnTie();
-                    };
-                li.Controls.Add(lb);
+                            SelectedID = id;
+                            n["ID"].Value = id;
+                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                            n["DataSource"] = DataSource;
+                            RaiseSafeEvent(
+                                DataSource.Contains("IDColumnEvent") ?
+                                    DataSource["IDColumnEvent"].Get<string>() :
+                                    "DBAdmin.Form.ViewComplexObject",
+                                n);
+                            n["DataSource"].UnTie();
+                        };
+                    li.Controls.Add(lb);
+                }
                 row.Controls.Add(li);
             }
             if (DataSource["IsRemove"].Get<bool>())

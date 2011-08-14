@@ -245,6 +245,10 @@
       <Project>{4FF5FFF4-4B4E-4E7E-8978-07A94C9C494B}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaActions\Magix.Brix.Components.ActiveControllers.MetaActions.csproj">
+      <Project>{2A130C6E-49FC-469C-98E7-93260CEB36D1}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.MetaActions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaType\Magix.Brix.Components.ActiveControllers.MetaTypes.csproj">
       <Project>{6F72A0D1-66F2-4840-97B5-42D262F32B45}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.MetaTypes</Name>
