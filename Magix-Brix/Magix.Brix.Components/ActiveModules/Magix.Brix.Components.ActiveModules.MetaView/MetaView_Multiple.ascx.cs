@@ -43,11 +43,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             node["Container"].Value = this.Parent.ID;
 
             RaiseSafeEvent(
-                "Magix.MetaType.RaiseViewMetaTypeFromMultipleView",
+                "Magix.MetaType.ShowMetaViewMultipleInCurrentContainer",
                 node);
         }
 
-        [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.GetTemplateColumnSelectViewMultiple")]
+        [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.MetaView_Multiple.GetTemplateColumnSelectView")]
         public string ViewName
         {
             get { return ViewState["ViewName"] as string; }

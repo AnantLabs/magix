@@ -185,7 +185,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             }
         }
 
-        [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.GetTemplateColumnSelectView")]
+        [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.MetaView_Single.GetTemplateColumnSelectView")]
         public string ViewName
         {
             get { return ViewState["ViewName"] as string; }

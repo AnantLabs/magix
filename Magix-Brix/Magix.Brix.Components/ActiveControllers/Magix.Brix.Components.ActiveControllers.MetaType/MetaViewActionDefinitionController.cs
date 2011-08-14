@@ -131,12 +131,12 @@ see debugging information ...";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.ViewMetaType")) == 0)
+                    Criteria.Eq("Name", "Magix.Meta.Actions.ViewMetaMultiView")) == 0)
                 {
                     Action a = new Action();
 
-                    a.Name = "Magix.Meta.Actions.ViewMetaType";
-                    a.EventName = "Magix.MetaType.ViewMetaType";
+                    a.Name = "Magix.Meta.Actions.ViewMetaMultiView";
+                    a.EventName = "Magix.MetaType.ViewMetaMultiView";
                     a.Description = @"Will load a grid of all Meta Objects of type already loaded
 in current activating WebPart. If you want to load a specific type, then you can override the 
 type being loaded by adding 'MetaViewTypeName' as a parameter, containing the name of the view. 

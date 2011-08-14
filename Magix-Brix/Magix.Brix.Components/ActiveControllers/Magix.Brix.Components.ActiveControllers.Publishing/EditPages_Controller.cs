@@ -378,7 +378,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 affectedPages);
             node["OK"]["ID"].Value = o.ID;
             node["OK"]["Event"].Value = "Magix.Publishing.DeletePageObject-Confirmed";
-            node["Cancel"]["Event"].Value = "Magix.Publishing.DeletePageObject-Cancel";
+            node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Width"].Value = 15;
 
             LoadModule(
@@ -432,15 +432,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 ActiveEvents.Instance.RaiseClearControls("child");
             }
-        }
-
-        /**
-         * Cancel delete operation of specific Page
-         */
-        [ActiveEvent(Name = "Magix.Publishing.DeletePageObject-Cancel")]
-        protected void Magix_Publishing_DeletePageObject_Cancel(object sender, ActiveEventArgs e)
-        {
-            ActiveEvents.Instance.RaiseClearControls("child");
         }
 
         /**
