@@ -86,6 +86,15 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
         public override void Save()
         {
+            // Making sure everything is like it should be ... ;)
+            if (Children.ListRetrieved)
+            {
+                foreach (MetaObject idx in Children)
+                {
+                    idx.ParentMetaObject = this;
+                }
+            }
+
             MetaObject idxParent = ParentMetaObject;
 
             while (idxParent != null)

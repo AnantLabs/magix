@@ -55,7 +55,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["FilterOnId"].Value = true;
             node["IDColumnName"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.MetaType.EditONEMetaObject_UnFiltered";
-            node["DeleteColumnEvent"].Value = "Magix.MetaType.DeleteObjectRaw";
+            node["DeleteColumnEvent"].Value = "Magix.MetaType.DeleteMetaObject";
 
             node["ReuseNode"].Value = true;
             node["CreateEventName"].Value = "Magix.MetaType.CreateMetaObjectAndEdit";
@@ -273,12 +273,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Created"]["Header"].Value = "When";
             node["Type"]["Properties"]["Children"]["Header"].Value = "Children";
-            node["Type"]["Properties"]["Children"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetChildrenTemplateColumn";
+            node["Type"]["Properties"]["Children"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetMetaObjectChildrenTemplateColumn";
 
             foreach (var idx in m.Values)
             {
-                node["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Value = "Magix.MetaType.GetValuesTemplateColumn";
-                node["Type"]["Properties"][idx.Name]["TemplateColumnHeaderEvent"].Value = "Magix.MetaType.GetHeaderTemplateColumn";
+                node["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Value = "Magix.MetaType.GetMetaObjectValuesTemplateColumn";
+                node["Type"]["Properties"][idx.Name]["TemplateColumnHeaderEvent"].Value = "Magix.MetaType.GetMetaObjectValuesTemplateColumn";
                 node["Type"]["Properties"][idx.Name]["ReadOnly"].Value = false;
                 node["Object"]["Properties"][idx.Name].Value = idx.Val;
             }
@@ -433,17 +433,26 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.EditObjectRaw-2")]
-        protected void Magix_MetaType_EditObjectRaw_2(object sender, ActiveEventArgs e)
+        /**
+         * Calls 'Magix.MetaType.EditONEMetaObject_UnFiltered' after changing the Container
+         * to display the module within. Allows editging of Child MetaObjects
+         */
+        [ActiveEvent(Name = "Magix.MetaType.EditONEMetaObject_UnFiltered-ChildMetaObject")]
+        protected void Magix_MetaType_EditONEMetaObject_UnFiltered_ChildMetaObject(object sender, ActiveEventArgs e)
         {
             e.Params["Container"].Value = "content6";
+
             RaiseEvent(
                 "Magix.MetaType.EditONEMetaObject_UnFiltered",
                 e.Params);
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.GetChildrenTemplateColumn")]
-        protected void Magix_Meta_GetChildrenTemplateColumn(object sender, ActiveEventArgs e)
+        /**
+         * Returns a LinkButton with no Children back to caller upon which clicked will start editing
+         * the Children collection of objects within the MetaObject
+         */
+        [ActiveEvent(Name = "Magix.MetaType.GetMetaObjectChildrenTemplateColumn")]
+        protected void Magix_MetaType_GetMetaObjectChildrenTemplateColumn(object sender, ActiveEventArgs e)
         {
             // Extracting necessary variables ...
             string name = e.Params["Name"].Get<string>();
@@ -459,40 +468,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             ls.Click +=
                 delegate
                 {
-                    Node node = new Node();
-
-                    node["Container"].Value = "content5";
-                    node["Top"].Value = 1;
-                    node["Width"].Value = 16;
-                    node["Padding"].Value = 8;
-                    node["Last"].Value = true;
-                    node["PullTop"].Value = 18;
-                    node["MarginBottom"].Value = 20;
-
-                    node["ID"].Value = id;
-                    node["PropertyName"].Value = "Children";
-                    node["IsList"].Value = true;
-                    node["FullTypeName"].Value = typeof(MetaObject).FullName;
-                    node["ReUseNode"].Value = true;
-                    node["IDColumnName"].Value = "Edit";
-                    node["IDColumnEvent"].Value = "Magix.MetaType.EditObjectRaw-2";
-                    node["AppendEventName"].Value = "DBAdmin.Form.AppendObject-OverriddenForVisualReasons";
-                    node["RemoveEvent"].Value = "Magix.Publishing.RemoveChildObject";
-
-                    node["WhiteListColumns"]["TypeName"].Value = true;
-                    node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
-                    node["WhiteListColumns"]["Reference"].Value = true;
-                    node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
-
-                    node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
-                    node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
-                    node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
-
-                    RaiseEvent(
-                        "DBAdmin.Form.ViewListOrComplexPropertyValue",
-                        node);
-
-                    ActiveEvents.Instance.RaiseClearControls("content6");
+                    ViewMetaObjectChildrenCollection(id);
                 };
 
             // Stuffing our newly created control into the return parameters, so
@@ -500,6 +476,52 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Control"].Value = ls;
         }
 
+        /*
+         * Helper for the above ...
+         */
+        private void ViewMetaObjectChildrenCollection(int id)
+        {
+            Node node = new Node();
+
+            node["Container"].Value = "content5";
+            node["Top"].Value = 1;
+            node["Width"].Value = 16;
+            node["Padding"].Value = 8;
+            node["Last"].Value = true;
+            node["PullTop"].Value = 18;
+            node["MarginBottom"].Value = 20;
+
+            node["ID"].Value = id;
+            node["PropertyName"].Value = "Children";
+            node["IsList"].Value = true;
+            node["FullTypeName"].Value = typeof(MetaObject).FullName;
+            node["ReUseNode"].Value = true;
+            node["IDColumnName"].Value = "Edit";
+            node["IDColumnEvent"].Value = "Magix.MetaType.EditONEMetaObject_UnFiltered-ChildMetaObject";
+            node["AppendEventName"].Value = "DBAdmin.Form.AppendObject-OverriddenForVisualReasons";
+            node["RemoveEvent"].Value = "Magix.Publishing.RemoveChildObjectAndEdit";
+
+            node["WhiteListColumns"]["TypeName"].Value = true;
+            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
+            node["WhiteListColumns"]["Reference"].Value = true;
+            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
+
+            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
+            node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewListOrComplexPropertyValue",
+                node);
+
+            ActiveEvents.Instance.RaiseClearControls("content6");
+        }
+
+        /**
+         * Will remove the Child MetaObject ['ID'] from the Parent MetaObject ['ParentID']
+         * collection of children. Notice the child object will NOT be deleted, only
+         * 'unreferenced out of' the parent MetaObject
+         */
         [ActiveEvent(Name = "Magix.Publishing.RemoveChildObject")]
         protected void Magix_Publishing_RemoveChildObject(object sender, ActiveEventArgs e)
         {
@@ -510,23 +532,45 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 parent.Children.Remove(child);
 
+                child.ParentMetaObject = null;
+
                 parent.Save();
 
                 tr.Commit();
-
-                Node node = new Node();
-                node["ID"].Value = parent.ID;
-
-                // Easy out ...
-                RaiseEvent(
-                    "Magix.MetaType.EditONEMetaObject_UnFiltered",
-                    node);
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.GetValuesTemplateColumn")]
-        protected void Magix_Meta_GetValuesTemplateColumn(object sender, ActiveEventArgs e)
+        /**
+         * Will remove the Child MetaObject ['ID'] from the Parent MetaObject ['ParentID']
+         * collection of children. Notice the child object will NOT be deleted, only
+         * 'unreferenced out of' the parent MetaObject. Will instantly edit the Parent
+         * MetaObject.
+         */
+        [ActiveEvent(Name = "Magix.Publishing.RemoveChildObjectAndEdit")]
+        protected void Magix_Publishing_RemoveChildObjectAndEdit(object sender, ActiveEventArgs e)
         {
+            RaiseEvent(
+                "Magix.Publishing.RemoveChildObject",
+                e.Params);
+
+            Node node = new Node();
+            node["ID"].Value = e.Params["ParentID"].Value;
+
+            // Easy out ...
+            RaiseEvent(
+                "Magix.MetaType.EditONEMetaObject_UnFiltered",
+                node);
+        }
+
+        /**
+         * Will return a TextAreaEdit, from which the Value of the Value object belonging to
+         * the MetaObject can be edited, and a LinkButton, from which the entire object can
+         * be deleted, back to caller
+         */
+        [ActiveEvent(Name = "Magix.MetaType.GetMetaObjectValuesTemplateColumn")]
+        protected void Magix_MetaType_GetMetaObjectValuesTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // TODO: Break up ....
             // Extracting necessary variables ...
             string name = e.Params["Name"].Get<string>();
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
@@ -600,8 +644,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Control"].Value = p;
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.GetHeaderTemplateColumn")]
-        protected void Magix_Meta_GetHeaderTemplateColumn(object sender, ActiveEventArgs e)
+        /**
+         * Will return an InPlaceEdit back to caller, since having Carriage Returns in
+         * a Property Name would only serve to be ridiculous
+         */
+        [ActiveEvent(Name = "Magix.MetaType.GetMetaObjectValuesNAMETemplateColumn")]
+        protected void Magix_MetaType_GetMetaObjectValuesNAMETemplateColumn(object sender, ActiveEventArgs e)
         {
             // Extracting necessary variables ...
             string name = e.Params["Name"].Get<string>();
@@ -653,8 +701,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Control"].Value = ls;
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.DeleteObjectRaw")]
-        protected void Magix_MetaType_DeleteObjectRaw(object sender, ActiveEventArgs e)
+        /**
+         * Will ask the user for confirmation to assure he really wants to delete the specific
+         * MetaObject ['ID'], and if the user confirms will delete that object
+         */
+        [ActiveEvent(Name = "Magix.MetaType.DeleteMetaObject")]
+        protected void Magix_MetaType_DeleteMetaObject(object sender, ActiveEventArgs e)
         {
             int id = e.Params["ID"].Get<int>();
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
@@ -688,6 +740,10 @@ have relationships towards other instances in your database.</p>";
                 node);
         }
 
+        /**
+         * Implementation of deletion of MetaObject after user has confirmed he really 
+         * wants to delete it
+         */
         [ActiveEvent(Name = "Magix.MetaType.DeleteObjectRaw-Confirmed")]
         protected void Magix_MetaType_DeleteObjectRaw_Confirmed(object sender, ActiveEventArgs e)
         {
@@ -710,6 +766,10 @@ have relationships towards other instances in your database.</p>";
             }
         }
 
+        /**
+         * Here only to make sure Grids are updated if we're adding a child MetaObject 
+         * to another MetaObject
+         */
         [ActiveEvent(Name = "DBAdmin.Common.CreateObjectAsChild")]
         protected void DBAdmin_Common_CreateObjectAsChild(object sender, ActiveEventArgs e)
         {
@@ -724,6 +784,9 @@ have relationships towards other instances in your database.</p>";
             }
         }
 
+        /**
+         * Clears from content4 and out
+         */
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
         protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
         {
@@ -733,6 +796,10 @@ have relationships towards other instances in your database.</p>";
             }
         }
 
+        /**
+         * Returns the number of MetaObjects in the system back to caller and the 
+         * name of the Event needed to show all MetaObjects in the system
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
         protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
         {
@@ -743,17 +810,23 @@ have relationships towards other instances in your database.</p>";
             e.Params["Object"]["Properties"]["MetaTypesCount"].Value = MetaObject.Count.ToString();
         }
 
+        /**
+         * Will either update the existing Value or create a new Value with the given 'Name'
+         * and make sure exists within the MetaObject ['MetaObjectID']
+         */
         [ActiveEvent(Name = "Magix.MetaType.SetMetaObjectValue")]
         protected void Magix_MetaType_SetMetaObjectValue(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+
                 MetaObject.Value val = o.Values.Find(
                     delegate(MetaObject.Value idx)
                     {
                         return idx.Name == e.Params["Name"].Get<string>();
                     });
+
                 if (val == null)
                 {
                     val = new MetaObject.Value();
