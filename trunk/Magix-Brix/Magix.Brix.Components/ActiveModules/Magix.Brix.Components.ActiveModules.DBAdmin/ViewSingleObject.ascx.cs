@@ -251,10 +251,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             c1.CssClass += "wide-" +
                                 DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
                         }
-                        else
-                        {
-                            int g = 0;
-                        }
                         bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
                             DataSource["Type"]["Properties"][node.Name]["Bold"].Get<bool>();
                         if (bold)

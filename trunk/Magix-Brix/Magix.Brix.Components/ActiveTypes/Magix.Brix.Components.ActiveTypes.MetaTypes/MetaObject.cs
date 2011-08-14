@@ -51,8 +51,8 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
                         });
                     if(other != null)
                     {
-                        // Last added must 'yield' ...
-                        other.Name += "_";
+                        // 'This' added must 'yield' ...
+                        Name += "_";
                         found = true;
                     }
                 }
@@ -98,26 +98,19 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             if (ID == 0)
                 Created = DateTime.Now;
 
+            // In case of 'caching issues' ...
+            // Plus to assure uniqueness of Names of properties ...
+            Dictionary<string, bool> dict = new Dictionary<string, bool>();
             foreach (Value idx in Values)
             {
-                idx.ParentMetaObject = this;
-            }
-
-            if (Children.ListRetrieved)
-            {
-                // Making sure no children are not twice. And also
-                // that this is not added into Children ...
-                Dictionary<int, bool> others = new Dictionary<int, bool>();
-                others[ID] = true;
-                foreach (MetaObject idx in Children)
+                string name = idx.Name;
+                while (dict.ContainsKey(idx.Name))
                 {
-                    if (others.ContainsKey(idx.ID) && 
-                        idx.ID != 0)
-                    {
-                        throw new ArgumentException("You can't have a child be added twice. Nor can you add an object to itself as its own child ...");
-                    }
-                    others[idx.ID] = true;
+                    name += "_";
                 }
+                dict[name] = true;
+                idx.ParentMetaObject = this;
+                idx.Name = name;
             }
 
             // Making sure the reference at the very least says; Anonymous Coward ...
