@@ -60,7 +60,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["ReuseNode"].Value = true;
             node["CreateEventName"].Value = "Magix.MetaType.CreateMetaObjectAndEdit";
 
-            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
             node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
@@ -263,7 +263,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
 
             node["WhiteListProperties"]["Name"].Value = true;
-            node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 3;
+            node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 4;
             node["WhiteListProperties"]["Value"].Value = true;
             node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
 
@@ -277,8 +277,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             foreach (var idx in m.Values)
             {
+                node["Type"]["Properties"][idx.Name]["TemplateColumnHeaderEvent"].Value = "Magix.MetaType.GetMetaObjectValuesNAMETemplateColumn";
                 node["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Value = "Magix.MetaType.GetMetaObjectValuesTemplateColumn";
-                node["Type"]["Properties"][idx.Name]["TemplateColumnHeaderEvent"].Value = "Magix.MetaType.GetMetaObjectValuesTemplateColumn";
                 node["Type"]["Properties"][idx.Name]["ReadOnly"].Value = false;
                 node["Object"]["Properties"][idx.Name].Value = idx.Val;
             }
@@ -378,11 +378,18 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["PullTop"].Value = 18;
             e.Params["Last"].Value = true;
             e.Params["SelectEvent"].Value = "Magix.MetaType.AppendChildMetaObjectToMetaObjectAndEditParent";
+            e.Params["IdColumnNotClickable"].Value = true;
+            e.Params["IsFilter"].Value = false;
+            e.Params["IsDelete"].Value = false;
 
             e.Params["WhiteListColumns"]["TypeName"].Value = true;
             e.Params["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 4;
             e.Params["WhiteListColumns"]["Reference"].Value = true;
             e.Params["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
+
+            e.Params["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = true;
+            e.Params["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
+            e.Params["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
 
             RaiseEvent(
                 "DBAdmin.Form.AppendObject",
@@ -506,7 +513,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListColumns"]["Reference"].Value = true;
             node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
 
-            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
             node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
 
@@ -838,6 +845,185 @@ have relationships towards other instances in your database.</p>";
                 val.Val = e.Params["Value"].Get<string>();
 
                 val.Save();
+
+                tr.Commit();
+            }
+        }
+
+        /**
+         * Handled to make sure we can traverse our MetaObjects in META mode [front-web, showing grids and views 
+         * of Meta Objects]
+         */
+        [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
+        protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
+            {
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+                    MetaObject.Value v = t.Values.Find(
+                        delegate(MetaObject.Value idx)
+                        {
+                            return idx.Name == e.Params["PropertyName"].Get<string>();
+                        });
+                    if (v == null)
+                    {
+                        v = new MetaObject.Value();
+                        v.Name = e.Params["PropertyName"].Get<string>();
+                        v.Val = e.Params["NewValue"].Get<string>();
+                        t.Values.Add(v);
+                        t.Save();
+                    }
+                    else
+                    {
+                        v.Val = e.Params["NewValue"].Get<string>();
+                        v.Save();
+                    }
+
+                    tr.Commit();
+                }
+            }
+        }
+
+        /**
+         * Handled to make sure "META mode" MetaObjects can be seen 'front-web'
+         */
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObject")]
+        protected void DBAdmin_DynamicType_GetObject(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() != typeof(MetaObject).FullName + "-META")
+                return;
+
+            MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+            e.Params["Object"]["ID"].Value = t.ID;
+
+            foreach (MetaObject.Value idx in t.Values)
+            {
+                e.Params["Object"]["Properties"][idx.Name].Value = idx.Val;
+            }
+        }
+
+        /**
+         * Handled to make sure "META mode" MetaObjects can be edited 'front-web'
+         */
+        [ActiveEvent(Name = "Magix.Meta.EditMetaObject")]
+        protected void Magix_Meta_EditMetaObject(object sender, ActiveEventArgs e)
+        {
+            MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+            string container = e.Params["Parameters"]["Container"].Get<string>();
+
+            Node node = new Node();
+
+            node["Container"].Value = container;
+            node["FreezeContainer"].Value = true;
+            node["FullTypeName"].Value = typeof(MetaObject) + "-META";
+            node["ReuseNode"].Value = true;
+            node["ID"].Value = t.ID;
+            node["MetaViewName"].Value = e.Params["Parameters"]["MetaViewName"].Get<string>();
+            node["PageObjectTemplateID"].Value = e.Params["Parameters"]["PageObjectTemplateID"].Value;
+
+            node["WhiteListProperties"]["Name"].Value = true;
+            node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 3;
+            node["WhiteListProperties"]["Value"].Value = true;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 5;
+            node["ChangeSimplePropertyValue"].Value = "Magix.Meta.ChangeMetaObjectValue";
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewComplexObject",
+                node);
+        }
+
+        /**
+         * Handled to make sure "META mode" MetaObjects can be deleted 'front-web'
+         */
+        [ActiveEvent(Name = "Magix.Meta.DeleteMetaObject")]
+        protected void Magix_Meta_DeleteMetaObject(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            string typeName = fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1);
+            Node node = e.Params;
+            if (node == null)
+            {
+                node = new Node();
+                node["ForcedSize"]["width"].Value = 550;
+                node["WindowCssClass"].Value =
+                    "mux-shaded mux-rounded push-5 down-2";
+            }
+            node["Caption"].Value = @"Please confirm!";
+            node["Text"].Value = @"I hope you know what you're doing when deleting this object,
+many things can go wrong if it's in use in other places, such as being used as a template 
+for your views and such. Please confirm that you really know what you're doing, and that 
+you'd still like to have this object deleted ...";
+            node["OK"]["ID"].Value = id;
+            node["OK"]["FullTypeName"].Value = fullTypeName;
+            node["OK"]["Event"].Value = "Magix.Meta.DeleteMetaObject-Confirmed";
+            node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
+            node["Cancel"]["FullTypeName"].Value = fullTypeName;
+            node["Width"].Value = 15;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        /**
+         * Handled to make sure "META mode" MetaObjects can be seen 'front-web'. Confirmation, actual
+         * deletion
+         */
+        [ActiveEvent(Name = "Magix.Meta.DeleteMetaObject-Confirmed")]
+        protected void Magix_Meta_DeleteMetaObject_Confirmed(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+                t.Delete();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    node);
+
+                ActiveEvents.Instance.RaiseClearControls("child"); // Assuming message box still visible ...
+            }
+        }
+
+        /**
+         * Handled to make sure "META mode" MetaObjects can have their values changed 'front-web'
+         */
+        [ActiveEvent(Name = "Magix.Meta.ChangeMetaObjectValue")]
+        protected void Magix_Meta_ChangeMetaObjectValue(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+                MetaObject.Value val = t.Values.Find(
+                    delegate(MetaObject.Value idx)
+                    {
+                        return idx.Name == e.Params["PropertyName"].Get<string>();
+                    });
+                if (val == null)
+                {
+                    val = new MetaObject.Value();
+                    val.Name = e.Params["PropertyName"].Get<string>();
+                    val.Val = e.Params["NewValue"].Get<string>();
+                    t.Values.Add(val);
+                    t.Save();
+                }
+                else
+                {
+                    val.Val = e.Params["NewValue"].Get<string>();
+                    val.Save();
+                }
 
                 tr.Commit();
             }

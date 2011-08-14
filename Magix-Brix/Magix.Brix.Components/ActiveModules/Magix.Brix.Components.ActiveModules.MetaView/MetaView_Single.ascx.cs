@@ -98,7 +98,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                         node["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;
 
                         RaiseSafeEvent(
-                            "Magix.Meta.RaiseEvent",
+                            "Magix.MetaAction.RaiseAction",
                             node);
                     }
                 };

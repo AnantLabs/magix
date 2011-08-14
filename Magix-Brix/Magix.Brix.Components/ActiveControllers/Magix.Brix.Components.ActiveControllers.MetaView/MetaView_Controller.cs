@@ -39,6 +39,75 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
+         * Will show the given MetaView ['MetaViewName'] in MultiView mode. As in, the end user will
+         * see a Grid of all MetaObjects of the TypeName of the MetaView
+         */
+        [ActiveEvent(Name = "Magix.MetaType.ViewMetaViewMultiMode")]
+        protected void Magix_MetaType_ViewMetaViewMultiMode(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            // To help our Publishing Module to refresh ...
+            // TODO: Refactor ...
+            node["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Get<int>();
+
+            if (e.Params.Contains("NoIdColumn"))
+                node["NoIdColumn"].Value = e.Params["NoIdColumn"].Value;
+
+            if (e.Params.Contains("IsDelete"))
+                node["IsDelete"].Value = e.Params["IsDelete"].Value;
+
+            if (e.Params.Contains("IsInlineEdit"))
+                node["IsInlineEdit"].Value = e.Params["IsInlineEdit"].Value;
+
+            if (e.Params.Contains("Container"))
+                node["Container"].Value = e.Params["Container"].Value;
+
+            node["FreezeContainer"].Value = true;
+            node["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
+
+            if (e.Params.Contains("WhiteListColumns"))
+            {
+                node["WhiteListColumns"] = e.Params["WhiteListColumns"];
+            }
+
+            if (e.Params.Contains("Type"))
+            {
+                node["Type"] = e.Params["Type"];
+            }
+
+            if (!node.Contains("Container"))
+            {
+                Node xx = new Node();
+
+                xx["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Get<int>();
+
+                RaiseEvent(
+                    "Magix.Meta.GetContainerIDOfApplicationWebPart",
+                    xx);
+                node["Container"].Value = xx["ID"].Get<string>();
+            }
+
+            node["FilterOnId"].Value = false;
+            node["IDColumnName"].Value = "Edit";
+            node["IDColumnValue"].Value = "Edit";
+            node["IDColumnEvent"].Value = "Magix.Meta.EditMetaObject";
+            node["DeleteColumnEvent"].Value = "Magix.Meta.DeleteMetaObject";
+            node["ChangeSimplePropertyValue"].Value = "Magix.Meta.ChangeMetaObjectValue";
+
+            node["IsCreate"].Value = false;
+
+            node["ReuseNode"].Value = true;
+            if (e.Params.Contains("MetaViewName"))
+                node["MetaViewName"].Value = e.Params["MetaViewName"].Value;
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        /**
          * Will show a Grid with all the MetaViews to the end user
          */
         [ActiveEvent(Name = "Magix.MetaView.ViewMetaViews")]
@@ -641,7 +710,7 @@ Deleting it may break these parts.</p>";
             e.Params["MetaViewName"].Value = view.Name;
 
             RaiseEvent(
-                "Magix.MetaType.ViewMetaMultiView",
+                "Magix.MetaType.ViewMetaViewMultiMode",
                 e.Params);
         }
 
@@ -865,7 +934,7 @@ Deleting it may break these parts.</p>";
                 node["PageObjectTemplateID"].Value = pageObj;
 
                 RaiseEvent(
-                    "Magix.Meta.RaiseEvent",
+                    "Magix.MetaAction.RaiseAction",
                     node);
             }
         }
@@ -1237,6 +1306,41 @@ Deleting it may break these parts.</p>";
             e.Params["Type"]["Properties"]["MetaViewCount"]["Header"].Value = "Views";
             e.Params["Type"]["Properties"]["MetaViewCount"]["ClickLabelEvent"].Value = "Magix.MetaView.ViewMetaViews";
             e.Params["Object"]["Properties"]["MetaViewCount"].Value = MetaView.Count.ToString();
+        }
+
+        /**
+         * Will create a new MetaObject according to the values given from the MetaView_SingleView form.
+         * 'PropertyValues' is expected to contain a Name/Value list-pair, and the ViewName is
+         * supposed to be the unique name to the specific MetaView being used.
+         */
+        [ActiveEvent(Name = "Magix.MetaView.CreateSingleViewMetaObject")]
+        protected void Magix_MetaView_CreateSingleViewMetaObject(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaView view = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
+                MetaObject t = new MetaObject();
+
+                t.TypeName = view.TypeName;
+                t.Reference =
+                    e.Params["MetaViewName"].Get<string>() +
+                    "|" +
+                    e.Params["ActionSenderName"].Get<string>();
+                t.Created = DateTime.Now;
+
+                foreach (Node idx in e.Params["PropertyValues"])
+                {
+                    MetaObject.Value v = new MetaObject.Value();
+                    v.Name = idx["Name"].Get<string>();
+                    v.Val = idx["Value"].Get<string>();
+                    t.Values.Add(v);
+                }
+
+                t.Save();
+
+                tr.Commit();
+            }
         }
     }
 }

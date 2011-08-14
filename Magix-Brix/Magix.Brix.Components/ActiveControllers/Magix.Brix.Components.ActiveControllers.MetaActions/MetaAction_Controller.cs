@@ -14,9 +14,19 @@ using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
+    /**
+     * Contains logic for Actions which are wrappers around ActiveEvents for the end user
+     * to be able to raise his own events, with his own data in the Node structure. The 
+     * MetaAction system is at the core of the Meta Application system wince without it
+     * the end user cannot create his own types of events or Actions
+     */
     [ActiveController]
-    public class MetaActionController : ActiveController
+    public class MetaAction_Controller : ActiveController
     {
+        /**
+         * Will return the menu items needed to fire up 'View Meta Actions' forms 
+         * for Administrator
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
@@ -26,45 +36,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Items"]["MetaType"]["Items"]["Actions"]["Event"]["Name"].Value = "Magix.MetaType.ViewActions";
         }
 
-        [ActiveEvent(Name = "Magix.Meta.FindAction")]
-        protected void Magix_Meta_FindAction(object sender, ActiveEventArgs e)
-        {
-            Node node = new Node();
-
-            node["FullTypeName"].Value = typeof(Action).FullName;
-            node["Container"].Value = "content5";
-            node["Width"].Value = 21;
-            node["Last"].Value = true;
-            node["Padding"].Value = 3;
-            node["MarginBottom"].Value = 10;
-            node["PullTop"].Value = 8;
-            node["IsDelete"].Value = false;
-
-            node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
-            node["WhiteListColumns"]["EventName"].Value = true;
-            node["WhiteListColumns"]["EventName"]["ForcedWidth"].Value = 5;
-            node["WhiteListColumns"]["Description"].Value = true;
-            node["WhiteListColumns"]["Description"]["ForcedWidth"].Value = 8;
-
-            node["FilterOnId"].Value = false;
-            node["IDColumnName"].Value = "Select";
-            node["IDColumnValue"].Value = "Select";
-            node["IDColumnEvent"].Value = "Magix.Meta.SelectAction";
-            node["CreateEventName"].Value = "Magix.Meta.CreateAction";
-            node["MetaTypeID"].Value = e.Params["ID"].Get<int>();
-
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["EventName"]["Header"].Value = "Action";
-            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
-
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "DBAdmin.Form.ViewClass",
-                node);
-        }
-
+        /**
+         * Will show a Grid containing all Meta Actions within the system
+         */
         [ActiveEvent(Name = "Magix.MetaType.ViewActions")]
         protected void Magix_MetaType_ViewActions(object sender, ActiveEventArgs e)
         {
@@ -85,8 +59,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
+            node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.Meta.EditAction";
-            node["CreateEventName"].Value = "Magix.Meta.CreateAction";
+            node["CreateEventName"].Value = "Magix.Meta.CreateActionAndEdit";
             node["DeleteColumnEvent"].Value = "Magix.MetaAction.DeleteMetaAction";
 
 
@@ -94,13 +69,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
-            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyActionTemplateColumn";
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetCopyActionTemplateColumn";
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
@@ -108,6 +83,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
+        /**
+         * Will show a 'search for Action and select' type of Grid to the end user so that
+         * he can select and append an action into whatever collection wants to contain one
+         */
         [ActiveEvent(Name = "Magix.MetaActions.SearchActions")]
         protected void Magix_MetaActions_SearchActions(object sender, ActiveEventArgs e)
         {
@@ -143,8 +122,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["Name"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
@@ -155,6 +135,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
+        /**
+         * Raise 'ParentPropertyName', first setting the ActionName to the Action found in 'ID'.
+         * Helper method for editing Actions in Views
+         */
         [ActiveEvent(Name = "Magix.MetaAction.ActionWasSelected")]
         protected void Magix_MetaAction_ActionWasSelected(object sender, ActiveEventArgs e)
         {
@@ -166,9 +150,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 e.Params);
         }
 
-        [ActiveEvent(Name = "Magix.MetaAction.GetContentsEventName")]
-        protected void Magix_MetaAction_GetContentsEventName(object sender, ActiveEventArgs e)
+        /**
+         * Basically just overrides 'DBAdmin.Data.GetContentsOfClass' to allow
+         * for adding some custom Criterias for our Search Box. Puts 'Filter'
+         * into a Like expression on the Name column before calling 'base class'
+         */
+        [ActiveEvent(Name = "DBAdmin.Data.GetContentsOfClass-Filter-Override")]
+        protected void DBAdmin_Data_GetContentsOfClass_Filter_Override(object sender, ActiveEventArgs e)
         {
+            // First in Header ...
             if (e.Params.Contains("Filter"))
             {
                 e.Params["Criteria"]["C3"]["Name"].Value = "Like";
@@ -178,13 +168,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             else if (e.Params.Contains("Criteria") &&
                 e.Params["Criteria"].Contains("C3"))
                 e.Params["Criteria"]["C3"].UnTie();
+
             RaiseEvent(
                 "DBAdmin.Data.GetContentsOfClass",
                 e.Params);
         }
 
-        [ActiveEvent(Name = "Magix.Meta.GetCopyActionTemplateColumn")]
-        protected void Magix_Meta_GetCopyActionTemplateColumn(object sender, ActiveEventArgs e)
+        /**
+         * Returns a LinkButton that will allow for Deep-Copying the selected Action
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.GetCopyActionTemplateColumn")]
+        protected void Magix_MetaAction_GetCopyActionTemplateColumn(object sender, ActiveEventArgs e)
         {
             // Extracting necessary variables ...
             string name = e.Params["Name"].Get<string>();
@@ -201,7 +195,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     Node node = new Node();
                     node["ID"].Value = id;
                     RaiseEvent(
-                        "Magix.Meta.CopyAction",
+                        "Magix.MetaAction.CopyActionAndEdit",
                         node);
                 };
 
@@ -210,8 +204,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Control"].Value = ls;
         }
 
-        [ActiveEvent(Name = "Magix.Meta.CopyAction")]
-        protected void Magix_Meta_CopyAction(object sender, ActiveEventArgs e)
+        /**
+         * Performs a Deep-Copy of the Action and returns the ID of the new Action as 'NewID'
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.CopyAction")]
+        protected void Magix_MetaAction_CopyAction(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
@@ -222,31 +219,49 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 tr.Commit();
 
-                Node n = new Node();
-
-                n["FullTypeName"].Value = typeof(Action).FullName;
-                n["ID"].Value = clone.ID;
-
-                RaiseEvent(
-                    "DBAdmin.Grid.SetActiveRow",
-                    n);
-
-                n = new Node();
-                n["FullTypeName"].Value = typeof(Action).FullName;
-
-                RaiseEvent(
-                    "Magix.Core.UpdateGrids",
-                    n);
-
-                n = new Node();
-                n["ID"].Value = clone.ID;
-
-                RaiseEvent(
-                    "Magix.Meta.EditAction",
-                    n);
+                e.Params["NewID"].Value = clone.ID;
             }
         }
 
+        /**
+         * Performs a Deep-Copy of the Action and start editing the Action immediately
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.CopyActionAndEdit")]
+        protected void Magix_MetaAction_CopyActionAndEdit(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "Magix.MetaAction.CopyAction",
+                e.Params);
+
+            object cloneID = e.Params["NewID"].Value;
+
+            Node n = new Node();
+
+            n["FullTypeName"].Value = typeof(Action).FullName;
+            n["ID"].Value = cloneID;
+
+            RaiseEvent(
+                "DBAdmin.Grid.SetActiveRow",
+                n);
+
+            n = new Node();
+            n["FullTypeName"].Value = typeof(Action).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                n);
+
+            n = new Node();
+            n["ID"].Value = cloneID;
+
+            RaiseEvent(
+                "Magix.Meta.EditAction",
+                n);
+        }
+
+        /**
+         * Creates a new Default Action and returns the ID of the new Action as 'NewID'
+         */
         [ActiveEvent(Name = "Magix.Meta.CreateAction")]
         protected void Magix_Meta_CreateAction(object sender, ActiveEventArgs e)
         {
@@ -258,25 +273,42 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 tr.Commit();
 
-                Node node = new Node();
-
-                node["Start"].Value = 0;
-                node["End"].Value = 10;
-                node["FullTypeName"].Value = typeof(Action).FullName;
-
-                RaiseEvent(
-                    "Magix.Core.SetGridPageStart",
-                    node);
-
-                Node n = new Node();
-                n["ID"].Value = a.ID;
-
-                RaiseEvent(
-                    "Magix.Meta.EditAction",
-                    n);
+                e.Params["NewID"].Value = a.ID;
             }
         }
 
+        /**
+         * Creates a new Default Action and starts editing it immediately
+         */
+        [ActiveEvent(Name = "Magix.Meta.CreateActionAndEdit")]
+        protected void Magix_Meta_CreateActionAndEdit(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "Magix.Meta.CreateAction",
+                e.Params);
+
+            Node node = new Node();
+
+            node["Start"].Value = 0;
+            node["End"].Value = 10;
+            node["FullTypeName"].Value = typeof(Action).FullName;
+
+            RaiseEvent(
+                "Magix.Core.SetGridPageStart",
+                node);
+
+            Node n = new Node();
+            n["ID"].Value = e.Params["NewID"].Value;
+
+            RaiseEvent(
+                "Magix.Meta.EditAction",
+                n);
+        }
+
+        /**
+         * Edits the given Action ['ID'], with all its properties, parameters and so on. Also
+         * creates a 'Run' button which the end user can click to run the action
+         */
         [ActiveEvent(Name = "Magix.Meta.EditAction")]
         protected void Magix_Meta_EditAction(object sender, ActiveEventArgs e)
         {
@@ -298,6 +330,70 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             ActiveEvents.Instance.RaiseClearControls("content6");
         }
 
+        /*
+         * Helper for above ...
+         */
+        private void EditActionItemParams(Action a, Node e)
+        {
+            Node node = new Node();
+
+            node["CssClass"].Value = "clear-left";
+            node["Width"].Value = 6;
+            node["MarginBottom"].Value = 10;
+            node["Top"].Value = 1;
+            node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
+            node["ActionItemID"].Value = a.ID;
+            node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParam";
+            node["GetItemsEvent"].Value = "Magix.MetaAction.GetActionItemTree";
+            node["NoClose"].Value = true;
+
+            RaiseEvent(
+                "Magix.MetaAction.GetActionItemTree",
+                node);
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Tree",
+                "content4",
+                node);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void EditActionItem(Action a, Node node)
+        {
+            // First filtering OUT columns ...!
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["EventName"].Value = true;
+            node["WhiteListColumns"]["StripInput"].Value = true;
+            node["WhiteListColumns"]["Description"].Value = true;
+
+            node["WhiteListProperties"]["Name"].Value = true;
+            node["WhiteListProperties"]["Value"].Value = true;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
+
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["EventName"]["Header"].Value = "Event Name";
+            node["Type"]["Properties"]["EventName"]["Bold"].Value = true;
+            node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["StripInput"]["Header"].Value = "Strip Input Node";
+            node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.DataPlugins.GetTemplateColumns.CheckBox";
+            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
+
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["Container"].Value = "content5";
+            node["MarginBottom"].Value = 20;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewComplexObject",
+                node);
+        }
+
+        /*
+         * Helper for above ...
+         */
         private void CreateRunParamButton(Action a)
         {
             Node node = new Node();
@@ -305,7 +401,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Text"].Value = "Run!";
             node["ButtonCssClass"].Value = "span-4";
             node["Append"].Value = true;
-            node["Event"].Value = "Magix.Meta.RaiseEvent";
+            node["Event"].Value = "Magix.MetaAction.RaiseAction";
             node["Event"]["ActionID"].Value = a.ID;
 
             LoadModule(
@@ -314,6 +410,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
+        /*
+         * Helper for above ...
+         */
         private void CreateCreateParamButton(Action a)
         {
             Node node = new Node();
@@ -330,6 +429,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
+        /*
+         * Helper for above ...
+         */
         private void CreateDeleteParamButton(Action a)
         {
             Node node = new Node();
@@ -348,6 +450,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
+        /**
+         * Deletes the Action.ActionParams given ['ID'] and updates a lot of UI properties.
+         * Raises 'Magix.Core.GetSelectedTreeItem' to get the ID of which ActionParams to
+         * actually delete
+         */
         [ActiveEvent(Name = "Magix.Meta.DeleteParameter")]
         protected void Magix_Meta_DeleteParameter(object sender, ActiveEventArgs e)
         {
@@ -370,6 +477,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             Node node = new Node();
             node["Seed"].Value = "delete-button";
             node["Enabled"].Value = false;
+
             RaiseEvent(
                 "Magix.Core.EnabledClickable",
                 node);
@@ -385,6 +493,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 n);
         }
 
+        /**
+         * Creates a new Parameter and attaches to either the Selected Parameter, or if
+         * none selected, the Action directly on root level. Depends upon the 
+         * 'Magix.Core.GetSelectedTreeItem' event to get to know whether or not
+         * it should add the action to a specific ActionParam as a Child or directly
+         * upon the root level of the Action given through 'ID'
+         */
         [ActiveEvent(Name = "Magix.Meta.CreateParameter")]
         protected void Magix_Meta_CreateParameter(object sender, ActiveEventArgs e)
         {
@@ -433,112 +548,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
         }
 
-        private void EditActionItem(Action a, Node node)
-        {
-            // First filtering OUT columns ...!
-            node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["EventName"].Value = true;
-            node["WhiteListColumns"]["StripInput"].Value = true;
-            node["WhiteListColumns"]["Description"].Value = true;
-
-            node["WhiteListProperties"]["Name"].Value = true;
-            node["WhiteListProperties"]["Value"].Value = true;
-            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
-
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["EventName"]["Header"].Value = "Event Name";
-            node["Type"]["Properties"]["EventName"]["Bold"].Value = true;
-            node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["StripInput"]["Header"].Value = "Strip Input Node";
-            node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetStripInputTemplateColumn";
-            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
-
-            node["Width"].Value = 18;
-            node["Last"].Value = true;
-            node["Container"].Value = "content5";
-            node["MarginBottom"].Value = 20;
-
-            RaiseEvent(
-                "DBAdmin.Form.ViewComplexObject",
-                node);
-        }
-
-        private void EditActionItemParams(Action a, Node e)
-        {
-            Node node = new Node();
-
-            node["CssClass"].Value = "clear-left";
-            node["Width"].Value = 6;
-            node["MarginBottom"].Value = 10;
-            node["Top"].Value = 1;
-            node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
-            node["ActionItemID"].Value = a.ID;
-            node["ItemSelectedEvent"].Value = "Magix.Meta.EditParam";
-            node["GetItemsEvent"].Value = "Magix.Meta.GetActionItemTree";
-            node["NoClose"].Value = true;
-
-            RaiseEvent(
-                "Magix.Meta.GetActionItemTree",
-                node);
-
-            LoadModule(
-                "Magix.Brix.Components.ActiveModules.CommonModules.Tree",
-                "content4",
-                node);
-        }
-
-        [ActiveEvent(Name = "Magix.MetaAction.GetStripInputTemplateColumn")]
-        protected void Magix_MetaAction_GetStripInputTemplateColumn(object sender, ActiveEventArgs e)
-        {
-            // Extracting necessary variables ...
-            string name = e.Params["Name"].Get<string>();
-            string fullTypeName = e.Params["FullTypeName"].Get<string>();
-            int id = e.Params["ID"].Get<int>();
-            bool value = bool.Parse(e.Params["Value"].Get<string>());
-
-            // Fetching specific user
-            Action a = Action.SelectByID(id);
-
-            Panel p = new Panel();
-
-            // Creating our SelectList
-            CheckBox ch = new CheckBox();
-            ch.Checked = a.StripInput;
-            ch.Style[Styles.floating] = "left";
-            ch.CheckedChanged +=
-                delegate
-                {
-                    using (Transaction tr = Adapter.Instance.BeginTransaction())
-                    {
-                        Action a2 = Action.SelectByID(id);
-                        a2.StripInput = ch.Checked;
-                        a2.Save();
-
-                        tr.Commit();
-                    }
-                };
-
-            p.Controls.Add(ch);
-
-            Label lbl = new Label();
-            lbl.Text = "&nbsp;";
-            lbl.Style[Styles.display] = "block";
-            lbl.Style[Styles.floating] = "left";
-            lbl.Style[Styles.width] = "375px";
-            lbl.Tag = "label";
-            lbl.Load +=
-                delegate
-                {
-                    lbl.For = ch.ClientID;
-                };
-            p.Controls.Add(lbl);
-
-            // Stuffing our newly created control into the return parameters, so
-            // our Grid control can put it where it feels for it ... :)
-            e.Params["Control"].Value = p;
-        }
-
+        /**
+         * Will ask the user for confirmation about deleting the given Action ['ID'], and if
+         * the end user confirms, the Action will be deleted
+         */
         [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaAction")]
         protected void Magix_MetaAction_DeleteMetaAction(object sender, ActiveEventArgs e)
         {
@@ -572,6 +585,10 @@ Deleting it may break these parts.</p>";
                 node);
         }
 
+        /**
+         * Will call 'DBAdmin.Common.ComplexInstanceDeletedConfirmed' which again [hopefully]
+         * will delete the given Action
+         */
         [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaAction-Confirmed")]
         protected void Magix_MetaAction_DeleteMetaAction_Confirmed(object sender, ActiveEventArgs e)
         {
@@ -593,7 +610,12 @@ Deleting it may break these parts.</p>";
             }
         }
 
-        [ActiveEvent(Name = "Magix.Meta.EditParam")]
+        // TODO: Too long ...!! [refactor]
+        /**
+         * Will initiate editing of Parameter for Action unless it's already being edited, at
+         * which point it'll be 'brought to front'
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.EditParam")]
         private void Magix_Meta_EditParam(object sender, ActiveEventArgs e)
         {
             Action.ActionParams p = 
@@ -623,7 +645,7 @@ Deleting it may break these parts.</p>";
 
                 node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["Value"]["ReadOnly"].Value = false;
-                node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.Publishing.GetMetaTypeName";
+                node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn";
 
                 node["Width"].Value = 18;
                 node["Last"].Value = true;
@@ -637,6 +659,7 @@ Deleting it may break these parts.</p>";
 
                 Node xx = new Node();
                 xx["Container"].Value = "content6";
+
                 RaiseEvent(
                     "Magix.Core.GetNumberOfChildrenOfContainer",
                     xx);
@@ -676,8 +699,13 @@ Deleting it may break these parts.</p>";
                 cc);
         }
 
-        [ActiveEvent(Name = "Magix.Publishing.GetMetaTypeName")]
-        private void Magix_Publishing_GetMetaTypeName(object sender, ActiveEventArgs e)
+        /**
+         * Returns a SelectList with the opportunity for the end user
+         * to select which type [system-type, native] the specific parameter should be
+         * converted to before Action is being ran
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn")]
+        private void Magix_MetaAction_GetMetaActionParameterTypeNameTemplateColumn(object sender, ActiveEventArgs e)
         {
             Action.ActionParams p = Action.ActionParams.SelectByID(e.Params["ID"].Get<int>());
 
@@ -732,7 +760,10 @@ Deleting it may break these parts.</p>";
             e.Params["Control"].Value = ls;
         }
 
-        [ActiveEvent(Name = "Magix.Meta.GetActionItemTree")]
+        /**
+         * Returns a tree structure containing all the Action's Parameters to the caller
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.GetActionItemTree")]
         private void Magix_Meta_GetActionItemTree(object sender, ActiveEventArgs e)
         {
             Action a = Action.SelectByID(e.Params["ActionItemID"].Get<int>());
@@ -742,6 +773,9 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        /*
+         * Helper for above
+         */
         private void AddParamToNode(Action.ActionParams par, Node node)
         {
             node["Items"]["i-" + par.ID]["ID"].Value = par.ID;
@@ -754,6 +788,9 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        /**
+         * Returns menu items for dashboard functionality to be able to click and view Actions from Dashboard
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
         protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
         {
@@ -764,6 +801,10 @@ Deleting it may break these parts.</p>";
             e.Params["Object"]["Properties"]["MetaActionCount"].Value = Action.Count.ToString();
         }
 
+        /**
+         * Will take an incoming 'EventName' with an optionally attached 'EventNode' structure
+         * and create an Action out of it
+         */
         [ActiveEvent(Name = "Magix.Core.EventClickedWhileDebugging")]
         protected void Magix_Core_EventClickedWhileDebugging(object sender, ActiveEventArgs e)
         {
@@ -780,8 +821,7 @@ Deleting it may break these parts.</p>";
                 a.Name = "Debug-Copy-" + eventName;
 
                 FillActionParams(eventNode, a.Params);
-                
-                
+
                 a.Save();
 
                 tr.Commit();
@@ -806,6 +846,10 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        // TODO: There are two almost similar methods in this file which the underneath is one of. Remove one of them
+        /*
+         * Helper for above ...
+         */
         private void FillActionParams(Node eventNode, LazyList<Action.ActionParams> lazyList)
         {
             foreach (Node idx in eventNode)
@@ -845,7 +889,12 @@ Deleting it may break these parts.</p>";
             }
         }
 
-        [ActiveEvent(Name = "Magix.Meta.RaiseEvent")]
+        /**
+         * Will tae an incoming Action ['ActionID' OR 'ActionName'] and run it. Will merge
+         * the incoming parameters with the Params of the Action, giving the 'incoming Parameters'
+         * preference over the Params associated with Action
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.RaiseAction")]
         protected void Magix_Meta_RaiseEvent(object sender, ActiveEventArgs e)
         {
             Action action = null;
@@ -857,8 +906,8 @@ Deleting it may break these parts.</p>";
 
             if (action == null)
             {
-                throw new ArgumentException(@"Sorry dude, we couldn't find that Action. 
-The 'Magix.Meta.RaiseEvent' Action needs to reference another existing Action 
+                throw new NotImplementedException(@"Sorry dude, we couldn't find that Action. 
+The 'Magix.MetaAction.RaiseAction' Action needs to reference another existing Action 
 within the system, either through the 'ActionName' parameter, or the 'ActionID' parameter. 
 Name, obviously, pointing to the exact name of an Action, while ActionID obviously
 referring to the exact ID of an action, and needing to be an integer ...");
@@ -888,6 +937,9 @@ referring to the exact ID of an action, and needing to be an integer ...");
                 node);
         }
 
+        /*
+         * Helper for above ...
+         */
         private void EmbedNodeIntoNode(Node source, Node destination)
         {
             if (source.Value != null)
@@ -900,6 +952,10 @@ referring to the exact ID of an action, and needing to be an integer ...");
             }
         }
 
+        // TODO: There are two almost similar methods in this file which the underneath is one of. Remove one of them
+        /*
+         * Helper for above ...
+         */
         private static void GetActionParameters(Node node, Action.ActionParams a)
         {
             switch (a.TypeName)

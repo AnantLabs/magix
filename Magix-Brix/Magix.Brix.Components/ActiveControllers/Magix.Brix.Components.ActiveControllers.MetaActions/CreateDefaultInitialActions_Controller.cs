@@ -14,10 +14,14 @@ using System.Globalization;
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
     [ActiveController]
-    public class MetaViewActionDefinitionController : ActiveController
+    public class CreateDefaultInitialActions_Controller : ActiveController
     {
         #region [ -- Application Startup. Creation of default, 'built-in' Actions ... -- ]
 
+        /**
+         * Will create some default installation Actions for the End User to consume in his own
+         * Meta Applications. These are all prefixed with 'Magix.DynamicEvent'
+         */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
@@ -28,7 +32,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 {
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.SaveActiveForm";
-                    a.EventName = "Magix.Meta.Actions.SaveObject";
+                    a.EventName = "Magix.MetaView.CreateSingleViewMetaObject";
                     a.Description = @"Will save the currently active Single-View Form.
 Will determine which form raised the event originally, and explicitly save the field values
 from that Form into a new Meta Object with the TypeName from the View ...";
@@ -79,11 +83,11 @@ copy for your own messages. For your convenience ... :)";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.TurnOnDebugging")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.TurnOnDebugging")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "Magix.Meta.Actions.TurnOnDebugging";
-                    a.EventName = "Magix.Meta.Actions.SetSessionVariable";
+                    a.Name = "Magix.DynamicEvent.TurnOnDebugging";
+                    a.EventName = "Magix.Common.SetSessionVariable";
                     a.Description = @"Will turn on 'Debugging', meaning you'll have a wire-grid
 covering your screen to see the 40x18 pixel 'grid-lock', plus you'll also get to see every single Action 
 ever raised on the server shown in an 'Action Stack Trace' Window. This only affects your session, 
@@ -105,11 +109,11 @@ meaning it should be safe to do in production to track down errors and such in l
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.TurnOffDebugging")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.TurnOffDebugging")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "Magix.Meta.Actions.TurnOffDebugging";
-                    a.EventName = "Magix.Meta.Actions.SetSessionVariable";
+                    a.Name = "Magix.DynamicEvent.TurnOffDebugging";
+                    a.EventName = "Magix.Common.SetSessionVariable";
                     a.Description = @"Will turn _OFF_ 'Debugging', meaning you'll no longer 
 have a wire-grid covering your screen, plus the stack tracing of actions on the 
 server will disappear. Only affects your session, and no other logged on users ability to 
@@ -131,12 +135,12 @@ see debugging information ...";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.ViewMetaMultiView")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ViewMetaViewMultiMode")) == 0)
                 {
                     Action a = new Action();
 
-                    a.Name = "Magix.Meta.Actions.ViewMetaMultiView";
-                    a.EventName = "Magix.MetaType.ViewMetaMultiView";
+                    a.Name = "Magix.DynamicEvent.ViewMetaViewMultiMode";
+                    a.EventName = "Magix.MetaType.ViewMetaViewMultiMode";
                     a.Description = @"Will load a grid of all Meta Objects of type already loaded
 in current activating WebPart. If you want to load a specific type, then you can override the 
 type being loaded by adding 'MetaViewTypeName' as a parameter, containing the name of the view. 
@@ -165,12 +169,12 @@ There are many other properties you can override...";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.SendEmail")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SendEmail")) == 0)
                 {
                     Action a = new Action();
 
-                    a.Name = "Magix.Meta.Actions.SendEmail";
-                    a.EventName = "Magix.MetaType.SendEmail";
+                    a.Name = "Magix.DynamicEvent.SendEmail";
+                    a.EventName = "Magix.Common.SendEmail";
                     a.Description = @"Will send yourself an email to the Email address you've associated
 with your user. The email will contain a default header and a default body. Override the 
 settings if you wish to send other emails, to other recipes, with another subject and/or body. 
@@ -219,12 +223,12 @@ Google Account if you do some 'Googling' ... ;)";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.ReplaceStringValue")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ReplaceStringValue")) == 0)
                 {
                     Action a = new Action();
 
-                    a.Name = "Magix.Meta.Actions.ReplaceStringValue";
-                    a.EventName = "Magix.MetaType.ReplaceStringValue";
+                    a.Name = "Magix.DynamicEvent.ReplaceStringValue";
+                    a.EventName = "Magix.Common.ReplaceStringValue";
                     a.Description = @"Will transform every entity of 'OldString' 
 found in 'Source' into the contents of 'NewString' and return as a 'Result', output node ...";
                     a.StripInput = true;
@@ -251,12 +255,12 @@ found in 'Source' into the contents of 'NewString' and return as a 'Result', out
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.MultiAction")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.MultiAction")) == 0)
                 {
                     Action a = new Action();
 
-                    a.Name = "Magix.Meta.Actions.MultiAction";
-                    a.EventName = "Magix.MetaType.MultiAction";
+                    a.Name = "Magix.DynamicEvent.MultiAction";
+                    a.EventName = "Magix.Common.MultiAction";
                     a.Description = @"Will raise several Actions consecutively, in the order they're defined
 in the 'Actions' node. Each Action needs a 'Name' and its own set of parameters through its 'Params' node.
 All 'Params' nodes will be copied into the root node before every event is raised. This means that your
@@ -273,7 +277,7 @@ Root node will become VERY large after subsequent actions. Be warned ...";
 
                     Action.ActionParams m2 = new Action.ActionParams();
                     m2.Name = "ActionName";
-                    m2.Value = "Magix.MetaType.ReplaceStringValue";
+                    m2.Value = "Magix.Common.ReplaceStringValue";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
 
@@ -307,7 +311,7 @@ to run your website ... :)";
 
                     m2 = new Action.ActionParams();
                     m2.Name = "ActionName";
-                    m2.Value = "Magix.MetaType.RenameNode";
+                    m2.Value = "Magix.Common.RenameNode";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
 
@@ -333,7 +337,7 @@ to run your website ... :)";
 
                     m2 = new Action.ActionParams();
                     m2.Name = "ActionName";
-                    m2.Value = "Magix.MetaType.StripEverythingBut";
+                    m2.Value = "Magix.Common.StripAllParametersExcept";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
 
@@ -371,12 +375,12 @@ to run your website ... :)";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.Actions.GetObjectIntoNode")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetObjectIntoNode")) == 0)
                 {
                     Action a = new Action();
 
-                    a.Name = "Magix.Meta.Actions.GetObjectIntoNode";
-                    a.EventName = "Magix.MetaType.GetObjectIntoNode";
+                    a.Name = "Magix.DynamicEvent.GetObjectIntoNode";
+                    a.EventName = "Magix.Common.GetSingleMetaObject";
                     a.Description = @"Will put every property from the given Meta Object, 
 into the given Node, with the name/value pair as the node name/value parts, 
 assuming they're all strings. Copy this Action, and make sure you _CHANGE_ its MetaObjectID
@@ -395,11 +399,11 @@ MultiActions or something ...";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.SetMetaObjectValue")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SetMetaObjectValue")) == 0)
                 {
                     Action a = new Action();
 
-                    a.Name = "Magix.Meta.SetMetaObjectValue";
+                    a.Name = "Magix.DynamicEvent.SetMetaObjectValue";
                     a.EventName = "Magix.MetaType.SetMetaObjectValue";
                     a.Description = @"Will set the value of the given MetaObject 
 [MetaObjectID] to the Value of your 'Value' node at the 'Name' property.";
@@ -444,7 +448,7 @@ with the Name/Value as the Node Name/Value pair.";
                 {
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.SendEmail";
-                    a.EventName = "Magix.MetaType.MultiAction";
+                    a.EventName = "Magix.Common.MultiAction";
                     a.StripInput = false;
                     a.Description = @"Can be used from a Form which has two fields, 
 Name and Email, which will be used to create the recipient parts. Expects to have
@@ -465,7 +469,7 @@ to an SMTP server which you have access to ...";
 
                     Action.ActionParams m2 = new Action.ActionParams();
                     m2.Name = "Name";
-                    m2.Value = "Magix.MetaType.GetObjectIntoNode";
+                    m2.Value = "Magix.Common.GetSingleMetaObject";
                     m2.TypeName = typeof(string).FullName;
                     m.Children.Add(m2);
 
@@ -490,14 +494,14 @@ to an SMTP server which you have access to ...";
                     m2.TypeName = typeof(string).FullName;
                     m.Children.Add(m2);
 
-                    // Magix.MetaType.RenameNode
+                    // Magix.Common.RenameNode
                     m = new Action.ActionParams();
                     m.Name = "...RenameNode";
                     rootA.Children.Add(m);
 
                     m2 = new Action.ActionParams();
                     m2.Name = "Name";
-                    m2.Value = "Magix.MetaType.RenameNode";
+                    m2.Value = "Magix.Common.RenameNode";
                     m2.TypeName = typeof(string).FullName;
                     m.Children.Add(m2);
 
@@ -517,7 +521,7 @@ to an SMTP server which you have access to ...";
                     m3.TypeName = typeof(string).FullName;
                     m2.Children.Add(m3);
 
-                    // Magix.MetaType.ReplaceStringValue-Header
+                    // Magix.Common.ReplaceStringValue-Header
                     m = new Action.ActionParams();
                     m.Name = "...ReplaceStringValue-Header";
                     rootA.Children.Add(m);
@@ -525,7 +529,7 @@ to an SMTP server which you have access to ...";
                     m2 = new Action.ActionParams();
                     m2.Name = "Name";
                     m2.TypeName = typeof(string).FullName;
-                    m2.Value = "Magix.MetaType.ReplaceStringValue";
+                    m2.Value = "Magix.Common.ReplaceStringValue";
                     m.Children.Add(m2);
 
 
@@ -557,7 +561,7 @@ to an SMTP server which you have access to ...";
                     m3.TypeName = typeof(string).FullName;
                     m2.Children.Add(m3);
 
-                    // Magix.MetaType.ReplaceStringValue-Body
+                    // Magix.Common.ReplaceStringValue-Body
                     m = new Action.ActionParams();
                     m.Name = "...ReplaceStringValue-Body";
                     rootA.Children.Add(m);
@@ -565,7 +569,7 @@ to an SMTP server which you have access to ...";
                     m2 = new Action.ActionParams();
                     m2.Name = "Name";
                     m2.TypeName = typeof(string).FullName;
-                    m2.Value = "Magix.MetaType.ReplaceStringValue";
+                    m2.Value = "Magix.Common.ReplaceStringValue";
                     m.Children.Add(m2);
 
                     m2 = new Action.ActionParams();
@@ -627,11 +631,11 @@ to an SMTP server which you have access to ...";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Meta.LoadSignatureModule")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.LoadSignatureModule")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "Magix.Meta.LoadSignatureModule";
-                    a.EventName = "Magix.MetaView.LoadSignature";
+                    a.Name = "Magix.DynamicEvent.LoadSignatureModule";
+                    a.EventName = "Magix.Common.LoadSignatureForCurrentMetaObject";
                     a.Description = @"Will load the Signature Module in
 whatever container its being raised from. And set the 'Value' property of the given
 MetaObject Column Property Name to the signature signed on the Signature module ...";
@@ -657,93 +661,6 @@ MetaObject Column Property Name to the signature signed on the Signature module 
         }
 
         #endregion
-
-        [ActiveEvent(Name = "Magix.MetaView.LoadSignature")]
-        protected void Magix_Signature_LoadSignature(object sender, ActiveEventArgs e)
-        {
-            e.Params["OKEvent"].Value = "Magix.MetaView.UnLoadSignature";
-            e.Params["OKEvent"]["Params"]["MetaObjectID"].Value = e.Params["MetaObjectID"].Value;
-            e.Params["OKEvent"]["Params"]["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Value;
-            e.Params["OKEvent"]["Params"]["Name"].Value = e.Params["ActionSenderName"].Value;
-
-            e.Params["CancelEvent"].Value = "Magix.Publishing.ReloadWebPart";
-            e.Params["CancelEvent"]["Params"]["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Value;
-
-            if (e.Params.Contains("Value") && 
-                !string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
-                e.Params["Coords"].Value = e.Params["Value"].Value;
-
-            RaiseEvent(
-                "Magix.Signature.LoadSignature",
-                e.Params);
-        }
-
-        [ActiveEvent(Name = "Magix.MetaView.UnLoadSignature")]
-        protected void Magix_Signature_UnLoadSignature(object sender, ActiveEventArgs e)
-        {
-            using (Transaction tr = Adapter.Instance.BeginTransaction())
-            {
-                MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
-
-                MetaObject.Value val = o.Values.Find(
-                    delegate(MetaObject.Value idx)
-                    {
-                        return idx.Name == e.Params["Name"].Get<string>();
-                    });
-                if (val == null)
-                {
-                    val = new MetaObject.Value();
-                    val.Name = e.Params["Name"].Get<string>();
-                    o.Values.Add(val);
-
-                    o.Save();
-                }
-
-                val.Val = e.Params["Signature"].Get<string>();
-
-                val.Save();
-
-                tr.Commit();
-            }
-
-            RaiseEvent(
-                "Magix.Publishing.ReloadWebPart",
-                e.Params);
-        }
-
-        [ActiveEvent(Name = "Magix.Meta.Actions.SetSessionVariable")]
-        protected void Magix_Meta_Actions_SetSessionVariable(object sender, ActiveEventArgs e)
-        {
-            Page.Session[e.Params["Name"].Get<string>()] = e.Params["Value"].Value;
-        }
-
-        [ActiveEvent(Name = "Magix.Meta.Actions.SaveObject")]
-        protected void Magix_Meta_Actions_SaveObject(object sender, ActiveEventArgs e)
-        {
-            using (Transaction tr = Adapter.Instance.BeginTransaction())
-            {
-                MetaObject t = new MetaObject();
-
-                t.TypeName = e.Params["MetaViewTypeName"].Get<string>();
-                t.Reference = 
-                    e.Params["MetaViewName"].Get<string>() +
-                    "|" + 
-                    e.Params["ActionSenderName"].Get<string>();
-                t.Created = DateTime.Now;
-
-                foreach (Node idx in e.Params["PropertyValues"])
-                {
-                    MetaObject.Value v = new MetaObject.Value();
-                    v.Name = idx["Name"].Get<string>();
-                    v.Val = idx["Value"].Get<string>();
-                    t.Values.Add(v);
-                }
-
-                t.Save();
-
-                tr.Commit();
-            }
-        }
     }
 }
 
