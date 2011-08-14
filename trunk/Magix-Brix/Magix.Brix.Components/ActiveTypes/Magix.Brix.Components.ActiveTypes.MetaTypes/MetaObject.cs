@@ -86,6 +86,15 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
         public override void Save()
         {
+            MetaObject idxParent = ParentMetaObject;
+
+            while (idxParent != null)
+            {
+                if (idxParent == this)
+                    throw new ArgumentException("You can't have cyclic relationships with your objects ... Sorry ... :(");
+                idxParent = idxParent.ParentMetaObject;
+            }
+
             if (ID == 0)
                 Created = DateTime.Now;
 

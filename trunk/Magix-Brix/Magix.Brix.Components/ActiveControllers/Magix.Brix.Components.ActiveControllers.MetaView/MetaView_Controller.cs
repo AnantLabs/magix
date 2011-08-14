@@ -748,7 +748,7 @@ Deleting it may break these parts.</p>";
                     e.Params["Objects"]["o-" + idxO.ID]["ID"].Value = idxO.ID;
                     foreach (MetaObject.Value idx in idxO.Values)
                     {
-                        string propertyName = idx.Name;
+                        string propertyName = idx.Name ?? "";
                         if (propertyName.IndexOf(":") != -1)
                         {
                             string[] splits = propertyName.Split(':');
@@ -1091,12 +1091,16 @@ Deleting it may break these parts.</p>";
                         break;
                     }
                 }
-                MetaObject.Value propCss = o4.Values.Find(
-                    delegate(MetaObject.Value idxI)
-                    {
-                        return idxI.Name == propertyCss;
-                    });
-                cssClass = propCss.Val;
+                if (o4 != null)
+                {
+                    MetaObject.Value propCss = o4.Values.Find(
+                        delegate(MetaObject.Value idxI)
+                        {
+                            return idxI.Name == propertyCss;
+                        });
+                    if (propCss != null)
+                        cssClass = propCss.Val;
+                }
             }
 
             b.Text = "&nbsp;";

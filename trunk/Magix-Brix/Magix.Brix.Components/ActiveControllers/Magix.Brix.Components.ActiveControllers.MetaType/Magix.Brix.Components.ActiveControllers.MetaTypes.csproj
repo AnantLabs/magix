@@ -39,7 +39,7 @@
   <ItemGroup>
     <Compile Include="CommonActionController.cs" />
     <Compile Include="MetaActionController.cs" />
-    <Compile Include="MetaObjectController.cs" />
+    <Compile Include="MetaObject_Controller.cs" />
     <Compile Include="MetaViewActionDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
