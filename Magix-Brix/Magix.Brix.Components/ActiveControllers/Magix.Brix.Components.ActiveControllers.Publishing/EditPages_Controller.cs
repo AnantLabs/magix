@@ -242,48 +242,58 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
          */
         private static void GetWebParts(WebPage p, Node node)
         {
-            foreach (WebPart idx in p.WebParts)
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                foreach (WebPart.WebPartSetting idxI in idx.Settings)
+                foreach (WebPart idx in p.WebParts)
                 {
-                    Type moduleType = Adapter.ActiveModules.Find(
-                        delegate(Type idxT)
-                        {
-                            return idxT.FullName == idx.Container.ModuleName;
-                        });
-                    if (moduleType.GetProperty(
-                        idxI.Name.Replace(moduleType.FullName, ""),
-                        BindingFlags.NonPublic |
-                        BindingFlags.Public |
-                        BindingFlags.Instance) != null)
+                    if (idx.Container == null)
                     {
-                        node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name].Value = idxI.Value;
-                        node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["ID"].Value = idxI.ID;
-                        PropertyInfo prop = moduleType.GetProperty(
-                            idxI.Name.Replace(moduleType.FullName, ""),
-                            BindingFlags.Public |
-                            BindingFlags.NonPublic |
-                            BindingFlags.Instance);
-                        if (prop != null)
-                        {
-                            ModuleSettingAttribute[] atrs =
-                                prop.GetCustomAttributes(typeof(ModuleSettingAttribute), true)
-                                as ModuleSettingAttribute[];
-                            if (atrs != null && atrs.Length > 0)
+                        // Cleaning up .. ! [... darn it! Needs refactoring, probably down to Model layer ... :( ]
+                        idx.Delete();
+                        continue;
+                    }
+                    foreach (WebPart.WebPartSetting idxI in idx.Settings)
+                    {
+                        Type moduleType = Adapter.ActiveModules.Find(
+                            delegate(Type idxT)
                             {
-                                ModuleSettingAttribute atr = atrs[0];
-                                if (!string.IsNullOrEmpty(atr.ModuleEditorName))
+                                return idxT.FullName == idx.Container.ModuleName;
+                            });
+                        if (moduleType.GetProperty(
+                            idxI.Name.Replace(moduleType.FullName, ""),
+                            BindingFlags.NonPublic |
+                            BindingFlags.Public |
+                            BindingFlags.Instance) != null)
+                        {
+                            node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name].Value = idxI.Value;
+                            node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["ID"].Value = idxI.ID;
+                            PropertyInfo prop = moduleType.GetProperty(
+                                idxI.Name.Replace(moduleType.FullName, ""),
+                                BindingFlags.Public |
+                                BindingFlags.NonPublic |
+                                BindingFlags.Instance);
+                            if (prop != null)
+                            {
+                                ModuleSettingAttribute[] atrs =
+                                    prop.GetCustomAttributes(typeof(ModuleSettingAttribute), true)
+                                    as ModuleSettingAttribute[];
+                                if (atrs != null && atrs.Length > 0)
                                 {
-                                    node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["Editor"].Value = atr.ModuleEditorName;
-                                }
-                                else if (!string.IsNullOrEmpty(atr.ModuleEditorEventName))
-                                {
-                                    node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["EditorEvent"].Value = atr.ModuleEditorEventName;
+                                    ModuleSettingAttribute atr = atrs[0];
+                                    if (!string.IsNullOrEmpty(atr.ModuleEditorName))
+                                    {
+                                        node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["Editor"].Value = atr.ModuleEditorName;
+                                    }
+                                    else if (!string.IsNullOrEmpty(atr.ModuleEditorEventName))
+                                    {
+                                        node["ObjectTemplates"]["i-" + idx.ID]["i-" + idxI.Parent.Container.ID][idxI.Name]["EditorEvent"].Value = atr.ModuleEditorEventName;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                tr.Commit();
             }
         }
 
@@ -339,21 +349,68 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
-        // TODO: Implement verification message box ...
         /**
-         * Will delete specific Page object and all of its children
+         * Will ask the end user if he wish to delete specific Page object and all of its children
          */
         [ActiveEvent(Name = "Magix.Publishing.DeletePageObject")]
         protected void Magix_Publishing_DeletePageObject(object sender, ActiveEventArgs e)
         {
+            WebPage o = WebPage.SelectByID(e.Params["ID"].Get<int>());
+
+            if (o.Parent == null)
+            {
+                throw new ArgumentException("You cannot delete the top most Page, only edit it ...");
+            }
+
+            int affectedPages = 1;
+            affectedPages += CountChildPages(o);
+
+            // Showing message box to user asking him if he's really sure he wish to delete
+            // this page ...
+            Node node = new Node();
+            node["ForcedSize"]["width"].Value = 550;
+            node["WindowCssClass"].Value =
+                "mux-shaded mux-rounded push-5 down-2";
+
+            node["Caption"].Value = @"Are you CERTAIN ...?";
+            node["Text"].Value = string.Format(@"
+<p>Are you sure you wish to delete this Page? This operation is ireversible, and will affect {0} pages</p>",
+                affectedPages);
+            node["OK"]["ID"].Value = o.ID;
+            node["OK"]["Event"].Value = "Magix.Publishing.DeletePageObject-Confirmed";
+            node["Cancel"]["Event"].Value = "Magix.Publishing.DeletePageObject-Cancel";
+            node["Width"].Value = 15;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private int CountChildPages(WebPage o)
+        {
+            int retVal = o.Children.Count;
+
+            foreach (WebPage idx in o.Children)
+            {
+                retVal += CountChildPages(idx);
+            }
+
+            return retVal;
+        }
+
+        /**
+         * Will delete specific Page object and all of its children
+         */
+        [ActiveEvent(Name = "Magix.Publishing.DeletePageObject-Confirmed")]
+        protected void Magix_Publishing_DeletePageObject_Confirmed(object sender, ActiveEventArgs e)
+        {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 WebPage o = WebPage.SelectByID(e.Params["ID"].Get<int>());
-
-                if (o.Parent == null)
-                {
-                    throw new ArgumentException("You cannot delete the top most Page, only edit it ...");
-                }
 
                 o.Delete();
 
@@ -372,7 +429,18 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 RaiseEvent(
                     "Magix.Core.UpdateTree",
                     node);
+
+                ActiveEvents.Instance.RaiseClearControls("child");
             }
+        }
+
+        /**
+         * Cancel delete operation of specific Page
+         */
+        [ActiveEvent(Name = "Magix.Publishing.DeletePageObject-Cancel")]
+        protected void Magix_Publishing_DeletePageObject_Cancel(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("child");
         }
 
         /**
@@ -437,7 +505,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
         /**
          * Will update all WebPages that was modified by changing the WebPageTemplate. This might
-         * include creating new WebParts with default values
+         * include creating new WebParts with default values, or removing existing WebParts on Pages
          */
         [ActiveEvent(Name = "Magix.Publishing.WebPageTemplateWasModified")]
         protected void Magix_Publishing_WebPageTemplateWasModified(object sender, ActiveEventArgs e)

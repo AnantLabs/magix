@@ -97,13 +97,13 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
                 node["Header"].Value = header.Text;
                 node["Body"].Value = body.Text;
                 RaiseSafeEvent(
-                    "Talkback.CreatePost",
+                    "Magix.Talkback.CreatePost",
                     node);
 
                 DataSource["Posts"].UnTie();
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "Talkback.GetPostings",
+                    "Magix.Talkback.GetPostings",
                     DataSource);
 
                 Current = DataSource["Posts"][0]["ID"].Get<int>();
@@ -126,13 +126,13 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
             node["Body"].Value = Selector.SelectFirst<TextArea>(button.Parent).Text;
             node["Parent"].Value = int.Parse(button.Info);
             if (RaiseSafeEvent(
-                "Talkback.CreatePost",
+                "Magix.Talkback.CreatePost",
                 node))
             {
                 DataSource["Posts"].UnTie();
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "Talkback.GetPostings",
+                    "Magix.Talkback.GetPostings",
                     DataSource);
 
                 Current = DataSource["Posts"][0]["ID"].Get<int>();
