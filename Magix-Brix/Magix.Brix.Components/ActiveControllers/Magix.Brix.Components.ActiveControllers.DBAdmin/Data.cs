@@ -16,6 +16,9 @@ using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 {
+    /*
+     * Helper class for DBAdmin Controller ...
+     */
     public sealed class Data
     {
         private static Data _instance;

@@ -63,9 +63,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             node["ParentID"].Value = DataSource["ParentID"].Value;
             node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
             node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+
             RaiseSafeEvent(
                 "DBAdmin.Data.RemoveObject",
                 node);
+
             ActiveEvents.Instance.RaiseClearControls("child");
         }
 
