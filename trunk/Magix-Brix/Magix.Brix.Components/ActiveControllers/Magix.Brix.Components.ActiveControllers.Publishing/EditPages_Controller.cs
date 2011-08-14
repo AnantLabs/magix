@@ -399,6 +399,13 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Will run through all WebParts which are 'touched' by this WebPartTemplate
+         * and update their settings according to whatever new module was chosen.
+         * Warning; This will set any 'value properties' in these WebParts to their
+         * default value. It might also retrieve values it had before if this WebPart
+         * has earlier been this type of WebPartTemplate
+         */
         [ActiveEvent(Name = "Magix.Publishing.WebPartTemplateWasModified")]
         protected void Magix_Publishing_WebPartTemplateWasModified(object sender, ActiveEventArgs e)
         {
@@ -428,6 +435,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Will update all WebPages that was modified by changing the WebPageTemplate. This might
+         * include creating new WebParts with default values
+         */
         [ActiveEvent(Name = "Magix.Publishing.WebPageTemplateWasModified")]
         protected void Magix_Publishing_WebPageTemplateWasModified(object sender, ActiveEventArgs e)
         {
