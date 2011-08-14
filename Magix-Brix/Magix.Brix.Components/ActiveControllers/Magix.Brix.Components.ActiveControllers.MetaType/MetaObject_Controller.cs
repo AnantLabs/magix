@@ -313,7 +313,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["ToolTip"].Value = "Click to create a New Property for your Object ...";
             node["ButtonCssClass"].Value = "span-2 clear-left";
             node["Append"].Value = true;
-            node["Event"].Value = "Magix.MetaType.CreateNewProperty";
+            node["Event"].Value = "Magix.MetaType.CreateNewMetaObject-Value-AndEdit";
             node["Event"]["ObjectID"].Value = m.ID;
             node["Event"]["Container"].Value = container;
 
@@ -364,8 +364,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.AppendMetaTypeValue")]
-        protected void DBAdmin_Form_AppendObject(object sender, ActiveEventArgs e)
+        /**
+         * Calls DBAdmin.Form.AppendObject after overriding some 'visual properties' for the Grid
+         * system
+         */
+        [ActiveEvent(Name = "DBAdmin.Form.AppendObject-OverriddenForVisualReasons")]
+        protected void DBAdmin_Form_AppendObject_OverriddenForVisualReasons(object sender, ActiveEventArgs e)
         {
             e.Params["Container"].Value = "content6";
             e.Params["ReUseNode"].Value = true;
@@ -385,12 +389,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 e.Params);
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.CreateNewProperty")]
-        protected void Magix_MetaType_CreateNewProperty(object sender, ActiveEventArgs e)
+        /**
+         * Creates a new 'Value Row' for our MetaObject ['ID']. Returns the ID of the new Value object
+         * as 'NewID'
+         */
+        [ActiveEvent(Name = "Magix.MetaType.CreateNewMetaObject-Value")]
+        protected void Magix_MetaType_CreateNewMetaObject_Value(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                MetaObject o = MetaObject.SelectByID(e.Params["ObjectID"].Get<int>());
+                MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
                 MetaObject.Value v = new MetaObject.Value();
                 o.Values.Add(v);
 
@@ -398,15 +406,31 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 tr.Commit();
 
-                Node node = new Node();
-                node["ID"].Value = o.ID;
-                node["Container"].Value = e.Params["Container"].Value;
-
-                // Easy out ...
-                RaiseEvent(
-                    "Magix.MetaType.EditONEMetaObject_UnFiltered",
-                    node);
+                e.Params["NewID"].Value = v.ID;
             }
+        }
+
+        /**
+         * Creates a new 'Value Row' for our MetaObject and Edits the MetaObject immediately
+         */
+        [ActiveEvent(Name = "Magix.MetaType.CreateNewMetaObject-Value-AndEdit")]
+        protected void Magix_MetaType_CreateNewMetaObject_Value_AndEdit(object sender, ActiveEventArgs e)
+        {
+            e.Params["ID"].Value = e.Params["ObjectID"].Value;
+
+            RaiseEvent(
+                "Magix.MetaType.CreateNewMetaObject-Value",
+                e.Params);
+
+            Node node = new Node();
+
+            node["ID"].Value = e.Params["ID"].Value;
+            node["Container"].Value = e.Params["Container"].Value;
+
+            // Easy out ...
+            RaiseEvent(
+                "Magix.MetaType.EditONEMetaObject_UnFiltered",
+                node);
         }
 
         [ActiveEvent(Name = "Magix.MetaType.EditObjectRaw-2")]
@@ -452,7 +476,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     node["ReUseNode"].Value = true;
                     node["IDColumnName"].Value = "Edit";
                     node["IDColumnEvent"].Value = "Magix.MetaType.EditObjectRaw-2";
-                    node["AppendEventName"].Value = "Magix.MetaType.AppendMetaTypeValue";
+                    node["AppendEventName"].Value = "DBAdmin.Form.AppendObject-OverriddenForVisualReasons";
                     node["RemoveEvent"].Value = "Magix.Publishing.RemoveChildObject";
 
                     node["WhiteListColumns"]["TypeName"].Value = true;
