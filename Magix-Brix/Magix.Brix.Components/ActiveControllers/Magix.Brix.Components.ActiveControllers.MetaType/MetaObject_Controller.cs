@@ -13,69 +13,59 @@ using Magix.UX.Widgets;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
+    /**
+     * Contains logic for editing, maintaining and viewing MetaObjects. MetaObjects are at the 
+     * heart of the Meta Application System since they serve as the 'storage' for everything a
+     * view updates or creates through interaction with the end user
+     */
     [ActiveController]
-    public class MetaObjectController : ActiveController
+    public class MetaObject_Controller : ActiveController
     {
+        /**
+         * Returns menu event handlers for viewing MetaObjects
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
             e.Params["Items"]["MetaType"]["Caption"].Value = "Meta Types";
             e.Params["Items"]["MetaType"]["Items"]["Types"]["Caption"].Value = "Meta Objects ...";
-            e.Params["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.ViewMetaObjectsRaw";
+            e.Params["Items"]["MetaType"]["Items"]["Types"]["Event"]["Name"].Value = "Magix.MetaType.EditMetaObjects_UnFiltered";
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.ViewMetaObjectsRaw")]
-        protected void Magix_MetaType_ViewMetaObjectsRaw(object sender, ActiveEventArgs e)
+        /**
+         * Will open up editing of the MetaObject directly, without any 'views' or other interferences.
+         * Mostly meant for administrators to edit objects in 'raw mode'
+         */
+        [ActiveEvent(Name = "Magix.MetaType.EditMetaObjects_UnFiltered")]
+        protected void Magix_MetaType_EditMetaObjects_UnFiltered(object sender, ActiveEventArgs e)
         {
             Node node = new Node();
 
-            if (e.Params != null && 
-                e.Params.Contains("ReUseNodeX") &&
-                e.Params["ReUseNodeX"].Get<bool>())
-            {
-                node = e.Params;
-            }
+            node["FullTypeName"].Value = typeof(MetaObject).FullName; // NO '-MEAT' here ... !!!
+            node["Container"].Value = "content3";
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["CssClass"].Value = "edit-objects";
+            node["WhiteListColumns"]["TypeName"].Value = true;
+            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
+            node["WhiteListColumns"]["Reference"].Value = true;
+            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
+            node["FilterOnId"].Value = true;
+            node["IDColumnName"].Value = "Edit";
+            node["IDColumnEvent"].Value = "Magix.MetaType.EditONEMetaObject_UnFiltered";
+            node["DeleteColumnEvent"].Value = "Magix.MetaType.DeleteObjectRaw";
 
-            node["FullTypeName"].Value = typeof(MetaObject).FullName;
-            if (!node.Contains("Container"))
-                node["Container"].Value = "content3";
-            if (!node.Contains("Width"))
-                node["Width"].Value = 18;
-            if (!node.Contains("Last"))
-                node["Last"].Value = true;
+            node["ReuseNode"].Value = true;
+            node["CreateEventName"].Value = "Magix.MetaType.CreateMetaObjectAndEdit";
 
-            if (!node.Contains("CssClass"))
-                node["CssClass"].Value = "edit-objects";
+            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
+            node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetCopyMetaObjectTemplateColumn";
 
-            if (!node.Contains("WhiteListColumns"))
-            {
-                node["WhiteListColumns"]["TypeName"].Value = true;
-                node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
-                node["WhiteListColumns"]["Reference"].Value = true;
-                node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
-                node["WhiteListColumns"]["Copy"].Value = true;
-                node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
-            }
-
-            if (!node.Contains("FilterOnId"))
-            {
-                node["FilterOnId"].Value = false;
-                node["IDColumnName"].Value = "Edit";
-                node["IDColumnEvent"].Value = "Magix.MetaType.EditObjectRaw";
-                node["DeleteColumnEvent"].Value = "Magix.MetaType.DeleteObjectRaw";
-
-                node["ReuseNode"].Value = true;
-                node["CreateEventName"].Value = "Magix.MetaType.CreateObject";
-            }
-
-            if (!node.Contains("Type"))
-            {
-                node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
-                node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
-                node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
-                node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
-                node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetCopyMetaTypeTemplateColumn";
-            }
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
@@ -86,8 +76,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.GetCopyMetaTypeTemplateColumn")]
-        protected void Magix_MetaType_GetCopyMetaTypeTemplateColumn(object sender, ActiveEventArgs e)
+        /**
+         * Will return a 'Copy Template LinkButton' back to caller
+         */
+        [ActiveEvent(Name = "Magix.MetaType.GetCopyMetaObjectTemplateColumn")]
+        protected void Magix_MetaType_GetCopyMetaObjectTemplateColumn(object sender, ActiveEventArgs e)
         {
             // Extracting necessary variables ...
             string name = e.Params["Name"].Get<string>();
@@ -121,7 +114,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     node["ID"].Value = id;
 
                     RaiseEvent(
-                        "Magix.MetaType.EditObjectRaw",
+                        "Magix.MetaType.EditONEMetaObject_UnFiltered",
                         node);
 
                     node = new Node();
@@ -140,6 +133,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Control"].Value = ls;
         }
 
+        /**
+         * Will copy the incoming MetaObject ['ID']
+         */
         [ActiveEvent(Name = "Magix.MetaType.CopyMetaObject")]
         private void Magix_MetaType_CopyMetaObject(object sender, ActiveEventArgs e)
         {
@@ -151,8 +147,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.CreateObject")]
-        protected void Magix_MetaType_CreateObject(object sender, ActiveEventArgs e)
+        /**
+         * Creates a new MetaObject with some default values and returns the ID of the new MetaObject
+         * as 'NewID'
+         */
+        [ActiveEvent(Name = "Magix.MetaType.CreateMetaObject")]
+        protected void Magix_MetaType_CreateMetaObject(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
@@ -168,43 +168,59 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 m.Save();
 
                 tr.Commit();
-
-                Node node = new Node();
-
-                node["Start"].Value = 0;
-                node["End"].Value = 10;
-                node["FullTypeName"].Value = typeof(MetaObject).FullName;
-
-                RaiseEvent(
-                    "Magix.Core.SetGridPageStart",
-                    node);
-
-                node = new Node();
-                node["ID"].Value = m.ID;
-
-                RaiseEvent(
-                    "Magix.MetaType.EditObjectRaw",
-                    node);
+                e.Params["NewID"].Value = m.ID;
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.EditObjectRaw")]
-        protected void Magix_MetaType_EditObjectRaw(object sender, ActiveEventArgs e)
+        /**
+         * Creates a new MetaObject with some default values, and lets the end user edit it immediately
+         */
+        [ActiveEvent(Name = "Magix.MetaType.CreateMetaObjectAndEdit")]
+        protected void Magix_MetaType_CreateMetaObjectAndEdit(object sender, ActiveEventArgs e)
+        {
+            Node x = new Node();
+            RaiseEvent(
+                "Magix.MetaType.CreateMetaObject",
+                x);
+ 
+            Node node = new Node();
+            node["Start"].Value = 0;
+            node["End"].Value = 10;
+            node["FullTypeName"].Value = typeof(MetaObject).FullName;
+
+            RaiseEvent(
+                "Magix.Core.SetGridPageStart",
+                node);
+
+            node = new Node();
+            node["ID"].Value = x["NewID"].Value;
+
+            RaiseEvent(
+                "Magix.MetaType.EditONEMetaObject_UnFiltered",
+                node);
+        }
+
+        // TODO: Break further up. Too long ...
+        /**
+         * Allows for editing the MetaObject directly without any Views filtering out anything
+         */
+        [ActiveEvent(Name = "Magix.MetaType.EditONEMetaObject_UnFiltered")]
+        protected void Magix_MetaType_EditONEMetaObject_UnFiltered(object sender, ActiveEventArgs e)
         {
             MetaObject m = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             Node node = new Node();
 
-            string cssClass = m.TypeName ?? "";
+            string cssClass = "";
 
-            if (cssClass == "")
+            if (string.IsNullOrEmpty(m.TypeName))
             {
                 cssClass = "no-typename";
             }
             else
             {
                 int rnd = Math.Abs(m.TypeName.GetHashCode());
-                switch (rnd % 7)
+                switch (rnd % 7) // TODO: Improve statistical probability by 'smoothening' it ...
                 {
                     case 0:
                         cssClass = "type-1";
@@ -247,6 +263,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
 
             node["WhiteListProperties"]["Name"].Value = true;
+            node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 3;
             node["WhiteListProperties"]["Value"].Value = true;
             node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
 
@@ -306,39 +323,45 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.AppendObjectToParentPropertyList")]
-        protected void Magix_MetaType_AppendObjectToParentPropertyList(object sender, ActiveEventArgs e)
+        /**
+         * Will Append an existing MetaObject [ID] to another existing MetaObject [ParentID] as a child
+         */
+        [ActiveEvent(Name = "Magix.MetaType.AppendChildMetaObjectToMetaObject")]
+        protected void Magix_MetaType_AppendChildMetaObjectToMetaObject(object sender, ActiveEventArgs e)
         {
-            ActiveEvents.Instance.RaiseClearControls("content6");
-
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject parent = MetaObject.SelectByID(e.Params["ParentID"].Get<int>());
                 MetaObject child = MetaObject.SelectByID(e.Params["ID"].Get<int>());
-
-                MetaObject idx = parent.ParentMetaObject;
-
-                while (idx != null)
-                {
-                    if (idx == child)
-                        throw new ArgumentException("You can't have cyclic relationships with your objects ... Sorry ... :(");
-                    idx = idx.ParentMetaObject;
-                }
 
                 parent.Children.Add(child);
 
                 parent.Save();
 
                 tr.Commit();
-
-                Node node = new Node();
-
-                node["ID"].Value = parent.ID;
-
-                RaiseEvent(
-                    "Magix.MetaType.EditObjectRaw",
-                    node);
             }
+        }
+
+        /**
+         * Will Append an existing MetaObject [ID] to another existing MetaObject [ParentID] as a child
+         * and immediately Edit the Parent MetaObject
+         */
+        [ActiveEvent(Name = "Magix.MetaType.AppendChildMetaObjectToMetaObjectAndEditParent")]
+        protected void Magix_MetaType_AppendChildMetaObjectToMetaObjectAndEditParent(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "Magix.MetaType.AppendChildMetaObjectToMetaObject",
+                e.Params);
+
+            ActiveEvents.Instance.RaiseClearControls("content6");
+
+            Node node = new Node();
+
+            node["ID"].Value = e.Params["ParentID"].Value;
+
+            RaiseEvent(
+                "Magix.MetaType.EditONEMetaObject_UnFiltered",
+                node);
         }
 
         [ActiveEvent(Name = "Magix.MetaType.AppendMetaTypeValue")]
@@ -350,7 +373,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Width"].Value = 16;
             e.Params["PullTop"].Value = 18;
             e.Params["Last"].Value = true;
-            e.Params["SelectEvent"].Value = "Magix.MetaType.AppendObjectToParentPropertyList";
+            e.Params["SelectEvent"].Value = "Magix.MetaType.AppendChildMetaObjectToMetaObjectAndEditParent";
 
             e.Params["WhiteListColumns"]["TypeName"].Value = true;
             e.Params["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 4;
@@ -379,8 +402,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node["ID"].Value = o.ID;
                 node["Container"].Value = e.Params["Container"].Value;
 
+                // Easy out ...
                 RaiseEvent(
-                    "Magix.MetaType.EditObjectRaw",
+                    "Magix.MetaType.EditONEMetaObject_UnFiltered",
                     node);
             }
         }
@@ -390,7 +414,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             e.Params["Container"].Value = "content6";
             RaiseEvent(
-                "Magix.MetaType.EditObjectRaw",
+                "Magix.MetaType.EditONEMetaObject_UnFiltered",
                 e.Params);
         }
 
@@ -469,8 +493,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 Node node = new Node();
                 node["ID"].Value = parent.ID;
 
+                // Easy out ...
                 RaiseEvent(
-                    "Magix.MetaType.EditObjectRaw",
+                    "Magix.MetaType.EditONEMetaObject_UnFiltered",
                     node);
             }
         }
@@ -540,7 +565,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         node["ID"].Value = id;
 
                         RaiseEvent(
-                            "Magix.MetaType.EditObjectRaw",
+                            "Magix.MetaType.EditONEMetaObject_UnFiltered",
                             node);
                     }
                 };
@@ -594,7 +619,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         node["Container"].Value = container;
 
                         RaiseEvent(
-                            "Magix.MetaType.EditObjectRaw",
+                            "Magix.MetaType.EditONEMetaObject_UnFiltered",
                             node);
                     }
                 };
@@ -690,7 +715,7 @@ have relationships towards other instances in your database.</p>";
             e.Params["WhiteListColumns"]["MetaTypesCount"].Value = true;
             e.Params["Type"]["Properties"]["MetaTypesCount"]["ReadOnly"].Value = true;
             e.Params["Type"]["Properties"]["MetaTypesCount"]["Header"].Value = "Objects";
-            e.Params["Type"]["Properties"]["MetaTypesCount"]["ClickLabelEvent"].Value = "Magix.MetaType.ViewMetaObjectsRaw";
+            e.Params["Type"]["Properties"]["MetaTypesCount"]["ClickLabelEvent"].Value = "Magix.MetaType.EditMetaObjects_UnFiltered";
             e.Params["Object"]["Properties"]["MetaTypesCount"].Value = MetaObject.Count.ToString();
         }
 
