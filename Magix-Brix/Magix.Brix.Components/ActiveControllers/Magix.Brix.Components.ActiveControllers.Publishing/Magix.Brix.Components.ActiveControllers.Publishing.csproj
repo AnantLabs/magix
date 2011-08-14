@@ -54,7 +54,7 @@
     <Compile Include="PageLoader_Controller.cs" />
     <Compile Include="EditTemplates_Controller.cs" />
     <Compile Include="SliderMenu_Controller.cs" />
-    <Compile Include="EditPagesController.cs" />
+    <Compile Include="EditPages_Controller.cs" />
     <Compile Include="AdminDashboardHeader_Controller.cs" />
     <Compile Include="Dashboard_Controller.cs" />
     <Compile Include="InitialLoading_Controller.cs" />

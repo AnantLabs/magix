@@ -85,7 +85,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             {
                 DataSource["Items"].UnTie();
                 RaiseSafeEvent(
-                    "Magix.Meta.GetActionItemTree",
+                    DataSource["GetItemsEvent"].Get<string>(),
                     DataSource);
                 ReDataBind();
 
@@ -120,6 +120,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             }
         }
 
+        [ActiveEvent(Name = "Magix.Core.UpdateTree")]
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
         protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
         {
@@ -127,7 +128,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             {
                 DataSource["Items"].UnTie();
                 RaiseSafeEvent(
-                    "Magix.Meta.GetActionItemTree",
+                    DataSource["GetItemsEvent"].Get<string>(),
                     DataSource);
                 ReDataBind();
 

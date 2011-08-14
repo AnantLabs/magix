@@ -174,12 +174,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                     string value = idxT["i-" + id][0].Get<string>();
                                     string editor = idxT["i-" + id][0]["Editor"].Get<string>();
                                     string editorEvent = idxT["i-" + id][0]["EditorEvent"].Get<string>();
+                                    int webPartId = idxT["i-" + id][0]["ID"].Get<int>();
                                     if (!string.IsNullOrEmpty(editorEvent))
                                     {
                                         Node node = new Node();
-                                        node["PotID"].Value = id;
+                                        node["WebPartID"].Value = webPartId;
                                         node["Value"].Value = value;
-                                        node["ID"].Value = DataSource["ID"].Value;
+
                                         RaiseEvent(
                                             editorEvent,
                                             node);
@@ -204,10 +205,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                                                 Node tx = new Node();
 
-                                                tx["SaveEvent"].Value = "Magix.Publishing.SavePageObjectIDSetting";
-                                                tx["SaveEvent"]["Params"]["ID"].Value = DataSource["ID"].Value;
-                                                tx["SaveEvent"]["Params"]["PropertyName"].Value = propName2;
-                                                tx["SaveEvent"]["Params"]["PotID"].Value = id2;
+                                                tx["SaveEvent"].Value = "Magix.Publishing.ChangeWebPartSetting";
+                                                tx["SaveEvent"]["WebPartID"].Value = webPartId;
                                                 tx["Text"].Value = ed2.Text;
                                                 tx["Width"].Value = 18;
                                                 tx["Height"].Value = 30;
@@ -219,14 +218,14 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                                                 ActiveEvents.Instance.RaiseLoadControl(
                                                     ed2.Info.Split('|')[2],
-                                                    Parent.ID,
+                                                    "content5",
                                                     tx);
                                             };
                                         w.Content.Controls.Add(ed);
                                     }
                                     else
                                     {
-                                        CreateInPlaceEdit(id, w, propName, value);
+                                        CreateInPlaceEdit(id, w, propName, value, webPartId);
                                     }
                                 }
                             }
@@ -238,7 +237,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
-        private void CreateInPlaceEdit(int id, Window w, string propName, string value)
+        private void CreateInPlaceEdit(int id, Window w, string propName, string value, int webPartId)
         {
             InPlaceEdit ed = new InPlaceEdit();
             ed.ToolTip = propName;
@@ -253,13 +252,11 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                     Node tx = new Node();
 
-                    tx["PageObjectID"].Value = DataSource["ID"].Get<int>();
-                    tx["ID"].Value = id2;
-                    tx["PropertyName"].Value = propName2;
+                    tx["WebPartID"].Value = webPartId;
                     tx["Value"].Value = ed2.Text;
 
                     RaiseSafeEvent(
-                        "Magix.Publishing.ChangeModuleSetting",
+                        "Magix.Publishing.ChangeWebPartSetting",
                         tx);
                 };
             w.Content.Controls.Add(ed);

@@ -6,6 +6,8 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.Publishing.EditSpecificPage" %>
 
+<link href="media/modules/Publisher-Editing.css" rel="stylesheet" type="text/css" />
+
 <mux:InPlaceTextAreaEdit
     runat="server"
     CssClass="span-3 mux-in-place-edit"

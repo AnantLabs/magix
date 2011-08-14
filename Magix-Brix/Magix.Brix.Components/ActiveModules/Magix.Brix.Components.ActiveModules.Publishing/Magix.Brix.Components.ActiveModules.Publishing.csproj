@@ -69,16 +69,7 @@
       <DependentUpon>SliderMenu.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TreeViewOfPages.ascx.cs">
-      <DependentUpon>TreeViewOfPages.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="TreeViewOfPages.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">

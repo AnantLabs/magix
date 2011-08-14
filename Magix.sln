@@ -106,8 +106,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveTypes.Publishing", "Magix-Brix\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Publishing\Magix.Brix.Components.ActiveTypes.Publishing.csproj", "{175455B9-43D0-4190-A2AE-8033BD3D62A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.Login", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Login\Magix.Brix.Components.ActiveControllers.Login.csproj", "{C152475B-51AC-4892-9E86-8315C058830D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.Publishing", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Publishing\Magix.Brix.Components.ActiveModules.Publishing.csproj", "{9B9A05F6-4593-496B-80B2-C324DCC734A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Publishing.Common", "Magix-Brix\Magix.Brix.Components\Magix.Brix.Publishing.Common\Magix.Brix.Publishing.Common.csproj", "{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}"
@@ -265,10 +263,6 @@ Global
 		{175455B9-43D0-4190-A2AE-8033BD3D62A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{175455B9-43D0-4190-A2AE-8033BD3D62A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{175455B9-43D0-4190-A2AE-8033BD3D62A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C152475B-51AC-4892-9E86-8315C058830D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C152475B-51AC-4892-9E86-8315C058830D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C152475B-51AC-4892-9E86-8315C058830D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C152475B-51AC-4892-9E86-8315C058830D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B9A05F6-4593-496B-80B2-C324DCC734A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B9A05F6-4593-496B-80B2-C324DCC734A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B9A05F6-4593-496B-80B2-C324DCC734A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -357,7 +351,6 @@ Global
 		{4FF5FFF4-4B4E-4E7E-8978-07A94C9C494B} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{CF6572CF-2B0A-4AE8-A688-448130EF39A1} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{4E93A1A1-0F18-49BB-9BDD-8A69A383116E} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
-		{C152475B-51AC-4892-9E86-8315C058830D} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{6F72A0D1-66F2-4840-97B5-42D262F32B45} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{BAF5E8CE-D6A2-486C-8DBA-E97D169E9547} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{4C5681EF-4013-4540-A05F-FF885A184AA8} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
