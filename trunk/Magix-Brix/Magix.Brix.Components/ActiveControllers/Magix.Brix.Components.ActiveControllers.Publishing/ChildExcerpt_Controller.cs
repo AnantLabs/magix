@@ -149,13 +149,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 {
                     Node tx = new Node();
 
-                    tx["Params"]["ID"].Value = e.Params["ID"].Value;
-                    tx["Params"]["PropertyName"].Value = "Magix.Brix.Components.ActiveModules.Publishing.ChildExcerptPagesCount";
-                    tx["Params"]["PotID"].Value = e.Params["PotID"].Value;
-                    tx["Text"].Value = ls.SelectedItem.Text;
+                    tx["WebPartID"].Value = e.Params["WebPartID"].Value;
+                    tx["Value"].Value = ls.SelectedItem.Text;
 
                     RaiseEvent(
-                        "Magix.Publishing.SavePageObjectIDSetting",
+                        "Magix.Publishing.ChangeWebPartSetting",
                         tx);
                 };
 

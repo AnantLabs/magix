@@ -48,15 +48,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 // Loading login module ...
                 Node node = new Node();
 
-                node["Container"].Value = "content1";
                 node["Width"].Value = 8;
                 node["Push"].Value = 8;
                 node["Last"].Value = true;
                 node["Top"].Value = 5;
                 node["Focus"].Value = true;
 
-                RaiseEvent(
-                    "Magix.Core.LoadLoginModule",
+                LoadModule(
+                    "Magix.Brix.Components.ActiveModules.Users.Login",
+                    "content1",
                     node);
             }
             else if(ShouldShowDashboard())

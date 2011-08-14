@@ -279,14 +279,12 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 {
                     Node tx = new Node();
 
-                    tx["Params"]["ID"].Value = e.Params["ID"].Value;
-                    tx["Params"]["PropertyName"].Value = "Magix.Brix.Components.ActiveModules.Publishing.LogInOutUserLoginMode";
-                    tx["Params"]["PotID"].Value = e.Params["PotID"].Value;
-                    tx["Text"].Value = ls.SelectedItem.Value;
+                    tx["WebPartID"].Value = e.Params["WebPartID"].Value;
+                    tx["Value"].Value = ls.SelectedItem.Value;
 
                     ActiveEvents.Instance.RaiseActiveEvent(
                         typeof(LogInOutUser),
-                        "Magix.Publishing.SavePageObjectIDSetting",
+                        "Magix.Publishing.ChangeWebPartSetting",
                         tx);
                 };
 

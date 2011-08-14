@@ -79,14 +79,12 @@ namespace Magix.Brix.Components.ActiveModules.Editor
         [WebMethod]
         protected void Save(string text)
         {
-            Node node = new Node();
-            node["Text"].Value = txt.Text;
-            node["Params"] = SaveEvent["Params"];
+            SaveEvent["Value"].Value = txt.Text;
             RaiseSafeEvent(
                 SaveEvent.Get<string>(),
-                node);
-            if (node["Text"].Get<string>() != txt.Text)
-                txt.Text = node["Text"].Get<string>(); // Changed in save ...!
+                SaveEvent);
+            if (SaveEvent["Value"].Get<string>() != txt.Text)
+                txt.Text = SaveEvent["Value"].Get<string>(); // Changed in save ...!
         }
 
         protected bool RaiseSafeEvent(string eventName, Node node)
