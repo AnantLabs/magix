@@ -15,11 +15,17 @@ using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.TalkBack
 {
+    /**
+     * Contains helper logic for the TalkBack module [forums] in Magix
+     */
     [ActiveController]
-    public class TalkBackController : ActiveController
+    public class TalkBack_Controller : ActiveController
     {
-        [ActiveEvent(Name = "Talkback.GetPostings")]
-        protected void Talkback_GetPostings(object sender, ActiveEventArgs e)
+        /**
+         * Will fetch the top 5 postings with the most recent activity within
+         */
+        [ActiveEvent(Name = "Magix.Talkback.GetPostings")]
+        protected void Magix_Talkback_GetPostings(object sender, ActiveEventArgs e)
         {
             Node node = e.Params;
             if (node == null)
@@ -82,21 +88,24 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
             }
         }
 
-        [ActiveEvent(Name = "TalkBack.LaunchForum")]
-        protected void Talkback_LaunchForum(object sender, ActiveEventArgs e)
+        /**
+         * Will launch the Talkback Module and allow for posting questions and such
+         */
+        [ActiveEvent(Name = "Magix.TalkBack.LaunchForum")]
+        protected void Magix_TalkBack_LaunchForum(object sender, ActiveEventArgs e)
         {
             Node header = new Node();
             header["Caption"].Value = "TalkBack ...";
+
             if (e.Params.Contains("Caption"))
                 header["Caption"].Value = e.Params["Caption"].Get<string>();
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+
+            RaiseEvent(
                 "Magix.Core.SetFormCaption",
                 header);
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "Talkback.GetPostings",
+            RaiseEvent(
+                "Magix.Talkback.GetPostings",
                 e.Params);
 
             LoadModule(
@@ -105,8 +114,12 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
                 e.Params);
         }
 
-        [ActiveEvent(Name = "Talkback.CreatePost")]
-        protected void Talkback_CreatePost(object sender, ActiveEventArgs e)
+        /**
+         * Will create a new posting with the Header and Body combination linked to the User.Current.
+         * If Parent, will put it into the Parent as a Reply
+         */
+        [ActiveEvent(Name = "Magix.Talkback.CreatePost")]
+        protected void Magix_Talkback_CreatePost(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {

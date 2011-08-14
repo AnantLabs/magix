@@ -212,14 +212,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 {
                     Node node = new Node();
 
-                    if (!string.IsNullOrEmpty(t.TabIndex))
+                    if (!string.IsNullOrEmpty(p.Text))
                     {
+                        // Password given, assuming username/password combo
                         node["Username"].Value = t.Text;
                         node["Password"].Value = p.Text;
                     }
                     else
                     {
-                        // Assuming OpenID ...
+                        // No password given, Assuming OpenID ...
                         node["OpenID"].Value = t.Text;
                     }
 

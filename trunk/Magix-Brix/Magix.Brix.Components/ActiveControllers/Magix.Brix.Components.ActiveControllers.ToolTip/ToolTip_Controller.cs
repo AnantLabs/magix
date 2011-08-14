@@ -13,9 +13,16 @@ using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.ToolTip
 {
+    /**
+     * Contains helper logic for displaying and maintaining previous/next Tip of today and such
+     */
     [ActiveController]
-    public class ToolTipController : ActiveController
+    public class ToolTip_Controller : ActiveController
     {
+        /**
+         * Returns the Previous Tooltip on a 'Per User' level. Meaning, it'll keep track of which
+         * ToolTip has been shown to which User
+         */
         [ActiveEvent(Name = "Magix.Core.GetPreviousToolTip")]
         private void Magix_Core_GetPreviousToolTip(object sender, ActiveEventArgs e)
         {
@@ -23,6 +30,10 @@ namespace Magix.Brix.Components.ActiveControllers.ToolTip
                 T.ToolTip.Instance.Previous(UserBase.Current.Username);
         }
 
+        /**
+         * Returns the Next Tooltip on a 'Per User' level. Meaning, it'll keep track of which
+         * ToolTip has been shown to which User
+         */
         [ActiveEvent(Name = "Magix.Core.GetNextToolTip")]
         private void Magix_Core_GetNextToolTip(object sender, ActiveEventArgs e)
         {
