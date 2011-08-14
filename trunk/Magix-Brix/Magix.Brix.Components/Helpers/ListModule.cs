@@ -600,6 +600,7 @@ namespace Magix.Brix.Components
                     colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>(); ;
                     colNode["Name"].Value = idx.Name;
                     colNode["Value"].Value = idx.Get<string>();
+                    colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>();
                     colNode["ID"].Value = node["ID"].Get<int>();
                     colNode["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;
                     ActiveEvents.Instance.RaiseActiveEvent(

@@ -17,7 +17,12 @@ using Magix.Brix.Components.ActiveTypes.MetaTypes;
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
     /**
-     * Contains helper logic for viewing and maintaing MetaViews, and related subjects
+     * Contains helper logic for viewing and maintaing MetaViews, and related subjects. MetaViews are the
+     * foundation for the whole viewing parts of the Meta Application system. A MetaView is imperativ for
+     * both being able to collect new data and also for viewing existing data. The MetaView defines which
+     * parts of the object you can see at any time too, which means you can use it to filter access according
+     * to which Grid the user is having access to, for instance. This controller contains logic for editing
+     * and maintaining MetaViews, plus also direct usage of MetaViews
      */
     [ActiveController]
     public class MetaView_Controller : ActiveController
@@ -633,8 +638,7 @@ Deleting it may break these parts.</p>";
             e.Params["IsFilter"].Value = false;
 
             e.Params["MetaViewTypeName"].Value = view.TypeName;
-
-            Page.Session["Magix.MetaView.EditingView"] = view;
+            e.Params["MetaViewName"].Value = view.Name;
 
             RaiseEvent(
                 "Magix.MetaType.ViewMetaMultiView",
@@ -678,7 +682,7 @@ Deleting it may break these parts.</p>";
                         string[] splits = name.Split(':');
                         name = splits[splits.Length - 1];
                         e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
-                            "Magix.MetaView.MultiViewTemplateColumn";
+                            "Magix.MetaView.MetaView_Multiple_GetColonTemplateColumn";
                     }
 
                     if (!string.IsNullOrEmpty(idx.Action))
@@ -783,7 +787,7 @@ Deleting it may break these parts.</p>";
         [ActiveEvent(Name = "Magix.MetaView.MultiViewActionItemTemplateColumn")]
         protected void Magix_MetaView_MultiViewActionItemTemplateColumn(object sender, ActiveEventArgs e)
         {
-            MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
+            MetaView v = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
             MetaView.MetaViewProperty p = v.Properties.Find(
                 delegate(MetaView.MetaViewProperty idx)
                 {
@@ -794,6 +798,7 @@ Deleting it may break these parts.</p>";
             string text = e.Params["Name"].Get<string>();
             string value = e.Params["Value"].Get<string>();
             int pageObj = e.Params["PageObjectTemplateID"].Get<int>();
+            string metaViewName = e.Params["MetaViewName"].Get<string>();
 
             LinkButton b = new LinkButton();
             b.Text = text;
@@ -814,6 +819,7 @@ Deleting it may break these parts.</p>";
                     node["Name"].Value = text;
                     node["Value"].Value = value;
                     node["PageObjectTemplateID"].Value = pageObj;
+                    node["MetaViewName"].Value = metaViewName;
 
                     RaiseEvent(
                         "Magix.MetaView.RunActionsForMetaViewProperty",
@@ -823,7 +829,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will run the Actions associated with the MetaViewProperty given through 'ID' [MetaObject],
+         * Will run the Actions associated with the MetaViewProperty given through 'MetaViewName' [MetaView - Name],
          * 'Name' [of property within MetaObject] and expects to be raised from within a WebPart, since it
          * will pass along the 'current container' onwards
          */
@@ -835,10 +841,8 @@ Deleting it may break these parts.</p>";
             string value = e.Params["Value"].Get<string>();
             int pageObj = e.Params["PageObjectTemplateID"].Get<int>();
 
-            MetaObject o = MetaObject.SelectByID(id);
+            MetaView v = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
 
-            // TODO: WTF ...?
-            MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
             MetaView.MetaViewProperty p = v.Properties.Find(
                 delegate(MetaView.MetaViewProperty idx)
                 {
@@ -866,10 +870,23 @@ Deleting it may break these parts.</p>";
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaView.MultiViewTemplateColumn")]
-        protected void Magix_MetaView_MultiViewTemplateColumn(object sender, ActiveEventArgs e)
+        /**
+         * Will create a control type depending upon the colon-prefix of the column. For instance, if given
+         * date:When it will create a Calendar, putting the Value selected into the 'When' property.
+         * If given select:xx.yy:zz it will create a select list, enumerating into
+         * the ObjectTypes given with the Property de-referenced. E.g. select:Gender.Sex:Male-Female will enumerate
+         * every 'Sex' value of every object of TypeName 'Gender' and put it into the property with
+         * the name of 'Male-Female'. choice:Gender.Sex,Css:Male-Female would function identically, except
+         * it also expects to find a Css property, whos value will be used as the CSS class for a small 
+         * 'clickable enumerating' type of control which would allow for 'single-choice' selection of
+         * status for instance. If you want to create plugin types for the MultiView Grid system, this
+         * event is what you'd have to handle to inject your own Column types
+         */
+        [ActiveEvent(Name = "Magix.MetaView.MetaView_Multiple_GetColonTemplateColumn")]
+        protected void Magix_MetaView_MetaView_Multiple_GetColonTemplateColumn(object sender, ActiveEventArgs e)
         {
-            MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
+            MetaView v = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
             MetaView.MetaViewProperty p = v.Properties.Find(
                 delegate(MetaView.MetaViewProperty idx)
                 {
@@ -883,249 +900,276 @@ Deleting it may break these parts.</p>";
             switch (typeOfControl)
             {
                 case "select":
-                    {
-                        SelectList ls = new SelectList();
-
-                        ls.CssClass = "span-2 gridSelect";
-                        ls.Style[Styles.display] = "block";
-
-                        string typeProperty = p.Name.Split(':')[1];
-                        string type = typeProperty.Split('.')[0];
-                        string propertyName = typeProperty.Split('.')[1];
-                        string gridPropertyName = p.Name.Split(':')[2];
-
-                        ls.SelectedIndexChanged +=
-                            delegate
-                            {
-                                using (Transaction tr = Adapter.Instance.BeginTransaction())
-                                {
-                                    MetaObject o = MetaObject.SelectByID(id);
-                                    MetaObject.Value val = o.Values.Find(
-                                        delegate(MetaObject.Value idxI)
-                                        {
-                                            return idxI.Name == gridPropertyName;
-                                        });
-                                    if (val == null)
-                                    {
-                                        val = new MetaObject.Value();
-                                        val.Name = gridPropertyName;
-                                        o.Values.Add(val);
-                                        o.Save();
-                                    }
-                                    val.Val = ls.SelectedItem.Value;
-                                    val.Save();
-
-                                    tr.Commit();
-                                }
-                            };
-
-                        ListItem i = new ListItem();
-                        i.Value = "";
-                        i.Text = "Please Select ...";
-                        ls.Items.Add(i);
-
-                        foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
-                        {
-                            ListItem it = new ListItem();
-                            MetaObject.Value val = idx.Values.Find(
-                                delegate(MetaObject.Value idxI)
-                                {
-                                    return idxI.Name == propertyName;
-                                });
-                            it.Text = val.Val;
-                            it.Value = val.Val;
-                            if (val.Val == e.Params["Value"].Get<string>())
-                                it.Selected = true;
-                            ls.Items.Add(it);
-                        }
-
-                        e.Params["Control"].Value = ls;
-                    } break;
+                    CreateMetaView_MultiView_SelectList(id, p, e.Params);
+                    break;
                 case "date":
-                    {
-                        string gridPropertyName = p.Name.Split(':')[1];
-
-                        MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
-                        string propertyName = e.Params["Name"].Get<string>();
-                        MetaObject.Value val = o.Values.Find(
-                            delegate(MetaObject.Value idx)
-                            {
-                                return idx.Name == propertyName;
-                            });
-
-                        Panel panel = new Panel();
-                        panel.ID = "pnl" + id;
-                        panel.CssClass = "calendar-wrapper";
-
-                        Calendar c = new Calendar();
-                        c.ID = "cal" + id;
-                        c.CssClass += " mux-shaded mux-rounded";
-                        if (val != null && 
-                            !string.IsNullOrEmpty(val.Val))
-                        {
-                            c.Value = DateTime.ParseExact(val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
-                        }
-                        c.Style[Styles.display] = "none";
-                        c.Style[Styles.position] = "absolute";
-                        c.Style[Styles.top] = "0";
-                        c.Style[Styles.left] = "0";
-                        c.Style[Styles.zIndex] = "100";
-                        panel.Controls.Add(c);
-
-                        LinkButton but = new LinkButton();
-
-                        c.DateSelected +=
-                            delegate(object sender2, EventArgs e2)
-                            {
-                                new EffectFadeOut(c, 250).Render();
-                                using (Transaction tr = Adapter.Instance.BeginTransaction())
-                                {
-                                    if (val == null)
-                                    {
-                                        val = new MetaObject.Value();
-                                        val.Name = propertyName;
-                                        o.Values.Add(val);
-                                        o.Save();
-                                    }
-                                    val.Val = c.Value.ToString("yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
-
-                                    val.Save();
-
-                                    tr.Commit();
-
-                                    but.Text = DateTime.ParseExact(
-                                        val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
-                                        .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                                }
-                            };
-
-                        but.Text = "???";
-                        if (val != null &&
-                            !string.IsNullOrEmpty(val.Val))
-                            but.Text = DateTime.ParseExact(
-                                val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
-                                .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                        but.ID = "but" + id;
-                        but.Click +=
-                            delegate
-                            {
-                                new EffectFadeIn(c, 250).Render();
-                            };
-                        panel.Controls.Add(but);
-
-                        e.Params["Control"].Value = panel;
-                    } break;
+                    CreateMetaView_MultiView_Calendar(id, p, e.Params);
+                    break;
                 case "choice":
+                    CreateMetaView_MultiView_ChoiceEnum(id, p, e.Params);
+                    break;
+                default:
+                    // Assuming some other bugger will handle this guy ...
+                    break;
+            }
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void CreateMetaView_MultiView_SelectList(int id, MetaView.MetaViewProperty p, Node node)
+        {
+            SelectList ls = new SelectList();
+
+            ls.CssClass = "span-2 gridSelect";
+            ls.Style[Styles.display] = "block";
+
+            string typeProperty = p.Name.Split(':')[1];
+            string type = typeProperty.Split('.')[0];
+            string propertyName = typeProperty.Split('.')[1];
+            string gridPropertyName = p.Name.Split(':')[2];
+
+            ls.SelectedIndexChanged +=
+                delegate
+                {
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
                     {
-                        string typeProperty = p.Name.Split(':')[1];
-                        string type = typeProperty.Split('.')[0];
-                        string propertyName = typeProperty.Split('.')[1].Split(',')[0];
-                        string propertyCss = typeProperty.Split('.')[1].Split(',')[1];
-                        string gridPropertyName = p.Name.Split(':')[2];
-
-                        LinkButton b = new LinkButton();
-
                         MetaObject o = MetaObject.SelectByID(id);
                         MetaObject.Value val = o.Values.Find(
                             delegate(MetaObject.Value idxI)
                             {
                                 return idxI.Name == gridPropertyName;
                             });
-                        MetaObject o4 = null;
-                        string cssClass = "status-unknown";
-                        if (val != null)
+                        if (val == null)
                         {
-                            foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
-                            {
-                                MetaObject.Value val2 = idx.Values.Find(
-                                    delegate(MetaObject.Value idxI)
-                                    {
-                                        return idxI.Name == propertyName && idxI.Val == val.Val;
-                                    });
-                                if (val2 != null)
-                                {
-                                    o4 = idx;
-                                    break;
-                                }
-                            }
-                            MetaObject.Value propCss = o4.Values.Find(
-                                delegate(MetaObject.Value idxI)
-                                {
-                                    return idxI.Name == propertyCss;
-                                });
-                            cssClass = propCss.Val;
+                            val = new MetaObject.Value();
+                            val.Name = gridPropertyName;
+                            o.Values.Add(val);
+                            o.Save();
                         }
+                        val.Val = ls.SelectedItem.Value;
+                        val.Save();
 
-                        b.Text = "&nbsp;";
-                        b.CssClass = "multi-choice " + cssClass;
-                        string choiceVal = val == null ? "" : val.Val;
+                        tr.Commit();
+                    }
+                };
 
-                        b.Text = choiceVal;
+            ListItem i = new ListItem();
+            i.Value = "";
+            i.Text = "Please Select ...";
+            ls.Items.Add(i);
 
-                        b.Click +=
-                            delegate
-                            {
-                                MetaObject next = null;
-                                bool found = false;
-                                foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
-                                {
-                                    if (found)
-                                    {
-                                        next = idx;
-                                        break;
-                                    }
-                                    MetaObject.Value val2 = idx.Values.Find(
-                                        delegate(MetaObject.Value idxI)
-                                        {
-                                            return idxI.Name == propertyName && 
-                                                choiceVal == idxI.Val;
-                                        });
-                                    if (val2 != null && val2.Val == choiceVal)
-                                        found = true;
-                                }
-                                if (next == null)
-                                    next = MetaObject.SelectFirst(Criteria.Eq("TypeName", type));
-                                b.CssClass = "multi-choice " + next.Values.Find(
-                                    delegate(MetaObject.Value idxI)
-                                    {
-                                        return idxI.Name == propertyCss;
-                                    }).Val;
-                                b.Text = next.Values.Find(
-                                    delegate(MetaObject.Value idxI)
-                                    {
-                                        return idxI.Name == propertyName;
-                                    }).Val;
-                                using (Transaction tr = Adapter.Instance.BeginTransaction())
-                                {
-                                    MetaObject o2 = MetaObject.SelectByID(id);
-                                    MetaObject.Value val3 = o.Values.Find(
-                                        delegate(MetaObject.Value idxI)
-                                        {
-                                            return idxI.Name == gridPropertyName;
-                                        });
-                                    if (val3 == null)
-                                    {
-                                        val3 = new MetaObject.Value();
-                                        val3.Name = gridPropertyName;
-                                        o2.Values.Add(val3);
-                                        o2.Save();
-                                    }
-                                    val3.Val = next.Values.Find(
-                                        delegate(MetaObject.Value idxI)
-                                        {
-                                            return idxI.Name == propertyName;
-                                        }).Val;
-                                    val3.Save();
-
-                                    tr.Commit();
-                                }
-                            };
-
-                        e.Params["Control"].Value = b;
-                    } break;
+            foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+            {
+                ListItem it = new ListItem();
+                MetaObject.Value val = idx.Values.Find(
+                    delegate(MetaObject.Value idxI)
+                    {
+                        return idxI.Name == propertyName;
+                    });
+                it.Text = val.Val;
+                it.Value = val.Val;
+                if (val.Val == node["Value"].Get<string>())
+                    it.Selected = true;
+                ls.Items.Add(it);
             }
+
+            node["Control"].Value = ls;
         }
 
+        /*
+         * Helper for above ...
+         */
+        private void CreateMetaView_MultiView_Calendar(int id, MetaView.MetaViewProperty p, Node node)
+        {
+            string gridPropertyName = p.Name.Split(':')[1];
+
+            MetaObject o = MetaObject.SelectByID(id);
+            string propertyName = node["Name"].Get<string>();
+            MetaObject.Value val = o.Values.Find(
+                delegate(MetaObject.Value idx)
+                {
+                    return idx.Name == propertyName;
+                });
+
+            Panel panel = new Panel();
+            panel.ID = "pnl" + id;
+            panel.CssClass = "calendar-wrapper";
+
+            Calendar c = new Calendar();
+            c.ID = "cal" + id;
+            c.CssClass += " mux-shaded mux-rounded";
+            if (val != null &&
+                !string.IsNullOrEmpty(val.Val))
+            {
+                c.Value = DateTime.ParseExact(val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            c.Style[Styles.display] = "none";
+            c.Style[Styles.position] = "absolute";
+            c.Style[Styles.top] = "0";
+            c.Style[Styles.left] = "0";
+            c.Style[Styles.zIndex] = "100";
+            panel.Controls.Add(c);
+
+            LinkButton but = new LinkButton();
+
+            c.DateSelected +=
+                delegate(object sender2, EventArgs e2)
+                {
+                    new EffectFadeOut(c, 250).Render();
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
+                    {
+                        if (val == null)
+                        {
+                            val = new MetaObject.Value();
+                            val.Name = propertyName;
+                            o.Values.Add(val);
+                            o.Save();
+                        }
+                        val.Val = c.Value.ToString("yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
+
+                        val.Save();
+
+                        tr.Commit();
+
+                        but.Text = DateTime.ParseExact(
+                            val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
+                            .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                };
+
+            but.Text = "???";
+            if (val != null &&
+                !string.IsNullOrEmpty(val.Val))
+                but.Text = DateTime.ParseExact(
+                    val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
+                    .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            but.ID = "but" + id;
+            but.Click +=
+                delegate
+                {
+                    new EffectFadeIn(c, 250).Render();
+                };
+            panel.Controls.Add(but);
+
+            node["Control"].Value = panel;
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void CreateMetaView_MultiView_ChoiceEnum(int id, MetaView.MetaViewProperty p, Node node)
+        {
+            string typeProperty = p.Name.Split(':')[1];
+            string type = typeProperty.Split('.')[0];
+            string propertyName = typeProperty.Split('.')[1].Split(',')[0];
+            string propertyCss = typeProperty.Split('.')[1].Split(',')[1];
+            string gridPropertyName = p.Name.Split(':')[2];
+
+            LinkButton b = new LinkButton();
+
+            MetaObject o = MetaObject.SelectByID(id);
+            MetaObject.Value val = o.Values.Find(
+                delegate(MetaObject.Value idxI)
+                {
+                    return idxI.Name == gridPropertyName;
+                });
+            MetaObject o4 = null;
+            string cssClass = "status-unknown";
+            if (val != null)
+            {
+                foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+                {
+                    MetaObject.Value val2 = idx.Values.Find(
+                        delegate(MetaObject.Value idxI)
+                        {
+                            return idxI.Name == propertyName && idxI.Val == val.Val;
+                        });
+                    if (val2 != null)
+                    {
+                        o4 = idx;
+                        break;
+                    }
+                }
+                MetaObject.Value propCss = o4.Values.Find(
+                    delegate(MetaObject.Value idxI)
+                    {
+                        return idxI.Name == propertyCss;
+                    });
+                cssClass = propCss.Val;
+            }
+
+            b.Text = "&nbsp;";
+            b.CssClass = "multi-choice " + cssClass;
+            string choiceVal = val == null ? "" : val.Val;
+
+            b.Text = choiceVal;
+
+            b.Click +=
+                delegate
+                {
+                    MetaObject next = null;
+                    bool found = false;
+                    foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+                    {
+                        if (found)
+                        {
+                            next = idx;
+                            break;
+                        }
+                        MetaObject.Value val2 = idx.Values.Find(
+                            delegate(MetaObject.Value idxI)
+                            {
+                                return idxI.Name == propertyName &&
+                                    choiceVal == idxI.Val;
+                            });
+                        if (val2 != null && val2.Val == choiceVal)
+                            found = true;
+                    }
+                    if (next == null)
+                        next = MetaObject.SelectFirst(Criteria.Eq("TypeName", type));
+                    b.CssClass = "multi-choice " + next.Values.Find(
+                        delegate(MetaObject.Value idxI)
+                        {
+                            return idxI.Name == propertyCss;
+                        }).Val;
+                    b.Text = next.Values.Find(
+                        delegate(MetaObject.Value idxI)
+                        {
+                            return idxI.Name == propertyName;
+                        }).Val;
+                    using (Transaction tr = Adapter.Instance.BeginTransaction())
+                    {
+                        MetaObject o2 = MetaObject.SelectByID(id);
+                        MetaObject.Value val3 = o.Values.Find(
+                            delegate(MetaObject.Value idxI)
+                            {
+                                return idxI.Name == gridPropertyName;
+                            });
+                        if (val3 == null)
+                        {
+                            val3 = new MetaObject.Value();
+                            val3.Name = gridPropertyName;
+                            o2.Values.Add(val3);
+                            o2.Save();
+                        }
+                        val3.Val = next.Values.Find(
+                            delegate(MetaObject.Value idxI)
+                            {
+                                return idxI.Name == propertyName;
+                            }).Val;
+                        val3.Save();
+
+                        tr.Commit();
+                    }
+                };
+
+            node["Control"].Value = b;
+        }
+
+        /**
+         * Loads up WYSIWYG editor for MetaView in 'SingleView Mode'
+         */
         [ActiveEvent(Name = "Magix.MetaView.LoadWysiwyg")]
         protected void Magix_MetaView_LoadWysiwyg(object sender, ActiveEventArgs e)
         {
@@ -1142,6 +1186,7 @@ Deleting it may break these parts.</p>";
             node["MetaViewTypeName"].Value = m.TypeName;
             node["MetaViewName"].Value = m.Name;
 
+            // TODO: Refactor and make shareable with MultiView and non-WYSIWYG mode ...
             foreach (MetaView.MetaViewProperty idx in m.Properties)
             {
                 node["Properties"]["p-" + idx.ID]["ID"].Value = idx.ID;
@@ -1157,6 +1202,9 @@ Deleting it may break these parts.</p>";
                 node);
         }
 
+        /**
+         * Returns the properties for the MetaView back to caller
+         */
         [ActiveEvent(Name = "Magix.MetaView.GetViewData")]
         protected void Magix_MetaView_GetViewData(object sender, ActiveEventArgs e)
         {
@@ -1174,6 +1222,9 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        /**
+         * Returns the number of MetaViews and an event for viewing all MetaViews back to caller
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
         protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
         {

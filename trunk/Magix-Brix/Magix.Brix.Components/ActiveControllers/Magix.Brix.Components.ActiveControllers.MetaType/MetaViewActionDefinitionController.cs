@@ -272,7 +272,7 @@ Root node will become VERY large after subsequent actions. Be warned ...";
                     m.Children.Add(ar);
 
                     Action.ActionParams m2 = new Action.ActionParams();
-                    m2.Name = "Name";
+                    m2.Name = "ActionName";
                     m2.Value = "Magix.MetaType.ReplaceStringValue";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
@@ -306,7 +306,7 @@ to run your website ... :)";
                     m.Children.Add(ar);
 
                     m2 = new Action.ActionParams();
-                    m2.Name = "Name";
+                    m2.Name = "ActionName";
                     m2.Value = "Magix.MetaType.RenameNode";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
@@ -332,7 +332,7 @@ to run your website ... :)";
                     m.Children.Add(ar);
 
                     m2 = new Action.ActionParams();
-                    m2.Name = "Name";
+                    m2.Name = "ActionName";
                     m2.Value = "Magix.MetaType.StripEverythingBut";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
@@ -352,7 +352,7 @@ to run your website ... :)";
                     m.Children.Add(ar);
 
                     m2 = new Action.ActionParams();
-                    m2.Name = "Name";
+                    m2.Name = "ActionName";
                     m2.Value = "Magix.Core.ShowMessage";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
