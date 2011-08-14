@@ -337,6 +337,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
                     Node colNode = new Node();
                     colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>(); ;
+                    colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>(); ;
                     colNode["Name"].Value = node.Name;
                     colNode["Value"].Value = node.Get<string>();
                     colNode["ID"].Value = DataSource["Object"]["ID"].Get<int>();
