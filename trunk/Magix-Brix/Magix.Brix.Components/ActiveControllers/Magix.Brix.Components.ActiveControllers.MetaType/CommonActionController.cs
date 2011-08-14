@@ -19,8 +19,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     [ActiveController]
     public class CommonActionController : ActiveController
     {
-        [ActiveEvent(Name = "Magix.MetaType.ViewMetaType")]
-        protected void Magix_MetaType_ViewMetaType(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.MetaType.ViewMetaMultiView")]
+        protected void Magix_MetaType_ViewMetaMultiView(object sender, ActiveEventArgs e)
         {
             Node node = new Node();
 

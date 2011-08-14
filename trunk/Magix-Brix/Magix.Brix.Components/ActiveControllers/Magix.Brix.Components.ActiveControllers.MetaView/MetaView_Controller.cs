@@ -16,9 +16,16 @@ using Magix.Brix.Components.ActiveTypes.MetaTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
+    /**
+     * Contains helper logic for viewing and maintaing MetaViews, and related subjects
+     */
     [ActiveController]
-    public class MetaViewController : ActiveController
+    public class MetaView_Controller : ActiveController
     {
+        /**
+         * Will return one item back to caller which hopefully will function as the basis
+         * of loading the ViewMetaViews logic
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
         {
@@ -26,6 +33,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             e.Params["Items"]["MetaType"]["Items"]["Views"]["Event"]["Name"].Value = "Magix.MetaView.ViewMetaViews";
         }
 
+        /**
+         * Will show a Grid with all the MetaViews to the end user
+         */
         [ActiveEvent(Name = "Magix.MetaView.ViewMetaViews")]
         protected void Magix_MetaView_ViewMetaViews(object sender, ActiveEventArgs e)
         {
@@ -49,7 +59,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["IDColumnName"].Value = "Edit";
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.MetaView.EditMetaView";
-            node["CreateEventName"].Value = "Magix.MetaView.CreateMetaView";
+            node["CreateEventName"].Value = "Magix.MetaView.CreateMetaViewAndEdit";
             node["DeleteColumnEvent"].Value = "Magix.MetaView.DeleteMetaView";
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
@@ -65,8 +75,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.MetaView.GetTemplateColumnSelectView")]
-        protected void Magix_MetaView_GetTemplateColumnSelectView(object sender, ActiveEventArgs e)
+        /**
+         * Will return a SelectList with all the MetaViews back to caller
+         */
+        [ActiveEvent(Name = "Magix.MetaView.MetaView_Single.GetTemplateColumnSelectView")]
+        protected void Magix_MetaView_MetaView_Single_GetTemplateColumnSelectView(object sender, ActiveEventArgs e)
         {
             SelectList ls = new SelectList();
             e.Params["Control"].Value = ls;
@@ -99,8 +112,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaView.GetTemplateColumnSelectViewMultiple")]
-        protected void Magix_MetaView_GetTemplateColumnSelectViewMultiple(object sender, ActiveEventArgs e)
+        /**
+         * Will return a SelectList with all the MetaViews back to caller
+         */
+        [ActiveEvent(Name = "Magix.MetaView.MetaView_Multiple.GetTemplateColumnSelectView")]
+        protected void Magix_MetaView_MetaView_Multiple_GetTemplateColumnSelectView(object sender, ActiveEventArgs e)
         {
             SelectList ls = new SelectList();
             e.Params["Control"].Value = ls;
@@ -133,6 +149,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             }
         }
 
+        /**
+         * Returns a Copy MetaView
+         */
         [ActiveEvent(Name = "Magix.Meta.GetCopyMetaViewTemplateColumn")]
         protected void Magix_Meta_GetCopyMetaViewTemplateColumn(object sender, ActiveEventArgs e)
         {
@@ -151,7 +170,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                     Node node = new Node();
                     node["ID"].Value = id;
                     RaiseEvent(
-                        "Magix.Meta.CopyMetaView",
+                        "Magix.Meta.CopyMetaViewAndEditCopy",
                         node);
                 };
 
@@ -160,6 +179,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             e.Params["Control"].Value = ls;
         }
 
+        /**
+         * Will copy [deep clone] the incoming 'ID' MetaView and return the new copy's
+         * ID as 'NewID'
+         */
         [ActiveEvent(Name = "Magix.Meta.CopyMetaView")]
         protected void Magix_Meta_CopyMetaView(object sender, ActiveEventArgs e)
         {
@@ -171,32 +194,48 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 clone.Save();
 
                 tr.Commit();
-
-                Node n = new Node();
-
-                n["FullTypeName"].Value = typeof(MetaView).FullName;
-                n["ID"].Value = clone.ID;
-
-                RaiseEvent(
-                    "DBAdmin.Grid.SetActiveRow",
-                    n);
-
-                n = new Node();
-                n["FullTypeName"].Value = typeof(MetaView).FullName;
-
-                RaiseEvent(
-                    "Magix.Core.UpdateGrids",
-                    n);
-
-                n = new Node();
-                n["ID"].Value = clone.ID;
-
-                RaiseEvent(
-                    "Magix.MetaView.EditMetaView",
-                    n);
+                e.Params["NewID"].Value = clone.ID;
             }
         }
 
+        /**
+         * Will copy [deep clone] the incoming 'ID' MetaView and edit it immediately
+         */
+        [ActiveEvent(Name = "Magix.Meta.CopyMetaViewAndEditCopy")]
+        protected void Magix_Meta_CopyMetaViewAndEditCopy(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "Magix.Meta.CopyMetaView",
+                e.Params);
+
+            Node n = new Node();
+
+            n["FullTypeName"].Value = typeof(MetaView).FullName;
+            n["ID"].Value = e.Params["NewID"].Value;
+
+            RaiseEvent(
+                "DBAdmin.Grid.SetActiveRow",
+                n);
+
+            n = new Node();
+            n["FullTypeName"].Value = typeof(MetaView).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                n);
+
+            n = new Node();
+            n["ID"].Value = e.Params["NewID"].Value;
+
+            RaiseEvent(
+                "Magix.MetaView.EditMetaView",
+                n);
+        }
+
+        /**
+         * Will ask the user if he really wish to delete the MetaView given through 'ID',
+         * and if the user says yes, delete it
+         */
         [ActiveEvent(Name = "Magix.MetaView.DeleteMetaView")]
         protected void Magix_MetaView_DeleteMetaView(object sender, ActiveEventArgs e)
         {
@@ -230,6 +269,9 @@ Deleting it may break these parts.</p>";
                 node);
         }
 
+        /**
+         * End user confirmed he wishes to delete the MetaView
+         */
         [ActiveEvent(Name = "Magix.MetaView.DeleteMetaView-Confirmed")]
         protected void Magix_MetaView_DeleteMetaView_Confirmed(object sender, ActiveEventArgs e)
         {
@@ -251,6 +293,10 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        /**
+         * Will create a new MetaView with some default settings and return ID of new view 
+         * as 'NewID'
+         */
         [ActiveEvent(Name = "Magix.MetaView.CreateMetaView")]
         protected void Magix_MetaView_CreateMetaView(object sender, ActiveEventArgs e)
         {
@@ -263,21 +309,48 @@ Deleting it may break these parts.</p>";
 
                 tr.Commit();
 
-                Node node = new Node();
-                node["ID"].Value = view.ID;
-                RaiseEvent(
-                    "Magix.MetaView.EditMetaView",
-                    node);
+                e.Params["NewID"].Value = view.ID;
             }
         }
 
+        /**
+         * Will create and Edit immediately a new MetaView
+         */
+        [ActiveEvent(Name = "Magix.MetaView.CreateMetaViewAndEdit")]
+        protected void Magix_MetaView_CreateMetaViewAndEdit(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "Magix.MetaView.CreateMetaView",
+                e.Params);
+
+            Node node = new Node();
+            node["ID"].Value = e.Params["NewID"].Value;
+
+            RaiseEvent(
+                "Magix.MetaView.EditMetaView",
+                node);
+        }
+
+        /**
+         * Will edit the given ['ID'] MetaView with its properties and some other
+         * controls. Such as for instance a 'View WYSIWYG' button
+         */
         [ActiveEvent(Name = "Magix.MetaView.EditMetaView")]
         protected void Magix_MetaView_EditMetaView(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("content6");
 
             MetaView m = MetaView.SelectByID(e.Params["ID"].Get<int>());
+            ViewMetaViewDirectPropertiesGrid(m);
+            ViewMetaViewINDirectPropertiesGrid(m);
+            ViewWysiwygButton(m);
+        }
 
+        /*
+         * Helper for above ...
+         */
+        private void ViewMetaViewDirectPropertiesGrid(MetaView m)
+        {
             Node node = new Node();
 
             // MetaView Single View Editing ...
@@ -305,9 +378,15 @@ Deleting it may break these parts.</p>";
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
+        }
 
+        /*
+         * Helper for above ...
+         */
+        private void ViewMetaViewINDirectPropertiesGrid(MetaView m)
+        {
             // Properties ...
-            node = new Node();
+            Node node = new Node();
 
             node["Width"].Value = 20;
             node["Padding"].Value = 4;
@@ -337,16 +416,22 @@ Deleting it may break these parts.</p>";
             node["Type"]["Properties"]["Action"]["Header"].Value = "Action";
             node["Type"]["Properties"]["Action"]["TemplateColumnEvent"].Value = "Magix.MetaView.GetMetaViewActionTemplateColumn";
 
-            node["ID"].Value = e.Params["ID"].Value;
+            node["ID"].Value = m.ID;
             node["NoIdColumn"].Value = true;
             node["ReUseNode"].Value = true;
 
             RaiseEvent(
                 "DBAdmin.Form.ViewListOrComplexPropertyValue",
                 node);
+        }
 
+        /*
+         * Helper for above ...
+         */
+        private void ViewWysiwygButton(MetaView m)
+        {
             // Wysiwyg button ...
-            node = new Node();
+            Node node = new Node();
 
             node["Text"].Value = "Preview ...";
             node["ButtonCssClass"].Value = "span-4";
@@ -360,47 +445,10 @@ Deleting it may break these parts.</p>";
                 node);
         }
 
-        [ActiveEvent(Name = "Magix.DataPlugins.GetTemplateColumns.CheckBox")]
-        protected void Magix_DataPlugins_GetTemplateColumns_CheckBox(object sender, ActiveEventArgs e)
-        {
-            int id = e.Params["ID"].Get<int>();
-
-            Panel pnl = new Panel();
-
-            CheckBox ch = new CheckBox();
-            ch.Style[Styles.floating] = "left";
-            ch.Style[Styles.width] = "15px";
-            ch.Style[Styles.display] = "block";
-            ch.Checked = bool.Parse(e.Params["Value"].Value.ToString());
-            ch.CheckedChanged +=
-                delegate
-                {
-                    Node node = new Node();
-                    node["ID"].Value = e.Params["ID"].Value;
-                    node["FullTypeName"].Value = e.Params["FullTypeName"].Value;
-                    node["NewValue"].Value = ch.Checked.ToString();
-                    node["PropertyName"].Value = e.Params["Name"].Value;
-
-                    RaiseEvent(
-                        "DBAdmin.Data.ChangeSimplePropertyValue",
-                        node);
-                };
-            pnl.Controls.Add(ch);
-
-            Label l = new Label();
-            l.Text = "&nbsp;";
-            l.CssClass += "span-2";
-            l.Tag = "label";
-            l.Load +=
-                delegate
-                {
-                    l.For = ch.ClientID;
-                };
-            pnl.Controls.Add(l);
-
-            e.Params["Control"].Value = pnl;
-        }
-
+        /**
+         * Will return a clickable and drop-down-able Panel that the end user can click
+         * to append and remove events that triggers the MetaView Property if clicked
+         */
         [ActiveEvent(Name = "Magix.MetaView.GetMetaViewActionTemplateColumn")]
         protected void Magix_MetaView_GetMetaViewActionTemplateColumn(object sender, ActiveEventArgs e)
         {
@@ -513,16 +561,25 @@ Deleting it may break these parts.</p>";
             e.Params["Control"].Value = pnl;
         }
 
+        /**
+         * Will show a Search box, from which the end user can search for a specific action
+         * to append to the list of actions already associated with the MetaView Property
+         */
         [ActiveEvent(Name = "Magix.MetaView.AppendAction")]
         protected void Magix_MetaView_AppendAction(object sender, ActiveEventArgs e)
         {
             e.Params["SelectEvent"].Value = "Magix.MetaView.ActionWasChosenForAppending";
             e.Params["ParentID"].Value = e.Params["ID"].Value;
+
             RaiseEvent(
                 "Magix.MetaActions.SearchActions",
                 e.Params);
         }
 
+        /**
+         * Will append the specific 'ActionName' into the 'ParentID' MetaView Property and
+         * call for an update of the grids
+         */
         [ActiveEvent(Name = "Magix.MetaView.ActionWasChosenForAppending")]
         protected void Magix_MetaView_ActionWasChosenForAppending(object sender, ActiveEventArgs e)
         {
@@ -547,6 +604,11 @@ Deleting it may break these parts.</p>";
                 n);
         }
 
+        // TODO: Implement checking against SPECIFIC MetaView before we 'flush containers' since
+        // user might very well delete _another_ view than the one being edited ...
+        /**
+         * Handled to make sure we clear content4 and out if a MetaView s deleted.
+         */
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
         protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
         {
@@ -556,8 +618,11 @@ Deleting it may break these parts.</p>";
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaType.RaiseViewMetaTypeFromMultipleView")]
-        protected void Magix_MetaType_RaiseViewMetaTypeFromMultipleView(object sender, ActiveEventArgs e)
+        /**
+         * Will show the 'MetaViewName' MetaView within the 'current container'
+         */
+        [ActiveEvent(Name = "Magix.MetaType.ShowMetaViewMultipleInCurrentContainer")]
+        protected void Magix_MetaType_ShowMetaViewMultipleInCurrentContainer(object sender, ActiveEventArgs e)
         {
             MetaView view = MetaView.SelectFirst(
                 Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
@@ -572,10 +637,13 @@ Deleting it may break these parts.</p>";
             Page.Session["Magix.MetaView.EditingView"] = view;
 
             RaiseEvent(
-                "Magix.MetaType.ViewMetaType",
+                "Magix.MetaType.ViewMetaMultiView",
                 e.Params);
         }
 
+        /**
+         * Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
+         */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
         protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
         {
@@ -620,7 +688,7 @@ Deleting it may break these parts.</p>";
                         e.Params["Type"]["Properties"][name]["Header"].Value = name;
                         e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
                         e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
-                            "Magix.MetaView.MultiViewTemplateColumnButton";
+                            "Magix.MetaView.MultiViewActionItemTemplateColumn";
                     }
 
                     e.Params["WhiteListColumns"][name].Value = true;
@@ -631,6 +699,9 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        /**
+         * Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
+         */
         [ActiveEvent(Name = "DBAdmin.DynamicType.CreateObject")]
         protected void DBAdmin_DynamicType_CreateObject(object sender, ActiveEventArgs e)
         {
@@ -645,6 +716,9 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        /**
+         * Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
+         */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
         protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
         {
@@ -702,8 +776,12 @@ Deleting it may break these parts.</p>";
             }
         }
 
-        [ActiveEvent(Name = "Magix.MetaView.MultiViewTemplateColumnButton")]
-        protected void Magix_MetaView_MultiViewTemplateColumnButton(object sender, ActiveEventArgs e)
+        /**
+         * Will return a Button control to caller, upon which clicked, will raise the named actions in its
+         * settings according to which MetaViewProperty it belongs to
+         */
+        [ActiveEvent(Name = "Magix.MetaView.MultiViewActionItemTemplateColumn")]
+        protected void Magix_MetaView_MultiViewActionItemTemplateColumn(object sender, ActiveEventArgs e)
         {
             MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
             MetaView.MetaViewProperty p = v.Properties.Find(
@@ -738,14 +816,19 @@ Deleting it may break these parts.</p>";
                     node["PageObjectTemplateID"].Value = pageObj;
 
                     RaiseEvent(
-                        "Magix.MetaView.MultiViewButtonWasClick",
+                        "Magix.MetaView.RunActionsForMetaViewProperty",
                         node);
                 };
             e.Params["Control"].Value = b;
         }
 
-        [ActiveEvent(Name = "Magix.MetaView.MultiViewButtonWasClick")]
-        protected void Magix_MetaView_MultiViewButtonWasClick(object sender, ActiveEventArgs e)
+        /**
+         * Will run the Actions associated with the MetaViewProperty given through 'ID' [MetaObject],
+         * 'Name' [of property within MetaObject] and expects to be raised from within a WebPart, since it
+         * will pass along the 'current container' onwards
+         */
+        [ActiveEvent(Name = "Magix.MetaView.RunActionsForMetaViewProperty")]
+        protected void Magix_MetaView_RunActionsForMetaViewProperty(object sender, ActiveEventArgs e)
         {
             int id = e.Params["ID"].Get<int>();
             string name = e.Params["Name"].Get<string>();
@@ -754,6 +837,7 @@ Deleting it may break these parts.</p>";
 
             MetaObject o = MetaObject.SelectByID(id);
 
+            // TODO: WTF ...?
             MetaView v = Page.Session["Magix.MetaView.EditingView"] as MetaView;
             MetaView.MetaViewProperty p = v.Properties.Find(
                 delegate(MetaView.MetaViewProperty idx)
