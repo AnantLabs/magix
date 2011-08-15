@@ -26,6 +26,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     [ActiveController]
     public class CommonActions_Controller : ActiveController
     {
+        [ActiveEvent(Name = "Magix.Common.GetUserSetting")]
+        protected void Magix_Common_GetUserSetting(object sender, ActiveEventArgs e)
+        {
+            string val = User.Current.GetSetting<string>(
+                e.Params["Name"].Get<string>(), 
+                e.Params["Default"].Get<string>());
+
+            e.Params["Value"].Value = val;
+        }
+
         /**
          * Level1: Simplification of 'Magix.Core.SendEmail', will among
          * other things using the User.Current as sender unless explicitly

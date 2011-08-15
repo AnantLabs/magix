@@ -26,6 +26,49 @@ namespace Doxygen.NET
         public List<Namespace> Namespaces { get; protected set; }
 
         public bool EagerParsing { get; set; }
+
+        public IEnumerable<Namespace> GetNamespaces(int level)
+        {
+            // Since namespaces cannot be documented [bug in Doxygen], we'll have to look for the
+            // existance of any classes with a smaller level than currently being viewed
+            foreach (Namespace idx in Namespaces)
+            {
+                if (HasClassWithLessThen(level, idx))
+                    yield return idx;
+            }
+        }
+
+        private bool HasClassWithLessThen(int level, Namespace ns)
+        {
+            foreach (Class idx in ns.Classes)
+            {
+                if (string.IsNullOrEmpty(idx.Description))
+                    continue; // Only returning documented stuff ...
+
+                if (level >= 4)
+                    return true; // Returning EVERYTHING ...!!
+
+                string tmpLevelStr = idx.Description ?? "";
+                if (tmpLevelStr.Length > 6)
+                {
+                    tmpLevelStr = tmpLevelStr.Substring(0, 6);
+                    switch (tmpLevelStr.ToLowerInvariant())
+                    {
+                        case "level1":
+                            return true;
+                        case "level2":
+                            if (level >= 2)
+                                return true;
+                            break;
+                        case "level3":
+                            if (level >= 3)
+                                return true;
+                            break;
+                    }
+                }
+            }
+            return false;
+        }
                 
         public Docs(string doxygenXmlOuputDirectoryPath)
         {
@@ -156,7 +199,7 @@ namespace Doxygen.NET
             XmlDocument typeDoc = new XmlDocument();
             typeDoc.Load(typeXmlFile.FullName);
 
-            t.Description = typeDoc.SelectSingleNode("/doxygen/compounddef/detaileddescription").InnerXml.Replace("preformatted", "pre");
+            t.Description = typeDoc.SelectSingleNode("/doxygen/compounddef/detaileddescription").InnerText;
 
             XmlNodeList baseTypes = typeDoc.SelectNodes("/doxygen/compounddef/basecompoundref");
             
@@ -206,7 +249,7 @@ namespace Doxygen.NET
                 m.FullName = string.Format("{0}.{1}", t.FullName, name);
                 m.Name = name;
                 m.Kind = kind;
-                m.Description = member["detaileddescription"].InnerXml.Replace("preformatted", "pre");
+                m.Description = member["detaileddescription"].InnerText;
                 m.AccessModifier = member.Attributes["prot"].Value;
                 m.Parent = t;
                 m.ReturnType = member["type"] != null ?
