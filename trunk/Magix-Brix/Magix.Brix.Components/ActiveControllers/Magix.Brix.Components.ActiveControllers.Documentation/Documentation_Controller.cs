@@ -199,17 +199,26 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
 
         private void AddClassToNodeForBookDistroPages(Class cls, Node node)
         {
-            node["Pages"][cls.FullName]["Header"].Value = cls.FullName;
-
             string description = cls.Description;
 
             foreach (Method idx in cls.Methods)
             {
                 if(string.IsNullOrEmpty(idx.Description))
                     continue;
-                description += "\r\n" + "\r\n";
-                description += idx.Name;
-                description += "\r\n";
+                description += "\r\n\r\n\r\n";
+                description += idx.AccessModifier + " " +
+                    idx.ReturnType.Replace("<", "[").Replace(">", "]") + " " + idx.Name;
+                string pars = "";
+                foreach (Parameter idxP in idx.Parameters)
+                {
+                    if (pars != "")
+                        pars += ", ";
+                    pars += idxP.Type.Replace("<", "[").Replace(">", "]") + " " + idxP.Name;
+                }
+                if (pars != "")
+                    description += "(" + pars + ")";
+
+                description += "\r\n\r\n";
                 description += idx.Description;
             }
 
