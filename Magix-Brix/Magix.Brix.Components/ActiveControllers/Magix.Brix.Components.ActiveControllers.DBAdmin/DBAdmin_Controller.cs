@@ -17,7 +17,7 @@ using Magix.Brix.Components.ActiveTypes;
 namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 {
     /**
-     * Contains the ogic for the DBAdmin, which is also the Grid/CRUD-Foundation
+     * Level2: Contains the logic for the DBAdmin module(s), which is also the Grid/CRUD-Foundation
      * system in Magix. Contains many useful methods and ActiveEvents for displaying
      * either Grids or editing Single Instances of Objects. Can react 100% 
      * transparently on ActiveTypes. Has support for Meta Types, meaning types where
@@ -27,7 +27,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
     public class DBAdmin_Controller : ActiveController
     {
         /**
-         * Loads up the DBAdmin BrowserClasses interface. Pass in a node for
+         * Level2: Loads up the DBAdmin BrowserClasses interface. Pass in a node for
          * positioning and such
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewClasses")]
@@ -46,7 +46,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will return the Class Hierarchy of all ActiveTypes within the system in a 
+         * Level2: Will return the Class Hierarchy of all ActiveTypes within the system in a 
          * tree hierarchy, according to namespace
          */
         [ActiveEvent(Name = "DBAdmin.Data.GetClassHierarchy")]
@@ -79,7 +79,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will show all the objects of type 'FullTypeName' by using the passed in
+         * Level2: Will show all the objects of type 'FullTypeName' by using the passed in
          * node for settings in regards to positioning and such
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewClass")]
@@ -138,7 +138,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will return a range of objects type 'FullTypeName' depending upon the 'Start' and 'End' 
+         * Level2: Will return a range of objects type 'FullTypeName' depending upon the 'Start' and 'End' 
          * parameter. Requires a "FullTypeName" parameter, and "Start" + "End"
          */
         [ActiveEvent(Name = "DBAdmin.Data.GetContentsOfClass")]
@@ -166,7 +166,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will change a 'Simple Property Value' [property of some sort belonging to the object, e.g. 
+         * Level2: Will change a 'Simple Property Value' [property of some sort belonging to the object, e.g. 
          * a DateTime/Birthday property]
          * Needs 'FullTypeName', 'ID', 'PropertyName', 'NewValue' to work. NewValue must be of type
          * of property.
@@ -187,7 +187,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will show either a Child object or a List of children depending upon the 'IsList' parameter
+         * Level2: Will show either a Child object or a List of children depending upon the 'IsList' parameter
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewListOrComplexPropertyValue")]
         protected void DBAdmin_Form_ViewListOrComplexPropertyValue(object sender, ActiveEventArgs e)
@@ -241,7 +241,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Returns a Range of Child Objects belonging to the 'ParentID'. Needs 'ParentFullTypeName',
+         * Level2: Returns a Range of Child Objects belonging to the 'ParentID'. Needs 'ParentFullTypeName',
          * 'ParentPropertyName', 'Start', 'End' and 'ParentID' to function
          */
         [ActiveEvent(Name = "DBAdmin.Data.GetListFromObject")]
@@ -276,7 +276,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will return the object with the given 'ID' being of 'FullTypeName' as a Value/Key pair
+         * Level2: Will return the object with the given 'ID' being of 'FullTypeName' as a Value/Key pair
          */
         [ActiveEvent(Name = "DBAdmin.Data.GetObject")]
         protected void DBAdmin_Data_GetObject(object sender, ActiveEventArgs e)
@@ -298,7 +298,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will return a single instance of a complex [ActiveType normally, unless 'meta'] child object
+         * Level2: Will return a single instance of a complex [ActiveType normally, unless 'meta'] child object
          */
         [ActiveEvent(Name = "DBAdmin.Data.GetObjectFromParentProperty")]
         protected void DBAdmin_Data_GetObjectFromParentProperty(object sender, ActiveEventArgs e)
@@ -315,7 +315,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Vill show one Complex object with the 'ID' and 'FullTypeName'
+         * Level2: Will show one Complex object with the 'ID' and 'FullTypeName'
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewComplexObject")]
         protected void DBAdmin_ShowComplexObject(object sender, ActiveEventArgs e)
@@ -349,7 +349,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will open up a 'Configure Filter' dialogue from which the user can change, edit or remove
+         * Level2: Will open up a 'Configure Filter' dialogue from which the user can change, edit or remove
          * any existing filters or create new ones
          */
         [ActiveEvent(Name = "DBAdmin.Form.ConfigureFilterForColumn")]
@@ -402,7 +402,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will load up 'Configure Columns to View form' to end user
+         * Level2: Will load up 'Configure Columns to View form' to end user
          */
         [ActiveEvent(Name = "DBAdmin.Form.ShowAddRemoveColumns")]
         protected void DBAdmin_Form_ShowAddRemoveColumns(object sender, ActiveEventArgs e)
@@ -429,7 +429,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Changes the visibility setting of a specific Column for a specific type
+         * Level2: Changes the visibility setting of a specific Column for a specific type
          */
         [ActiveEvent(Name = "DBAdmin.Data.ChangeVisibilityOfColumn")]
         protected void DBAdmin_Data_ChangeVisibilityOfColumn(object sender, ActiveEventArgs e)
@@ -446,7 +446,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Will delete the given 'ID' ActiveType within the 'FullTypeName' namespace/name after
+         * Level2: Will delete the given 'ID' ActiveType within the 'FullTypeName' namespace/name after
          * user has been asked to confirm deletion
          */
         [ActiveEvent(Name = "DBAdmin.Data.DeleteObject")]
@@ -485,7 +485,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Default implementation of 'deletion of object was confirmed by user' logic
+         * Level2: Default implementation of 'deletion of object was confirmed by user' logic
          */
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
         protected void DBAdmin_Data_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
@@ -498,8 +498,9 @@ have relationships towards other instances in your database.</p>";
             ActiveEvents.Instance.RaiseClearControls("child");
         }
 
+        // TODO: Is this needed ...?? Refactor ...
         /**
-         * Flushes the Container containing the MessageBox
+         * Level2: Flushes the Container containing the MessageBox
          */
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed")]
         protected void DBAdmin_Data_ComplexInstanceDeletedNotConfirmed(object sender, ActiveEventArgs e)
@@ -509,7 +510,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Will create a new object of type 'FullTypeName'
+         * Level2: Will create a new object of type 'FullTypeName'
          */
         [ActiveEvent(Name = "DBAdmin.Common.CreateObject")]
         protected void DBAdmin_Common_CreateObject(object sender, ActiveEventArgs e)
@@ -525,7 +526,7 @@ model while trying to create object, and it was never created for some reasons."
         }
 
         /**
-         * Will create a new object of type 'ParentFullTypeName' and append it to the 'ParentID'
+         * Level2: Will create a new object of type 'ParentFullTypeName' and append it to the 'ParentID'
          * 'ParentPropertyName' property which must be of type 'FullTypeName'
          */
         [ActiveEvent(Name = "DBAdmin.Common.CreateObjectAsChild")]
@@ -552,7 +553,7 @@ model while trying to create object, and it was never created for some reasons."
         }
 
         /**
-         * Will show a list of objects of type 'FullTypeName' and allow the user
+         * Level2: Will show a list of objects of type 'FullTypeName' and allow the user
          * to pick one to append into 'ParentID' 'ParentPropertyName' with the given
          * 'ParentFullTypeName'
          */
@@ -580,7 +581,7 @@ model while trying to create object, and it was never created for some reasons."
         }
 
         /**
-         * Will append an object to a list of objects in 'ParentID' ParentPropertyName collection and
+         * Level2: Will append an object to a list of objects in 'ParentID' ParentPropertyName collection and
          * save the 'ParentID' object
          */
         [ActiveEvent(Name = "DBAdmin.Data.AppendObjectToParentPropertyList")]
@@ -604,7 +605,7 @@ model while trying to create object, and it was never created for some reasons."
         }
 
         /**
-         * Will change a single instance object reference between 'ParentID' and 'ID' in the
+         * Level2: Will change a single instance object reference between 'ParentID' and 'ID' in the
          * 'ParentPropertyName' of 'ParentFullTypeName'. Flushes child container
          */
         [ActiveEvent(Name = "DBAdmin.Data.ChangeObjectReference")]
@@ -628,7 +629,7 @@ model while trying to create object, and it was never created for some reasons."
         }
 
         /**
-         * Removes a referenced object without deleting it [taking it out of its parent collection]
+         * Level2: Removes a referenced object without deleting it [taking it out of its parent collection]
          * Notice that if the Parent object is the 'Owner' of the object, it may still be deleted.
          * Will ask for confirmation from end user before operation is performed
          */
@@ -670,7 +671,7 @@ collection you're removing it from.</p>";
         }
 
         /**
-         * Removes an object out of its 'ParentID' 'ParentPropertyName' collection of type
+         * Level2: Removes an object out of its 'ParentID' 'ParentPropertyName' collection of type
          * 'ParentFullTypeName'
          */
         [ActiveEvent(Name = "DBAdmin.Form.RemoveObjectFromParentPropertyList-Confirmed")]
@@ -694,7 +695,7 @@ collection you're removing it from.</p>";
         }
 
         /**
-         * Will show the 'Change Single-Object Reference' form to the end user
+         * Level2: Will show the 'Change Single-Object Reference' form to the end user
          */
         [ActiveEvent(Name = "DBAdmin.Form.ChangeObject")]
         protected void DBAdmin_Form_ChangeObject(object sender, ActiveEventArgs e)
@@ -714,7 +715,7 @@ collection you're removing it from.</p>";
         }
 
         /**
-         * Removes a single-object reference from the 'ParentID' object
+         * Level2: Removes a single-object reference from the 'ParentID' object
          */
         [ActiveEvent(Name = "DBAdmin.Data.RemoveObject")]
         protected void DBAdmin_Form_RemoveObject(object sender, ActiveEventArgs e)
@@ -732,7 +733,7 @@ collection you're removing it from.</p>";
         }
 
         /**
-         * Returns the filters for different columns in the Grid system
+         * Level2: Returns the filters for different columns in the Grid system
          */
         [ActiveEvent(Name = "DBAdmin.Data.GetFilter")]
         protected void DBAdmin_Data_GetFilter(object sender, ActiveEventArgs e)
@@ -749,7 +750,7 @@ collection you're removing it from.</p>";
         }
 
         /**
-         * Changes the filter for a specific 'Key'/'Value' for a specific type
+         * Level2: Changes the filter for a specific 'Key'/'Value' for a specific type
          */
         [ActiveEvent(Name = "DBAdmin.Data.SetFilter")]
         protected void DBAdmin_Data_SetFilter(object sender, ActiveEventArgs e)

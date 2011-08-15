@@ -18,7 +18,7 @@ using Magix.UX.Widgets;
 namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 {
     /**
-     * Contains some template columns for the Grid system for you to use in your
+     * Level3: Contains some template columns for the Grid system for you to use in your
      * own Grids
      */
     [ActiveController]
@@ -26,7 +26,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
     {
         // TODO: Create more of these guys. SelectLists for instance are in HIGH demand ...!!
         /**
-         * Creates a CheckBox type of column for the Grid System
+         * Level3: Creates a CheckBox type of column for the Grid System
          */
         [ActiveEvent(Name = "Magix.DataPlugins.GetTemplateColumns.CheckBox")]
         protected void Magix_DataPlugins_GetTemplateColumns_CheckBox(object sender, ActiveEventArgs e)
