@@ -55,17 +55,31 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
 
             if (e.Params.Contains("Index"))
             {
+                // Header
+                Paragraph paragraph = header.AddParagraph();
+                paragraph.AddLineBreak();
+                paragraph.AddLineBreak();
+
+                paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 100);
+                paragraph.Format.Font.Size = new Unit(12, UnitType.Point);
+
+                paragraph.AddFormattedText(
+                    "Index",
+                    TextFormat.Bold);
+
+                int idxNo = 1;
+
                 foreach (Node idx in e.Params["Index"])
                 {
                     // Header
-                    Paragraph paragraph = header.AddParagraph();
+                    paragraph = header.AddParagraph();
                     paragraph.AddLineBreak();
 
                     paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 100);
                     paragraph.Format.Font.Size = new Unit(8, UnitType.Point);
 
                     paragraph.AddFormattedText(
-                        idx["Header"].Get<string>(),
+                        idxNo.ToString() + ". " + idx["Header"].Get<string>(),
                         TextFormat.NotBold);
 
                     // Description
@@ -79,11 +93,15 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
                     paragraph.AddFormattedText(
                         idx["Description"].Get<string>(),
                         TextFormat.NotBold);
+
+                    idxNo += 1;
                 }
             }
 
             if (e.Params.Contains("Pages"))
             {
+                int idxNo = 1;
+
                 header = document.AddSection();
                 header.PageSetup.TopMargin = new Unit(50);
                 header.PageSetup.BottomMargin = new Unit(50);
@@ -103,7 +121,7 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
                     paragraph.Format.Font.Size = new Unit(8, UnitType.Point);
 
                     paragraph.AddFormattedText(
-                        idx.Name,
+                        idxNo.ToString() + ". " + idx.Name,
                         TextFormat.Bold);
 
                     paragraph.AddLineBreak();
@@ -115,6 +133,8 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
                             val = "<p>" + val + "</p>";
                         ParseHTML(header, val);
                     }
+
+                    idxNo += 1;
                 }
             }
 
