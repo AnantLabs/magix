@@ -14,15 +14,31 @@ using System.Web;
 
 namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
+    /**
+     * Encapsulates an OpenID Token. Meaning an OpenID Claim. Magix has support for serving
+     * as both an OpenID Relying Party and an OpenID Provider. This class serializes the
+     * OpenID Claims for users when using Magix as an OpenID Relying Party, and associating
+     * these claims with specific users. This means you can associate an OpenID claim to your
+     * user and then use the OpenID Token to log into Magix later
+     */
     [ActiveType]
     public class OpenIDToken : ActiveType<OpenIDToken>
     {
+        /**
+         * OpenID Claim or Token. E.g.; myGoogleUsername.blogspot.com
+         */
         [ActiveField]
         public string Name { get; set; }
 
+        /**
+         * Which user the claim belongs to, if any
+         */
         [ActiveField(BelongsTo = true)]
         public User User { get; set; }
 
+        /**
+         * Overridden to make sure all Claims are unique within Magix
+         */
         public override void Save()
         {
             if (!string.IsNullOrEmpty(Name) &&

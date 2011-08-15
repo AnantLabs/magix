@@ -45,12 +45,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Append"].Value = true;
             if (Page.Session["HasLoadedTooltipOfToday"] == null)
             {
-                node["Text"].Value = ToolTip.Instance.Next(User.Current.Username);
+                node["Text"].Value = TipOfToday.Instance.Next(User.Current.Username);
                 Page.Session["HasLoadedTooltipOfToday"] = true;
             }
             else
             {
-                node["Text"].Value = ToolTip.Instance.Current(User.Current.Username);
+                node["Text"].Value = TipOfToday.Instance.Current(User.Current.Username);
             }
             node["ChildCssClass"].Value = "tool-tip";
 

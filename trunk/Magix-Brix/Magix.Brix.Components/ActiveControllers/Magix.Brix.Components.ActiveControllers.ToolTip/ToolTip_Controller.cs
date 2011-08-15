@@ -27,7 +27,7 @@ namespace Magix.Brix.Components.ActiveControllers.ToolTip
         private void Magix_Core_GetPreviousToolTip(object sender, ActiveEventArgs e)
         {
             e.Params["Text"].Value = 
-                T.ToolTip.Instance.Previous(UserBase.Current.Username);
+                T.TipOfToday.Instance.Previous(UserBase.Current.Username);
         }
 
         /**
@@ -38,7 +38,7 @@ namespace Magix.Brix.Components.ActiveControllers.ToolTip
         private void Magix_Core_GetNextToolTip(object sender, ActiveEventArgs e)
         {
             e.Params["Text"].Value =
-                T.ToolTip.Instance.Next(UserBase.Current.Username);
+                T.TipOfToday.Instance.Next(UserBase.Current.Username);
         }
 
         /**
@@ -47,7 +47,7 @@ namespace Magix.Brix.Components.ActiveControllers.ToolTip
         [ActiveEvent(Name = "Magix.Core.GetAllToolTips")]
         private void Magix_Core_GetAllToolTips(object sender, ActiveEventArgs e)
         {
-            foreach (T.ToolTip.Tip idx in T.ToolTip.Tip.Select())
+            foreach (T.TipOfToday.Tip idx in T.TipOfToday.Tip.Select())
             {
                 e.Params["t-" + idx.ID].Value = idx.Value;
             }

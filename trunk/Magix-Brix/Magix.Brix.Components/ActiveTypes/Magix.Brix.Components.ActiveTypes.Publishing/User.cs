@@ -14,6 +14,11 @@ using System.Web;
 
 namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
+    // TODO: WTF ..? ['TableName']
+    /**
+     * Encapsulates one user in Magix' Publishing system. Inherited to add more,
+     * specific to the publishing system, to the class
+     */
     [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Publishing.User")]
     public class User : U.UserBase
     {
@@ -22,51 +27,100 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             OpenIDTokens = new LazyList<OpenIDToken>();
         }
 
+        /**
+         * Full name of person
+         */
         [ActiveField]
         public string FullName { get; set; }
 
+        /**
+         * URL, can either be relative [media/images/myImage.jpg] or absolute [http://g.com/x.jpg]
+         */
         [ActiveField]
         public string AvatarURL { get; set; }
 
+        /**
+         * Phone number to person
+         */
         [ActiveField]
         public string Phone { get; set; }
 
+        /**
+         * Street Address to person
+         */
         [ActiveField]
         public string Address { get; set; }
 
+        /**
+         * City where person lives
+         */
         [ActiveField]
         public string City { get; set; }
 
+        /**
+         * Zip, yup ...
+         */
         [ActiveField]
         public string Zip { get; set; }
 
+        /**
+         * State [if US. Ignore if other countries]
+         */
         [ActiveField]
         public string State { get; set; }
 
+        /**
+         * The Twitter Handle to the person, e.g. 'WinergyInc'
+         */
         [ActiveField]
         public string Twitter { get; set; }
 
+        /**
+         * The Facebook username to the person, e.g. 'polterguy'
+         */
         [ActiveField]
         public string Facebook { get; set; }
 
+        /**
+         * Date of birth
+         */
         [ActiveField]
         public DateTime BirthDate { get; set; }
 
+        /**
+         * Country where person lives
+         */
         [ActiveField]
         public string Country { get; set; }
 
+        /**
+         * Yup, normally 'Male' or 'Female'
+         */
         [ActiveField]
         public string Gender { get; set; }
 
+        /**
+         * Come estas? Comprende ...?
+         */
         [ActiveField]
         public string Language { get; set; }
 
+        // TODO: Unique within app ...?
+        /**
+         * A small little personal 'nickname', e.g. 'polterguy'
+         */
         [ActiveField]
         public string Nickname { get; set; }
 
+        /**
+         * Which timezone is person within
+         */
         [ActiveField]
         public string TimeZone { get; set; }
 
+        /**
+         * List of OpenID Claims associated with person
+         */
         [ActiveField]
         public LazyList<OpenIDToken> OpenIDTokens { get; set; }
 
@@ -194,15 +248,20 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             }
         }
 
+        /**
+         * Overridden to make sure we've got a default AvatarURL before calling base
+         */
         public override void Save()
         {
             if (string.IsNullOrEmpty(AvatarURL))
             {
                 Node node = new Node();
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "Magix.Publishing.GetDefaultGravatarURL",
+                    "Magix.Publishing.GetDefaultAvatarURL",
                     node);
+
                 AvatarURL = node["URL"].Get<string>();
             }
             base.Save();
