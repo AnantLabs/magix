@@ -14,7 +14,7 @@ namespace Magix.UX.Widgets
 {
     /**
      * This widget is another type of 'button widget', though this will be rendered
-     * using anchor HTML element (&lt;a...)
+     * using anchor HTML element (anchor element...)
      * Even though everything can be made 'clickable' in Magix UX, it is definitely
      * semantically much more 'correct' to constraint yourself to the ones that
      * are expected to be 'clickable', such as this widget (LinkButton), Button, 

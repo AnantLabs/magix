@@ -117,6 +117,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         {
             // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
             Node xx = new Node();
+
             xx["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
             xx["Default"].Value = "1";
 
@@ -180,9 +181,39 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 "Magix.Core.GetAllToolTips",
                 node["Pages"]["Introduction"]);
 
+            foreach (Namespace idx in Docs.GetNamespaces(level))
+            {
+                if (new List<Doxygen.NET.Type>(idx.GetClasses(level)).Count > 0)
+                {
+                    foreach (Class idxC in idx.GetClasses(level))
+                    {
+                        AddClassToNodeForBookDistroPages(idxC, node);
+                    }
+                }
+            }
+
             RaiseEvent(
                 "Magix.PDF.CreatePDF",
                 node);
+        }
+
+        private void AddClassToNodeForBookDistroPages(Class cls, Node node)
+        {
+            node["Pages"][cls.FullName]["Header"].Value = cls.FullName;
+
+            string description = cls.Description;
+
+            foreach (Method idx in cls.Methods)
+            {
+                if(string.IsNullOrEmpty(idx.Description))
+                    continue;
+                description += "\r\n" + "\r\n";
+                description += idx.Name;
+                description += "\r\n";
+                description += idx.Description;
+            }
+
+            node["Pages"][cls.FullName]["Description"].Value = description;
         }
 
         private void AddClassToNodeForBookDistro(Class cls, Node node)

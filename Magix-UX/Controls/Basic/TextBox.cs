@@ -14,7 +14,7 @@ namespace Magix.UX.Widgets
 {
     /**
      * A single-line type of 'give me some text input' type of widget. This widget
-     * is a wrapper around the &lt;input type="text" type of widget. If you need 
+     * is a wrapper around the input type="text" type of widget. If you need 
      * multiple lines of input, you should rather use the TextArea widget. However 
      * this widget is useful for cases when you need the user to give you one line 
      * of text input. See also the RichEdit widget if you need rich formatting 

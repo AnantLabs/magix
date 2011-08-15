@@ -13,7 +13,7 @@ using Magix.UX.Widgets.Core;
 namespace Magix.UX.Widgets
 {
     /**
-     * A clickable button. The equivalent of &lt;input type="button". Use when you
+     * A clickable button. The equivalent of input type="button". Use when you
      * need a clickable thing to resemble a button. See also the LinkButton for  
      * an alternative. Also remember that any Widget in Magix UX can be made
      * clickable, so you can also use a Label as your 'clickable thingie' if you wish.
