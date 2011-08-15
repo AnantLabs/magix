@@ -55,7 +55,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             int level = int.Parse(xx["Value"].Get<string>(), CultureInfo.InvariantCulture);
 
             Node node = new Node();
-            foreach (Namespace idx in Docs.GetNamespaces(level)) /* Doxygen.NET [or something] doesn't support namespace descriptions unfortunately ... :( */
+            foreach (Namespace idx in Docs.GetNamespaces(level))
             {
                 Node outerMostNamespace = AddNamespaceToNode(idx, node);
                 foreach (Class idxC in idx.GetClasses(level))
@@ -87,23 +87,94 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
 
             node["ButtonCssClass"].Value = "span-8 clear-left down-1";
             node["Append"].Value = true;
-            // TODO: Marketing campaign around Easter Egg ... :P
+
+            // TODO: Marketing campaign around E@ster E9g ... :P
             // PS!
-            // I bet the guy who finds it, will find it through SVN, and now read this text,
+            // I bet the guy who finds it, will find it through SVN/History, and now read this text,
             // admit to himself that he's cheating [maybe], don't really give a damn, and
             // move on with his life, claiming the Easter Egg reward anyway ... !!! ;)
-            // Still he needs to explain why it's an Easter Egg, and what's 'wrong with it' ...
+            // Still he needs to explain why it's an E@ster E9g, and what's 'wrong with it' ...
             // And he also needs to explain the probem with _ONE_ word ...!
             // In an override for a Serialized Action which changes the text of the button
             // to that one word which explains it, and make that Action Publicly Available 
             // for Download ... ;)
-            node["Event"].Value = "Magix.Doxygen.Give_Me_My_Bok_Mann_;)_..._!!!";
+            node["Event"].Value = "Magix.Doxygen.Nei!Det_E_Boka_Mi ...!";
             node["Text"].Value = GetTextForGiveMeMyBookManButton();
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
                 "content3",
                 node);
+        }
+
+        /**
+         * Will generate the PDF containing the entire documentation, plus potential
+         * plugins documentation features, such as the MetaAction and MetaView system etc.
+         * Will redirect the client to download the PDF file once generated.
+         */
+        [ActiveEvent(Name = "Magix.Doxygen.Nei!Det_E_Boka_Mi ...!")]
+        protected void Magix_Doxygen_Give_Me_My_Bok_Mann(object sender, ActiveEventArgs e)
+        {
+            // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
+            Node xx = new Node();
+            xx["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
+            xx["Default"].Value = "1";
+
+            RaiseEvent(
+                "Magix.Common.GetUserSetting",
+                xx);
+
+            int level = int.Parse(xx["Value"].Get<string>(), CultureInfo.InvariantCulture);
+
+            Node node = new Node();
+            switch (level)
+            {
+                case 1:
+                    node["Title"].Value = "Magix for Noobs!";
+                    node["File"].Value = "Tmp/Magix-For-Noobs.pdf";
+                    node["FrontPage"].Value = "media/images/book-front-page-noob.png";
+                    break;
+                case 2:
+                    node["Title"].Value = "Magix for 'The Believers'";
+                    node["File"].Value = "Tmp/Magix-For-Believers.pdf";
+                    node["FrontPage"].Value = "media/images/book-front-page-believer.png";
+                    break;
+                case 3:
+                    node["Title"].Value = "Magix for C#-People";
+                    node["File"].Value = "Tmp/Magix-For-CSharp-People.pdf";
+                    node["FrontPage"].Value = "media/images/book-front-page-CSharp.png";
+                    break;
+                case 4:
+                    node["Title"].Value = "Magix for 'Believing C#-People'";
+                    node["File"].Value = "Tmp/Magix-For-Believing-CSharp-People.pdf";
+                    node["FrontPage"].Value = "media/images/book-front-page-CSharp-Believers.png";
+                    break;
+            }
+
+            node["Index"]["Intro"]["Header"].Value = "Introduction";
+            node["Index"]["Intro"]["Description"].Value = @"A short introduction to Magix
+and what you can expect using it";
+
+            foreach (Namespace idx in Docs.GetNamespaces(level))
+            {
+                if (new List<Doxygen.NET.Type>(idx.GetClasses(level)).Count > 0)
+                {
+                    foreach (Class idxC in idx.GetClasses(level))
+                    {
+                        AddClassToNodeForBookDistro(idxC, node);
+                    }
+                }
+            }
+
+            RaiseEvent(
+                "Magix.PDF.CreatePDF",
+                node);
+        }
+
+        private void AddClassToNodeForBookDistro(Class cls, Node node)
+        {
+            node["Index"][cls.FullName]["Header"].Value = cls.Name;
+            node["Index"][cls.FullName]["Description"].Value = cls.Description;
         }
 
         private string GetTextForGiveMeMyBookManButton()
@@ -290,7 +361,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             outerMostNamespace["Items"][cls.FullName]["ID"].Value = cls.FullName.Replace(".", "_XX_").Replace("+", "_XQ_");
             outerMostNamespace["Items"][cls.FullName]["Name"].Value = cls.Name;
             if (!string.IsNullOrEmpty(cls.Description))
-                outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.Description.Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "'");
+                outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.Description;
             else
                 outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.FullName;
             outerMostNamespace["Items"][cls.FullName]["CssClass"].Value = "tree-item-class";

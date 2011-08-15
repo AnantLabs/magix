@@ -257,6 +257,10 @@
       <Project>{BAF5E8CE-D6A2-486C-8DBA-E97D169E9547}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.MetaView</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.PDF\Magix.Brix.Components.ActiveControllers.PDF.csproj">
+      <Project>{F2ED4117-A492-4FBA-A514-F6DE9C38E059}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.PDF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Publishing\Magix.Brix.Components.ActiveControllers.Publishing.csproj">
       <Project>{4E93A1A1-0F18-49BB-9BDD-8A69A383116E}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Publishing</Name>
