@@ -75,6 +75,147 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 "Magix.Brix.Components.ActiveModules.CommonModules.Tree",
                 "content3",
                 node);
+
+            LoadToggleDoxLevelButton(level);
+            LoadGiveMeMyDarnBookDamnit(level);
+        }
+
+        private void LoadGiveMeMyDarnBookDamnit(int level)
+        {
+            // Loading 'change level button' ...
+            Node node = new Node();
+
+            node["ButtonCssClass"].Value = "span-8 clear-left down-1";
+            node["Append"].Value = true;
+            // TODO: Marketing campaign around Easter Egg ... :P
+            // PS!
+            // I bet the guy who finds it, will find it through SVN, and now read this text,
+            // admit to himself that he's cheating [maybe], don't really give a damn, and
+            // move on with his life, claiming the Easter Egg reward anyway ... !!! ;)
+            // Still he needs to explain why it's an Easter Egg, and what's 'wrong with it' ...
+            // And he also needs to explain the probem with _ONE_ word ...!
+            // In an override for a Serialized Action which changes the text of the button
+            // to that one word which explains it, and make that Action Publicly Available 
+            // for Download ... ;)
+            node["Event"].Value = "Magix.Doxygen.Give_Me_My_Bok_Mann_;)_..._!!!";
+            node["Text"].Value = GetTextForGiveMeMyBookManButton();
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content3",
+                node);
+        }
+
+        private string GetTextForGiveMeMyBookManButton()
+        {
+            Node node = new Node();
+
+            RaiseEvent(
+                "Magix.EasterEgg.GiveMeTextForMyMyBookDarnitButton",
+                node);
+            return node["Text"].Value.ToString();
+        }
+
+        static string[] _bookRandomRamblingsForButton = {
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Give me my Book Man!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Book please ...?",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "Dox in Books [form]",
+            "Download Book!",
+            "Download Book!",
+            "Download Book!",
+            "BOOK!",
+            "Download Book!",
+            "Download Book!",
+            "Dox against Forrest!",
+            "Download Book!",
+            "Dead Tree Distribution!",
+            "Dox took the Trees!",
+            "Doxygen stuff...",
+            "Trees Unite!",
+            "Dead K[tr]e[a]nnedies",
+            "I Eat at McDonalds",
+            "YES! Its the Easter Egg!"
+        };
+
+        [ActiveEvent(Name = "Magix.EasterEgg.GiveMeTextForMyMyBookDarnitButton")]
+        protected void Magix_EasterEgg_GiveMeTextForMyMyBookDarnitButton(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+            node["Name"].Value = "Magix.Dox.NameForBookButtonIndex";
+            node["Default"].Value = "0";
+
+            RaiseEvent(
+                "Magix.Common.GetUserSetting",
+                node);
+
+            int index = int.Parse(node["Value"].Value.ToString());
+
+            e.Params["Text"].Value = _bookRandomRamblingsForButton[index];
+
+            index += 1;
+            if (index >= _bookRandomRamblingsForButton.Length)
+                index = 0;
+
+            node["Value"].Value = index.ToString();
+
+            RaiseEvent(
+                "Magix.Common.SetUserSetting",
+                node);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void LoadToggleDoxLevelButton(int level)
+        {
+            // Loading 'change level button' ...
+            Node node = new Node();
+
+            switch (level)
+            {
+                case 1:
+                    node["Text"].Value = "Intermediary";
+                    break;
+                case 2:
+                    node["Text"].Value = "Code!";
+                    break;
+                case 3:
+                    node["Text"].Value = "Advanced Coding!";
+                    break;
+                case 4:
+                    node["Text"].Value = "Back to [Noob] ...!";
+                    break;
+            }
+            node["ButtonCssClass"].Value = "span-6 down-1";
+            node["Append"].Value = true;
+            node["Event"].Value = "Magix.Doxygen.RollLevel";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content3",
+                node);
         }
 
         #region [ -- Helper methods for viewing doxygen files -- ]
@@ -158,9 +299,41 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         #endregion
 
         /**
+         * Rolls level on documentation advanceness one up, til 4, and then back to zero.
+         * Reloads Doxygen Documentation class/namespace Tree afterwards
+         */
+        [ActiveEvent(Name = "Magix.Doxygen.RollLevel")]
+        protected void Magix_Doxygen_RollLevel(object sender, ActiveEventArgs e)
+        {
+            // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
+            Node xx = new Node();
+            xx["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
+            xx["Default"].Value = "1";
+
+            RaiseEvent(
+                "Magix.Common.GetUserSetting",
+                xx);
+
+            int level = int.Parse(xx["Value"].Get<string>());
+
+            level += 1;
+            if (level >= 5)
+                level = 1;
+
+            xx["Value"].Value = level.ToString();
+
+            RaiseEvent(
+                "Magix.Common.SetUserSetting",
+                xx);
+
+            // Chickening out ... ;)
+            RaiseEvent("Magix.MetaType.ViewDoxygenFiles");
+        }
+
+        /**
          * Level2: Expects a SelectedItemID which should point to either a Namespace or
          * a Class, and will show this namespace/class features. Such as which
-         * dll(s) implements tha namespace/class, if a class, which methods it has etc
+         * dll(s) implements the namespace/class, if a class, which methods it has etc
          */
         [ActiveEvent(Name = "Magix.Doxygen.ViewNamespaceOrClass")]
         protected void Magix_Doxygen_ViewNamespaceOrClass(object sender, ActiveEventArgs e)

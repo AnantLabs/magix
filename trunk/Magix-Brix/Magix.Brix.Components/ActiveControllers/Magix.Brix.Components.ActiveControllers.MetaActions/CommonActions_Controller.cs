@@ -26,14 +26,31 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     [ActiveController]
     public class CommonActions_Controller : ActiveController
     {
+        /**
+         * Level1: Returns the 'Name' setting for the current logged in User. Sets the
+         * setting to 'Default' if no existing value is found. Both are mandatory params.
+         * Returns new value as 'Value'
+         */
         [ActiveEvent(Name = "Magix.Common.GetUserSetting")]
         protected void Magix_Common_GetUserSetting(object sender, ActiveEventArgs e)
         {
             string val = User.Current.GetSetting<string>(
-                e.Params["Name"].Get<string>(), 
-                e.Params["Default"].Get<string>());
+                e.Params["Name"].Get<string>(),
+                e.Params["Default"].Value.ToString());
 
             e.Params["Value"].Value = val;
+        }
+
+        /**
+         * Sets the given setting 'Name' to the given value 'Value' for the currently
+         * logged in User
+         */
+        [ActiveEvent(Name = "Magix.Common.SetUserSetting")]
+        protected void Magix_Common_SetUserSetting(object sender, ActiveEventArgs e)
+        {
+            User.Current.SetSetting<string>(
+                e.Params["Name"].Get<string>(),
+                e.Params["Value"].Get<string>());
         }
 
         /**
