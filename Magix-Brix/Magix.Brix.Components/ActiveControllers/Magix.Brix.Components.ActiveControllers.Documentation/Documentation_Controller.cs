@@ -10,6 +10,7 @@ using Magix.Brix.Loader;
 using Doxygen.NET;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.Documentation
 {
@@ -42,11 +43,22 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         [ActiveEvent(Name = "Magix.MetaType.ViewDoxygenFiles")]
         protected void Magix_MetaType_ViewDoxygenFiles(object sender, ActiveEventArgs e)
         {
+            // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
+            Node xx = new Node();
+            xx["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
+            xx["Default"].Value = "1";
+
+            RaiseEvent(
+                "Magix.Common.GetUserSetting",
+                xx);
+
+            int level = int.Parse(xx["Value"].Get<string>(), CultureInfo.InvariantCulture);
+
             Node node = new Node();
-            foreach (Namespace idx in Docs.Namespaces)
+            foreach (Namespace idx in Docs.GetNamespaces(level)) /* Doxygen.NET [or something] doesn't support namespace descriptions unfortunately ... :( */
             {
                 Node outerMostNamespace = AddNamespaceToNode(idx, node);
-                foreach (Class idxC in idx.Classes)
+                foreach (Class idxC in idx.GetClasses(level))
                 {
                     AddClassToNode(idxC, outerMostNamespace);
                 }
@@ -155,6 +167,16 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         {
             string fullName = e.Params["SelectedItemID"].Get<string>().Replace("_XX_", ".").Replace("_XQ_", "+");
 
+            // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
+            Node xx = new Node();
+            xx["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
+            xx["Default"].Value = "1";
+
+            RaiseEvent(
+                "Magix.Common.GetUserSetting",
+                xx);
+
+            int level = int.Parse(xx["Value"].Get<string>(), CultureInfo.InvariantCulture);
 
             Namespace nSpc = Docs.Namespaces.Find(
                 delegate(Namespace idx)
@@ -175,7 +197,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                         return idx.FullName == fullName;
                     });
                 if (cls != null)
-                    ShowClassDllsAndMethods(cls);
+                    ShowClassDllsAndMethods(cls, level);
             }
         }
 
@@ -213,10 +235,10 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         /*
          * Helper for above
          */
-        private void ShowClassDllsAndMethods(Class cls)
+        private void ShowClassDllsAndMethods(Class cls, int level)
         {
             ViewClassDlls(cls);
-            ViewClassMembers(cls);
+            ViewClassMembers(cls, level);
         }
 
         /*
@@ -250,7 +272,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         /*
          * Shows the members of the Class in a Grid plus all documentation in regards to the class
          */
-        private void ViewClassMembers(Class cls)
+        private void ViewClassMembers(Class cls, int level)
         {
             // Loading 'View Class Details' Module ...
             Node node = new Node();
@@ -268,7 +290,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             node["FullName"].Value = cls.FullName;
 
             // Showing all Methods of class
-            foreach (Method idx in cls.Methods)
+            foreach (Method idx in cls.GetMethods(level))
             {
                 if (string.IsNullOrEmpty(idx.Description))
                     continue; // Don't do methods not described ...

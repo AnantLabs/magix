@@ -52,6 +52,38 @@ namespace Doxygen.NET
             get { return Members.FindAll(FindByKind("function")); }
         }
 
+        public IEnumerable<Member> GetMethods(int level)
+        {
+            foreach (Member idx in Members.FindAll(FindByKind("function")))
+            {
+                if (string.IsNullOrEmpty(idx.Description))
+                    continue; // Only returning documented stuff ...
+
+                if (level >= 4)
+                    yield return idx; // Returning EVERYTHING ...!!
+
+                string tmpLevelStr = idx.Description ?? "";
+                if (tmpLevelStr.Length > 6)
+                {
+                    tmpLevelStr = tmpLevelStr.Substring(0, 6);
+                    switch (tmpLevelStr.ToLowerInvariant())
+                    {
+                        case "level1":
+                            yield return idx;
+                            break;
+                        case "level2":
+                            if (level >= 2)
+                                yield return idx;
+                            break;
+                        case "level3":
+                            if (level >= 3)
+                                yield return idx;
+                            break;
+                    }
+                }
+            }
+        }
+
         public List<Member> Constructors
         {
             get { return Members.FindAll(FindByKind("ctor")); }
