@@ -12,44 +12,70 @@ using Magix.Brix.Data;
 
 namespace Magix.Brix.Components.ActiveTypes
 {
-    public sealed class ToolTip
+    /**
+     * Level3: Helper class for Tip [Today's Tips] logic
+     */
+    public sealed class TipOfToday
     {
+        /**
+         * Level4: One actual Tip
+         */
         [ActiveType]
         public class Tip : ActiveType<Tip>
         {
+            /**
+             * Level4: The actual text of the tip
+             */
             [ActiveField]
             public string Value { get; set; }
 
+            /**
+             * Level4: Its number in regards to being displayed
+             */
             [ActiveField]
             public int No { get; set; }
         }
 
+        /**
+         *Level4:  Normally stored on a per user level to remember which tip the
+         * user has seen last, so we know which one to show him next
+         */
         [ActiveType]
         public class TipPosition : ActiveType<TipPosition>
         {
+            /**
+             * Level4: Actual position of 'current tip', corresponds to No in Tip
+             */
             [ActiveField]
             public int Position { get; set; }
 
+            /**
+             * Level4: Normally a 'per user unique key' for filtering in regards to
+             * different users
+             */
             [ActiveField]
             public string Seed { get; set; }
         }
 
-        private static ToolTip _instance;
+        private static TipOfToday _instance;
 
-        private ToolTip()
+        private TipOfToday()
         { }
 
-        public static ToolTip Instance
+        /**
+         * Level3: Getter to gain access to today's tips
+         */
+        public static TipOfToday Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    lock (typeof(ToolTip))
+                    lock (typeof(TipOfToday))
                     {
                         if (_instance == null)
                         {
-                            _instance = new ToolTip();
+                            _instance = new TipOfToday();
                         }
                     }
                 }
@@ -57,6 +83,9 @@ namespace Magix.Brix.Components.ActiveTypes
             }
         }
 
+        /**
+         * Level3: Only way to create a tip form the outside
+         */
         public void CreateTip(string tip)
         {
             Tip t = new Tip();
@@ -65,6 +94,9 @@ namespace Magix.Brix.Components.ActiveTypes
             t.Save();
         }
 
+        /**
+         * Level3: Number of tips in database
+         */
         public int Count
         {
             get { return Tip.Count; }
@@ -104,16 +136,27 @@ namespace Magix.Brix.Components.ActiveTypes
             return retVal.Value;
         }
 
+        /**
+         * Level3: Will return the 'previous' tip with the given seed
+         */
         public string Previous(string seed)
         {
             return GetToolTip(seed, -1);
         }
 
+        /**
+         * Level3: Will return the 'next' tip with the given seed
+         */
         public string Next(string seed)
         {
             return GetToolTip(seed, 1);
         }
 
+        /**
+         * Level3: Will return the 'current' tip with the given seed, and not in any ways
+         * increament or decrement the 'currently viewed tips' like the sibling
+         * methods will
+         */
         public string Current(string seed)
         {
             return GetToolTip(seed, 0);

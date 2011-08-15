@@ -13,16 +13,28 @@ using Magix.Brix.Data;
 namespace Magix.Brix.Components.ActiveTypes
 {
     /**
-     * Wrapper class for common/global settings within a Magix-Brix application.
+     * Level2: Wrapper class for common/global settings within a Magix-Brix application.
+     * Use the overloaded this operator to access Settings through code
      */
     public sealed class Settings
     {
+        /**
+         * Level4: Not really exposed out, so shouldn't ever be any reasons to 
+         * even know about, but still left documented here for reference purposes
+         */
         [ActiveType]
         public class Setting : ActiveType<Setting>
         {
+            /**
+             * Level4: The key part of the setting. Used as 'ID'ish
+             */
             [ActiveField]
             public string Key { get; set; }
 
+            /**
+             * Level4: The actual setting value. All settings are stored internally as strings,
+             * and then later converted using InvariantCulture back and forth
+             */
             [ActiveField]
             public string Value { get; set; }
         }
@@ -36,7 +48,9 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Retrieves the singleton instance of your settings.
+         * Level3: Retrieves the singleton instance of your settings. Reference the Settings ActiveTypes
+         * in your project, use the Instance property from below, and use the index operator
+         * of the class or Get/Set to access specific settings
          */
         public static Settings Instance
         {
@@ -59,7 +73,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Returns or sets the key value as a string
+         * Level3: Returns or sets the key value as a string
          */
         public string this[string key]
         {
@@ -102,7 +116,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Retrieves the setting with the specific key, and converts it to typeof(T).
+         * Level3: Retrieves the setting with the specific key, and converts it to typeof(T).
          * If the setting doesn't exists, a default value will be created and saved
          * with the value of defaultValue and then returned to caller.
          */
@@ -118,7 +132,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Retrieves the setting with the specific key, and converts it to typeof(T).
+         * Level3: Retrieves the setting with the specific key, and converts it to typeof(T).
          * If the setting doesn't exists, default(T) will be returned.
          */
         public T Get<T>(string key)
@@ -130,7 +144,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Sets value of key to val typeof(T)
+         * Level3: Sets value of key to val typeof(T)
          */
         public void Set<T>(string key, T newValue)
         {
@@ -153,7 +167,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Returns all the keys which exists.
+         * Level4: Returns all the keys which exists.
          */
         public IEnumerable<string> Keys
         {
@@ -167,7 +181,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Will reload all settings from DB ...
+         * Level3: Will reload all settings from DB ...
          */
         public void Reload()
         {
@@ -175,7 +189,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Will delete all settings. Notice that this operation cannot be undone!
+         * Level4: Will delete all settings. Notice that this operation cannot be undone!
          */
         public void Clear()
         {
@@ -187,7 +201,7 @@ namespace Magix.Brix.Components.ActiveTypes
         }
 
         /**
-         * Returns the number of settings in total in database
+         * Level3: Returns the number of settings in total in database
          */
         public int Count
         {
@@ -197,6 +211,9 @@ namespace Magix.Brix.Components.ActiveTypes
             }
         }
 
+        /**
+         * Level3: Removes the specific Setting Key form the collection
+         */
         public void Remove(string key)
         {
             lock(this)

@@ -16,8 +16,20 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
     /**
      * Represents one web page in our system, or one unique URL if you wish.
-     * Contains a list of WebParts which again are the areas of the screen within your
-     * web page.
+     * Contains a list of WebParts which again are areas of the screen within your
+     * web page. Every page must have at least one webpart, but can have many more.
+     * This class encapsulates the logic of 'Pages' in Magix, which is probably easy
+     * to understand within the context of publishing or CMS systems. Anyway, a page
+     * in Magix might also be a container for your application, plugins and WebParts.
+     * WebParts and Plugins again can be either your own creations through MetaViews or
+     * something similar, or actual C# code written plugins for your system. One page
+     * is often easy to understand if you can perceive it as 'one URL', while it is 
+     * still much more powerful than any 'CMS Pages' or 'Publishing Pages' out there.
+     * 
+     * Every page is built upon a 'recipe' which is the WebPageTemplate class. The 
+     * WebPageTemplate class contains the logic for which plugin type it should ue etc,
+     * while the WebPage contains the settings for the type of plugins instantiated upon
+     * opening it
      */
     [ActiveType]
     public class WebPage : ActiveType<WebPage>
@@ -31,7 +43,9 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         /**
          * Name of your Web Page. Serves nothing but as a friendly name
          * and have no real meaning in the system. Doesn't need to be in any
-         * ways unique ...
+         * ways unique. Should be 'descriptive' such as if you've got a 'Header'
+         * type of WebPart, it might be smart to Name your webpart 'Header' too, or
+         * 'Sub-Section-Header' or something similar
          */
         [ActiveField]
         public string Name { get; set; }
@@ -39,11 +53,17 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         /**
          * Needs to be unique system wide, but will do its best
          * at staying unique. Also serves as a Materialized Path
-         * for our Page Hierarchy ...
+         * for our Page Hierarchy. Please notice though that if you change the URL
+         * after the page is created, it'll update the URL's of ALL child pages, and
+         * their children again, and so on ifinitely inwards. This makes changing the URL
+         * after creating [many] children for it a potential very expensive operation
          */
         [ActiveField]
         public string URL { get; private set; }
 
+        /**
+         * Automatically kept track of. Keeps the 'created date' of the WebPage
+         */
         [ActiveField]
         public DateTime Created { get; private set; }
 
@@ -54,20 +74,19 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         public WebPageTemplate Template { get; set; }
 
         /**
-         * The parts, or containers of the Web Page ...
+         * The parts, or containers of the Web Page
          */
         [ActiveField]
         public LazyList<WebPart> WebParts { get; set; }
 
         /**
-         * Children Page objects ...
+         * Children Page objects. Every WebPage might have a list of children within it
          */
         [ActiveField]
         public LazyList<WebPage> Children { get; set; }
 
         /**
-         * Parent web page ...
-         * Is null if this is the top most page ...
+         * Parent web page. Is null if this is the top most page
          */
         [ActiveField(BelongsTo = true)]
         public WebPage Parent { get; set; }
@@ -77,7 +96,10 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         public void ChangeURL(string newUrl)
         {
             if (CountWhere(Criteria.Like("URL", URL + "/%")) > 20)
-                throw new ArgumentException("You cannot change the URL of your pages once they've acquired more than 20 descendants in total. Note, if you want to force this through anyway, you can edit the Page through the Database Administrator ...");
+                throw new ArgumentException(@"You cannot change the URL of your pages once 
+they've acquired more than 20 descendants in total. Note, if you want to force this 
+through anyway, you can edit the Page through the Database Administrator ...");
+
             if (Parent != null)
             {
                 if (newUrl.Contains("/"))
