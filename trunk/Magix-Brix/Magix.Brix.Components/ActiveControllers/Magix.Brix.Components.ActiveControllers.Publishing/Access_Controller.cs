@@ -19,14 +19,14 @@ using Magix.Brix.Components.ActiveTypes.Users;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Helps out sorting out which Pages and Menu Items which Users and Roles 
+     * Level3: Helps out sorting out which Pages and Menu Items which Users and Roles 
      * and such have access to
      */
     [ActiveController]
     public class Access_Controller : ActiveController
     {
         /**
-         * Returns 'STOP' to true unless User has access to Page, either explicitly
+         * Level3: Returns 'STOP' to true unless User has access to Page, either explicitly
          * or implicitly
          */
         [ActiveEvent(Name = "Magix.Publishing.VerifyUserHasAccessToPage")]
@@ -43,7 +43,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will recursively traverse children until it find the first page [breadth first] User has access
+         * Level3: Will recursively traverse children until it find the first page [breadth first] User has access
          * to from given page
          */
         [ActiveEvent(Name = "Magix.Publishing.FindFirstChildPageUserCanAccess")]
@@ -140,7 +140,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will return a List of Roles that have explicit access [or not] to the given Page
+         * Level3: Will return a List of Roles that have explicit access [or not] to the given Page
          */
         [ActiveEvent(Name = "Magix.Publishing.GetRolesListForPage")]
         protected void Magix_Publishing_GetRolesListForPage(object sender, ActiveEventArgs e)
@@ -166,7 +166,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will change the Access rights for a specific page
+         * Level3: Will change the Access rights for a specific page
          */
         [ActiveEvent(Name = "Magix.Publishing.ChangePageAccess")]
         protected void Magix_Publishing_ChangePageAccess(object sender, ActiveEventArgs e)
@@ -200,6 +200,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Level3: Handled to make sure we delete all WebPageRoleAccess objects
+         * belonging to WebPage too
+         */
         [ActiveEvent(Name = "Magix.Publishing.PageObjectDeleted")]
         protected void Magix_Publishing_PageObjectDeleted(object sender, ActiveEventArgs e)
         {

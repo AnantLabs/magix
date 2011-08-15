@@ -14,7 +14,7 @@ using Magix.UX;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Class for taking care of the Magix.Core.InitialLoading message, meaning
+     * Level2: Class for taking care of the Magix.Core.InitialLoading message, meaning
      * the initialization of the page on a per User level initially as they're coming
      * to a new 'page' or URL ...
      * Basically just handles Magix.Core.InitialLoading and mostly delegates from that
@@ -24,14 +24,18 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     public class InitialLoading_Controller : ActiveController
     {
         /**
-         * This method will handle the 'initial loading', meaning basically that the page
+         * Level2: This method will handle the 'initial loading', meaning basically that the page
          * was loaded initially by either changing the URL of the browser to the app or 
          * doing a Refresh or something. For coders, meaning basically not IsPostBack on 
          * the page object ...
          * Throws a whole range of different events based upon whether or not the User
          * is logged in or not, and which URL is being specifically requested. Its most
          * noticable outgoing event would though be 'Magix.Publishing.LoadDashboard' and
-         * 'Magix.Publishing.UrlRequested'
+         * 'Magix.Publishing.UrlRequested'. PS! If you override this one, you've effectively 
+         * completely bypassed every single existing logic in Magix, and everything are
+         * 'dead event handlers' in 'limbo' not tied together at all. Which might be cool,
+         * or might be a nightmare, depending upon how you use it, if you use it, use it with CARE 
+         * if you do though !!
          */
         [ActiveEvent(Name = "Magix.Core.InitialLoading")]
         protected void Magix_Core_InitialLoading(object sender, ActiveEventArgs e)

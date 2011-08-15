@@ -22,15 +22,15 @@ using DotNetOpenAuth.Messaging;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Login and Logout Controller
+     * Level2: Login and Logout Controller
      */
     [ActiveController]
     public class LoginOut_Controller : ActiveController
     {
         /**
-         * Basically just checks to see if the given username/password 
+         * Level2: Basically just checks to see if the given username/password 
          * combination exists, and if so sets the User.Current object, which
-         * is staic per request, returning the logged in user. Then if successful,
+         * is static per request, returning the logged in user. Then if successful,
          * raises the 'Magix.Core.UserLoggedIn' event
          */
         [ActiveEvent(Name = "Magix.Core.LogInUser")]
@@ -53,7 +53,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Basically just Redirects the user to Root, unless another Redirect path
+         * Level2: Redirects the user to Root, unless another Redirect path
          * is somehow given
          */
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
@@ -75,7 +75,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Resets the User.Current object, and redirects user back to root
+         * Level2: Resets the User.Current object, and redirects user back to root
          */
         [ActiveEvent(Name = "Magix.Core.UserLoggedOut")]
         private void Magix_Core_UserLoggedOut(object sender, ActiveEventArgs e)
@@ -88,7 +88,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Returns whether or not the User is logged in or not for the LoginInOut Module
+         * Level2: Returns whether or not the User is logged in or not for the LoginInOut Module
          * to know what types of controls to load
          */
         [ActiveEvent(Name = "Magix.Publishing.GetStateForLoginControl")]

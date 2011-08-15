@@ -17,14 +17,14 @@ using Magix.Brix.Components.ActiveTypes.Users;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Main 'router' in dispatching important [ADMIN] Dashboard functionality 
+     *Level2:  Main 'router' in dispatching important [ADMIN] Dashboard functionality 
      * [As in; Administrator user logged in]
      */
     [ActiveController]
     public class Logging_Controller : ActiveController
     {
         /**
-         * Will display the Grid of the latest Log Items for the user to be able
+         * Level2: Will display the Grid of the latest Log Items for the user to be able
          * to drill down, and have a more thourough look
          */
         [ActiveEvent(Name = "Magix.Publishing.ViewLog")]
@@ -70,7 +70,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will return the last log items according to newest first
+         * Level2: Will return the last log items according to newest first
          */
         [ActiveEvent(Name = "Magix.Publishing.GetLogItems")]
         private void Magix_Publishing_GetLogItems(object sender, ActiveEventArgs e)
@@ -87,7 +87,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will show one LogItem in a grid for the end-user to scrutinize. Will allow the user to
+         * Level2: Will show one LogItem in a grid for the end-user to scrutinize. Will allow the user to
          * always have to LogItems up at the same time
          */
         [ActiveEvent(Name = "Magix.Publishing.ViewLogItem")]

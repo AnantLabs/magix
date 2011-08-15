@@ -16,13 +16,13 @@ using Magix.Brix.Components.ActiveTypes;
 namespace Magix.Brix.Components.ActiveControllers.TalkBack
 {
     /**
-     * Contains helper logic for the TalkBack module [forums] in Magix
+     * Level2: Contains helper logic for the TalkBack module [forums] in Magix
      */
     [ActiveController]
     public class TalkBack_Controller : ActiveController
     {
         /**
-         * Will fetch the top 5 postings with the most recent activity within
+         * Level3: Will fetch the top 5 postings with the most recent activity within
          */
         [ActiveEvent(Name = "Magix.Talkback.GetPostings")]
         protected void Magix_Talkback_GetPostings(object sender, ActiveEventArgs e)
@@ -89,7 +89,7 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
         }
 
         /**
-         * Will launch the Talkback Module and allow for posting questions and such
+         * Level2: Will launch the Talkback Module and allow for posting questions and such
          */
         [ActiveEvent(Name = "Magix.TalkBack.LaunchForum")]
         protected void Magix_TalkBack_LaunchForum(object sender, ActiveEventArgs e)
@@ -115,7 +115,7 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
         }
 
         /**
-         * Will create a new posting with the Header and Body combination linked to the User.Current.
+         * Level3: Will create a new posting with the Header and Body combination linked to the User.Current.
          * If Parent, will put it into the Parent as a Reply
          */
         [ActiveEvent(Name = "Magix.Talkback.CreatePost")]

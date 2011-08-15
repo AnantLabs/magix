@@ -17,14 +17,14 @@ using Magix.Brix.Components.ActiveTypes.Users;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Main 'router' in dispatching important [ADMIN] Dashboard functionality 
+     * Level2: Main 'router' in dispatching important [ADMIN] Dashboard functionality 
      * [As in; Administrator user logged in]
      */
     [ActiveController]
     public class AdministratorDashboard_Controller : ActiveController
     {
         /**
-         * Loads Administrator Dashboard [back-web]
+         * Level2: Loads Administrator Dashboard [back-web]
          */
         [ActiveEvent(Name = "Magix.Publishing.LoadAdministratorDashboard")]
         protected void Magix_Publishing_LoadAdministratorDashboard(object sender, ActiveEventArgs e)
@@ -36,8 +36,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             LoadTipOfToday();
         }
 
-        /**
-         * Loads up TipOfToday in 3rd content
+        /*
+         * Helper for above
          */
         private void LoadTipOfToday()
         {
@@ -60,7 +60,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
-        /**
+        /*
          * Creates the Dashboard Grid for us, by among other things raising the
          * 'Magix.Publishing.GetDataForAdministratorDashboard' event which others
          * could connect to, and fill in their own plugin extensions for
@@ -111,7 +111,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Loads the Administrator SlidingMenu into the 1st content, but 
+         * Level2: Loads the Administrator SlidingMenu into the 1st content, but 
          * everything here is basically overridable. Will also raise
          * 'Magix.Publishing.GetPluginMenuItems' to allow for plugins to connect
          * up their own Administrator Dashboard menu items
@@ -203,7 +203,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Ads up the 'common data' for the Admin Dashboard such as Users, Roles etc
+         * Level2: Ads up the 'common data' for the Admin Dashboard such as Users, Roles etc
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
         protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
@@ -228,14 +228,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will fire up our Database Manager
+         * Level2: Will fire up our Database Manager
          */
         [ActiveEvent(Name = "Magix.Publishing.ViewClasses")]
         private void Magix_Publishing_ViewClasses(object sender, ActiveEventArgs e)
         {
             Node node = new Node();
 
-            node["container"].Value = "child";
+            node["Container"].Value = "child";
             node["Width"].Value = 19;
             node["WindowCssClass"].Value = "mux-shaded mux-rounded browser";
             node["Caption"].Value = "Browse classes";

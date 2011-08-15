@@ -24,6 +24,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
     [ActiveController]
     public class ColumnTypesPlugins_Controller : ActiveController
     {
+        // TODO: Create more of these guys. SelectLists for instance are in HIGH demand ...!!
         /**
          * Creates a CheckBox type of column for the Grid System
          */

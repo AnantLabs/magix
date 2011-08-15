@@ -22,14 +22,14 @@ using DotNetOpenAuth.Messaging;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Here mostly for Editing User, and also to some extent creating default 
+     * Level2: Here mostly for Editing User, and also to some extent creating default 
      * users and roles upon startup if none exists
      */
     [ActiveController]
     public class EditUser_Controller : ActiveController
     {
         /**
-         * Makes sure we have Administrator and User Roles, in addition creates a default
+         * Level2: Makes sure we have Administrator and User Roles, in addition creates a default
          * user [admin/admin] if no user exists
          */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
@@ -68,7 +68,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Allows editing of all users, and searching and changing properties and such. Shows
+         * Level2: Allows editing of all users, and searching and changing properties and such. Shows
          * all Users in a Grid
          */
         [ActiveEvent(Name = "Magix.Publishing.EditUsers")]
@@ -107,7 +107,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Get 'select Role' template column for our Grid. Creates a SelectList and returns
+         * Level3: Get 'select Role' template column for our Grid. Creates a SelectList and returns
          * back to caller.
          * PS!
          * We only allow for editing the user such that he or she can belong to only one Role. If you'd
@@ -192,7 +192,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         #endregion
 
         /**
-         * Edit one specific User, and all of his properties
+         * Level2: Edit one specific User, and all of his properties
          */
         [ActiveEvent(Name = "Magix.Publishing.EditUser")]
         protected void Magix_Publishing_EditUser(object sender, ActiveEventArgs e)
@@ -379,7 +379,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Callback for creating a New User from Dashboard that pops up editing
+         * Level2: Callback for creating a New User from Dashboard that pops up editing
          * the specific user after his initial creation
          */
         [ActiveEvent(Name = "Magix.Publishing.CreateUser")]
@@ -403,7 +403,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * User has requested a change of Avatar for either himself, or another user.
+         * Level2: User has requested a change of Avatar for either himself, or another user.
          * Loads up the FileExplorer Selector, and allows for selecting a new avatar 
          * for the admin user
          */
@@ -432,7 +432,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * New image was selected in our FileExplorer as a new Avatar for our User. Will
+         * Level2: New image was selected in our FileExplorer as a new Avatar for our User. Will
          * change the User's Avatar and save it and update 
          */
         [ActiveEvent(Name = "Magix.Publishing.SelectImageForUser")]
@@ -461,7 +461,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Callback for supplying the Default Avatar for a User
+         * Level2: Callback for supplying the Default Avatar for a User. Override
+         * this one if you wish to change the default image for a new user, which might
+         * be useful in e.g. OpenID scenarios and profiling efforts
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDefaultGravatarURL")]
         protected void Magix_Publishing_GetDefaultGravatarURL(object sender, ActiveEventArgs e)

@@ -21,13 +21,13 @@ using System.Security;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Initializes WebParts and such while being injected onto WebPage
+     * Level2: Initializes WebParts and such while being injected onto WebPage
      */
     [ActiveController]
     public class WebPart_Controller : ActiveController
     {
         /**
-         * Initializes the Plugin with its values according to what's in its settings
+         * Level2: Initializes the Plugin with its values according to what's in its settings
          */
         [ActiveEvent(Name = "Magix.Publishing.InitializePublishingPlugin")]
         protected void Magix_Publishing_InitializePublishingPlugin(object sender, ActiveEventArgs e)
@@ -67,7 +67,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Returns the Value of a specific setting of a specific WebPart
+         * Level2: Returns the Value of a specific setting of a specific WebPart
          */
         [ActiveEvent(Name = "Magix.Publishing.GetWebPartSettingValue")]
         private void Magix_Publishing_GetWebPartSettingValue(object sender, ActiveEventArgs e)
@@ -84,6 +84,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Level2: Injects one plugin into the given container, unless anything says the
+         * Plugin doesn't need to be reloaded for some reasons [sliding menu for instance]
+         */
         [ActiveEvent(Name = "Magix.Publishing.InjectPlugin")]
         private void Magix_Publishing_InjectPlugin(object sender, ActiveEventArgs e)
         {
@@ -157,6 +161,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             }
         }
 
+        /**
+         * Level2: Reloads the Original WebPart content
+         */
         [ActiveEvent(Name = "Magix.Publishing.ReloadWebPart")]
         protected void Magix_Publishing_ReloadWebPart(object sender, ActiveEventArgs e)
         {

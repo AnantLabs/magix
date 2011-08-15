@@ -21,13 +21,17 @@ using System.Collections.Generic;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Contains logic for Editing WebPage objects and such for administrator
+     * Level2: Contains logic for Editing WebPage objects and such for administrator
      */
     [ActiveController]
     public class EditPages_Controller : ActiveController
     {
         #region [ -- ApplicationStartup, creation of some default objects -- ]
 
+        /**
+         * Level2: Overridden to make sure we've got some default pages during startup if none 
+         * exists from before
+         */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
@@ -111,7 +115,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         #endregion
 
         /**
-         * Will load a Tree of the Pages from which you can browse around within to edit
+         * Level2: Will load a Tree of the Pages from which you can browse around within to edit
          * and view the relationships between all your WebPage objects
          */
         [ActiveEvent(Name = "Magix.Publishing.EditPages")]
@@ -144,7 +148,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will return the WebPages in your system back to caller in the return value as 'Items'
+         * Level2: Will return the WebPages in your system back to caller in the return value as 'Items'
          * collections
          */
         [ActiveEvent(Name = "Magix.Publishing.GetEditPagesDataSource")]
@@ -179,7 +183,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will edit one Specific page according to iether SelectedItemID [Tree] or ID parameter
+         * Level2: Will edit one Specific page according to either SelectedItemID [Tree] or ID parameter
          */
         [ActiveEvent(Name = "Magix.Publishing.EditSpecificPage")]
         protected void Magix_Publishing_EditSpecificPage(object sender, ActiveEventArgs e)
@@ -223,7 +227,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will make sure we update our Tree control
+         * Level2: Will make sure we update our Tree control
          */
         [ActiveEvent(Name = "Magix.Publishing.PageWasUpdated")]
         protected void Magix_Publishing_PageWasUpdated(object sender, ActiveEventArgs e)
@@ -298,7 +302,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Changes the given properties of the WebPage object. Legal values are Text, URL, PageTemplateID
+         * Level2: Changes the given properties of the WebPage object. Legal values are Text, URL, PageTemplateID
          */
         [ActiveEvent(Name = "Magix.Publishing.ChangePageProperty")]
         protected void Magix_Publishing_ChangePageProperty(object sender, ActiveEventArgs e)
@@ -309,12 +313,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                 if (e.Params.Contains("Text"))
                     o.Name = e.Params["Text"].Get<string>();
+
                 if (e.Params.Contains("URL"))
                     o.ChangeURL(e.Params["URL"].Get<string>());
+
                 if (e.Params.Contains("PageTemplateID"))
                 {
                     o.Template = WebPageTemplate.SelectByID(e.Params["PageTemplateID"].Get<int>());
                 }
+
                 o.Save();
 
                 tr.Commit();
@@ -326,7 +333,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will create a new WebPage being the child of the given ID WebPage
+         * Level2: Will create a new WebPage being the child of the given 'ID' WebPage
          */
         [ActiveEvent(Name = "Magix.Publishing.CreateChild")]
         protected void Magix_Publishing_CreateChild(object sender, ActiveEventArgs e)
@@ -350,7 +357,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will ask the end user if he wish to delete specific Page object and all of its children
+         * Level2: Will ask the end user if he wish to delete specific Page object and all of 
+         * its children
          */
         [ActiveEvent(Name = "Magix.Publishing.DeletePageObject")]
         protected void Magix_Publishing_DeletePageObject(object sender, ActiveEventArgs e)
@@ -403,7 +411,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will delete specific Page object and all of its children
+         * Level2: Will delete specific Page object ['ID'] and all of its children
          */
         [ActiveEvent(Name = "Magix.Publishing.DeletePageObject-Confirmed")]
         protected void Magix_Publishing_DeletePageObject_Confirmed(object sender, ActiveEventArgs e)
@@ -435,8 +443,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will update and save the incoming WebPartID [WebPartSetting] and set its Value property to
-         * 'Value'
+         * Level2: Will update and save the incoming WebPartID [WebPartSetting] and set its Value 
+         * property to 'Value'
          */
         [ActiveEvent(Name = "Magix.Publishing.ChangeWebPartSetting")]
         protected void Magix_Publishing_ChangeWebPartSetting(object sender, ActiveEventArgs e)
@@ -459,7 +467,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will run through all WebParts which are 'touched' by this WebPartTemplate
+         * Level3: Will run through all WebParts which are 'touched' by this WebPartTemplate
          * and update their settings according to whatever new module was chosen.
          * Warning; This will set any 'value properties' in these WebParts to their
          * default value. It might also retrieve values it had before if this WebPart
@@ -495,7 +503,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will update all WebPages that was modified by changing the WebPageTemplate. This might
+         * Level2: Will update all WebPages that was modified by changing the WebPageTemplate. This might
          * include creating new WebParts with default values, or removing existing WebParts on Pages
          */
         [ActiveEvent(Name = "Magix.Publishing.WebPageTemplateWasModified")]

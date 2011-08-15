@@ -14,7 +14,7 @@ using Magix.UX.Widgets;
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
     /**
-     * Contains logic for editing, maintaining and viewing MetaObjects. MetaObjects are at the 
+     * Level2: Contains logic for editing, maintaining and viewing MetaObjects. MetaObjects are at the 
      * heart of the Meta Application System since they serve as the 'storage' for everything a
      * view updates or creates through interaction with the end user
      */
@@ -22,7 +22,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     public class MetaObject_Controller : ActiveController
     {
         /**
-         * Returns menu event handlers for viewing MetaObjects
+         * Level2: Returns menu event handlers for viewing MetaObjects
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will open up editing of the MetaObject directly, without any 'views' or other interferences.
+         * Level2: Will open up editing of the MetaObject directly, without any 'views' or other interferences.
          * Mostly meant for administrators to edit objects in 'raw mode'
          */
         [ActiveEvent(Name = "Magix.MetaType.EditMetaObjects_UnFiltered")]
@@ -77,7 +77,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will return a 'Copy Template LinkButton' back to caller
+         * Level3: Will return a 'Copy Template LinkButton' back to caller
          */
         [ActiveEvent(Name = "Magix.MetaType.GetCopyMetaObjectTemplateColumn")]
         protected void Magix_MetaType_GetCopyMetaObjectTemplateColumn(object sender, ActiveEventArgs e)
@@ -134,7 +134,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will copy the incoming MetaObject ['ID']
+         * Level1: Will copy the incoming MetaObject ['ID']
          */
         [ActiveEvent(Name = "Magix.MetaType.CopyMetaObject")]
         private void Magix_MetaType_CopyMetaObject(object sender, ActiveEventArgs e)
@@ -148,7 +148,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Creates a new MetaObject with some default values and returns the ID of the new MetaObject
+         * Level1: Creates a new MetaObject with some default values and returns the ID of the new MetaObject
          * as 'NewID'
          */
         [ActiveEvent(Name = "Magix.MetaType.CreateMetaObject")]
@@ -173,7 +173,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Creates a new MetaObject with some default values, and lets the end user edit it immediately
+         * Level2: Creates a new MetaObject with some default values, and lets the end 
+         * user edit it immediately
          */
         [ActiveEvent(Name = "Magix.MetaType.CreateMetaObjectAndEdit")]
         protected void Magix_MetaType_CreateMetaObjectAndEdit(object sender, ActiveEventArgs e)
@@ -202,7 +203,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
         // TODO: Break further up. Too long ...
         /**
-         * Allows for editing the MetaObject directly without any Views filtering out anything
+         * Level2: Allows for editing the MetaObject directly without any Views filtering 
+         * out anything
          */
         [ActiveEvent(Name = "Magix.MetaType.EditONEMetaObject_UnFiltered")]
         protected void Magix_MetaType_EditONEMetaObject_UnFiltered(object sender, ActiveEventArgs e)
@@ -324,7 +326,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will Append an existing MetaObject [ID] to another existing MetaObject [ParentID] as a child
+         * Level2: Will Append an existing MetaObject [ID] to another existing 
+         * MetaObject [ParentID] as a child
          */
         [ActiveEvent(Name = "Magix.MetaType.AppendChildMetaObjectToMetaObject")]
         protected void Magix_MetaType_AppendChildMetaObjectToMetaObject(object sender, ActiveEventArgs e)
@@ -343,7 +346,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will Append an existing MetaObject [ID] to another existing MetaObject [ParentID] as a child
+         * Level2: Will Append an existing MetaObject [ID] to another existing MetaObject [ParentID] as a child
          * and immediately Edit the Parent MetaObject
          */
         [ActiveEvent(Name = "Magix.MetaType.AppendChildMetaObjectToMetaObjectAndEditParent")]
@@ -365,7 +368,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Calls DBAdmin.Form.AppendObject after overriding some 'visual properties' for the Grid
+         * Level2: Calls DBAdmin.Form.AppendObject after overriding some 'visual properties' for the Grid
          * system
          */
         [ActiveEvent(Name = "DBAdmin.Form.AppendObject-OverriddenForVisualReasons")]
@@ -397,7 +400,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Creates a new 'Value Row' for our MetaObject ['ID']. Returns the ID of the new Value object
+         * Level2: Creates a new 'Value Row' for our MetaObject ['ID']. Returns the ID of the new Value object
          * as 'NewID'
          */
         [ActiveEvent(Name = "Magix.MetaType.CreateNewMetaObject-Value")]
@@ -418,7 +421,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Creates a new 'Value Row' for our MetaObject and Edits the MetaObject immediately
+         * Level2: Creates a new 'Value Row' for our MetaObject and Edits the MetaObject immediately
          */
         [ActiveEvent(Name = "Magix.MetaType.CreateNewMetaObject-Value-AndEdit")]
         protected void Magix_MetaType_CreateNewMetaObject_Value_AndEdit(object sender, ActiveEventArgs e)
@@ -441,7 +444,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Calls 'Magix.MetaType.EditONEMetaObject_UnFiltered' after changing the Container
+         * Level2: Calls 'Magix.MetaType.EditONEMetaObject_UnFiltered' after changing the Container
          * to display the module within. Allows editging of Child MetaObjects
          */
         [ActiveEvent(Name = "Magix.MetaType.EditONEMetaObject_UnFiltered-ChildMetaObject")]
@@ -455,7 +458,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Returns a LinkButton with no Children back to caller upon which clicked will start editing
+         * Level3: Returns a LinkButton with no Children back to caller upon which clicked will start editing
          * the Children collection of objects within the MetaObject
          */
         [ActiveEvent(Name = "Magix.MetaType.GetMetaObjectChildrenTemplateColumn")]
@@ -525,7 +528,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will remove the Child MetaObject ['ID'] from the Parent MetaObject ['ParentID']
+         * Level2: Will remove the Child MetaObject ['ID'] from the Parent MetaObject ['ParentID']
          * collection of children. Notice the child object will NOT be deleted, only
          * 'unreferenced out of' the parent MetaObject
          */
@@ -548,7 +551,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will remove the Child MetaObject ['ID'] from the Parent MetaObject ['ParentID']
+         * Level2: Will remove the Child MetaObject ['ID'] from the Parent MetaObject ['ParentID']
          * collection of children. Notice the child object will NOT be deleted, only
          * 'unreferenced out of' the parent MetaObject. Will instantly edit the Parent
          * MetaObject.
@@ -570,7 +573,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will return a TextAreaEdit, from which the Value of the Value object belonging to
+         * Level3: Will return a TextAreaEdit, from which the Value of the Value object belonging to
          * the MetaObject can be edited, and a LinkButton, from which the entire object can
          * be deleted, back to caller
          */
@@ -652,7 +655,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will return an InPlaceEdit back to caller, since having Carriage Returns in
+         * Level3: Will return an InPlaceEdit back to caller, since having Carriage Returns in
          * a Property Name would only serve to be ridiculous
          */
         [ActiveEvent(Name = "Magix.MetaType.GetMetaObjectValuesNAMETemplateColumn")]
@@ -709,7 +712,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will ask the user for confirmation to assure he really wants to delete the specific
+         * Level2: Will ask the user for confirmation to assure he really wants to delete the specific
          * MetaObject ['ID'], and if the user confirms will delete that object
          */
         [ActiveEvent(Name = "Magix.MetaType.DeleteMetaObject")]
@@ -748,7 +751,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Implementation of deletion of MetaObject after user has confirmed he really 
+         * Level2: Implementation of deletion of MetaObject after user has confirmed he really 
          * wants to delete it
          */
         [ActiveEvent(Name = "Magix.MetaType.DeleteObjectRaw-Confirmed")]
@@ -774,7 +777,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Here only to make sure Grids are updated if we're adding a child MetaObject 
+         * Level2: Here only to make sure Grids are updated if we're adding a child MetaObject 
          * to another MetaObject
          */
         [ActiveEvent(Name = "DBAdmin.Common.CreateObjectAsChild")]
@@ -792,7 +795,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Clears from content4 and out
+         * Level2: Clears from content4 and out
          */
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
         protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
@@ -804,7 +807,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Returns the number of MetaObjects in the system back to caller and the 
+         * Level2: Returns the number of MetaObjects in the system back to caller and the 
          * name of the Event needed to show all MetaObjects in the system
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
@@ -818,7 +821,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Will either update the existing Value or create a new Value with the given 'Name'
+         * Level2: Will either update the existing Value or create a new Value with the given 'Name'
          * and make sure exists within the MetaObject ['MetaObjectID']
          */
         [ActiveEvent(Name = "Magix.MetaType.SetMetaObjectValue")]
@@ -851,7 +854,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Handled to make sure we can traverse our MetaObjects in META mode [front-web, showing grids and views 
+         * Level2: Handled to make sure we can traverse our MetaObjects in META mode [front-web, showing grids and views 
          * of Meta Objects]
          */
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
@@ -888,7 +891,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Handled to make sure "META mode" MetaObjects can be seen 'front-web'
+         * Level2: Handled to make sure "META mode" MetaObjects can be seen 'front-web'
          */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObject")]
         protected void DBAdmin_DynamicType_GetObject(object sender, ActiveEventArgs e)
@@ -907,7 +910,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Handled to make sure "META mode" MetaObjects can be edited 'front-web'
+         * Level2: Handled to make sure "META mode" MetaObjects can be edited 'front-web'
          */
         [ActiveEvent(Name = "Magix.Meta.EditMetaObject")]
         protected void Magix_Meta_EditMetaObject(object sender, ActiveEventArgs e)
@@ -938,7 +941,7 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
-         * Handled to make sure "META mode" MetaObjects can be deleted 'front-web'
+         * Level2: Handled to make sure "META mode" MetaObjects can be deleted 'front-web'
          */
         [ActiveEvent(Name = "Magix.Meta.DeleteMetaObject")]
         protected void Magix_Meta_DeleteMetaObject(object sender, ActiveEventArgs e)
@@ -973,7 +976,7 @@ you'd still like to have this object deleted ...";
         }
 
         /**
-         * Handled to make sure "META mode" MetaObjects can be seen 'front-web'. Confirmation, actual
+         * Level2: Handled to make sure "META mode" MetaObjects can be seen 'front-web'. Confirmation, actual
          * deletion
          */
         [ActiveEvent(Name = "Magix.Meta.DeleteMetaObject-Confirmed")]
@@ -998,7 +1001,7 @@ you'd still like to have this object deleted ...";
         }
 
         /**
-         * Handled to make sure "META mode" MetaObjects can have their values changed 'front-web'
+         * Level2: Handled to make sure "META mode" MetaObjects can have their values changed 'front-web'
          */
         [ActiveEvent(Name = "Magix.Meta.ChangeMetaObjectValue")]
         protected void Magix_Meta_ChangeMetaObjectValue(object sender, ActiveEventArgs e)

@@ -21,7 +21,7 @@ using System.Security;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Controller responsible for loading up 'Page Objects', 
+     * Level2: Controller responsible for loading up 'Page Objects', 
      * and doing initialization around pages and such as they're 
      * being loaded
      */
@@ -29,7 +29,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     public class PageLoader_Controller : ActiveController
     {
         /**
-         * Basically just 're-maps' the event to Magix.Publishing.OpenPage and
+         * Level2: Basically just 're-maps' the event to Magix.Publishing.OpenPage and
          * changes the incoming URL parameter to an outgoing ID parameter of the 
          * specific page being requested ...
          */
@@ -70,8 +70,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
         }
 
+        // TODO: Create a Startup Default Action encapsulating method to hint towards
+        // user that he can actually do this himself to bypass the menu and such...
         /**
-         * Expects an ID parameter which should be the ID of a Page.
+         * Level2: Expects an ID parameter which should be the ID of a Page.
          * Will loop through every WebPart of the page, and raise 
          * 'Magix.Publishing.InjectPlugin' for every WebPart within 
          * the WebPage object. Might throw exceptions if the page is
@@ -180,7 +182,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will return the Container ID of the 'Current Container', meaning whomever 
+         * Level2: Will return the Container ID of the 'Current Container', meaning whomever 
          * raised whatever event we're currently within. Meaning if you've got a Button
          * in a Grid which raises some event which is dependent upon knowing which Container
          * its being raised from within, to load some other control [e.g. Signature Column in Grid

@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
     /**
-     * Contains logic for Actions which are wrappers around ActiveEvents for the end user
+     * Level1: Contains logic for Actions which are wrappers around ActiveEvents for the end user
      * to be able to raise his own events, with his own data in the Node structure. The 
      * MetaAction system is at the core of the Meta Application system wince without it
      * the end user cannot create his own types of events or Actions
@@ -24,7 +24,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     public class MetaAction_Controller : ActiveController
     {
         /**
-         * Will return the menu items needed to fire up 'View Meta Actions' forms 
+         * Level2: Will return the menu items needed to fire up 'View Meta Actions' forms 
          * for Administrator
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
@@ -37,7 +37,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will show a Grid containing all Meta Actions within the system
+         * Level2: Will show a Grid containing all Meta Actions within the system
          */
         [ActiveEvent(Name = "Magix.MetaType.ViewActions")]
         protected void Magix_MetaType_ViewActions(object sender, ActiveEventArgs e)
@@ -84,7 +84,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will show a 'search for Action and select' type of Grid to the end user so that
+         * Level2: Will show a 'search for Action and select' type of Grid to the end user so that
          * he can select and append an action into whatever collection wants to contain one
          */
         [ActiveEvent(Name = "Magix.MetaActions.SearchActions")]
@@ -136,7 +136,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Raise 'ParentPropertyName', first setting the ActionName to the Action found in 'ID'.
+         * Level2: Raise 'ParentPropertyName', first setting the ActionName to the Action found in 'ID'.
          * Helper method for editing Actions in Views
          */
         [ActiveEvent(Name = "Magix.MetaAction.ActionWasSelected")]
@@ -151,7 +151,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Basically just overrides 'DBAdmin.Data.GetContentsOfClass' to allow
+         * Level2: Basically just overrides 'DBAdmin.Data.GetContentsOfClass' to allow
          * for adding some custom Criterias for our Search Box. Puts 'Filter'
          * into a Like expression on the Name column before calling 'base class'
          */
@@ -175,7 +175,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Returns a LinkButton that will allow for Deep-Copying the selected Action
+         * Level3: Returns a LinkButton that will allow for Deep-Copying the selected Action
          */
         [ActiveEvent(Name = "Magix.MetaAction.GetCopyActionTemplateColumn")]
         protected void Magix_MetaAction_GetCopyActionTemplateColumn(object sender, ActiveEventArgs e)
@@ -205,7 +205,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Performs a Deep-Copy of the Action and returns the ID of the new Action as 'NewID'
+         * Level1: Performs a Deep-Copy of the Action and returns the ID of the new Action as 'NewID'
          */
         [ActiveEvent(Name = "Magix.MetaAction.CopyAction")]
         protected void Magix_MetaAction_CopyAction(object sender, ActiveEventArgs e)
@@ -224,7 +224,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Performs a Deep-Copy of the Action and start editing the Action immediately
+         * Level2: Performs a Deep-Copy of the Action and start editing the Action immediately
          */
         [ActiveEvent(Name = "Magix.MetaAction.CopyActionAndEdit")]
         protected void Magix_MetaAction_CopyActionAndEdit(object sender, ActiveEventArgs e)
@@ -260,7 +260,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Creates a new Default Action and returns the ID of the new Action as 'NewID'
+         * Level1: Creates a new Default Action and returns the ID of the new Action as 'NewID'
          */
         [ActiveEvent(Name = "Magix.Meta.CreateAction")]
         protected void Magix_Meta_CreateAction(object sender, ActiveEventArgs e)
@@ -278,7 +278,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Creates a new Default Action and starts editing it immediately
+         * Level2: Creates a new Default Action and starts editing it immediately
          */
         [ActiveEvent(Name = "Magix.Meta.CreateActionAndEdit")]
         protected void Magix_Meta_CreateActionAndEdit(object sender, ActiveEventArgs e)
@@ -306,7 +306,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Edits the given Action ['ID'], with all its properties, parameters and so on. Also
+         * Level2: Edits the given Action ['ID'], with all its properties, parameters and so on. Also
          * creates a 'Run' button which the end user can click to run the action
          */
         [ActiveEvent(Name = "Magix.Meta.EditAction")]
@@ -451,7 +451,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Deletes the Action.ActionParams given ['ID'] and updates a lot of UI properties.
+         * Level2: Deletes the Action.ActionParams given ['ID'] and updates a lot of UI properties.
          * Raises 'Magix.Core.GetSelectedTreeItem' to get the ID of which ActionParams to
          * actually delete
          */
@@ -494,7 +494,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Creates a new Parameter and attaches to either the Selected Parameter, or if
+         * Level2: Creates a new Parameter and attaches to either the Selected Parameter, or if
          * none selected, the Action directly on root level. Depends upon the 
          * 'Magix.Core.GetSelectedTreeItem' event to get to know whether or not
          * it should add the action to a specific ActionParam as a Child or directly
@@ -549,7 +549,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Will ask the user for confirmation about deleting the given Action ['ID'], and if
+         * Level2: Will ask the user for confirmation about deleting the given Action ['ID'], and if
          * the end user confirms, the Action will be deleted
          */
         [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaAction")]
@@ -586,7 +586,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will call 'DBAdmin.Common.ComplexInstanceDeletedConfirmed' which again [hopefully]
+         * Level2: Will call 'DBAdmin.Common.ComplexInstanceDeletedConfirmed' which again [hopefully]
          * will delete the given Action
          */
         [ActiveEvent(Name = "Magix.MetaAction.DeleteMetaAction-Confirmed")]
@@ -612,7 +612,7 @@ Deleting it may break these parts.</p>";
 
         // TODO: Too long ...!! [refactor]
         /**
-         * Will initiate editing of Parameter for Action unless it's already being edited, at
+         * Level2: Will initiate editing of Parameter for Action unless it's already being edited, at
          * which point it'll be 'brought to front'
          */
         [ActiveEvent(Name = "Magix.MetaAction.EditParam")]
@@ -700,7 +700,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Returns a SelectList with the opportunity for the end user
+         * Level3: Returns a SelectList with the opportunity for the end user
          * to select which type [system-type, native] the specific parameter should be
          * converted to before Action is being ran
          */
@@ -761,7 +761,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Returns a tree structure containing all the Action's Parameters to the caller
+         * Level2: Returns a tree structure containing all the Action's Parameters to the caller
          */
         [ActiveEvent(Name = "Magix.MetaAction.GetActionItemTree")]
         private void Magix_Meta_GetActionItemTree(object sender, ActiveEventArgs e)
@@ -789,7 +789,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Returns menu items for dashboard functionality to be able to click and view Actions from Dashboard
+         * Level2: Returns menu items for dashboard functionality to be able to click and view Actions from Dashboard
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
         protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
@@ -802,7 +802,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will take an incoming 'EventName' with an optionally attached 'EventNode' structure
+         * Level2: Will take an incoming 'EventName' with an optionally attached 'EventNode' structure
          * and create an Action out of it
          */
         [ActiveEvent(Name = "Magix.Core.EventClickedWhileDebugging")]
@@ -890,7 +890,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will tae an incoming Action ['ActionID' OR 'ActionName'] and run it. Will merge
+         * Level1: Will take an incoming Action ['ActionID' OR 'ActionName'] and run it. Will merge
          * the incoming parameters with the Params of the Action, giving the 'incoming Parameters'
          * preference over the Params associated with Action
          */
