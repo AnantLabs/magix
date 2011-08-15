@@ -214,6 +214,10 @@
     <Content Include="media\Fonts\Hawaii_Killer.ttf" />
     <Content Include="media\Fonts\kberry.ttf" />
     <Content Include="media\Fonts\lexograph.ttf" />
+    <Content Include="media\images\book-front-page-believer.png" />
+    <Content Include="media\images\book-front-page-CSharp-Believers.png" />
+    <Content Include="media\images\book-front-page-CSharp.png" />
+    <Content Include="media\images\book-front-page-noob.png" />
     <Content Include="media\images\magix-logo.png" />
     <Content Include="media\images\openid_small.png" />
     <Content Include="media\images\openid_tiny.png" />
