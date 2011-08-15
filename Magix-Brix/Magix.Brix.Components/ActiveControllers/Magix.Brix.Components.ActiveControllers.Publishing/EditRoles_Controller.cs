@@ -19,13 +19,13 @@ using Magix.Brix.Components.ActiveTypes.Users;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Here mostly to serve up grids and such for editing of Roles in the system
+     * Level2: Here mostly to serve up grids and such for editing of Roles in the system
      */
     [ActiveController]
     public class EditRoles_Controller : ActiveController
     {
         /**
-         * Will allow the end-user to edit [add, change, delete] roles within the system
+         * Level2: Will allow the end-user to edit [add, change, delete] roles within the system
          */
         [ActiveEvent(Name = "Magix.Publishing.EditRoles")]
         protected void Magix_Publishing_EditRoles(object sender, ActiveEventArgs e)

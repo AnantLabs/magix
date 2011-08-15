@@ -13,13 +13,16 @@ using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
+    /**
+     * Level2: Contains Application Startup code to create the defaul Actions unless they're already there
+     */
     [ActiveController]
     public class CreateDefaultInitialActions_Controller : ActiveController
     {
         #region [ -- Application Startup. Creation of default, 'built-in' Actions ... -- ]
 
         /**
-         * Will create some default installation Actions for the End User to consume in his own
+         * Level2: Will create some default installation Actions for the End User to consume in his own
          * Meta Applications. These are all prefixed with 'Magix.DynamicEvent'
          */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]

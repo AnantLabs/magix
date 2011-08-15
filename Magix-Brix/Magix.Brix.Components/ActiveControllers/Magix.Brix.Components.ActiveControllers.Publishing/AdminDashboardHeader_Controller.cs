@@ -15,7 +15,7 @@ using Magix.Brix.Components.ActiveTypes.Publishing;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Basically only here to is Administrator logs into Dashboard, we'll 'lock'
+     * Level2: We'll 'lock'
      * the Header control since it can be VERY annoying sometimes due to the DB
      * Manager, which seriously needs to be refactored here BTW ...
      */
@@ -23,7 +23,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     public class AdminDashboardHeader_Controller : ActiveController
     {
         /**
-         * Basically just ensures the Header Menu is loaded, and locked with 
+         * Level2: Basically just ensures the Header Menu is loaded, and locked with 
          * 'Administrator Dashboard' as its value.
          */
         [ActiveEvent(Name = "Magix.Publishing.LoadHeader")]

@@ -17,7 +17,7 @@ using Magix.Brix.Components.ActiveTypes.Users;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Creats our default Tooltips or Tutorial rather
+     * Level2: Creats our default Tooltips or Tutorial rather
      */
     [ActiveController]
     public class TipOfToday_Controller : ActiveController
@@ -25,7 +25,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         #region [ -- Creation of a 'gazillion' tooltips during ApplicationStartup ... -- ]
 
         /**
-         * Creates our default tooltips if there exists none
+         * Level2: Creates our default tooltips if there exists none
          */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)

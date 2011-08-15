@@ -38,8 +38,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColumnTypesPluginsController.cs" />
-    <Compile Include="DBAdminController.cs" />
+    <Compile Include="ColumnTypesPlugins_Controller.cs" />
+    <Compile Include="DBAdmin_Controller.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

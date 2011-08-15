@@ -17,13 +17,13 @@ using Magix.Brix.Components.ActiveTypes.Users;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Helps feed the SliderMenu in Front-Web to get its Items to build its structure upon
+     * Level2: Helps feed the SliderMenu in Front-Web to get its Items to build its structure upon
      */
     [ActiveController]
     public class SliderMenu_Controller : ActiveController
     {
         /**
-         * Will return a node containing all the menu items in your Pages hierarchy, possibly
+         * Level2: Will return a node containing all the menu items in your Pages hierarchy, possibly
          * according to how you've got access to them, as long as the Access Controller is in no
          * ways jeopardized
          */
@@ -59,7 +59,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will build up the Node structure for one Menu item, first verifying the User
+         * Level2: Will build up the Node structure for one Menu item, first verifying the User
          * has access to that particular page by raising the
          * 'Magix.Publishing.GetRolesListForPage' event
          */
@@ -145,7 +145,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will Open the specific WebPage accordingly to which SlidingMenuItem was clicked
+         * Level2: Will Open the specific WebPage accordingly to which SlidingMenuItem was clicked
          */
         [ActiveEvent(Name = "Magix.Publishing.SliderMenuItemClicked")]
         protected void Magix_Publishing_SliderMenuItemClicked(object sender, ActiveEventArgs e)

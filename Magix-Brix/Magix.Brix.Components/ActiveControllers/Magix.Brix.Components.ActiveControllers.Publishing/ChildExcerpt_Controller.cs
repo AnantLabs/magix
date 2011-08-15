@@ -21,13 +21,13 @@ using System.Security;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Helps out with some of the editing and using of the ChildExcerpt Module Type
+     * Level2: Helps out with some of the editing and using of the ChildExcerpt Module Type
      */
     [ActiveController]
     public class ChildExcerpt_Controller : ActiveController
     {
         /**
-         * Creates a SelectList from which the no of articles in the ChildExcerpt Object can
+         * Level3: Creates a SelectList from which the no of articles in the ChildExcerpt Object can
          * be chosen
          */
         [ActiveEvent(Name = "Magix.Publishing.GetEditChildExcerptNoArticlesDropDown")]
@@ -61,7 +61,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * The actual construction of our Child Excerpt panels are being done here
+         * Level3: The actual construction of our Child Excerpt panels are being done here
          */
         [ActiveEvent(Name = "Magix.Publishing.BuildOneChildExcerptControl")]
         private void Magix_Publishing_BuildOneChildExcerptControl(object sender, ActiveEventArgs e)
@@ -114,7 +114,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will return the last 'Count' number of pages, sorted according to newest first
+         * Level2: Will return the last 'Count' number of pages, sorted according to newest first
          */
         [ActiveEvent(Name = "Magix.Publishing.GetLastChildrenPages")]
         private void Magix_Publishing_GetLastChildrenPages(object sender, ActiveEventArgs e)
@@ -133,7 +133,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will create a SelectList for editing of the number of ChildExcerpts in the WebPart
+         * Level3: Will create a SelectList for editing of the number of ChildExcerpts in the WebPart
          */
         [ActiveEvent(Name = "Magix.Publishing.GetTemplateColumnSelectChildExcerptNo")]
         protected void Magix_Publishing_GetTemplateColumnSelectChildExcerptNo(object sender, ActiveEventArgs e)

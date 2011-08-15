@@ -10,7 +10,7 @@ using Magix.Brix.Loader;
 namespace Magix.Brix.Components.ActiveControllers.Settings
 {
     /**
-     * Helper logic to assist with Settings and updating of settings. 
+     * Level2: Helper logic to assist with Settings and updating of settings. 
      * PS!
      * Unless you have this 
      * controller in your Application Pool, Enabled, then direct changes, through the DB Admin
@@ -21,7 +21,7 @@ namespace Magix.Brix.Components.ActiveControllers.Settings
     public class Settings_Controller
     {
         /**
-         * Need to override 'DBAdmin.Data.ChangeSimplePropertyValue' to make sure
+         * Level2: Need to override 'DBAdmin.Data.ChangeSimplePropertyValue' to make sure
          * settings are 'flushed' if they're being updated
          */
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
@@ -39,7 +39,7 @@ namespace Magix.Brix.Components.ActiveControllers.Settings
         }
 
         /**
-         * Overrides 'DBAdmin.Data.ChangeSimplePropertyValue' to make sure
+         * Level2: Overrides 'DBAdmin.Data.ChangeSimplePropertyValue' to make sure
          * settings are 'flushed' if they're being updated. Calls original logic,
          * then resets the settings and reloads them. This because settings are 
          * cached on Application Level for speed issues

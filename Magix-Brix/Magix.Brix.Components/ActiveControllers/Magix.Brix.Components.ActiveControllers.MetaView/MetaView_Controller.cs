@@ -17,7 +17,7 @@ using Magix.Brix.Components.ActiveTypes.MetaTypes;
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
     /**
-     * Contains helper logic for viewing and maintaing MetaViews, and related subjects. MetaViews are the
+     * Level2: Contains helper logic for viewing and maintaing MetaViews, and related subjects. MetaViews are the
      * foundation for the whole viewing parts of the Meta Application system. A MetaView is imperativ for
      * both being able to collect new data and also for viewing existing data. The MetaView defines which
      * parts of the object you can see at any time too, which means you can use it to filter access according
@@ -28,7 +28,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
     public class MetaView_Controller : ActiveController
     {
         /**
-         * Will return one item back to caller which hopefully will function as the basis
+         * Level2: Will return one item back to caller which hopefully will function as the basis
          * of loading the ViewMetaViews logic
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
@@ -39,8 +39,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
-         * Will show the given MetaView ['MetaViewName'] in MultiView mode. As in, the end user will
-         * see a Grid of all MetaObjects of the TypeName of the MetaView
+         * Level2: Will show the given MetaView ['MetaViewName'] in MultiView mode. 
+         * As in, the end user will see a Grid of all MetaObjects of the TypeName of the MetaView
          */
         [ActiveEvent(Name = "Magix.MetaType.ViewMetaViewMultiMode")]
         protected void Magix_MetaType_ViewMetaViewMultiMode(object sender, ActiveEventArgs e)
@@ -108,7 +108,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
-         * Will show a Grid with all the MetaViews to the end user
+         * Level2: Will show a Grid with all the MetaViews to the end user
          */
         [ActiveEvent(Name = "Magix.MetaView.ViewMetaViews")]
         protected void Magix_MetaView_ViewMetaViews(object sender, ActiveEventArgs e)
@@ -149,8 +149,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 node);
         }
 
+        // TODO: Get Generic SelectList Control
         /**
-         * Will return a SelectList with all the MetaViews back to caller
+         * Level3: Will return a SelectList with all the MetaViews back to caller
          */
         [ActiveEvent(Name = "Magix.MetaView.MetaView_Single.GetTemplateColumnSelectView")]
         protected void Magix_MetaView_MetaView_Single_GetTemplateColumnSelectView(object sender, ActiveEventArgs e)
@@ -187,7 +188,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
-         * Will return a SelectList with all the MetaViews back to caller
+         * Level3: Will return a SelectList with all the MetaViews back to caller
          */
         [ActiveEvent(Name = "Magix.MetaView.MetaView_Multiple.GetTemplateColumnSelectView")]
         protected void Magix_MetaView_MetaView_Multiple_GetTemplateColumnSelectView(object sender, ActiveEventArgs e)
@@ -224,7 +225,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
-         * Returns a Copy MetaView
+         * Level3: Creates a Copy MetaView LinkButton
          */
         [ActiveEvent(Name = "Magix.Meta.GetCopyMetaViewTemplateColumn")]
         protected void Magix_Meta_GetCopyMetaViewTemplateColumn(object sender, ActiveEventArgs e)
@@ -254,7 +255,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
-         * Will copy [deep clone] the incoming 'ID' MetaView and return the new copy's
+         * Level2: Will copy [deep clone] the incoming 'ID' MetaView and return the new copy's
          * ID as 'NewID'
          */
         [ActiveEvent(Name = "Magix.Meta.CopyMetaView")]
@@ -273,7 +274,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
-         * Will copy [deep clone] the incoming 'ID' MetaView and edit it immediately
+         * Level2: Will copy [deep clone] the incoming 'ID' MetaView and edit it immediately
          */
         [ActiveEvent(Name = "Magix.Meta.CopyMetaViewAndEditCopy")]
         protected void Magix_Meta_CopyMetaViewAndEditCopy(object sender, ActiveEventArgs e)
@@ -307,7 +308,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
         }
 
         /**
-         * Will ask the user if he really wish to delete the MetaView given through 'ID',
+         * Level2: Will ask the user if he really wish to delete the MetaView given through 'ID',
          * and if the user says yes, delete it
          */
         [ActiveEvent(Name = "Magix.MetaView.DeleteMetaView")]
@@ -344,7 +345,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * End user confirmed he wishes to delete the MetaView
+         * Level2: End user confirmed he wishes to delete the MetaView
          */
         [ActiveEvent(Name = "Magix.MetaView.DeleteMetaView-Confirmed")]
         protected void Magix_MetaView_DeleteMetaView_Confirmed(object sender, ActiveEventArgs e)
@@ -368,7 +369,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will create a new MetaView with some default settings and return ID of new view 
+         * Level2: Will create a new MetaView with some default settings and return ID of new view 
          * as 'NewID'
          */
         [ActiveEvent(Name = "Magix.MetaView.CreateMetaView")]
@@ -388,7 +389,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will create and Edit immediately a new MetaView
+         * Level2: Will create and Edit immediately a new MetaView
          */
         [ActiveEvent(Name = "Magix.MetaView.CreateMetaViewAndEdit")]
         protected void Magix_MetaView_CreateMetaViewAndEdit(object sender, ActiveEventArgs e)
@@ -406,7 +407,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will edit the given ['ID'] MetaView with its properties and some other
+         * Level2: Will edit the given ['ID'] MetaView with its properties and some other
          * controls. Such as for instance a 'View WYSIWYG' button
          */
         [ActiveEvent(Name = "Magix.MetaView.EditMetaView")]
@@ -520,7 +521,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will return a clickable and drop-down-able Panel that the end user can click
+         * Level3: Will return a clickable and drop-down-able Panel that the end user can click
          * to append and remove events that triggers the MetaView Property if clicked
          */
         [ActiveEvent(Name = "Magix.MetaView.GetMetaViewActionTemplateColumn")]
@@ -636,7 +637,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will show a Search box, from which the end user can search for a specific action
+         * Level2: Will show a Search box, from which the end user can search for a specific action
          * to append to the list of actions already associated with the MetaView Property
          */
         [ActiveEvent(Name = "Magix.MetaView.AppendAction")]
@@ -651,7 +652,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will append the specific 'ActionName' into the 'ParentID' MetaView Property and
+         * Level2: Will append the specific 'ActionName' into the 'ParentID' MetaView Property and
          * call for an update of the grids
          */
         [ActiveEvent(Name = "Magix.MetaView.ActionWasChosenForAppending")]
@@ -681,7 +682,7 @@ Deleting it may break these parts.</p>";
         // TODO: Implement checking against SPECIFIC MetaView before we 'flush containers' since
         // user might very well delete _another_ view than the one being edited ...
         /**
-         * Handled to make sure we clear content4 and out if a MetaView s deleted.
+         * Level2: Handled to make sure we clear content4 and out if a MetaView s deleted.
          */
         [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
         protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
@@ -692,8 +693,9 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        // TODO: Implement Wrapper Action around this bugger ...
         /**
-         * Will show the 'MetaViewName' MetaView within the 'current container'
+         * Level2: Will show the 'MetaViewName' MetaView within the 'current container'
          */
         [ActiveEvent(Name = "Magix.MetaType.ShowMetaViewMultipleInCurrentContainer")]
         protected void Magix_MetaType_ShowMetaViewMultipleInCurrentContainer(object sender, ActiveEventArgs e)
@@ -715,7 +717,8 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
+         * Level2: Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode',
+         * front-web style
          */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
         protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
@@ -773,7 +776,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
+         * Level2: Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
          */
         [ActiveEvent(Name = "DBAdmin.DynamicType.CreateObject")]
         protected void DBAdmin_DynamicType_CreateObject(object sender, ActiveEventArgs e)
@@ -790,7 +793,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
+         * Level2: Overridden to handle MetaView 'dynamically displayed'. Meaning in "-META" 'mode'
          */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
         protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
@@ -850,13 +853,15 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will return a Button control to caller, upon which clicked, will raise the named actions in its
-         * settings according to which MetaViewProperty it belongs to
+         * Level3: Will return a Button control to caller, upon which clicked, will raise the named actions in its
+         * settings according to which MetaViewProperty it belongs to. Front-web stuff, basically a MetaView
+         * form field with 'Actions' associated with it
          */
         [ActiveEvent(Name = "Magix.MetaView.MultiViewActionItemTemplateColumn")]
         protected void Magix_MetaView_MultiViewActionItemTemplateColumn(object sender, ActiveEventArgs e)
         {
             MetaView v = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
             MetaView.MetaViewProperty p = v.Properties.Find(
                 delegate(MetaView.MetaViewProperty idx)
                 {
@@ -898,7 +903,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will run the Actions associated with the MetaViewProperty given through 'MetaViewName' [MetaView - Name],
+         * Level2: Will run the Actions associated with the MetaViewProperty given through 'MetaViewName' [MetaView - Name],
          * 'Name' [of property within MetaObject] and expects to be raised from within a WebPart, since it
          * will pass along the 'current container' onwards
          */
@@ -940,7 +945,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will create a control type depending upon the colon-prefix of the column. For instance, if given
+         *Level3:  Will create a control type depending upon the colon-prefix of the column. For instance, if given
          * date:When it will create a Calendar, putting the Value selected into the 'When' property.
          * If given select:xx.yy:zz it will create a select list, enumerating into
          * the ObjectTypes given with the Property de-referenced. E.g. select:Gender.Sex:Male-Female will enumerate
@@ -1241,7 +1246,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Loads up WYSIWYG editor for MetaView in 'SingleView Mode'
+         * Level2: Loads up WYSIWYG editor for MetaView in 'SingleView Mode'
          */
         [ActiveEvent(Name = "Magix.MetaView.LoadWysiwyg")]
         protected void Magix_MetaView_LoadWysiwyg(object sender, ActiveEventArgs e)
@@ -1276,7 +1281,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Returns the properties for the MetaView back to caller
+         * Level2: Returns the properties for the MetaView back to caller
          */
         [ActiveEvent(Name = "Magix.MetaView.GetViewData")]
         protected void Magix_MetaView_GetViewData(object sender, ActiveEventArgs e)
@@ -1296,7 +1301,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Returns the number of MetaViews and an event for viewing all MetaViews back to caller
+         * Level2: Returns the number of MetaViews and an event for viewing all MetaViews back to caller
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
         protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
@@ -1309,7 +1314,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Will create a new MetaObject according to the values given from the MetaView_SingleView form.
+         * Level2: Will create a new MetaObject according to the values given from the MetaView_SingleView form.
          * 'PropertyValues' is expected to contain a Name/Value list-pair, and the ViewName is
          * supposed to be the unique name to the specific MetaView being used.
          */

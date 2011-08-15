@@ -14,13 +14,13 @@ using Magix.Brix.Components.ActiveTypes.Users;
 namespace Magix.Brix.Components.ActiveControllers.ToolTip
 {
     /**
-     * Contains helper logic for displaying and maintaining previous/next Tip of today and such
+     * Level2: Contains helper logic for displaying and maintaining previous/next Tip of today and such
      */
     [ActiveController]
     public class ToolTip_Controller : ActiveController
     {
         /**
-         * Returns the Previous Tooltip on a 'Per User' level. Meaning, it'll keep track of which
+         * Level2: Returns the Previous Tooltip on a 'Per User' level. Meaning, it'll keep track of which
          * ToolTip has been shown to which User
          */
         [ActiveEvent(Name = "Magix.Core.GetPreviousToolTip")]
@@ -31,7 +31,7 @@ namespace Magix.Brix.Components.ActiveControllers.ToolTip
         }
 
         /**
-         * Returns the Next Tooltip on a 'Per User' level. Meaning, it'll keep track of which
+         * Level2: Returns the Next Tooltip on a 'Per User' level. Meaning, it'll keep track of which
          * ToolTip has been shown to which User
          */
         [ActiveEvent(Name = "Magix.Core.GetNextToolTip")]

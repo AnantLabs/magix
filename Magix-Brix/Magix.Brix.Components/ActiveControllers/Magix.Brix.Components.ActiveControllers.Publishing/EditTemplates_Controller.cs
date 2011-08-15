@@ -21,14 +21,14 @@ using System.Collections.Generic;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Controller for editing Templates. Contains all the relevant event handlers and
+     * Level2: Controller for editing Templates. Contains all the relevant event handlers and
      * logic for editing your templates
      */
     [ActiveController]
     public class EditTemplates_Controller : ActiveController
     {
         /**
-         * Shows the grid containing all your Templates such that you can edit them
+         * Level2: Shows the grid containing all your Templates such that you can edit them
          * or create new Templates and such
          */
         [ActiveEvent(Name = "Magix.Publishing.EditTemplates")]
@@ -73,7 +73,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Creates the 'Copy Template' LinkButtons and returns back to the Grid system
+         * Level3: Creates the 'Copy Template' LinkButtons and returns back to the Grid system
          * so that we can have an implementation of 'Copy Template' button. LinkButton raises 
          * 'Magix.Publishing.CopyTemplate' when clicked
          */
@@ -107,7 +107,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Only here to make sure that if a WebPageTemplate is being deleted
+         * Level2: Only here to make sure that if a WebPageTemplate is being deleted
          * from the Grid while editing it [for instance], we clear from 'content4'
          * and out to make sure we're not allowig for editing of a deleted Template
          */
@@ -124,7 +124,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Will return all possible 'CSS Template Values' from the 'web-part-templates.css'
+         * Level2: Will return all possible 'CSS Template Values' from the 'web-part-templates.css'
          * file within the media/module/ folders
          */
         [ActiveEvent(Name = "Magix.Publishing.GetCssTemplatesForWebPartTemplate")]
@@ -152,7 +152,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Changes the CSS class of the WebPartTemplate instance according to the Selected Css value
+         * Level2: Changes the CSS class of the WebPartTemplate instance according to the Selected Css value
          * chosen
          */
         [ActiveEvent(Name = "Magix.Publishing.ChangeCssForWebPartTemplateFromCssTemplate")]
@@ -169,7 +169,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Completes a 'deep copy' of the Template and saves it and loads up the Editing of
+         * Level2: Completes a 'deep copy' of the Template and saves it and loads up the Editing of
          * it for the user to immediately start editing it
          */
         [ActiveEvent(Name = "Magix.Publishing.CopyTemplate")]
@@ -209,7 +209,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Edits one specific WebPageTemplate by loading up the 
+         * Level2: Edits one specific WebPageTemplate by loading up the 
          * 'Magix.Brix.Components.ActiveModules.Publishing.EditSpecificTemplate' module
          */
         [ActiveEvent(Name = "Magix.Publishing.EditTemplate")]
@@ -242,7 +242,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Deletes a specific WebPartTemplate
+         * Level2: Deletes a specific WebPartTemplate
          */
         [ActiveEvent(Name = "Magix.Publishing.DeleteWebPartTemplate")]
         protected void Magix_Publishing_DeleteWebPartTemplate(object sender, ActiveEventArgs e)
@@ -258,7 +258,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Returns a node of all WebPageTemplates in the system
+         * Level2: Returns a node of all WebPageTemplates in the system
          */
         [ActiveEvent(Name = "Magix.Publishing.GetWebPageTemplates")]
         protected void Magix_Publishing_GetWebPageTemplates(object sender, ActiveEventArgs e)
@@ -288,7 +288,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Returns a node of all PublisherPlugins you've got available in your installation
+         * Level2: Returns a node of all PublisherPlugins you've got available in your installation
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPublisherPlugins")]
         protected void Magix_Publishing_GetPublisherPlugins(object sender, ActiveEventArgs e)
@@ -307,7 +307,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Changes the ModuleName [plugin type] of the WebPartTemplate and saves it
+         * Level2: Changes the ModuleName [plugin type] of the WebPartTemplate and saves it
          */
         [ActiveEvent(Name = "Magix.Publishing.ChangeModuleTypeForWebPartTemplate")]
         protected void Magix_Publishing_ChangeModuleTypeForWebPartTemplate(object sender, ActiveEventArgs e)
@@ -338,7 +338,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Changes properties of the Template and saves it
+         * Level2: Changes properties of the Template and saves it
          */
         [ActiveEvent(Name = "Magix.Publishing.ChangeTemplateProperty")]
         protected void Magix_Publishing_ChangeTemplateProperty(object sender, ActiveEventArgs e)
@@ -469,7 +469,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Creates the Container column [select list] for selecting different number of 
+         * Level3: Creates the Container column [select list] for selecting different number of 
          * WebParts for your template
          */
         [ActiveEvent(Name = "Magix.Publisher.GetNoContainersTemplateColumn")]
@@ -503,7 +503,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Checks to see if number of webparts are decreasing, if they are, warning
+         * Level2: Checks to see if number of webparts are decreasing, if they are, warning
          * user about that he should be careful, blah, blah, blah ...
          */
         private void RaiseTryToChangeNumberOfWebParts(WebPageTemplate t, int count)
@@ -553,7 +553,7 @@ irrevocably delete every single WebPart on every sigle WebPage built upon that W
         }
 
         /**
-         * Will change the number of WebParts in your WebPartTemplate
+         * Level2: Will change the number of WebParts in your WebPartTemplate
          */
         [ActiveEvent(Name = "Magix.Publisher.ChangeNumberOFContainersOnTemplates-Confirmed")]
         protected void Magix_Publisher_ChangeNumberOFContainersOnTemplates_Confirmed(object sender, ActiveEventArgs e)

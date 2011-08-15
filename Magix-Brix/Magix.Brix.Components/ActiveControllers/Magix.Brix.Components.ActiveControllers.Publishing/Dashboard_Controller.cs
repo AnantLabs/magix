@@ -14,13 +14,13 @@ using Magix.UX;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Main 'router' in dispatching important Dashboard functionality 
+     * Level2: Main 'router' in dispatching important Dashboard functionality 
      */
     [ActiveController]
     public class Dashboard_Controller : ActiveController
     {
         /**
-         * Will load the Dashboard if User is of type Administrator through raising
+         * Level2: Will load the Dashboard if User is of type Administrator through raising
          * 'Magix.Publishing.LoadDashboard', otherwise raise
          * 'Magix.Publishing.LoadUserDashboard' which isn't currently being catched 
          * any place

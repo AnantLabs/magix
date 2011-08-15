@@ -27,7 +27,7 @@ using System.Security;
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
     /**
-     * Controller implementing the OpenID logic for both Relying Party
+     * Level2: Controller implementing the OpenID logic for both Relying Party
      * and OpenID Provider logic. Every User in Magix can use the website
      * where Magix is installed as an OpenID provider by typing in the
      * root URL of the web application and append ?openID=username
@@ -38,7 +38,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     public class OpenID_Controller : ActiveController
     {
         /**
-         * Overriding our default Magix Login logic here to inject our own OpenID stuff ...
+         * Level2: Overriding our default Magix Login logic here to inject our own OpenID stuff ...
          * Overrides; 'Magix.Core.LogInUser' and 'Magix.Core.UserLoggedIn' which again
          * are being used by the Magix 'core' login logic, meaning we're basically
          * doing effectively 'AOP' here by overriding existing events like these ...
@@ -65,7 +65,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Basically just checking if this is an OpenID Request, and doing
+         * Level2: Basically just checking if this is an OpenID Request, and doing
          * either the Provider or the Relying Party thing needed ...
          */
         [ActiveEvent(Name = "Magix.Core.InitialLoading")]
@@ -295,7 +295,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         }
 
         /**
-         * Creates a default User object, and ads him into the
+         * Level2: Creates a default User object, and ads him into the
          * default role as set through the 
          * 'Magix.Publishing.OpenID.DefaultRoleName' setting.
          * Associates the given OpenID Token with the User [obviously]
@@ -387,7 +387,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         #endregion
 
         /**
-         * Overridden to check if we're in OpenID Mode or in Username/Password mode
+         * Level2: Overridden to check if we're in OpenID Mode or in Username/Password mode
          * Will forward to overridden method is no OpenID value is given ...
          */
         [ActiveEvent(Name = "Magix.Core.LogInUser-Override")]
@@ -471,7 +471,7 @@ maybe a suggestion of what it might have been ...?";
         }
 
         /**
-         * Overridden to check to see if we're an OpenID Provider, and if so, redirect back 
+         * Level2: Overridden to check to see if we're an OpenID Provider, and if so, redirect back 
          * to Relying Party accordingly. If we're not a Provider, it will forward the event to
          * the overridden logic
          */
