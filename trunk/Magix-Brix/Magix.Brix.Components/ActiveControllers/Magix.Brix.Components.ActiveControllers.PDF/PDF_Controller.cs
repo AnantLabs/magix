@@ -89,10 +89,12 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
                 header.PageSetup.BottomMargin = new Unit(50);
                 header.PageSetup.LeftMargin = new Unit(50);
                 header.PageSetup.RightMargin = new Unit(50);
-                header.AddPageBreak();
 
                 foreach (Node idx in e.Params["Pages"])
                 {
+                    // Every 'chapter' starts a new page
+                    header.AddPageBreak();
+
                     // Header
                     Paragraph paragraph = header.AddParagraph();
                     paragraph.AddLineBreak();
@@ -108,7 +110,10 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
 
                     foreach (Node idxP in idx)
                     {
-                        ParseHTML(header, (idxP.Value ?? "").ToString());
+                        string val = (idxP.Value ?? "").ToString();
+                        if (val.IndexOf("<p>") == -1)
+                            val = "<p>" + val + "</p>";
+                        ParseHTML(header, val);
                     }
                 }
             }

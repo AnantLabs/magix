@@ -13,7 +13,7 @@ using Magix.UX.Widgets.Core;
 namespace Magix.UX.Widgets
 {
     /**
-     * A wrapper around a hyper link or anchor HTML element (&lt;a ...)
+     * A wrapper around a hyper link or anchor HTML element (anchor HTML element ...)
      * Sometimes you will need to create links that might change or needs
      * changes after initially created. For such scenarios, this widget
      * is highly useful.

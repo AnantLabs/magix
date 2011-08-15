@@ -15,7 +15,7 @@ namespace Magix.UX.Widgets
 {
     /**
      * A multiple line type of 'give me some text input' type of widget. It wraps the
-     * &lt;textarea HTML element. If you only need single lines of input, you should
+     * textarea HTML element. If you only need single lines of input, you should
      * probably rather use the TextBox widget. However this widget is useful for cases
      * when you need multiple lines of text input. See also the RichEdit widget if
      * you need rich formatting of your text.

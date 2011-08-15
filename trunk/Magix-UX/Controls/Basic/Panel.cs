@@ -13,9 +13,9 @@ namespace Magix.UX.Widgets
 {
     /**
      * A container widget for displaying other widgets inside of it. Will render as a
-     * &lt;div by default, but the specific tag this widget will render, can easily be
+     * div by default, but the specific tag this widget will render, can easily be
      * overridden by changing the Tag property. You can choose to render your panels as
-     * paragraphs (&lt;p...) for instance.
+     * paragraphs (p...) for instance.
      * If you only need to display text on your page, and you need to use WebControls for
      * this, you should use the Label control and not the Panel control.
      */

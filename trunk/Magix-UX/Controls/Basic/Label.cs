@@ -18,7 +18,7 @@ namespace Magix.UX.Widgets
      * property you can easily manipulate this to do mostly anything you wish.
      * If a more 'complex widget' is needed, for instance to host other widgets,
      * then the Panel widget is more appropriate to use than the Label. Unless
-     * the Tag property is changed, this widget will render as a &lt;span...
+     * the Tag property is changed, this widget will render as a span...
      */
     public class Label : BaseWebControl
     {

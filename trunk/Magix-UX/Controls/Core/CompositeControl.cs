@@ -42,7 +42,7 @@ namespace Magix.UX.Widgets.Core
          * This is your actual 'control area'. This is, among other things, where
          * you want to add up Aspects and such if you want to add aspects to widgets
          * which are CompositeControls. In code you can use 'myControl', but in
-         * markup you have to use &lt;Control&gt; to gain access to the control itself.
+         * markup you have to use Control to gain access to the control itself.
          * This is because of that the Content property is the default for your
          * control.
          */
