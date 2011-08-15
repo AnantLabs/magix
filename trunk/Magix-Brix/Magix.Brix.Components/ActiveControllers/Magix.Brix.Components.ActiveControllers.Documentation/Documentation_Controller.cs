@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Magix.Brix.Components.ActiveControllers.Documentation
 {
     /**
-     * Contains the logic for our 'Class Browser' which can browse all the 
+     * Level1: Contains the logic for our 'Class Browser' which can browse all the 
      * classes in the system and make some changes to them by enabling them and
      * disabling them by either overriding specific events or by disabling entire
      * controllers or modules all together
@@ -23,7 +23,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
     public class Documentation_Controller : ActiveController
     {
         /**
-         * Will return the menu items needed to start the class browser
+         * Level2: Will return the menu items needed to start the class browser
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
@@ -36,7 +36,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         }
 
         /**
-         * Gets every namespace and class into a tree hierarchy and loads up the Tree module
+         * Level2: Gets every namespace and class into a tree hierarchy and loads up the Tree module
          * to display it
          */
         [ActiveEvent(Name = "Magix.MetaType.ViewDoxygenFiles")]
@@ -146,7 +146,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         #endregion
 
         /**
-         * Expects a SelectedItemID which should point to either a Namespace or
+         * Level2: Expects a SelectedItemID which should point to either a Namespace or
          * a Class, and will show this namespace/class features. Such as which
          * dll(s) implements tha namespace/class, if a class, which methods it has etc
          */
@@ -301,7 +301,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         #endregion
 
         /**
-         * Handled to make sure we handle the "Documentation_Controller-META" type for the Grid system
+         * Level2: Handled to make sure we handle the "Documentation_Controller-META" type for the Grid system
          * so that we can see our DLLs
          */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
@@ -319,7 +319,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         }
 
         /**
-         * Handled to make sure we handle the "Documentation_Controller-META" type for the Grid system
+         * Level2: Handled to make sure we handle the "Documentation_Controller-META" type for the Grid system
          * so that we can see our DLLs
          */
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]

@@ -14,7 +14,7 @@ using System.Web.UI;
 namespace Magix.Brix.Components.ActiveControllers.FileExplorer
 {
     /**
-     * Contains Logic for file explorer. The file explorer is a component where you can browse
+     * Level1: Contains Logic for file explorer. The file explorer is a component where you can browse
      * the file folder system on your web server, remotely, and do many operations. Such as
      * editing CSS files, uploading images and such. PS! To use this Module it is IMPERATIVE
      * that you've given the 'NETWORK SERVICE' account 'Full Access' to at the very least
@@ -25,7 +25,7 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
     public class FileExplorerController : ActiveController
     {
         /**
-         * Use this method to launch the file explorer. You can override any parameter you wish.
+         * Level1: Use this method to launch the file explorer. You can override any parameter you wish.
          * The default file filter is; "*.png;*.jpeg;*.jpg;*.gif;" but can be changed through the
          * "Filter" parameter. If you add up CSS, and set "CanCreateNewCssFile" to true, then
          * CSS files can both be edited and created on the fly. If you set "IsSelect", then
@@ -91,7 +91,7 @@ Account 'Full Control' over the specific folder?");
         }
 
         /**
-         * Will retrieve the 'FolderToOpen' folder's files back to caller
+         * Level2: Will retrieve the 'FolderToOpen' folder's files back to caller
          */
         [ActiveEvent(Name = "Magix.FileExplorer.GetFilesFromFolder")]
         protected void Magix_FileExplorer_GetFilesFromFolder(object sender, ActiveEventArgs e)
@@ -123,7 +123,7 @@ Account 'Full Control' over the specific folder?");
         }
 
         /**
-         * Will open up EitAsciiFile 'Notepad'ish' Editor with the given 'File' for editing.
+         * Level1: Will open up EitAsciiFile 'Notepad'ish' Editor with the given 'File' for editing.
          * Intended to allow editing of CSS files and other types of ASCII files
          */
         [ActiveEvent(Name = "Magix.FileExplorer.EditAsciiFile")]
@@ -145,7 +145,7 @@ Account 'Full Control' over the specific folder?");
         }
 
         /**
-         * Will retrieve the properties for the file, such as disc size, width/height if image, etc
+         * Level1: Will retrieve the properties for the file, such as disc size, width/height if image, etc
          */
         [ActiveEvent(Name = "Magix.FileExplorer.FileSelected")]
         protected void Magix_FileExplorer_FileSelected(object sender, ActiveEventArgs e)
@@ -163,7 +163,7 @@ Account 'Full Control' over the specific folder?");
         }
 
         /**
-         * Changes the name of the file with 'OldName' to 'NewName' within the given 'Folder'
+         * Level1: Changes the name of the file with 'OldName' to 'NewName' within the given 'Folder'
          */
         [ActiveEvent(Name = "Magix.FileExplorer.ChangeFileName")]
         protected void Magix_FileExplorer_ChangeFileName(object sender, ActiveEventArgs e)
@@ -191,7 +191,7 @@ Account 'Full Control' over the specific folder?");
         }
 
         /**
-         * Will delete the 'File' within the 'Folder' of the system
+         * Level1: Will delete the 'File' within the 'Folder' of the system
          */
         [ActiveEvent(Name = "Magix.FileExplorer.DeleteFile")]
         protected void Magix_FileExplorer_DeleteFile(object sender, ActiveEventArgs e)

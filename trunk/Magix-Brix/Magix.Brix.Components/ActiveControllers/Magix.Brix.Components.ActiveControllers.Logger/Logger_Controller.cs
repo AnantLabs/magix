@@ -18,13 +18,13 @@ using Magix.Brix.Components.ActiveTypes.Logging;
 namespace Magix.Brix.Components.ActiveControllers.Logger
 {
     /**
-     * Contains logic for Logging things
+     * Level1: Contains logic for Logging things
      */
     [ActiveController]
     public class Logger_Controller : ActiveController
     {
         /**
-         * Handled here since it's one of the more 'common operations' and probably interesting
+         * Level2: Handled here since it's one of the more 'common operations' and probably interesting
          * to see in retrospect in case something goes wrong
          */
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
@@ -45,7 +45,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Handled here since it's one of the more 'common operations' and probably interesting
+         * Level2: Handled here since it's one of the more 'common operations' and probably interesting
          * to see in retrospect in case something goes wrong
          */
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
@@ -88,7 +88,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Will create one LogItem with the given LogItemType, Header, Message, 
+         * Level1: Will create one LogItem with the given LogItemType, Header, Message, 
          * ObjectID, ParentID, StackTrace and so on, depending upon which data is actually 
          * being passed into it. Minimu requirement is 'Header'
          */
@@ -139,7 +139,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Handled since it's important information since it's highly likely it's a new visitor 
+         * Level2: Handled since it's important information since it's highly likely it's a new visitor 
          * to the app/website
          */
         [ActiveEvent(Name = "Magix.Core.NewUserIDCookieCreated")]
