@@ -40,5 +40,17 @@ namespace Magix.Brix.Components.ActiveControllers.ToolTip
             e.Params["Text"].Value =
                 T.ToolTip.Instance.Next(UserBase.Current.Username);
         }
+
+        /**
+         * Level2: Returns all ToolTip instances to caller
+         */
+        [ActiveEvent(Name = "Magix.Core.GetAllToolTips")]
+        private void Magix_Core_GetAllToolTips(object sender, ActiveEventArgs e)
+        {
+            foreach (T.ToolTip.Tip idx in T.ToolTip.Tip.Select())
+            {
+                e.Params["t-" + idx.ID].Value = idx.Value;
+            }
+        }
     }
 }

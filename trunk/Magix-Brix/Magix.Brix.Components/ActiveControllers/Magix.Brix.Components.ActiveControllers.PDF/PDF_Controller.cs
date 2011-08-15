@@ -13,6 +13,9 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using PdfSharp.Pdf;
 using Magix.UX;
+using PdfSharp.Drawing;
+using System.Xml;
+using MigraDoc.DocumentObjectModel.Shapes;
 
 namespace Magix.Brix.Components.ActiveControllers.PDF
 {
@@ -29,6 +32,7 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
             // Creating Document
             Document document = new Document();
             document.Info.Title = e.Params["Title"].Get<string>();
+            document.Comment = "This document is to be considered as Creative Commons Share-Alike. Copyright 2011 belongs to Ra-Software, Inc.";
 
             if (e.Params.Contains("FrontPage"))
             {
@@ -40,8 +44,10 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
                 front.AddImage(Page.MapPath("~/" + e.Params["FrontPage"].Get<string>()));
             }
 
-            // Creating Header section
+            // Creating Index section
             Section header = document.AddSection();
+            header.PageSetup.StartingNumber = 1;
+            header.Footers.Primary.AddParagraph().AddPageField();
             header.PageSetup.TopMargin = new Unit(50);
             header.PageSetup.BottomMargin = new Unit(50);
             header.PageSetup.LeftMargin = new Unit(50);
@@ -54,14 +60,13 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
                     // Header
                     Paragraph paragraph = header.AddParagraph();
                     paragraph.AddLineBreak();
-                    paragraph.AddLineBreak();
 
                     paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 100);
                     paragraph.Format.Font.Size = new Unit(8, UnitType.Point);
 
                     paragraph.AddFormattedText(
                         idx["Header"].Get<string>(),
-                        TextFormat.Bold);
+                        TextFormat.NotBold);
 
                     // Description
                     paragraph = header.AddParagraph();
@@ -73,7 +78,38 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
 
                     paragraph.AddFormattedText(
                         idx["Description"].Get<string>(),
+                        TextFormat.NotBold);
+                }
+            }
+
+            if (e.Params.Contains("Pages"))
+            {
+                header = document.AddSection();
+                header.PageSetup.TopMargin = new Unit(50);
+                header.PageSetup.BottomMargin = new Unit(50);
+                header.PageSetup.LeftMargin = new Unit(50);
+                header.PageSetup.RightMargin = new Unit(50);
+                header.AddPageBreak();
+
+                foreach (Node idx in e.Params["Pages"])
+                {
+                    // Header
+                    Paragraph paragraph = header.AddParagraph();
+                    paragraph.AddLineBreak();
+
+                    paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 100);
+                    paragraph.Format.Font.Size = new Unit(8, UnitType.Point);
+
+                    paragraph.AddFormattedText(
+                        idx.Name,
                         TextFormat.Bold);
+
+                    paragraph.AddLineBreak();
+
+                    foreach (Node idxP in idx)
+                    {
+                        ParseHTML(header, (idxP.Value ?? "").ToString());
+                    }
                 }
             }
 
@@ -91,6 +127,67 @@ namespace Magix.Brix.Components.ActiveControllers.PDF
             pdfRenderer.PdfDocument.Save(filename);
 
             AjaxManager.Instance.WriterAtBack.Write("window.open('" + fileToSaveTo + "');");
+        }
+
+        private void ParseHTML(Section header, string html)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml("<doc>" + html.Replace("<em>", "").Replace("</em>", "") + "</doc>");
+
+            foreach (XmlNode idx in doc.DocumentElement.ChildNodes)
+            {
+                switch (idx.Name)
+                {
+                    case "h1":
+                        {
+                            Paragraph paragraph = header.AddParagraph();
+                            paragraph.AddLineBreak();
+
+                            paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 100);
+                            paragraph.Format.Font.Size = new Unit(9, UnitType.Point);
+
+                            paragraph.AddFormattedText(
+                                idx.InnerText,
+                                TextFormat.Bold);
+                        } break;
+                    case "h2":
+                        {
+                            Paragraph paragraph = header.AddParagraph();
+                            paragraph.AddLineBreak();
+
+                            paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 100);
+                            paragraph.Format.Font.Size = new Unit(8, UnitType.Point);
+
+                            paragraph.AddFormattedText(
+                                idx.InnerText,
+                                TextFormat.Bold);
+                        } break;
+                    case "h3":
+                        {
+                            Paragraph paragraph = header.AddParagraph();
+                            paragraph.AddLineBreak();
+
+                            paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 100);
+                            paragraph.Format.Font.Size = new Unit(7, UnitType.Point);
+
+                            paragraph.AddFormattedText(
+                                idx.InnerText,
+                                TextFormat.Bold);
+                        } break;
+                    default: // Defaulting to paragraph ...
+                        {
+                            Paragraph paragraph = header.AddParagraph();
+                            paragraph.AddLineBreak();
+
+                            paragraph.Format.Font.Color = Color.FromCmyk(0, 0, 0, 50);
+                            paragraph.Format.Font.Size = new Unit(6, UnitType.Point);
+
+                            paragraph.AddFormattedText(
+                                idx.InnerText,
+                                TextFormat.NotBold);
+                        } break;
+                }
+            }
         }
     }
 }

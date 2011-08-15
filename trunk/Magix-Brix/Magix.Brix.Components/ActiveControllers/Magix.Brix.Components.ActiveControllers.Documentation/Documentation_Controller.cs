@@ -151,9 +151,14 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                     break;
             }
 
-            node["Index"]["Intro"]["Header"].Value = "Introduction";
-            node["Index"]["Intro"]["Description"].Value = @"A short introduction to Magix
-and what you can expect using it";
+            node["Index"]["Introduction"]["Header"].Value = "Introduction";
+            node["Index"]["Introduction"]["Description"].Value = "A short introduction to Magix " +
+"and what you can expect from it. Explains the terms and introduces Magix using a Tutorial-Like " +
+"communication form. This is the main content parts of the book, while the other parts are more " +
+"reference like in structure. Start out here to get an introduction of the different terms if you " +
+"are new to Magix, and use the other parts as a Reference Guide later when wondering about specific subjects. " +
+"Also remember that there are tons of stuff about Magix on YouTube and on the internet in general in case you're "+
+"stuck with a very specific subject";
 
             foreach (Namespace idx in Docs.GetNamespaces(level))
             {
@@ -166,6 +171,15 @@ and what you can expect using it";
                 }
             }
 
+            node["Index"]["Actions"]["Header"].Value = "Meta Actions";
+            node["Index"]["Actions"]["Description"].Value = "Reference documentation about the " +
+                "MetaActions that was present, and had documentation within your installation upon " +
+                "the generation of this document";
+
+            RaiseEvent(
+                "Magix.Core.GetAllToolTips",
+                node["Pages"]["Introduction"]);
+
             RaiseEvent(
                 "Magix.PDF.CreatePDF",
                 node);
@@ -173,7 +187,7 @@ and what you can expect using it";
 
         private void AddClassToNodeForBookDistro(Class cls, Node node)
         {
-            node["Index"][cls.FullName]["Header"].Value = cls.Name;
+            node["Index"][cls.FullName]["Header"].Value = cls.FullName;
             node["Index"][cls.FullName]["Description"].Value = cls.Description;
         }
 
