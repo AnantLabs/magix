@@ -8,7 +8,7 @@ using Magix.Brix.Types;
 
 namespace Magix.Brix.Loader
 {
-    // TODO: Remove this interface and exchange with logic in ActiveModule base class
+    // TODO: Remove this interface and exchange with event/delegate logic in ActiveModule base class
     /**
      * Level3: Optional interface you can mark your Modules with. If you do your Modules will be called the
      * first time they load through the InitialLoading with whatever object you choose to RaiseYour 

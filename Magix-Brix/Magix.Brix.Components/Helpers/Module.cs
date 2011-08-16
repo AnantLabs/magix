@@ -61,10 +61,14 @@ namespace Magix.Brix.Components
             }
         }
 
+        // TODO: Refactor ...!
         /**
-         * Level4: Handled to make sure we re-databind at the right spots
+         * Level4: Handled to make sure we re-databind at the right spots. This event is raised
+         * whenever a child window is closed, and other windows might need to refresh. We're
+         * making sure its either a 'ClientID' match or the incoming 'ClientID' is 'LastWindow'
+         * before we do our update here. 'LastWindow' is true if it's the 'last popup window'
          */
-        [ActiveEvent(Name = "RefreshWindowContent")]
+        [ActiveEvent(Name = "Magix.Core.RefreshWindowContent")]
         protected virtual void RefreshWindowContent(object sender, ActiveEventArgs e)
         {
             if (e.Params["ClientID"].Get<string>() == "LastWindow")

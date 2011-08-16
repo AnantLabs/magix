@@ -81,7 +81,7 @@ namespace Magix.Brix.Loader
         [DebuggerStepThrough]
         public void RaiseLoadControl(string name, string position, Node parameters)
         {
-            Node tmpNode = new Node("LoadControl");
+            Node tmpNode = new Node("Magix.Core.LoadActiveModule");
 
             tmpNode["Name"].Value = name;
             tmpNode["Position"].Value = position;
@@ -91,7 +91,7 @@ namespace Magix.Brix.Loader
             else
                 tmpNode["Parameters"].AddRange(parameters);
 
-            RaiseActiveEvent(this, "LoadControl", tmpNode);
+            RaiseActiveEvent(this, "Magix.Core.LoadActiveModule", tmpNode);
         }
 
         /**
