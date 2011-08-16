@@ -14,10 +14,13 @@ using System.Collections.Generic;
 namespace Magix.Brix.Data.Internal
 {
     /**
-      * Common logic for all Database adapters that relies on standard SQL syntax. Wrappers
-      * for creating SQL text for derived data adapters that uses RDBS that relies on standard
-      * SQL syntax.
-      */
+     * Level4: Common logic for all Database adapters that relies on standard SQL syntax. Wrappers
+     * for creating SQL text for derived data adapters that uses RDBS that relies on standard
+     * SQL syntax. Sorry, I have to prioritize what I comment. Needs refactoring though, that's one
+     * thing ...
+     * 
+     * ... but so does the entire Magix.Data namespace ... :(
+     */
     public abstract class StdSQLDataAdapter : Adapter
     {
         protected class LazyHelper
@@ -63,15 +66,15 @@ namespace Magix.Brix.Data.Internal
                     if (_isOwner)
                     {
                         return Instance.Select(
-                            _type, 
-                            _propertyName, 
+                            _type,
+                            _propertyName,
                             Criteria.ParentId(_parentId));
                     }
                     else
                     {
                         return Instance.Select(
-                            _type, 
-                            _propertyName, 
+                            _type,
+                            _propertyName,
                             Criteria.ExistsIn(_parentId, false));
                     }
                 }
@@ -103,8 +106,8 @@ namespace Magix.Brix.Data.Internal
         }
 
         protected string CreateSelectStatementForDocument(
-            Type type, 
-            string propertyName, 
+            Type type,
+            string propertyName,
             Criteria[] args)
         {
             string retVal = "";
@@ -322,8 +325,8 @@ order by Value{8}) as Tbl2 order by Value{7}",
         }
 
         protected string CreateCriteriasForDocument(
-            Type type, 
-            string propertyName, 
+            Type type,
+            string propertyName,
             Criteria[] args)
         {
             string where = "";
@@ -365,8 +368,8 @@ order by Value{8}) as Tbl2 order by Value{7}",
                     }
                     else if (idx is HasChildId)
                     {
-                        where += string.Format(" and exists(select ID from " + 
-                            TablePrefix + 
+                        where += string.Format(" and exists(select ID from " +
+                            TablePrefix +
                             "Documents d2 where d2.Parent=d.ID and d2.ID={0})", idx.Value);
                     }
                     else if (idx is ExistsInEquals)
@@ -423,7 +426,7 @@ order by Value{8}) as Tbl2 order by Value{7}",
                         }
                         string tableName = "";
                         string sqlEscapedValue = "";
-                        if(idx.Value == null)
+                        if (idx.Value == null)
                             sqlEscapedValue = "null";
                         switch (propertyFullName)
                         {

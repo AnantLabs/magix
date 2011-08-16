@@ -18,6 +18,7 @@
 .submitSignature
 {
 	width:110px;
+	margin-right:10px !important;
 	display:block;
 	float:left;
 	clear:left;

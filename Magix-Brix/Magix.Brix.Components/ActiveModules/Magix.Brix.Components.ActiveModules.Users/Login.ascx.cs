@@ -13,16 +13,26 @@ using Magix.Brix.Loader;
 
 namespace Magix.Brix.Components.ActiveModules.Users
 {
+    // TODO: Put into 'Commons' ...?
+    // Hehe ... ;)
+    /**
+     * Shows a login box with username/password/openid combo. Username/password has preference, but
+     * if only OpenID is given, the system will attempt at login you in using the OpenID claim. Note,
+     * this is not the Publisher Plugin login box. This is the 'main system one', which you get by
+     * going to ?dashboard=true
+     */
     [ActiveModule]
-    public class Login : UserControl, IModule
+    public class Login : ActiveModule
     {
         protected TextBox username;
         protected TextBox password;
         protected TextBox openID;
         protected Label err;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -30,6 +40,8 @@ namespace Magix.Brix.Components.ActiveModules.Users
                         .ChainThese(
                             new EffectFocusAndSelect(username))
                         .Render();
+
+                    // TODO: Clean up this, once and for all ... :(
                     Page.Form.Action = Request.Url.ToString().Replace("default.aspx", "");
                 };
         }
@@ -53,8 +65,7 @@ namespace Magix.Brix.Components.ActiveModules.Users
                 node["OpenID"].Value = openID.Text;
             }
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseSafeEvent(
                 "Magix.Core.LogInUser",
                 node);
 
@@ -63,8 +74,7 @@ namespace Magix.Brix.Components.ActiveModules.Users
                 Node n = new Node();
                 n["Message"].Value = "Sorry, no access ...";
 
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+                RaiseEvent(
                     "Magix.Core.ShowMessage",
                     n);
 

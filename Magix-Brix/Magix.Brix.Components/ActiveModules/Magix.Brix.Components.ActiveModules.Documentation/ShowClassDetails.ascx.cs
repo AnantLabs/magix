@@ -21,7 +21,7 @@ namespace Magix.Brix.Components.ActiveModules.Documentation
      * a grid if displaying items according to the structure given
      */
     [ActiveModule]
-    public class ShowClassDetails : ActiveModule, IModule
+    public class ShowClassDetails : ActiveModule
     {
         protected Label header;
         protected Label content;

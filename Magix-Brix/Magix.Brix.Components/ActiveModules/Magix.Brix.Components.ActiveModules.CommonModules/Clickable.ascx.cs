@@ -22,7 +22,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
      * 'Event' when clicked
      */
     [ActiveModule]
-    public class Clickable : ActiveModule, IModule
+    public class Clickable : ActiveModule
     {
         protected Button btn;
 

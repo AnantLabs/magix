@@ -12,6 +12,13 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components
 {
+    /**
+     * Level4: Basically every single instance you see in Magix which is of type
+     * 'InPlaceEditable' is an instance of this component. Alows for viewing textual
+     * based information, while at the same time, this tet can be 'clicked' which will
+     * change it into a text box, in which you can change its value. Often displayed with
+     * a pen next to it
+     */
     public class TextAreaEdit : Panel
     {
         private readonly TextArea _text = new TextArea();
@@ -22,16 +29,28 @@ namespace Magix.Brix.Components
             CssClass = "mux-in-place-edit";
         }
 
+        /**
+         * Level4: Text was changed by end user
+         */
         public event EventHandler TextChanged;
 
+        /**
+         * Level4: Raised when TetBox is about to become displayed
+         */
         public event EventHandler DisplayTextBox;
 
+        /**
+         * Level4: The actual text property of the control
+         */
         public string Text
         {
             get { return _text.Text; }
             set { _link.Text = ReduceText(EscapeHTML(value)); _link.Info = value; _text.Text = value; }
         }
 
+        /**
+         * Level4: Max length before 'clipping' will occur
+         */
         public int TextLength
         {
             get { return ViewState["TextLength"] == null ? 50 : (int)ViewState["TextLength"]; }

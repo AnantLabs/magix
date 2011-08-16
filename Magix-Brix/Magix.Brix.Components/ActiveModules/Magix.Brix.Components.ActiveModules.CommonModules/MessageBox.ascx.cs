@@ -23,7 +23,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
      * 'Cancel/Event' will be raised with 'Cancel' node if Cancel button is clicked
      */
     [ActiveModule]
-    public class MessageBox : ActiveModule, IModule
+    public class MessageBox : ActiveModule
     {
         protected Label lbl;
         protected Button ok;

@@ -22,7 +22,7 @@ namespace Magix.Brix.Components.ActiveModules.Menu
      * when clicked ['Event']
      */
     [ActiveModule]
-    public class Slider : ActiveModule, IModule
+    public class Slider : ActiveModule
     {
         protected SlidingMenu slid;
         protected SlidingMenuLevel root;

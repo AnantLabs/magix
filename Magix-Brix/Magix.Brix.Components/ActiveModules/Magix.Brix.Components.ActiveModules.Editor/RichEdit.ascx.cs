@@ -27,7 +27,7 @@ namespace Magix.Brix.Components.ActiveModules.Editor
      * resembling 'word'. Specify a 'SaveEvent' to trap when 'Text' is being edited.
      */
     [ActiveModule]
-    public class RichEdit : ActiveModule, IModule
+    public class RichEdit : ActiveModule
     {
         protected TextArea txt;
         protected Panel wrp;

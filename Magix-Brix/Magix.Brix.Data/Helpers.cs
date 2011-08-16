@@ -10,7 +10,8 @@ using System.Reflection;
 namespace Magix.Brix.Data.Internal
 {
     /**
-      * Static helper class for data-storage Adapter developers.
+      * Level3: Static helper class for data-storage Adapter developers. If yo're fiddling around here,
+     * you'd better know what you're doing ...!! ;)
       */
     public static class Helpers
     {
@@ -19,10 +20,12 @@ namespace Magix.Brix.Data.Internal
             ActiveTypeAttribute[] attr = 
                 type.GetCustomAttributes(typeof(ActiveTypeAttribute), true)
                 as ActiveTypeAttribute[];
+
             if (attr != null &&
                 attr.Length > 0 &&
                 !string.IsNullOrEmpty(attr[0].TableName))
                 return attr[0].TableName;
+
             return "doc" + type.FullName;
         }
 
@@ -37,7 +40,7 @@ namespace Magix.Brix.Data.Internal
         }
     }
 
-    /// Static helper class for data-storage Adapter developers.
+    // Static helper class for data-storage Adapter developers.
     public static class CopyOfHelpers
     {
         public static string TypeName(Type type)

@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: A constructor type of member
+     */
     public class Constructor : Method
     {
         public override string Kind

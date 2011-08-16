@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: Encapsulates a class documentation item
+     */
     public class Class : Type
     {
         public override string Kind

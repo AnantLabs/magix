@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: A property type of member
+     */
     public class Property : Member
     {
         public override string Kind

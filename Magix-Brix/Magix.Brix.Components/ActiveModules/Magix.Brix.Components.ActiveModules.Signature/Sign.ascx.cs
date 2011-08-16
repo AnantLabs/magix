@@ -16,18 +16,29 @@ using Magix.UX.Core;
 
 namespace Magix.Brix.Components.ActiveModules.Signature
 {
+    /**
+     * Level1: A Signature module, basically a place where the end user can 'sign his name' to
+     * confirm a transaction of some sort. Will load up a big white thing, which can be 'drawn
+     * upon', together with two buttons, OK and Cancel which will raise the 
+     * 'CancelEvent' and the 'OKEvent. 'OKEvent' will pass in 'Signature' being the coords
+     * for all the splines that comprises the Signature, which can be stored and later
+     * used as input to this Module, which will again load those splines in 'read-only mode'
+     */
     [ActiveModule]
-    public class Sign : UserControl, IModule
+    public class Sign : ActiveModule
     {
         protected HtmlInputButton sub;
         protected Button cancel;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
                     DataSource = node;
+
                     if (DataSource.Contains("Coords") &&
                         !string.IsNullOrEmpty(DataSource["Coords"].Get<string>()))
                     {
@@ -59,12 +70,6 @@ namespace Magix.Brix.Components.ActiveModules.Signature
             return 360;
         }
 
-        private Node DataSource
-        {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
-        }
-
         [WebMethod]
         protected void submitSignature(string signature)
         {
@@ -73,7 +78,7 @@ namespace Magix.Brix.Components.ActiveModules.Signature
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 DataSource["OKEvent"].Get<string>(),
-                DataSource["OKEvent"]["Params"]);
+                DataSource["OKEvent"]["Params"]); // TODO: Standardize how we pass parameters like these somehow intelligently ...??
         }
 
         protected void cancel_Click(object sender, EventArgs e)
