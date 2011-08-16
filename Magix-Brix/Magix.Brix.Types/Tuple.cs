@@ -10,9 +10,10 @@ using System.Diagnostics;
 namespace Magix.Brix.Types
 {
     /**
-     * A helper structure to make it possible to create multiple return values or "couple"
+     * Level3: A helper structure to make it possible to create multiple return values or "couple"
      * objects together. Type is a natural immutable type and hence also 100% thread safe.
-     * Though objects contained within the type might not be.
+     * Though objects contained within the type might not be. This class is something .Net should
+     * have had natively, but doesn't [really]
      */
     [Serializable]
     public struct Tuple<TLeft, TRight>
@@ -21,7 +22,7 @@ namespace Magix.Brix.Types
         private readonly TRight _right;
 
         /**
-         * CTOR taking left/first and right/second arguments.
+         * Level3: CTOR taking left/first and right/second arguments.
          */
         [DebuggerStepThrough]
         public Tuple(TLeft left, TRight right)
@@ -31,7 +32,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the left or first object
+         * Level3: Returns the left or first object
          */
         public TLeft Left
         {
@@ -40,7 +41,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the right or second argument
+         * Level3: Returns the right or second argument
          */
         public TRight Right
         {
@@ -48,11 +49,18 @@ namespace Magix.Brix.Types
             get { return _right; }
         }
 
+        /**
+         * Level3: Will return true if the two objects 
+         */
         [DebuggerStepThrough]
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (obj.GetType() != typeof (Tuple<TLeft, TRight>)) return false;
+            if (ReferenceEquals(null, obj))
+                return false;
+
+            if (obj.GetType() != typeof (Tuple<TLeft, TRight>))
+                return false;
+
             return Equals((Tuple<TLeft, TRight>) obj);
         }
 
