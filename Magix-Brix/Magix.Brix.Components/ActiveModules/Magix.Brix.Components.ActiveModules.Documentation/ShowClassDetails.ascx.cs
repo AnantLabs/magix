@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -15,6 +15,11 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.Documentation
 {
+    /**
+     * Level2: Doxygen helper class for displaying documentation about members of classes and such for our
+     * documentation system. Takes in 'FullName', 'Description' and so on. Will create
+     * a grid if displaying items according to the structure given
+     */
     [ActiveModule]
     public class ShowClassDetails : ActiveModule, IModule
     {
@@ -25,6 +30,7 @@ namespace Magix.Brix.Components.ActiveModules.Documentation
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
             Load += delegate
             {
                 header.Text = node["FullName"].Get<string>();
@@ -44,6 +50,7 @@ namespace Magix.Brix.Components.ActiveModules.Documentation
             {
                 if (!string.IsNullOrEmpty(retVal))
                     retVal += ", ";
+
                 retVal += idx["Type"].Get<string>() + 
                     " " +
                     idx["Name"].Get<string>();

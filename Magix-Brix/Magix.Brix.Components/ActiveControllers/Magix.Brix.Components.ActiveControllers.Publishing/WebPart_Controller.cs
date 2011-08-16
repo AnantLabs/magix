@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -119,7 +119,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["Width"].Value = page.Container.Width;
                 node["ID"].Value = page.ID;
                 node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
-                node["PageObjectTemplateID"].Value = page.ID;
+                node["OriginalWebPartID"].Value = page.ID;
 
                 node["CssClass"].Value = "web-part" + " " + page.Container.CssClass;
 
@@ -167,7 +167,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.ReloadWebPart")]
         protected void Magix_Publishing_ReloadWebPart(object sender, ActiveEventArgs e)
         {
-            WebPart t = WebPart.SelectByID(e.Params["PageObjectTemplateID"].Get<int>());
+            WebPart t = WebPart.SelectByID(e.Params["OriginalWebPartID"].Get<int>());
 
             Node node = new Node();
 

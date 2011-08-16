@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -133,8 +133,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         private void BuildNodeForOneMenuItem(Node node, WebPage po, bool isRoot)
         {
             node["Items"]["i" + po.ID]["Caption"].Value = po.Name;
-            node["Items"]["i" + po.ID]["Event"]["Name"].Value = "Magix.Publishing.SliderMenuItemClicked";
-            node["Items"]["i" + po.ID]["Event"]["MenuItemID"].Value = po.URL;
+            node["Items"]["i" + po.ID]["Event"].Value = "Magix.Publishing.SliderMenuItemClicked";
+            node["Items"]["i" + po.ID]["Event"]["WebPageURL"].Value = po.URL;
             foreach (WebPage idx in po.Children)
             {
                 if (isRoot) // We inject root on the same node as the children of root ...
@@ -150,7 +150,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.SliderMenuItemClicked")]
         protected void Magix_Publishing_SliderMenuItemClicked(object sender, ActiveEventArgs e)
         {
-            WebPage o = WebPage.SelectFirst(Criteria.Eq("URL", e.Params["MenuItemID"].Get<string>()));
+            WebPage o = WebPage.SelectFirst(Criteria.Eq("URL", e.Params["WebPageURL"].Get<string>()));
 
             Node node = new Node();
 

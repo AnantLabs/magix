@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -16,6 +16,17 @@ using System.Web.UI;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
+    /**
+     * Level2: Contains the logic for editing and viewing one single ActiveType object, 
+     * with all of its properties. Can become initiated in two different states, one
+     * of which is 'edit object reference from another object' which will allow for 
+     * changing and removing the reference, the other is plain old 'edit the thing' mode.
+     * Supports 'ChildCssClass' and several other properties. Most of the common properties from
+     * the Database Enterprise Manager is included. Will raise 'DBAdmin.Form.ChangeObject'
+     * if user attempts to change the reference. Will raise 'DBAdmin.Data.RemoveObject'
+     * when object reference is removed. Changing the reference or removing it is only
+     * enabled if 'IsChange' and/or 'IsRemove' is given as true
+     */
     [ActiveModule]
     public class ViewSingleObject : Module, IModule
     {
@@ -28,6 +39,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -47,10 +59,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected void change_Click(object sender, EventArgs e)
         {
             Node node = new Node();
+
             node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
             node["ParentID"].Value = DataSource["ParentID"].Value;
             node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
             node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+
             RaiseSafeEvent(
                 "DBAdmin.Form.ChangeObject",
                 node);
@@ -59,6 +73,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected void remove_Click(object sender, EventArgs e)
         {
             Node node = new Node();
+
             node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
             node["ParentID"].Value = DataSource["ParentID"].Value;
             node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
@@ -98,11 +113,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataBindDone();
         }
 
+        // TODO: Rip its heart out, throw it in the garbage, and REFACTOR ...!!
         protected void DataBindDone()
         {
+            // TODO: We REALLY need to get 'control over' our Header module somehow here ...
             changePnl.Visible = DataSource["IsChange"].Get<bool>();
-            removePnl.Visible = DataSource["IsRemove"].Get<bool>() &&
+            removePnl.Visible = 
+                DataSource["IsRemove"].Get<bool>() &&
                 DataSource.Contains("Object");
+
             string parentTypeName = 
                 !DataSource.Contains("ParentFullTypeName") ? 
                 "" : 
@@ -120,6 +139,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     parentTypeName =
                         parentTypeName.Substring(
                             parentTypeName.LastIndexOf(".") + 1);
+
                     if (DataSource.Contains("Object"))
                     {
                         caption = string.Format(
@@ -343,7 +363,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     colNode["Name"].Value = node.Name;
                     colNode["Value"].Value = node.Get<string>();
                     colNode["ID"].Value = DataSource["Object"]["ID"].Get<int>();
-                    colNode["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;
+                    colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
+
                     ActiveEvents.Instance.RaiseActiveEvent(
                         this,
                         eventName,
@@ -478,6 +499,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return row;
         }
 
+        // TODO: Refactor ...!
         private HtmlTableRow CreateHeaderRow()
         {
             HtmlTableRow row = new HtmlTableRow();
@@ -573,15 +595,22 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             return row;
         }
 
-        [ActiveEvent(Name = "Magix.Core.CheckIfIDIsBeingSingleEdited")]
-        protected void Magix_Core_CheckIfIDIsBeingSingleEdited(object sender, ActiveEventArgs e)
+        /**
+         * Level2: Will return 'Yes' == true if the given 'ID' matches the object being edited
+         */
+        [ActiveEvent(Name = "DBAdmin.Form.CheckIfActiveTypeIsBeingSingleEdited")]
+        protected void DBAdmin_Form_CheckIfActiveTypeIsBeingSingleEdited(object sender, ActiveEventArgs e)
         {
             if (e.Params["ID"].Get<int>() == DataSource["ID"].Get<int>())
                 e.Params["Yes"].Value = true;
         }
 
-        [ActiveEvent(Name = "Magix.Core.ChangeCssClassOfModule")]
-        protected void Magix_Core_ChangeCssClassOfModule(object sender, ActiveEventArgs e)
+        /**
+         * Level2: Will change the CSS class of the editing parts of the module if the 'FullTypeName'
+         * and the 'ID' matches. Useful for setting CSS class of specific 'Edit Object Module'
+         */
+        [ActiveEvent(Name = "DBAdmin.Form.ChangeCssClassOfModule")]
+        protected void DBAdmin_Form_ChangeCssClassOfModule(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() == 
                 DataSource["FullTypeName"].Get<string>())
@@ -609,11 +638,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             if (DataSource.Contains("DoNotRebind") &&
                 DataSource["DoNotRebind"].Get<bool>())
                 return;
+
             if (DataSource.Contains("ParentID") && 
                 DataSource["ParentID"].Get<int>() > 0)
             {
                 DataSource["Object"].UnTie();
-                //DataSource["Type"].UnTie();
+                
                 if (RaiseSafeEvent(
                     "DBAdmin.Data.GetObjectFromParentProperty",
                     DataSource))
@@ -627,9 +657,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 if (!DataSource.Contains("Object"))
                     return;
+
                 DataSource["ID"].Value = DataSource["Object"]["ID"].Get<int>();
                 DataSource["Object"].UnTie();
-                //DataSource["Type"].UnTie(); // TODO; Remove ALL of these UnTies [Type unties] since they destroy architecture by not allowing DRY ...
+                
                 if (RaiseSafeEvent(
                     DataSource.Contains("GetObjectEvent") ?
                         DataSource["GetObjectEvent"].Get<string>() :

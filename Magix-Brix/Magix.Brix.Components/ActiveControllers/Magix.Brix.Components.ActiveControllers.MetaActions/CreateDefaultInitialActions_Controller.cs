@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -438,7 +438,7 @@ MultiActions or something ...";
                 {
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.GetActiveFormData";
-                    a.EventName = "Magix.Meta.GetActiveFormData";
+                    a.EventName = "Magix.MetaView.SerializeSingleViewForm";
                     a.Description = @"Will find the Form that raised the current event
 chain, and query it to put all its data flat out into the current Node structure
 with the Name/Value as the Node Name/Value pair.";

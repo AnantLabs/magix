@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -15,6 +15,12 @@ using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
+    /**
+     * Level2: Will show all objects of type 'FullTypeName' in a Grid from which the user can filter,
+     * edit, change values, delete objects, create new objects and such from. Basically the 
+     * 'show single table' logic of the Magix' 'Database Enterprise Manager'. If 'IsCreate',
+     * will allow for creation of objects of the 'FullTypeName' by the click of a button
+     */
     [ActiveModule]
     public class ViewClassContents : ListModule, IModule
     {
@@ -34,6 +40,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -52,6 +59,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataSource["Start"].Value = 0;
             DataSource["End"].Value = 
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+
             ReDataBind(false);
         }
 
@@ -62,11 +70,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     0, 
                     DataSource["Start"].Get<int>() - 
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(), 
                     DataSource["Start"].Get<int>() + 
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             ReDataBind(false);
         }
 
@@ -77,11 +87,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         DataSource["SetCount"].Get<int>() - 10,
                         DataSource["Start"].Get<int>() +
                             DataSource["Objects"].Count);
+
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             ReDataBind(false);
         }
 
@@ -99,6 +111,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["CreateEventName"].Get<string>() :
                     "DBAdmin.Common.CreateObject",
                 DataSource);
+
             ReDataBind(true);
         }
 
@@ -109,6 +122,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void DataBindDone()
         {
+            // TODO: MAJORLY REFACTOR ... !! IDIOT LOGIC ...!!
             if (Parent.Parent.Parent is Window)
             {
                 (Parent.Parent.Parent as Window).Caption = string.Format(
@@ -127,6 +141,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     ((int)DataSource["Start"].Value) + 1,
                     DataSource["End"].Get<int>(),
                     DataSource["SetCount"].Get<int>());
+
                 RaiseSafeEvent(
                     "Magix.Core.SetFormCaption",
                     node);
@@ -152,9 +167,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 // Last window was closed, we're still around, what are we waiting for ...
                 /// ... phreaking UPDATE ...!!! :P
                 DataSource["Start"].Value = 0;
+
                 DataSource["End"].Value =
                     DataSource["Start"].Get<int>(0) +
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+
                 ReDataBind(false);
             }
             else
@@ -162,9 +179,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
                 {
                     DataSource["Start"].Value = 0;
+
                     DataSource["End"].Value =
                         DataSource["Start"].Get<int>(0) +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+
                     ReDataBind(false);
                 }
             }
@@ -178,6 +197,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         private void ReDataBind(bool setSelectedRow)
         {
             ResetColumnsVisibility();
+
             DataSource["Objects"].UnTie();
 
             if (DataSource["SetCount"].Get<int>() >= DataSource["End"].Get<int>() &&

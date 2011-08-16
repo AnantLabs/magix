@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -22,14 +22,20 @@ using Magix.Brix.Loader;
 
 namespace Magix.Brix.Components.ActiveModules.Editor
 {
+    /**
+     * Level2: Contains the UI for the RichEditor or WYSIWYG editor of Magix. That little guy 
+     * resembling 'word'. Specify a 'SaveEvent' to trap when 'Text' is being edited.
+     */
     [ActiveModule]
-    public class RichEdit : UserControl, IModule
+    public class RichEdit : ActiveModule, IModule
     {
         protected TextArea txt;
         protected Panel wrp;
 
-        void IModule.InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -42,19 +48,22 @@ namespace Magix.Brix.Components.ActiveModules.Editor
                         "Magix.Brix.Components.ActiveModules.Editor.editor-min.js"
                     })
                     {
-                    AjaxManager.Instance.IncludeScriptFromResource(
-                        typeof(RichEdit),
-                        idx,
-                        false);
+                        AjaxManager.Instance.IncludeScriptFromResource(
+                            typeof(RichEdit),
+                            idx,
+                            false);
                     }
                     string text = node["Text"].Get<string>();
 
                     // Normalizing text, making sure it's made on paragraph form ...!
                     if (string.IsNullOrEmpty(text.Trim()))
                         text = "Default text...";
+
                     if (text.IndexOf("<p") == -1)
                         text = "<p>" + text + "</p>";
+
                     txt.Text = text;
+
                     SaveEvent = node["SaveEvent"].UnTie();
 
                     if (node.Contains("NoChrome") && node["NoChrome"].Get<bool>())
@@ -70,6 +79,11 @@ namespace Magix.Brix.Components.ActiveModules.Editor
             set { ViewState["SaveEvent"] = value; }
         }
 
+        // TODO: Implement support for multiple editors ...
+        /**
+         * Level2: Will flat out return the Value of the RichEditor. Does NOT support multiple
+         * editors on the same screen
+         */
         [ActiveEvent(Name = "Magix.Brix.Core.GetRichEditorValue")]
         protected void Magix_Brix_Core_GetRichEditorValue(object sender, ActiveEventArgs e)
         {
@@ -80,35 +94,13 @@ namespace Magix.Brix.Components.ActiveModules.Editor
         protected void Save(string text)
         {
             SaveEvent["Value"].Value = txt.Text;
+
             RaiseSafeEvent(
                 SaveEvent.Get<string>(),
                 SaveEvent);
+
             if (SaveEvent["Value"].Get<string>() != txt.Text)
                 txt.Text = SaveEvent["Value"].Get<string>(); // Changed in save ...!
-        }
-
-        protected bool RaiseSafeEvent(string eventName, Node node)
-        {
-            try
-            {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    eventName,
-                    node);
-                return true;
-            }
-            catch (Exception err)
-            {
-                Node n = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                n["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Magix.Core.ShowMessage",
-                    n);
-                return false;
-            }
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -49,7 +49,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
 
             // To help our Publishing Module to refresh ...
             // TODO: Refactor ...
-            node["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Get<int>();
+            node["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Get<int>();
 
             if (e.Params.Contains("NoIdColumn"))
                 node["NoIdColumn"].Value = e.Params["NoIdColumn"].Value;
@@ -80,10 +80,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             {
                 Node xx = new Node();
 
-                xx["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Get<int>();
+                xx["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Get<int>();
 
                 RaiseEvent(
-                    "Magix.Meta.GetContainerIDOfApplicationWebPart",
+                    "Magix.MetaView.GetWebPartsContainer",
                     xx);
                 node["Container"].Value = xx["ID"].Get<string>();
             }
@@ -871,7 +871,7 @@ Deleting it may break these parts.</p>";
             int id = e.Params["ID"].Get<int>();
             string text = e.Params["Name"].Get<string>();
             string value = e.Params["Value"].Get<string>();
-            int pageObj = e.Params["PageObjectTemplateID"].Get<int>();
+            int pageObj = e.Params["OriginalWebPartID"].Get<int>();
             string metaViewName = e.Params["MetaViewName"].Get<string>();
 
             LinkButton b = new LinkButton();
@@ -892,7 +892,7 @@ Deleting it may break these parts.</p>";
                     node["ID"].Value = id;
                     node["Name"].Value = text;
                     node["Value"].Value = value;
-                    node["PageObjectTemplateID"].Value = pageObj;
+                    node["OriginalWebPartID"].Value = pageObj;
                     node["MetaViewName"].Value = metaViewName;
 
                     RaiseEvent(
@@ -913,7 +913,7 @@ Deleting it may break these parts.</p>";
             int id = e.Params["ID"].Get<int>();
             string name = e.Params["Name"].Get<string>();
             string value = e.Params["Value"].Get<string>();
-            int pageObj = e.Params["PageObjectTemplateID"].Get<int>();
+            int pageObj = e.Params["OriginalWebPartID"].Get<int>();
 
             MetaView v = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
 
@@ -936,7 +936,7 @@ Deleting it may break these parts.</p>";
 
                 // Settings Event Specific Features ...
                 node["ActionName"].Value = idxS;
-                node["PageObjectTemplateID"].Value = pageObj;
+                node["OriginalWebPartID"].Value = pageObj;
 
                 RaiseEvent(
                     "Magix.MetaAction.RaiseAction",

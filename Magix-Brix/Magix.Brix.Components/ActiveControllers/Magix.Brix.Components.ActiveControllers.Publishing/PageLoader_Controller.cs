@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -193,10 +193,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Core.GetContainerForControl")]
         protected void Magix_Core_GetContainerForControl(object sender, ActiveEventArgs e)
         {
-            if (e.Params.Contains("PageObjectTemplateID"))
+            if (e.Params.Contains("OriginalWebPartID"))
             {
                 e.Params["Container"].Value =
-                    WebPart.SelectByID(e.Params["PageObjectTemplateID"].Get<int>()).Container.ViewportContainer;
+                    WebPart.SelectByID(e.Params["OriginalWebPartID"].Get<int>()).Container.ViewportContainer;
                 e.Params["FreezeContainer"].Value = true;
             }
         }

@@ -15,6 +15,12 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
+    /**
+     * Level2: Encapsulates a Clickable Component, basically a button. Which you can load as
+     * a module, and trap clicks to. Set its 'Text', 'ButtonCssClass', 'Enabled'
+     * and 'ToolTip' params to customize it till your needs. Will raise 
+     * 'Event' when clicked
+     */
     [ActiveModule]
     public class Clickable : ActiveModule, IModule
     {
@@ -42,6 +48,9 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 DataSource["Event"]);
         }
 
+        /**
+         * Level2: Enables or disables [according to 'Enabled'] button
+         */
         [ActiveEvent(Name = "Magix.Core.EnabledClickable")]
         protected void Magix_Core_EnabledClickable(object sender, ActiveEventArgs e)
         {

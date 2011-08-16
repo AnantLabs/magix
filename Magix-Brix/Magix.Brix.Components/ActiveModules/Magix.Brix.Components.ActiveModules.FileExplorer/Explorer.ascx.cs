@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -17,8 +17,22 @@ using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Components.ActiveModules.FileExplorer
 {
+    // TODO: Refactor saving logic. Call controller ...!
+    /**
+     * Level2: Containe the UI for the Explorer component, which allows you to browse your 
+     * File System on your server, through your browser. Basically a File System Explorer
+     * kind of control, which allows for renaming, deleting, and editing [to some extent]
+     * the files in your installation. Can be instantiated in Select mode by setting its
+     * 'IsSelect' input parameter. If 'CanCreateNewCssFile' is true, the end user is allowed
+     * to create a new default CSS file which he can later edit. 'RootAccessFolder' is the root
+     * of the system from where the current user is allowed to browse, while 'Folder' is his
+     * current folder. The control does some basic paging and such, and has support for 
+     * will raise 'Magix.FileExplorer.GetFilesFromFolder' to get its items. The module will
+     * raise the value of the 'SelectEvent' paeameter when an item has been selected.
+     * The module supports browsing hierarchical folder structures
+     */
     [ActiveModule]
-    public class Explorer : UserControl, IModule
+    public class Explorer : ActiveModule, IModule
     {
         protected Panel pnl;
         protected Panel prop;
@@ -38,8 +52,10 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected Label imageSize;
         protected Button newCss;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -361,6 +377,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 DataSource["FolderToOpen"].Value = "";
                 DataSource["File"].UnTie();
                 DataSource["Files"].UnTie();
+
                 RaiseSafeEvent(
                     "Magix.FileExplorer.GetFilesFromFolder",
                     DataSource);
@@ -368,12 +385,16 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
                 SelectedPanelID = "empty.css";
                 DataSource["File"].Value = "empty.css";
+
                 RaiseSafeEvent(
                     "Magix.FileExplorer.FileSelected",
                     DataSource);
+
                 UpdateSelectedFile();
+
                 new EffectFadeIn(prop, 500)
                     .Render();
+
                 prop.Visible = true;
                 prop.Style[Styles.display] = "none";
 
@@ -396,6 +417,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 node["Seed"].Value = DataSource["Seed"].Value;
             node["Folder"].Value = DataSource["Folder"].Value;
             node["Params"].AddRange(DataSource["SelectEvent"]["Params"]);
+
             RaiseSafeEvent(
                 DataSource["SelectEvent"].Get<string>(),
                 node);
@@ -598,7 +620,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             int height = DataSource["File"]["ImageHeight"].Get<int>() + 90;
             height += 18 - (height % 18);
             node["ForcedSize"]["height"].Value = height + 2;
-            node["ImageUrl"].Value = file;
+            node["ImageURL"].Value = file;
             node["Push"].Value = 2;
             node["Top"].Value = 4;
             node["Last"].Value = true;
@@ -666,40 +688,11 @@ Layout System in our WinePad product ...";
             {
                 Node node = new Node();
                 node["Caption"].Value = DataSource["Caption"].Get<string>();
+
                 RaiseSafeEvent(
                     "Magix.Core.SetFormCaption",
                     node);
             }
-        }
-
-        protected bool RaiseSafeEvent(string eventName, Node node)
-        {
-            try
-            {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    eventName,
-                    node);
-                return true;
-            }
-            catch (Exception err)
-            {
-                Node n = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                n["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Magix.Core.ShowMessage",
-                    n);
-                return false;
-            }
-        }
-
-        private Node DataSource
-        {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
         }
 
         private string SelectedPanelID

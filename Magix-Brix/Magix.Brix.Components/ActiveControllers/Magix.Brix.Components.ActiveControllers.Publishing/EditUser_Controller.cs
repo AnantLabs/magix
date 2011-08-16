@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -231,7 +231,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Container"].Value = "content4";
             node["AlternateText"].Value = "Avatar of User";
             node["Description"].Value = "Click image to change it ...";
-            node["ImageUrl"].Value = user.AvatarURL;
+            node["ImageURL"].Value = user.AvatarURL;
 
             ActiveEvents.Instance.RaiseLoadControl(
                 "Magix.Brix.Components.ActiveModules.CommonModules.ImageModule",

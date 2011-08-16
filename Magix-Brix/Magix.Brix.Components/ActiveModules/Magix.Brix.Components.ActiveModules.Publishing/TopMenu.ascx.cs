@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -52,9 +52,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         {
             string caption = node["Caption"].Get<string>();
             string eventName = 
-                node["Event"]["Name"].Get<string>() + 
-                "|" + 
-                node["Event"]["MenuItemID"].Get<string>();
+                node["Event"].Get<string>() + 
+                "|" +
+                node["Event"]["WebPageURL"].Get<string>();
 
             MenuItem item = new MenuItem();
             item.ID = node.Name;
@@ -84,7 +84,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             Node node = new Node();
 
-            node["MenuItemID"].Value = menuItemId;
+            node["WebPageURL"].Value = menuItemId;
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,

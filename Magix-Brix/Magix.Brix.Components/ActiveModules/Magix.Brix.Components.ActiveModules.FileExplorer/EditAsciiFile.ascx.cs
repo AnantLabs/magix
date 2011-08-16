@@ -14,17 +14,25 @@ using System.IO;
 
 namespace Magix.Brix.Components.ActiveModules.FileExplorer
 {
+    // TODO: Implement Controller logic here for saving. Looks ugly, and not possible to override
+    /**
+     * Level2: Kind of like Magix' version of 'Notepad'. Allows for editing of textfiles or text fragments, 
+     * and allow for saving them
+     */
     [ActiveModule]
-    public class EditAsciiFile : UserControl, IModule
+    public class EditAsciiFile : ActiveModule, IModule
     {
         protected TextArea txt;
 
-        void IModule.InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
                     DataSource = node;
+
                     // Loading file ...
                     using (TextReader reader = File.OpenText(DataSource["File"].Get<string>()))
                     {
@@ -49,16 +57,11 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             // Feedback to user ...
             Node n = new Node();
             n["Message"].Value = "File was successfully saved ...";
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "Magix.Core.ShowMessage",
                 n);
-        }
-
-        private Node DataSource
-        {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -14,6 +14,11 @@ using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
+    /**
+     * Level2: Will allow the end user to configure his filters, meaning what filter to filter each column
+     * by. There are many different types of filter in Magix. LIKE, Equal and so on. This form
+     * allows you to globally set the filters for specific types on specific columns of those types
+     */
     [ActiveModule]
     public class ConfigureFilters : Module, IModule
     {
@@ -24,17 +29,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         public override void InitialLoading(Node node)
         {
-            base.InitialLoading(node);
             _isFirst = true;
-            Load +=
-                delegate
-                {
-                };
+
+            base.InitialLoading(node);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             if (DataSource != null)
                 DataBindFilters();
         }
@@ -79,19 +82,26 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             equals = new TextBox();
             equals.ID = "t";
+
             Node fNode = new Node();
+
             fNode["Key"].Value = "DBAdmin.Filter." +
                 DataSource["FullTypeName"].Get<string>() +
                 ":" +
                 DataSource["PropertyName"].Value;
+
             fNode["Default"].Value = "";
+
             RaiseSafeEvent(
                 "DBAdmin.Data.GetFilter",
                 fNode);
+
             string filter = fNode["Filter"].Get<string>();
             equals.Text = filter;
+
             if (!string.IsNullOrEmpty(equals.Text))
                 equals.Text = equals.Text.Split('|')[1];
+
             wrp.Controls.Add(equals);
             pnl.Controls.Add(wrp);
 
@@ -100,6 +110,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             l.Text = @"Type in the ID of the 
 Document you want to filter by. Empty string removes any existing filters.";
             pnl.Controls.Add(l);
+
             if (_isFirst)
             {
                 new EffectTimeout(250)
@@ -137,15 +148,19 @@ Document you want to filter by. Empty string removes any existing filters.";
             ls.Items.Add(i);
 
             Node fNode = new Node();
+
             fNode["Key"].Value = 
                 "DBAdmin.Filter." + 
                 DataSource["FullTypeName"].Get<string>() +
                 ":" +
                 DataSource["PropertyName"].Get<string>();
+
             fNode["Default"].Value = "";
+
             RaiseSafeEvent(
                 "DBAdmin.Data.GetFilter",
                 fNode);
+
             string setting = fNode["Filter"].Get<string>();
             string[] filter = setting.Split('|');
             if (!string.IsNullOrEmpty(filter[0]))
@@ -170,8 +185,10 @@ Document you want to filter by. Empty string removes any existing filters.";
             wrp.Controls.Add(ls);
 
             TextBox t = new TextBox();
+
             if (!string.IsNullOrEmpty(filter[0]))
                 t.Text = filter[1];
+
             wrp.Controls.Add(t);
 
             pnl.Controls.Add(wrp);
@@ -186,6 +203,7 @@ empty string removes any existing Criteria...";
             {
                 if (string.IsNullOrEmpty(setting))
                     ls.SelectedIndex = 3;
+
                 new EffectTimeout(500)
                     .ChainThese(
                         new EffectFocusAndSelect(t))
@@ -210,10 +228,13 @@ empty string removes any existing Criteria...";
                 DataSource["FullTypeName"].Get<string>() +
                 ":" +
                 DataSource["PropertyName"].Value;
+
             fNode["Default"].Value = "";
+
             RaiseSafeEvent(
                 "DBAdmin.Data.GetFilter",
                 fNode);
+
             string filter = fNode["Filter"].Get<string>();
             equals.Text = filter;
             wrp.Controls.Add(equals);
@@ -224,6 +245,7 @@ empty string removes any existing Criteria...";
             l.Text = @"Type in a specific ID, integer value, 
 or a list of comma separated IDs. Empty string removes any existing filters.";
             pnl.Controls.Add(l);
+
             if (_isFirst)
             {
                 new EffectTimeout(250)
@@ -243,11 +265,14 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                 if (string.IsNullOrEmpty(filter))
                 {
                     Node fNode = new Node();
+
                     fNode["Key"].Value = 
                         "DBAdmin.Filter." + 
                         fullTypeName + ":" + 
                         propertyName;
+
                     fNode["Value"].Value = "";
+
                     RaiseSafeEvent(
                         "DBAdmin.Data.SetFilter",
                         fNode);
@@ -260,12 +285,16 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                     {
                         int x = int.Parse(idx);
                     }
+
                     Node fNode = new Node();
+
                     fNode["Key"].Value =
                         "DBAdmin.Filter." +
                         fullTypeName + ":" +
                         propertyName;
+
                     fNode["Value"].Value = filter;
+
                     RaiseSafeEvent(
                         "DBAdmin.Data.SetFilter",
                         fNode);
@@ -288,11 +317,14 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                 if (string.IsNullOrEmpty(filter))
                                 {
                                     Node fNode = new Node();
+
                                     fNode["Key"].Value =
                                         "DBAdmin.Filter." +
                                         fullTypeName + ":" +
                                         propertyName;
+
                                     fNode["Value"].Value = "";
+
                                     RaiseSafeEvent(
                                         "DBAdmin.Data.SetFilter",
                                         fNode);
@@ -300,7 +332,9 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                 else
                                 {
                                     int selIndex = Selector.SelectFirst<SelectList>(this).SelectedIndex;
+
                                     string set = "";
+
                                     switch (selIndex)
                                     {
                                         case 0:
@@ -319,11 +353,14 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                             break;
                                     }
                                     Node fNode = new Node();
+
                                     fNode["Key"].Value =
                                         "DBAdmin.Filter." +
                                         fullTypeName + ":" +
                                         propertyName;
+
                                     fNode["Value"].Value = set + "|" + filter;
+
                                     RaiseSafeEvent(
                                         "DBAdmin.Data.SetFilter",
                                         fNode);
@@ -334,9 +371,12 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                             {
                                 Node node = new Node();
                                 node["Message"].Value = err.Message;
+                                node["IsError"].Value = true;
+
                                 RaiseSafeEvent(
                                     "Magix.Core.ShowMessage",
                                     node);
+
                                 equals.Select();
                                 equals.Focus();
                             }
@@ -349,11 +389,14 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                 if (string.IsNullOrEmpty(filter))
                                 {
                                     Node fNode = new Node();
+
                                     fNode["Key"].Value =
                                         "DBAdmin.Filter." +
                                         fullTypeName + ":" +
                                         propertyName;
+
                                     fNode["Value"].Value = "";
+
                                     RaiseSafeEvent(
                                         "DBAdmin.Data.SetFilter",
                                         fNode);
@@ -361,11 +404,14 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                 else
                                 {
                                     Node fNode = new Node();
+
                                     fNode["Key"].Value =
                                         "DBAdmin.Filter." +
                                         fullTypeName + ":" +
                                         propertyName;
+
                                     fNode["Value"].Value = "In|" + filter;
+
                                     RaiseSafeEvent(
                                         "DBAdmin.Data.SetFilter",
                                         fNode);
@@ -376,9 +422,11 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                             {
                                 Node node = new Node();
                                 node["Message"].Value = err.Message;
+
                                 RaiseSafeEvent(
                                     "Magix.Core.ShowMessage",
                                     node);
+
                                 equals.Select();
                                 equals.Focus();
                             }
@@ -397,9 +445,11 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
             {
                 Node node = new Node();
                 node["Message"].Value = err.Message;
+
                 RaiseSafeEvent(
                     "Magix.Core.ShowMessage",
                     node);
+
                 equals.Select();
                 equals.Focus();
             }

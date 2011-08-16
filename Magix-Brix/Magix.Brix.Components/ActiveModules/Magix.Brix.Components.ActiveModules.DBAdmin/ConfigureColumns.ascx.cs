@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -15,6 +15,12 @@ using System.Web.UI.HtmlControls;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
+    /**
+     * Level2: Allows for editing of 'visible columns' per type level. Will show a form from which the end
+     * user can tag off and on the different columns he wish to see in his grid. Databinds
+     * towards 'WhiteListColumns' and raises 'DBAdmin.Data.ChangeVisibilityOfColumn' when visibility
+     * of column changes with 'Visible', 'FullTypeName' and 'ColumnName' as parameters
+     */
     [ActiveModule]
     public class ConfigureColumns : Module, IModule
     {
@@ -56,9 +62,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             CheckBox b = sender as CheckBox;
             string columnName = b.Info;
             Node node = new Node();
+
             node["ColumnName"].Value = columnName;
             node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
             node["Visible"].Value = b.Checked;
+
             RaiseSafeEvent(
                 "DBAdmin.Data.ChangeVisibilityOfColumn",
                 node);
@@ -71,10 +79,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             CheckBox b = Selector.SelectFirst<CheckBox>(l.Parent);
             b.Checked = !b.Checked;
             b.Focus();
+
             Node node = new Node();
             node["ColumnName"].Value = columnName;
             node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
             node["Visible"].Value = b.Checked;
+
             RaiseSafeEvent(
                 "DBAdmin.Data.ChangeVisibilityOfColumn",
                 node);

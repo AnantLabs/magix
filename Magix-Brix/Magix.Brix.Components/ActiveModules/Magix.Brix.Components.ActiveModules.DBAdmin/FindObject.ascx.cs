@@ -13,6 +13,10 @@ using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
+    /**
+     * Level2: Basically identical to ViewClassContents, with one addition. This module will show a 'filter field'
+     * to the end user which the user can use to 'search for items' from within.
+     */
     [ActiveModule]
     public class FindObject : ListModule, IModule
     {
@@ -32,6 +36,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -65,10 +70,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataSource["Filter"].Value = query.Text;
 
             DataSource["Start"].Value = 0;
+
             DataSource["End"].Value =
                 DataSource["Start"].Get<int>(0) +
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+
             ReDataBind(false);
+
             query.Select();
             query.Focus();
         }
@@ -78,6 +86,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             DataSource["Start"].Value = 0;
             DataSource["End"].Value =
                 Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+
             ReDataBind(false);
         }
 
@@ -88,11 +97,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     0,
                     DataSource["Start"].Get<int>() -
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             ReDataBind(false);
         }
 
@@ -103,11 +114,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         DataSource["SetCount"].Get<int>() - 10,
                         DataSource["Start"].Get<int>() +
                             DataSource["Objects"].Count);
+
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             ReDataBind(false);
         }
 
@@ -115,6 +128,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             DataSource["Start"].Value = Math.Max(0, DataSource["SetCount"].Get<int>() - 10);
             DataSource["End"].Value = DataSource["SetCount"].Get<int>();
+
             ReDataBind(false);
         }
 
@@ -125,6 +139,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void DataBindDone()
         {
+            // TODO: MAJORLY REFACTOR ... !! IDIOT LOGIC ...!!
             if (Parent.Parent.Parent is Window)
             {
                 (Parent.Parent.Parent as Window).Caption = string.Format(
@@ -137,12 +152,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             else
             {
                 Node node = new Node();
+
                 node["Caption"].Value = string.Format(
                     "{0} {1}-{2}/{3}",
                     DataSource["TypeName"].Get<string>(),
                     ((int)DataSource["Start"].Value) + 1,
                     DataSource["End"].Get<int>(),
                     DataSource["SetCount"].Get<int>());
+
                 RaiseSafeEvent(
                     "Magix.Core.SetFormCaption",
                     node);
@@ -171,6 +188,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["End"].Value =
                     DataSource["Start"].Get<int>(0) +
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+
                 ReDataBind(false);
             }
             else
@@ -181,6 +199,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["End"].Value =
                         DataSource["Start"].Get<int>(0) +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+
                     ReDataBind(false);
                 }
             }
@@ -194,7 +213,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         private void ReDataBind(bool setSelectedRow)
         {
             ResetColumnsVisibility();
+
             DataSource["Objects"].UnTie();
+
             if (DataSource["SetCount"].Get<int>() >= DataSource["End"].Get<int>() &&
                 DataSource["End"].Get<int>() -
                 DataSource["Start"].Get<int>() <
@@ -215,6 +236,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     // the time being within our Grid component ...
                     DataSource["End"].Value =
                         DataSource["SetCount"].Get<int>() + 1;
+
                     DataSource["Start"].Value =
                         DataSource["SetCount"].Get<int>() -
                         (Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) - 1);

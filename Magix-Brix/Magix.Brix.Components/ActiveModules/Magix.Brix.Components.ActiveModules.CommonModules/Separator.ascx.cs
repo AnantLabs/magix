@@ -15,6 +15,9 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
+    /**
+     * Level2: Encapsulates a [dead] html Horizontal Ruler [hr] element for you if you need one
+     */
     [ActiveModule]
     public class Separator : UserControl
     {

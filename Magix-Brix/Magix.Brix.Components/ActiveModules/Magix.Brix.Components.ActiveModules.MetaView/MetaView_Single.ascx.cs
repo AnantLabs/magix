@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -15,6 +15,21 @@ using Magix.Brix.Publishing.Common;
 
 namespace Magix.Brix.Components.ActiveModules.MetaView
 {
+    /**
+     * Level1: UI parts for showing a MetaView in 'SingleView Mode'. Basically shows a form, with items
+     * dependent upon the look of the view. This is a Publisher Plugin module. This form expects
+     * to be given a 'MetaViewName', which will serve as the foundation for raising the
+     * 'Magix.MetaView.GetViewData' event, whos default implementation will populate the node
+     * structure according to the views content in a Key/Value pair kind of relationship.
+     * This will serv as the foundation for the module to know which types of controls it needs to load
+     * up [TextBoxes, Buttons etc]
+     * 
+     * Handles the 'Magix.MetaView.SerializeSingleViewForm' event, which is the foundation for creating
+     * new objects upon clicking Save buttons etc.
+     * 
+     * This is the PublisherPlugin you'd use if you'd like to have the end user being able to 
+     * create a new MetaObject
+     */
     [ActiveModule]
     [PublisherPlugin]
     public class MetaView_Single : ActiveModule
@@ -83,6 +98,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.Click +=
                 delegate
                 {
+                    // TODO: Out-factor into controller
                     foreach (string idxS in idx["Action"].Get<string>().Split('|'))
                     {
                         Node node = new Node();
@@ -95,7 +111,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
 
                         // Settings Event Specific Features ...
                         node["ActionName"].Value = idxS;
-                        node["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;
+                        node["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
 
                         RaiseSafeEvent(
                             "Magix.MetaAction.RaiseAction",
@@ -128,6 +144,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             }
         }
 
+        // TODO: Out-factor all of these to the controller ...
+        // Make it more similar [hopefully shareable] between the 'MultiView' logic ...!!
         private void CreateReadOnlyControl(Node idx, bool shouldClear)
         {
             Label lbl = new Label();
@@ -135,8 +153,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             lbl.Info = idx["Name"].Get<string>();
             lbl.Text = idx["Description"].Get<string>();
             lbl.CssClass = "meta-view-form-element meta-view-form-label";
+
             if (shouldClear)
                 lbl.CssClass += " clear-both";
+
             ctrls.Controls.Add(lbl);
         }
 
@@ -147,27 +167,42 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.ToolTip = b.PlaceHolder;
             b.Info = idx["Name"].Get<string>();
             b.CssClass = "meta-view-form-element meta-view-form-textbox";
+
             if (shouldClear)
                 b.CssClass += " clear-both";
+
             ctrls.Controls.Add(b);
         }
 
-        [ActiveEvent(Name = "Magix.Meta.GetContainerIDOfApplicationWebPart")]
-        protected void Magix_Meta_GetContainerIDOfApplicationWebPart(object sender, ActiveEventArgs e)
+        /**
+         * Level2: Will return the Container's ID back to caller [e.g. "content1"] if it's the
+         * correct WebPartTemplate Container according to the requested 'PageObjectTemplateID'
+         */
+        [ActiveEvent(Name = "Magix.MetaView.GetWebPartsContainer")]
+        protected void Magix_MetaView_GetWebPartsContainer(object sender, ActiveEventArgs e)
         {
-            if (e.Params["PageObjectTemplateID"].Get<int>() == DataSource["PageObjectTemplateID"].Get<int>())
+            if (e.Params["OriginalWebPartID"].Get<int>() == DataSource["OriginalWebPartID"].Get<int>())
                 e.Params["ID"].Value = this.Parent.ID;
         }
 
-        [ActiveEvent(Name = "Magix.Meta.GetActiveFormData")]
-        protected void Magix_Meta_GetActiveFormData(object sender, ActiveEventArgs e)
+        /**
+         * Level1: Will serialize the form into a key/value pair back to the caller. Basically the foundation
+         * for this control's ability to create MetaObjects. Create an action, encapsulating this event,
+         * instantiate it and raise it [somehow] when user is done, by attaching it to e.g. a Save button,
+         * and have the form serialized into a brand new MetaObject of the given TypeName
+         */
+        [ActiveEvent(Name = "Magix.MetaView.SerializeSingleViewForm")]
+        protected void Magix_MetaView_SerializeSingleViewForm(object sender, ActiveEventArgs e)
         {
-            if (e.Params["PageObjectTemplateID"].Get<int>() == DataSource["PageObjectTemplateID"].Get<int>())
+            if (e.Params["OriginalWebPartID"].Get<int>() == DataSource["OriginalWebPartID"].Get<int>())
             {
                 GetPropertyValues(e.Params, true);
             }
         }
 
+        /**
+         * Level1: Will 'empty' the current form. Useful in combination with Save or Clear button
+         */
         [ActiveEvent(Name = "Magix.Meta.Actions.EmptyForm")]
         protected void Magix_Meta_Actions_EmptyForm(object sender, ActiveEventArgs e)
         {
@@ -185,6 +220,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             }
         }
 
+        /**
+         * Level1: The name of the MetaView to use as the foundation for this form
+         */
         [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.MetaView_Single.GetTemplateColumnSelectView")]
         public string ViewName
         {

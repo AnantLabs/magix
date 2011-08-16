@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -249,11 +249,11 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         [ActiveEvent(Name = "Magix.Common.ReloadOriginalWebPart")]
         protected void Magix_Common_ReloadOriginalWebPart(object sender, ActiveEventArgs e)
         {
-            int po = e.Params["Parameters"]["PageObjectTemplateID"].Get<int>();
+            int po = e.Params["Parameters"]["OriginalWebPartID"].Get<int>();
 
             Node node = new Node();
 
-            node["PageObjectTemplateID"].Value = po;
+            node["OriginalWebPartID"].Value = po;
 
             RaiseEvent(
                 "Magix.Publishing.ReloadWebPart",
@@ -271,11 +271,11 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         {
             e.Params["OKEvent"].Value = "Magix.MetaView.UnLoadSignature";
             e.Params["OKEvent"]["Params"]["MetaObjectID"].Value = e.Params["MetaObjectID"].Value;
-            e.Params["OKEvent"]["Params"]["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Value;
+            e.Params["OKEvent"]["Params"]["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
             e.Params["OKEvent"]["Params"]["Name"].Value = e.Params["ActionSenderName"].Value;
 
             e.Params["CancelEvent"].Value = "Magix.Publishing.ReloadWebPart";
-            e.Params["CancelEvent"]["Params"]["PageObjectTemplateID"].Value = e.Params["PageObjectTemplateID"].Value;
+            e.Params["CancelEvent"]["Params"]["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
 
             if (e.Params.Contains("Value") &&
                 !string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
