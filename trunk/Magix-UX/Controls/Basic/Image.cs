@@ -27,12 +27,12 @@ namespace Magix.UX.Widgets
          */
         public string ImageUrl
         {
-            get { return ViewState["ImageUrl"] == null ? "" : (string)ViewState["ImageUrl"]; }
+            get { return ViewState["ImageURL"] == null ? "" : (string)ViewState["ImageURL"]; }
             set
             {
                 if (value != ImageUrl)
                     SetJsonGeneric("src", value);
-                ViewState["ImageUrl"] = value;
+                ViewState["ImageURL"] = value;
             }
         }
 

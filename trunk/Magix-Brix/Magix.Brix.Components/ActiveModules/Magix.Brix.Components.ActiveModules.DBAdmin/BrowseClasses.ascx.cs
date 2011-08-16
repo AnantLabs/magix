@@ -12,6 +12,15 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
+    // TODO: Replace with CommonModules.Tree
+    /**
+     * Level2: Contains UI for letting the end user browse the ActiveType classes within his system as
+     * a Database Enterprise Management tool. Allows for seeings all classes in a Tree hierarchy
+     * and letting him select classes, which again will trigger editing of records in that class.
+     * Kind of like the Database Anterprise Management tool for Magix. Will raise
+     * 'DBAdmin.Data.GetClassHierarchy', which you can handle if you have 'meta types' you wish
+     * to display
+     */
     [ActiveModule]
     public class BrowseClasses : Module, IModule
     {
@@ -23,11 +32,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
-                    Node tmp = new Node();
+                    DataSource = new Node(); // Discards input entirely ...
                     RaiseSafeEvent(
                         "DBAdmin.Data.GetClassHierarchy",
-                        tmp);
-                    DataSource = tmp;
+                        DataSource);
                 };
         }
 
@@ -90,6 +98,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 // Showing the ViewClassContens Form
                 Node node = new Node();
                 node["FullTypeName"].Value = classFullName.Replace("Leaf:", "");
+
                 RaiseSafeEvent(
                     "DBAdmin.Form.ViewClass",
                     node);

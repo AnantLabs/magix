@@ -4,15 +4,15 @@
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magix.Brix.Components.ActiveModules.CommonModules.ToolTip" %>
+    Inherits="Magix.Brix.Components.ActiveModules.CommonModules.TipOfToday" %>
 
 <link href="media/modules/ToolTip.css" rel="stylesheet" type="text/css" />
 
 <mux:Panel
     runat="server"
     id="pnl"
-    OnClick="pnl_Click"
     CssClass="navigation">
+
     <mux:Button
         runat="server"
         id="next"
@@ -20,6 +20,7 @@
         ToolTip="Next Carpe Diem ..."
         CssClass="navButton"
         Text="&gt;" />
+
     <mux:Button
         runat="server"
         id="previous"
@@ -27,9 +28,11 @@
         ToolTip="Previous Carpe Diem ..."
         CssClass="navButton"
         Text="&lt;" />
+
     <mux:Label
         runat="server"
         Tag="div"
         CssClass="tip-text"
         id="lbl" />
+
 </mux:Panel>

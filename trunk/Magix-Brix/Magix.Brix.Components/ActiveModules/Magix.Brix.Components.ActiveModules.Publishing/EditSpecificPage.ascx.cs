@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -14,6 +14,10 @@ using System.Web;
 
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
+    /**
+     * Level2: Allows for editing of one single specific WebPage in the system. Contains most of the UI
+     * which you're probably daily using while adding and creating new pages and such
+     */
     [ActiveModule]
     public class EditSpecificPage : ActiveModule, IModule
     {
@@ -26,6 +30,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -299,6 +304,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node);
         }
 
+        /**
+         * Level2: Needs to be handled here, in case it was 'this page'
+         */
         [ActiveEvent(Name = "Magix.Publishing.PageWasDeleted")]
         protected void Magix_Publishing_PageWasDeleted(object sender, ActiveEventArgs e)
         {
@@ -319,6 +327,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node);
         }
 
+        /**
+         * Page was somehow updated, and we need to reload the currently editing page
+         */
         [ActiveEvent(Name = "Magix.Publishing.PageWasUpdated")]
         protected void Magix_Publishing_PageWasUpdated(object sender, ActiveEventArgs e)
         {

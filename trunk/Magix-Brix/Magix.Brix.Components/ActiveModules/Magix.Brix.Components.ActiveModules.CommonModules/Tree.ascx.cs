@@ -16,6 +16,16 @@ using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
+    /**
+     * Level2: Shows a Tree module for the end user for him to navigate and select single nodes from.
+     * Change its properties by passing in 'TreeCssClass' or 'NoClose'. 'Items' should 
+     * contain the tree items in a hierarchical fashion with e.g. 'Item/i-1/' containing
+     * 'Name' 'CssClass' and 'ToolTip'. 'Name' being minimum. Child items of 'Items/i-1'
+     * should be stored in the 'Items/i-1/Items' node. Will raise 'GetItemsEvent'
+     * upon needing to refresh for some reasons, and 
+     * 'ItemSelectedEvent' with 'SelectedItemID' parameter as selected item ID upon
+     * user selecting an item
+     */
     [ActiveModule]
     public class Tree : ActiveModule, IModule
     {
@@ -78,15 +88,21 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             }
         }
 
+        /**
+         * Level2: Overrides to make sure we also update this bugger upon changing of these types
+         * of records, but only if 'relevant'
+         */
         [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
         protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
         {
             if (CheckForTypeHit(e.Params))
             {
                 DataSource["Items"].UnTie();
+
                 RaiseSafeEvent(
                     DataSource["GetItemsEvent"].Get<string>(),
                     DataSource);
+
                 ReDataBind();
 
                 new EffectHighlight(tree, 250)
@@ -94,22 +110,26 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             }
         }
 
-        [ActiveEvent(Name = "Magix.Core.GetTreeSelectedID")]
-        protected void Magix_Core_GetTreeSelectedID(object sender, ActiveEventArgs e)
-        {
-            if (tree.SelectedItem != null)
-                e.Params["ID"].Value = int.Parse(tree.SelectedItem.Info);
-        }
-
+        /**
+         * Level2: Sets the selected tree item to the 'ID' given
+         */
         [ActiveEvent(Name = "Magix.Core.SetTreeSelectedID")]
         protected void Magix_Core_SetTreeSelectedID(object sender, ActiveEventArgs e)
         {
-            tree.SelectedItem = Selector.FindControl<TreeItem>(tree, "i-" + e.Params["ID"].Value);
+            tree.SelectedItem = 
+                Selector.FindControl<TreeItem>(
+                    tree, 
+                    "i-" + e.Params["ID"].Value);
+
             tree.SelectedItem.Expanded = true;
             tree.SelectedItem.CssClass =
                 tree.SelectedItem.CssClass.Replace(" mux-tree-collapsed", " mux-tree-expanded");
         }
 
+        /**
+         * Level2: Makes sure the 'currently selected tree item' becomes expanded, 
+         * if any are selected
+         */
         [ActiveEvent(Name = "Magix.Core.ExpandTreeSelectedID")]
         protected void Magix_Core_ExpandTreeSelectedID(object sender, ActiveEventArgs e)
         {
@@ -120,6 +140,9 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             }
         }
 
+        /**
+         * Level3: Overridden to handle some internal events
+         */
         [ActiveEvent(Name = "Magix.Core.UpdateTree")]
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
         protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
@@ -127,9 +150,11 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             if (CheckForTypeHit(e.Params))
             {
                 DataSource["Items"].UnTie();
+
                 RaiseSafeEvent(
                     DataSource["GetItemsEvent"].Get<string>(),
                     DataSource);
+
                 ReDataBind();
 
                 new EffectHighlight(tree, 250)
@@ -137,6 +162,9 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             }
         }
 
+        /**
+         * Level2: Returns the selected tree item as 'ID' if any is selected
+         */
         [ActiveEvent(Name = "Magix.Core.GetSelectedTreeItem")]
         protected void Magix_Core_GetSelectedTreeItem(object sender, ActiveEventArgs e)
         {
@@ -149,6 +177,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             if (DataSource.Contains("ItemSelectedEvent"))
             {
                 DataSource["SelectedItemID"].Value = tree.SelectedItem.Info;
+
                 RaiseSafeEvent(
                     DataSource["ItemSelectedEvent"].Get<string>(),
                     DataSource);

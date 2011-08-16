@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;

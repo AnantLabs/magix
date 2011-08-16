@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -14,6 +14,10 @@ using System.Web;
 
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
+    /**
+     * Level2: Allows for editing of WebPageTemplate objects. Contains most of the UI
+     * which you're probably daily using while adding and creating new templates and such
+     */
     [ActiveModule]
     public class EditSpecificTemplate : ActiveModule, IModule
     {
@@ -53,6 +57,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         w.CssClass += " web-part";
                         if (overflow)
                             w.CssClass += " overflow-design";
+
                         SetCommonWebPartProperties(
                             width, 
                             height, 
@@ -603,8 +608,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             w.CssClass += " mux-shaded mux-rounded";
             w.CssClass += " span-" + width;
             w.CssClass += " height-" + height;
+
             if (last)
                 w.CssClass += " last";
+
             w.Caption = name;
             w.Info = id.ToString();
             w.CssClass += " pushRight-" + padding;
@@ -645,8 +652,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         new ListItem(
                             idxN1["ShortName"].Get<string>(),
                             idxN1["ModuleName"].Get<string>());
+
                     if (idxN1["ModuleName"].Get<string>() == moduleName)
                         li.Selected = true;
+
                     sel.Items.Add(li);
                 }
                 w.Content.Controls.Add(sel);

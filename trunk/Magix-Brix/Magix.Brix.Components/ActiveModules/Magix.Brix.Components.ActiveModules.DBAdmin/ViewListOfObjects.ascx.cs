@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -15,6 +15,14 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.DBAdmin
 {
+    /**
+     * Level2: Basically the same as ViewClassContents, though will only show objects 'belonging to a specific
+     * object [ParentID] through a specific property ['PropertyName'] and allow for appending, and not
+     * creation of new objects of 'FullTypeName'. Raises 'DBAdmin.Data.GetListFromObject' to get
+     * objects to display in Grid. Override the Append button's text property with 
+     * 'AppendText'. Other properties are as normal from mostly every grid in Magix such as 
+     * 'IsDelete', 'IsRemove' etc
+     */
     [ActiveModule]
     public class ViewListOfObjects : ListModule, IModule
     {
@@ -22,8 +30,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button append;
         protected Button previous;
         protected Button next;
-        protected Button extra1;
-        protected Panel appendPnl;
         protected Panel previousPnl;
         protected Panel nextPnl;
 
@@ -33,8 +39,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
-                    appendPnl.Visible = DataSource["IsAppend"].Get<bool>();
-
                     if (node.Contains("ChildCssClass"))
                     {
                         pnl.CssClass = node["ChildCssClass"].Get<string>();
@@ -42,11 +46,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     if (node.Contains("AppendText"))
                     {
                         append.Text = node["AppendText"].Get<string>();
-                    }
-                    if (node.Contains("Extra1Event"))
-                    {
-                        extra1.Visible = true;
-                        extra1.Text = node["Extra1EventDescription"].Get<string>();
                     }
                 };
         }
@@ -60,11 +59,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 node["ParentID"].Value = DataSource["ParentID"].Value;
                 node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
                 node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+
                 RaiseSafeEvent(
                     (DataSource.Contains("AppendEvent") ? 
                         DataSource["AppendEvent"].Get<string>() : 
                         "DBAdmin.Common.CreateObjectAsChild"),
                     node);
+
                 ReDataBind();
             }
             else
@@ -75,25 +76,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 node["ParentID"].Value = DataSource["ParentID"].Value;
                 node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
                 node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+
                 RaiseSafeEvent(
                     DataSource.Contains("AppendEventName") ? 
                         DataSource["AppendEventName"].Get<string>() : 
                         "DBAdmin.Form.AppendObject",
                     node);
             }
-        }
-
-        protected void extra1_Click(object sender, EventArgs e)
-        {
-            Node node = new Node();
-            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-            node["ParentID"].Value = DataSource["ParentID"].Value;
-            node["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
-            node["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
-            RaiseSafeEvent(
-                DataSource["Extra1Event"].Get<string>(),
-                DataSource["Extra1Event"]["Params"]);
-            ReDataBind();
         }
 
         protected void PreviousItems(object sender, EventArgs e)
@@ -103,11 +92,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     0,
                     DataSource["Start"].Get<int>() -
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             ReDataBind();
         }
 
@@ -118,11 +109,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         DataSource["SetCount"].Get<int>() - 1,
                         DataSource["Start"].Get<int>() +
                             DataSource["Objects"].Count);
+
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
                         Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+
             ReDataBind();
         }
 
@@ -133,8 +126,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected override void DataBindDone()
         {
+            // TODO: OMG REFACTOR THIS ...!!
             string parentTypeName = DataSource["ParentFullTypeName"].Get<string>();
             parentTypeName = parentTypeName.Substring(parentTypeName.LastIndexOf(".") + 1);
+
             string caption = string.Format(
                 "{0} {1}-{2}/{3} of {4}[{5}]/{6}",
                 DataSource["TypeName"].Get<string>(),
@@ -153,6 +148,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 Node node = new Node();
                 node["Caption"].Value = caption;
+
                 RaiseSafeEvent(
                     "Magix.Core.SetFormCaption",
                     node);
@@ -192,7 +188,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             ResetColumnsVisibility();
             DataSource["Objects"].UnTie();
-            //DataSource["Type"].UnTie();
+
             if (RaiseSafeEvent(
                 "DBAdmin.Data.GetListFromObject",
                 DataSource))

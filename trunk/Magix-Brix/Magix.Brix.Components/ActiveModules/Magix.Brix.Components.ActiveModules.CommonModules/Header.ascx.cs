@@ -15,17 +15,15 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
+    /**
+     * Level2: Encapsulates a header [h1] control for you to create headers for your
+     * pages and apps. Load it and raise 'Magix.Core.SetFormCaption' to set the
+     * header
+     */
     [ActiveModule]
-    public class Header : UserControl, IModule
+    public class Header : UserControl
     {
         protected Label lbl;
-
-        public void InitialLoading(Node node)
-        {
-            Load += delegate
-            {
-            };
-        }
 
         private bool Lock
         {
@@ -45,6 +43,11 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             set { ViewState["PoppedNo"] = value; }
         }
 
+        // TODO: Refactor ...
+        /**
+         * Bad stuff. Refactor ...!
+         * To be removed ....
+         */
         [ActiveEvent(Name = "Magix.Core.UnlockFormCaption")]
         protected void Magix_Core_UnlockFormCaption(object sender, ActiveEventArgs e)
         {
@@ -54,12 +57,17 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             lbl.Style[Styles.marginTop] = (36 - PoppedNo).ToString() + "px";
         }
 
+        /**
+         * Level2: Sets the caption of the header [h1] control
+         */
         [ActiveEvent(Name = "Magix.Core.SetFormCaption")]
         protected void Magix_Core_SetFormCaption(object sender, ActiveEventArgs e)
         {
             if (Lock)
                 return;
+
             Lock = e.Params.Contains("Lock") && e.Params["Lock"].Get<bool>();
+
             if (Lock)
             {
                 Popped = lbl.Text;
@@ -68,8 +76,10 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     size = int.Parse(lbl.Style[Styles.fontSize].Replace("px", ""));
                 PoppedNo = size;
             }
+
             string caption = e.Params["Caption"].Get<string>();
             lbl.Text = caption;
+
             if (e.Params.Contains("FontSize"))
             {
                 lbl.Style[Styles.fontSize] = e.Params["FontSize"].Get<int>().ToString() + "px";

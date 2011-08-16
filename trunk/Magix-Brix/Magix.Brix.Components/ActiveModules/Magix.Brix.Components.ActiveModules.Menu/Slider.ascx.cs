@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -14,14 +14,23 @@ using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Components.ActiveModules.Menu
 {
+    // TODO: Create a common SlidingMenu which can be shared as both the plugin one
+    // and the admin one ...
+    /**
+     * Level2: Contains the UI for our SlidingMenu module, used in the administrator dashboard. Takes
+     * a recursive 'Items' structure containing 'Caption' and 'Event' which will be raised
+     * when clicked ['Event']
+     */
     [ActiveModule]
-    public class Slider : UserControl, IModule
+    public class Slider : ActiveModule, IModule
     {
         protected SlidingMenu slid;
         protected SlidingMenuLevel root;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -70,9 +79,11 @@ namespace Magix.Brix.Components.ActiveModules.Menu
         {
             SlidingMenuItem item = sender as SlidingMenuItem;
             string eventName = item.Info;
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 eventName);
+
             SlidingMenuItem old = Selector.SelectFirst<SlidingMenuItem>(
                 root,
                 delegate(Control idx)
@@ -83,12 +94,6 @@ namespace Magix.Brix.Components.ActiveModules.Menu
             if (old != null)
                 old.CssClass = old.CssClass.Replace(" selected", "");
             item.CssClass += " selected";
-        }
-
-        private Node DataSource
-        {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
         }
     }
 }

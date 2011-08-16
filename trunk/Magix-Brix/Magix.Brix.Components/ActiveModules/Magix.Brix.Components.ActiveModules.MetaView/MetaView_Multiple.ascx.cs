@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -16,6 +16,16 @@ using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveModules.MetaView
 {
+    /**
+     * Level1: UI parts for showing a MetaView in 'MultiView Mode'. Basically shows a grid, with items
+     * dependent upon the look of the view. This is a Publisher Plugin module. Basically a 
+     * completely 'empty' module whos only purpose is to raise the
+     * 'Magix.MetaType.ShowMetaViewMultipleInCurrentContainer' event, whos default implementation
+     * will simply in its entirety replace this Module, hence not really much to see here.
+     * 
+     * This is the PublisherPlugin you'd use if you'd like to see a 'list of MetaObjects' on 
+     * the page
+     */
     [ActiveModule]
     [PublisherPlugin]
     public class MetaView_Multiple : ActiveModule, IModule
@@ -23,6 +33,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         void IModule.InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
+            // Crap ...
+            // I don't know why ...!
             if (!IsPostBack)
                 Page.LoadComplete +=
                     delegate
@@ -47,6 +60,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                 node);
         }
 
+        /**
+         * Level1: The name of the MetaView to use as the foundation for this form
+         */
         [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.MetaView_Multiple.GetTemplateColumnSelectView")]
         public string ViewName
         {

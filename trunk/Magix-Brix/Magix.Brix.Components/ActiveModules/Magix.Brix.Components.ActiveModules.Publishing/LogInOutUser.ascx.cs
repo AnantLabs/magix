@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -15,6 +15,17 @@ using Magix.Brix.Publishing.Common;
 
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
+    /**
+     * Level1: PublisherPlugin containing most of the UI for allowing a user to login/out
+     * of your website. Can be set into both OpenID mode and 'only native mode' or both.
+     * Raises 'Magix.Publishing.GetStateForLoginControl' to determine the state of the module,
+     * meaning if it should show both OpenID logic and native logic or only one of them.
+     * Will raise 'Magix.Core.UserLoggedOut' if user logs out and 'Magix.Core.LogInUser'
+     * if the user tries to log in. The 'Magix.Core.LogInUser' default implementation again
+     * will raise 'Magix.Core.UserLoggedIn' if it succeeds. It'll pass in 'OpenID' if
+     * user has chosen to log in with OpenID and 'Username'/'Password' if user choses
+     * to login natively
+     */
     [ActiveModule]
     [PublisherPlugin(CanBeEmpty = true)]
     public class LogInOutUser : ActiveModule
@@ -249,6 +260,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             pnl.DefaultWidget = b.ID;
         }
 
+        /**
+         * Level2: Will return false if this webpart can just be 'reused' to the next page
+         */
         [ActiveEvent(Name = "Magix.Publishing.ShouldReloadWebPart")]
         protected void Magix_Publishing_ShouldReloadWebPart(object sender, ActiveEventArgs e)
         {
@@ -259,6 +273,12 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
+        /**
+         * Level1: Which mode you wish to use for your login control. Legal values are
+         * 'OpenID', 'Native' and 'Both'. Signifying the obvious, both being the default
+         * which will allow you to log in either with username/password combination or
+         * an OpenID claim
+         */
         [ModuleSetting(DefaultValue = "Both", ModuleEditorEventName = "Magix.Publishing.GetTemplateColumnSelectTypeOfLoginControl")]
         public string LoginMode
         {
@@ -266,6 +286,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             set { ViewState["LoginMode"] = value; }
         }
 
+        /**
+         * Level3: Implementation of 'Get Select Type Of Login Control' for Magix. Will 
+         * return a Select Lst back to caller
+         */
         [ActiveEvent(Name = "Magix.Publishing.GetTemplateColumnSelectTypeOfLoginControl")]
         protected static void Magix_Publishing_GetTemplateColumnSelectTypeOfLoginControl(object sender, ActiveEventArgs e)
         {

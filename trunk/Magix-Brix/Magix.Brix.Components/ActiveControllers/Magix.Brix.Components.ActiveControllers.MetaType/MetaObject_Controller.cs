@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -927,7 +927,7 @@ have relationships towards other instances in your database.</p>";
             node["ReuseNode"].Value = true;
             node["ID"].Value = t.ID;
             node["MetaViewName"].Value = e.Params["Parameters"]["MetaViewName"].Get<string>();
-            node["PageObjectTemplateID"].Value = e.Params["Parameters"]["PageObjectTemplateID"].Value;
+            node["OriginalWebPartID"].Value = e.Params["Parameters"]["OriginalWebPartID"].Value;
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 3;

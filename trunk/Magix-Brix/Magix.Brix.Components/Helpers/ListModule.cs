@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -615,7 +615,7 @@ namespace Magix.Brix.Components
                     colNode["Value"].Value = idx.Get<string>();
                     colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>();
                     colNode["ID"].Value = node["ID"].Get<int>();
-                    colNode["PageObjectTemplateID"].Value = DataSource["PageObjectTemplateID"].Value;
+                    colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
                     ActiveEvents.Instance.RaiseActiveEvent(
                         this,
                         eventName,

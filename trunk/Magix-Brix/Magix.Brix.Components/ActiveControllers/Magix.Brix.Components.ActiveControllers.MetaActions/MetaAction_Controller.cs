@@ -1,5 +1,5 @@
 ﻿/*
- * Magix - A Modular-based Framework for building Web Applications 
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
@@ -510,7 +510,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 Node tmp = new Node();
 
                 RaiseEvent(
-                    "Magix.Core.GetTreeSelectedID",
+                    "Magix.Core.GetSelectedTreeItem",
                     tmp);
 
                 RaiseEvent(
@@ -626,11 +626,12 @@ Deleting it may break these parts.</p>";
 
             // Checks to see if Item is already being edited ...
             RaiseEvent(
-                "Magix.Core.CheckIfIDIsBeingSingleEdited",
+                "DBAdmin.Form.CheckIfActiveTypeIsBeingSingleEdited",
                 ch);
 
             if (!ch.Contains("Yes"))
             {
+                // Editing it, since it's not being edited from before ...
                 Node node = new Node();
 
                 // First filtering OUT columns ...!
@@ -685,7 +686,7 @@ Deleting it may break these parts.</p>";
             cc["Replace"].Value = " selected-action";
 
             RaiseEvent(
-                "Magix.Core.ChangeCssClassOfModule",
+                "DBAdmin.Form.ChangeCssClassOfModule",
                 cc);
 
             cc = new Node();
@@ -695,7 +696,7 @@ Deleting it may break these parts.</p>";
             cc["CssClass"].Value = " selected-action";
 
             RaiseEvent(
-                "Magix.Core.ChangeCssClassOfModule",
+                "DBAdmin.Form.ChangeCssClassOfModule",
                 cc);
         }
 

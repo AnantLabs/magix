@@ -1,7 +1,7 @@
 ﻿/*
- * MagicBRIX - A Web Application Framework for ASP.NET
+ * Magix - A Web Application Framework for Humans
  * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
- * MagicBRIX is licensed as GPLv3.
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
 using System;
@@ -15,8 +15,13 @@ using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
+    /**
+     * Level2: Shows one tip of today with the option for the User to browse forward or
+     * backward to read more. Raises 'Magix.Core.GetPreviousToolTip' and
+     * 'Magix.Core.GetNextToolTip' to get its next and previous tips
+     */
     [ActiveModule]
-    public class ToolTip : UserControl, IModule
+    public class TipOfToday : UserControl, IModule
     {
         protected Label lbl;
         protected Panel pnl;
@@ -36,11 +41,14 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         protected void previous_Click(object sender, EventArgs e)
         {
             Node node = new Node();
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "Magix.Core.GetPreviousToolTip",
                 node);
+
             SetText(node);
+
             new EffectHighlight(lbl, 500)
                 .Render();
         }
@@ -48,11 +56,14 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         protected void next_Click(object sender, EventArgs e)
         {
             Node node = new Node();
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "Magix.Core.GetNextToolTip",
                 node);
+
             SetText(node);
+
             new EffectHighlight(lbl, 500)
                 .Render();
         }
@@ -62,15 +73,11 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             if (!node.Contains("Text") ||
                 string.IsNullOrEmpty(node["Text"].Get<string>()))
                 throw new ArgumentException("Ooops, empty tooltip ...!");
+
             string str = node["Text"].Get<string>();
             if (!str.Contains("<p"))
                 str = "<p>" + str + "</p>";
             lbl.Text = str;
-        }
-
-        protected void pnl_Click(object sender, EventArgs e)
-        {
-            next.Focus();
         }
     }
 }
