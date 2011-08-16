@@ -18,6 +18,9 @@ using Magix.UX;
 
 namespace Magix.Brix.ApplicationPool
 {
+    /**
+     * Level3: Implements serialization of ViewState into the database on the server side
+     */
     public class Magix_PageStatePersister : PageStatePersister
     {
         private Guid _session;
@@ -42,6 +45,9 @@ namespace Magix.Brix.ApplicationPool
             }
         }
 
+        /**
+         * Level3: Loads Viewstate from database
+         */
         public override void Load()
         {
             IPersistViewState state = Magix.Brix.Data.Adapter.Instance as IPersistViewState;
@@ -52,11 +58,15 @@ namespace Magix.Brix.ApplicationPool
             ControlState = pair.Second;
         }
 
+        /**
+         * Level3: Saves Viewstate to database
+         */
         public override void Save()
         {
             IPersistViewState state = Magix.Brix.Data.Adapter.Instance as IPersistViewState;
             LosFormatter formatter = new LosFormatter();
             StringBuilder builder = new StringBuilder();
+
             using (StringWriter writer = new StringWriter(builder))
             {
                 formatter.Serialize(writer, new Pair(ViewState, ControlState));

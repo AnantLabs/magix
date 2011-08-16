@@ -17,12 +17,19 @@ using System.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+// JavaScript file for supporting finger scrolling on tablets and phones
+// [webkit e.g.]
 [assembly: WebResource("Magix.Brix.Viewports.iscroll.js", "text/javascript")]
 
 namespace Magix.Brix.Viewports
 {
+    /**
+     * Level1: Contains the logic for the main Viewport in Magix. A viewport
+     * can be seen as your 'design' and contains all the different logic
+     * for being able to load and unload modules and such
+     */
     [ActiveModule]
-    public class SingleContainer : UserControl
+    public class SingleContainer : ActiveModule
     {
         protected DynamicPanel content1;
         protected DynamicPanel content2;
@@ -70,6 +77,7 @@ namespace Magix.Brix.Viewports
             if (IsDebug())
             {
                 int idxNo = 0;
+
                 foreach (Tuple<string, Node> idx in DebuggingEvents)
                 {
                     LinkButton b = new LinkButton();
@@ -77,18 +85,20 @@ namespace Magix.Brix.Viewports
                     b.ID = "bb-" + idxNo;
                     b.CssClass = "clear-left span-6";
                     Tuple<string, Node> tmp = idx;
-                    //b.ToolTip = idx.Right == null ? "" : idx.Right.ToJSONString();
+
                     b.Click += delegate(object sender, EventArgs e)
                     {
                         LinkButton b2 = sender as LinkButton;
                         Node node = new Node();
+
                         node["EventName"].Value = tmp.Left;
                         node["EventNode"].Value = tmp.Right;
-                        ActiveEvents.Instance.RaiseActiveEvent(
-                            this,
+
+                        RaiseSafeEvent(
                             "Magix.Core.EventClickedWhileDebugging",
                             node);
                     };
+
                     debug.Controls.Add(b);
                     idxNo += 1;
                 }
@@ -109,6 +119,10 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        /**
+         * Level2: Handled to make sure we log our events int the Debug window
+         * if enabled
+         */
         [ActiveEvent] // Null event handler for logging in debug cases ...
         [DebuggerStepThrough]
         protected void NULLEventHandler(object sender, ActiveEventArgs e)
@@ -160,6 +174,7 @@ namespace Magix.Brix.Viewports
                 IncludeAllCssFiles();
 
             HttpCookie cookie = Request.Cookies["UserID"];
+
             if (cookie == null)
             {
                 // Creating new cookie, with Random GUID inside ...
@@ -169,8 +184,8 @@ namespace Magix.Brix.Viewports
                 Page.Response.Cookies.Add(cookie);
                 Node node = new Node();
                 node["UserID"].Value = cookie.Value;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+
+                RaiseEvent(
                     "Magix.Core.NewUserIDCookieCreated",
                     node);
             }
@@ -181,9 +196,8 @@ namespace Magix.Brix.Viewports
             // ORDER COUNTS!!!
             // In case of exceptions ...
             timer.Enabled = false;
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                timer.Info);
+
+            RaiseSafeEvent(timer.Info);
         }
 
         private void IncludeAllCssFiles()
@@ -257,15 +271,25 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        /**
+         * Level1: Will set the Title element of the page to the given 'Caption'
+         */
         [ActiveEvent(Name = "Magix.Core.SetTitleOfPage")]
         protected void Magix_Core_SetTitleOfPage(object sender, ActiveEventArgs e)
         {
             string caption = e.Params["Caption"].Get<string>();
+
             if (string.IsNullOrEmpty(caption))
                 throw new ArgumentException("Cannot set title to nothing. Try being more creative than such ... ;)");
+
             Page.Title = caption; // TODO: Implement support for changing Browser Title bar during Ajax Callbacks ...
         }
 
+        /**
+         * Level2: Will change th Viewport's settings such as CSS class, margins,
+         * size etc. Legal parameters are 'Width', 'Top', 'MarginBottom',
+         * 'PullTop', 'Height', 'PushLeft', 'PushRight', 'Padding', 'Last' and 'CssClass'
+         */
         [ActiveEvent(Name = "Magix.Core.SetViewPortContainerSettings")]
         protected void Magix_Core_SetViewPortContainerSettings(object sender, ActiveEventArgs e)
         {
@@ -275,9 +299,11 @@ namespace Magix.Brix.Viewports
                 DynamicPanel p = Selector.FindControl<DynamicPanel>(
                     this,
                     e.Params["Container"].Get<string>());
+
                 if (p != null)
                 {
                     p.CssClass = e.Params["CssClass"].Get<string>() + " web-part";
+
                     PutInSpan(e.Params, p, "Width", "span");
                     PutInSpan(e.Params, p, "Top", "down");
                     PutInSpan(e.Params, p, "MarginBottom", "spcBottom");
@@ -286,9 +312,14 @@ namespace Magix.Brix.Viewports
                     PutInSpan(e.Params, p, "PushLeft", "pushLeft");
                     PutInSpan(e.Params, p, "PushRight", "pushRight");
                     PutInSpan(e.Params, p, "Padding", "prepend");
-                    if(e.Params.Contains("Last") &&
+
+                    if (e.Params.Contains("Last") &&
                         e.Params["Last"].Get<bool>())
                         p.CssClass += " last";
+
+                    if (e.Params.Contains("Overflow") &&
+                        e.Params["Overflow"].Get<bool>())
+                        p.CssClass += " overflowized";
                 }
             }
         }
@@ -299,6 +330,10 @@ namespace Magix.Brix.Viewports
                 p.CssClass += " " + cssName + "-" + node[nodeName].Value.ToString();
         }
 
+        /**
+         * Level2: Will return the settings for the Viewport back to caller. 'Width', 
+         * 'Top', 'MarginBotto', 'Last' and so on
+         */
         [ActiveEvent(Name = "Magix.Core.GetViewPortSettings")]
         protected void Magix_Core_GetViewPortSettings(object sender, ActiveEventArgs e)
         {
@@ -308,6 +343,7 @@ namespace Magix.Brix.Viewports
                 DynamicPanel p = Selector.FindControl<DynamicPanel>(
                     this,
                     e.Params["Container"].Get<string>());
+
                 if (p != null)
                 {
                     ExtractSpan(e.Params, p, "Width", "span");
@@ -334,6 +370,8 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        // TODO: Refactor. Useful event, but not working optimally...
+        // Support multiple timers, from different modules, with different event handlers and such
         [ActiveEvent(Name = "Magix.Core.TimeOut")]
         protected void Magix_Core_TimeOut(object sender, ActiveEventArgs e)
         {
@@ -341,6 +379,9 @@ namespace Magix.Brix.Viewports
             timer.Info = e.Params["EventName"].Get<string>();
         }
 
+        /**
+         * Level2: Will add a 'link header element' to your rendered HTML
+         */
         [ActiveEvent(Name = "Magix.Core.AddLinkInHeader")]
         protected void Magix_Core_AddLinkInHeader(object sender, ActiveEventArgs e)
         {
@@ -350,10 +391,14 @@ namespace Magix.Brix.Viewports
                 headerStr += " " + idx.Name + "=\"" + idx.Get<string>() + "\"";
             }
             headerStr += " />";
+
             HeaderElements.Add(headerStr);
             IncludeHeaderFile(headerStr);
         }
 
+        /**
+         * Level1: Injects a CSS file onto the page for inclusion on the client side for you
+         */
         [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]
         protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
         {
@@ -431,6 +476,14 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        /**
+         * Level1: Will show a 'Message Box' with your 'Message', 'Header' for 'Milliseconds'
+         * time period. If 'IsError' is true, it'll be red and contain some 'error logic' within 
+         * it. If 'Delayed' is true, the message will not be shown directly, but in fact
+         * 'postponed' to the next request. Which canbe useful for e.g. Async event handlers, 
+         * needing to tell the user something, or when you're redirecting the user, but need
+         * to explain him why and such
+         */
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
@@ -460,6 +513,7 @@ namespace Magix.Brix.Viewports
                 if (firstMessage)
                 {
                     msgLbl.Text = "";
+
                     new EffectFadeIn(message, 250)
                         .JoinThese(new EffectRollDown())
                         .ChainThese(
@@ -467,7 +521,9 @@ namespace Magix.Brix.Viewports
                             new EffectFadeOut(message, 250)
                                 .JoinThese(new EffectRollUp()))
                         .Render();
+
                     firstMessage = false;
+
                     if (e.Params.Contains("Header"))
                         message.Caption = e.Params["Header"].Get<string>();
                     else
@@ -477,19 +533,29 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        // TODO: Change 'Position' to 'Container'. In general standardize ALL these things ...!
+        /**
+         * Level2: Will clear the incoming 'Position' container for controls, and unload and clean
+         * up everything in regards to any modules within that container
+         */
         [ActiveEvent(Name = "ClearControls")]
         protected void ClearControls(object sender, ActiveEventArgs e)
         {
             string container = e.Params["Position"].Value as string;
+
             if (string.IsNullOrEmpty(container))
                 container = "content1";
+
             if (container.StartsWith("content"))
             {
                 DynamicPanel pnl = 
                     Selector.FindControl<DynamicPanel>(
                     this, 
                     container);
+
                 ClearControls(pnl, true);
+
+                // TODO: Refactor ...
                 if (pnl.ID == "content2")
                 {
                     ClearControls(content3, true);
@@ -524,17 +590,21 @@ namespace Magix.Brix.Viewports
             else if (e.Params["Position"].Get<string>() == "child")
             {
                 DynamicPanel toEmpty = child[0];
+
                 foreach (DynamicPanel idxChild in child)
                 {
                     if (idxChild.Controls.Count > 0)
                         toEmpty = idxChild;
                 }
+
                 (toEmpty.Parent.Parent as Window).CloseWindow();
+
                 ClearControls(toEmpty, true);
             }
             else if (e.Params["Position"].Get<string>() == "fullScreen")
             {
                 ClearControls(fullScreen, true);
+
                 new EffectFadeOut(fullScreen, 500)
                     .Render();
             }
@@ -544,6 +614,7 @@ namespace Magix.Brix.Viewports
         {
             if (clearCss)
                 dynamic.CssClass = "";
+
             foreach (Control idx in dynamic.Controls)
             {
                 ActiveEvents.Instance.RemoveListener(idx);
@@ -551,21 +622,11 @@ namespace Magix.Brix.Viewports
             dynamic.ClearControls();
         }
 
-        [ActiveEvent(Name = "Magix.Core.SetBodyStyles")]
-        private void SetStyles(object sender, ActiveEventArgs e)
-        {
-            string bgcolor = e.Params["BackgroundColor"].Get<string>();
-            string color = e.Params["Color"].Get<string>();
-            if (!string.IsNullOrEmpty(color))
-            {
-                wrp.Style[Styles.color] = color;
-            }
-            if (!string.IsNullOrEmpty(bgcolor))
-            {
-                wrp.Style[Styles.backgroundColor] = bgcolor;
-            }
-        }
-
+        /**
+         * Level2: Will return the number of Active Modules [or controls] a specific
+         * Viewport Container contains. Useful for determining of a specific container
+         * is available or not
+         */
         [ActiveEvent(Name = "Magix.Core.GetNumberOfChildrenOfContainer")]
         protected void Magix_Core_GetNumberOfChildrenOfContainer(object sender, ActiveEventArgs e)
         {
@@ -578,8 +639,12 @@ namespace Magix.Brix.Viewports
             }
         }
 
-        [ActiveEvent(Name = "LoadControl")]
-        protected void LoadControl(object sender, ActiveEventArgs e)
+        // TODO: Refactor. WAY too big ...!
+        /**
+         * Level2: Handled to make it possible to load Active Modules into this Viewport's containers
+         */
+        [ActiveEvent(Name = "Magix.Core.LoadActiveModule")]
+        protected void Magix_Core_LoadActiveModule(object sender, ActiveEventArgs e)
         {
             string cssClass = null;
 
@@ -968,53 +1033,17 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        /**
+         * Allows you to change the 'Ajax Wait Image' for your application. Every time
+         * an Ajax request [something is clicked e.g.] is sent to the server, a Please
+         * Wait "Window" will display an animated image while you're waiting. If you
+         * wish to change this animated Image, you can raise the 'Magix.Core.SetAjaxWaitImage'
+         * event, which will update the image according to the new 'Image' value passed in
+         */
         [ActiveEvent(Name = "Magix.Core.SetAjaxWaitImage")]
         protected void Magix_Core_SetAjaxWaitImage(object sender, ActiveEventArgs e)
         {
             ajaxWait.ImageUrl = e.Params["Image"].Get<string>();
-        }
-
-        [ActiveEvent(Name = "Magix.Core.SetViewPortSize")]
-        protected void Magix_Core_SetViewPortSize(object sender, ActiveEventArgs e)
-        {
-            if (e.Params.Contains("Width"))
-            {
-                if (!e.Params["NoCss"].Get<bool>())
-                {
-                    if (e.Params["CSSWidth"].Value != null)
-                    {
-                        wrp.Style[Styles.width] = e.Params["CSSWidth"].Value.ToString();
-                        wrp.Style[Styles.marginRight] = "auto !important";
-                        wrp.Style[Styles.marginLeft] = "auto !important";
-                    }
-                    else
-                    {
-                        wrp.Style[Styles.width] = e.Params["Width"].Value.ToString();
-                        wrp.Style[Styles.marginRight] = "auto !important";
-                        wrp.Style[Styles.marginLeft] = "auto !important";
-                    }
-                }
-                string contr =
-                    string.Format(@"
-<meta name=""viewport"" content=""width={0}{1}{2}{3}{4}{5}"" />
-<meta name=""apple-mobile-web-app-capable"" content=""yes"" />
-<meta name=""apple-mobile-web-app-status-bar-style"" content=""black"" />
-<link rel=""apple-touch-icon"" href=""./media/images/icon.png"" />",
-                e.Params["Width"].Value.ToString().Replace("px", ""),
-                e.Params["InitialScale"].Value != null 
-                    ? string.Format(", initial-scale={0}", e.Params["InitialScale"].Get<string>()) 
-                    : "",
-                e.Params["InitialScale"].Value == null ? ", user-scalable=no" : "",
-                e.Params["MaxScale"].Value != null ? string.Format(", maximum-scale={0}", e.Params["MaxScale"].Value) : "",
-                e.Params["MinScale"].Value != null ? string.Format(", minimum-scale={0}", e.Params["MinScale"].Value) : "",
-                e.Params["TargetDensity"].Value != null ? string.Format(", target-densitydpi={0}", e.Params["TargetDensity"].Value) : "");
-                LiteralControl lit = new LiteralControl(contr);
-                Page.Header.Controls.Add(lit);
-            }
-            if (e.Params.Contains("Height"))
-            {
-                wrp.Style[Styles.height] = e.Params["Height"].Value.ToString();
-            }
         }
 
         protected void wnd_Closed(object sender, EventArgs e)
@@ -1033,19 +1062,21 @@ namespace Magix.Brix.Viewports
             {
                 Node node = new Node();
                 node["ClientID"].Value = "LastWindow";
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "RefreshWindowContent",
+
+                RaiseSafeEvent(
+                    "Magix.Core.RefreshWindowContent",
                     node);
             }
             else
             {
                 int refreshWindowID = closingWindowID - 1;
+
                 Node node = new Node();
+
                 node["ClientID"].Value = w.ClientID.Replace(w.ID, "wd" + refreshWindowID);
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "RefreshWindowContent",
+
+                RaiseSafeEvent(
+                    "Magix.Core.RefreshWindowContent",
                     node);
             }
         }
@@ -1066,6 +1097,7 @@ namespace Magix.Brix.Viewports
                             module.InitialLoading(nn);
                         }
                     };
+
                 ctrl.Load +=
                     delegate
                     {
