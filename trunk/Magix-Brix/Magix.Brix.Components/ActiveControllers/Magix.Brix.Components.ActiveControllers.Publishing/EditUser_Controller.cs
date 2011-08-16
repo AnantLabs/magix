@@ -465,8 +465,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
          * this one if you wish to change the default image for a new user, which might
          * be useful in e.g. OpenID scenarios and profiling efforts
          */
-        [ActiveEvent(Name = "Magix.Publishing.GetDefaultGravatarURL")]
-        protected void Magix_Publishing_GetDefaultGravatarURL(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.GetDefaultAvatarURL")]
+        protected void Magix_Publishing_GetDefaultAvatarURL(object sender, ActiveEventArgs e)
         {
             e.Params["URL"].Value = "media/images/avatars/marvin-headshot.png";
         }

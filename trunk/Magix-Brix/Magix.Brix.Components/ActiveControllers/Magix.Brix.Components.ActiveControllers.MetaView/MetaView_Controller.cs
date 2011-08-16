@@ -818,7 +818,7 @@ Deleting it may break these parts.</p>";
                         false)))
                 {
                     e.Params["Objects"]["o-" + idxO.ID]["ID"].Value = idxO.ID;
-                    foreach (MetaObject.Value idx in idxO.Values)
+                    foreach (MetaObject.Property idx in idxO.Values)
                     {
                         string propertyName = idx.Name ?? "";
                         if (propertyName.IndexOf(":") != -1)
@@ -827,11 +827,11 @@ Deleting it may break these parts.</p>";
                             propertyName = splits[splits.Length - 1];
                         }
                         if (idxO.Values.Exists(
-                            delegate(MetaObject.Value ixx)
+                            delegate(MetaObject.Property ixx)
                             {
                                 return ixx.Name == propertyName;
                             }))
-                            e.Params["Objects"]["o-" + idxO.ID]["Properties"][propertyName].Value = idx.Val;
+                            e.Params["Objects"]["o-" + idxO.ID]["Properties"][propertyName].Value = idx.Value;
                     }
 
                     // Looping through, 'touching' all the items with no values ...
@@ -839,7 +839,7 @@ Deleting it may break these parts.</p>";
                         delegate(MetaView.MetaViewProperty idxI)
                         {
                             return !idxO.Values.Exists(
-                                delegate(MetaObject.Value idxI2)
+                                delegate(MetaObject.Property idxI2)
                                 {
                                     return idxI2.Name == idxI.Name;
                                 });
@@ -1009,19 +1009,19 @@ Deleting it may break these parts.</p>";
                     using (Transaction tr = Adapter.Instance.BeginTransaction())
                     {
                         MetaObject o = MetaObject.SelectByID(id);
-                        MetaObject.Value val = o.Values.Find(
-                            delegate(MetaObject.Value idxI)
+                        MetaObject.Property val = o.Values.Find(
+                            delegate(MetaObject.Property idxI)
                             {
                                 return idxI.Name == gridPropertyName;
                             });
                         if (val == null)
                         {
-                            val = new MetaObject.Value();
+                            val = new MetaObject.Property();
                             val.Name = gridPropertyName;
                             o.Values.Add(val);
                             o.Save();
                         }
-                        val.Val = ls.SelectedItem.Value;
+                        val.Value = ls.SelectedItem.Value;
                         val.Save();
 
                         tr.Commit();
@@ -1036,14 +1036,14 @@ Deleting it may break these parts.</p>";
             foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
             {
                 ListItem it = new ListItem();
-                MetaObject.Value val = idx.Values.Find(
-                    delegate(MetaObject.Value idxI)
+                MetaObject.Property val = idx.Values.Find(
+                    delegate(MetaObject.Property idxI)
                     {
                         return idxI.Name == propertyName;
                     });
-                it.Text = val.Val;
-                it.Value = val.Val;
-                if (val.Val == node["Value"].Get<string>())
+                it.Text = val.Value;
+                it.Value = val.Value;
+                if (val.Value == node["Value"].Get<string>())
                     it.Selected = true;
                 ls.Items.Add(it);
             }
@@ -1060,8 +1060,8 @@ Deleting it may break these parts.</p>";
 
             MetaObject o = MetaObject.SelectByID(id);
             string propertyName = node["Name"].Get<string>();
-            MetaObject.Value val = o.Values.Find(
-                delegate(MetaObject.Value idx)
+            MetaObject.Property val = o.Values.Find(
+                delegate(MetaObject.Property idx)
                 {
                     return idx.Name == propertyName;
                 });
@@ -1074,9 +1074,9 @@ Deleting it may break these parts.</p>";
             c.ID = "cal" + id;
             c.CssClass += " mux-shaded mux-rounded";
             if (val != null &&
-                !string.IsNullOrEmpty(val.Val))
+                !string.IsNullOrEmpty(val.Value))
             {
-                c.Value = DateTime.ParseExact(val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
+                c.Value = DateTime.ParseExact(val.Value, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
             }
             c.Style[Styles.display] = "none";
             c.Style[Styles.position] = "absolute";
@@ -1095,28 +1095,28 @@ Deleting it may break these parts.</p>";
                     {
                         if (val == null)
                         {
-                            val = new MetaObject.Value();
+                            val = new MetaObject.Property();
                             val.Name = propertyName;
                             o.Values.Add(val);
                             o.Save();
                         }
-                        val.Val = c.Value.ToString("yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
+                        val.Value = c.Value.ToString("yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
 
                         val.Save();
 
                         tr.Commit();
 
                         but.Text = DateTime.ParseExact(
-                            val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
+                            val.Value, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
                             .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
                     }
                 };
 
             but.Text = "???";
             if (val != null &&
-                !string.IsNullOrEmpty(val.Val))
+                !string.IsNullOrEmpty(val.Value))
                 but.Text = DateTime.ParseExact(
-                    val.Val, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
+                    val.Value, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture)
                     .ToString("ddd d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
             but.ID = "but" + id;
             but.Click +=
@@ -1143,8 +1143,8 @@ Deleting it may break these parts.</p>";
             LinkButton b = new LinkButton();
 
             MetaObject o = MetaObject.SelectByID(id);
-            MetaObject.Value val = o.Values.Find(
-                delegate(MetaObject.Value idxI)
+            MetaObject.Property val = o.Values.Find(
+                delegate(MetaObject.Property idxI)
                 {
                     return idxI.Name == gridPropertyName;
                 });
@@ -1154,10 +1154,10 @@ Deleting it may break these parts.</p>";
             {
                 foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
                 {
-                    MetaObject.Value val2 = idx.Values.Find(
-                        delegate(MetaObject.Value idxI)
+                    MetaObject.Property val2 = idx.Values.Find(
+                        delegate(MetaObject.Property idxI)
                         {
-                            return idxI.Name == propertyName && idxI.Val == val.Val;
+                            return idxI.Name == propertyName && idxI.Value == val.Value;
                         });
                     if (val2 != null)
                     {
@@ -1167,19 +1167,19 @@ Deleting it may break these parts.</p>";
                 }
                 if (o4 != null)
                 {
-                    MetaObject.Value propCss = o4.Values.Find(
-                        delegate(MetaObject.Value idxI)
+                    MetaObject.Property propCss = o4.Values.Find(
+                        delegate(MetaObject.Property idxI)
                         {
                             return idxI.Name == propertyCss;
                         });
                     if (propCss != null)
-                        cssClass = propCss.Val;
+                        cssClass = propCss.Value;
                 }
             }
 
             b.Text = "&nbsp;";
             b.CssClass = "multi-choice " + cssClass;
-            string choiceVal = val == null ? "" : val.Val;
+            string choiceVal = val == null ? "" : val.Value;
 
             b.Text = choiceVal;
 
@@ -1195,47 +1195,47 @@ Deleting it may break these parts.</p>";
                             next = idx;
                             break;
                         }
-                        MetaObject.Value val2 = idx.Values.Find(
-                            delegate(MetaObject.Value idxI)
+                        MetaObject.Property val2 = idx.Values.Find(
+                            delegate(MetaObject.Property idxI)
                             {
                                 return idxI.Name == propertyName &&
-                                    choiceVal == idxI.Val;
+                                    choiceVal == idxI.Value;
                             });
-                        if (val2 != null && val2.Val == choiceVal)
+                        if (val2 != null && val2.Value == choiceVal)
                             found = true;
                     }
                     if (next == null)
                         next = MetaObject.SelectFirst(Criteria.Eq("TypeName", type));
                     b.CssClass = "multi-choice " + next.Values.Find(
-                        delegate(MetaObject.Value idxI)
+                        delegate(MetaObject.Property idxI)
                         {
                             return idxI.Name == propertyCss;
-                        }).Val;
+                        }).Value;
                     b.Text = next.Values.Find(
-                        delegate(MetaObject.Value idxI)
+                        delegate(MetaObject.Property idxI)
                         {
                             return idxI.Name == propertyName;
-                        }).Val;
+                        }).Value;
                     using (Transaction tr = Adapter.Instance.BeginTransaction())
                     {
                         MetaObject o2 = MetaObject.SelectByID(id);
-                        MetaObject.Value val3 = o.Values.Find(
-                            delegate(MetaObject.Value idxI)
+                        MetaObject.Property val3 = o.Values.Find(
+                            delegate(MetaObject.Property idxI)
                             {
                                 return idxI.Name == gridPropertyName;
                             });
                         if (val3 == null)
                         {
-                            val3 = new MetaObject.Value();
+                            val3 = new MetaObject.Property();
                             val3.Name = gridPropertyName;
                             o2.Values.Add(val3);
                             o2.Save();
                         }
-                        val3.Val = next.Values.Find(
-                            delegate(MetaObject.Value idxI)
+                        val3.Value = next.Values.Find(
+                            delegate(MetaObject.Property idxI)
                             {
                                 return idxI.Name == propertyName;
-                            }).Val;
+                            }).Value;
                         val3.Save();
 
                         tr.Commit();
@@ -1336,9 +1336,9 @@ Deleting it may break these parts.</p>";
 
                 foreach (Node idx in e.Params["PropertyValues"])
                 {
-                    MetaObject.Value v = new MetaObject.Value();
+                    MetaObject.Property v = new MetaObject.Property();
                     v.Name = idx["Name"].Get<string>();
-                    v.Val = idx["Value"].Get<string>();
+                    v.Value = idx["Value"].Get<string>();
                     t.Values.Add(v);
                 }
 

@@ -11,6 +11,7 @@ using Doxygen.NET;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Globalization;
+using Magix.Brix.Components.ActiveTypes.MetaTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.Documentation
 {
@@ -192,9 +193,21 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                 }
             }
 
+            foreach (Action idx in Action.Select())
+            {
+                PutActionIntoDox(idx, node["Pages"]["Actions"][idx.Name]);
+            }
+
             RaiseEvent(
                 "Magix.PDF.CreatePDF",
                 node);
+        }
+
+        private void PutActionIntoDox(Action cls, Node node)
+        {
+            string description = "<h2>" + cls.Name + "</h2>";
+            description += "<p>" + cls.Description + "</p>";
+            node.Value = description;
         }
 
         private void AddClassToNodeForBookDistroPages(Class cls, Node node)

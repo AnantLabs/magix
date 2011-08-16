@@ -160,9 +160,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 m.TypeName = "[Anonymous-Coward]";
                 m.Reference = e.Name;
 
-                MetaObject.Value val = new MetaObject.Value();
+                MetaObject.Property val = new MetaObject.Property();
                 val.Name = "Default Name";
-                val.Val = "Default Value";
+                val.Value = "Default Value";
                 m.Values.Add(val);
 
                 m.Save();
@@ -282,7 +282,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node["Type"]["Properties"][idx.Name]["TemplateColumnHeaderEvent"].Value = "Magix.MetaType.GetMetaObjectValuesNAMETemplateColumn";
                 node["Type"]["Properties"][idx.Name]["TemplateColumnEvent"].Value = "Magix.MetaType.GetMetaObjectValuesTemplateColumn";
                 node["Type"]["Properties"][idx.Name]["ReadOnly"].Value = false;
-                node["Object"]["Properties"][idx.Name].Value = idx.Val;
+                node["Object"]["Properties"][idx.Name].Value = idx.Value;
             }
 
             node["Width"].Value = 16;
@@ -409,7 +409,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
-                MetaObject.Value v = new MetaObject.Value();
+                MetaObject.Property v = new MetaObject.Property();
                 o.Values.Add(v);
 
                 o.Save();
@@ -599,12 +599,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     using (Transaction tr = Adapter.Instance.BeginTransaction())
                     {
                         MetaObject o = MetaObject.SelectByID(id);
-                        MetaObject.Value va = o.Values.Find(
-                            delegate(MetaObject.Value idxS)
+                        MetaObject.Property va = o.Values.Find(
+                            delegate(MetaObject.Property idxS)
                             {
                                 return idxS.Name == name;
                             });
-                        va.Val = inplace.Text;
+                        va.Value = inplace.Text;
 
                         va.Save();
 
@@ -625,8 +625,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     using (Transaction tr = Adapter.Instance.BeginTransaction())
                     {
                         MetaObject o = MetaObject.SelectByID(id);
-                        MetaObject.Value va = o.Values.Find(
-                            delegate(MetaObject.Value idxS)
+                        MetaObject.Property va = o.Values.Find(
+                            delegate(MetaObject.Property idxS)
                             {
                                 return idxS.Name == name;
                             });
@@ -680,8 +680,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     using (Transaction tr = Adapter.Instance.BeginTransaction())
                     {
                         MetaObject o = MetaObject.SelectByID(id);
-                        MetaObject.Value va = o.Values.Find(
-                            delegate(MetaObject.Value idxS)
+                        MetaObject.Property va = o.Values.Find(
+                            delegate(MetaObject.Property idxS)
                             {
                                 return idxS.Name == name;
                             });
@@ -783,7 +783,7 @@ have relationships towards other instances in your database.</p>";
         [ActiveEvent(Name = "DBAdmin.Common.CreateObjectAsChild")]
         protected void DBAdmin_Common_CreateObjectAsChild(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject.Value).FullName)
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject.Property).FullName)
             {
                 Node node = new Node();
                 node["FullTypeName"].Value = typeof(MetaObject).FullName;
@@ -831,21 +831,21 @@ have relationships towards other instances in your database.</p>";
             {
                 MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
 
-                MetaObject.Value val = o.Values.Find(
-                    delegate(MetaObject.Value idx)
+                MetaObject.Property val = o.Values.Find(
+                    delegate(MetaObject.Property idx)
                     {
                         return idx.Name == e.Params["Name"].Get<string>();
                     });
 
                 if (val == null)
                 {
-                    val = new MetaObject.Value();
+                    val = new MetaObject.Property();
                     val.Name = e.Params["Name"].Get<string>();
                     o.Values.Add(val);
 
                     o.Save();
                 }
-                val.Val = e.Params["Value"].Get<string>();
+                val.Value = e.Params["Value"].Get<string>();
 
                 val.Save();
 
@@ -866,22 +866,22 @@ have relationships towards other instances in your database.</p>";
                 {
                     MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
-                    MetaObject.Value v = t.Values.Find(
-                        delegate(MetaObject.Value idx)
+                    MetaObject.Property v = t.Values.Find(
+                        delegate(MetaObject.Property idx)
                         {
                             return idx.Name == e.Params["PropertyName"].Get<string>();
                         });
                     if (v == null)
                     {
-                        v = new MetaObject.Value();
+                        v = new MetaObject.Property();
                         v.Name = e.Params["PropertyName"].Get<string>();
-                        v.Val = e.Params["NewValue"].Get<string>();
+                        v.Value = e.Params["NewValue"].Get<string>();
                         t.Values.Add(v);
                         t.Save();
                     }
                     else
                     {
-                        v.Val = e.Params["NewValue"].Get<string>();
+                        v.Value = e.Params["NewValue"].Get<string>();
                         v.Save();
                     }
 
@@ -903,9 +903,9 @@ have relationships towards other instances in your database.</p>";
 
             e.Params["Object"]["ID"].Value = t.ID;
 
-            foreach (MetaObject.Value idx in t.Values)
+            foreach (MetaObject.Property idx in t.Values)
             {
-                e.Params["Object"]["Properties"][idx.Name].Value = idx.Val;
+                e.Params["Object"]["Properties"][idx.Name].Value = idx.Value;
             }
         }
 
@@ -1009,22 +1009,22 @@ you'd still like to have this object deleted ...";
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
-                MetaObject.Value val = t.Values.Find(
-                    delegate(MetaObject.Value idx)
+                MetaObject.Property val = t.Values.Find(
+                    delegate(MetaObject.Property idx)
                     {
                         return idx.Name == e.Params["PropertyName"].Get<string>();
                     });
                 if (val == null)
                 {
-                    val = new MetaObject.Value();
+                    val = new MetaObject.Property();
                     val.Name = e.Params["PropertyName"].Get<string>();
-                    val.Val = e.Params["NewValue"].Get<string>();
+                    val.Value = e.Params["NewValue"].Get<string>();
                     t.Values.Add(val);
                     t.Save();
                 }
                 else
                 {
-                    val.Val = e.Params["NewValue"].Get<string>();
+                    val.Value = e.Params["NewValue"].Get<string>();
                     val.Save();
                 }
 
