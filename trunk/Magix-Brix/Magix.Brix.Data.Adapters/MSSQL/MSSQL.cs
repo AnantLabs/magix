@@ -18,9 +18,9 @@ using Magix.Brix.Loader;
 namespace Magix.Brix.Data.Adapters.MSSQL
 {
     /**
-     * Microsoft SQL Server Database Adapter, which probably works with 2005 and any later, for
-     * Magix-Brix. Contains all MS SQL specific logic needed to use Magix-Brix 
-     * together with MS SQL.
+     * Level4: Microsoft SQL Server Database Adapter, which probably works with 2005 and any later, for
+     * Magix-Brix. Contains all MS SQL specific logic needed to use Magix-Brix together with MS SQL.
+     * This is the default Data Adapter in use in Magix
      */
     public class MSSQL : StdSQLDataAdapter, IPersistViewState
     {
@@ -33,6 +33,9 @@ namespace Magix.Brix.Data.Adapters.MSSQL
         private static Dictionary<string, MethodInfo> _setMethods = new Dictionary<string, MethodInfo>();
         private MSTransaction _transaction;
 
+        /**
+         * Level4: Opens a connection to the MS SQL database
+         */
         public override void Open(string connectionString)
         {
             _connection = new SqlConnection(connectionString);
@@ -63,6 +66,9 @@ is *seriously* wrong with your Data Adapter ...!");
             _hasInitialised = true;
         }
 
+        /**
+         * Level4: Will create a new Transaction and return to caller
+         */
         public override Transaction BeginTransaction()
         {
             if (_transaction != null)
@@ -86,6 +92,9 @@ is *seriously* wrong with your Data Adapter ...!");
             return new SqlCommand(sql, _connection, GetTransaction());
         }
 
+        /*
+         * Implementation of Adapter
+         */
         public override int CountWhere(Type type, params Criteria[] args)
         {
             string where = CreateCriteriasForDocument(type, null, args);
@@ -149,6 +158,9 @@ is *seriously* wrong with your Data Adapter ...!");
             _setIdMethods[type.FullName].Invoke(retVal, new object[] { id });
         }
 
+        /*
+         * Implementation of Adapter
+         */
         protected override object SelectObjectByID(Type type, int id)
         {
             // Must "de-reference" PluginLoader first, to make sure we've loaded our types ...
@@ -415,7 +427,10 @@ select Name, Value from {0} where FK_Document={1}",
                 }
             }
         }
-          
+
+        /*
+         * Implementation of Adapter
+         */
         public override object SelectFirst(Type type, string propertyName, params Criteria[] args)
         {
             string where = CreateSelectStatementForDocument(type, propertyName, args);
@@ -430,6 +445,9 @@ select Name, Value from {0} where FK_Document={1}",
             return SelectByID(type, retValID);
         }
 
+        /*
+         * Implementation of Adapter
+         */
         public override IEnumerable<object> Select(Type type, string propertyName, params Criteria[] args)
         {
             string where = CreateSelectStatementForDocument(type, propertyName, args);
@@ -448,6 +466,9 @@ select Name, Value from {0} where FK_Document={1}",
             }
         }
 
+        /*
+         * Implementation of Adapter
+         */
         public override IEnumerable<object> Select()
         {
             SqlCommand cmd = CreateSqlCommand(
@@ -486,6 +507,9 @@ select Name, Value from {0} where FK_Document={1}",
             }
         }
 
+        /*
+         * Implementation of Adapter
+         */
         protected override void DeleteObject(int id)
         {
             DeleteWithTransaction(id);
@@ -532,6 +556,9 @@ select Name, Value from {0} where FK_Document={1}",
             }
         }
 
+        /*
+         * Implementation of Adapter
+         */
         public override void Save(object value)
         {
             TransactionalObject trs = value as TransactionalObject;
@@ -1049,11 +1076,17 @@ select Name, Value from {0} where FK_Document={1}",
             }
         }
 
+        /*
+         * Implementation of Adapter
+         */
         public override void Close()
         {
             _connection.Close();
         }
 
+        /*
+         * Implementation of ViewStateStorage
+         */
         public void Save(string sessionId, string pageUrl, string content)
         {
             // Deleting *OLD* ViewState from table...
@@ -1072,6 +1105,9 @@ select Name, Value from {0} where FK_Document={1}",
             sql.ExecuteNonQuery();
         }
 
+        /*
+         * Implementation of ViewStateStorage
+         */
         public string Load(string sessionId, string pageUrl)
         {
             // Retrieving ViewState
@@ -1083,11 +1119,17 @@ select Name, Value from {0} where FK_Document={1}",
             return retVal;
         }
 
+        /*
+         * Implementation of Adapter
+         */
         public override void ResetTransaction()
         {
             _transaction = null;
         }
 
+        /*
+         * Implementation of Adapter
+         */
         public override string GetConnectionString()
         {
             return _connection.ConnectionString;

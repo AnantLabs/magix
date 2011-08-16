@@ -9,8 +9,9 @@ using System;
 namespace Magix.Brix.Loader
 {
     /**
-     * Mark your Active Modules with this attribute. If you mark your Modules with this attribute
-     * you can load them using the PluginLoader.LoadControl method.
+     * Level3: Mark your Active Modules with this attribute. If you mark your Modules with this attribute
+     * you can load them using the PluginLoader.LoadControl method. This is the main
+     * attribute for being able to create ActiveModules
      */
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class ActiveModuleAttribute : Attribute

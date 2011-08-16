@@ -13,8 +13,9 @@ namespace Magix.Brix.Types
     public delegate IEnumerable FunctorGetItems();
 
     /**
-     * Helper class for Lazy Loading of Child ActiveTypes objects. Basically
-     * just a list generic type, that'll not load objects before needed ...
+     * Level3: Helper class for Lazy Loading of Child ActiveTypes objects. Basically
+     * just a list generic type, that'll not load objects before needed. Useful for
+     * using as properties for list of child objects in your ActiveTypes
      */
     public class LazyList<T> : IList<T>, IList
     {
@@ -22,7 +23,7 @@ namespace Magix.Brix.Types
         private readonly FunctorGetItems _functor;
         private bool _listRetrieved;
 
-        /**
+        /*
          * CTOR taking a delegate to use when items should be fetched
          */
         public LazyList(FunctorGetItems functor)
@@ -30,7 +31,7 @@ namespace Magix.Brix.Types
             _functor = functor;
         }
 
-        /**
+        /*
          * Default empty CTOR
          */
         public LazyList()
@@ -51,15 +52,19 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns true if list is already populated
+         * Level3: Returns true if list is already populated. If the LazyList
+         * is not retrieved, then the child objects in that property won't
+         * be saved when saving the parent object. Which can be very useful
+         * for optimizing your application. Be careful with 'de-referencing'
+         * LazyList properties because of this, unless you really have to
          */
         public bool ListRetrieved
         {
             get { return _listRetrieved; }
         }
 
-        /**
-         * Sorts given a Comparison delegate
+        /*
+         * Sorts given a Comparison delegate. Must implement. Don't like it ...
          */
         public void Sort(Comparison<T> functor)
         {
@@ -68,7 +73,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Traverses the list and returns true if the item you're looking for exists,
+         * Level3: Traverses the list and returns true if the item you're looking for exists,
          * as in the predicate returns true
          */
         public bool Exists(Predicate<T> functor)
@@ -83,7 +88,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Traverses the list and returns the first item matching the predicate
+         * Level3: Traverses the list and returns the first item matching the predicate
          */
         public T Find(Predicate<T> functor)
         {
@@ -96,6 +101,9 @@ namespace Magix.Brix.Types
             return default(T);
         }
 
+        /**
+         * Level3: Traverses the list and returns all items matching the predicate
+         */
         public IEnumerable<T> FindAll(Predicate<T> functor)
         {
             FillList();
@@ -107,7 +115,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Adds a range of new items to the list collection
+         * Level3: Adds a range of new items to the list collection
          */
         public void AddRange(IEnumerable<T> collection)
         {
@@ -116,7 +124,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Removes all items matching the given predicate
+         * Level3: Removes all items matching the given predicate
          */
         public void RemoveAll(Predicate<T> functor)
         {
@@ -135,7 +143,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the index of the given item, if it exists in the list
+         * Level3: Returns the index of the given item, if it exists in the list
          */
         public int IndexOf(T item)
         {
@@ -144,7 +152,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Inserts a new item at the given position
+         * Level3: Inserts a new item at the given position
          */
         public void Insert(int index, T item)
         {
@@ -153,7 +161,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Removes the item at the given index
+         * Level3: Removes the item at the given index
          */
         public void RemoveAt(int index)
         {
@@ -162,7 +170,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Gets or sets the item at the specific index
+         * Level3: Gets or sets the item at the specific index
          */
         public T this[int index]
         {
@@ -179,7 +187,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Appends a new item to the list
+         * Level3: Appends a new item to the list
          */
         public void Add(T item)
         {
@@ -188,7 +196,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Clears the list of all its items
+         * Level3: Clears the list of all its items
          */
         public void Clear()
         {
@@ -197,7 +205,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns true if the specific item exists in the list
+         * Level3: Returns true if the specific item exists in the list
          */
         public bool Contains(T item)
         {
@@ -206,7 +214,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Copies the list to the given array, starting at the given offset
+         * Level4: Copies the list to the given array, starting at the given offset
          */
         public void CopyTo(T[] array, int arrayIndex)
         {
@@ -215,7 +223,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the number of items in our list
+         * Level3: Returns the number of items in our list
          */
         public int Count
         {
@@ -235,7 +243,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Removes the specific item from the list, returns true if an item was removed.
+         * Level3: Removes the specific item from the list, returns true if an item was removed.
          * Returns false if the item doesn't exist in the list
          */
         public bool Remove(T item)

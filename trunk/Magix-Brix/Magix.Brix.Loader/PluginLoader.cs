@@ -19,9 +19,11 @@ using System.Diagnostics;
 namespace Magix.Brix.Loader
 {
     /**
-     * Helps load UserControls embedded in resources. Relies on that Magix.Brix.Loader.AssemblyResourceProvider
+     * Level4: Helps load UserControls embedded in resources. Relies on that Magix.Brix.Loader.AssemblyResourceProvider
      * is registered as a Virtual Path Provider in e.g. your Global.asax file. Use the Instance method
-     * to access the singleton object, then use the LoadControl to load UserControls embedded in resources.
+     * to access the singleton object, then use the LoadControl to load UserControls embedded as resources.
+     * Kind of like the Magix' version of Page.LoadControl. Can be used directly by you, if you really
+     * know what you're doing though. In general, I'd say DON'T ...!!
      */
     public sealed class PluginLoader
     {
@@ -97,7 +99,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Singleton accessor.
+         * Level4: Singleton accessor. Allows access to the 'one and only' PluginLoader
          */
         public static PluginLoader Instance
         {
@@ -126,9 +128,11 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Dynamically load a Control with the given FullName (namespace + type name). This
+         * Level3: Dynamically load a Control with the given FullName (namespace + type name). This
          * is the method which is internally used in Magix-Brix to load UserControls from 
-         * embedded resources and also other controls.
+         * embedded resources and also other controls. Since ActiveEvents might be mapped and
+         * overridden, you actually have no guarantee of that the event you wish to raise
+         * is the one who will become raised
          */
         public Control LoadActiveModule(string fullTypeName)
         {
@@ -143,8 +147,10 @@ namespace Magix.Brix.Loader
 
             // Looking through configuration mappings to see if Module Key is overloaded...
             string mapping = ConfigurationManager.AppSettings["mapping-" + fullTypeName];
+
             if (!string.IsNullOrEmpty(mapping))
                 fullTypeName = mapping;
+
             if (!_loadedPlugins.ContainsKey(fullTypeName))
             {
                 throw new ArgumentException(
@@ -229,13 +235,19 @@ namespace Magix.Brix.Loader
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
-        internal static List<Assembly> PluginAssemblies
+        /**
+         * Level4: Will return all assemblies within your Application Pool, minus 'system assemblies'.
+         * Useful for 'meta stuff'
+         */
+        public static List<Assembly> PluginAssemblies
         {
             get
             {
                 if (_assemblies != null)
                     return _assemblies;
+
                 _assemblies = new List<Assembly>();
+
                 foreach (Assembly idx in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     if (idx.GlobalAssemblyCache)

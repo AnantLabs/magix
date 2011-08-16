@@ -14,7 +14,7 @@ using System.Diagnostics;
 namespace Magix.Brix.Types
 {
     /**
-     * Helper class to pass around data in a "JSON kind of way" without having
+     * Level3: Helper class to pass around data in a "JSON kind of way" without having
      * to convert to JSON strings. Create a new instance, and just start appending
      * items to it like this;
      * <pre>
@@ -22,6 +22,10 @@ namespace Magix.Brix.Types
      *    n["Customer"]["Name"] = "John Doe";
      *    n["Customer"]["Adr"] = "NY";
      * </pre>
+     * This is at the core of Magix, being the 'protocol' we're using to pass
+     * data around within the system. If you don't understand this class, you're
+     * in trouble! Make sure you understand, at least roughly, what this class does
+     * if you'd like to code C# for Magix
      */
     [Serializable]
     public class Node : IList<Node>
@@ -67,24 +71,36 @@ namespace Magix.Brix.Types
             _parent = parent;
         }
 
+        // TODO: Refactor to allow for types to be serialized
+        /**
+         * Level3: Will de-serialize the given JSON string into a Node structure. PS!
+         * Even though Nodes can be serialized to JSON, the type information is lost,
+         * meaning you can not go back again 100% correctly, since you're 'loosing
+         * your types' when converting from Node to JSON. This is on our road map
+         * for fixing, but currently not finished
+         */
         [DebuggerStepThrough]
         public static Node FromJSONString(string json)
         {
             List<string> tokens = ExtractTokens(json);
+
             if (tokens.Count == 0)
                 throw new ArgumentException("JSON string was empty");
+
             if (tokens[0] != "{")
                 throw new ArgumentException("JSON string wasn't an object, missing opening token at character 0");
+
             int idxToken = 1;
             Node retVal = new Node();
+
             while (tokens[idxToken] != "}")
             {
                 ParseToken(tokens, ref idxToken, retVal);
             }
+
             return retVal;
         }
 
-        [DebuggerStepThrough]
         private static void ParseToken(IList<string> tokens, ref int idxToken, Node node)
         {
             if (tokens[idxToken] == "{")
@@ -172,7 +188,10 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the Parent node of the current node in the hierarchy
+         * Level3: Returns the Parent node of the current node in the hierarchy. Normally
+         * you'd never need to know the 'Parent' of a node, due to the intrinsic
+         * logic of Magix, so be careful. If you're using this method, you're probably
+         * doing something wrong on an architectural level. Be warned ...
          */
         public Node Parent
         {
@@ -181,29 +200,32 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the name of the node
+         * Level3: Returns the name of the node
          */
         public string Name
         {
             [DebuggerStepThrough]
             get { return _name; }
+
             [DebuggerStepThrough]
             set { _name = value; }
         }
 
         /**
-         * Returns the value of the object
+         * Level3: Returns the value of the object
          */
         public object Value
         {
             [DebuggerStepThrough]
             get { return _value; }
+
             [DebuggerStepThrough]
             set { _value = value; }
         }
 
         /**
-         * Returns the value of the object to type of T
+         * Level3: Returns the value of the object to type of T. Will try to cast and
+         * throw exception if unsuccessful
          */
         [DebuggerStepThrough]
         public T Get<T>()
@@ -212,39 +234,38 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the value of the object to type of T, and if
-         * object cannot for some reason be converted will return 
-         * the "default" value...
+         * Level3: Returns the value of the object to type of T, and if
+         * object is null it will return 
+         * the "default" value. Be careful, might throw if type is wrong
          */
         [DebuggerStepThrough]
         public T Get<T>(T defaultValue)
         {
             if (_value == null)
                 return defaultValue;
-            return (T)_value;
-        }
 
-        [DebuggerStepThrough]
-        public T Get<T>(T defaultValue, bool force)
-        {
-            if (string.IsNullOrEmpty(_value as string))
-                return defaultValue;
             return (T)_value;
         }
 
         /**
-         * Returns the first node that matches the given Predicate
+         * Level3: Returns the first node that matches the given Predicate. Will
+         * search recursively. Be creful here, if you're dereferncing nodes that
+         * don't exist inside your function, you might very well never return
+         * from this method ... ;)
          */
         [DebuggerStepThrough]
         public Node Find(Predicate<Node> functor)
         {
             if (functor(this))
                 return this;
+
             foreach (Node idx in this)
             {
                 if (functor(idx))
                     return idx;
+
                 Node tmp = idx.Find(functor);
+
                 if (tmp != null)
                     return tmp;
             }
@@ -252,7 +273,8 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns true if node exists in children collection
+         * Level3: Returns true if node exists as a direct child only, and not search
+         * recursive
          */
         [DebuggerStepThrough]
         public bool Exists(Predicate<Node> functor)
@@ -261,20 +283,27 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns true if node exists in children collection
+         * Level3: Returns true if node exists anywhere as a child or child of child
          */
         [DebuggerStepThrough]
-        public bool Exists(Predicate<Node> functor, bool flat)
+        public bool ExistsDeep(Predicate<Node> functor)
         {
-            if (!flat && functor(this))
-                return true;
+            return Exists(functor, true);
+        }
+
+        [DebuggerStepThrough]
+        private bool Exists(Predicate<Node> functor, bool flat)
+        {
             foreach (Node idx in this._children)
             {
                 if (functor(idx))
                     return true;
+
                 if (flat)
-                    continue;
+                    continue; // Don't traverse children if not supposed to
+
                 bool tmp = idx.Exists(functor, flat);
+
                 if (tmp)
                     return true;
             }
@@ -282,8 +311,8 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Will "disconnect" the node from its parent node. Useful for parsing subtrees
-         * where you're dependant upon the DNA code or something...
+         * Level3: Will "disconnect" the node from its parent node. Ueful
+         * for removing nodes and trees out of Node structures
          */
         [DebuggerStepThrough]
         public Node UnTie()
@@ -294,9 +323,10 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Returns the node with the given Name. If that node doesn't exist
+         * Level3: Returns the node with the given Name. If that node doesn't exist
          * a new node will be created with the given name and appended into the
-         * Children collection and then be returned.
+         * Children collection and then be returned. Please notice that this
+         * method CREATES NODES during DE-REFERENCING. And it is its INTENT TOO! ;)
          */
         public Node this[string name]
         {
@@ -333,28 +363,19 @@ namespace Magix.Brix.Types
             }
         }
 
-        public Node this[string name, bool forceCreation]
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (forceCreation)
-                    return this[name];
-                Node retVal = _children.Find(
-                    delegate(Node idx)
-                    {
-                        return idx.Name == name;
-                    });
-                return retVal;
-            }
-        }
-
+        /**
+         * Level3: Returns the index of the given item, if it exists within the children
+         * collection. Otherwise it returns -1
+         */
         [DebuggerStepThrough]
         public int IndexOf(Node item)
         {
             return _children.IndexOf(item);
         }
 
+        /**
+         * Level3: Inserts a new item into the children collection
+         */
         [DebuggerStepThrough]
         public void Insert(int index, Node item)
         {
@@ -362,6 +383,9 @@ namespace Magix.Brix.Types
             item._parent = this;
         }
 
+        /**
+         * Level3: Removes node at given index
+         */
         [DebuggerStepThrough]
         public void RemoveAt(int index)
         {
@@ -369,6 +393,9 @@ namespace Magix.Brix.Types
             _children.RemoveAt(index);
         }
 
+        /**
+         * Level3: Returns the n'th node
+         */
         public Node this[int index]
         {
             [DebuggerStepThrough]
@@ -384,6 +411,9 @@ namespace Magix.Brix.Types
             }
         }
 
+        /**
+         * Level3: Adds a new node to the collection
+         */
         [DebuggerStepThrough]
         public void Add(Node item)
         {
@@ -400,6 +430,9 @@ namespace Magix.Brix.Types
             item._parent = this;
         }
 
+        /**
+         * Level3: Adds a range of nodes to collection
+         */
         [DebuggerStepThrough]
         public void AddRange(IEnumerable<Node> items)
         {
@@ -409,6 +442,9 @@ namespace Magix.Brix.Types
             }
         }
 
+        /**
+         * Level3: Entirely empties the collection
+         */
         [DebuggerStepThrough]
         public void Clear()
         {
@@ -419,12 +455,18 @@ namespace Magix.Brix.Types
             _children.Clear();
         }
 
+        /**
+         * Level3: Returns true if node exists within child collection [flat]
+         */
         [DebuggerStepThrough]
         public bool Contains(Node item)
         {
             return _children.Contains(item);
         }
 
+        /**
+         * Level3: Returns true if node exists within child collection [flat]
+         */
         [DebuggerStepThrough]
         public bool Contains(string itemName)
         {
@@ -445,6 +487,9 @@ namespace Magix.Brix.Types
             _children.CopyTo(array, arrayIndex);
         }
 
+        /**
+         * Level3: Returns the number of items in the children collection
+         */
         public int Count
         {
             [DebuggerStepThrough]
@@ -457,15 +502,23 @@ namespace Magix.Brix.Types
             get { return false; }
         }
 
+        /**
+         * Level3: Removes the given node from the child collection
+         */
         [DebuggerStepThrough]
         public bool Remove(Node item)
         {
             bool retVal = _children.Remove(item);
+
             if (retVal)
                 item._parent = null;
+
             return retVal;
         }
 
+        /**
+         * Level3: Supports enumerating items
+         */
         [DebuggerStepThrough]
         public IEnumerator<Node> GetEnumerator()
         {
@@ -478,24 +531,39 @@ namespace Magix.Brix.Types
             return _children.GetEnumerator();
         }
 
+        /**
+         * Level4: Will return name/value and number of children as a string
+         */
         [DebuggerStepThrough]
         public override string ToString()
         {
             string retVal = "";
             retVal += _name;
+
             if (_value != null)
                 retVal += ":" + _value;
+
             if (_children != null)
                 retVal += ":" + _children.Count;
+
             return retVal;
         }
 
+        // TODO: Preserve type information
+        /**
+         * Level3: Will translate the Node structure to a JSON string. Useful
+         * for passing stuff around to other systems, and integrating with client-side
+         * etc. Be warned! No TYPE information is being passed, so you cannot build
+         * the same Node structure by reversing the method and call FromJSON after
+         * creating JSON out of your node
+         */
         [DebuggerStepThrough]
         public string ToJSONString()
         {
             StringBuilder builder = new StringBuilder();
             builder.Append("{");
             bool hasChild = false;
+
             if(!string.IsNullOrEmpty(Name))
             {
                 builder.AppendFormat(@"""Name"":""{0}""", Name);
@@ -511,9 +579,11 @@ namespace Magix.Brix.Types
                     case "System.String":
                         value = Value.ToString().Replace("\"", "\\\"");
                         break;
+
                     case "System.DateTime":
                         value = ((DateTime)Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
                         break;
+
                     default:
                         value = Value.ToString();
                         break;
@@ -527,6 +597,7 @@ namespace Magix.Brix.Types
                     builder.Append(",");
                 builder.Append(@"""Children"":[");
                 bool first = true;
+
                 foreach(Node idx in _children)
                 {
                     if (!first)
@@ -540,6 +611,9 @@ namespace Magix.Brix.Types
             return builder.ToString();
         }
 
+        /**
+         * Level3: Will sort the nodes according to your given comparison delegate
+         */
         [DebuggerStepThrough]
         public void Sort(Comparison<Node> del)
         {

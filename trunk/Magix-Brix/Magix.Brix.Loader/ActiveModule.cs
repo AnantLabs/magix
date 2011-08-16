@@ -13,8 +13,9 @@ using System.Diagnostics;
 namespace Magix.Brix.Loader
 {
     /**
-     * Helper class for simplifying some of the common tasks you'd normally
-     * want to use from your Modules, such as RaisingEvents etc.
+     * Level3: Helper class for simplifying some of the common tasks you'd normally
+     * want to use from your Modules, such as RaisingEvents etc. Inherit your ActiveModules
+     * from this class to simplify their usage
      */
     public abstract class ActiveModule : UserControl, IModule
     {
@@ -28,7 +29,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * The Node passed into InitialLoading will automatically be stored here ...
+         * Level3: The Node passed into InitialLoading will automatically be stored here ...
          */
         protected Node DataSource
         {
@@ -37,7 +38,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Shorthand for raising events. Will return a node, initially created empty, 
+         * Level3: Shorthand for raising events. Will return a node, initially created empty, 
          * but passed onto the Event Handler(s)
          */
         protected Node RaiseEvent(string eventName)
@@ -51,7 +52,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Shorthand for raising events.
+         * Level3: Shorthand for raising events
          */
         protected void RaiseEvent(string eventName, Node node)
         {
@@ -62,8 +63,9 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Shorthand for raising events. Will return a node, initially created empty, 
-         * but passed onto the Event Handler(s)
+         * Level3: Shorthand for raising events. Will return a node, initially created empty, 
+         * but passed onto the Event Handler(s). This method will trap any exceptions occuring,
+         * and show a message box back to the end user with its exception content, if any
          */
         [DebuggerStepThrough]
         public Node RaiseSafeEvent(string eventName)
@@ -74,7 +76,9 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Shorthand for raising events.
+         * Level3: Shorthand for raising events. Will return a node, initially created empty, 
+         * but passed onto the Event Handler(s). This method will trap any exceptions occuring,
+         * and show a message box back to the end user with its exception content, if any
          */
         [DebuggerStepThrough]
         protected bool RaiseSafeEvent(string eventName, Node node)
@@ -90,6 +94,7 @@ namespace Magix.Brix.Loader
             catch (Exception err)
             {
                 Exception tmp = err;
+
                 while (tmp.InnerException != null)
                     tmp = tmp.InnerException;
 
@@ -102,26 +107,28 @@ namespace Magix.Brix.Loader
                 RaiseEvent(
                     "Magix.Core.ShowMessage",
                     m);
-                return false;
             }
+            return false;
         }
 
         /**
-         * Will include the given CSS file onto the page.
+         * Level3: Will include the given CSS file onto the page. Useful for injecting your
+         * own CSS files onto the page
          */
         protected void IncludeCssFile(string file)
         {
             Node node = new Node();
             node["CSSFile"].Value = file;
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "Magix.Core.AddCustomCssFile",
                 node);
         }
 
         /**
-         * Will return the 'base' URL of your application.
+         * Level3: Will return the 'base' URL of your application. Meaning if your application
+         * is installed on x.com/f then x.com/f will always be returned from this method.
+         * Useful for using as foundation for finding specific files and so on
          */
         protected string GetApplicationBaseUrl()
         {

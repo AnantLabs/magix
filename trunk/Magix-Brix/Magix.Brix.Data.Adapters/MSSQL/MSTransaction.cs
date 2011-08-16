@@ -18,6 +18,9 @@ using System.Data;
 
 namespace Magix.Brix.Data.Adapters.MSSQL
 {
+    /**
+     * Level4: Implementation of Transaction class for MS SQL Data Adapter
+     */
     public class MSTransaction : Transaction
     {
         SqlTransaction _trans;
@@ -28,6 +31,9 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             _trans = connection.BeginTransaction();
         }
 
+        /*
+         * Rolls back all changes
+         */
         protected override void Rollback()
         {
             base.Rollback();
@@ -35,6 +41,9 @@ namespace Magix.Brix.Data.Adapters.MSSQL
             _trans = null;
         }
 
+        /*
+         * Commits all changes to the database
+         */
         public override void Commit()
         {
             _trans.Commit();
