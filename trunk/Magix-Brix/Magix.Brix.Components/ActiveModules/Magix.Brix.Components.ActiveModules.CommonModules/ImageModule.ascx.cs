@@ -24,7 +24,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
      * If 'Events/Click' is given, it'll raise that event upon clicking the image
      */
     [ActiveModule]
-    public class ImageModule : ActiveModule, IModule
+    public class ImageModule : ActiveModule
     {
         protected Image img;
         protected Label lbl;

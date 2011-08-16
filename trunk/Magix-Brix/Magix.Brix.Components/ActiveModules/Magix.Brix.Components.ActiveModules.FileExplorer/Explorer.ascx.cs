@@ -32,7 +32,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
      * The module supports browsing hierarchical folder structures
      */
     [ActiveModule]
-    public class Explorer : ActiveModule, IModule
+    public class Explorer : ActiveModule
     {
         protected Panel pnl;
         protected Panel prop;

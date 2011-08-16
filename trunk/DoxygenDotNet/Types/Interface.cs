@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: Encapsulates an interface documentation item
+     */
     public class Interface : Class
     {
         public override string Kind

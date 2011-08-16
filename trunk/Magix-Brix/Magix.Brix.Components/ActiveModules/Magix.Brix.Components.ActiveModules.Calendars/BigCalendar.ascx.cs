@@ -18,6 +18,7 @@ using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveModules.Calendars
 {
+    // TODO: Document ... [WITH level ...]
     [ActiveModule]
     public class BigCalendar : UserControl, IModule
     {

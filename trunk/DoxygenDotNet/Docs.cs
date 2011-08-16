@@ -17,16 +17,41 @@ using System.Xml;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: Encapsulates the 'entry point' if you wish to Doxygen.NET. Use by
+     * instantiating a new Docs item, passing in a folder to the place on the disc
+     * where the documentation is, and start traversing your namespaces
+     */
     public class Docs
     {
         private XmlDocument _indexXmlDoc;
 
+        /**
+         * Level3: A list of all the XML files used in this Docs instance
+         */
         public List<FileInfo> XmlFiles { get; set; }
+
+        /**
+         * Level3: All directories used in this instance
+         */
         public DirectoryInfo XmlDirectory { get; protected set; }
+
+        /**
+         * Level3: List of all namespace, flat, in this instance
+         */
         public List<Namespace> Namespaces { get; protected set; }
 
+        /**
+         * Level3: If yes, will instantly start parsing as instance is created
+         */
         public bool EagerParsing { get; set; }
 
+        /**
+         * Level3: Will only return namespaces containing classes, having 'Levelx'
+         * within their description parts. This is done to filter documentation
+         * according to 'difficulty level' all the way from 'For Dummies' to 
+         * 'Guru'
+         */
         public IEnumerable<Namespace> GetNamespaces(int level)
         {
             // Since namespaces cannot be documented [bug in Doxygen], we'll have to look for the
@@ -69,7 +94,14 @@ namespace Doxygen.NET
             }
             return false;
         }
-                
+
+        /**
+         * Level3: Main CTOR. Will instantiate a new Docs instance and parse the
+         * given Doxygen folder for doxygen files, and build a hierarchy of classes, namespaces
+         * and such for your usage. PS! Yes, this does take insane amounts of memory. Please
+         * do NOT use this module at all unless you need it. Look for memory bottlenecks
+         * and such if in doubt
+         */
         public Docs(string doxygenXmlOuputDirectoryPath)
         {
             if (!Directory.Exists(doxygenXmlOuputDirectoryPath))
@@ -90,11 +122,17 @@ namespace Doxygen.NET
             LoadNamespaces();
         }
 
+        /**
+         * Level3: Returns the given Namespace instance
+         */
         public Namespace GetNamespaceByName(string namespaceName)
         {
             return Namespaces.Find(delegate(Namespace n) { return n.FullName == namespaceName; });
         }
 
+        /**
+         * Level3: Returns the given type
+         */
         public Type GetTypeByName(string typeFullName)
         {
             string namespaceName = typeFullName.Remove(typeFullName.LastIndexOf("."));
@@ -109,6 +147,9 @@ namespace Doxygen.NET
             return null;
         }
 
+        /**
+         * Level3: Returns the given type by id
+         */
         public Type GetTypeByID(string id)
         {
             foreach (Namespace nspace in Namespaces)
@@ -120,6 +161,11 @@ namespace Doxygen.NET
             return null;
         }
 
+        // TODO: Implement yield return here one of these days. Bad bizniss to build up such
+        // a huge list ...!
+        /**
+         * Level3: Returns all classes in a list
+         */
         public List<Class> GetAllClasses()
         {
             List<Class> classes = new List<Class>();
@@ -133,7 +179,7 @@ namespace Doxygen.NET
             return classes;
         }
 
-        public void LoadNamespaces()
+        private void LoadNamespaces()
         {
             Namespaces = new List<Namespace>();
             XmlNodeList namespaceXmlNodes = _indexXmlDoc.SelectNodes("/doxygenindex/compound[@kind=\"namespace\"]");
@@ -152,7 +198,7 @@ namespace Doxygen.NET
             }
         }
 
-        public void LoadTypes(Namespace nspace, bool forceReload)
+        private void LoadTypes(Namespace nspace, bool forceReload)
         {
             if (!forceReload && nspace.Types.Count > 0)
                 return;
@@ -183,7 +229,7 @@ namespace Doxygen.NET
             }
         }
         
-        public void LoadTypesMembers(Type t, bool forceReload)
+        private void LoadTypesMembers(Type t, bool forceReload)
         {
             if (!forceReload && t.Members.Count > 0)
                 return;

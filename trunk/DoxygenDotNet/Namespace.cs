@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: Encapsulates a C# namespace within our documentation system
+     */
     public class Namespace : IDocItem
     {
         #region IDocItem Members
@@ -36,13 +39,23 @@ namespace Doxygen.NET
             Types = new List<Type>();
         }
 
+        /**
+         * Level3: All the types within this namespace. Interfaces, classes etc
+         */
         public List<Type> Types { get; protected internal set; }
 
+        /**
+         * Level3: All the classes in the namespace
+         */
         public List<Type> Classes
         {
             get { return Types.FindAll(FindByKind("class")); }
         }
 
+        /**
+         * Level3: Will return all classes with a documentation level 
+         * [level1, level2 etc] above or equal to the given level parameter
+         */
         public IEnumerable<Type> GetClasses(int level)
         {
             foreach (Type idx in Types.FindAll(FindByKind("class")))
@@ -75,16 +88,25 @@ namespace Doxygen.NET
             }
         }
 
+        /**
+         * Level3: Returns all value types in our documentation
+         */
         public List<Type> Structs
         {
             get { return Types.FindAll(FindByKind("struct")); }
         }
 
+        /**
+         * Level3: Returns all enums in our documentation
+         */
         public List<Type> Enums
         {
             get { return Types.FindAll(FindByKind("enum")); }
         }
 
+        /**
+         * Level3: Returns all delegates in our documentation
+         */
         public List<Type> Delegates
         {
             get { return Types.FindAll(FindByKind("delegate")); }

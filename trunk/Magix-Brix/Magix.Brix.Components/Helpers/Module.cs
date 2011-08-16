@@ -14,7 +14,11 @@ using System.Diagnostics;
 
 namespace Magix.Brix.Components
 {
-    public abstract class Module : ActiveModule, IModule
+    /**
+     * Level4: Baseclass for the 'Edit Objects' parts of the Grid system in Magix. Not meant
+     * for directly consuming through this class
+     */
+    public abstract class Module : ActiveModule
     {
         protected abstract void ReDataBind();
 
@@ -32,6 +36,10 @@ namespace Magix.Brix.Components
             return false;
         }
 
+        /**
+         * Level4: Handled to make sure we update ours too, since object might be changed
+         * some of its properties
+         */
         [ActiveEvent(Name = "Magix.Core.UpdateGrids")]
         protected void Magix_Core_UpdateGrids(object sender, ActiveEventArgs e)
         {
@@ -41,6 +49,9 @@ namespace Magix.Brix.Components
             }
         }
 
+        /**
+         * Level4: Checking to see if it may be us, and if so, re-databind
+         */
         [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
         protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
         {
@@ -50,6 +61,9 @@ namespace Magix.Brix.Components
             }
         }
 
+        /**
+         * Level4: Handled to make sure we re-databind at the right spots
+         */
         [ActiveEvent(Name = "RefreshWindowContent")]
         protected virtual void RefreshWindowContent(object sender, ActiveEventArgs e)
         {
@@ -59,6 +73,7 @@ namespace Magix.Brix.Components
             }
             else
             {
+                // TODO: OMG, I hate these parts ... :(
                 if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
                 {
                     ReDataBind();

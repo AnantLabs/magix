@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: A method type of member. Belongs to a class yes
+     */
     public class Method : Member
     {
         public override string Kind
@@ -22,6 +25,9 @@ namespace Doxygen.NET
             get { return "function"; }
         }
 
+        /**
+         * Level3: Its parameters
+         */
         public List<Parameter> Parameters { get; protected internal set; }
 
         public Method()

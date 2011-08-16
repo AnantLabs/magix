@@ -17,15 +17,25 @@ using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components
 {
+    /**
+     * Level4: Implements most of the logic for our DBAdmin module and basically
+     * every single Grid we have in Magix. This class is the foundation for probably
+     * most Magix screens you've ever seen, since every Grid within the system, virtually,
+     * is built using this class. Have so many bells and whistles, it could probably need
+     * its own book, not to mention some serious refactoring. Till at least the refactoring
+     * parts are over, I think I'll resist the temptation of going 'over the board' in 
+     * documenting this, since first of all everything will change later, and you shouldn't
+     * fiddle too much directly with this bugger yourself. There's also PLENTY code samples
+     * around ANYWHERE in magix of usage of this class, so have fun :)
+     */
     public abstract class ListModule : Module
     {
-        protected abstract Control TableParent { get; }
-        protected abstract void DataBindDone();
         private LinkButton rc;
 
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -38,6 +48,16 @@ namespace Magix.Brix.Components
             base.OnInit(e);
             EnsureChildControls();
         }
+
+        /**
+         * Level4: The control being our 'table element'
+         */
+        protected abstract Control TableParent { get; }
+
+        /**
+         * Level4: Called when databinding are done
+         */
+        protected abstract void DataBindDone();
 
         protected override void CreateChildControls()
         {
@@ -358,6 +378,9 @@ namespace Magix.Brix.Components
             set { ViewState["SelectedID"] = value; }
         }
 
+        /**
+         * Level4: Will 'page' back to 'start' [whatever that is]
+         */
         [ActiveEvent(Name = "Magix.Core.SetGridPageStart")]
         public void Magix_Core_SetGridPageStart(object sender, ActiveEventArgs e)
         {
@@ -369,6 +392,9 @@ namespace Magix.Brix.Components
             }
         }
 
+        /**
+         * Level4: Will set the Active Row of the grid, if the 'FullTypeName' is correct
+         */
         [ActiveEvent(Name = "DBAdmin.Grid.SetActiveRow")]
         public void DBAdmin_Grid_SetActiveRow(object sender, ActiveEventArgs e)
         {
@@ -409,6 +435,7 @@ namespace Magix.Brix.Components
             row.Tag = "tr";
             if (node["ID"].Get<int>() == SelectedID)
                 row.CssClass = "grid-selected";
+
             row.Info = node["ID"].Get<int>().ToString();
 
             if (DataSource["IsSelect"].Get<bool>())
@@ -421,12 +448,15 @@ namespace Magix.Brix.Components
                     delegate(object sender, EventArgs e)
                     {
                         LinkButton b2 = sender as LinkButton;
+
                         Node n = new Node();
+
                         n["ID"].Value = int.Parse((b2.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                         n["ParentID"].Value = DataSource["ParentID"].Value;
                         n["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
                         n["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+
                         if (DataSource["IsList"].Get<bool>())
                         {
                             RaiseSafeEvent(
@@ -452,6 +482,7 @@ namespace Magix.Brix.Components
             {
                 Label li = new Label();
                 li.Tag = "td";
+
                 if (DataSource.Contains("IdColumnNotClickable") &&
                     DataSource["IdColumnNotClickable"].Get<bool>())
                 {
@@ -462,6 +493,7 @@ namespace Magix.Brix.Components
                 else
                 {
                     LinkButton lb = new LinkButton();
+
                     if (DataSource.Contains("IDColumnValue"))
                     {
                         lb.Text = DataSource["IDColumnValue"].Get<string>();
@@ -470,6 +502,7 @@ namespace Magix.Brix.Components
                     {
                         lb.Text = node["ID"].Value.ToString();
                     }
+
                     lb.Click +=
                         delegate(object sender, EventArgs e)
                         {
@@ -491,14 +524,17 @@ namespace Magix.Brix.Components
                                 }
                             }
                             SelectedID = id;
+
                             n["ID"].Value = id;
                             n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                             n["DataSource"] = DataSource;
+
                             RaiseSafeEvent(
                                 DataSource.Contains("IDColumnEvent") ?
                                     DataSource["IDColumnEvent"].Get<string>() :
                                     "DBAdmin.Form.ViewComplexObject",
                                 n);
+
                             n["DataSource"].UnTie();
                         };
                     li.Controls.Add(lb);
@@ -532,6 +568,7 @@ namespace Magix.Brix.Components
                             }
                         }
                         SelectedID = id;
+
                         n["ID"].Value = int.Parse((b2.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                         n["ParentID"].Value = DataSource["ParentID"].Value;
@@ -579,8 +616,10 @@ namespace Magix.Brix.Components
                             }
                         }
                         SelectedID = id;
+
                         n["ID"].Value = int.Parse((b.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
                         if (RaiseSafeEvent(
                             DataSource.Contains("DeleteColumnEvent") ? 
                                 DataSource["DeleteColumnEvent"].Get<string>() : 
@@ -616,11 +655,13 @@ namespace Magix.Brix.Components
                     colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>();
                     colNode["ID"].Value = node["ID"].Get<int>();
                     colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
+
+                    RaiseSafeEvent(
                         eventName,
                         colNode);
-                    l.Controls.Add(colNode["Control"].Get<Control>());
+
+                    if (colNode.Contains("Control"))
+                        l.Controls.Add(colNode["Control"].Get<Control>());
                 }
                 else if (DataSource["Type"]["Properties"][idx.Name]["IsComplex"].Get<bool>())
                 {
@@ -636,10 +677,12 @@ namespace Magix.Brix.Components
                     {
                         LinkButton btn = new LinkButton();
                         btn.Text = idx.Get<string>();
+
                         if (DataSource["Type"]["Properties"][idx.Name]["BelongsTo"].Get<bool>())
                             btn.CssClass = "belongsTo";
                         btn.Info
                             = DataSource["Type"]["Properties"][idx.Name]["IsList"].Get<bool>().ToString();
+
                         btn.Click +=
                             delegate(object sender, EventArgs e)
                             {
@@ -661,11 +704,14 @@ namespace Magix.Brix.Components
                                 }
                                 SelectedID = id;
                                 string column = (ed.Parent as Label).Info;
+
                                 Node n = new Node();
+
                                 n["ID"].Value = id;
                                 n["PropertyName"].Value = column;
                                 n["IsList"].Value = bool.Parse(ed.Info);
                                 n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
                                 RaiseSafeEvent(
                                     "DBAdmin.Form.ViewListOrComplexPropertyValue",
                                     n);
@@ -704,6 +750,7 @@ namespace Magix.Brix.Components
                     {
                         TextAreaEdit edit = new TextAreaEdit();
                         edit.ToolTip = idx.Get<string>();
+
                         if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
                         {
                             int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();
@@ -711,6 +758,7 @@ namespace Magix.Brix.Components
                         }
                         else
                             edit.TextLength = 20;
+
                         edit.DisplayTextBox +=
                             delegate(object sender, EventArgs e)
                             {
@@ -743,11 +791,13 @@ namespace Magix.Brix.Components
                                 n["PropertyName"].Value = column;
                                 n["NewValue"].Value = ed.Text;
                                 n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
                                 RaiseSafeEvent(
                                     DataSource.Contains("ChangeSimplePropertyValue") ?
                                         DataSource["ChangeSimplePropertyValue"].Get<string>() :
                                         "DBAdmin.Data.ChangeSimplePropertyValue",
                                     n);
+
                             };
                         edit.Text = idx.Get<string>();
                         l.Controls.Add(edit);

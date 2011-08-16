@@ -4,14 +4,10 @@
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
-/**
- * Namespace for all commonly used API parts of Magix-Brix. Contains most
- * data abstractions in Magix-Brix.
- */
 namespace Magix.Brix.Data
 {
     /**
-     * Abstract base class for all data storage retrieval criterias.
+     * Level3: Abstract base class for all data storage retrieval criterias.
      * Also contains several handy static constructors for easy
      * creation of data storage retrieval criterias.
      */
@@ -27,7 +23,7 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Name of property associated with criteria.
+         * Level3: Name of property associated with criteria.
          */
         public string PropertyName
         {
@@ -35,7 +31,7 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Value that criteria associates with the given property
+         * Level3: Value that criteria associates with the given property
          * of your criteria.
          */
         public object Value
@@ -44,7 +40,7 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type Equals.
+         * Level3: Static constructor to create a criteria of type Equals.
          */
         public static Criteria Eq(string propertyName, object value)
         {
@@ -52,7 +48,7 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type NotEquals.
+         * Level3: Static constructor to create a criteria of type NotEquals.
          */
         public static Criteria Ne(string propertyName, object value)
         {
@@ -60,7 +56,9 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type LikeEquals.
+         * Level3: Static constructor to create a criteria of type LikeEquals. Notice that
+         * this is equal to the LIKE keyword from SQL, meaning you can use % and _ as control
+         * characters to look for 'wild card combinations'. Laymen terms; % == * and _ == ?
          */
         public static Criteria Like(string propertyName, string value)
         {
@@ -68,15 +66,17 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type CritID.
+         * Level3: Static constructor to create a criteria of type CritID. Will create a Criteria
+         * that will demand the ID of the object is id
          */
         public static Criteria Id(int id)
         {
-            return new CritNoID(id);
+            return new CritID(id);
         }
 
         /**
-         * Static constructor to create a criteria of type CritID.
+         * Level3: Static constructor to create a criteria of type CritNoID. Will create a Criteria
+         * that will demand the ID of the object is NOT id
          */
         public static Criteria NotId(int id)
         {
@@ -84,7 +84,8 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type LikeNotEquals.
+         * Level3: Static constructor to create a criteria of type LikeNotEquals. The opposite of
+         * Like
          */
         public static Criteria NotLike(string propertyName, string value)
         {
@@ -92,7 +93,10 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type LessThen.
+         * Level3: Static constructor to create a criteria of type LessThen. Depends upon the
+         * column type, but normally a dash of reason can deduct this, regardless of the column
+         * type. String are compared alphabetically, all other from a 'least is less' standpoint.
+         * Will return only objects that are 'Less than' the given value
          */
         public static Criteria Lt(string propertyName, object value)
         {
@@ -100,7 +104,8 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type MoreThen.
+         * Level3: Static constructor to create a criteria of type MoreThen. 'Opposite' of Lt.
+         * See Lt
          */
         public static Criteria Mt(string propertyName, object value)
         {
@@ -108,7 +113,9 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type ParentIdEquals.
+         * Level3: Static constructor to create a criteria of type ParentIdEquals. Will
+         * enforce that the only objects being chosen are all belonging to a parent object,
+         * with the given id
          */
         public static Criteria ParentId(int id)
         {
@@ -116,7 +123,22 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type ExistsInEquals.
+         * Level3: Static constructor to create a criteria of type ExistsInEquals.
+         * Which will make sure there exists a relationship between the resulting object
+         * and the object with the given id in such a way that the other object
+         * are 'referencing' this one in one way or another. If you need to express
+         * the 'opposite', as in 'return objects who are referencing id object', then
+         * use the overloaded version of this method and pass in true as the reversed
+         * parameter. This will ensure that only objects which themselves are referencing
+         * the id object will be returned. For instance if a Customer has a LazyList of
+         * Contacts, you could find all Contacts referenced in a specific customer
+         * through using Contact.Select(Crieria.ExistsIn(customerId))
+         * 
+         * If you want to go the other way, as in finding all Customers that are referencing
+         * a specific contact you'd have to go Customer.Select(Criteria.ExistsIn(contactIs, true))
+         * 
+         * The above works, as long as the 'IsOwner' parts of a relationship equals false. If it's
+         * an 'IsOwner type of relationship', you'd rather using IsChild and IsParent methods
          */
         public static Criteria ExistsIn(int id)
         {
@@ -124,7 +146,8 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type ExistsInEquals.
+         * Level3: Static constructor to create a REVERSED criteria of type ExistsInEquals.
+         * See the documentation to the overload for an explanation
          */
         public static Criteria ExistsIn(int id, bool reversed)
         {
@@ -132,7 +155,9 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type HasChildId.
+         * Level3: Static constructor to create a criteria of type HasChildId. Will only
+         * return objects that have the given id as their 'child objects' [meaning 'IsOwner' 
+         * == true in its ActiveField declaration]
          */
         public static Criteria HasChild(int id)
         {
@@ -140,7 +165,7 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type Sort.
+         * Level3: Static constructor to create a criteria of type Sort. Will sort on the Column name
          */
         public static Criteria Sort(string colName)
         {
@@ -148,7 +173,8 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type Sort.
+         * Level3: Static constructor to create a criteria of type Sort. Will sort on the column
+         * name. ascending decides whether or not ascending or descending
          */
         public static Criteria Sort(string colName, bool ascending)
         {
@@ -156,7 +182,13 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Static constructor to create a criteria of type Range.
+         * Level3: Static constructor to create a criteria of type Range. Will first of all
+         * sort acording to the sortColumn, either ascending or descending depending upon the 
+         * 'ascending' parameter. Then it will return only the [start, end} result set from that
+         * dataset. Executes actually __BLISTERING__ fast, even thought you 
+         * probably wouldn't believe so ... ;)
+         * 
+         * Basically the 'foundation' for the Grid System in many ways ...
          */
         public static Criteria Range(int start, int end, string sortColumn, bool ascending)
         {
@@ -164,7 +196,7 @@ namespace Magix.Brix.Data
         }
     }
 
-    /**
+    /*
      * A criteria that makes sure your returned object is the parent 
      * of the object with the given id
      */
@@ -175,7 +207,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * A criteria that sorts the result
      */
     public class SortOn : Criteria
@@ -237,7 +269,7 @@ namespace Magix.Brix.Data
         }
     }
 
-    /**
+    /*
      * A criteria that makes sure your object must exist within the object with the
      * given ID in order to be true. Notice that this one becomes true BOTH ways for
      * a IsOwner=false relationship since logically if it's not an owner there is an
@@ -258,7 +290,7 @@ namespace Magix.Brix.Data
         public bool Reversed { get; set; }
     }
 
-    /**
+    /*
      * A criteria that only returns true if the object is a child (IsOwner=true)
      * of the object with the given ID.
      */
@@ -269,7 +301,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Returns only true if the property with the given name has the given value.
      */
     public class Equals : Criteria
@@ -279,7 +311,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Returns only true if the property with the given name does NOT have the given value.
      */
     public class NotEquals : Criteria
@@ -289,7 +321,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Returns only true if the property with the given name contains the given value
      * string. Only usable for string types.
      */
@@ -300,7 +332,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Specific ID for instance ...
      */
     public class CritID : Criteria
@@ -310,7 +342,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Specific ID for instance ...
      */
     public class CritNoID : Criteria
@@ -320,7 +352,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Returns only true if the property with the given name does NOT contain the given value
      * string. Only usable for string types.
      */
@@ -331,7 +363,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Returns only true if the property with the given name have a value which is
      * "less" then the given value.
      */
@@ -342,7 +374,7 @@ namespace Magix.Brix.Data
         { }
     }
 
-    /**
+    /*
      * Returns only true if the property with the given name have a value which is
      * "more" then the given value.
      */

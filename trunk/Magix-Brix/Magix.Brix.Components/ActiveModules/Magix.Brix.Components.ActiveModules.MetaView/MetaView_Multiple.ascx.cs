@@ -28,9 +28,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
      */
     [ActiveModule]
     [PublisherPlugin]
-    public class MetaView_Multiple : ActiveModule, IModule
+    public class MetaView_Multiple : ActiveModule
     {
-        void IModule.InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
 

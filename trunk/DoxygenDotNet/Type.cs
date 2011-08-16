@@ -15,8 +15,17 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: A type in our documentation system. Struct, interface, class etc
+     */
     public class Type : IDocItem
     {
+        public Type()
+        {
+            BaseTypes = new List<string>();
+            Members = new List<Member>();
+        }
+
         #region IDocItem Members
 
         public virtual string ID { get; protected internal set; }
@@ -26,11 +35,29 @@ namespace Doxygen.NET
 
         #endregion
 
+        /**
+         * Level3: All the nested namespaces within our type
+         */
         public virtual Namespace Namespace { get; protected internal set; }
+
+        /**
+         * Level3: All our nested types
+         */
         public virtual List<Type> NestedTypes { get; protected internal set; }
+
+        /**
+         * Level3: All our members. Including properties, methods, fields, enums etc
+         */
         public virtual List<Member> Members { get; protected internal set; }
+
+        /**
+         * Level3: The base class and interfaces of this class
+         */
         public virtual List<string> BaseTypes { get; protected internal set; }
 
+        /**
+         * Level3: Returns the name of the type
+         */
         public virtual string Name
         {
             get 
@@ -41,17 +68,17 @@ namespace Doxygen.NET
             }
         }
 
-        public Type()
-        {
-            BaseTypes = new List<string>();
-            Members = new List<Member>();
-        }
-
+        /**
+         * Level3: Returns all methods to caller
+         */
         public List<Member> Methods
         {
             get { return Members.FindAll(FindByKind("function")); }
         }
 
+        /**
+         * Level3: Returns methods above threshold of documentation level back to caller
+         */
         public IEnumerable<Member> GetMethods(int level)
         {
             foreach (Member idx in Members.FindAll(FindByKind("function")))
@@ -84,21 +111,33 @@ namespace Doxygen.NET
             }
         }
 
+        /**
+         * Level3: Returns constructors back to caller
+         */
         public List<Member> Constructors
         {
             get { return Members.FindAll(FindByKind("ctor")); }
         }
 
+        /**
+         * Level3: Returns properties back to caller
+         */
         public List<Member> Properties
         {
             get { return Members.FindAll(FindByKind("property")); }
         }
 
+        /**
+         * Level3: Returns events back to caller
+         */
         public List<Member> Events
         {
             get { return Members.FindAll(FindByKind("event")); }
         }
 
+        /**
+         * Level3: Returns member delegates back to caller
+         */
         public List<Member> MemberDelegates
         {
             get { return Members.FindAll(FindByKind("memberdelegates")); }

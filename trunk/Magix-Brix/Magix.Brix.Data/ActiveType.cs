@@ -16,6 +16,11 @@ using Magix.Brix.Data.Internal;
 
 namespace Magix.Brix.Data
 {
+    // TODO: Refactor ...
+    /**
+     * Baseclass for 'internal usage' behind ActiveTypes. Definitely candidate for refactoring.
+     * In general do NOT reference any members from here directly, except the ID of course
+     */
     public class TransactionalObject
     {
         public TransactionalObject()
@@ -34,7 +39,7 @@ namespace Magix.Brix.Data
     }
 
     /**
-     * Inherit your well known types or entity types - the types you want to serialize
+     * Level3: Inherit your well known types or entity types - the types you want to serialize
      * to your database from this class giving the generic argument type as the type
      * you're creating. Notice that you also need to mark your types with the 
      * ActiveRecordAttribute attribute in addition to marking all your serializable 
@@ -58,13 +63,13 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * The data storage associated ID of the object. Often the primary
+         * Level3: The data storage associated ID of the object. Often the primary
          * key if you're using a database as your data storage.
          */
         override public int ID { get; internal set; }
 
         /**
-         * Returns the number of objects in your data storage which is of type T.
+         * Level3: Returns the number of objects in your data storage which is of type T.
          */
         public static int Count
         {
@@ -72,8 +77,8 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Returns the number of objects in your data storage which is of type T
-         * where the given criterias are true.
+         * Level3: Returns the number of objects in your data storage which is of type T
+         * where the given criterias are true
          */
         public static int CountWhere(params Criteria[] args)
         {
@@ -92,7 +97,9 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Returns the object with the given ID from your data storage.
+         * Level3: Returns the object with the given ID from your data storage.
+         * Will return null if either it's a 'type-clash' or object doesn't exist, which
+         * are for all practical concerns for you, and should be, irrelevant
          */
         public static T SelectByID(int id)
         {
@@ -100,7 +107,7 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Returns a list of objects with the given ID from your data storage.
+         * Level3: Returns a list of objects with the given ID from your data storage
          */
         public static IEnumerable<T> SelectByIDs(params int[] ids)
         {
@@ -111,8 +118,8 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Returns the first object from your data storage which are true
-         * for the given criterias. Pass null if no criterias are needed.
+         * Level3: Returns the first object from your data storage which are true
+         * for the given criterias. Pass nothing () if no criterias are needed.
          */
         public static T SelectFirst(params Criteria[] args)
         {
@@ -127,8 +134,8 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Returns all objects from your data storage that matches the
-         * given criterias. Pass null if you want all objects regardless
+         * Level3: Returns all objects from your data storage that matches the
+         * given criterias. Pass nothing () if you want all objects regardless
          * of any values or criterias.
          */
         public static IEnumerable<T> Select(params Criteria[] args)
@@ -170,7 +177,7 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Deletes the object from your data storage.
+         * Level3: Deletes the object from your data storage.
          */
         virtual public void Delete()
         {
@@ -178,8 +185,10 @@ namespace Magix.Brix.Data
         }
 
         private bool _isSaving;
+
         /**
-         * Save the object to your data storage.
+         * Level3: Save the object to your data storage. This should normally be overridden
+         * to make sure the end user isn't messing up your domain model somehow
          */
         override public void Save()
         {
@@ -197,10 +206,12 @@ namespace Magix.Brix.Data
         }
 
         /**
-         * Returns true if the given object have the same ID as the this object.
+         * Level3: Returns true if the given object have the same ID as the this object.
          */
         public override bool Equals(object obj)
         {
+            // Since theoretically user might have created an object and assigned an ID to
+            // it, we still need to check for type before de-referencing here ... :|
             return obj != null && (obj is ActiveType<T>) && (obj as ActiveType<T>).ID == ID;
         }
 
@@ -209,23 +220,24 @@ namespace Magix.Brix.Data
             return ID.GetHashCode();
         }
 
+        /**
+         * Level3: Will return the ID of the ActiveType. Little bit of 'debugging helping'
+         */
         public override string ToString()
         {
             return ID.ToString();
         }
 
         /**
-         * Returns true if the two given objects does not have the same ID.
+         * Level3: Returns true if the two given objects does not have the same ID.
          */
         public static bool operator != (ActiveType<T> left, ActiveType<T> right)
         {
-            if ((object)left == null && (object)right != null)
-                return true;
-            return (object) left != null && !left.Equals(right);
+            return !(left == right);
         }
 
         /**
-         * Returns true if the two given objects do have the same ID.
+         * Level3: Returns true if the two given objects do have the same ID.
          */
         public static bool operator ==(ActiveType<T> left, ActiveType<T> right)
         {

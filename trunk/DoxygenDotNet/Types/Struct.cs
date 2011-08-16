@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: Encapsulates a struct documentation item
+     */
     public class Struct : Type
     {
         public override string Kind

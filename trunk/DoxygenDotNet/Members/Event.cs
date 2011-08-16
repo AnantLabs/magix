@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: And event type of member
+     */
     public class Event : Member
     {
         public override string Kind

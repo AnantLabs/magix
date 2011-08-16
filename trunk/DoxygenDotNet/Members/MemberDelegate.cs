@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: A delegate type of member
+     */
     public class MemberDelegate : Member
     {
         public override string Kind

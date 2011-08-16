@@ -14,22 +14,29 @@ using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Components.ActiveModules.TalkBack
 {
+    /**
+     * Level2: Basically a 'Forum module' which allows for posting and reading and replying to other people's
+     * opinions about 'whatever'. Not very good on its own, please use through TalkBack Controller
+     * to save head aches
+     */
     [ActiveModule]
-    public class Forum : System.Web.UI.UserControl, IModule
+    public class Forum : ActiveModule
     {
         protected Panel wrp;
         protected System.Web.UI.WebControls.Repeater rep;
         protected TextBox header;
         protected TextArea body;
 
-        public void InitialLoading(Node node)
+        public override void InitialLoading(Node node)
         {
+            base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
                     if (node.Contains("Active"))
                         Current = node["Active"].Get<int>();
-                    DataSource = node;
+
                     DataBindRepeater();
                 };
         }
@@ -38,6 +45,7 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
         {
             rep.DataSource = DataSource["Posts"];
             rep.DataBind();
+
             foreach (Label idx in Selector.Select<Label>(rep,
                 delegate(System.Web.UI.Control idxP)
                 {
@@ -85,9 +93,11 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
                 string.IsNullOrEmpty(body.Text.Trim()))
             {
                 Node n = new Node();
-                n["Message"].Value = "You need to supply at least some characters in both the header and the body field ...";
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+                n["Message"].Value = 
+                    @"You need to supply at least some characters in both the 
+header and the body field ...";
+
+                RaiseEvent(
                     "Magix.Core.ShowMessage",
                     n);
             }
@@ -96,22 +106,26 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
                 Node node = new Node();
                 node["Header"].Value = header.Text;
                 node["Body"].Value = body.Text;
+
                 RaiseSafeEvent(
                     "Magix.Talkback.CreatePost",
                     node);
 
                 DataSource["Posts"].UnTie();
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+
+                RaiseSafeEvent(
                     "Magix.Talkback.GetPostings",
                     DataSource);
 
                 Current = DataSource["Posts"][0]["ID"].Get<int>();
 
                 DataBindRepeater();
+
                 wrp.ReRender();
+
                 new EffectHighlight(wrp, 500)
                     .Render();
+
                 header.Text = "";
                 body.Text = "";
             }
@@ -122,57 +136,32 @@ namespace Magix.Brix.Components.ActiveModules.TalkBack
             Button button = sender as Button;
 
             Node node = new Node();
+
             node["Header"].Value = Selector.SelectFirst<TextBox>(button.Parent).Text;
             node["Body"].Value = Selector.SelectFirst<TextArea>(button.Parent).Text;
             node["Parent"].Value = int.Parse(button.Info);
+
             if (RaiseSafeEvent(
                 "Magix.Talkback.CreatePost",
                 node))
             {
                 DataSource["Posts"].UnTie();
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+
+                RaiseSafeEvent(
                     "Magix.Talkback.GetPostings",
                     DataSource);
 
                 Current = DataSource["Posts"][0]["ID"].Get<int>();
 
                 DataBindRepeater();
+
                 wrp.ReRender();
+
                 new EffectHighlight(wrp, 500)
                     .Render();
+
                 header.Text = "";
                 body.Text = "";
-            }
-        }
-
-        private Node DataSource
-        {
-            get { return ViewState["DataSource"] as Node; }
-            set { ViewState["DataSource"] = value; }
-        }
-
-        protected bool RaiseSafeEvent(string eventName, Node node)
-        {
-            try
-            {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    eventName,
-                    node);
-                return true;
-            }
-            catch (Exception err)
-            {
-                Node n = new Node();
-                while (err.InnerException != null)
-                    err = err.InnerException;
-                n["Message"].Value = err.Message;
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Magix.Core.ShowMessage",
-                    n);
-                return false;
             }
         }
     }

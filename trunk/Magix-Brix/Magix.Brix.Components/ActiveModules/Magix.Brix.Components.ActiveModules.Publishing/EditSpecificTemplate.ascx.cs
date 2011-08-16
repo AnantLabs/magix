@@ -19,7 +19,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
      * which you're probably daily using while adding and creating new templates and such
      */
     [ActiveModule]
-    public class EditSpecificTemplate : ActiveModule, IModule
+    public class EditSpecificTemplate : ActiveModule
     {
         protected Panel parts;
 

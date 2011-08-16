@@ -15,6 +15,9 @@ using System.Text;
 
 namespace Doxygen.NET
 {
+    /**
+     * Level3: Encapsulates an enum documentation item
+     */
     public class Enum : Type
     {
         public override string Kind

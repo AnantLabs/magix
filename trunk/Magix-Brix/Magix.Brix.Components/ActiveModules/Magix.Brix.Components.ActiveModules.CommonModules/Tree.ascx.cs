@@ -27,7 +27,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
      * user selecting an item
      */
     [ActiveModule]
-    public class Tree : ActiveModule, IModule
+    public class Tree : ActiveModule
     {
         protected TreeView tree;
 

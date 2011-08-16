@@ -20,7 +20,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
      * and allow for saving them
      */
     [ActiveModule]
-    public class EditAsciiFile : ActiveModule, IModule
+    public class EditAsciiFile : ActiveModule
     {
         protected TextArea txt;
 

@@ -15,6 +15,13 @@ using Magix.Brix.Publishing.Common;
 
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
+    /**
+     * Level1: PublisherPlugin containing a conventional 'File Menu' 
+     * type of menu which normally is expected to find at the
+     * top of a page, which will 'drop down' child selection boxes for being able to select
+     * children. Useful for conventional applications, which should look like legacy code,
+     * or something. Takes the exact same input parameters as the SliderMenu PublisherPlugin
+     */
     [ActiveModule]
     [PublisherPlugin(CanBeEmpty = true)]
     public class TopMenu : ActiveModule
@@ -24,6 +31,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
+
             Load +=
                 delegate
                 {
@@ -92,6 +100,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 node);
         }
 
+        /**
+         * Level2: Will return false if this webpart can just be 'reused' to the next page
+         */
         [ActiveEvent(Name = "Magix.Publishing.ShouldReloadWebPart")]
         protected void Magix_Publishing_ShouldReloadWebPart(object sender, ActiveEventArgs e)
         {

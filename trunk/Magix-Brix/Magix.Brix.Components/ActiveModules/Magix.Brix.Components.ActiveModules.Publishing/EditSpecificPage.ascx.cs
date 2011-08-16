@@ -19,7 +19,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
      * which you're probably daily using while adding and creating new pages and such
      */
     [ActiveModule]
-    public class EditSpecificPage : ActiveModule, IModule
+    public class EditSpecificPage : ActiveModule
     {
         protected InPlaceTextAreaEdit header;
         protected InPlaceTextAreaEdit url;
