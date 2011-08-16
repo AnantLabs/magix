@@ -233,9 +233,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     @"Some wize-guy have deleted your object dude. 
 Update the MetaObjectID property of your Action to another Meta Object ...");
 
-            foreach (MetaObject.Value idx in o.Values)
+            foreach (MetaObject.Property idx in o.Values)
             {
-                e.Params[idx.Name].Value = idx.Val;
+                e.Params[idx.Name].Value = idx.Value;
             }
         }
 
@@ -298,21 +298,21 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
             {
                 MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
 
-                MetaObject.Value val = o.Values.Find(
-                    delegate(MetaObject.Value idx)
+                MetaObject.Property val = o.Values.Find(
+                    delegate(MetaObject.Property idx)
                     {
                         return idx.Name == e.Params["Name"].Get<string>();
                     });
                 if (val == null)
                 {
-                    val = new MetaObject.Value();
+                    val = new MetaObject.Property();
                     val.Name = e.Params["Name"].Get<string>();
                     o.Values.Add(val);
 
                     o.Save();
                 }
 
-                val.Val = e.Params["Signature"].Get<string>();
+                val.Value = e.Params["Signature"].Get<string>();
 
                 val.Save();
 

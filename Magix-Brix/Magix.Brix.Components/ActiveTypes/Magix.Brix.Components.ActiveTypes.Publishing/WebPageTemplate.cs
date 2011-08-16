@@ -15,7 +15,9 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
     /**
      * Serves as a 'recipe' for a WebPage. Every WebPage is built from one of these.
      * Contains the definition of which module to instantiate for instance, but not which
-     * parameters to send into it. Etc ...
+     * parameters to send into it. Also contains the positioning of the WebParts and other
+     * common features, such as CSS classes and such. A Template is just that, a 'template'
+     * for your WebPages
      */
     [ActiveType]
     public class WebPageTemplate : ActiveType<WebPageTemplate>
@@ -26,14 +28,18 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         }
 
         /**
-         * Friendly name of template. Serves no logical meaning ...
+         * Friendly name of template. Serves no logical meaning. It is probably smart
+         * though to create a coding convention of some sort here
          */
         [ActiveField]
         public string Name { get; set; }
 
+        // TODO: Change logic. Bug while deleting or something ...
         /**
          * Our 'WebPart-recipes'. Contains the recipe for every webpart that
-         * should be added to our page.
+         * should be added to our page. The number of WebPartTemplates, and their settings,
+         * will define how the WebPage's WebParts will look like. This property 'controls'
+         * how the WebParts property of the associated WebPage is being built
          */
         [ActiveField]
         public LazyList<WebPartTemplate> Containers { get; set; }

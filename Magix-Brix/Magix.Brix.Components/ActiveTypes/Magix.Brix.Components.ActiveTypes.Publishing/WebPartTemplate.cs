@@ -15,26 +15,35 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
     /**
      * Serves as a 'recipe' for WebParts. Contains stuff such as positioning
-     * of webpart, and name of module to inject.
+     * of webpart, and name of module to inject. Every WebPageTemplate has a list of
+     * these guys, which serves as recipe for how the WebPage's WebParts should be
+     * built, and which Plugins to load up
      */
     [ActiveType]
     public class WebPartTemplate : ActiveType<WebPartTemplate>
     {
         /**
-         * Name of template. Serves no logical purpose.
+         * Name of template. Serves no logical purpose. But please 
+         * make meaningful names
          */
         [ActiveField]
         public string Name { get; set; }
 
         /**
-         * Which container in our ViewPort are we supposed to get stuffed into ...
+         * Which container in our ViewPort are we supposed to get stuffed into. Normally
+         * this value is being 'normalized' though, meaning the WebParts are stuffed out
+         * in chronological order, according to how they appear in the collection, up until
+         * we've either stuffed them all out, or ran out of Viewport Containers
          */
         [ActiveField]
         public string ViewportContainer { get; set; }
 
         /**
          * Contains the fully qualified name of the module to instantiate.
-         * Warning, if modifying this one 'by hand', bad things can happen ...!!!
+         * Warning, if modifying this one 'by hand', bad things can happen!
+         * This shoulc contain the full name of the Module's C# Class, e.g.;
+         * 'MyCompany.MyComponent.MyModule'. These modules must be attributed 
+         * as PublisherPlugins
          */
         [ActiveField]
         public string ModuleName { get; set; }
@@ -64,37 +73,38 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         public int Height { get; set; }
 
         /**
-         * Margin-Left in multiples of 18
+         * Margin-Left in multiples of 18. Can go negative to -23
          */
         [ActiveField]
         public int MarginLeft { get; set; }
 
         /**
-         * Margin-Top in multiples of 18
+         * Margin-Top in multiples of 18. Can go negative to -30
          */
         [ActiveField]
         public int MarginTop { get; set; }
 
         /**
-         * 'Padding' in multiples of 30/70/110 [+40] units up til 24
+         * 'Padding' in multiples of 30/70/110 [+40] units up til 24. Can go negative to -23
          */
         [ActiveField]
         public int MarginRight { get; set; }
 
         /**
-         * Bottom-Top in multiples of 18
+         * Bottom-Top in multiples of 18. Can go negative to -30
          */
         [ActiveField]
         public int MarginBottom { get; set; }
 
         /**
-         * If true, will eliminate al margins to the right of the webpart
+         * If true, will eliminate all margins [10px spacing] to the right of the webpart
          */
         [ActiveField]
         public bool Last { get; set; }
 
         /**
-         * If true, will allow the element to overflow in the vertical direction
+         * If true, will allow the element to overflow in the vertical direction. Meaning
+         * it will 'ignore' its height, and just 'flow as high as it is'
          */
         [ActiveField]
         public bool Overflow { get; set; }
