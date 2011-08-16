@@ -17,16 +17,20 @@ using System.Diagnostics;
 namespace Magix.Brix.Loader
 {
     /**
-     * Class contains methods for raising events and other helpers, like for instance helpers
-     * to load controls and such.
+     * Level3: Class contains methods for raising events and other helpers, like for instance helpers
+     * to load controls and such. Though often you'll not use this directly, but rather use
+     * it through helper methods on your ActiveControllers and ActiveModules
      */
     public sealed class ActiveEvents
     {
         private readonly Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> _methods =
             new Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>>();
+
         private static ActiveEvents _instance;
+
         private Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>> _nonWeb = 
             new Dictionary<string, List<Tuple<MethodInfo, Tuple<object, bool>>>>();
+
         private static Dictionary<string, string> _eventMappers = new Dictionary<string, string>();
 
         private delegate void AsyncDelegate(object sender, ActiveEventArgs e);
@@ -35,9 +39,9 @@ namespace Magix.Brix.Loader
         { }
 
         /**
-         * This is our Singleton to access our only ActiveEvents object. This is
+         * Level3: This is our Singleton to access our only ActiveEvents object. This is
          * the property you'd use to gain access to the only existing ActiveEvents
-         * object in your application pool.
+         * object in your application pool
          */
         public static ActiveEvents Instance
         {
@@ -57,7 +61,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Loads a control with the given name (class name) into the given position (name of Magix.UX.Dynamic in
+         * Level3: Loads a control with the given name (class name) into the given position (name of Magix.UX.Dynamic in
          * the Viewport currently used). Use this method to load Modules. Notice
          * that there exists an overload of this method which takes an object parameter that will be 
          * passed into the InitialLoading method when control is loaded.
@@ -69,7 +73,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Loads a control with the given name (class name) into the given position (name of Magix.UX.Dynamic in
+         * Level3: Loads a control with the given name (class name) into the given position (name of Magix.UX.Dynamic in
          * the Viewport currently used). Use this method to load Modules. This overload of the method
          * will pass the "initializingArgument" parameter into the InitialLoading method when control 
          * is loaded.
@@ -78,17 +82,20 @@ namespace Magix.Brix.Loader
         public void RaiseLoadControl(string name, string position, Node parameters)
         {
             Node tmpNode = new Node("LoadControl");
+
             tmpNode["Name"].Value = name;
             tmpNode["Position"].Value = position;
+
             if (parameters == null)
                 tmpNode["Parameters"].Value = null;
             else
                 tmpNode["Parameters"].AddRange(parameters);
+
             RaiseActiveEvent(this, "LoadControl", tmpNode);
         }
 
         /**
-         * Clear all controls out of the position (Ra-Dynamic) of your Viewport.
+         * Level3: Clear all controls out of the position (Magix-Dynamic) of your Viewport.
          */
         [DebuggerStepThrough]
         public void RaiseClearControls(string position)
@@ -99,7 +106,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Raises an event with null as the initialization parameter.
+         * Level3: Raises an event with null as the initialization parameter.
          * This will dispatch control to all the ActiveEvent that are marked with
          * the Name attribute matching the name parameter of this method call.
          */
@@ -136,7 +143,7 @@ namespace Magix.Brix.Loader
         }
 
         [DebuggerStepThrough]
-        private void ExecuteMethod(
+        private void ExecuteEventMethod(
             MethodInfo method, 
             object context, 
             bool async, 
@@ -165,7 +172,7 @@ namespace Magix.Brix.Loader
         }
 
         /**
-         * Raises an event. This will dispatch control to all the ActiveEvent that are marked with
+         * Level3: Raises an event. This will dispatch control to all the ActiveEvent that are marked with
          * the Name attribute matching the name parameter of this method call.
          */
         [DebuggerStepThrough]
@@ -211,7 +218,7 @@ namespace Magix.Brix.Loader
                     {
                         if (idx.Equals(idx2))
                         {
-                            ExecuteMethod(idx.Left, idx.Right.Left, idx.Right.Right, sender, e);
+                            ExecuteEventMethod(idx.Left, idx.Right.Left, idx.Right.Right, sender, e);
                             break;
                         }
                     }
@@ -220,6 +227,12 @@ namespace Magix.Brix.Loader
             return name;
         }
 
+        /**
+         * Level3: Will override the given 'from' ActiveEvent name and make it so that every time
+         * anyone tries to raise the 'from' event, then the 'to' event will be raised instead.
+         * Useful for 'overriding functionality' in Magix. This can also be accomplished through
+         * doing the mapping in the system's web.config file
+         */
         public void CreateEventMapping(string from, string to)
         {
             _eventMappers[from] = to;

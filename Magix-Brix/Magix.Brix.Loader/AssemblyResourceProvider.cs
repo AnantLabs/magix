@@ -10,15 +10,12 @@ using System.Web.Hosting;
 using System.Web.Caching;
 using System.Collections;
 
-/**
- * Namespace containing all the helpers for dynamically loading UserControls 
- * from Embedded Resources.
- */
 namespace Magix.Brix.Loader
 {
     /**
-     * Helper class to make it possible to load controls (and more importantly) UserControls
-     * which are embedded as resources in DLLs.
+     * Level4: Helper class to make it possible to load controls (and more importantly) UserControls
+     * which are embedded as resources in DLLs. Not intended for direct usage, but will be in 
+     * 'the background' and making sure you can load ActiveModules as resources from your DLLs
      */
     public class AssemblyResourceProvider : VirtualPathProvider
     {
@@ -37,14 +34,11 @@ namespace Magix.Brix.Loader
                 (absolutePath.Contains(":") && absolutePath.ToLower().Contains(".dll"));
         }
 
-        // Overridden from base class to verify that file exists
         public override bool FileExists(string virtualPath)
         {
             return (IsAppResourcePath(virtualPath) || base.FileExists(virtualPath));
         }
 
-        // Overridden to return a file, either from base class or from our other helper
-        // class; AssemblyResourceVirtualFile
         public override VirtualFile GetFile(string virtualPath)
         {
             return IsAppResourcePath(virtualPath) ? 

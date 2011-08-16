@@ -14,14 +14,16 @@ using Magix.Brix.Loader;
 namespace Magix.Brix.Loader
 {
     /*
-     * The internal implementation of our VirtualFile or VPP (Virtual Path Provider)
+     * Level4: The internal implementation of our VirtualFile or VPP (Virtual Path Provider).
+     * Not intended for direct usage yourself, but will exist in 'the background' making
+     * sure everything you do turns out right
      */
     internal class AssemblyResourceVirtualFile : VirtualFile
     {
         readonly string _path;
 
         /*
-         * CTORtaking the path and storing to later...
+         * Level4: CTOR taking the path and storing to later...
          */
         public AssemblyResourceVirtualFile(string virtualPath)
             : base(virtualPath)
@@ -30,7 +32,7 @@ namespace Magix.Brix.Loader
         }
 
         /*
-         * Expects either a relative DLL coming from the Bin folder of our
+         * Level4: Expects either a relative DLL coming from the bin folder of our
          * application or a complete path pointing to a DLL another place. Will split
          * the "path" string into two different parts where the first is the assembly name
          * and the second is the fully qaulified resource identifier of the resource to load.
@@ -38,6 +40,7 @@ namespace Magix.Brix.Loader
         public override Stream Open()
         {
             string[] parts;
+
             if (_path.IndexOf(":") == -1)
                 parts = _path.Split('/');
             else
@@ -47,6 +50,7 @@ namespace Magix.Brix.Loader
                     StringSplitOptions.RemoveEmptyEntries);
                 parts[0] += ".dll";
             }
+
             string assemblyName = parts[2];
             string resourceName = parts[3];
 
@@ -57,15 +61,18 @@ namespace Magix.Brix.Loader
                     assemblyName.ToLower())
                 {
                     Stream retVal = idx.GetManifestResourceStream(resourceName);
+
                     if (retVal == null)
                         throw new ArgumentException(
                             "Could not find the Virtual File; '" + 
                             _path + 
                             "'. Resource didn't exist within Assembly: " + 
                             assemblyName);
+
                     return retVal;
                 }
             }
+
             throw new ArgumentException(
                 "Could not find the assembly pointed to by the Virtual File; '" + _path + "'");
         }

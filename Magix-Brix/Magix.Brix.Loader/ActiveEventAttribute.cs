@@ -9,21 +9,22 @@ using System;
 namespace Magix.Brix.Loader
 {
     /**
-     * Mark your methods with this attribute to make then catch Magix.Brix Active Events. 
+     * Level3: Mark your methods with this attribute to make then handle Magix.Brix Active Events. 
      * The Name property is the second argument to the RaiseEvent, or the "name" of the 
      * event being raised. You can mark your methods with multiple instances of this 
-     * attribute to catch multiple events in the same event handler.
+     * attribute to catch multiple events in the same event handler. However, as a general
+     * rule of thumb it's often better to have one method handling one event
      */
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=true, Inherited=true)]
     public class ActiveEventAttribute : Attribute
     {
         /**
-         * Name of event
+         * Level3: Name of event
          */
         public string Name;
 
         /**
-         * If true, method will be called asynchronous. Note that if you use Async event handlers 
+         * Level3: If true, method will be called asynchronous. Note that if you use Async event handlers 
          * then you **CANNOT** in ANY ways access any parts of the Page, Response, Request, HttpContext
          * etc since these might very well be discarded and returned back to the client when you try
          * to access it. You can also obviously NOT write to the
@@ -39,28 +40,7 @@ namespace Magix.Brix.Loader
          */
         public bool Async;
 
-        /**
-         * Empty CTOR
-         */
         public ActiveEventAttribute()
         { }
-
-        /**
-         * CTOR taking the name of the event you want your method to catch.
-         */
-        public ActiveEventAttribute(string name)
-        {
-            Name = name;
-        }
-
-        /**
-         * CTOR taking the name of the event you want your method to catch, plus a boolean indicating
-         * if the event handler should be called asynchronously.
-         */
-        public ActiveEventAttribute(string name, bool async)
-        {
-            Name = name;
-            Async = async;
-        }
     }
 }
