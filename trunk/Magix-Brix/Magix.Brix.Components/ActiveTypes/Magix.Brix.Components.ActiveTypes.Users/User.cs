@@ -19,7 +19,7 @@ using System.Security;
 namespace Magix.Brix.Components.ActiveTypes.Users
 {
     /**
-     * Level2: Settings stored on a 'per user level'. Useful for storing simple fact
+     * Level3: Settings stored on a 'per user level'. Useful for storing simple fact
      * on a per user level
      */
     [ActiveType]
@@ -41,7 +41,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
     }
 
     /**
-     * Level2: A User is a single person using your website, being registered 
+     * Level3: A User is a single person using your website, being registered 
      * with a username and a password, and hence no longer
      * 'anonymous'. A user is normally recognized through his 'Username', and he has a
      * password which he can use to log into the system, normally. This class
@@ -58,7 +58,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
         }
 
         /**
-         * Level2: Username. Normally used to login to the system with, in combination with the user's
+         * Level3: Username. Normally used to login to the system with, in combination with the user's
          * password
          */
         [ActiveField]
@@ -66,20 +66,20 @@ namespace Magix.Brix.Components.ActiveTypes.Users
 
         // TODO: Stored HASHED ....!
         /**
-         * Level2: Password. Unique word, character combinations or a sentence which only the user
+         * Level3: Password. Unique word, character combinations or a sentence which only the user
          * knows about himself, and which is used to authenticate the user upon logging in
          */
         [ActiveField]
         public string Password { get; set; }
 
         /**
-         * Level2: Email address of user
+         * Level3: Email address of user
          */
         [ActiveField]
         public string Email { get; set; }
 
         /**
-         * Level2: List of roles. Please notice that every user in Magix might belong to more than one role,
+         * Level3: List of roles. Please notice that every user in Magix might belong to more than one role,
          * though there's not UI currently for adding a user into more than one role, meaning defacto
          * there's only one role per user today
          */
@@ -87,13 +87,13 @@ namespace Magix.Brix.Components.ActiveTypes.Users
         public LazyList<Role> Roles { get; set; }
 
         /**
-         * Level2: Settings for user instance
+         * Level3: Settings for user instance
          */
         [ActiveField]
         internal LazyList<UserSettings> Settings { get; set; }
 
         /**
-         * Level2: Will return a string containing all roles user belongs to
+         * Level3: Will return a string containing all roles user belongs to
          */
         public string RolesString
         {
@@ -165,7 +165,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
         }
 
         /**
-         * Overridden to make sure username is unique etc.
+         * Level3: Overridden to make sure username is unique etc.
          */
         public override void Save()
         {
@@ -173,7 +173,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
         }
 
         /**
-         * Will save the user 'raw' running none of the verification logic to make sure
+         * Level3: Will save the user 'raw' running none of the verification logic to make sure
          * the data is not violating some logic or something
          */
         public void SaveNoVerification()
@@ -182,7 +182,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
         }
 
         /**
-         * Implementation of our two other Save methods
+         * Level3: Implementation of our two other Save methods
          */
         protected void SaveImpl(bool verify)
         {
@@ -247,7 +247,7 @@ usernames must be unique within the application ...");
         }
 
         /**
-         * Overridden to make sure we log this
+         * Level3: Overridden to make sure we log this
          */
         public override void Delete()
         {
@@ -265,7 +265,7 @@ usernames must be unique within the application ...");
         }
 
         /*
-         * Helper for creating unique cookie values, in case you've got more than one website at the same
+         * Level3: Helper for creating unique cookie values, in case you've got more than one website at the same
          * URL
          */
         private static string GetUniqueAppString()
@@ -274,7 +274,7 @@ usernames must be unique within the application ...");
         }
 
         /**
-         * Will return or change the currently logged in user object. Notice that Users are in Magix
+         * Level3: Will return or change the currently logged in user object. Notice that Users are in Magix
          * stored in cookies on the harddiscs of the browsers that clients visits your website with.
          * These cookies are currently being stored as non-persistive, and HttpOnly, but will make 
          * sure that as long as user doesn't close his browser, he will become automatically logged in 
@@ -360,7 +360,7 @@ usernames must be unique within the application ...");
         }
 
         /**
-         * Returns true if user belongs to a role with the given name
+         * Level3: Returns true if user belongs to a role with the given name
          * [case-in-sensitive search]
          */
         public bool InRole(string roleName)

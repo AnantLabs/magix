@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     /**
-     * Level1: A 'header' PublisherPlugin. Basically just an HTML h1 element
+     * Level2: A 'header' PublisherPlugin. Basically just an HTML h1 element
      */
     [ActiveModule]
     [PublisherPlugin(CanBeEmpty = true)]
@@ -36,7 +36,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         }
 
         /**
-         * Level1: BAsically the content of the h1 element. Default value is
+         * Level2: BAsically the content of the h1 element. Default value is
          * 'The Caption of your Header'
          */
         [ModuleSetting(DefaultValue = "The Caption of your Header WebPart")]

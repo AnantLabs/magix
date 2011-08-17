@@ -17,7 +17,7 @@ using System.Globalization;
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
     /**
-     * Level1: Contains common end user useful actions which doesn't really belong 
+     * Level2: Contains common end user useful actions which doesn't really belong 
      * any particular place, but which can still be immensily useful for
      * 'scripting purposes'. Perceive these as 'plugins' ... ;) - [Or extra 
      * candy if you wish]. Often they're 'simplifications' of other more
@@ -27,7 +27,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     public class CommonActions_Controller : ActiveController
     {
         /**
-         * Level1: Returns the 'Name' setting for the current logged in User. Sets the
+         * Level2: Returns the 'Name' setting for the current logged in User. Sets the
          * setting to 'Default' if no existing value is found. Both are mandatory params.
          * Returns new value as 'Value'
          */
@@ -54,7 +54,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Simplification of 'Magix.Core.SendEmail', will among
+         * Level2: Simplification of 'Magix.Core.SendEmail', will among
          * other things using the User.Current as sender unless explicitly
          * overridden. Will also unless to email address is given, send email to
          * yourself. Takes these parameters 'Header', 'Body', 'Email' [from email], 'From' [name]
@@ -114,7 +114,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Will to a String.Replace on the given 'Source' or 'SourceNode'. Will replace 'OldString' or 'OldStringNode'
+         * Level2: Will to a String.Replace on the given 'Source' or 'SourceNode'. Will replace 'OldString' or 'OldStringNode'
          * with 'NewString' or 'NewStringNode' and return the value either in 'Result' or 'ResultNode', direct
          * value [no 'Node' part] always have preference
          */
@@ -143,7 +143,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Will call 'Magix.MetaAction.RaiseAction' for every single 'ActionName' in the Actions [list]
+         * Level2: Will call 'Magix.MetaAction.RaiseAction' for every single 'ActionName' in the Actions [list]
          * Parameter. Useful for creating complex abstractions, doing multiple tasks at once or 'encapsulating'
          * your entire logic inside one Action
          */
@@ -161,7 +161,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Will rename the given 'FromName' to 'ToName'. Will throw exception if no 'FromName' exists,
+         * Level2: Will rename the given 'FromName' to 'ToName'. Will throw exception if no 'FromName' exists,
          * or parameters are missing
          */
         [ActiveEvent(Name = "Magix.Common.RenameNode")]
@@ -179,7 +179,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Will strip every single Parameter OUT of the Node structure except the given 'But'. But can be
+         * Level2: Will strip every single Parameter OUT of the Node structure except the given 'But'. But can be
          * either one single name of an object or a list of nodes containing several names. Useful for
          * shrinking nodes as the grow due to being passed around or being parts of MultiActions or something
          * similar
@@ -219,7 +219,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Will return the given MetaObject [MetaObjectID] as a Key/Value pair. Will not traverse
+         * Level2: Will return the given MetaObject [MetaObjectID] as a Key/Value pair. Will not traverse
          * Child Objects though. Useful for fetching objects for any one reasons you might have,
          * as long as you know their ID
          */
@@ -240,7 +240,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         }
 
         /**
-         * Level1: Will reload the Original WebPart, intended to be, within the 'current WebPart container'
+         * Level2: Will reload the Original WebPart, intended to be, within the 'current WebPart container'
          * on the page. Meaning, if you've allowed the user to 'fuzz around all over the place' till he
          * no longer can remember what originally was within a specific WebPart Container, he can 
          * raise this event [somehow], which will 'reload the original content' into the 'current
@@ -261,7 +261,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         }
 
         /**
-         * Level1: If raised from within a MetaView on a specific MetaObject ['MetaObjectID'], 
+         * Level2: If raised from within a MetaView on a specific MetaObject ['MetaObjectID'], 
          * somehow, will show the Signature Module for that particular MetaObject for
          * its 'ActionSenderName' property. When Signature is done [signing complete]
          * the original content of the Container will be reloaded
@@ -325,7 +325,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         }
 
         /**
-         * Level1: Will set the given Session Variable ['Name'] to the 'Value'. Useful for creating caches
+         * Level2: Will set the given Session Variable ['Name'] to the 'Value'. Useful for creating caches
          * of huge things, you need to occur really fast [or something]. Session Variables like
          * these can later be retrieved by its sibling method 'Magix.Common.GetSessionVariable'.
          * Things stored into the Session will be on a per user level [meaning, it'll take a LOT of 
@@ -338,7 +338,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         }
 
         /**
-         * Level1: Will return the given Session Variable ['Name'] to the 'Value' output node. Useful for retrieving caches
+         * Level2: Will return the given Session Variable ['Name'] to the 'Value' output node. Useful for retrieving caches
          * of huge things, you need to occur really fast [or something]. Session Variables like
          * these can be set by its sibling method 'Magix.Common.SetSessionVariable'.
          * Things stored into the Session will be on a per user level [meaning, it'll take a LOT of 

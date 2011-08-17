@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     /**
-     * Level1: PublisherPlugin containing the UI for the Sliding Menu Publisher Plugin.
+     * Level2: PublisherPlugin containing the UI for the Sliding Menu Publisher Plugin.
      * Meaning the default menu to the left in the front-web parts, which you can choose
      * to inject into a WebPartTemplate in one of your Templates if you wish. Basically
      * just loads the items once through raising the 'Magix.Publishing.GetSliderMenuItems'

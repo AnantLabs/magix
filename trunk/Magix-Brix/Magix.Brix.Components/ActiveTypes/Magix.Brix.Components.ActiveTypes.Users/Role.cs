@@ -14,7 +14,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
 {
     // TODO: Why does this have that namespace ...
     /**
-     * Level2: Contains the roles i the system. Every user belongs to a 'role' which gives him
+     * Level3: Contains the roles i the system. Every user belongs to a 'role' which gives him
      * rights in regards to some aspect of functionality or something. All autorization,
      * by default in Magix, will go through this Role class, and which specific roles
      * the currently logged in user belongs to
@@ -23,7 +23,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
     public class Role : ActiveType<Role>
     {
         /**
-         * Level2: The name of the role, typically 'Administrator' or 'Guest' or something
+         * Level3: The name of the role, typically 'Administrator' or 'Guest' or something
          */
         [ActiveField]
         public string Name { get; set; }

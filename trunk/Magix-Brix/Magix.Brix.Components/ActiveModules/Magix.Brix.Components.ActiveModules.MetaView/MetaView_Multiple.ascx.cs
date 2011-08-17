@@ -17,7 +17,7 @@ using Magix.Brix.Components.ActiveTypes;
 namespace Magix.Brix.Components.ActiveModules.MetaView
 {
     /**
-     * Level1: UI parts for showing a MetaView in 'MultiView Mode'. Basically shows a grid, with items
+     * Level2: UI parts for showing a MetaView in 'MultiView Mode'. Basically shows a grid, with items
      * dependent upon the look of the view. This is a Publisher Plugin module. Basically a 
      * completely 'empty' module whos only purpose is to raise the
      * 'Magix.MetaType.ShowMetaViewMultipleInCurrentContainer' event, whos default implementation
@@ -61,7 +61,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         }
 
         /**
-         * Level1: The name of the MetaView to use as the foundation for this form
+         * Level2: The name of the MetaView to use as the foundation for this form
          */
         [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.MetaView_Multiple.GetTemplateColumnSelectView")]
         public string ViewName

@@ -196,6 +196,11 @@ namespace Doxygen.NET
                 }
                 Namespaces.Add(nspace);
             }
+            Namespaces.Sort(
+                delegate(Namespace left, Namespace right)
+                {
+                    return left.FullName.CompareTo(right.FullName);
+                });
         }
 
         private void LoadTypes(Namespace nspace, bool forceReload)
@@ -227,6 +232,26 @@ namespace Doxygen.NET
                     nspace.Types.Add(t);
                 }
             }
+            nspace.Types.Sort(
+                delegate(Type left, Type right)
+                {
+                    int leftLev = 5;
+                    int rightLev = 5;
+
+                    if (left.Description.Contains("Level"))
+                    {
+                        leftLev = int.Parse(
+                            left.Description.Substring(
+                                left.Description.IndexOf("Level") + 5, 1));
+                    }
+                    if (right.Description.Contains("Level"))
+                    {
+                        rightLev = int.Parse(
+                            right.Description.Substring(
+                                right.Description.IndexOf("Level") + 5, 1));
+                    }
+                    return leftLev.CompareTo(rightLev);
+                });
         }
         
         private void LoadTypesMembers(Type t, bool forceReload)

@@ -134,7 +134,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Will copy the incoming MetaObject ['ID']
+         * Level2: Will copy the incoming MetaObject ['ID']
          */
         [ActiveEvent(Name = "Magix.MetaType.CopyMetaObject")]
         private void Magix_MetaType_CopyMetaObject(object sender, ActiveEventArgs e)
@@ -148,7 +148,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Creates a new MetaObject with some default values and returns the ID of the new MetaObject
+         * Level2: Creates a new MetaObject with some default values and returns the ID of the new MetaObject
          * as 'NewID'
          */
         [ActiveEvent(Name = "Magix.MetaType.CreateMetaObject")]

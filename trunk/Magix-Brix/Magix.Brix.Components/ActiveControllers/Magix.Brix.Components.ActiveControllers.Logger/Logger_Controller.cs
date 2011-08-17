@@ -18,7 +18,7 @@ using Magix.Brix.Components.ActiveTypes.Logging;
 namespace Magix.Brix.Components.ActiveControllers.Logger
 {
     /**
-     * Level1: Contains logic for Logging things
+     * Level2: Contains logic for Logging things
      */
     [ActiveController]
     public class Logger_Controller : ActiveController
@@ -88,7 +88,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Level1: Will create one LogItem with the given LogItemType, Header, Message, 
+         * Level2: Will create one LogItem with the given LogItemType, Header, Message, 
          * ObjectID, ParentID, StackTrace and so on, depending upon which data is actually 
          * being passed into it. Minimu requirement is 'Header'
          */

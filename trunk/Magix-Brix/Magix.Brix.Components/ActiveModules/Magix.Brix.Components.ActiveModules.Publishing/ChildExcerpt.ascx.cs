@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     /**
-     * Level1: Will show an excerpt of all its children, sorted with newest first, showing a maximum of
+     * Level2: Will show an excerpt of all its children, sorted with newest first, showing a maximum of
      * PagesCount items. Kind of like a front page to a blog or a news website or something
      */
     [ActiveModule]
@@ -70,7 +70,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         }
 
         /**
-         * Level1: How many of the latest pages will be shown in the excerpt
+         * Level2: How many of the latest pages will be shown in the excerpt
          */
         [ModuleSetting(ModuleEditorEventName = "Magix.Publishing.GetTemplateColumnSelectChildExcerptNo", DefaultValue="10")]
         public int PagesCount

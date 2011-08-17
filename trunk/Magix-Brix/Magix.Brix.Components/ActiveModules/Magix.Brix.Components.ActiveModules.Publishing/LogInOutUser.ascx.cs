@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     /**
-     * Level1: PublisherPlugin containing most of the UI for allowing a user to login/out
+     * Level2: PublisherPlugin containing most of the UI for allowing a user to login/out
      * of your website. Can be set into both OpenID mode and 'only native mode' or both.
      * Raises 'Magix.Publishing.GetStateForLoginControl' to determine the state of the module,
      * meaning if it should show both OpenID logic and native logic or only one of them.
@@ -274,7 +274,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         }
 
         /**
-         * Level1: Which mode you wish to use for your login control. Legal values are
+         * Level2: Which mode you wish to use for your login control. Legal values are
          * 'OpenID', 'Native' and 'Both'. Signifying the obvious, both being the default
          * which will allow you to log in either with username/password combination or
          * an OpenID claim

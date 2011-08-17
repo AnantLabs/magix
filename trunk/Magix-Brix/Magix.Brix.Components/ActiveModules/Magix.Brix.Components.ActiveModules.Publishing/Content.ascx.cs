@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     /**
-     * Level1: A 'content' PublisherPlugin. Basically just a text fragment, that'll be edited through
+     * Level2: A 'content' PublisherPlugin. Basically just a text fragment, that'll be edited through
      * the Magix' RichText or WYSIWYG Editor
      */
     [ActiveModule]
@@ -42,7 +42,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         }
 
         /**
-         * Level1: The actual content of the Content control ... ;)
+         * Level2: The actual content of the Content control ... ;)
          */
         [ModuleSetting(ModuleEditorName = "Magix.Brix.Components.ActiveModules.Editor.RichEdit", DefaultValue = "<p>The Content for your <strong style=\"color:Red;\">Rich</strong> Text <em>Content</em> WebPart ...</p>")]
         public string Text

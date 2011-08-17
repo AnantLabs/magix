@@ -19,7 +19,7 @@ using Magix.UX;
 namespace Magix.Brix.ApplicationPool
 {
     /**
-     * Level3: Implements serialization of ViewState into the database on the server side
+     * Level4: Implements serialization of ViewState into the database on the server side
      */
     public class Magix_PageStatePersister : PageStatePersister
     {

@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (TipOfToday.Instance.Count == 0)
             {
                 TipOfToday.Instance.CreateTip(@"
-<h2>Welcome to Magix!</h2>
+<h1>Welcome to Magix!</h1>
 <p>Truly a Strange and Wonderful World ...</p>
 <p>A place where you can become literate in regards to computers. A place where you can express yourself, creating what you want out of your computer. A place where you are in charge, a place which is fun!</p>
 <p>This is your First tip of the day. <em>Leave These Tips On</em> to make sure you get Useful Tips and Tricks as you proceed deeper and deeper into the Rabbit Hole ...</p>
@@ -41,6 +41,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p>If you need to re-read a previous tip, you can click the previous button ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
+<h2>4 sec Intro</h2>
 <p>Magix consists of two majorly important pre-installed modules; The <em>'Publishing'</em> System and the <em>'MetaType'</em> System.</p>
 <p>Publishing is where you go to create your WebSite, and MetaTypes is where you go to create Applications. Though, really the difference is more blurry than you think. For instance; It is difficult to show any Applications to your end users, if you do not have any Pages to 'host' your Application ... </p>
 <p>So Pages can be thought of as Views in your Applications if you want to, or your entire hierarchy of Pages can be viewed as a gigantic plugin Application, which it actually in fact is ... ;)</p>
@@ -57,6 +58,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p>There are many types of 'Basic Components' like these in Magix. Over the next couple of pages, we'll be walking through some of them which you'll need to understand to be able to get the <em>most out of Magix</em> ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
+<h2>Grids</h2>
 <p>Most Grids in Magix have tons of features. These features includes; Paging, In Place Editing of Values, Filtering, and so on ...</p>
 <p>To Filter according to a Column, all you've got to do is to click the header of your Grid, choose which type of Filter you want to apply, type in its value, and click OK ...</p>
 <p>The arrow buttons, normally at the bottom of your grids makes it possible to traverse forward and backwards in your list of items. The double arrows [""&lt;&lt;""] takes you <em>'all the way'</em> in its direction ...</p>
@@ -115,7 +117,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p>If you now access the root of your website, and try to browse around by clicking different buttons, you can see how the WebPart Containers are 'jumping around' on the screen ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<p>WebParts Initialization...</p>
+<h2>Init. of WebParts</h2>
 <p>WebParts initializes differently depending upon where you're coming from, and from which Template type you're coming from dependent upon to which Template type you're entering. And also according to which type of WebParts, or Modules they are ... </p>
 <p>For instance the sliding menu will not reload as long as the container it is within on one page template, is the same container it is within on the next page template ...</p>
 <p>Too confusing ...?</p>
@@ -135,9 +137,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 TipOfToday.Instance.CreateTip(@"
 <p>Add three properties to your form, name them</p>
 <ul>
-<li>Name</li>
-<li>Email</li>
-<li>Subscribe</li>
+\t<li>Name</li>
+\t<li>Email</li>
+\t<li>Subscribe</li>
 </ul>
 <p>Change their description to something meaningful ...</p>
 <p>Make sure you change the 'Type Name' of your object to <em>'EmailSubscription'</em></p>
@@ -145,8 +147,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 TipOfToday.Instance.CreateTip(@"
 <p>Attach two Actions to your 'Save' property.</p>
 <ul>
-<li>Magix.DynamicEvent.SaveActiveForm</li>
-<li>Magix.DynamicEvent.EmptyActiveForm</li>
+\t<li>Magix.DynamicEvent.SaveActiveForm</li>
+\t<li>Magix.DynamicEvent.EmptyActiveForm</li>
 </ul>
 <p>The first Action will save your form, while the second one will empty it.</p>
 <p>Now try to <em>View your form in preview</em> mode, and test it out by typing in your email and name, and clicking Submit to save your Object ...</p>
@@ -154,7 +156,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in case you wondered ... ;)</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<p>Meta Objects and Type Names ...</p>
+<h2>TypeNames ...</h2>
 <p>If you take a look at your <em>Meta Objects</em> now you will see a new object with the Type Name of 'EmailSubscription'. The <em>'Type Name'</em> property from your MetaView decides the Type Name of your Objects ...</p>
 <p>These 'Type Names' are important to distinguish from different types of Objects.</p>
 <p>One Object might be of type 'Customer', while another object might be of type 'Email', and so on. What names you give your Types is <em>crucial</em>! Name clashes here might create very hard to track down bugs and such ...</p>
@@ -163,7 +165,7 @@ Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in
 <p>We encourage people to use type names such as; ""CompanyName.Department.Customer"", and never 'Customer' directly. In fact, your <em>homework</em> for this lesson is to go and rename your 'Customer' TypeName, and rename the Type Name to; 'CompanyName.Department.Customer'. Where Company Name and Department are <em>your</em> company name and your department ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<h3>OpenID</h3>
+<h2>OpenID</h2>
 <p>Did you know that you can use Magix as both a Relying Party and OpenID Provider?</p>
 <p>[ Read more about Open ID <a href=""http://openid.net/"" target=""_blank"">here</a> ... ]</p>
 <p>If you need an OpenID token to log into some website somewhere, then you can append ?openID=admin after the root URL to your website, if the admin user is the User you'd like to log in with.</p>
@@ -174,7 +176,7 @@ Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in
 <p>If your blogger account is 'magix' for instance, then your OpenID 'username' [claim] would become 'magix.blogspot.com'</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<h3>Talk to CEO</h3>
+<h2>Talk to CEO</h2>
 <p>If you make something cool with Magix, that you want to share, then we'd love to get to know about it. It can be an instructional YouTube video about how to Get Started, Tips and Tricks etc. It can be a Tutorial Blog you've written about how to install Magix on your server. It can be a book you have written about the O2 Architecture. It can be an Action, or a collection of Actions, which you think is awesome. Anything really! </p>
 <p>As long as it has Value for our Community somehow, we'd love to know about it, so that we could help you promote it, and more importantly; Helping our Community out ... :)</p>
 <p>Our CEO's Name and Email address is; Lissa Millspaugh - <a href=""mailto:lissa.millspaugh@winergyinc.com"">lissa.millspaugh@winergyinc.com</a></p>
