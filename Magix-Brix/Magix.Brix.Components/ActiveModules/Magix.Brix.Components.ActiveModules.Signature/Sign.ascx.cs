@@ -17,7 +17,7 @@ using Magix.UX.Core;
 namespace Magix.Brix.Components.ActiveModules.Signature
 {
     /**
-     * Level1: A Signature module, basically a place where the end user can 'sign his name' to
+     * Level2: A Signature module, basically a place where the end user can 'sign his name' to
      * confirm a transaction of some sort. Will load up a big white thing, which can be 'drawn
      * upon', together with two buttons, OK and Cancel which will raise the 
      * 'CancelEvent' and the 'OKEvent. 'OKEvent' will pass in 'Signature' being the coords

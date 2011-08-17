@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.MetaView
 {
     /**
-     * Level1: UI parts for showing a MetaView in 'SingleView Mode'. Basically shows a form, with items
+     * Level2: UI parts for showing a MetaView in 'SingleView Mode'. Basically shows a form, with items
      * dependent upon the look of the view. This is a Publisher Plugin module. This form expects
      * to be given a 'MetaViewName', which will serve as the foundation for raising the
      * 'Magix.MetaView.GetViewData' event, whos default implementation will populate the node
@@ -186,7 +186,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         }
 
         /**
-         * Level1: Will serialize the form into a key/value pair back to the caller. Basically the foundation
+         * Level2: Will serialize the form into a key/value pair back to the caller. Basically the foundation
          * for this control's ability to create MetaObjects. Create an action, encapsulating this event,
          * instantiate it and raise it [somehow] when user is done, by attaching it to e.g. a Save button,
          * and have the form serialized into a brand new MetaObject of the given TypeName
@@ -201,7 +201,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         }
 
         /**
-         * Level1: Will 'empty' the current form. Useful in combination with Save or Clear button
+         * Level2: Will 'empty' the current form. Useful in combination with Save or Clear button
          */
         [ActiveEvent(Name = "Magix.Meta.Actions.EmptyForm")]
         protected void Magix_Meta_Actions_EmptyForm(object sender, ActiveEventArgs e)
@@ -221,7 +221,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         }
 
         /**
-         * Level1: The name of the MetaView to use as the foundation for this form
+         * Level2: The name of the MetaView to use as the foundation for this form
          */
         [ModuleSetting(ModuleEditorEventName = "Magix.MetaView.MetaView_Single.GetTemplateColumnSelectView")]
         public string ViewName

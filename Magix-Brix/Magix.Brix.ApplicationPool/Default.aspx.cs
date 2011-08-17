@@ -18,7 +18,7 @@ using System.Web;
 namespace Magix.Brix.ApplicationPool
 {
     /**
-     * Level1: Your 'Application Pool', meaning the 'world' where all your 'components' lives.
+     * Level4: Your 'Application Pool', meaning the 'world' where all your 'components' lives.
      * Nothing really to see here, this should just 'work'. But are here for reference reasons
      */
     public partial class MainWebPage : Page

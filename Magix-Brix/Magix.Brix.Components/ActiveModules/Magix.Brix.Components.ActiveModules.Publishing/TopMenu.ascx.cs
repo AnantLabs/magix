@@ -16,7 +16,7 @@ using Magix.Brix.Publishing.Common;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     /**
-     * Level1: PublisherPlugin containing a conventional 'File Menu' 
+     * Level2: PublisherPlugin containing a conventional 'File Menu' 
      * type of menu which normally is expected to find at the
      * top of a page, which will 'drop down' child selection boxes for being able to select
      * children. Useful for conventional applications, which should look like legacy code,

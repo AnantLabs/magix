@@ -10,14 +10,14 @@ using Magix.Brix.Loader;
 namespace Magix.Brix.Components.ActiveControllers.Signature
 {
     /**
-     * Level1: Signature Plugin Control for Publishing system to allow for loading of a different
+     * Level2: Signature Plugin Control for Publishing system to allow for loading of a different
      * plugin module from e.g. the click of a row button or a single-view button etc.
      */
     [ActiveController]
     public class Signature_Controller : ActiveController
     {
         /**
-         * Level1: Will load the Signature module, asking for Signature from the user and saving
+         * Level2: Will load the Signature module, asking for Signature from the user and saving
          * associated with the record. Will replace the module that raised the Action
          * with the Signature module
          */

@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
     /**
-     * Level1: Contains logic for Actions which are wrappers around ActiveEvents for the end user
+     * Level2: Contains logic for Actions which are wrappers around ActiveEvents for the end user
      * to be able to raise his own events, with his own data in the Node structure. The 
      * MetaAction system is at the core of the Meta Application system wince without it
      * the end user cannot create his own types of events or Actions
@@ -205,7 +205,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Performs a Deep-Copy of the Action and returns the ID of the new Action as 'NewID'
+         * Level2: Performs a Deep-Copy of the Action and returns the ID of the new Action as 'NewID'
          */
         [ActiveEvent(Name = "Magix.MetaAction.CopyAction")]
         protected void Magix_MetaAction_CopyAction(object sender, ActiveEventArgs e)
@@ -260,7 +260,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level1: Creates a new Default Action and returns the ID of the new Action as 'NewID'
+         * Level2: Creates a new Default Action and returns the ID of the new Action as 'NewID'
          */
         [ActiveEvent(Name = "Magix.Meta.CreateAction")]
         protected void Magix_Meta_CreateAction(object sender, ActiveEventArgs e)
@@ -891,7 +891,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Level1: Will take an incoming Action ['ActionID' OR 'ActionName'] and run it. Will merge
+         * Level2: Will take an incoming Action ['ActionID' OR 'ActionName'] and run it. Will merge
          * the incoming parameters with the Params of the Action, giving the 'incoming Parameters'
          * preference over the Params associated with Action
          */

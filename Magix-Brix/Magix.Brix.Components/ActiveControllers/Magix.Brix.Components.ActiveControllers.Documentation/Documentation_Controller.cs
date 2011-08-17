@@ -16,7 +16,7 @@ using Magix.Brix.Components.ActiveTypes.MetaTypes;
 namespace Magix.Brix.Components.ActiveControllers.Documentation
 {
     /**
-     * Level1: Contains the logic for our 'Class Browser' which can browse all the 
+     * Level2: Contains the logic for our 'Class Browser' which can browse all the 
      * classes in the system and make some changes to them by enabling them and
      * disabling them by either overriding specific events or by disabling entire
      * controllers or modules all together
@@ -46,6 +46,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         {
             // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
             Node xx = new Node();
+
             xx["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
             xx["Default"].Value = "1";
 
@@ -116,19 +117,256 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         [ActiveEvent(Name = "Magix.Doxygen.Nei!Det_E_Boka_Mi ...!")]
         protected void Magix_Doxygen_Give_Me_My_Bok_Mann(object sender, ActiveEventArgs e)
         {
-            // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
-            Node xx = new Node();
+            Node node = new Node();
+            int level = GetDoxLevel();
 
-            xx["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
-            xx["Default"].Value = "1";
+            SetTitleAndCoverImage(level, node);
+
+            // Index ...
+            CreateIntroduction_TipOfToday_IndexItem(node);
+            CreateIndexItemForMetaActions(node);
+            CreateIndexItemsForClasses(node, level);
+
+            // Pages [linked to from index - hopefully ... ! :O]
+            GetTipOfTodayPagesForDox(node);
+            GetAllActionsForPages(node);
+            GetAllClassesForPages(node, level);
 
             RaiseEvent(
-                "Magix.Common.GetUserSetting",
+                "Magix.PDF.CreatePDF-Book",
+                node);
+        }
+
+        private void GetAllActionsForPages(Node node)
+        {
+            string allActionsHtml = "<h1>Meta Actions</h1>";
+            allActionsHtml += @"
+<p>Meta Actions, or 'Actions' for short, are dynamically created actions within the system, 
+either created by the system itself during installation or something, or Actions created
+by users, such as you.</p>
+<p>These Actions can then later be invoked by some sort of event, for instance a user 
+clicking a button, or something similar</p>
+<p>Basically, if it can be described as a 'verb', it's probably an Action ... ;)</p>
+";
+            foreach (Action idx in Action.Select())
+            {
+                string name = idx.Name;
+                string evt = idx.EventName;
+                string description = idx.Description;
+                string shortName = name;
+                if (shortName.IndexOf('.') != -1)
+                {
+                    shortName = shortName.Substring(shortName.LastIndexOf('.') + 1);
+                }
+
+                allActionsHtml += "<h2>" + shortName + "</h2>";
+                allActionsHtml += "<em>" + name + "</em>";
+                allActionsHtml += "<em>" + evt + "</em>";
+                allActionsHtml += "<p>" + description + "</p>";
+            }
+            node["Pages"]["Actions"].Value = allActionsHtml;
+        }
+
+        private void GetAllClassesForPages(Node node, int level)
+        {
+            foreach (Namespace idx in Docs.GetNamespaces(level))
+            {
+                foreach (Class idxC in idx.GetClasses(level))
+                {
+                    if (!string.IsNullOrEmpty(idxC.Description))
+                    {
+                        // Classes each have their own 'section' ...
+                        AddClassToNodeForBookDistroPages(idxC, node);
+                    }
+                }
+            }
+        }
+
+        private void AddClassToNodeForBookDistroPages(Class cls, Node node)
+        {
+            string allHtml = "<h1>" + cls.Name + "</h1>" +
+                "<codebig>" + cls.FullName + "</codebig>";
+
+            allHtml += "<p2>Description: </p2><p>" + cls.Description + "</p>";
+
+            if (cls.BaseTypes != null && cls.BaseTypes.Count > 0)
+            {
+                allHtml += "<p2>Basetypes</p2>";
+                foreach (string idx in cls.BaseTypes)
+                {
+                    allHtml += "<codesmall>" + Docs.GetTypeByID(idx).FullName + "</codesmall>";
+                }
+            }
+
+            allHtml += DoClassCTORsForPDF(cls);
+            allHtml += DoClassMethodsForPDF(cls);
+            allHtml += DoClassEventsForPDF(cls);
+            allHtml += DoClassPropertiesForPDF(cls);
+            node["Pages"][cls.FullName].Value = allHtml;
+        }
+
+        private string DoClassCTORsForPDF(Class cls)
+        {
+            string allHtml = "";
+            foreach (Constructor idx in cls.Constructors)
+            {
+                if (string.IsNullOrEmpty(idx.Description))
+                    continue;
+                allHtml += "<code>";
+                allHtml +=
+                    idx.AccessModifier + "\t" +
+                    idx.ReturnType.Replace("<", "&lt;").Replace(">", "&gt;") + "\t" +
+                    idx.Name;
+                allHtml += "(";
+
+                bool first = true;
+                foreach (Parameter idxP in idx.Parameters)
+                {
+                    if (first)
+                        first = false;
+                    else
+                        allHtml += ", ";
+                    allHtml += idxP.Type.Replace("<", "(").Replace(">", ")") + " " + idxP.Name;
+                }
+                allHtml += ")";
+                allHtml += "</code>";
+                allHtml += "<p>" + idx.Description + "</p>";
+            }
+            if (!string.IsNullOrEmpty(allHtml))
+                allHtml = "<sec>Constructors</sec>" + allHtml;
+            return allHtml;
+        }
+
+        private string DoClassPropertiesForPDF(Class cls)
+        {
+            string allHtml = "";
+            foreach (Property idx in cls.Properties)
+            {
+                if (string.IsNullOrEmpty(idx.Description))
+                    continue;
+                allHtml += "<code>";
+                allHtml +=
+                    idx.AccessModifier + "\t" +
+                    idx.ReturnType.Replace("<", "&lt;").Replace(">", "&gt;") + "\t" +
+                    idx.Name;
+                allHtml += "</code>";
+                allHtml += "<p>" + idx.Description + "</p>";
+            }
+            if (!string.IsNullOrEmpty(allHtml))
+                allHtml = "<sec>Properties</sec>" + allHtml;
+            return allHtml;
+        }
+
+        private string DoClassEventsForPDF(Class cls)
+        {
+            string allHtml = "";
+            foreach (Event idx in cls.Events)
+            {
+                if (string.IsNullOrEmpty(idx.Description))
+                    continue;
+                allHtml += "<code>";
+                allHtml +=
+                    idx.AccessModifier + "\t" +
+                    idx.ReturnType.Replace("<", "&lt;").Replace(">", "&gt;") + "\t" +
+                    idx.Name;
+                allHtml += "</code>";
+                allHtml += "<p>" + idx.Description + "</p>";
+            }
+            if (!string.IsNullOrEmpty(allHtml))
+                allHtml = "<p2>Events</p2>" + allHtml;
+            return allHtml;
+        }
+
+        private static string DoClassMethodsForPDF(Class cls)
+        {
+            string allHtml = "";
+            foreach (Method idx in cls.Methods)
+            {
+                if (string.IsNullOrEmpty(idx.Description))
+                    continue;
+
+                allHtml += "<code>";
+                allHtml +=
+                    idx.AccessModifier + " " +
+                    idx.ReturnType.Replace("<", "(").Replace(">", ")") + " " +
+                    idx.Name.Replace("<", "(").Replace(">", ")");
+                allHtml += "(";
+
+                bool first = true;
+                foreach (Parameter idxP in idx.Parameters)
+                {
+                    if (first)
+                        first = false;
+                    else
+                        allHtml += ", ";
+                    allHtml += idxP.Type.Replace("<", "(").Replace(">", ")") + " " + idxP.Name;
+                }
+                allHtml += ")";
+                allHtml += "</code>";
+                allHtml += "<p>" + idx.Description + "</p>";
+            }
+            if (!string.IsNullOrEmpty(allHtml))
+                allHtml = "<sec>Methods</sec>" + allHtml;
+            return allHtml;
+        }
+
+        private void GetTipOfTodayPagesForDox(Node node)
+        {
+            Node xx = new Node();
+
+            RaiseEvent(
+                "Magix.Core.GetAllToolTips",
                 xx);
 
-            int level = int.Parse(xx["Value"].Get<string>(), CultureInfo.InvariantCulture);
+            string allTipOfToday = "";
+            foreach (Node idx in xx)
+            {
+                // TipOfToday stores its stuff as HTML ...
+                string html = idx.Get<string>();
+                allTipOfToday += html;
+            }
+            node["Pages"]["Introduction"].Value = allTipOfToday;
+        }
 
-            Node node = new Node();
+        private static void CreateIndexItemForMetaActions(Node node)
+        {
+            node["Index"]["Actions"]["Header"].Value = "Meta Actions";
+            node["Index"]["Actions"]["Description"].Value = "Reference documentation about the " +
+                "MetaActions that was present, and had documentation within your installation upon " +
+                "the generation of this document";
+        }
+
+        private void CreateIndexItemsForClasses(Node node, int level)
+        {
+            foreach (Namespace idx in Docs.GetNamespaces(level))
+            {
+                if (new List<Doxygen.NET.Type>(idx.GetClasses(level)).Count > 0)
+                {
+                    foreach (Class idxC in idx.GetClasses(level))
+                    {
+                        if (!string.IsNullOrEmpty(idxC.Description))
+                        {
+                            AddClassToNodeForBookDistro(idxC, node);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void CreateIntroduction_TipOfToday_IndexItem(Node node)
+        {
+            node["Index"]["Introduction"]["Header"].Value = "Welcome to Magix!";
+            node["Index"]["Introduction"]["Description"].Value = "A short introduction to Magix " +
+"and what you can expect from it. Explains the terms and introduces Magix using a Tutorial-Like " +
+"communication form. This is the main content parts of the book, while the other parts are more " +
+"reference like in structure. Start out here to get an introduction of the different terms if you " +
+"are new to Magix, and use the other parts as a Reference Guide later when wondering about specific subjects. " +
+"Also remember that there are tons of stuff about Magix on YouTube and on the internet in general in case you're " +
+"stuck with a very specific subject";
+        }
+
+        private static void SetTitleAndCoverImage(int level, Node node)
+        {
             switch (level)
             {
                 case 1:
@@ -136,111 +374,44 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                     node["File"].Value = "Tmp/Magix-For-Noobs.pdf";
                     node["FrontPage"].Value = "media/images/book-front-page-noob.png";
                     break;
+
                 case 2:
                     node["Title"].Value = "Magix for 'The Believers'";
                     node["File"].Value = "Tmp/Magix-For-Believers.pdf";
                     node["FrontPage"].Value = "media/images/book-front-page-believer.png";
                     break;
+
                 case 3:
                     node["Title"].Value = "Magix for C#-People";
                     node["File"].Value = "Tmp/Magix-For-CSharp-People.pdf";
                     node["FrontPage"].Value = "media/images/book-front-page-CSharp.png";
                     break;
+
                 case 4:
                     node["Title"].Value = "Magix for 'Believing C#-People'";
                     node["File"].Value = "Tmp/Magix-For-Believing-CSharp-People.pdf";
                     node["FrontPage"].Value = "media/images/book-front-page-CSharp-Believers.png";
                     break;
             }
-
-            node["Index"]["Introduction"]["Header"].Value = "Introduction";
-            node["Index"]["Introduction"]["Description"].Value = "A short introduction to Magix " +
-"and what you can expect from it. Explains the terms and introduces Magix using a Tutorial-Like " +
-"communication form. This is the main content parts of the book, while the other parts are more " +
-"reference like in structure. Start out here to get an introduction of the different terms if you " +
-"are new to Magix, and use the other parts as a Reference Guide later when wondering about specific subjects. " +
-"Also remember that there are tons of stuff about Magix on YouTube and on the internet in general in case you're "+
-"stuck with a very specific subject";
-
-            foreach (Namespace idx in Docs.GetNamespaces(level))
-            {
-                if (new List<Doxygen.NET.Type>(idx.GetClasses(level)).Count > 0)
-                {
-                    foreach (Class idxC in idx.GetClasses(level))
-                    {
-                        AddClassToNodeForBookDistro(idxC, node);
-                    }
-                }
-            }
-
-            node["Index"]["Actions"]["Header"].Value = "Meta Actions";
-            node["Index"]["Actions"]["Description"].Value = "Reference documentation about the " +
-                "MetaActions that was present, and had documentation within your installation upon " +
-                "the generation of this document";
-
-            RaiseEvent(
-                "Magix.Core.GetAllToolTips",
-                node["Pages"]["Introduction"]);
-
-            foreach (Namespace idx in Docs.GetNamespaces(level))
-            {
-                if (new List<Doxygen.NET.Type>(idx.GetClasses(level)).Count > 0)
-                {
-                    foreach (Class idxC in idx.GetClasses(level))
-                    {
-                        AddClassToNodeForBookDistroPages(idxC, node);
-                    }
-                }
-            }
-
-            foreach (Action idx in Action.Select())
-            {
-                PutActionIntoDox(idx, node["Pages"]["Actions"][idx.Name]);
-            }
-
-            RaiseEvent(
-                "Magix.PDF.CreatePDF",
-                node);
         }
 
-        private void PutActionIntoDox(Action cls, Node node)
+        private int GetDoxLevel()
         {
-            string description = "<h2>" + cls.Name + "</h2>";
-            description += "<p>" + cls.Description + "</p>";
-            node.Value = description;
-        }
+            // Getting setting for 'Level of Documentation' [easy, intermediate or advanced or 'super']
+            Node doxLevel = new Node();
 
-        private void AddClassToNodeForBookDistroPages(Class cls, Node node)
-        {
-            string description = cls.Description;
+            doxLevel["Name"].Value = "Magix.Brix.Components.ActiveControllers.Documentation.CurrentLevel";
+            doxLevel["Default"].Value = "1";
 
-            foreach (Method idx in cls.Methods)
-            {
-                if(string.IsNullOrEmpty(idx.Description))
-                    continue;
-                description += "\r\n\r\n\r\n";
-                description += idx.AccessModifier + " " +
-                    idx.ReturnType.Replace("<", "[").Replace(">", "]") + " " + idx.Name;
-                string pars = "";
-                foreach (Parameter idxP in idx.Parameters)
-                {
-                    if (pars != "")
-                        pars += ", ";
-                    pars += idxP.Type.Replace("<", "[").Replace(">", "]") + " " + idxP.Name;
-                }
-                if (pars != "")
-                    description += "(" + pars + ")";
-
-                description += "\r\n\r\n";
-                description += idx.Description;
-            }
-
-            node["Pages"][cls.FullName]["Description"].Value = description;
+            RaiseEvent(
+                "Magix.Common.GetUserSetting",
+                doxLevel);
+            return int.Parse(doxLevel["Value"].Value.ToString());
         }
 
         private void AddClassToNodeForBookDistro(Class cls, Node node)
         {
-            node["Index"][cls.FullName]["Header"].Value = cls.FullName;
+            node["Index"][cls.FullName]["Header"].Value = cls.Name;
             node["Index"][cls.FullName]["Description"].Value = cls.Description;
         }
 
@@ -574,8 +745,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
 
             node["Class"].Value = cls.FullName;
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
         }

@@ -58,31 +58,35 @@ namespace Doxygen.NET
          */
         public IEnumerable<Type> GetClasses(int level)
         {
-            foreach (Type idx in Types.FindAll(FindByKind("class")))
+            foreach (Class idx in Classes)
             {
                 if (string.IsNullOrEmpty(idx.Description))
                     continue; // Only returning documented stuff ...
 
                 if (level >= 4)
-                    yield return idx; // Returning EVERYTHING ...!!
-
-                string tmpLevelStr = idx.Description ?? "";
-                if (tmpLevelStr.Length > 6)
                 {
-                    tmpLevelStr = tmpLevelStr.Substring(0, 6);
-                    switch (tmpLevelStr.ToLowerInvariant())
+                    yield return idx; // Returning EVERYTHING ...!!
+                }
+                else
+                {
+                    string tmpLevelStr = idx.Description ?? "";
+                    if (tmpLevelStr.Length > 6)
                     {
-                        case "level1":
-                            yield return idx;
-                            break;
-                        case "level2":
-                            if (level >= 2)
+                        tmpLevelStr = tmpLevelStr.Substring(0, 6);
+                        switch (tmpLevelStr.ToLowerInvariant())
+                        {
+                            case "level1":
                                 yield return idx;
-                            break;
-                        case "level3":
-                            if (level >= 3)
-                                yield return idx;
-                            break;
+                                break;
+                            case "level2":
+                                if (level >= 2)
+                                    yield return idx;
+                                break;
+                            case "level3":
+                                if (level >= 3)
+                                    yield return idx;
+                                break;
+                        }
                     }
                 }
             }

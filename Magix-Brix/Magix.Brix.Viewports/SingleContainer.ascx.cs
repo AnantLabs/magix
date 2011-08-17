@@ -24,7 +24,7 @@ using System.Diagnostics;
 namespace Magix.Brix.Viewports
 {
     /**
-     * Level1: Contains the logic for the main Viewport in Magix. A viewport
+     * Level2: Contains the logic for the main Viewport in Magix. A viewport
      * can be seen as your 'design' and contains all the different logic
      * for being able to load and unload modules and such
      */
@@ -272,7 +272,7 @@ namespace Magix.Brix.Viewports
         }
 
         /**
-         * Level1: Will set the Title element of the page to the given 'Caption'
+         * Level2: Will set the Title element of the page to the given 'Caption'
          */
         [ActiveEvent(Name = "Magix.Core.SetTitleOfPage")]
         protected void Magix_Core_SetTitleOfPage(object sender, ActiveEventArgs e)
@@ -397,7 +397,7 @@ namespace Magix.Brix.Viewports
         }
 
         /**
-         * Level1: Injects a CSS file onto the page for inclusion on the client side for you
+         * Level2: Injects a CSS file onto the page for inclusion on the client side for you
          */
         [ActiveEvent(Name = "Magix.Core.AddCustomCssFile")]
         protected void Magix_Core_AddCustomCssFile(object sender, ActiveEventArgs e)
@@ -477,7 +477,7 @@ namespace Magix.Brix.Viewports
         }
 
         /**
-         * Level1: Will show a 'Message Box' with your 'Message', 'Header' for 'Milliseconds'
+         * Level2: Will show a 'Message Box' with your 'Message', 'Header' for 'Milliseconds'
          * time period. If 'IsError' is true, it'll be red and contain some 'error logic' within 
          * it. If 'Delayed' is true, the message will not be shown directly, but in fact
          * 'postponed' to the next request. Which canbe useful for e.g. Async event handlers, 

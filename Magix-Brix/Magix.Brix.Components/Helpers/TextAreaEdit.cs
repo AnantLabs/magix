@@ -35,7 +35,7 @@ namespace Magix.Brix.Components
         public event EventHandler TextChanged;
 
         /**
-         * Level4: Raised when TetBox is about to become displayed
+         * Level4: Raised when TextBox is about to become displayed
          */
         public event EventHandler DisplayTextBox;
 
