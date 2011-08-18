@@ -112,7 +112,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["IsDelete"].Value = false;
             node["IsFind"].Value = true;
             node["IsSelect"].Value = true;
-            node["GetContentsEventName"].Value = "Magix.MetaAction.GetContentsEventName";
+            node["GetContentsEventName"].Value = "DBAdmin.Data.GetContentsOfClass-Filter-Override";
             node["SetFocus"].Value = true;
             node["SelectEvent"].Value = "Magix.MetaAction.ActionWasSelected";
             node["ParentPropertyName"].Value = e.Params["SelectEvent"].Value;
