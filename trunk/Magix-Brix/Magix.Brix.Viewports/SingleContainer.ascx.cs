@@ -436,7 +436,7 @@ namespace Magix.Brix.Viewports
             }
         }
 
-        private void IncludeCssFile(string cssFile)
+        private new void IncludeCssFile(string cssFile)
         {
             if (!string.IsNullOrEmpty(cssFile))
             {
