@@ -83,6 +83,14 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
                 }
                 switch (idx.Name)
                 {
+                    case "br":
+                        {
+                            section.AddParagraph("", "NormalNoMargs");
+                        } break;
+                    case "codenomargs":
+                        {
+                            section.AddParagraph(value, "Code2");
+                        } break;
                     case "big":
                         {
                             section.AddParagraph(value, "Big");
@@ -122,9 +130,7 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
                         } break;
                     case "code":
                         {
-                            Paragraph p = section.AddParagraph();
-                            p.Style = "Code";
-                            p.AddText(value);
+                            section.AddParagraph(value, "Code");
                         } break;
                     case "codebig":
                         {
@@ -191,8 +197,24 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
             code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.KeepTogether = true;
             code.ParagraphFormat.SpaceBefore = 40;
+            code.ParagraphFormat.SpaceAfter = 0;
             code.Font = new Font("Courier", 10);
+
+            code = doc.Styles.AddStyle("Code2", "Normal");
+            code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.SpaceAfter = 10;
+            code.ParagraphFormat.SpaceBefore = 0;
+            code.ParagraphFormat.KeepTogether = true;
+            code.Font = new Font("Courier", 10);
+
+            code = doc.Styles.AddStyle("NormalNoMargs", "Normal");
+            code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.KeepWithNext = true;
+            code.ParagraphFormat.SpaceAfter = 0;
+            code.ParagraphFormat.SpaceBefore = 0;
+            code.ParagraphFormat.KeepTogether = true;
+            code.Font = new Font("Courier", 10);
 
             code = doc.Styles.AddStyle("Codebig", "Normal");
             code.ParagraphFormat = new ParagraphFormat();
