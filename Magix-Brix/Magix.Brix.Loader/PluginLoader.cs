@@ -66,6 +66,17 @@ namespace Magix.Brix.Loader
                 });
         }
 
+        /**
+         * Level4: A list of all your ActiveControllers in the system
+         */
+        public List<Type> ActiveControllers
+        {
+            get
+            {
+                return _controllerTypes;
+            }
+        }
+
         // Helper method that loops through every type in AppDomain and 
         // looks for an attribute of a given type and passes it into a delegate 
         // submitted by the caller...

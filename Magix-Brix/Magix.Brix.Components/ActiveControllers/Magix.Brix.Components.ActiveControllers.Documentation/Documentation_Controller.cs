@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Globalization;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
+using Magix.Brix.Data;
 
 namespace Magix.Brix.Components.ActiveControllers.Documentation
 {
@@ -184,8 +185,51 @@ clicking a button, or something similar</p>
 
         private void AddClassToNodeForBookDistroPages(Class cls, Node node)
         {
-            string allHtml = "<h1>" + cls.Name + "</h1>" +
-                "<codebig>" + cls.FullName + "</codebig>";
+            string allHtml = "<h1>" + cls.Name + "</h1>";
+
+            System.Type am = Adapter.ActiveModules.Find(
+                delegate(System.Type idx)
+                {
+                    return idx.FullName == cls.FullName;
+                });
+            if (am != null)
+            {
+                allHtml += "<codebig>[ActiveModule]</codebig>";
+            }
+
+            System.Type ac = PluginLoader.Instance.ActiveControllers.Find(
+                delegate(System.Type idx)
+                {
+                    return idx.FullName == cls.FullName;
+                });
+            if (ac != null)
+            {
+                allHtml += "<codebig>[ActiveController]</codebig>";
+            }
+
+            System.Type at = Adapter.ActiveTypes.Find(
+                delegate(System.Type idx)
+                {
+                    return idx.FullName == cls.FullName;
+                });
+            if (at != null)
+            {
+                allHtml += "<codebig>[ActiveType";
+                ActiveTypeAttribute[] atrs =
+                    at.GetCustomAttributes(typeof(ActiveTypeAttribute), true) as
+                    ActiveTypeAttribute[];
+                if (atrs != null && atrs.Length > 0)
+                {
+                    if (!string.IsNullOrEmpty(atrs[0].TableName))
+                    {
+                        allHtml += "(";
+                        allHtml += "TableName=\"" + atrs[0].TableName + "\"";
+                        allHtml += ")";
+                    }
+                }
+                allHtml += "]</codebig>";
+            }
+            allHtml += "<codebig>" + cls.FullName + "</codebig>";
 
             allHtml += "<p2>Description: </p2><p>" + cls.Description + "</p>";
 
@@ -245,11 +289,66 @@ clicking a button, or something similar</p>
                 if (string.IsNullOrEmpty(idx.Description))
                     continue;
                 allHtml += "<code>";
+
+                System.Type at = Adapter.ActiveTypes.Find(
+                    delegate(System.Type idx2)
+                    {
+                        return idx2.FullName == cls.FullName;
+                    });
+                if (at != null)
+                {
+                    ActiveTypeAttribute[] atrs =
+                        at.GetCustomAttributes(typeof(ActiveTypeAttribute), true) as
+                        ActiveTypeAttribute[];
+                    if (atrs != null && atrs.Length > 0)
+                    {
+                        PropertyInfo prop = at.GetProperty(
+                            idx.Name, 
+                            BindingFlags.Instance | 
+                            BindingFlags.Public | 
+                            BindingFlags.NonPublic);
+                        if (prop != null)
+                        {
+                            ActiveFieldAttribute[] at2 =
+                                prop.GetCustomAttributes(typeof(ActiveFieldAttribute), true) as
+                                ActiveFieldAttribute[];
+                            if (at2 != null && at2.Length > 0)
+                            {
+                                allHtml += "[ActiveField";
+                                allHtml += "(";
+                                bool found = false;
+
+                                if (!string.IsNullOrEmpty(at2[0].RelationName))
+                                {
+                                    allHtml += "RelationName=\"" + at2[0].RelationName + "\"";
+                                    found = true;
+                                }
+                                if (!at2[0].IsOwner)
+                                {
+                                    if (found)
+                                        allHtml += ", ";
+                                    allHtml += "IsOwner=false";
+                                    found = true;
+                                }
+                                if (at2[0].BelongsTo)
+                                {
+                                    if (found)
+                                        allHtml += ", ";
+                                    allHtml += "BelongsTo=true";
+                                    found = true;
+                                }
+                                allHtml += ")";
+                                allHtml += "]\r\n";
+                            }
+                        }
+                    }
+                }
+                allHtml += " </code><codenomargs>";
                 allHtml +=
                     idx.AccessModifier + "\t" +
                     idx.ReturnType.Replace("<", "&lt;").Replace(">", "&gt;") + "\t" +
-                    idx.Name;
-                allHtml += "</code>";
+                    idx.Name +
+                    "</codenomargs>";
                 allHtml += "<p>" + idx.Description + "</p>";
             }
             if (!string.IsNullOrEmpty(allHtml))
@@ -286,6 +385,57 @@ clicking a button, or something similar</p>
                     continue;
 
                 allHtml += "<code>";
+                System.Type eh = Adapter.ActiveModules.Find(
+                    delegate(System.Type idx2)
+                    {
+                        return idx2.FullName == cls.FullName;
+                    });
+                if (eh == null)
+                    eh = Adapter.ActiveTypes.Find(
+                    delegate(System.Type idx2)
+                    {
+                        return idx2.FullName == cls.FullName;
+                    });
+                if (eh == null)
+                    eh = PluginLoader.Instance.ActiveControllers.Find(
+                    delegate(System.Type idx2)
+                    {
+                        return idx2.FullName == cls.FullName;
+                    });
+                if (eh != null)
+                {
+                    try
+                    {
+                        MethodInfo prop = eh.GetMethod(
+                                idx.Name,
+                                BindingFlags.Instance |
+                                BindingFlags.Public |
+                                BindingFlags.NonPublic);
+                        if (prop != null)
+                        {
+                            ActiveEventAttribute[] at2 =
+                                prop.GetCustomAttributes(typeof(ActiveEventAttribute), true) as
+                                ActiveEventAttribute[];
+                            if (at2 != null && at2.Length > 0)
+                            {
+                                allHtml += "[ActiveEvent(";
+                                if (at2[0].Async)
+                                {
+                                    allHtml += "Async=true, ";
+                                }
+                                allHtml += "Name=\"" + at2[0].Name + "\")]";
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // silently catching since some methods might have the same names
+                        // at which point they're NOT Event Handlers. That's for sure ... ;)
+                    }
+                }
+                allHtml += "</code>";
+
+                allHtml += "<codenomargs>";
                 allHtml +=
                     idx.AccessModifier + " " +
                     idx.ReturnType.Replace("<", "(").Replace(">", ")") + " " +
@@ -302,7 +452,7 @@ clicking a button, or something similar</p>
                     allHtml += idxP.Type.Replace("<", "(").Replace(">", ")") + " " + idxP.Name;
                 }
                 allHtml += ")";
-                allHtml += "</code>";
+                allHtml += "</codenomargs><br/>";
                 allHtml += "<p>" + idx.Description + "</p>";
             }
             if (!string.IsNullOrEmpty(allHtml))
