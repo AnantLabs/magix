@@ -49,7 +49,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     c1.ViewportContainer = "content1";
                     c1.Width = 6;
                     c1.Height = 20;
-                    c1.MarginTop = 8;
+                    c1.MarginTop = 13;
                     c1.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.SliderMenu";
                     t1.Containers.Add(c1);
 
@@ -58,7 +58,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     c2.CssClass = "header";
                     c2.ViewportContainer = "content2";
                     c2.Width = 18;
-                    c2.Height = 7;
+                    c2.MarginTop = 6;
+                    c2.Height = 5;
                     c2.Last = true;
                     c2.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.Header";
                     t1.Containers.Add(c2);
@@ -70,6 +71,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     c3.Width = 18;
                     c3.Height = 30;
                     c3.MarginBottom = 10;
+                    c3.Overflow = true;
                     c3.MarginTop = 2;
                     c3.Last = true;
                     c3.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.Content";
@@ -81,7 +83,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 {
                     // Creating a default page ...
                     WebPage o = new WebPage();
-                    o.Name = "Default Home Page";
+                    o.Name = "Welcome to Magix!";
                     o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "Menu Left"));
 
                     WebPart t1 = new WebPart();
@@ -101,8 +103,46 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     WebPart.WebPartSetting s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
+<img src=""media/images/magix-logo.png"" style=""margin-left:20px;float:right;display:block;width:200px;"" alt=""Magix, where Dreams come Through ...""/>
 <p>By default a user has been created with the username/password of admin/admin</p>
-<p>You can login with this user to the Back-End form <a href=""?dashboard=true"">here</a> ...</p>";
+<p>You can login with this user to the Back-End form <a href=""?dashboard=true"">here</a> ...</p>
+<h3>Down the Rabbit Hole ...</h3>
+<p>What is Magix ...?</p>
+<p>Magix is difficult to describe. Some will say it's a CMS or a 'Publishing System', 
+others might say that it's a System Development Platform, 
+others again might say it's a Social Media platform, for collaboration across Organizations. Some developers 
+will claim it's nothing but a RAD implementation of Lisp on top of ASP.NET and WebControls. And so on ...</p>
+<p>Regardless, they're probably all right! Every person who looks at Magix will probably categorize it 
+differently than the next person out there! 
+</p><p>
+You might in fact think
+of Magix as a <em>'Hole in the Universe'</em>, which will Annihilate most of your existing Assumptions 
+about Software and IT ...</p>
+<p>This is because Magix is built with one goal in mind, which is to empower <strong>you</strong>, in any ways it 
+possibly can! Like for instance, even if you've never touched a computer before, it's highly likely 
+that you'll be able to create your own Highly Advanced and Sophisticated Software Systems within hours after getting 
+Magix installed. Not only will these systems be much more advanced than what you'd normally have to pay 
+several thousands dollars for, but they'd also work on every single device out there in existance today. 
+iPhones, Androids, Nokias, Microsoft Windows Phones, iPads etc ...</p>
+<p>In addition Magix completely rewrites the whole <em>'Cloud'</em> thing, by basically <strong>being</strong> its 
+own <em>'Cloud Implementation'</em> by allowing 'your app', or server that is, to communicate 
+seemless with any other server you wish out there. And say anything it wish back and forth. Subscribe 
+to events and actions and such, and just seemlessly 'work together as one unity'. Still without 
+compromising ANY control over what data is being transfered, and easily creating Authentication 
+routines, Authorization routines, and such for 'other servers out there'.</p>
+<p>So even though Magix is not Facebook in any ways, you could probably create your own version of Facebook 
+within a couple of hours after getting started with it. And connect <em>'Your Facebook'</em> seemlessly together 
+with all of your friend's <em>'Facebooks'</em></p>
+<p>Create something beautiful you'd like to share with a friend? One click Copy/Paste it from your server to your friend's 
+server. Entire Applications if you wish ...</p>
+<p>Tired of iTunes' prices? Create your OWN iTunes in hours ...</p>
+<p>Oh yeah! Almost forgot the most important thing; <strong>Magis is Free Software!</strong> ...</p>
+<p>To sum it all up, in a couple of meaningful words, which I think accurately 
+describes Magix; </p>
+<p><strong>Yup!<br/>It's Game Over!<br/>Equilibrium to the Force, And YOU Won ... ! ;)</strong></p>
+<p>Have a nice life!</p>
+<p>.t</p>
+";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
 
