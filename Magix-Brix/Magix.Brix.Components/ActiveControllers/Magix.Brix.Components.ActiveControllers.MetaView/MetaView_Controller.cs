@@ -1033,7 +1033,12 @@ Deleting it may break these parts.</p>";
             i.Text = "Please Select ...";
             ls.Items.Add(i);
 
-            foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+            foreach (MetaObject idx in Cache<IEnumerable<MetaObject>>(
+                "Magix.MetaObjects.OfTypeName-" + type,
+                delegate
+                {
+                    return MetaObject.Select(Criteria.Eq("TypeName", type));
+                }))
             {
                 ListItem it = new ListItem();
                 MetaObject.Property val = idx.Values.Find(
@@ -1152,7 +1157,12 @@ Deleting it may break these parts.</p>";
             string cssClass = "status-unknown";
             if (val != null)
             {
-                foreach (MetaObject idx in MetaObject.Select(Criteria.Eq("TypeName", type)))
+                foreach (MetaObject idx in Cache<IEnumerable<MetaObject>>(
+                    "Magix.MetaObjects.OfTypeName-" + type,
+                    delegate
+                    {
+                        return MetaObject.Select(Criteria.Eq("TypeName", type));
+                    }))
                 {
                     MetaObject.Property val2 = idx.Values.Find(
                         delegate(MetaObject.Property idxI)

@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Web;
 using Magix.Brix.Types;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Magix.Brix.Loader
 {
@@ -25,6 +26,11 @@ namespace Magix.Brix.Loader
          * it'll 'swallow' the exception, and show a Message box showing the exception
          */
         protected delegate void executor();
+
+        /**
+         * Level3: Helper for retrieving cached items
+         */
+        protected delegate T executor<T>();
 
         /**
          * Level3: Loads the given module and puts it into your default container
@@ -206,6 +212,21 @@ namespace Magix.Brix.Loader
             {
                 return HttpContext.Current.Handler as Page;
             }
+        }
+
+        private Dictionary<string, object> _cache = new Dictionary<string, object>();
+        /**
+         * Level3: Will cache the result object for the remaininbg of the request
+         */
+        protected T Cache<T>(string key, executor<T> functor)
+        {
+            if (_cache.ContainsKey(key))
+                return (T)_cache[key];
+
+            T tmp = functor();
+
+            _cache[key] = tmp;
+            return tmp;
         }
     }
 }
