@@ -659,6 +659,22 @@ MetaObject Column Property Name to the signature signed on the Signature module 
                     a.Save();
                 }
 
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ExportMetaView2CSV")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ExportMetaView2CSV";
+                    a.EventName = "Magix.Common.ExportMetaView2CSV";
+                    a.StripInput = false;
+                    a.Description = @"Will render the 'Currently Viewed' MetaView into
+a CSV file [Microsoft Excel or Apple Numbers etc] and redirect the users client [Web Browser] 
+to the newly rendered CSV file. 'Currently Viewed' meaning the view that contained the 
+control that initiated this Action somehow. If you explicitly create a 'MetaViewName' parameter, 
+and set its name to another MetaView, then that MetaView will be rendered instead";
+
+                    a.Save();
+                }
+
                 tr.Commit();
             }
         }

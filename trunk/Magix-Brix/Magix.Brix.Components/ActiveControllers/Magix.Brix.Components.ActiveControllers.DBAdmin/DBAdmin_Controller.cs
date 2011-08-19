@@ -139,23 +139,26 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 
         /**
          * Level2: Will return a range of objects type 'FullTypeName' depending upon the 'Start' and 'End' 
-         * parameter. Requires a "FullTypeName" parameter, and "Start" + "End"
+         * parameter. Requires a 'FullTypeName' parameter, and 'Start' and 'End' parameters
          */
         [ActiveEvent(Name = "DBAdmin.Data.GetContentsOfClass")]
         protected void DBAdmin_Data_GetContentsOfClass(object sender, ActiveEventArgs e)
         {
-            string fullTypeName = 
-                e.Params["FullTypeName"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+
             Data.Instance.GetObjectTypeNode(fullTypeName, e.Params);
-            List<Criteria> pars = 
-                Data.Instance.GetCriteria(fullTypeName, e.Params);
+
+            List<Criteria> pars = Data.Instance.GetCriteria(fullTypeName, e.Params);
+
             Data.Instance.GetObjectsNode(
                 fullTypeName,
                 e.Params,
                 e.Params["Start"].Get<int>(0),
                 e.Params["End"].Get<int>(Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10)),
                 pars.ToArray());
+
             e.Params["End"].Value = e.Params["Start"].Get<int>(0) + e.Params["Objects"].Count;
+
             if (!e.Params.Contains("SetCount") ||
                 !e.Params.Contains("LockSetCount") ||
                 !e.Params["LockSetCount"].Get<bool>())

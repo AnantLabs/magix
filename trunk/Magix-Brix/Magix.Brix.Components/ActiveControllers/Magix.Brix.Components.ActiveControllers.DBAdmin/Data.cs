@@ -504,12 +504,11 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         {
 
             Type type2 = GetType(fullTypeName);
-            if (type2 == null)
-                return new List<Criteria>();
-
+ 
             // Creating Criteria from Settings ...
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> getters
                 = GetMethodInfos(fullTypeName, node);
+
             List<Criteria> retVal = new List<Criteria>();
 
 
@@ -571,10 +570,12 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Node fNode = new Node();
             fNode["Key"].Value = "DBAdmin.Filter." + fullTypeName + ":ID";
             fNode["Default"].Value = "";
+
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 "DBAdmin.Data.GetFilter",
                 fNode);
+
             string idFilter = fNode["Filter"].Get<string>();
             if (!string.IsNullOrEmpty(idFilter))
             {
@@ -597,10 +598,12 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                             ":" +
                             propertyName;
                     fNode["Default"].Value = "";
+
                     ActiveEvents.Instance.RaiseActiveEvent(
                         this,
                         "DBAdmin.Data.GetFilter",
                         fNode);
+
                     string filter = fNode["Filter"].Get<string>();
                     if (string.IsNullOrEmpty(filter))
                         continue;
@@ -931,6 +934,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             GetMethodInfos(string typeNamey, Node node)
         {
             Type type = GetType(typeNamey);
+            if (type == null)
+                return new Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>>();
             Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>> retVal =
                 new Dictionary<string, Tuple<MethodInfo, ActiveFieldAttribute>>();
             foreach (PropertyInfo idx in type.GetProperties(

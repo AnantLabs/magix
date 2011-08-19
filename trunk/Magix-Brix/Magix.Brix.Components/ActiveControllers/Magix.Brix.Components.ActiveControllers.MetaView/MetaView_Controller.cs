@@ -13,6 +13,7 @@ using Magix.UX.Widgets;
 using Magix.UX.Effects;
 using System.Collections.Generic;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
+using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
@@ -101,8 +102,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             if (e.Params.Contains("MetaViewName"))
                 node["MetaViewName"].Value = e.Params["MetaViewName"].Value;
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
         }
@@ -809,15 +809,21 @@ Deleting it may break these parts.</p>";
 
                 e.Params["LockSetCount"].Value = true;
 
-                foreach (MetaObject idxO in MetaObject.Select(
-                    Criteria.Eq("TypeName", templ.TypeName),
-                    Criteria.Range(
-                        e.Params["Start"].Get<int>(),
-                        e.Params["End"].Get<int>(),
-                        "Created",
-                        false)))
+                List<Criteria> crits = new List<Criteria>();
+                crits.Add(Criteria.Eq("TypeName", templ.TypeName));
+                if (e.Params["Start"].Get<int>() != 0 &&
+                    e.Params["End"].Get<int>() != -1)
+                    crits.Add(Criteria.Range(
+                            e.Params["Start"].Get<int>(),
+                            e.Params["End"].Get<int>(),
+                            "Created",
+                            false));
+
+                foreach (MetaObject idxO in MetaObject.Select(crits.ToArray()))
                 {
                     e.Params["Objects"]["o-" + idxO.ID]["ID"].Value = idxO.ID;
+                    e.Params["Objects"]["o-" + idxO.ID]["Created"].Value = 
+                        idxO.Created.ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
                     foreach (MetaObject.Property idx in idxO.Values)
                     {
                         string propertyName = idx.Name ?? "";
@@ -1075,7 +1081,7 @@ Deleting it may break these parts.</p>";
             panel.ID = "pnl" + id;
             panel.CssClass = "calendar-wrapper";
 
-            Calendar c = new Calendar();
+            Magix.UX.Widgets.Calendar c = new Magix.UX.Widgets.Calendar();
             c.ID = "cal" + id;
             c.CssClass += " mux-shaded mux-rounded";
             if (val != null &&
