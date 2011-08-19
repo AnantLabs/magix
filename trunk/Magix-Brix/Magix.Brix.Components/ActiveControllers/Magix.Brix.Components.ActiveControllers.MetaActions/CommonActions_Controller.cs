@@ -359,7 +359,8 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
          * MetaView's TypeName into a CSV file, which it will redirect the client's web 
          * browser towards. You can also override how the type is being rendered by 
          * adding up 'WhiteListColumns' and 'Type' parameters, which will override 
-         * the default behavior for the MetaView
+         * the default behavior for the MetaView. Set 'Redirect' to false if you wish
+         * to stop redirecting to the newly created file to occur.
          */
         [ActiveEvent(Name = "Magix.Common.ExportMetaView2CSV")]
         protected void Magix_Common_ExportMetaView2CSV(object sender, ActiveEventArgs e)
@@ -392,6 +393,9 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
                 "-" + 
                 DateTime.Now.ToString("yyyy-MM-mm-HH-mm-ss", CultureInfo.InvariantCulture) + ".csv";
 
+            if (e.Params.Contains("Redirect"))
+                n["Redirect"].Value = e.Params["Redirect"].Value;
+
             RaiseEvent(
                 "Magix.Common.ExportMetaViewObjectList2CSV",
                 n);
@@ -399,7 +403,8 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
 
         /**
          * Level2: Will export a node list in 'Objects' List form to a CSV file, 
-         * and redirect the client to that newly created CSV file
+         * and redirect the client to that newly created CSV file. Set 'Redirect' to 
+         * false to stop redirecting to the newly created CSV file to occur
          */
         [ActiveEvent(Name = "Magix.Common.ExportMetaViewObjectList2CSV")]
         protected void Magix_Common_ExportMetaViewObjectList2CSV(object sender, ActiveEventArgs e)
@@ -458,12 +463,17 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
                 }
             }
 
-            Node xx = new Node();
-            xx["URL"].Value = e.Params["FileName"].Get<string>();
+            // Checking to see if we're supposed to redirect client browser
+            if (!e.Params.Contains("Redirect") ||
+                e.Params["Redirect"].Get<bool>())
+            {
+                Node xx = new Node();
+                xx["URL"].Value = e.Params["FileName"].Get<string>();
 
-            RaiseEvent(
-                "Magix.Common.RedirectClient",
-                xx);
+                RaiseEvent(
+                    "Magix.Common.RedirectClient",
+                    xx);
+            }
         }
 
         /**
