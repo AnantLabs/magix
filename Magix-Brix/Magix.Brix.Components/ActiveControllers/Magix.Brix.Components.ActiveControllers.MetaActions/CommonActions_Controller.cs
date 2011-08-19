@@ -380,6 +380,8 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
             n["Criteria"]["C1"]["Value"].Value = "Created";
             n["Criteria"]["C1"]["Ascending"].Value = false;
 
+            // TODO: Support 'Massively Large DataSets' by allowing for 'CallBackEvent' to be supplied
+            // ... which then will call CallBackEventHandler every n'th iteration or something ...
             RaiseEvent(
                 "DBAdmin.Data.GetContentsOfClass",
                 n);
