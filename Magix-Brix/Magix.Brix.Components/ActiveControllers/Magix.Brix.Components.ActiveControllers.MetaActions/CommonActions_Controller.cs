@@ -13,6 +13,9 @@ using Magix.UX.Widgets;
 using Magix.Brix.Components.ActiveTypes.Publishing;
 using System.Collections.Generic;
 using System.Globalization;
+using Magix.Brix.Components.ActiveTypes.MetaViews;
+using System.IO;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -348,6 +351,134 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         protected void Magix_Common_GetSessionVariable(object sender, ActiveEventArgs e)
         {
             e.Params["Value"].Value = Page.Session[e.Params["Name"].Get<string>()];
+        }
+
+        /**
+         * Level2: Expects to be given a 'MetaViewName' which it will turn into a MetaView
+         * object, which it will use as its foundation for exporting all MetaObjects of the 
+         * MetaView's TypeName into a CSV file, which it will redirect the client's web 
+         * browser towards. You can also override how the type is being rendered by 
+         * adding up 'WhiteListColumns' and 'Type' parameters, which will override 
+         * the default behavior for the MetaView
+         */
+        [ActiveEvent(Name = "Magix.Common.ExportMetaView2CSV")]
+        protected void Magix_Common_ExportMetaView2CSV(object sender, ActiveEventArgs e)
+        {
+            Node n = new Node();
+
+            n["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
+            n["MetaViewName"].Value = e.Params["MetaViewName"].Value;
+
+            // Signalizing 'everything' to the GetContentsOfClass event handler ...
+            n["Start"].Value = 0;
+            n["End"].Value = -1;
+
+            // Making sure everything is sorted according to Newest FIRST ...!
+            // TODO: There are tons of OTHER Grids in this system, e.g. SearchActions grid, 
+            // which are NOT sorted correctly. Fix this at some point ... !
+            n["Criteria"]["C1"]["Name"].Value = "Sort";
+            n["Criteria"]["C1"]["Value"].Value = "When";
+            n["Criteria"]["C1"]["Ascending"].Value = false;
+
+            RaiseEvent(
+                "DBAdmin.Data.GetContentsOfClass",
+                n);
+
+            n["FileName"].Value = 
+                "Tmp/" + 
+                e.Params["MetaViewName"].Get<string>() + 
+                "-" + 
+                DateTime.Now.ToString("yyyy-MM-mm-HH-mm-ss", CultureInfo.InvariantCulture) + ".csv";
+
+            RaiseEvent(
+                "Magix.Common.ExportMetaViewObjectList2CSV",
+                n);
+        }
+
+        /**
+         * Level2: Will export a node list in 'Objects' List form to a CSV file, UNIX style, 
+         * and redirect the client to that newly created CSV file
+         */
+        [ActiveEvent(Name = "Magix.Common.ExportMetaViewObjectList2CSV")]
+        protected void Magix_Common_ExportMetaViewObjectList2CSV(object sender, ActiveEventArgs e)
+        {
+            MetaView v = MetaView.SelectFirst(
+                Criteria.Eq(
+                    "Name", 
+                    e.Params["MetaViewName"].Get<string>()));
+
+            List<string> cols = new List<string>();
+            foreach (MetaView.MetaViewProperty idx in v.Properties)
+            {
+                if (idx.Name.StartsWith(":"))
+                    continue; // e.g. ":Save" or ":Delete" - System columns. Do NOT render to csv ...
+                if (idx.Name.Contains(":"))
+                {
+                    // 'Complex prperty', e.g. "select:Gender.Sex:Sex".
+                    // ALWAYS renders the 'Column Name' at the END ...!
+                    cols.Add(idx.Name.Substring(idx.Name.LastIndexOf(":") + 1));
+                }
+                else
+                {
+                    cols.Add(idx.Name);
+                }
+            }
+
+            using (TextWriter text = File.CreateText(Page.MapPath("~/" + e.Params["FileName"].Get<string>())))
+            {
+                // Rendering headers ...
+                text.Write("ID, Created");
+                foreach (string idx in cols)
+                {
+                    text.Write(",");
+                    text.Write(idx);
+                }
+                text.WriteLine();
+
+                // Rendering objects ...
+                foreach (Node idx in e.Params["Objects"])
+                {
+                    text.Write(idx["ID"].Value.ToString() + ",");
+                    text.Write(idx["Created"].Value.ToString());
+                    foreach (string idxCol in cols)
+                    {
+                        text.Write(",");
+                        if (idx["Properties"].Contains(idxCol))
+                        {
+                            string content = idx["Properties"][idxCol].Get<string>() ?? "";
+                            content = content
+                                .Replace("\\", "\\\\")
+                                .Replace("\"", "'");
+                            text.Write("\"" + content + "\"");
+                        }
+                    }
+                    text.WriteLine();
+                }
+            }
+
+            Node xx = new Node();
+            xx["Path"].Value = e.Params["FileName"].Get<string>();
+
+            RaiseEvent(
+                "Magix.Common.RedirectClient",
+                xx);
+        }
+
+        /**
+         * Level2: Redirect clients to the given 'Path' parameter
+         */
+        [ActiveEvent(Name = "Magix.Common.RedirectClient")]
+        protected void Magix_Common_RedirectClient(object sender, ActiveEventArgs e)
+        {
+            string path = e.Params["Path"].Get<string>();
+
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentException("Tried to redirect to a 'null' path ...??");
+
+            if (!path.StartsWith("http"))
+                path = "~/" + path;
+
+            AjaxManager.Instance.Redirect(path);
         }
     }
 }

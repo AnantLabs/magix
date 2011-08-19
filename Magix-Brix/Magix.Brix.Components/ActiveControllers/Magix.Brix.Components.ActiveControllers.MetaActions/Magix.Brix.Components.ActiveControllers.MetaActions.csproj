@@ -63,6 +63,10 @@
       <Project>{E1BAF1A9-58D0-4B95-8855-8D4008EAE918}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.MetaTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.MetaView\Magix.Brix.Components.ActiveTypes.MetaViews.csproj">
+      <Project>{A811B919-D021-4750-8422-578FAD42F4A0}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.MetaViews</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Publishing\Magix.Brix.Components.ActiveTypes.Publishing.csproj">
       <Project>{175455B9-43D0-4190-A2AE-8033BD3D62A1}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Publishing</Name>
