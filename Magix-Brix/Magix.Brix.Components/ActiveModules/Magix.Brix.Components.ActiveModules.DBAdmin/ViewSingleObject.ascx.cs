@@ -392,22 +392,24 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         if (DataSource["Type"]["Properties"][node.Name].Contains("ReadOnly") &&
                             DataSource["Type"]["Properties"][node.Name]["ReadOnly"].Get<bool>())
                         {
-                            Label ed = new Label();
-                            ed.Text = node.Value.ToString();
+                            string value = (node.Value ?? "").ToString();
                             if (DataSource["Type"]["Properties"][node.Name].Contains("MaxLength"))
                             {
-                                if (ed.Text.Length > DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>())
+                                if (value.ToString().Length > DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>())
                                 {
-                                    ed.Text = ed.Text.Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
+                                    c1.Text = value.ToString().Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
                                 }
+                                else
+                                    c1.Text = value.ToString();
                             }
+                            else
+                                c1.Text = value.ToString();
                             if (DataSource.Contains("WhiteListProperties") &&
                                 DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                             {
                                 c1.CssClass += "span-" + 
                                     DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
                             }
-                            c1.Controls.Add(ed);
                         }
                         else
                         {
@@ -450,15 +452,24 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         if (DataSource["Type"]["Properties"][node.Name].Contains("ReadOnly") &&
                             DataSource["Type"]["Properties"][node.Name]["ReadOnly"].Get<bool>())
                         {
-                            Label ed = new Label();
-                            ed.Text = node.Value as string;
+                            string value = (node.Value ?? "").ToString();
                             if (DataSource.Contains("WhiteListProperties") &&
                                 DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                             {
-                                ed.CssClass += "span-" +
+                                c1.CssClass += "span-" +
                                     DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
                             }
-                            c1.Controls.Add(ed);
+                            if (DataSource["Type"]["Properties"][node.Name].Contains("MaxLength"))
+                            {
+                                if (value.ToString().Length > DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>())
+                                {
+                                    c1.Text = value.ToString().Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
+                                }
+                                else
+                                    c1.Text = value.ToString();
+                            }
+                            else
+                                c1.Text = value.ToString();
                         }
                         else
                         {

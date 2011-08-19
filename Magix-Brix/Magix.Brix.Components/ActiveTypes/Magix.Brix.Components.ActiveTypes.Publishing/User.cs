@@ -14,12 +14,14 @@ using System.Web;
 
 namespace Magix.Brix.Components.ActiveTypes.Publishing
 {
-    // TODO: WTF ..? ['TableName']
     /**
-     * Encapsulates one user in Magix' Publishing system. Inherited to add more,
-     * specific to the publishing system, to the class
+     * Level3: Encapsulates one user in Magix' Publishing system. Inherited to add more,
+     * specific to the publishing system, to the class. PS! This class is a fine
+     * example of inheriting ActiveTypes for the curious C# developer out there. Basically 
+     * you've got to override the TableName to point your inherited type to the correct 
+     * typename, in addition to overriding a "mapped type" in your web.config
      */
-    [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Publishing.User")]
+    [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Users.UserBase")]
     public class User : U.UserBase
     {
         public User()
