@@ -413,15 +413,17 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
 
             log["LogItemType"].Value = "Magix.Common.ExportMetaView2CSV";
             log["Header"].Value = "CSV File was Created";
+
             log["Message"].Value = string.Format(@"
-CSV File '{0}' was created at {1} from MetaType '{2}' and MetaView '{5}' with {3} records in. Time to create 
-file was {4} milliseconds",
+CSV File '{0}' was created at {1} from MetaView '{5}' of MetaType '{2}'. 
+The file has {3} records in it. Time to create file was {4} milliseconds",
                 e.Params["FileName"].Value,
                 DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"),
                 e.Params["MetaViewTypeName"].Value,
                 n["Objects"].Count,
                 timer.TotalMilliseconds,
                 e.Params["MetaViewName"].Get<string>());
+
             if (User.Current != null)
                 log["ObjectID"].Value = User.Current.ID;
 
