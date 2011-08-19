@@ -41,15 +41,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             Node node = new Node();
 
-            node["FullTypeName"].Value = typeof(MetaObject).FullName; // NO '-MEAT' here ... !!!
+            node["FullTypeName"].Value = typeof(MetaObject).FullName; // NO '-META' here ... !!!
             node["Container"].Value = "content3";
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["CssClass"].Value = "edit-objects";
             node["WhiteListColumns"]["TypeName"].Value = true;
-            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
+            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 4;
             node["WhiteListColumns"]["Reference"].Value = true;
-            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 6;
+            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Created"].Value = true;
+            node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 3;
             node["WhiteListColumns"]["Copy"].Value = true;
             node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             node["FilterOnId"].Value = true;
@@ -63,6 +65,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
             node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetCopyMetaObjectTemplateColumn";
 
@@ -273,7 +276,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
             node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Created"]["Header"].Value = "When";
             node["Type"]["Properties"]["Children"]["Header"].Value = "Children";
             node["Type"]["Properties"]["Children"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetMetaObjectChildrenTemplateColumn";
 

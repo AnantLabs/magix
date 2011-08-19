@@ -181,7 +181,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
             // Making sure the reference at the very least says; Anonymous Coward ...
             if (string.IsNullOrEmpty(Reference))
-                Reference = "[Anonymous-Coward-Reference]";
+                Reference = "[Anonymous-Coward]";
             base.Save();
         }
 
