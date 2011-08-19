@@ -880,7 +880,7 @@ Deleting it may break these parts.</p>";
                         a.Value = idx.Value.ToString();
                         break;
                     default:
-                        a.TypeName = "[Anonymous-Coward-Type]";
+                        a.TypeName = "[Anonymous-Coward]";
                         a.Value = (idx.Value ?? "").ToString();
                         break;
                 }
