@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Web;
 using Magix.Brix.Types;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Magix.Brix.Loader
 {
@@ -91,6 +92,13 @@ namespace Magix.Brix.Loader
                     node);
                 return true;
             }
+            catch (ThreadAbortException)
+            {
+                ; // ASP.NET throws this exception upon 'Response.Redirect' calls
+                // Hence we just sliently let it pass, since it's highly likely a redirect
+                // and not something we'd need to display in a message box to the user ...
+                throw;
+            }
             catch (Exception err)
             {
                 Exception tmp = err;
@@ -99,11 +107,11 @@ namespace Magix.Brix.Loader
                     tmp = tmp.InnerException;
 
                 Node m = new Node();
-                
+
                 m["Message"].Value = tmp.Message;
                 m["Milliseconds"].Value = 10000;
                 m["IsError"].Value = true;
-                
+
                 RaiseEvent(
                     "Magix.Core.ShowMessage",
                     m);

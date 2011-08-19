@@ -360,11 +360,15 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
          * browser towards. You can also override how the type is being rendered by 
          * adding up 'WhiteListColumns' and 'Type' parameters, which will override 
          * the default behavior for the MetaView. Set 'Redirect' to false if you wish
-         * to stop redirecting to the newly created file to occur.
+         * to stop redirecting to the newly created file to occur. Regardless the relative 
+         * path to the file created will be returned as 'FileName' and the number of 
+         * records as 'NoRecords'
          */
         [ActiveEvent(Name = "Magix.Common.ExportMetaView2CSV")]
         protected void Magix_Common_ExportMetaView2CSV(object sender, ActiveEventArgs e)
         {
+            DateTime begin = DateTime.Now;
+
             Node n = new Node();
 
             n["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
@@ -399,6 +403,31 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
             RaiseEvent(
                 "Magix.Common.ExportMetaViewObjectList2CSV",
                 n);
+
+            e.Params["FileName"].Value = n["FileName"].Value;
+            e.Params["NoRecords"].Value = n["Objects"].Count;
+
+            TimeSpan timer = DateTime.Now - begin;
+
+            Node log = new Node();
+
+            log["LogItemType"].Value = "Magix.Common.ExportMetaView2CSV";
+            log["Header"].Value = "CSV File was Created";
+            log["Message"].Value = string.Format(@"
+CSV File '{0}' was created at {1} from MetaType '{2}' and MetaView '{5}' with {3} records in. Time to create 
+file was {4} milliseconds",
+                e.Params["FileName"].Value,
+                DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"),
+                e.Params["MetaViewTypeName"].Value,
+                n["Objects"].Count,
+                timer.TotalMilliseconds,
+                e.Params["MetaViewName"].Get<string>());
+            if (User.Current != null)
+                log["ObjectID"].Value = User.Current.ID;
+
+            RaiseEvent(
+                "Magix.Core.Log",
+                log);
         }
 
         /**

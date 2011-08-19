@@ -851,8 +851,12 @@ Deleting it may break these parts.</p>";
         /*
          * Helper for above ...
          */
-        private void FillActionParams(Node eventNode, LazyList<Action.ActionParams> lazyList)
+        private void FillActionParams(
+            Node eventNode, 
+            LazyList<Action.ActionParams> lazyList)
         {
+            if (eventNode == null)
+                return;
             foreach (Node idx in eventNode)
             {
                 Action.ActionParams a = new Action.ActionParams();

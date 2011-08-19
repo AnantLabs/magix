@@ -216,7 +216,11 @@ namespace Magix.Brix.Loader
 
         private Dictionary<string, object> _cache = new Dictionary<string, object>();
         /**
-         * Level3: Will cache the result object for the remaininbg of the request
+         * Level3: Will cache the result object for the remaining of the request. Highly
+         * useful if you've got some objects or something which is expensive in retrieving, 
+         * or are being for some resons retrieved several times per request. Use this one 
+         * to make sure the 'retrieval method' is only ran ONCE per request, per controller.
+         * Sorry, currently doesn't share cache between different controllers.
          */
         protected T Cache<T>(string key, executor<T> functor)
         {

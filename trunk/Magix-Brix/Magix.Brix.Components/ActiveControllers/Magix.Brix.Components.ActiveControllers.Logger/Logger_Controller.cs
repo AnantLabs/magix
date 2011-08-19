@@ -51,6 +51,11 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
         {
+            // Only logging ERRORS ... !
+            if (!e.Params.Contains("IsError") ||
+                !e.Params["IsError"].Get<bool>())
+                return;
+
             Node node = new Node();
             node["LogItemType"].Value = "Magix.Core.ShowMessage";
             if (e.Params.Contains("Username"))
@@ -145,7 +150,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         [ActiveEvent(Name = "Magix.Core.NewUserIDCookieCreated")]
         protected void Magix_Core_NewUserIDCookieCreated(object sender, ActiveEventArgs e)
         {
-            // TODO: Fuck man! ReFACTOR ...!!
+            // TODO: @#$#@ man! Re-FACTOR ...!!
             string userID = e.Params["UserID"].Get<string>();
 
             // Running through 10 latest log requests with same IP address to determine

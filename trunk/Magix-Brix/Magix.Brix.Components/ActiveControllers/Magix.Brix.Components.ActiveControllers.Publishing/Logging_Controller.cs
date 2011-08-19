@@ -116,7 +116,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["WhiteListProperties"]["Name"].Value = true;
             e.Params["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
             e.Params["WhiteListProperties"]["Value"].Value = true;
-            e.Params["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 4;
+            e.Params["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 8;
 
             e.Params["Type"]["Properties"]["LogItemType"]["ReadOnly"].Value = true;
             e.Params["Type"]["Properties"]["LogItemType"]["Bold"].Value = true;

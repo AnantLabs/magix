@@ -48,7 +48,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
      * encapsulates that logic. PS! This class supports inheriting [though it's not
      * really entirely stable quite yet ...! ]
      */
-    [ActiveType(TableName = "docWineTasting.CoreTypes.User")]
+    [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Users.UserBase")]
     public class UserBase : ActiveType<UserBase>
     {
         public UserBase()
