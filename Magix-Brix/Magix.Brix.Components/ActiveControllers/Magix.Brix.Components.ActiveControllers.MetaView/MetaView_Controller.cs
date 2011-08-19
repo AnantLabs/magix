@@ -811,13 +811,15 @@ Deleting it may break these parts.</p>";
 
                 List<Criteria> crits = new List<Criteria>();
                 crits.Add(Criteria.Eq("TypeName", templ.TypeName));
-                if (e.Params["Start"].Get<int>() != 0 &&
+                if (e.Params["Start"].Get<int>() != 0 ||
                     e.Params["End"].Get<int>() != -1)
                     crits.Add(Criteria.Range(
                             e.Params["Start"].Get<int>(),
                             e.Params["End"].Get<int>(),
                             "Created",
                             false));
+                if (e.Params["Criteria"].Value != null)
+                    crits.AddRange((IEnumerable<Criteria>)e.Params["Criteria"].Value);
 
                 foreach (MetaObject idxO in MetaObject.Select(crits.ToArray()))
                 {

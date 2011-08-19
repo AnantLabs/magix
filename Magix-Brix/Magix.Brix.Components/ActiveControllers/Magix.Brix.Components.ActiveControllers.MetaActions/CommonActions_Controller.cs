@@ -377,7 +377,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
             // TODO: There are tons of OTHER Grids in this system, e.g. SearchActions grid, 
             // which are NOT sorted correctly. Fix this at some point ... !
             n["Criteria"]["C1"]["Name"].Value = "Sort";
-            n["Criteria"]["C1"]["Value"].Value = "When";
+            n["Criteria"]["C1"]["Value"].Value = "Created";
             n["Criteria"]["C1"]["Ascending"].Value = false;
 
             RaiseEvent(
@@ -396,7 +396,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         }
 
         /**
-         * Level2: Will export a node list in 'Objects' List form to a CSV file, UNIX style, 
+         * Level2: Will export a node list in 'Objects' List form to a CSV file, 
          * and redirect the client to that newly created CSV file
          */
         [ActiveEvent(Name = "Magix.Common.ExportMetaViewObjectList2CSV")]
@@ -457,7 +457,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
             }
 
             Node xx = new Node();
-            xx["Path"].Value = e.Params["FileName"].Get<string>();
+            xx["URL"].Value = e.Params["FileName"].Get<string>();
 
             RaiseEvent(
                 "Magix.Common.RedirectClient",
@@ -465,15 +465,15 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         }
 
         /**
-         * Level2: Redirect clients to the given 'Path' parameter
+         * Level2: Redirect clients to the given 'URL' parameter
          */
         [ActiveEvent(Name = "Magix.Common.RedirectClient")]
         protected void Magix_Common_RedirectClient(object sender, ActiveEventArgs e)
         {
-            string path = e.Params["Path"].Get<string>();
+            string path = e.Params["URL"].Get<string>();
 
             if (string.IsNullOrEmpty(path))
-                throw new ArgumentException("Tried to redirect to a 'null' path ...??");
+                throw new ArgumentException("Tried to redirect to a 'null' URL ...??");
 
             if (!path.StartsWith("http"))
                 path = "~/" + path;
