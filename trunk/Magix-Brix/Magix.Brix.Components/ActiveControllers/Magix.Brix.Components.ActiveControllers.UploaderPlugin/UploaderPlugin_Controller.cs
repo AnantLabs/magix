@@ -53,6 +53,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (!string.IsNullOrEmpty(actionNameToRaise) && 
                 actionNameToRaise != "NO-ACTION")
             {
+                System.Threading.Thread.Sleep(5000);
                 RaiseEvent(
                     "Magix.MetaAction.RaiseAction",
                     e.Params);

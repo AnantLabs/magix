@@ -39,7 +39,7 @@
         this._fileCount = files.length;
         var ih = '';
         for (var i = 0, f; f = files[i]; i++) {
-          ih += '<li>' + f.name + '</li>';
+          ih += '<li id="' + this.element.id + '_li' + i + '">' + f.name + '</li>';
         }
         MUX.$(this.element.id + '_ul').innerHTML = ih;
 
@@ -53,7 +53,8 @@
           reader.onload = (function(idxF) {
             return function(e) {
               var img = e.target.result;
-              alert(img);
+              var ul = MUX.$(T.element.id + '_ul');
+              MUX.$(ul.children[0]).addClassName('mux-uploader-processing');
               var x = new MUX.Ajax({
                 args: '__MUX_CONTROL_CALLBACK=' + T.element.id + 
                   '&__MUX_EVENT=uploaded' + 
@@ -78,6 +79,10 @@
       this._fileCount -= 1;
       if(this._fileCount == 0) {
         this.element.setStyle('display', 'none');
+      } else {
+        var ul = MUX.$(this.element.id + '_ul');
+        ul.removeChild(ul.children[0]);
+        MUX.$(ul.children[0]).addClassName('mux-uploader-processing');
       }
     },
 

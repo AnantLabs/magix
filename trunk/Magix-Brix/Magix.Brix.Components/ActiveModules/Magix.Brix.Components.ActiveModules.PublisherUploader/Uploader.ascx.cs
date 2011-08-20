@@ -70,9 +70,9 @@ namespace Magix.Brix.Components.ActiveModules.PublisherUploader
          * Level2: If given, will only show files of given types. Should contain a string of 
          * file filters separated by semi-colons. E.g. "*.png;*.jpg;" will allow for all 
          * files having either the .png or the .jpg extensions. By default the control 
-         * tolerates image files, CSV files, PDF files, CSS files
+         * tolerates image files, CSV files, PDF files, CSS files, text files [.txt], 
          */
-        [ModuleSetting(DefaultValue = "*.png;*.gif;*.jpg;*.jpeg;*.csv;*.pdf;*.css;")]
+        [ModuleSetting(DefaultValue = "*.png;*.gif;*.jpg;*.jpeg;*.csv;*.pdf;*.css;*.txt;*.ttf;")]
         public string Filter
         {
             get { return ViewState["Filter"] as string; }
