@@ -6,8 +6,6 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.CommonModules.TipOfToday" %>
 
-<link href="media/modules/ToolTip.css" rel="stylesheet" type="text/css" />
-
 <mux:Panel
     runat="server"
     id="pnl"

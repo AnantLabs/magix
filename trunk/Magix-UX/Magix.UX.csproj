@@ -71,6 +71,7 @@
     <Compile Include="Controls\Extended\Timer\Timer.cs" />
     <Compile Include="Controls\Extended\TreeView\TreeItem.cs" />
     <Compile Include="Controls\Extended\TreeView\TreeView.cs" />
+    <Compile Include="Controls\Extended\Uploader\Uploader.cs" />
     <Compile Include="Controls\Extended\Window\Window.cs" />
     <Compile Include="Core\Selector\Selector.cs" />
     <Compile Include="Effects\EffectScrollBrowser.cs" />
@@ -139,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Js\Magix.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Js\Uploader.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

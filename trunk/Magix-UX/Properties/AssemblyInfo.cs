@@ -33,10 +33,7 @@ using System.Web.UI;
 [assembly: WebResource("Magix.UX.Js.Aspects.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.Effects.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.AjaxWait.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.ResizeHandler.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.RichEdit.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.Timer.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.Carousel.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Calendar.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.SmartScroll.js", "text/javascript")]
+[assembly: WebResource("Magix.UX.Js.Uploader.js", "text/javascript")]
 

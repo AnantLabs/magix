@@ -286,6 +286,10 @@
       <Project>{CF6572CF-2B0A-4AE8-A688-448130EF39A1}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.ToolTip</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.UploaderPlugin\Magix.Brix.Components.ActiveControllers.UploaderPlugin.csproj">
+      <Project>{4F76DD2A-0C10-4167-89A6-9353F4E3C89F}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.UploaderPlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Calendars\Magix.Brix.Components.ActiveModules.Calendars.csproj">
       <Project>{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Calendars</Name>
@@ -317,6 +321,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaView\Magix.Brix.Components.ActiveModules.MetaView.csproj">
       <Project>{498CBC4B-E81C-462F-AFD6-DD9A6AA60633}</Project>
       <Name>Magix.Brix.Components.ActiveModules.MetaView</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.PublisherUploader\Magix.Brix.Components.ActiveModules.PublisherUploader.csproj">
+      <Project>{FAEFC3B9-C958-4D22-9027-17B86F3D3BCC}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.PublisherUploader</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Publishing\Magix.Brix.Components.ActiveModules.Publishing.csproj">
       <Project>{9B9A05F6-4593-496B-80B2-C324DCC734A5}</Project>
