@@ -57,6 +57,50 @@ form only. Useful for things such as 'Clear Buttons' and such ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.RedirectClient")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.RedirectClient";
+                    a.EventName = "Magix.Common.RedirectClient";
+                    a.Description = @"Will redirect the client's browser to the
+given URL parameter";
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "URL";
+                    m.Value = "http://google.com";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ImportCSVFile")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ImportCSVFile";
+                    a.EventName = "Magix.Common.ImportCSVFile";
+                    a.Description = @"Will import the given 'FileName' from the given 'Folder' 
+and transform to MetaObjects using the given 'MetaViewName'";
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "FileName";
+                    m.Value = "x.csv";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Folder";
+                    m.Value = "Tmp/";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "MetaViewName";
+                    m.Value = "-- EXCHANGE-WITH-YOUR-OWN-META-VIEW --";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.ShowDefaultMessage")) == 0)
                 {
                     Action a = new Action();
