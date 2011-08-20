@@ -175,62 +175,65 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                             {
                                 if (idxT.Contains("i-" + id))
                                 {
-                                    string propName = idxT["i-" + id][0].Name;
-                                    string value = idxT["i-" + id][0].Get<string>();
-                                    string editor = idxT["i-" + id][0]["Editor"].Get<string>();
-                                    string editorEvent = idxT["i-" + id][0]["EditorEvent"].Get<string>();
-                                    int webPartId = idxT["i-" + id][0]["ID"].Get<int>();
-                                    if (!string.IsNullOrEmpty(editorEvent))
+                                    foreach (Node idxII in idxT["i-" + id])
                                     {
-                                        Node node = new Node();
-                                        node["WebPartID"].Value = webPartId;
-                                        node["Value"].Value = value;
+                                        string propName = idxII.Name;
+                                        string value = idxII.Get<string>();
+                                        string editor = idxII["Editor"].Get<string>();
+                                        string editorEvent = idxII["EditorEvent"].Get<string>();
+                                        int webPartId = idxII["ID"].Get<int>();
+                                        if (!string.IsNullOrEmpty(editorEvent))
+                                        {
+                                            Node node = new Node();
+                                            node["WebPartID"].Value = webPartId;
+                                            node["Value"].Value = value;
 
-                                        RaiseEvent(
-                                            editorEvent,
-                                            node);
-                                        w.Content.Controls.Add(node["Control"].Value as Control);
-                                    }
-                                    else if (!string.IsNullOrEmpty(editor))
-                                    {
-                                        Label ed = new Label();
-                                        ed.ToolTip =
-                                            string.Format("Click to edit '{0}'",
-                                                propName);
-                                        ed.Text = value;
-                                        ed.Tag = "div";
-                                        ed.CssClass += "magix-publishing-wysiwyg";
-                                        ed.Info = id.ToString() + "|" + propName + "|" + editor;
-                                        ed.Click +=
-                                            delegate(object sender2, EventArgs e2)
-                                            {
-                                                Label ed2 = sender2 as Label;
-                                                int id2 = int.Parse(ed2.Info.Split('|')[0]);
-                                                string propName2 = ed2.Info.Split('|')[1];
+                                            RaiseEvent(
+                                                editorEvent,
+                                                node);
+                                            w.Content.Controls.Add(node["Control"].Value as Control);
+                                        }
+                                        else if (!string.IsNullOrEmpty(editor))
+                                        {
+                                            Label ed = new Label();
+                                            ed.ToolTip =
+                                                string.Format("Click to edit '{0}'",
+                                                    propName);
+                                            ed.Text = value;
+                                            ed.Tag = "div";
+                                            ed.CssClass += "magix-publishing-wysiwyg";
+                                            ed.Info = id.ToString() + "|" + propName + "|" + editor;
+                                            ed.Click +=
+                                                delegate(object sender2, EventArgs e2)
+                                                {
+                                                    Label ed2 = sender2 as Label;
+                                                    int id2 = int.Parse(ed2.Info.Split('|')[0]);
+                                                    string propName2 = ed2.Info.Split('|')[1];
 
-                                                Node tx = new Node();
+                                                    Node tx = new Node();
 
-                                                tx["SaveEvent"].Value = "Magix.Publishing.ChangeWebPartSetting";
-                                                tx["SaveEvent"]["WebPartID"].Value = webPartId;
-                                                tx["Text"].Value = ed2.Text;
-                                                tx["Width"].Value = 18;
-                                                tx["Height"].Value = 30;
-                                                tx["Last"].Value = true;
-                                                tx["Padding"].Value = 6;
-                                                tx["Push"].Value = 0;
-                                                tx["Top"].Value = 0;
-                                                tx["BottomMargin"].Value = 15;
+                                                    tx["SaveEvent"].Value = "Magix.Publishing.ChangeWebPartSetting";
+                                                    tx["SaveEvent"]["WebPartID"].Value = webPartId;
+                                                    tx["Text"].Value = ed2.Text;
+                                                    tx["Width"].Value = 18;
+                                                    tx["Height"].Value = 30;
+                                                    tx["Last"].Value = true;
+                                                    tx["Padding"].Value = 6;
+                                                    tx["Push"].Value = 0;
+                                                    tx["Top"].Value = 0;
+                                                    tx["BottomMargin"].Value = 15;
 
-                                                ActiveEvents.Instance.RaiseLoadControl(
-                                                    ed2.Info.Split('|')[2],
-                                                    "content5",
-                                                    tx);
-                                            };
-                                        w.Content.Controls.Add(ed);
-                                    }
-                                    else
-                                    {
-                                        CreateInPlaceEdit(id, w, propName, value, webPartId);
+                                                    ActiveEvents.Instance.RaiseLoadControl(
+                                                        ed2.Info.Split('|')[2],
+                                                        "content5",
+                                                        tx);
+                                                };
+                                            w.Content.Controls.Add(ed);
+                                        }
+                                        else
+                                        {
+                                            CreateInPlaceEdit(id, w, propName, value, webPartId);
+                                        }
                                     }
                                 }
                             }

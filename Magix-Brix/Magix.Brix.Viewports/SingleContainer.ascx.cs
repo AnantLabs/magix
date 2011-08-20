@@ -17,10 +17,6 @@ using System.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-// JavaScript file for supporting finger scrolling on tablets and phones
-// [webkit e.g.]
-[assembly: WebResource("Magix.Brix.Viewports.iscroll.js", "text/javascript")]
-
 namespace Magix.Brix.Viewports
 {
     /**

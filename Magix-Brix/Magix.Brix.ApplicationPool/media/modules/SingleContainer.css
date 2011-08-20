@@ -1224,3 +1224,58 @@ li.tree-item-class span.mux-tree-icon
 }
 
 
+
+
+
+.mux-file-uploader
+{
+	position:fixed;
+	top:0;
+	left:0;
+	width:250px;
+	min-height:36px;
+	padding:36px 36px 18px 36px;
+	z-index:100000;
+	display:none;
+	color:White;
+
+	-moz-border-radius:0 0 50px 0;
+	-webkit-border-radius:0 0 50px o;
+	border-radius:0 0 50px 0;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, 1)), to(rgba(64, 64, 64, 1)));
+	background-image: -moz-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
+
+	-webkit-box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.mux-file-uploader p
+{
+	color:White;
+}
+
+.mux-file-uploader ul
+{
+}
+
+.mux-file-uploader ul li
+{
+}
+
+.mux-file-uploader img
+{
+	display:block;
+	position:fixed;
+	top:30px;
+	left:25px;
+}
+
+
+
+
+
+
+
+
