@@ -53,10 +53,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (!string.IsNullOrEmpty(actionNameToRaise) && 
                 actionNameToRaise != "NO-ACTION")
             {
-                System.Threading.Thread.Sleep(5000);
-                RaiseEvent(
-                    "Magix.MetaAction.RaiseAction",
-                    e.Params);
+                foreach (string idx in actionNameToRaise.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    e.Params["ActionName"].Value = idx;
+
+                    RaiseEvent(
+                        "Magix.MetaAction.RaiseAction",
+                        e.Params);
+                }
             }
         }
     }

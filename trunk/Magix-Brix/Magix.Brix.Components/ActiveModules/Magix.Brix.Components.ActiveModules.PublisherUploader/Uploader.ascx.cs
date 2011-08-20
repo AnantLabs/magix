@@ -82,7 +82,8 @@ namespace Magix.Brix.Components.ActiveModules.PublisherUploader
         /**
          * Level2: If given, will Raise the given Action with the 'FileName', 
          * full relative path, after saving file on server. The default value of 'NO-ACTION'
-         * will make sure no Actions are being raised
+         * will make sure no Actions are being raised. If you wish you can separate multiple 
+         * actions with the pipe symbol (|) to have multiple Actions raised
          */
         [ModuleSetting(DefaultValue = "NO-ACTION")]
         public string ActionName
