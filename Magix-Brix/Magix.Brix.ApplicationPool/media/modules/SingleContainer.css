@@ -1232,7 +1232,7 @@ li.tree-item-class span.mux-tree-icon
 	position:fixed;
 	top:0;
 	left:0;
-	width:250px;
+	width:450px;
 	min-height:36px;
 	padding:36px 36px 18px 36px;
 	z-index:100000;
@@ -1251,17 +1251,19 @@ li.tree-item-class span.mux-tree-icon
 	box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
 }
 
-.mux-file-uploader p
-{
-	color:White;
-}
-
 .mux-file-uploader ul
 {
+	margin-left:50px;
+}
+
+.mux-file-uploader p
+{
+	margin-left:50px;
 }
 
 .mux-file-uploader ul li
 {
+	list-style-type:none;
 }
 
 .mux-file-uploader img
@@ -1272,6 +1274,35 @@ li.tree-item-class span.mux-tree-icon
 	left:25px;
 }
 
+@-webkit-keyframes mux-uploader-processing {
+ from {
+   color: rgba(255, 0, 0, 1);
+ }
+ to {
+   color: rgba(255, 200, 0, 1);
+ }
+}
+
+@-moz-keyframes mux-uploader-processing {
+ from {
+   color: rgba(255, 0, 0, 1);
+ }
+ to {
+   color: rgba(255, 200, 0, 1);
+ }
+}
+
+.mux-file-uploader ul li.mux-uploader-processing
+{
+	-webkit-animation-name: mux-uploader-processing;
+	-webkit-animation-duration: 2s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: alternate;
+	-moz-animation-name: mux-uploader-processing;
+	-moz-animation-duration: 2s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+}
 
 
 

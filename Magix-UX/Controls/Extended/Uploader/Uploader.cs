@@ -20,15 +20,22 @@ namespace Magix.UX.Widgets
      */
     public class Uploader : BaseWebControl
     {
+        private string _fileCache = null;
+
         /**
          * Level4: Fired when File is uploaded. Access the file in raw [BASE64 encoded] through
          * the GetFileRawBASE64
          */
         public event EventHandler Uploaded;
 
-        string _fileCache = null;
+        public Uploader()
+        {
+            CssClass = "mux-file-uploader";
+        }
+
         /**
-         * Level4: Returns the raw BASE64 encoded information about the file
+         * Level4: Returns the raw BASE64 encoded information about the file. Use Convert.FromBase64...
+         * to convert file to raw byte[] content ...
          */
         public string GetFileRawBASE64()
         {
@@ -53,11 +60,6 @@ namespace Magix.UX.Widgets
                 throw new ArgumentException("No files in Uploader");
 
             return Page.Request["__FILENAME"];
-        }
-
-        public Uploader()
-        {
-            CssClass = "mux-file-uploader";
         }
 
         protected override void OnPreRender(EventArgs e)
