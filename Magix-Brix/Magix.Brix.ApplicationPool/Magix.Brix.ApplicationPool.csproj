@@ -218,6 +218,7 @@
     <Content Include="media\images\book-front-page-CSharp-Believers.png" />
     <Content Include="media\images\book-front-page-CSharp.png" />
     <Content Include="media\images\book-front-page-noob.png" />
+    <Content Include="media\images\csv.png" />
     <Content Include="media\images\default-pdf-cover.png" />
     <Content Include="media\images\magix-logo.png" />
     <Content Include="media\images\openid_small.png" />

@@ -170,7 +170,7 @@ describes Magix; </p>
             node["CssClass"].Value = "edit-pages-tree-view";
             node["Width"].Value = 18;
             node["Last"].Value = true;
-            node["Top"].Value = 1;
+            node["Header"].Value = "Select a WebPage ...";
             node["FullTypeName"].Value = typeof(WebPage).FullName;
             node["ItemSelectedEvent"].Value = "Magix.Publishing.EditSpecificPage";
             node["GetItemsEvent"].Value = "Magix.Publishing.GetEditPagesDataSource";
@@ -393,6 +393,8 @@ describes Magix; </p>
                 // Signalizing that Pages has been changed, in case other modules are
                 // dependent upon knowing ...
                 RaiseEvent("Magix.Publishing.PageWasUpdated");
+
+                RaiseEvent("Magix.Core.ExpandTreeSelectedID");
             }
         }
 

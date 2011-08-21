@@ -143,6 +143,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         int width = idxC["Width"].Get<int>();
                         int height = idxC["Height"].Get<int>();
                         bool last = idxC["Last"].Get<bool>();
+                        bool overflow = idxC["Overflow"].Get<bool>();
                         string name = idxC["Name"].Get<string>() ?? "[Unknown]";
                         int id = idxC["ID"].Get<int>();
                         int padding = idxC["Padding"].Get<int>();
@@ -159,6 +160,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         w.CssClass += " height-" + height;
                         if (last)
                             w.CssClass += " last";
+                        if (overflow)
+                            w.CssClass += " overflowized";
                         w.Caption = name;
                         w.Info = id.ToString();
                         w.CssClass += " pushRight-" + padding;

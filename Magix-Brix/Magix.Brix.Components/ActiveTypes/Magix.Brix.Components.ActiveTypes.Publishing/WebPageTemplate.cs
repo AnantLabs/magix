@@ -52,6 +52,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
             {
                 WebPartTemplate t = new WebPartTemplate();
                 t.CssClass = idx.CssClass;
+                t.Overflow = idx.Overflow;
                 t.Height = idx.Height;
                 t.Last = idx.Last;
                 t.MarginBottom = idx.MarginBottom;
