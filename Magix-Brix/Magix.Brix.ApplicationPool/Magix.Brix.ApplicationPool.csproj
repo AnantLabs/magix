@@ -224,6 +224,7 @@
     <Content Include="media\images\openid_small.png" />
     <Content Include="media\images\openid_tiny.png" />
     <Content Include="media\images\snow.png" />
+    <Content Include="media\modules\ImageGallery.css" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +323,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaView\Magix.Brix.Components.ActiveModules.MetaView.csproj">
       <Project>{498CBC4B-E81C-462F-AFD6-DD9A6AA60633}</Project>
       <Name>Magix.Brix.Components.ActiveModules.MetaView</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.PublisherImage\Magix.Brix.Components.ActiveModules.PublisherImage.csproj">
+      <Project>{050B176B-9C38-4A12-8110-C668FA303138}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.PublisherImage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.PublisherUploader\Magix.Brix.Components.ActiveModules.PublisherUploader.csproj">
       <Project>{FAEFC3B9-C958-4D22-9027-17B86F3D3BCC}</Project>
