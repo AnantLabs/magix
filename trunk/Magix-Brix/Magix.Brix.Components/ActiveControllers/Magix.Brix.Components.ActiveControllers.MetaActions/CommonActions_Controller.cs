@@ -533,6 +533,183 @@ The file has {3} records in it. Time to create file was {4} milliseconds",
         [ActiveEvent(Name = "Magix.Common.ImportCSVFile")]
         protected void Magix_Common_ImportCSVFile(object sender, ActiveEventArgs e)
         {
+            MetaView m = 
+                MetaView.SelectFirst(
+                    Criteria.Eq(
+                        "Name", 
+                        e.Params["MetaViewName"].Get<string>()));
+
+            if (m == null)
+                throw new ArgumentException(
+                    @"Sorry, but you need to submit a 'MetaViewName' to an 
+existing MetaView to import CSV files");
+
+            if (string.IsNullOrEmpty(m.TypeName))
+                throw new ArgumentException("Sorry, but your MetaView doesn't have a TypeName, which means we don't know which types to create from your CSV file");
+
+            if (m.Properties.Count == 0)
+                throw new ArgumentException(
+                    @"Sorry, but your MetaView doesn't contain any properties, 
+hence nothing will become imported, and this function call is useless. 
+Add up properties that corresponds to the columns in your CSV file if you wish to import it");
+
+            string folder = (e.Params["Folder"].Get<string>() ?? "").Trim().Trim('/');
+            if (!string.IsNullOrEmpty(folder))
+                folder += "/";
+
+            string fileName = Page.MapPath(
+                "~/" +
+                folder +
+                e.Params["FileName"].Get<string>());
+
+            int count = ImportCSVFileFromMetaView(fileName, m);
+
+            if (!e.Params.Contains("NoMessage") || 
+                !e.Params["NoMessage"].Get<bool>())
+            {
+                Node node = new Node();
+
+                node["Message"].Value = string.Format(@"
+You've successfully imported {0} items of type '{1}' from the file '{2}' using the MetaView '{3}'",
+                    count,
+                    m.TypeName,
+                    fileName,
+                    m.Name);
+
+                RaiseEvent(
+                    "Magix.Core.ShowMessage",
+                    node);
+            }
+
+            Node l = new Node();
+            l["LogItemType"].Value = "Magix.Common.ImportCSVFile";
+            l["Header"].Value = "File '" + fileName + "' was imported";
+            l["Message"].Value = string.Format(@"
+File '{0}' was imported, creating {1} items of type '{2}' from MetaView '{3}' on page '{4}'",
+                fileName,
+                count,
+                m.TypeName,
+                m.Name,
+                Page.Request.Url.ToString());
+
+            RaiseEvent(
+                "Magix.Core.Log",
+                l);
+        }
+
+        private int ImportCSVFileFromMetaView(string fileName, MetaView m)
+        {
+            int retVal = 0;
+            List<string> viewCols = GetViewCols(m);
+            using (TextReader reader = File.OpenText(fileName))
+            {
+                List<string> fileCols = GetFileCols(reader);
+
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    while (true)
+                    {
+                        string line = reader.ReadLine();
+                        if (line == null)
+                            break;
+
+                        List<string> values = GetFileValues(line);
+
+                        CreateMetaObject(viewCols, fileCols, values, m.TypeName, fileName);
+                        retVal += 1;
+                    }
+                    tr.Commit();
+                }
+            }
+            return retVal;
+        }
+
+        /*
+         * Creates, and saves, one meta object mapping the values into the viewCols from
+         * indexing the values through the fileCols
+         */
+        private void CreateMetaObject(
+            List<string> viewCols, 
+            List<string> fileCols, 
+            List<string> values, 
+            string typeName,
+            string fileName)
+        {
+            MetaObject o = new MetaObject();
+            o.TypeName = typeName;
+            o.Reference = "Import: " + fileName;
+
+            int idxNo = 0;
+            foreach (string idx in viewCols)
+            {
+                MetaObject.Property p = new MetaObject.Property();
+                p.Name = idx;
+                int indexOfViewInFileCols = fileCols.IndexOf(idx);
+
+                if (indexOfViewInFileCols < values.Count) // In case line in file is 'chopped' ...
+                {
+                    p.Value = values[indexOfViewInFileCols];
+                }
+                o.Values.Add(p);
+                idxNo += 1;
+            }
+
+            o.Save();
+        }
+
+        /*
+         * Given a string, which is one line from a CSV file, breaks it down into a
+         * list of values it returns back to caller ...
+         */
+        private List<string> GetFileValues(string line)
+        {
+            List<string> values = new List<string>();
+            foreach (string idx in line.Split(','))
+            {
+                string val = idx.Trim().Trim('"').Replace("\\\"", "\"");
+                values.Add(val);
+            }
+            return values;
+        }
+
+        /*
+         * Helper for above, returns a List containing all 'columns' in the file. Expects
+         * to be positioned at the beginning of the CSV file before being called ...
+         */
+        private List<string> GetFileCols(TextReader reader)
+        {
+            List<string> cols = new List<string>();
+
+            string firstLine = reader.ReadLine();
+
+            foreach (string idx in firstLine.Split(','))
+            {
+                string col = idx.Trim().Trim('"');
+                cols.Add(col);
+            }
+
+            return cols;
+        }
+
+        /*
+         * Helper for above. Returns a List of names from properties from the MetaView
+         */
+        private List<string> GetViewCols(MetaView m)
+        {
+            List<string> viewCols = new List<string>();
+            foreach (MetaView.MetaViewProperty idx in m.Properties)
+            {
+                string name = idx.Name;
+                if (name.IndexOf(":") == 0)
+                    continue;
+
+                if (name.Contains(":"))
+                {
+                    name = name.Substring(name.LastIndexOf(":"));
+                }
+                viewCols.Add(name);
+            }
+            return viewCols;
         }
     }
 }
