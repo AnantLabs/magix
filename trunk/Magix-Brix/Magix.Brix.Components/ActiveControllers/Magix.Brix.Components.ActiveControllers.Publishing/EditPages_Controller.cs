@@ -105,40 +105,20 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     s2.Value = @"
 <img src=""media/images/magix-logo.png"" style=""margin-left:20px;float:right;display:block;width:200px;"" alt=""Magix, where Dreams come Through ...""/>
 <p>By default a user has been created with the username/password of admin/admin</p>
-<p>You can login with this user to the Back-End form <a href=""?dashboard=true"">here</a> ...</p>
-<h3>Down the Rabbit Hole ...</h3>
-<p>What is Magix ...?</p>
-<p>Magix is difficult to describe. Some will say it's a CMS or a 'Publishing System', 
-others might say that it's a System Development Platform, 
+<p>You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
+<h3>What is Magix ...?</h3>
+<p>Magix is difficult to describe. Some will say it's a 'better CMS' or a 'Publishing System', 
+others might say that it's a System Development Platform, some might call it a Web Operating System, 
 others again might say it's a Social Media platform, for collaboration across Organizations. Some developers 
 will claim it's nothing but a RAD implementation of Lisp on top of ASP.NET and WebControls. And so on ...</p>
 <p>Regardless, they're probably all right! Every person who looks at Magix will probably categorize it 
-differently than the next person out there! 
-</p><p>
-You might in fact think
-of Magix as a <em>'Hole in the Universe'</em>, which will Annihilate most of your existing Assumptions 
-about Software and IT ...</p>
-<p>This is because Magix is built with one goal in mind, which is to empower <strong>you</strong>, in any ways it 
-possibly can! Like for instance, even if you've never touched a computer before, it's highly likely 
-that you'll be able to create your own Highly Advanced and Sophisticated Software Systems within hours after getting 
-Magix installed. Not only will these systems be much more advanced than what you'd normally have to pay 
-several thousands dollars for, but they'd also work on every single device out there in existance today. 
-iPhones, Androids, Nokias, Microsoft Windows Phones, iPads etc ...</p>
-<p>In addition Magix completely rewrites the whole <em>'Cloud'</em> thing, by basically <strong>being</strong> its 
-own <em>'Cloud Implementation'</em> by allowing 'your app', or server that is, to communicate 
-seemless with any other server you wish out there. And say anything it wish back and forth. Subscribe 
-to events and actions and such, and just seemlessly 'work together as one unity'. Still without 
-compromising ANY control over what data is being transfered, and easily creating Authentication 
-routines, Authorization routines, and such for 'other servers out there'.</p>
-<p>So even though Magix is not Facebook in any ways, you could probably create your own version of Facebook 
-within a couple of hours after getting started with it. And connect <em>'Your Facebook'</em> seemlessly together 
-with all of your friend's <em>'Facebooks'</em></p>
-<p>Create something beautiful you'd like to share with a friend? One click Copy/Paste it from your server to your friend's 
-server. Entire Applications if you wish ...</p>
-<p>Tired of iTunes' prices? Create your OWN iTunes in hours ...</p>
+differently than the next person out there! </p>
+<p>That's because <strong>Magix is Everything</strong>! Regardless of what types of IT problems you've got, Magix is probably the best solution for you.</p>
+<p>With Magix you can create complex web applications, that runs on everything, within hours after you've started using it</p>
+<p>Need your own iTunes, create one within a couple of hours. Need a new CRM application? Spend 2-4 hours reading the docs for Magix, and you'd be surprised at how much you'd be able to implement, even with zero coding experience from before</p>
 <p>Oh yeah! Almost forgot the most important thing; <strong>Magis is Free Software!</strong> ...</p>
-<p>To sum it all up, in a couple of meaningful words, which I think accurately 
-describes Magix; </p>
+<p>However, regardless of what you think about Magix, we consider it our gift, from us, to You, and the Rest of The World!</p>
+<p>To sum it all up, in a couple of meaningful words, which I think accurately describes Magix; </p>
 <p><strong>Yup!<br/>It's Game Over!<br/>Equilibrium to the Force, And YOU Won ... ! ;)</strong></p>
 <p>Have a nice life!</p>
 <p>.t</p>

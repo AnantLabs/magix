@@ -638,7 +638,7 @@ File '{0}' was imported, creating {1} items of type '{2}' from MetaView '{3}' on
             MetaObject o = new MetaObject();
             o.TypeName = typeName;
             string fileName2 = fileName;
-            if (fileName2.IndexOf('\'') != -1)
+            if (fileName2.IndexOf('\\') != -1)
                 fileName2 = fileName2.Substring(fileName2.LastIndexOf('\\') + 1);
             o.Reference = "Import: " + fileName2;
 
@@ -650,7 +650,7 @@ File '{0}' was imported, creating {1} items of type '{2}' from MetaView '{3}' on
 
                 int indexOfViewInFileCols = fileCols.IndexOf(idxViewColumnName);
 
-                if (indexOfViewInFileCols > 0 && 
+                if (indexOfViewInFileCols > -1 && 
                     indexOfViewInFileCols < values.Count) // In case line in file is 'chopped' ...
                 {
                     p.Value = values[indexOfViewInFileCols];
@@ -668,12 +668,75 @@ File '{0}' was imported, creating {1} items of type '{2}' from MetaView '{3}' on
          */
         private List<string> GetFileValues(string line)
         {
+            line = line.Trim();
             List<string> values = new List<string>();
-            foreach (string idx in line.Split(','))
+            bool isInside = true; // We start OUT by being inside ...
+            bool hasFnutt = false;
+            string buffer = "";
+            int startNo = 0;
+            if (line.Length > 0 && line[0] == '"')
             {
-                string val = idx.Trim().Trim('"').Replace("\\\"", "\"");
-                values.Add(val);
+                startNo += 1;
+                hasFnutt = true;
             }
+            for (int idxNo = startNo; idxNo < line.Length; idxNo++)
+            {
+                if (isInside)
+                {
+                    // Inside of a "
+                    char idxC = line[idxNo];
+                    if (idxC == '\\')
+                    {
+                        idxNo += 1; // skipping this one, reading next
+
+                        if (idxNo >= line.Length)
+                            break; // Ops. At end ...! Buffer being added further down ...
+
+                        idxC = line[idxNo];
+                        buffer += idxC;
+                    }
+                    else if (hasFnutt && idxC == '"')
+                    {
+                        // Ending entity ...
+                        hasFnutt = false;
+                        values.Add(buffer);
+                        buffer = "";
+                        isInside = false;
+                    }
+                    else if (!hasFnutt && idxC == ',')
+                    {
+                        // Ending entity ...
+                        values.Add(buffer);
+                        buffer = "";
+                        isInside = false;
+                        idxNo -= 1; // Need this ...!
+                    }
+                    else
+                    {
+                        buffer += idxC;
+                    }
+                }
+                else
+                {
+                    // OUTSIDE of the " [or ,]
+                    char idxC = line[idxNo];
+                    if (idxC == ',')
+                    {
+                        // Going inside again ...
+                        // Need to discard the first '"' if existing ...
+                        if (line.Length > idxNo + 1)
+                        {
+                            if (line[idxNo + 1] == '"')
+                            {
+                                hasFnutt = true;
+                                idxNo += 1; // Skipping the " parts ...
+                            }
+                        }
+                        isInside = true;
+                    }
+                }
+            }
+            values.Add(buffer); // LAST value ...
             return values;
         }
 
