@@ -29,6 +29,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
     [ActiveModule]
     public class Tree : ActiveModule
     {
+        protected Label header;
         protected TreeView tree;
 
         public override void InitialLoading(Node node)
@@ -40,6 +41,15 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     tree.CssClass += " " + node["TreeCssClass"].Get<string>();
                 if (node.Contains("NoClose"))
                     tree.NoCollapseOfItems = node["NoClose"].Get<bool>();
+                if (node.Contains("Header"))
+                {
+                    header.Visible = true;
+                    header.Text = node["Header"].Get<string>();
+                }
+                else
+                {
+                    header.Visible = false;
+                }
             };
         }
 

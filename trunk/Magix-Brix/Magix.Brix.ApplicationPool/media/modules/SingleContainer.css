@@ -372,6 +372,7 @@ div.height-30, .height-30 {height:45em;}
 .overflowized
 {
 	overflow:auto;
+	height:auto !important;
 }
 
 .ipad
@@ -574,6 +575,8 @@ input[type=button].clear-both
 .yellow-background
 {
 	background:Transparent url(../images/actual-size.png) repeat 0 0;
+	margin-bottom:144px;
+	margin-top:18px;
 }
 
 .small-editer
@@ -1304,7 +1307,10 @@ li.tree-item-class span.mux-tree-icon
 	-moz-animation-direction: alternate;
 }
 
-
+.no-bottom-margin
+{
+	margin-bottom:0;
+}
 
 
 

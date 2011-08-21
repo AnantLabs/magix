@@ -637,16 +637,21 @@ File '{0}' was imported, creating {1} items of type '{2}' from MetaView '{3}' on
         {
             MetaObject o = new MetaObject();
             o.TypeName = typeName;
-            o.Reference = "Import: " + fileName;
+            string fileName2 = fileName;
+            if (fileName2.IndexOf('\'') != -1)
+                fileName2 = fileName2.Substring(fileName2.LastIndexOf('\\') + 1);
+            o.Reference = "Import: " + fileName2;
 
             int idxNo = 0;
-            foreach (string idx in viewCols)
+            foreach (string idxViewColumnName in viewCols)
             {
                 MetaObject.Property p = new MetaObject.Property();
-                p.Name = idx;
-                int indexOfViewInFileCols = fileCols.IndexOf(idx);
+                p.Name = idxViewColumnName;
 
-                if (indexOfViewInFileCols < values.Count) // In case line in file is 'chopped' ...
+                int indexOfViewInFileCols = fileCols.IndexOf(idxViewColumnName);
+
+                if (indexOfViewInFileCols > 0 && 
+                    indexOfViewInFileCols < values.Count) // In case line in file is 'chopped' ...
                 {
                     p.Value = values[indexOfViewInFileCols];
                 }
