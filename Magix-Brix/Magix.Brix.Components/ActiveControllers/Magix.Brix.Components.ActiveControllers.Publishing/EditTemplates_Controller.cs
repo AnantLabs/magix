@@ -66,8 +66,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             node["Container"].Value = "content3";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
         }

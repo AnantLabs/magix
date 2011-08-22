@@ -39,7 +39,7 @@ namespace Magix.Brix.Components.ActiveModules.PublisherImage
                         "Magix.Gallery.GetGalleryData",
                         DataSource);
 
-                    rep.DataSource = DataSource["Items"];
+                    rep.DataSource = DataSource["Images"];
                     rep.DataBind();
                 };
         }
@@ -47,7 +47,7 @@ namespace Magix.Brix.Components.ActiveModules.PublisherImage
         /**
          * Level1: The Unique name of the Image Gallery
          */
-        [ModuleSetting(DefaultValue = "")]
+        [ModuleSetting(ModuleEditorEventName = "Magix.Gallery.GetTemplateColumnSelectGallery")]
         public string GalleryName
         {
             get { return ViewState["GalleryName"] as string; }

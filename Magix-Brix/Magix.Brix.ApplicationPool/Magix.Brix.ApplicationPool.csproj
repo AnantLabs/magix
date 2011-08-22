@@ -248,6 +248,10 @@
       <Project>{2B7F49E6-2867-4E16-AAF6-2236A0FF6402}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.FileExplorer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.GalleryPlugin\Magix.Brix.Components.ActiveControllers.GalleryPlugin.csproj">
+      <Project>{88E60EC3-628C-44AA-945F-5FC46337D664}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.GalleryPlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Logger\Magix.Brix.Components.ActiveControllers.Logger.csproj">
       <Project>{4FF5FFF4-4B4E-4E7E-8978-07A94C9C494B}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Logger</Name>
@@ -347,6 +351,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Users\Magix.Brix.Components.ActiveModules.Users.csproj">
       <Project>{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Users</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Gallery\Magix.Brix.Components.ActiveTypes.Gallery.csproj">
+      <Project>{0FBF5BF8-34E2-46EF-AC3F-2DCF25378A3A}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Gallery</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Logging\Magix.Brix.Components.ActiveTypes.Logging.csproj">
       <Project>{58466D6B-928F-4932-B1AC-913AD28EB8A2}</Project>

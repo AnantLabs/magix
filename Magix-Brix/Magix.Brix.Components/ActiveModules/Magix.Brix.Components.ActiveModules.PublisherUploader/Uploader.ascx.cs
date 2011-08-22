@@ -60,10 +60,49 @@ namespace Magix.Brix.Components.ActiveModules.PublisherUploader
             DataSource["File"].Value = filBase64;
             DataSource["ActionName"].Value = ActionName;
             DataSource["Folder"].Value = Folder;
+            DataSource["SizeOfBatch"].Value = uploader.SizeOfBatch;
+            DataSource["CurrentNo"].Value = uploader.CurrentNo;
+
+            if (uploader.CurrentNo == 0)
+            {
+                // This is a new batch ...
+                // Emptying our previous 'batch' ...
+                FilesInBatch.Clear();
+            }
+            FilesInBatch.Add(fileName);
 
             RaiseSafeEvent(
                 "Magix.Core.FileUploaded",
                 DataSource);
+
+            if (uploader.CurrentNo == uploader.SizeOfBatch - 1)
+            {
+                // Last file in current 'batch' was just finished processed ...
+                DataSource["Files"].UnTie();
+                int idxNo = 0;
+                foreach (string idx in FilesInBatch)
+                {
+                    DataSource["Files"]["f-" + idxNo].Value = idx;
+                    idxNo += 1;
+                }
+
+                RaiseSafeEvent(
+                    "Magix.Core.FileBatchUploadFinished",
+                    DataSource);
+            }
+        }
+
+        /*
+         * Contains all files in a current dragging operation ...
+         */
+        private List<string> FilesInBatch
+        {
+            get
+            {
+                if (ViewState["FilesInBatch"] == null)
+                    ViewState["FilesInBatch"] = new List<string>();
+                return (List<string>)ViewState["FilesInBatch"];
+            }
         }
 
         /**

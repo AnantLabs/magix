@@ -63,6 +63,30 @@ namespace Magix.UX.Widgets
             return Page.Request["__FILENAME"];
         }
 
+        /**
+         * Level4: Since the user can drag and drop multiple files into the browser at
+         * the same time, we need to track which is our 'current file' to be able to notify
+         * our code that a 'batch is finished'. This one returns the size [number of files]
+         * in the 'current processed batch'. Meaning, as long as SizeOfBatch is higher than
+         * CurrentNo, then you've got more files coming in after this one ...
+         */
+        public int SizeOfBatch
+        {
+            get { return int.Parse(Page.Request.Params["__MUX_TOTAL"]); }
+        }
+
+        /**
+         * Level4: Since the user can drag and drop multiple files into the browser at
+         * the same time, we need to track which is our 'current file' to be able to notify
+         * our code that a 'batch is finished'. This one returns the current index
+         * in the 'current processed batch'. Meaning, as long as SizeOfBatch is higher than
+         * CurrentNo, then you've got more files coming in after this one ...
+         */
+        public int CurrentNo
+        {
+            get { return int.Parse(Page.Request.Params["__MUX_CURRENT"]); }
+        }
+
         protected override void OnPreRender(EventArgs e)
         {
             AjaxManager.Instance.IncludeScriptFromResource(

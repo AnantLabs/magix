@@ -134,26 +134,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (!e.Params.Contains("CssClass"))
                 e.Params["CssClass"].Value = "administrator-menu";
 
-            if (!e.Params["Items"].Contains("Home"))
-            {
-                e.Params["Items"]["Home"]["Caption"].Value = "Dashboard ...";
-                e.Params["Items"]["Home"]["Selected"].Value = true;
-                e.Params["Items"]["Home"]["Event"]["Name"].Value = "Magix.Publishing.LoadAdministratorDashboard";
-            }
-            if (!e.Params["Items"].Contains("Publishing"))
-            {
-                e.Params["Items"]["Publishing"]["Caption"].Value = "Publishing";
-            }
-            if (!e.Params["Items"]["Publishing"]["Items"].Contains("Pages"))
-            {
-                e.Params["Items"]["Publishing"]["Items"]["Pages"]["Caption"].Value = "Pages ...";
-                e.Params["Items"]["Publishing"]["Items"]["Pages"]["Event"]["Name"].Value = "Magix.Publishing.EditPages";
-            }
-            if (!e.Params["Items"]["Publishing"]["Items"].Contains("Templates"))
-            {
-                e.Params["Items"]["Publishing"]["Items"]["Templates"]["Caption"].Value = "Templates ...";
-                e.Params["Items"]["Publishing"]["Items"]["Templates"]["Event"]["Name"].Value = "Magix.Publishing.EditTemplates";
-            }
+            e.Params["Items"]["Home"]["Caption"].Value = "Dashboard ...";
+            e.Params["Items"]["Home"]["Selected"].Value = true;
+            e.Params["Items"]["Home"]["Event"]["Name"].Value = "Magix.Publishing.LoadAdministratorDashboard";
+            e.Params["Items"]["Publishing"]["Caption"].Value = "Publishing";
+            e.Params["Items"]["Publishing"]["Items"]["Pages"]["Caption"].Value = "Pages ...";
+            e.Params["Items"]["Publishing"]["Items"]["Pages"]["Event"]["Name"].Value = "Magix.Publishing.EditPages";
+            e.Params["Items"]["Publishing"]["Items"]["Templates"]["Caption"].Value = "Templates ...";
+            e.Params["Items"]["Publishing"]["Items"]["Templates"]["Event"]["Name"].Value = "Magix.Publishing.EditTemplates";
 
             // Putting plugins just beneath Publishing menu item ...
             RaiseEvent(
