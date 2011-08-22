@@ -44,6 +44,18 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.CreateGallery")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.CreateGallery";
+                    a.EventName = "Magix.Common.CreateGallery";
+                    a.Description = @"Will create a Gallery object from the given 
+'Files' list within the 'Folder'";
+                    a.StripInput = false;
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.EmptyActiveForm")) == 0)
                 {
                     Action a = new Action();

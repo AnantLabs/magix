@@ -45,6 +45,7 @@
 
 
         // Loop through the FileList and render image files as thumbnails.
+        var idxNo = 0;
         for (var i = 0, f; f = files[i]; i++) {
           var reader = new FileReader();
 
@@ -58,6 +59,8 @@
               var x = new MUX.Ajax({
                 args: '__MUX_CONTROL_CALLBACK=' + T.element.id + 
                   '&__MUX_EVENT=uploaded' + 
+                  '&__MUX_TOTAL=' + files.length +
+                  '&__MUX_CURRENT=' + (idxNo++) + 
                   '&__FILE=' + encodeURIComponent(img) + 
                   '&__FILENAME=' + encodeURIComponent(idxF.name),
                 onSuccess: T.onFinishedUploading,

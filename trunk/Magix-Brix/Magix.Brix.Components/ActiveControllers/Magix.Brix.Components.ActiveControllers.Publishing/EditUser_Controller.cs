@@ -242,7 +242,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         /*
          * Used by EditUser logic
          */
-        private static void LoadEditUserObject(object sender, ActiveEventArgs e, User user)
+        private void LoadEditUserObject(object sender, ActiveEventArgs e, User user)
         {
             // First filtering OUT columns ...!
             e.Params["WhiteListColumns"]["FullName"].Value = true;
@@ -303,8 +303,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     "Editing User: {0}",
                     user.Username);
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                sender,
+            RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 e.Params);
         }

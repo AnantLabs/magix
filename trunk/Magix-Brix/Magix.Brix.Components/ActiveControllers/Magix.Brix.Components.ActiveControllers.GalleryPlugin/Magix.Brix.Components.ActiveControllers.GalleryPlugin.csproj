@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +41,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">
+      <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
+      <Name>Magix.UX</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Magix.Brix.Data\Magix.Brix.Data.csproj">
       <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
       <Name>Magix.Brix.Data %28Brix\Magix.Brix.Data\Magix.Brix.Data%29</Name>
@@ -55,6 +60,14 @@
     <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Gallery\Magix.Brix.Components.ActiveTypes.Gallery.csproj">
       <Project>{0FBF5BF8-34E2-46EF-AC3F-2DCF25378A3A}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Gallery</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Publishing\Magix.Brix.Components.ActiveTypes.Publishing.csproj">
+      <Project>{175455B9-43D0-4190-A2AE-8033BD3D62A1}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Publishing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Users\Magix.Brix.Components.ActiveTypes.Users.csproj">
+      <Project>{72BD8731-239E-463D-A66C-556ED55A4578}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Users</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

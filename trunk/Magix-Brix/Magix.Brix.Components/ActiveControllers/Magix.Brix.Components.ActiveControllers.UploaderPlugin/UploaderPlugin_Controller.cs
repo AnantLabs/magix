@@ -23,7 +23,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     {
         /**
          * Level2: Will save the given 'File' to the given 'Folder' with the given 'FileName' and
-         * then raise 'ActionName', unless it's either null or empty, or it's "NO-ACTION"
+         * then raise 'ActionName', unless it's either null or empty, or it's "NO-ACTION". If the
+         * Action starts with 'finished:', the action will only be raised when an entire batch
+         * is done. Otherwise the action will be raise consecutively for every file within the
+         * same batch
          */
         [ActiveEvent(Name = "Magix.Core.FileUploaded")]
         protected void Magix_Core_FileUploaded(object sender, ActiveEventArgs e)
@@ -55,7 +58,42 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 foreach (string idx in actionNameToRaise.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
                 {
+                    if (idx.StartsWith("finished:"))
+                        continue;
+
                     e.Params["ActionName"].Value = idx;
+
+                    RaiseEvent(
+                        "Magix.MetaAction.RaiseAction",
+                        e.Params);
+                }
+            }
+        }
+
+        /**
+         * Raised when an entire batch of files are done. If the 'ActionName' starts with
+         * 'finished:', the Action given in the | separated string will be consecutively
+         * raised
+         */
+        [ActiveEvent(Name = "Magix.Core.FileBatchUploadFinished")]
+        protected void Magix_Core_FileBatchUploadFinished(object sender, ActiveEventArgs e)
+        {
+            string actionNameToRaise = e.Params["ActionName"].Get<string>();
+
+            // Raising a action, if we should
+            if (!string.IsNullOrEmpty(actionNameToRaise) &&
+                actionNameToRaise != "NO-ACTION")
+            {
+                foreach (string idx in actionNameToRaise.Split(
+                    new char[] { '|' }, 
+                    StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!idx.StartsWith("finished:"))
+                        continue;
+
+                    string actName = idx.Substring(9);
+
+                    e.Params["ActionName"].Value = actName;
 
                     RaiseEvent(
                         "Magix.MetaAction.RaiseAction",
