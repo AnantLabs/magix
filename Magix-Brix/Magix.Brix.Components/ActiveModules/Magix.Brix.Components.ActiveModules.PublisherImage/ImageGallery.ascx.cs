@@ -51,6 +51,11 @@ namespace Magix.Brix.Components.ActiveModules.PublisherImage
                 };
         }
 
+        protected int GetNoImages()
+        {
+            return DataSource["Images"].Count;
+        }
+
         /**
          * Level1: The Unique name of the Image Gallery
          */

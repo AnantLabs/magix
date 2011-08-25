@@ -46,8 +46,32 @@
 	opacity:1;
 }
 
+.mux-gallery p
+{
+	margin-bottom:0;
+}
 
-/* One galler */
+.mux-gallery-name
+{
+	font-weight:bold;
+}
+
+.mux-gallery-user
+{
+}
+
+.mux-gallery-count
+{
+}
+
+.mux-gallery-date
+{
+	font-style:italic;
+	color:#999;
+}
+
+
+/* One gallery */
 
 .mux-one-gallery
 {
@@ -58,6 +82,21 @@
 	height:540px;
 	overflow-x:hidden;
 	overflow-y:hidden;
+	-moz-border-radius:25px;
+	-webkit-border-radius:25px;
+	border-radius:25px;
+}
+
+.mux-gallery-pager
+{
+	position:absolute;
+	bottom:0;
+	width:100%;
+	text-align:center;
+	padding:9px 0 9px 0;
+	background-color:rgba(0,0,0,.7);
+	color:White;
+	z-index:301;
 }
 
 .mux-one-gallery-scroller
@@ -289,6 +328,11 @@
 }
 
 
+
+.mux-one-gallery-0
+{
+	margin-left:0;
+}
 
 .mux-one-gallery-1
 {
