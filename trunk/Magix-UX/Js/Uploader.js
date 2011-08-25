@@ -12,9 +12,11 @@
 
   MUX.extend(MUX.Uploader.prototype, {
     init: function(el, opt) {
+      this._fileCount = 0;
       this.initControl(el, opt);
       var b = MUX.$(document.body);
       b.observe('dragover', this.onDragOver, this);
+      b.observe('dragleave', this.onDragLeave, this);
       b.observe('drop', this.onDrop, this);
     },
 
@@ -24,6 +26,10 @@
       evt.stopPropagation();
       evt.preventDefault();
       return false;
+    },
+
+    onDragLeave: function(evt){
+      this.element.setStyle('display', 'none');
     },
 
     onDrop: function(evt){
@@ -64,6 +70,7 @@
                   '&__FILE=' + encodeURIComponent(img) + 
                   '&__FILENAME=' + encodeURIComponent(idxF.name),
                 onSuccess: T.onFinishedUploading,
+                onError: T.onFinishedUploadingError,
                 callingContext: T
               });
             };
@@ -75,6 +82,10 @@
       else {
         this.element.setStyle('display', 'none');
       }
+    },
+
+    onFinishedUploadingError: function(error) {
+      this.element.setStyle('display', 'none');
     },
 
     onFinishedUploading: function(response) {
@@ -92,6 +103,7 @@
     destroyThis: function() {
       var b = MUX.$(document.body);
       b.stopObserving('dragover', this.onDragOver, this);
+      b.stopObserving('dragleave', this.onDragLeave, this);
       b.stopObserving('drop', this.onDrop, this);
       this._destroyThisControl();
     }

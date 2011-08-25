@@ -1,1 +1,623 @@
 ﻿
+/* Galleries ... */
+
+.mux-gallery
+{
+	width:150px;
+	float:left;
+	margin-right:10px;
+	height:144px;
+	margin-bottom:18px;
+	font-size:12px;
+	cursor:pointer;
+	position:relative;
+	overflow:hidden;
+}
+
+.mux-user-gallery-avatar
+{
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+	position:absolute;
+	top:0;
+	left:0;
+	opacity:.2;
+	max-height:100%;
+	max-width:100%;
+	margin-left:auto;
+	margin-right:auto;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+.mux-user-gallery-avatar:hover
+{
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+	opacity:1;
+}
+
+
+/* One galler */
+
+.mux-one-gallery
+{
+	z-index:300;
+	position:absolute;
+	top:54px;
+	width:950px;
+	height:540px;
+	overflow-x:hidden;
+	overflow-y:hidden;
+}
+
+.mux-one-gallery-scroller
+{
+	width:3000%;
+	margin-left:0;
+	-moz-transition-property:margin-left;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:margin-left;
+	-webkit-transition-duration:1s;
+	transition-property:margin-left;
+	transition-duration:1s;
+	-webkit-transition-timing-function: ease-in;
+	-moz-transition-timing-function: ease-in;
+}
+
+.mux-one-gallery-image
+{
+	width:950px;
+	height:540px;
+	background-color:White;
+	float:left;
+	line-height:540px;
+	font-size:270px;
+	text-align:center;
+	vertical-align:middle;
+}
+
+.mux-one-gallery-image img
+{
+	display:inline-block;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-direction: normal;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-timing-function: ease-in;
+	-moz-animation-duration: 1s;
+	-moz-animation-direction: normal;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-timing-function: ease-in;
+}
+
+
+@-moz-keyframes mux-img-freak-flag
+{
+0%
+{
+   -moz-transform: scale(1.0) rotate(0deg);
+   opacity:1;
+}
+50%
+{
+   -moz-transform: scale(1.5) rotate(360deg);
+   opacity:.7;
+}
+100%
+{
+   -moz-transform: scale(1.0) rotate(720deg);
+   opacity:1;
+}
+}
+
+@-webkit-keyframes mux-img-freak-flag
+{
+0%
+{
+   -webkit-transform: scale(1.0) rotate(0deg);
+   opacity:1;
+}
+50%
+{
+   -webkit-transform: scale(1.5) rotate(360deg);
+   opacity:.7;
+}
+100%
+{
+   -webkit-transform: scale(1.0) rotate(720deg);
+   opacity:1;
+}
+}
+
+
+@-moz-keyframes mux-img-freak-flag-2
+{
+0%
+{
+   -moz-transform: scale(1.0) rotate(0deg);
+}
+50%
+{
+   -moz-transform: scale(.1) rotate(720deg);
+}
+100%
+{
+   -moz-transform: scale(1.0) rotate(0deg);
+}
+}
+
+@-webkit-keyframes mux-img-freak-flag-2
+{
+0%
+{
+   -webkit-transform: scale(1.0) rotate(0deg);
+}
+50%
+{
+   -webkit-transform: scale(.1) rotate(720deg);
+}
+100%
+{
+   -webkit-transform: scale(1.0) rotate(0deg);
+}
+}
+
+
+@-moz-keyframes mux-img-freak-flag-3
+{
+0%
+{
+	-moz-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+50%
+{
+	-moz-transform: matrix(1, 0, -1.25, 1, 0px, 0px);
+}
+100%
+{
+	-moz-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+}
+
+@-webkit-keyframes mux-img-freak-flag-3
+{
+0%
+{
+	-webkit-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+50%
+{
+	-webkit-transform: matrix(1, 0, -1.25, 1, 0px, 0px);
+}
+100%
+{
+	-webkit-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+}
+
+
+@-moz-keyframes mux-img-freak-flag-4
+{
+0%
+{
+	-moz-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+50%
+{
+	-moz-transform: matrix(1, 0, 1.25, 1, 0px, 0px);
+}
+100%
+{
+	-moz-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+}
+
+@-webkit-keyframes mux-img-freak-flag-4
+{
+0%
+{
+	-webkit-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+50%
+{
+	-webkit-transform: matrix(1, 0, 1.25, 1, 0px, 0px);
+}
+100%
+{
+	-webkit-transform: matrix(1, 0, 0, 1, 0px, 0px);
+}
+}
+
+@-moz-keyframes mux-img-freak-flag-5
+{
+0%
+{
+	-moz-transform: scaleX(1.0);
+}
+50%
+{
+	-moz-transform: scaleX(0);
+}
+100%
+{
+	-moz-transform: scaleX(1.0);
+}
+}
+
+@-webkit-keyframes mux-img-freak-flag-5
+{
+0%
+{
+	-webkit-transform: scaleX(1.0);
+}
+50%
+{
+	-webkit-transform: scaleX(0);
+}
+100%
+{
+	-webkit-transform: scaleX(1.0);
+}
+}
+
+
+
+
+@-moz-keyframes mux-img-freak-flag-6
+{
+0%
+{
+	-moz-transform: scaleX(1.0) rotate(0deg);
+}
+50%
+{
+	-moz-transform: scaleX(2.0) rotate(-720deg);
+}
+100%
+{
+	-moz-transform: scaleX(1.0) rotate(0deg);
+}
+}
+
+
+
+.mux-one-gallery-1
+{
+	margin-left:-100%;
+}
+
+.mux-one-gallery-1 img
+{
+	-webkit-animation-name: mux-img-freak-flag;
+	-moz-animation-name: mux-img-freak-flag;
+}
+
+.mux-one-gallery-2
+{
+	margin-left:-200%;
+}
+
+.mux-one-gallery-2 img
+{
+	-webkit-animation-name: mux-img-freak-flag-2;
+	-moz-animation-name: mux-img-freak-flag-2;
+}
+
+.mux-one-gallery-3
+{
+	margin-left:-300%;
+}
+
+.mux-one-gallery-3 img
+{
+	-webkit-animation-name: mux-img-freak-flag-3;
+	-moz-animation-name: mux-img-freak-flag-3;
+}
+
+.mux-one-gallery-4
+{
+	margin-left:-400%;
+}
+
+.mux-one-gallery-4 img
+{
+	-webkit-animation-name: mux-img-freak-flag-4;
+	-moz-animation-name: mux-img-freak-flag-4;
+}
+
+.mux-one-gallery-5
+{
+	margin-left:-500%;
+}
+
+.mux-one-gallery-5 img
+{
+	-webkit-animation-name: mux-img-freak-flag-5;
+	-moz-animation-name: mux-img-freak-flag-5;
+}
+
+.mux-one-gallery-6
+{
+	margin-left:-600%;
+}
+
+.mux-one-gallery-6 img
+{
+	-webkit-animation-name: mux-img-freak-flag-6;
+	-moz-animation-name: mux-img-freak-flag-6;
+}
+
+.mux-one-gallery-7
+{
+	margin-left:-700%;
+}
+
+.mux-one-gallery-7 img
+{
+	-webkit-animation-name: mux-img-freak-flag;
+	-moz-animation-name: mux-img-freak-flag;
+}
+
+.mux-one-gallery-8
+{
+	margin-left:-800%;
+}
+
+.mux-one-gallery-8 img
+{
+	-webkit-animation-name: mux-img-freak-flag-2;
+	-moz-animation-name: mux-img-freak-flag-2;
+}
+
+.mux-one-gallery-9
+{
+	margin-left:-900%;
+}
+
+.mux-one-gallery-9 img
+{
+	-webkit-animation-name: mux-img-freak-flag-3;
+	-moz-animation-name: mux-img-freak-flag-3;
+}
+
+.mux-one-gallery-10
+{
+	margin-left:-1000%;
+}
+
+.mux-one-gallery-10 img
+{
+	-webkit-animation-name: mux-img-freak-flag-4;
+	-moz-animation-name: mux-img-freak-flag-4;
+}
+
+.mux-one-gallery-11
+{
+	margin-left:-1100%;
+}
+
+.mux-one-gallery-11 img
+{
+	-webkit-animation-name: mux-img-freak-flag-5;
+	-moz-animation-name: mux-img-freak-flag-5;
+}
+
+.mux-one-gallery-12
+{
+	margin-left:-1200%;
+}
+
+.mux-one-gallery-12 img
+{
+	-webkit-animation-name: mux-img-freak-flag-6;
+	-moz-animation-name: mux-img-freak-flag-6;
+}
+
+.mux-one-gallery-13
+{
+	margin-left:-1300%;
+}
+
+.mux-one-gallery-13 img
+{
+	-webkit-animation-name: mux-img-freak-flag;
+	-moz-animation-name: mux-img-freak-flag;
+}
+
+.mux-one-gallery-14
+{
+	margin-left:-1400%;
+}
+
+.mux-one-gallery-14 img
+{
+	-webkit-animation-name: mux-img-freak-flag-2;
+	-moz-animation-name: mux-img-freak-flag-2;
+}
+
+.mux-one-gallery-15
+{
+	margin-left:-1500%;
+}
+
+.mux-one-gallery-15 img
+{
+	-webkit-animation-name: mux-img-freak-flag-3;
+	-moz-animation-name: mux-img-freak-flag-3;
+}
+
+.mux-one-gallery-16
+{
+	margin-left:-1600%;
+}
+
+.mux-one-gallery-16 img
+{
+	-webkit-animation-name: mux-img-freak-flag-4;
+	-moz-animation-name: mux-img-freak-flag-4;
+}
+
+.mux-one-gallery-17
+{
+	margin-left:-1700%;
+}
+
+.mux-one-gallery-18 img
+{
+	-webkit-animation-name: mux-img-freak-flag-5;
+	-moz-animation-name: mux-img-freak-flag-5;
+}
+
+.mux-one-gallery-18
+{
+	margin-left:-1800%;
+}
+
+.mux-one-gallery-18 img
+{
+	-webkit-animation-name: mux-img-freak-flag-6;
+	-moz-animation-name: mux-img-freak-flag-6;
+}
+
+.mux-one-gallery-19
+{
+	margin-left:-1900%;
+}
+
+.mux-one-gallery-19 img
+{
+	-webkit-animation-name: mux-img-freak-flag;
+	-moz-animation-name: mux-img-freak-flag;
+}
+
+.mux-one-gallery-20
+{
+	margin-left:-2000%;
+}
+
+.mux-one-gallery-20 img
+{
+	-webkit-animation-name: mux-img-freak-flag-2;
+	-moz-animation-name: mux-img-freak-flag-2;
+}
+
+.mux-one-gallery-21
+{
+	margin-left:-2100%;
+}
+
+.mux-one-gallery-21 img
+{
+	-webkit-animation-name: mux-img-freak-flag-3;
+	-moz-animation-name: mux-img-freak-flag-3;
+}
+
+.mux-one-gallery-22
+{
+	margin-left:-2200%;
+}
+
+.mux-one-gallery-22 img
+{
+	-webkit-animation-name: mux-img-freak-flag-4;
+	-moz-animation-name: mux-img-freak-flag-4;
+}
+
+.mux-one-gallery-23
+{
+	margin-left:-2300%;
+}
+
+.mux-one-gallery-23 img
+{
+	-webkit-animation-name: mux-img-freak-flag-5;
+	-moz-animation-name: mux-img-freak-flag-5;
+}
+
+.mux-one-gallery-24
+{
+	margin-left:-2400%;
+}
+
+.mux-one-gallery-24 img
+{
+	-webkit-animation-name: mux-img-freak-flag-6;
+	-moz-animation-name: mux-img-freak-flag-6;
+}
+
+.mux-one-gallery-25
+{
+	margin-left:-2500%;
+}
+
+.mux-one-gallery-25 img
+{
+	-webkit-animation-name: mux-img-freak-flag;
+	-moz-animation-name: mux-img-freak-flag;
+}
+
+.mux-one-gallery-26
+{
+	margin-left:-2600%;
+}
+
+.mux-one-gallery-26 img
+{
+	-webkit-animation-name: mux-img-freak-flag-2;
+	-moz-animation-name: mux-img-freak-flag-2;
+}
+
+.mux-one-gallery-27
+{
+	margin-left:-2700%;
+}
+
+.mux-one-gallery-27 img
+{
+	-webkit-animation-name: mux-img-freak-flag-3;
+	-moz-animation-name: mux-img-freak-flag-3;
+}
+
+.mux-one-gallery-28
+{
+	margin-left:-2800%;
+}
+
+.mux-one-gallery-28 img
+{
+	-webkit-animation-name: mux-img-freak-flag-4;
+	-moz-animation-name: mux-img-freak-flag-4;
+}
+
+.mux-one-gallery-29
+{
+	margin-left:-2900%;
+}
+
+.mux-one-gallery-29 img
+{
+	-webkit-animation-name: mux-img-freak-flag-5;
+	-moz-animation-name: mux-img-freak-flag-5;
+}
+
+.mux-one-gallery-30
+{
+	margin-left:-3000%;
+}
+
+.mux-one-gallery-30 img
+{
+	-webkit-animation-name: mux-img-freak-flag-6;
+	-moz-animation-name: mux-img-freak-flag-6;
+}
+
+

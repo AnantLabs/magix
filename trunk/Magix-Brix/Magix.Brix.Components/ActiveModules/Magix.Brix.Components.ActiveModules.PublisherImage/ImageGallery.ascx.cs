@@ -33,7 +33,14 @@ namespace Magix.Brix.Components.ActiveModules.PublisherImage
             Load +=
                 delegate
                 {
-                    DataSource["GalleryName"].Value = GalleryName;
+                    if (string.IsNullOrEmpty(GalleryName) && node.Contains("GalleryName"))
+                    {
+                        GalleryName = node["GalleryName"].Get<string>();
+                    }
+                    else
+                    {
+                        DataSource["GalleryName"].Value = GalleryName;
+                    }
 
                     RaiseSafeEvent(
                         "Magix.Gallery.GetGalleryData",

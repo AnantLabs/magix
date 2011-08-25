@@ -34,6 +34,9 @@ namespace Magix.Brix.Components.ActiveTypes.Gallery
         [ActiveField]
         public string Folder { get; set; }
 
+        [ActiveField]
+        public DateTime Created { get; set; }
+
         [ActiveField(IsOwner = false)]
         public User User { get; set; }
 
@@ -48,6 +51,10 @@ namespace Magix.Brix.Components.ActiveTypes.Gallery
             if (User == null && ID == 0)
             {
                 User = User.Current;
+            }
+            if (ID == 0)
+            {
+                Created = DateTime.Now;
             }
 
             if (Name == null)
