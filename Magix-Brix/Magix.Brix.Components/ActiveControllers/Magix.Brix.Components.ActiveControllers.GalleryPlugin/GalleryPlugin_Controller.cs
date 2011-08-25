@@ -12,6 +12,8 @@ using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes.Gallery;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
+using Magix.Brix.Components.ActiveTypes.Publishing;
+using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
 {
@@ -22,6 +24,22 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
     [ActiveController]
     public class GalleryPlugin_Controller : ActiveController
     {
+        /**
+         * Level2: Handled to override the 
+         * 'DBAdmin.Common.ComplexInstanceDeletedConfirmed' event
+         */
+        [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
+        protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
+        {
+            Magix.Brix.Loader.ActiveEvents.Instance.CreateEventMapping(
+                "DBAdmin.Common.ComplexInstanceDeletedConfirmed",
+                "DBAdmin.Common.ComplexInstanceDeletedConfirmed-Override");
+
+            Magix.Brix.Loader.ActiveEvents.Instance.CreateEventMapping(
+                "DBAdmin.Common.ComplexInstanceDeletedConfirmed-Passover",
+                "DBAdmin.Common.ComplexInstanceDeletedConfirmed");
+        }
+
         /**
          * Level2: Loads the Administrator SlidingMenu for our GalleryPlugin injected
          */
@@ -116,6 +134,130 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
             RaiseEvent(
                 "DBAdmin.Form.ViewListOrComplexPropertyValue",
                 node);
+
+            // Creating our 'Append Files Uploader' control ...
+            CreateUploaderForAppendingFilesInEdit(e.Params);
+        }
+
+        private void CreateUploaderForAppendingFilesInEdit(Node node)
+        {
+            Node n = new Node();
+
+            n["Width"].Value = 1; // Must have some arbitrary width, since otherwise element
+            // won't 'float', and mess up our layout ...
+            n["GalleryID"].Value = node["ID"].Value;
+            n["FileUploadedEvent"].Value = "Magix.Gallery.FileWasAppendedToGallery";
+            n["FreezeContainer"].Value = true;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Uploader",
+                "content5",
+                n);
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.Gallery.GetAllGalleries")]
+        protected void Magix_Publishing_Gallery_GetAllGalleries(object sender, ActiveEventArgs e)
+        {
+            foreach (Gallery idx in 
+                Gallery.Select(
+                    Criteria.Range(0, 12, "Created", false)))
+            {
+                e.Params["Galleries"]["g-" + idx.ID]["Name"].Value = idx.Name;
+                if (idx.User != null)
+                {
+                    e.Params["Galleries"]["g-" + idx.ID]["User"].Value = idx.User.Username;
+                    e.Params["Galleries"]["g-" + idx.ID]["UserAvatarURL"].Value = idx.User.AvatarURL;
+                }
+                else
+                {
+                    e.Params["Galleries"]["g-" + idx.ID]["User"].Value = "[anonymous-coward]";
+                    e.Params["Galleries"]["g-" + idx.ID]["UserAvatarURL"].Value = "media/images/marvin-headshot.png";
+                }
+                e.Params["Galleries"]["g-" + idx.ID]["Count"].Value = idx.Images.Count;
+                e.Params["Galleries"]["g-" + idx.ID]["ID"].Value = idx.ID;
+                e.Params["Galleries"]["g-" + idx.ID]["Created"].Value = 
+                    idx.Created.ToString("ddd d. MMM yy", CultureInfo.InvariantCulture);
+            }
+        }
+
+        [ActiveEvent(Name = "Magix.Publishing.Gallery.OpenGalleryInCurrentContainer")]
+        protected void Magix_Publishing_Gallery_OpenGalleryInCurrentContainer(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            Gallery g = Gallery.SelectByID(id);
+
+            OpenGallery(g, e.Params);
+        }
+
+        private void OpenGallery(Gallery g, Node node)
+        {
+            WebPart p = WebPart.SelectByID(node["OriginalWebPartID"].Get<int>());
+
+            Node n = new Node();
+            n["OriginalWebPartID"].Value = node["OriginalWebPartID"].Value;
+            n["GalleryName"].Value = g.Name;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.PublisherImage.ImageGallery",
+                p.Container.ViewportContainer,
+                n);
+
+        }
+
+        /**
+         * Level3: File was appended to gallery, saving the file locally, within
+         * the folder of the Gallery, and attaching the image to the existing Gallery
+         */
+        [ActiveEvent(Name = "Magix.Gallery.FileWasAppendedToGallery")]
+        protected void Magix_Gallery_FileWasAppendedToGallery(object sender, ActiveEventArgs e)
+        {
+            string fileContent = e.Params["File"].Get<string>();
+            string fileName = e.Params["FileName"].Get<string>();
+
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                Gallery g = Gallery.SelectByID(e.Params["GalleryID"].Get<int>());
+
+                if (g == null)
+                    throw new ArgumentException("That gallery doesn't exist");
+
+                string folder = g.Folder;
+
+                string fullPath = Page.MapPath("~/" + folder + fileName);
+
+                byte[] rawContent = Convert.FromBase64String(fileContent);
+
+                using (FileStream stream = File.Create(fullPath))
+                {
+                    stream.Write(rawContent, 0, rawContent.Length);
+                }
+
+                Gallery.Image i = new Gallery.Image();
+                i.FileName = folder + fileName;
+                g.Images.Add(i);
+                g.Save();
+
+                tr.Commit();
+
+                Node x = new Node();
+                x["Message"].Value = string.Format(@"
+Image was uploaded as '{0}' and attached to Gallery '{1}'",
+                    i.FileName,
+                    g.Name);
+
+                RaiseEvent(
+                    "Magix.Core.ShowMessage",
+                    x);
+
+                x = new Node();
+                x["FullTypeName"].Value = 
+                    typeof(Gallery).FullName + "|" + 
+                    typeof(Gallery.Image).FullName;
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    x);
+            }
         }
 
         [ActiveEvent(Name = "Magix.Gallery.AppendButtonClicked")]
@@ -158,6 +300,8 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
 
                 tr.Commit();
             }
+
+            ActiveEvents.Instance.RaiseClearControls("child");
         }
 
         /**
@@ -198,6 +342,7 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 Gallery g = new Gallery();
+                g.Folder = folder;
 
                 foreach (Node idx in e.Params["Files"])
                 {
@@ -252,6 +397,29 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
                 ls.Items.Add(i);
             }
             e.Params["Control"].Value = ls;
+        }
+
+        /**
+         * Level2: Overridden to clear from content 4 and out ...
+         */
+        [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed-Override")]
+        protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed_Override(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(Gallery).FullName)
+            {
+                // We have to clear number 4 and out, before the object is deleted ...
+                ActiveEvents.Instance.RaiseClearControls("content4");
+
+                RaiseEvent(
+                    "DBAdmin.Common.ComplexInstanceDeletedConfirmed-Passover",
+                    e.Params);
+            }
+            else
+            {
+                RaiseEvent(
+                    "DBAdmin.Common.ComplexInstanceDeletedConfirmed-Passover",
+                    e.Params);
+            }
         }
     }
 }
