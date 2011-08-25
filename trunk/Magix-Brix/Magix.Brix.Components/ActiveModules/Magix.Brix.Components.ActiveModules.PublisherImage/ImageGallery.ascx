@@ -14,8 +14,10 @@
   var idx = 0;
   el.observe('click', function(){
     el.className = 'mux-one-gallery-scroller mux-one-gallery-' + (++idx);
-    if(idx == 30) {
-      idx = 0;
+    var p = MUX.$('pager');
+    p.innerHTML = '' + (idx + 1) + '/<%=GetNoImages() %>';
+    if(idx >= <%=GetNoImages()-1 %>) {
+      idx = -1;
     }
   }, el);
 })();
@@ -25,6 +27,9 @@
     runat="server"
     id="wrp"
     CssClass="mux-one-gallery">
+    <div
+        class="mux-gallery-pager"
+        id="pager">1/<%=GetNoImages() %></div>
     <mux:Panel
         runat="server"
         CssClass="mux-one-gallery-scroller"

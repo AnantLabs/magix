@@ -21,10 +21,10 @@
                 src='<%#Eval("[UserAvatarURL].Value") %>' 
                 class="mux-user-gallery-avatar"
                 alt="Avatar for user" />
-            <p>Name: <%#Eval("[Name].Value") %></p>
-            <p>User: <%#Eval("[User].Value") %></p>
-            <p>Count: <%#Eval("[Count].Value") %></p>
-            <p>Created: <%#Eval("[Created].Value") %></p>
+            <p class="mux-gallery-name"><%#Eval("[Name].Value") %></p>
+            <p class="mux-gallery-user"><%#Eval("[User].Value") %></p>
+            <p class="mux-gallery-count"><%#Eval("[Count].Value") %> images...</p>
+            <p class="mux-gallery-date"><%#Eval("[Created].Value") %></p>
         </mux:Panel>
     </ItemTemplate>
 </asp:Repeater>
