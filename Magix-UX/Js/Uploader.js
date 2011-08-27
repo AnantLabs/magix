@@ -50,12 +50,10 @@
         MUX.$(this.element.id + '_ul').innerHTML = ih;
 
 
-        // Loop through the FileList and render image files as thumbnails.
         var idxNo = 0;
         for (var i = 0, f; f = files[i]; i++) {
           var reader = new FileReader();
 
-          // Closure to capture the file information.
           var T = this;
           reader.onload = (function(idxF) {
             return function(e) {

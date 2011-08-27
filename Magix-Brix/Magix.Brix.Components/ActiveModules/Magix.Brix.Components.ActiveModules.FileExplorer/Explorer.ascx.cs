@@ -14,6 +14,7 @@ using Magix.UX.Effects;
 using System.Globalization;
 using Magix.UX;
 using Magix.UX.Widgets.Core;
+using Magix.UX.Core;
 
 namespace Magix.Brix.Components.ActiveModules.FileExplorer
 {
@@ -47,8 +48,6 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected Image preview;
         protected Button delete;
         protected Button select;
-        protected System.Web.UI.WebControls.FileUpload file;
-        protected TextBox fileReal;
         protected Label imageSize;
         protected Button newCss;
 
@@ -423,88 +422,86 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 node);
         }
 
-        protected void submitFile_Click(object sender, EventArgs e)
+        [WebMethod]
+        protected void SubmitFile(string fileName, string fileBase64Content)
         {
-            if (!file.HasFile)
+            string webServerApp = Server.MapPath("~/");
+            if (DataSource.Contains("Filter") && 
+                DataSource["Filter"].Get<string>().Trim().Length > 0)
             {
-                Node node = new Node();
-                node["Message"].Value = "You have to specify a file ...! ";
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Magix.Core.ShowMessage",
-                    node);
-            }
-            else
-            {
-                fileReal.Text = "";
-                string fileName = file.FileName;
-                string webServerApp = Server.MapPath("~/");
-                if (DataSource.Contains("Filter") && 
-                    DataSource["Filter"].Get<string>().Trim().Length > 0)
+                bool message = true;
+                foreach (string idx in 
+                    DataSource["Filter"].Get<string>().Trim().Split(';'))
                 {
-                    bool message = true;
-                    foreach (string idx in 
-                        DataSource["Filter"].Get<string>().Trim().Split(';'))
+                    if (idx == null)
+                        continue;
+                    if (idx == "*.*")
                     {
-                        if (idx == null)
-                            continue;
-                        if (idx == "*.*")
-                        {
-                            message = false;
-                            break;
-                        }
-                        if (fileName.Substring(
-                            fileName.LastIndexOf(".") + 1).
-                            Contains(idx.Replace("*.", "")))
-                        {
-                            message = false;
-                            break;
-                        }
+                        message = false;
+                        break;
                     }
-                    if (message)
+                    if (fileName.Substring(
+                        fileName.LastIndexOf(".") + 1).
+                        Contains(idx.Replace("*.", "")))
                     {
-                        Node node = new Node();
-                        node["Message"].Value = "You cannot save files of that type...";
-                        ActiveEvents.Instance.RaiseActiveEvent(
-                            this,
-                            "Magix.Core.ShowMessage",
-                            node);
-                        return;
+                        message = false;
+                        break;
                     }
                 }
-                file.SaveAs(
-                    webServerApp +
-                    DataSource["Folder"].Get<string>().Replace("/", "\\") +
-                    fileName);
+                if (message)
+                {
+                    Node node = new Node();
+                    node["Message"].Value = "You cannot save files of that type...";
 
-                DataSource["FolderToOpen"].Value = "";
-                DataSource["File"].UnTie();
-                DataSource["Files"].UnTie();
-                RaiseSafeEvent(
-                    "Magix.FileExplorer.GetFilesFromFolder",
-                    DataSource);
-                ReDataBind();
-
-                SelectedPanelID = fileName;
-                DataSource["File"].Value = fileName;
-                RaiseSafeEvent(
-                    "Magix.FileExplorer.FileSelected",
-                    DataSource);
-                UpdateSelectedFile();
-                new EffectFadeIn(prop, 500)
-                    .Render();
-                prop.Visible = true;
-                prop.Style[Styles.display] = "none";
-
-                Panel pl = Selector.SelectFirst<Panel>(this,
-                    delegate(Control idx)
-                    {
-                        return (idx is BaseWebControl) &&
-                            (idx as BaseWebControl).Info == SelectedPanelID;
-                    });
-                if (pl != null)
-                    pl.CssClass += " viewing";
+                    RaiseSafeEvent(
+                        "Magix.Core.ShowMessage",
+                        node);
+                    return;
+                }
             }
+
+            using (Stream writer = File.Create(
+                webServerApp + DataSource["Folder"].Get<string>().Replace("/", "\\") +
+                fileName))
+            {
+                byte[] bytes = Convert.FromBase64String(fileBase64Content.Substring(fileBase64Content.IndexOf(",") + 1));
+                writer.Write(bytes, 0, bytes.Length);
+            }
+
+            DataSource["FolderToOpen"].Value = "";
+            DataSource["File"].UnTie();
+            DataSource["Files"].UnTie();
+
+            RaiseSafeEvent(
+                "Magix.FileExplorer.GetFilesFromFolder",
+                DataSource);
+            
+            ReDataBind();
+
+            SelectedPanelID = fileName;
+            DataSource["File"].Value = fileName;
+
+            RaiseSafeEvent(
+                "Magix.FileExplorer.FileSelected",
+                DataSource);
+
+            UpdateSelectedFile();
+
+            new EffectFadeIn(prop, 500)
+                .Render();
+
+            prop.Visible = true;
+            prop.Style[Styles.display] = "none";
+
+            Panel pl = Selector.SelectFirst<Panel>(this,
+                delegate(Control idx)
+                {
+                    return (idx is BaseWebControl) &&
+                        (idx as BaseWebControl).Info == SelectedPanelID;
+                });
+
+            if (pl != null)
+                pl.CssClass += " viewing";
         }
 
         private void UpdateSelectedFile()
@@ -592,9 +589,11 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             node["Files"].UnTie();
             node["NewName"].Value = newName;
             node["OldName"].Value = oldName;
+
             RaiseSafeEvent(
                 "Magix.FileExplorer.ChangeFileName",
                 node);
+
             node["NewName"].UnTie();
             node["OldName"].UnTie();
             SelectedPanelID = newName + oldName.Substring(oldName.LastIndexOf("."));
@@ -632,6 +631,7 @@ Layout System in our WinePad product ...";
             node["DynCssClass"].Value = "showgrid";
             node["Caption"].Value =
                 "Preview";
+
             ActiveEvents.Instance.RaiseLoadControl(
                 "Magix.Brix.Components.ActiveModules.CommonModules.ImageModule",
                 "child",

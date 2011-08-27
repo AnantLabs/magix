@@ -329,52 +329,12 @@
 
 
 
-.fileUploader
+.fileEx input[type=file].file-control
 {
-	position:relative;
-	height:36px;
-	overflow:hidden; /* For some reasons the file input field fucks up things ... */
-}
-
-.fileUploader input[type=file]
-{
+	visibility:hidden;
+	height:0;
+	width:0;
 	position:absolute;
-	z-index:2;
-	opacity:0;
-	top:0;
-	left:0;
-	width:110px;
-	margin:10px 0 0 0 !important;
-}
-
-.fileUploader .browse
-{
-	position:absolute;
-	z-index:1;
-	width:168px !important;
-	top:0;
-	left:0;
-
-	background-image:url(../magic-ux-skins/pen.png);
-	background-repeat:no-repeat;
-	background-position:1px 1px;
-	padding-left:20px;
-	margin-left:0 !important;
-	margin-right:10px;
-}
-
-input[type=text].browse
-{
-	width:150px !important;
-	margin-left:10px !important;
-}
-
-.submitButton
-{
-	margin-left:120px !important;
-	width:110px;
-	margin-right:10px;
-	display:none !important;
 }
 
 .select
