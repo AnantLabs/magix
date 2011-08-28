@@ -98,6 +98,65 @@ Creative Commons Attribution-ShareAlike 3.0";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.CreateQRCode")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.CreateQRCode";
+                    a.EventName = "Magix.QRCodes.CreateQRCode";
+                    a.Description = @"Will create a QR Code with the given 'FileName' path 
+and filename, which should end with .png. The QR Code will point to the given 'URL', and it will use 
+the textures of 'BGImage' and 'FGImage' to render the code. The QR Code will have 'RoundedCorners' 
+radius of rounded corners, and it will be 'AntiPixelated', and have the descriptive text of 
+'Text'. The QR Code will use 'Scale' number of pixels per square to render";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "FileName";
+                    m.Value = "Tmp/test-qr-code.png";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "URL";
+                    m.Value = "http://rasoftwarefactory.com/magix";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "BGImage";
+                    m.Value = "media/images/textures/marble-black.png";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "FGImage";
+                    m.Value = "media/images/textures/marble-white.png";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "RoundedCorners";
+                    m.TypeName = typeof(int).FullName;
+                    m.Value = "25";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Scale";
+                    m.TypeName = typeof(int).FullName;
+                    m.Value = "6";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "AntiPixelated";
+                    m.TypeName = typeof(bool).FullName;
+                    m.Value = "True";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Text";
+                    m.Value = "Magix!";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.PauseSound")) == 0)
                 {
                     Action a = new Action();
