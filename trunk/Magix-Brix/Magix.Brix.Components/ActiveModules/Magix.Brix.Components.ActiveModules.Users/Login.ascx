@@ -68,13 +68,3 @@
         </table>
     </Content>
 </mux:Window>
-
-
-
-
-
-
-
-
-
-

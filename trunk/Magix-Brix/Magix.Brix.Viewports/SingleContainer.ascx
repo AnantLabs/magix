@@ -95,8 +95,3 @@
         id="fullScreen" />
 
 </mux:Panel>
-
-
-
-
-

@@ -13,5 +13,3 @@
     id="tree"
     OnSelectedItemChanged="tree_SelectedItemChanged">
 </mux:TreeView>
-
-

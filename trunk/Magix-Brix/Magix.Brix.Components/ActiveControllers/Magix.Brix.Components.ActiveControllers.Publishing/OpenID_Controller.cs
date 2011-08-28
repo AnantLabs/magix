@@ -513,19 +513,3 @@ maybe a suggestion of what it might have been ...?";
         }
     }
 }
-
-
-
-
-
-
-
-// NOT currently in use, but quite a useful construct. Kept for reference purposes ...
-
-//[ActiveEvent(Name = "Magix.Publishing.GetSettings")]
-//protected void Magix_Publishing_GetSettings(object sender, ActiveEventArgs e)
-//{
-//    e.Params["OpenID"]["Header"].Value = "OpenID";
-//    e.Params["OpenID"]["DefaultRoleName"]["Name"].Value = "Default Role";
-//    e.Params["OpenID"]["DefaultRoleName"]["SettingsValue"].Value = "Magix.Publishing.OpenID.DefaultRoleName";
-//}

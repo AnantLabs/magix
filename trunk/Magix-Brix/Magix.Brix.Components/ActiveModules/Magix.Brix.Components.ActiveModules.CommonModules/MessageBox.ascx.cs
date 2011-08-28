@@ -79,6 +79,3 @@ Event you wish to raise upon OK, otherwise the MessageBox won't make any meaning
         }
     }
 }
-
-
-

@@ -97,6 +97,3 @@ namespace Magix.Brix.Components.ActiveModules.Menu
         }
     }
 }
-
-
-

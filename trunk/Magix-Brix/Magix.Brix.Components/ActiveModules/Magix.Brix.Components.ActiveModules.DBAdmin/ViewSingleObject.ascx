@@ -34,4 +34,3 @@
         OnClick="remove_Click"
         Text="Remove Reference" />
 </mux:Panel>
-

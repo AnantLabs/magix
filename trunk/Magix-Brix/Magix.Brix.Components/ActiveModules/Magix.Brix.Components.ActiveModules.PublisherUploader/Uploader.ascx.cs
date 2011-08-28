@@ -143,6 +143,3 @@ namespace Magix.Brix.Components.ActiveModules.PublisherUploader
         }
     }
 }
-
-
-

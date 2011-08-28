@@ -166,7 +166,3 @@ header and the body field ...";
         }
     }
 }
-
-
-
-

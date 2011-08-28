@@ -57,5 +57,3 @@ namespace Magix.Brix.Loader
         }
     }
 }
-
-
