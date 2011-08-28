@@ -8,6 +8,18 @@
 
 <link href="media/modules/FileExplorer.css" rel="stylesheet" type="text/css" />
 
+<mux:Uploader
+    runat="server"
+    OnUploaded="uploader_Uploaded"
+    id="uploader">
+    <p>Please wait while Marvin is pushing your files through ...</p>
+    <mux:Image
+        runat="server"
+        id="ajaxWait2"
+        ImageUrl="media/images/ajax.gif" 
+        AlternateText="Marvin's brain ..." />
+</mux:Uploader>
+
 <div class="span-12">
     <mux:Panel
         runat="server"
