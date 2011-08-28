@@ -202,7 +202,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                             btn.AlternateText = name;
                             btn.ImageUrl =
                                 "media/images/" +
-                                name.Substring(name.IndexOf('.') + 1) + ".png";
+                                name.Substring(name.LastIndexOf('.') + 1) + ".png";
 
                             Panel p = new Panel();
                             p.Style[Styles.position] = "relative";
@@ -575,12 +575,28 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 imageUrl = DataSource["Folder"].Get<string>() +
                     DataSource["File"]["FullName"].Get<string>();
                 preview.ToolTip = "Click Image to view full-size ...";
+                preview.Visible = true;
             }
             else
             {
-                imageUrl = "media/images/" +
-                    DataSource["File"]["FullName"].Get<string>().Substring(DataSource["File"]["FullName"].Get<string>().LastIndexOf('.') + 1) + ".png";
-                preview.ToolTip = "Click file to edit in ASCII editor ...";
+                switch(DataSource["File"]["FullName"].Get<string>().Substring(DataSource["File"]["FullName"].Get<string>().LastIndexOf('.') + 1))
+                {
+                    case "css":
+                    case "txt":
+                    case "config":
+                    case "xml":
+                    case "json":
+                    case "html":
+                    case "cs":
+                        imageUrl = "media/images/" +
+                            DataSource["File"]["FullName"].Get<string>().Substring(DataSource["File"]["FullName"].Get<string>().LastIndexOf('.') + 1) + ".png";
+                        preview.ToolTip = "Click file to edit in ASCII editor ...";
+                        preview.Visible = true;
+                        break;
+                    default:
+                        preview.Visible = false;
+                        break;
+                }
             }
 
             preview.ImageUrl = imageUrl;
