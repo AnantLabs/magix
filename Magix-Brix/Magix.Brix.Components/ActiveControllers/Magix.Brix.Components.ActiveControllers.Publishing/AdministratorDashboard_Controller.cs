@@ -144,6 +144,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Items"]["FileExplorer"]["Text"].Value = "Click to launch File Explorer";
             e.Params["Items"]["FileExplorer"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["FileExplorer"]["Event"].Value = "Magix.Publishing.ViewFileSystem";
+
+            e.Params["Items"]["Log"]["Image"].Value = "media/images/oscilloscope.png";
+            e.Params["Items"]["Log"]["Text"].Value = "Click to view Log";
+            e.Params["Items"]["Log"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Log"]["Event"].Value = "Magix.Publishing.ViewLog";
         }
 
         /**
