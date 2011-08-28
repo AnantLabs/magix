@@ -394,16 +394,42 @@ namespace Magix.Brix.Viewports
         }
 
         /**
-         * 
+         * Level2: Will play the given 'File' as a sound. Supported sound formats depends upon
+         * browsers, but normally .ogg is pretty safe
          */
         [ActiveEvent(Name = "Magix.Core.PlaySound")]
         protected void Magix_Core_PlaySound(object sender, ActiveEventArgs e)
         {
             audio.SoundFile = e.Params["File"].Get<string>();
 
+            // Google Chrome doesn't seem to obey by the autoplay parameter ...
             AjaxManager.Instance.WriterAtBack.Write(
                 string.Format(
                     "MUX.$('{0}').play();", 
+                    audio.ClientID));
+        }
+
+        /**
+         * Level2: Will stop, or pause, any sound or music immediately
+         */
+        [ActiveEvent(Name = "Magix.Core.PauseSound")]
+        protected void Magix_Core_PauseSound(object sender, ActiveEventArgs e)
+        {
+            AjaxManager.Instance.WriterAtBack.Write(
+                string.Format(
+                    "MUX.$('{0}').pause();",
+                    audio.ClientID));
+        }
+
+        [ActiveEvent(Name = "Magix.Core.ResumeSound")]
+        protected void Magix_Core_ResumeSound(object sender, ActiveEventArgs e)
+        {
+            if (string.IsNullOrEmpty(audio.SoundFile))
+                throw new ArgumentException("There are no sound files to really resume here ...?");
+
+            AjaxManager.Instance.WriterAtBack.Write(
+                string.Format(
+                    "MUX.$('{0}').play();",
                     audio.ClientID));
         }
 
