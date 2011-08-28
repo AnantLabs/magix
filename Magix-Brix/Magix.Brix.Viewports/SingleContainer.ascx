@@ -6,6 +6,10 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Viewports.SingleContainer" %>
 
+<mux:Audio
+    runat="server"
+    id="audio" />
+
 <mux:AjaxWait 
     runat="server" 
     CssClass="ajax-wait"

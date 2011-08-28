@@ -56,6 +56,42 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.IncludeCSSFile")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.IncludeCSSFile";
+                    a.EventName = "Magix.Core.AddCustomCssFile";
+                    a.Description = @"Will include a CSS file onto the page, even 
+in an Ajax Callback if you wish. Change the 'CSSFile' parameter to choose which CSS file 
+you'd like to include";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "CSSFile";
+                    m.Value = "media/your-css-file-and-path.css";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.PlaySound")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.PlaySound";
+                    a.EventName = "Magix.Core.PlaySound";
+                    a.Description = @"Will play the given 'File' sound";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "File";
+                    m.Value = "media/Cool-Breeze.ogg";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.EmptyActiveForm")) == 0)
                 {
                     Action a = new Action();
