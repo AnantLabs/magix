@@ -42,6 +42,10 @@
       <DependentUpon>Clickable.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ImageList.ascx.cs">
+      <DependentUpon>ImageList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Uploader.ascx.cs">
       <DependentUpon>Uploader.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -123,6 +127,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Uploader.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ImageList.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

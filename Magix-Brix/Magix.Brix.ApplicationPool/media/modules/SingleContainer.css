@@ -1312,6 +1312,32 @@ li.tree-item-class span.mux-tree-icon
 	margin-bottom:0;
 }
 
+.mux-desktop-icon
+{
+	opacity:.3;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+	-moz-transition-property:-moz-box-shadow, opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, opacity;
+	transition-duration:0.2s;
+	cursor:pointer;
+	margin-right:10px;
+}
+
+.mux-desktop-icon:hover
+{
+	opacity:1;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
 
 
 

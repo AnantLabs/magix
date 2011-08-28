@@ -28,7 +28,7 @@ namespace Magix.UX.Builder
         {
             if (_closed)
                 throw new Exception("Can't add an attribute once the attribute is closed due to accessing the underlaying Writer or something else");
-            _builder.WriterUnClosed.Write(" " + name + "=\"" + value + "\"");
+            _builder.WriterUnClosed.Write(" " + name + "=\"" + value.Replace("\"", "&quot;") + "\"");
         }
 
         public void Write(string content, params object[] args)

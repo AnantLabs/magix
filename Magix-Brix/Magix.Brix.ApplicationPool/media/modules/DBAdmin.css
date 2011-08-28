@@ -322,7 +322,7 @@ table.noMargin .checkboxWithText
 .pagingButton input[type=button]:disabled:hover,
 .pagingButton input[type=button]:disabled:focus
 {
-	color:#CC6600;
+	color:#999;
 }
 
 /* The different [known!] paging buttons in our system ... */

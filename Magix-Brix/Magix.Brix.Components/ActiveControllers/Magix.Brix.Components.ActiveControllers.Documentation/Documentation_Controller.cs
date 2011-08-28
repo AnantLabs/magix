@@ -69,8 +69,8 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
 
             node["Width"].Value = 9;
             node["MarginBottom"].Value = 10;
-            node["Top"].Value = 1;
             node["Last"].Value = false;
+            node["Header"].Value = "Classes";
             node["FullTypeName"].Value = typeof(Namespace).FullName;
             node["ItemSelectedEvent"].Value = "Magix.Doxygen.ViewNamespaceOrClass";
 
