@@ -34,6 +34,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             Node node = new Node();
 
             node["Width"].Value = 18;
+            node["MarginBottom"].Value = 20;
             node["Last"].Value = true;
             node["Container"].Value = "content3";
             node["Filter"].Value = "*.*";
