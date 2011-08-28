@@ -34,8 +34,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             RaiseEvent("Magix.Publishing.LoadAdministratorMenu");
 
             LoadDashboard();
-            LoadTipOfToday();
             LoadDesktopIcons();
+            LoadTipOfToday();
         }
 
         /*
@@ -120,12 +120,13 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 "Magix.Publishing.GetDashBoardDesktopPlugins",
                 node);
 
-            node["Width"].Value = 18;
+            node["Width"].Value = 13;
             node["Last"].Value = true;
+            node["Append"].Value = true;
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.ImageList",
-                "content4",
+                "content3",
                 node);
         }
 
