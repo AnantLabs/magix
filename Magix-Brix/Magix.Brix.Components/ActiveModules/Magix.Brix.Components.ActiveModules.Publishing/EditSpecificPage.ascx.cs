@@ -374,6 +374,3 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         }
     }
 }
-
-
-

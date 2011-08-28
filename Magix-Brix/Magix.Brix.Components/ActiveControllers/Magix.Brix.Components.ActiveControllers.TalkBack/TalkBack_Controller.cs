@@ -206,16 +206,3 @@ namespace Magix.Brix.Components.ActiveControllers.TalkBack
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

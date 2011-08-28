@@ -231,6 +231,3 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         }
     }
 }
-
-
-

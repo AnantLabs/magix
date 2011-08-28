@@ -17,4 +17,3 @@
         ImageUrl="media/images/ajax.gif" 
         AlternateText="Marvin's brain ..." />
 </mux:Uploader>
-

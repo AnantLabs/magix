@@ -20,5 +20,3 @@
             ToolTip='<%#Eval("[Text].Value") %>' />
     </ItemTemplate>
 </asp:Repeater>
-
-

@@ -19,4 +19,3 @@
         CssClass="imageDescription small"
         id="lbl" />
 </mux:Panel>
-

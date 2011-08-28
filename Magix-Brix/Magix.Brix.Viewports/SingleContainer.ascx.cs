@@ -1158,6 +1158,3 @@ namespace Magix.Brix.Viewports
         }
     }
 }
-
-
-

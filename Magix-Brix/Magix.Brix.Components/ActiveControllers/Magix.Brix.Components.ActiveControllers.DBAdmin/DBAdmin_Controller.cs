@@ -764,17 +764,3 @@ collection you're removing it from.</p>";
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

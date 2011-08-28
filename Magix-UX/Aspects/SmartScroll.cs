@@ -41,4 +41,3 @@ namespace Magix.UX.Aspects
         }
     }
 }
-

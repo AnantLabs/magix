@@ -70,17 +70,3 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -104,4 +104,3 @@ namespace Magix.Brix.Components.ActiveModules.Editor
         }
     }
 }
-

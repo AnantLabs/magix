@@ -61,6 +61,3 @@ namespace Magix.Brix.Components.ActiveModules.Documentation
         }
     }
 }
-
-
-

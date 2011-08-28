@@ -28,6 +28,3 @@
         </mux:Panel>
     </ItemTemplate>
 </asp:Repeater>
-
-
-

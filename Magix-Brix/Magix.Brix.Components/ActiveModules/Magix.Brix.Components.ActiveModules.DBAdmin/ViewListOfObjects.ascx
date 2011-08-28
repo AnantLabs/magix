@@ -45,4 +45,3 @@
         ToolTip="Click to Append either a New or an Existing Object to List of Objects ..."
         OnClick="append_Click" />
 </mux:Panel>
-

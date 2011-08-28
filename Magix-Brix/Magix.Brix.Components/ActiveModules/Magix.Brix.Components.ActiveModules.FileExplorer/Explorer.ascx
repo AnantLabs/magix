@@ -147,9 +147,3 @@ MUX.uploadFile = function() {
         OnClick="newCss_Click"
         Text="+" />
 </div>
-
-
-
-
-
-

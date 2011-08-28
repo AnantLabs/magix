@@ -84,6 +84,3 @@ namespace Magix.Brix.Components.ActiveModules.Users
         }
     }
 }
-
-
-

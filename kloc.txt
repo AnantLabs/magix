@@ -1,0 +1,55 @@
+Magix.Brix.Data							1707
+Magix.Brix.Components.ActiveModules.Calendars			782
+Magix.Brix.Components.ActiveModules.Users			160
+Magix.Brix.Components.ActiveModules.CommonModules		1039
+Magix.Brix.Components.ActiveModules.DBAdmin			2453
+Magix.Brix.Components.ActiveModules.Documentation		106
+Magix.Brix.Components.ActiveModules.Editor			209
+Magix.Brix.Components.ActiveModules.FileExplorer		1012
+Magix.Brix.Components.ActiveModules.Menu			119
+Magix.Brix.Components.ActiveModules.MetaView			332
+Magix.Brix.Components.ActiveModules.PublisherImage		205
+Magix.Brix.Components.ActiveModules.PublisherUploader		166
+Magix.Brix.Components.ActiveModules.Publishing			2087
+Magix.Brix.Components.ActiveModules.Signature			261
+Magix.Brix.Components.ActiveModules.TalkBack			285
+Magix.Brix.Components.ActiveModules.Users			158
+
+Magix.Brix.Components.ActiveControllers.DBAdmin			1843
+Magix.Brix.Components.ActiveControllers.Documentation		1074
+Magix.Brix.Components.ActiveControllers.Email			105
+Magix.Brix.Components.ActiveControllers.FileExplorer		371
+Magix.Brix.Components.ActiveControllers.GalleryPlugin		426
+Magix.Brix.Components.ActiveControllers.Logger			402
+Magix.Brix.Components.ActiveControllers.MetaActions		2645
+Magix.Brix.Components.ActiveControllers.MetaTypes		1038
+Magix.Brix.Components.ActiveControllers.MetaView		1370
+Magix.Brix.Components.ActiveControllers.PDF			454
+Magix.Brix.Components.ActiveControllers.Publishing		4219
+Magix.Brix.Components.ActiveControllers.QRGenerator		467
+Magix.Brix.Components.ActiveControllers.Settings		66
+Magix.Brix.Components.ActiveControllers.Signature		46
+Magix.Brix.Components.ActiveControllers.TalkBack		209
+Magix.Brix.Components.ActiveControllers.ToolTip			57
+Magix.Brix.Components.ActiveControllers.UploaderPlugin		106
+Magix.Brix.Components.ActiveTypes.Settings			234
+Magix.Brix.Components.ActiveTypes.TalkBack			74
+Magix.Brix.Components.ActiveTypes.ToolTip			166
+Magix.Brix.Components.ActiveTypes.Users				443
+Doxygen.NET							1130
+Magix.Brix.Components						1058
+Magix.Brix.Publishing.Common					72
+Magix.Brix.Data.Adapters.MSSQL					1491
+Magix.Brix.Loader						1358
+Magix.Brix.Types						1781
+Magix.Brix.Viewports						1259
+Magix.UX							10636 + 2879js
+
+
+Total == 							48,553 Lines of Code as of; 28th of August, 4:33AM
+
+
+None of the supporting libraries were counted, except Doxygen.NET, and none of the Assembly.cs files either ...
+
+
+.t

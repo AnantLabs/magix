@@ -65,4 +65,3 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         }
     }
 }
-

@@ -50,6 +50,3 @@ namespace Magix.Brix.Components.ActiveModules.PublisherImage
         }
     }
 }
-
-
-

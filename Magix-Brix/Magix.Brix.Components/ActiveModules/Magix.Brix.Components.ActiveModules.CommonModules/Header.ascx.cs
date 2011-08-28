@@ -93,6 +93,3 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         }
     }
 }
-
-
-

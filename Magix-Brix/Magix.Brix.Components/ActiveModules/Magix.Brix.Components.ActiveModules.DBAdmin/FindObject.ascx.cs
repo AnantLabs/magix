@@ -279,4 +279,3 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         }
     }
 }
-
