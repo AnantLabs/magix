@@ -50,6 +50,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         protected Button select;
         protected Label imageSize;
         protected Button newCss;
+        protected Uploader uploader;
 
         public override void InitialLoading(Node node)
         {
@@ -422,6 +423,58 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 node);
         }
 
+        protected void uploader_Uploaded(object sender, EventArgs e)
+        {
+            string filBase64 = uploader.GetFileRawBASE64();
+            string fileName = uploader.GetFileName();
+
+            using (FileStream writer = 
+                File.Create(
+                    MapPath(
+                        "~/" + 
+                        DataSource["Folder"].Get<string>() + 
+                        fileName)))
+            {
+                byte[] bytes = Convert.FromBase64String(filBase64);
+                writer.Write(bytes, 0, bytes.Length);
+            }
+
+            DataSource["FolderToOpen"].Value = "";
+            DataSource["File"].UnTie();
+            DataSource["Files"].UnTie();
+
+            RaiseSafeEvent(
+                "Magix.FileExplorer.GetFilesFromFolder",
+                DataSource);
+
+            ReDataBind();
+
+            SelectedPanelID = fileName;
+            DataSource["File"].Value = fileName;
+
+            RaiseSafeEvent(
+                "Magix.FileExplorer.FileSelected",
+                DataSource);
+
+            UpdateSelectedFile();
+
+            new EffectFadeIn(prop, 500)
+                .Render();
+
+            prop.Visible = true;
+            prop.Style[Styles.display] = "none";
+
+            Panel pl = Selector.SelectFirst<Panel>(this,
+                delegate(Control idx)
+                {
+                    return (idx is BaseWebControl) &&
+                        (idx as BaseWebControl).Info == SelectedPanelID;
+                });
+
+            if (pl != null)
+                pl.CssClass += " viewing";
+        }
+
         [WebMethod]
         protected void SubmitFile(string fileName, string fileBase64Content)
         {
@@ -475,7 +528,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             RaiseSafeEvent(
                 "Magix.FileExplorer.GetFilesFromFolder",
                 DataSource);
-            
+
             ReDataBind();
 
             SelectedPanelID = fileName;
