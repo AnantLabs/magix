@@ -276,6 +276,10 @@
       <Project>{4E93A1A1-0F18-49BB-9BDD-8A69A383116E}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Publishing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.QRGenerator\Magix.Brix.Components.ActiveControllers.QRGenerator.csproj">
+      <Project>{D4D65F4C-A198-4509-8B10-DA18922F0B24}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.QRGenerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Settings\Magix.Brix.Components.ActiveControllers.Settings.csproj">
       <Project>{314FAAAA-759C-4357-BA64-985CD9EA08BE}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.Settings</Name>
