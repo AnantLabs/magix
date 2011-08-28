@@ -80,13 +80,44 @@ you'd like to include";
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.PlaySound";
                     a.EventName = "Magix.Core.PlaySound";
-                    a.Description = @"Will play the given 'File' sound";
+                    a.Description = @"Will play the given 'File' sound. If the sample 
+sound file doesn't work, you've probably got something wrong with the setup 
+of your Web Server. Make sure the file extension .ogg is associated with the 
+MIME type of audio/ogg. Cool Breeze is a song composed by our CTO Thomas Hansen and performed 
+by Thomas Hansen and his wife Inger Hoeoeg, and is to be considered licensed to you under the terms of 
+Creative Commons Attribution-ShareAlike 3.0";
                     a.StripInput = true;
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "File";
                     m.Value = "media/Cool-Breeze.ogg";
                     a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.PauseSound")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.PauseSound";
+                    a.EventName = "Magix.Core.PauseSound";
+                    a.Description = @"Stops Any sound or music currently being played";
+                    a.StripInput = true;
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ResumeSound")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ResumeSound";
+                    a.EventName = "Magix.Core.ResumeSound";
+                    a.Description = @"Resumes any sound or music previously being halted through 'StopSound' 
+or other similar mechanisms. PS! Will throw exception if no sounds have been played, and hence 
+no resuming can occur in any ways";
+                    a.StripInput = true;
 
                     a.Save();
                 }
