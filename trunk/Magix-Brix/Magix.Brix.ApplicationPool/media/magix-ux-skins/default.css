@@ -35,12 +35,6 @@ input[type=submit]
 	transition-duration:0.2s;
 }
 
-input:disabled[type=button],
-input:disabled[type=submit]
-{
-	color:#999;
-}
-
 input[type=button]:focus,
 input[type=submit]:focus,
 input[type=button]:hover,
@@ -50,6 +44,12 @@ input[type=submit]:hover
 	-moz-box-shadow: 2px 2px 3px #444;
 	box-shadow: 2px 2px 3px #444;
 	color:#06c;
+}
+
+input[type=button]:disabled,
+input[type=submit]:disabled
+{
+	color:#999;
 }
 
 input[type=text],

@@ -10,7 +10,6 @@
 .fileEx input[type=submit]:disabled:hover,
 .fileEx input[type=button]:disabled:hover
 {
-	color:#CC6600 !important;
 }
 
 .fileExplorer

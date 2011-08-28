@@ -83,8 +83,9 @@ you'd like to include";
                     a.Description = @"Will play the given 'File' sound. If the sample 
 sound file doesn't work, you've probably got something wrong with the setup 
 of your Web Server. Make sure the file extension .ogg is associated with the 
-MIME type of audio/ogg. Cool-Breeze.ogg [and The-Last-Barfly.ogg] is a song composed by our CTO Thomas Hansen and performed 
-by Thomas Hansen and his wife Inger Hoeoeg, and is to be considered licensed to you under the terms of 
+MIME type of audio/ogg. PS! For the record; Cool-Breeze.ogg and The-Last-Barfly.ogg 
+are both songs composed by our CTO Thomas Hansen. They are both performed by Thomas Hansen and 
+his wife Inger Hoeoeg, and are to be considered licensed to you under the terms of 
 Creative Commons Attribution-ShareAlike 3.0";
                     a.StripInput = true;
 

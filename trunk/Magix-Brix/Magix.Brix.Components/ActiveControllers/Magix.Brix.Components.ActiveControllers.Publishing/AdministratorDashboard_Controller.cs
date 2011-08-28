@@ -34,6 +34,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             LoadDashboard();
             LoadTipOfToday();
+            LoadDesktopIcons();
         }
 
         /*
@@ -108,6 +109,41 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
+        }
+
+        private void LoadDesktopIcons()
+        {
+            Node node = new Node();
+
+            RaiseEvent(
+                "Magix.Publishing.GetDashBoardDesktopPlugins",
+                node);
+
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.ImageList",
+                "content4",
+                node);
+        }
+
+        /**
+         * Level2: Will return the icons needed to populate the 'desktop' with 
+         * your most important 'shortcut icons'
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
+        protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
+        {
+            e.Params["Items"]["DBManager"]["Image"].Value = "media/images/database.png";
+            e.Params["Items"]["DBManager"]["Text"].Value = "Click to launch Database Manager";
+            e.Params["Items"]["DBManager"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["DBManager"]["Event"].Value = "Magix.Publishing.ViewClasses";
+
+            e.Params["Items"]["FileExplorer"]["Image"].Value = "media/images/briefcase.png";
+            e.Params["Items"]["FileExplorer"]["Text"].Value = "Click to launch File Explorer";
+            e.Params["Items"]["FileExplorer"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["FileExplorer"]["Event"].Value = "Magix.Publishing.ViewFileSystem";
         }
 
         /**
