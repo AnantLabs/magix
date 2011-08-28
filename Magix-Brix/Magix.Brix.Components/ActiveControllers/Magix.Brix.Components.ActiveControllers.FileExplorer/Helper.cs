@@ -76,12 +76,10 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
         {
             if (folder != string.Empty)
             {
-                // Not opening 'root' folder ...
-                // (which shouldn't be allowed anyway in your app ...!!!!!!
                 folder = folder.Replace("\\", "/");
-                if (folder.Length > 1 && folder[0] == '/')
+                if (folder[0] == '/')
                     folder = folder.Substring(1);
-                if (folder[folder.Length - 1] != '/')
+                if (folder.Length > 0 && folder[folder.Length - 1] != '/')
                     folder += "/";
             }
             return folder;
