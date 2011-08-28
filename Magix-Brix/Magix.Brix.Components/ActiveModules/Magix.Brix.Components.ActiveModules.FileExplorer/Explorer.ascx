@@ -56,7 +56,7 @@
         runat="server"
         id="fullUrl"
         Target="_blank"
-        ToolTip="Click here to open Image in another Window and get its complete URL for embedding onto other objects etc ..."
+        ToolTip="Click here to open or download file"
         CssClass="fullUrl small" />
     <mux:Label 
         runat="server"

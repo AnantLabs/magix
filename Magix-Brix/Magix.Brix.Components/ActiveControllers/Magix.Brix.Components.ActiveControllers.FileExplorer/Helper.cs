@@ -50,12 +50,13 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
                     webServerApp + webServerFolder, idxFilter))
                 {
                     string fileName = idxFile.Substring(idxFile.LastIndexOf("\\") + 1);
-                    switch (idxFilter.Substring(idxFilter.LastIndexOf(".") + 1))
+                    switch (idxFile.Substring(idxFile.LastIndexOf(".") + 1))
                     {
                         case "png":
                         case "gif":
                         case "jpeg":
                         case "jpg":
+                        case "ico":
                             node["Files"][fileName]["IsImage"].Value = true;
                             using (Bitmap b = Bitmap.FromFile(idxFile) as Bitmap)
                             {
