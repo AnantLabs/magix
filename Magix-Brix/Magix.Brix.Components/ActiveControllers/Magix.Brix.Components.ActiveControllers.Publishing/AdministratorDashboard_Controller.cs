@@ -13,6 +13,7 @@ using System.Web;
 using Magix.Brix.Data;
 using Magix.Brix.Components.ActiveTypes.Logging;
 using Magix.Brix.Components.ActiveTypes.Users;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.Publishing
 {
@@ -149,6 +150,21 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Items"]["Log"]["Text"].Value = "Click to view Log";
             e.Params["Items"]["Log"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Log"]["Event"].Value = "Magix.Publishing.ViewLog";
+
+            e.Params["Items"]["Dox"]["Image"].Value = "media/images/docs.png";
+            e.Params["Items"]["Dox"]["Text"].Value = "Click to Download Magix' Documentation in PDF Format";
+            e.Params["Items"]["Dox"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Dox"]["Event"].Value = "Magix.Publishing.DownloadHeavyDocumentation";
+        }
+
+        /**
+         * Level2: Will redirect the browser towards the complete PDF documentation for Magix', including 
+         * all the C# and coding parts
+         */
+        [ActiveEvent(Name = "Magix.Publishing.DownloadHeavyDocumentation")]
+        protected void Magix_Publishing_DownloadHeavyDocumentation(object sender, ActiveEventArgs e)
+        {
+            AjaxManager.Instance.WriterAtBack.Write("window.open('Tmp/Magix-For-Believing-CSharp-People.pdf');");
         }
 
         /**
