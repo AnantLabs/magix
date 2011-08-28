@@ -61,7 +61,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <h2>Grids</h2>
 <p>Most Grids in Magix have tons of features. These features includes; Paging, In Place Editing of Values, Filtering, and so on ...</p>
 <p>To Filter according to a Column, all you've got to do is to click the header of your Grid, choose which type of Filter you want to apply, type in its value, and click OK ...</p>
-<p>The arrow buttons, normally at the bottom of your grids makes it possible to traverse forward and backwards in your list of items. The double arrows [""&lt;&lt;""] takes you <em>'all the way'</em> in its direction ...</p>
+<p>The arrow buttons, normally at the bottom of your grids makes it possible to traverse forward and backwards in your list of items. The double arrows takes you <em>'all the way'</em> in its direction ...</p>
 <p><em>Open up Meta Types/Meta Actions</em> and play around with that grid by filtering, creating a couple of new items and so on.</p>
 <p>Make sure you <em>don't change any</em> of the existing items, since some things are dependent upon 'System Actions' which must be defined for your system to properly work ...!</p>
 <p>To see Paging you'll normally need to have more than 10 items in your grid. To see 'all the way paging', you'll normally need more than 20 items ...</p>
