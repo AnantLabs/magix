@@ -53,6 +53,7 @@
     <Compile Include="Controls\Extended\Accordion\Accordion.cs" />
     <Compile Include="Controls\Extended\Accordion\AccordionView.cs" />
     <Compile Include="Controls\Extended\AjaxWait\GlobalUpdater.cs" />
+    <Compile Include="Controls\Extended\Audio\Audio.cs" />
     <Compile Include="Controls\Extended\Calendar\Calendar.cs" />
     <Compile Include="Controls\Extended\Carousel\Carousel.cs" />
     <Compile Include="Controls\Extended\InPlaceTextAreaEdit\InPlaceTextAreaEdit.cs" />

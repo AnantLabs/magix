@@ -45,6 +45,7 @@ namespace Magix.Brix.Viewports
         protected Image ajaxWait;
         protected Panel debug;
         protected Timer timer;
+        protected Audio audio;
 
         [DebuggerStepThrough]
         private bool IsDebug()
@@ -390,6 +391,20 @@ namespace Magix.Brix.Viewports
 
             HeaderElements.Add(headerStr);
             IncludeHeaderFile(headerStr);
+        }
+
+        /**
+         * 
+         */
+        [ActiveEvent(Name = "Magix.Core.PlaySound")]
+        protected void Magix_Core_PlaySound(object sender, ActiveEventArgs e)
+        {
+            audio.SoundFile = e.Params["File"].Get<string>();
+
+            AjaxManager.Instance.WriterAtBack.Write(
+                string.Format(
+                    "MUX.$('{0}').play();", 
+                    audio.ClientID));
         }
 
         /**
