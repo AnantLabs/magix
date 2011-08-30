@@ -35,6 +35,7 @@ namespace Magix.Brix.Viewports
         protected DynamicPanel content6;
         protected DynamicPanel content7;
         protected DynamicPanel fullScreen;
+        protected DynamicPanel floater;
         protected Window message;
         protected Label msgLbl;
         protected Panel pnlAll;
@@ -583,11 +584,15 @@ namespace Magix.Brix.Viewports
             if (string.IsNullOrEmpty(container))
                 container = "content1";
 
-            if (container.StartsWith("content"))
+            if (container == "floater")
             {
-                DynamicPanel pnl = 
+                ClearControls(floater, true);
+            }
+            else if (container.StartsWith("content"))
+            {
+                DynamicPanel pnl =
                     Selector.FindControl<DynamicPanel>(
-                    this, 
+                    this,
                     container);
 
                 ClearControls(pnl, true);
@@ -1067,6 +1072,12 @@ namespace Magix.Brix.Viewports
                     ClearControls(toAddInto, true);
                     toAddInto.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
                 }
+            }
+            else if (e.Params["Position"].Get<string>() == "floater")
+            {
+                if (e.Params["Parameters"].Contains("CssClass"))
+                    floater.CssClass = e.Params["Parameters"]["CssClass"].Get<string>();
+                floater.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
             }
         }
 

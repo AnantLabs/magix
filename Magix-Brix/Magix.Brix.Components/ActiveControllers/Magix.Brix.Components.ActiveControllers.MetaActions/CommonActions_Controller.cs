@@ -328,21 +328,29 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         [ActiveEvent(Name = "Magix.Common.LoadSignatureForCurrentMetaObject")]
         protected void Magix_Common_LoadSignatureForCurrentMetaObject(object sender, ActiveEventArgs e)
         {
-            e.Params["OKEvent"].Value = "Magix.MetaView.UnLoadSignature";
-            e.Params["OKEvent"]["Params"]["MetaObjectID"].Value = e.Params["MetaObjectID"].Value;
-            e.Params["OKEvent"]["Params"]["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
-            e.Params["OKEvent"]["Params"]["Name"].Value = e.Params["ActionSenderName"].Value;
+            if (!e.Params.Contains("OriginalWebPartID") ||
+                !e.Params.Contains("MetaObjectID"))
+            {
+                throw new ArgumentException("Sorry buddy, but this Action only works from a MetaView WebPart ...");
+            }
+            else
+            {
+                e.Params["OKEvent"].Value = "Magix.MetaView.UnLoadSignature";
+                e.Params["OKEvent"]["Params"]["MetaObjectID"].Value = e.Params["MetaObjectID"].Value;
+                e.Params["OKEvent"]["Params"]["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
+                e.Params["OKEvent"]["Params"]["Name"].Value = e.Params["ActionSenderName"].Value;
 
-            e.Params["CancelEvent"].Value = "Magix.Publishing.ReloadWebPart";
-            e.Params["CancelEvent"]["Params"]["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
+                e.Params["CancelEvent"].Value = "Magix.Publishing.ReloadWebPart";
+                e.Params["CancelEvent"]["Params"]["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
 
-            if (e.Params.Contains("Value") &&
-                !string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
-                e.Params["Coords"].Value = e.Params["Value"].Value;
+                if (e.Params.Contains("Value") &&
+                    !string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
+                    e.Params["Coords"].Value = e.Params["Value"].Value;
 
-            RaiseEvent(
-                "Magix.Signature.LoadSignature",
-                e.Params);
+                RaiseEvent(
+                    "Magix.Signature.LoadSignature",
+                    e.Params);
+            }
         }
 
         /**

@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using Magix.Brix.Data;
+using Magix.Brix.Components.ActiveTypes;
+using Magix.Brix.Components.ActiveTypes.Users;
 
 namespace Magix.Brix.Components.ActiveControllers.Documentation
 {
@@ -25,6 +27,51 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
     [ActiveController]
     public class Documentation_Controller : ActiveController
     {
+        /**
+         * Level2: Will populate the Desktop with the 'Help from Marvin' icon
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
+        protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
+        {
+            e.Params["Items"]["Help"]["Image"].Value = "media/images/marvin-help.png";
+            e.Params["Items"]["Help"]["Text"].Value = "Click to have Marvin Magix Rescue you ...!";
+            e.Params["Items"]["Help"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Help"]["Event"].Value = "Magix.Documentation.LaunchMarvin";
+        }
+
+        /**
+         * Level2: Will return the menu items needed to start the class browser
+         */
+        [ActiveEvent(Name = "Magix.Documentation.LaunchMarvin")]
+        protected void Magix_Documentation_LaunchMarvin(object sender, ActiveEventArgs e)
+        {
+            LoadTipOfToday();
+        }
+
+        /*
+         * Helper for above
+         */
+        private void LoadTipOfToday()
+        {
+            Node node = new Node();
+            if (Page.Session["HasLoadedTooltipOfToday"] == null)
+            {
+                node["Text"].Value = TipOfToday.Instance.Next(UserBase.Current.Username);
+                Page.Session["HasLoadedTooltipOfToday"] = true;
+            }
+            else
+            {
+                node["Text"].Value = TipOfToday.Instance.Current(UserBase.Current.Username);
+            }
+            node["ChildCssClass"].Value = "tool-tip";
+            node["CssClass"].Value = "mux-tooltip-module";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.TipOfToday",
+                "floater",
+                node);
+        }
+
         /**
          * Level2: Will return the menu items needed to start the class browser
          */

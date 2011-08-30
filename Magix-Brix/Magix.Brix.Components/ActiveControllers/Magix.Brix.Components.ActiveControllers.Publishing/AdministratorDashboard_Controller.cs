@@ -35,31 +35,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             LoadDashboard();
             LoadDesktopIcons();
-            LoadTipOfToday();
-        }
-
-        /*
-         * Helper for above
-         */
-        private void LoadTipOfToday()
-        {
-            Node node = new Node();
-            node["Append"].Value = true;
-            if (Page.Session["HasLoadedTooltipOfToday"] == null)
-            {
-                node["Text"].Value = TipOfToday.Instance.Next(User.Current.Username);
-                Page.Session["HasLoadedTooltipOfToday"] = true;
-            }
-            else
-            {
-                node["Text"].Value = TipOfToday.Instance.Current(User.Current.Username);
-            }
-            node["ChildCssClass"].Value = "tool-tip";
-
-            LoadModule(
-                "Magix.Brix.Components.ActiveModules.CommonModules.TipOfToday",
-                "content3",
-                node);
         }
 
         /*
@@ -282,11 +257,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             Node node = new Node();
 
             node["Container"].Value = "child";
-            node["Width"].Value = 19;
-            node["WindowCssClass"].Value = "mux-shaded mux-rounded browser";
-            node["Caption"].Value = "Browse classes";
-            node["NoHeader"].Value = true;
-            node["CloseEvent"].Value = "Magix.Publishing.ViewClassesClosed";
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["Container"].Value = "content3";
+            node["Header"].Value = "Database Objects";
 
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,

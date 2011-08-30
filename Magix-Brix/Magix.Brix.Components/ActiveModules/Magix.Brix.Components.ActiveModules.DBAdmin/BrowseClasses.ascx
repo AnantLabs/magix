@@ -8,6 +8,11 @@
 
 <link href="media/modules/DBAdmin.css" rel="stylesheet" type="text/css" />
 
+<mux:Label
+    runat="server"
+    id="header"
+    Tag="h3" />
+
 <mux:TreeView
     runat="server"
     id="tree"
