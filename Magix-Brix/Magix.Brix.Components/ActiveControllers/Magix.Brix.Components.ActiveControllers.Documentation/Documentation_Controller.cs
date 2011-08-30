@@ -117,7 +117,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             node["Width"].Value = 9;
             node["MarginBottom"].Value = 10;
             node["Last"].Value = false;
-            node["Header"].Value = "Classes";
+            node["Header"].Value = "Documentation for Magix";
             node["FullTypeName"].Value = typeof(Namespace).FullName;
             node["ItemSelectedEvent"].Value = "Magix.Doxygen.ViewNamespaceOrClass";
 
@@ -894,7 +894,6 @@ clicking a button, or something similar</p>
             node["Container"].Value = "content4";
             node["Width"].Value = 9;
             node["MarginBottom"].Value = 10;
-            node["Top"].Value = 1;
             node["Last"].Value = true;
             node["IsCreate"].Value = false;
             node["ReuseNode"].Value = true;
@@ -933,7 +932,6 @@ clicking a button, or something similar</p>
             node["Container"].Value = "content4";
             node["Width"].Value = 9;
             node["MarginBottom"].Value = 10;
-            node["Top"].Value = 1;
             node["Last"].Value = true;
             node["IsCreate"].Value = false;
             node["ReuseNode"].Value = true;

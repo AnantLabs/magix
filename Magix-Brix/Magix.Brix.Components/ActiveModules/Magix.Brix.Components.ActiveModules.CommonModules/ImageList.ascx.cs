@@ -21,6 +21,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
     [ActiveModule]
     public class ImageList : ActiveModule
     {
+        protected Panel wrp;
         protected System.Web.UI.WebControls.Repeater rep;
 
         public override void InitialLoading(Node node)
@@ -32,6 +33,8 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 {
                     rep.DataSource = DataSource["Items"];
                     rep.DataBind();
+                    if (node.Contains("ChildCssClass"))
+                        wrp.CssClass = node["ChildCssClass"].Get<string>();
                 };
         }
 
