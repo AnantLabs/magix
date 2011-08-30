@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Text;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using Magix.Brix.Types;
 
 namespace Magix.Brix.Components.ActiveControllers.QRGenerator
 {
@@ -20,6 +21,37 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
     [ActiveController]
     public class QRGenerator_Controller : ActiveController
     {
+        /**
+         * Level2: Will populate the Desktop with the Vanity QR Code Generator Icon
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
+        protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
+        {
+            e.Params["Items"]["QRCode"]["Image"].Value = "media/images/qr-code.png";
+            e.Params["Items"]["QRCode"]["Text"].Value = "Click to launch Vanity QR Code Generator";
+            e.Params["Items"]["QRCode"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["QRCode"]["Event"].Value = "Magix.QCodes.LaunchGenerator";
+        }
+
+        /**
+         * Level2: Will launch the Vanity QR Code Generator
+         */
+        [ActiveEvent(Name = "Magix.QCodes.LaunchGenerator")]
+        protected void Magix_QCodes_LaunchGenerator(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["MarginBottom"].Value = 10;
+            node["Height"].Value = 17;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.QRGenerator.Generator",
+                "content3",
+                node);
+        }
+
         /**
          * Level2: Will create a QR Code pointing to the given 'URL' parameter. 'Scale' 
          * defines how many pixels will be used to render each individual dot in the QR Code, 
@@ -33,8 +65,8 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
          * 'FGImage' will be rendered as foreground texture if given. 'FontName' will be used as font for 
          * rendering the description 'Text' parts. 'FontSize' expects to be an integer, and will define
          * the size of the text description rendered. 'FontColor' can either be a named color, or an 
-         * HEX value, such as #9fb430. 'Angle' defines how many degrees the code will be rotated. Should
-         * be an inteer value between 0 and 360. 'PhysicalPath' defines where you want the QR Code to 
+         * HEX value, such as #9fb430. 'Rotate' defines how many degrees the code will be rotated. Should
+         * be an inteer value between 0 and 360. 'FileName' defines where you want the QR Code to 
          * be saved.
          */
         [ActiveEvent(Name = "Magix.QRCodes.CreateQRCode")]
@@ -43,17 +75,35 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
             // Retreiving attributes for QR Code...
             int scale = e.Params["Scale"].Get<int>(6);
             string errCorrection = e.Params["ErrCor"].Get<string>("Q");
-            string fullUrl = e.Params["URL"].Get<string>();
-            string explanation = e.Params["Text"].Get<string>();
-            int cornerRadius = e.Params["RoundedCorners"].Get<int>();
-            bool animate = e.Params["AntiPixelated"].Get<bool>();
-            string backgroundImage = e.Params["BGImage"].Get<string>();
-            string foregroundImage = e.Params["FGImage"].Get<string>();
+            string fullUrl = e.Params["URL"].Get<string>("http://code.google.com/p/magix");
+            string explanation = e.Params["Text"].Get<string>("Magix!");
+            int cornerRadius = e.Params["RoundedCorners"].Get<int>(20);
+            bool animate = e.Params["AntiPixelated"].Get<bool>(true);
+            string backgroundImage = e.Params["BGImage"].Get<string>("media/images/Textures/bumpy-white.png");
+            string foregroundImage = e.Params["FGImage"].Get<string>("media/images/Textures/bumpy-black.png");
+
+            // Image has presedence ...
+            string backgroundColor =
+                string.IsNullOrEmpty(backgroundImage) ? 
+                    e.Params["BGColor"].Get<string>() : 
+                    null;
+            string foregroundColor =
+                string.IsNullOrEmpty(foregroundImage) ? 
+                    e.Params["FGColor"].Get<string>() : 
+                    null;
             string fontName = e.Params["FontName"].Get<string>("Comic Sans MS");
             int fontSize = e.Params["FontSize"].Get<int>(25);
-            string fontColor = e.Params["FontColor"].Get<string>("Black");
-            int rotateAngle = e.Params["Angle"].Get<int>();
+            string fontColor = e.Params["FontColor"].Get<string>("#999999");
+            int rotateAngle = e.Params["Rotate"].Get<int>();
             string physicalPath = e.Params["FileName"].Get<string>();
+
+            if (string.IsNullOrEmpty(physicalPath))
+            {
+                physicalPath = "Tmp/qr-" + Guid.NewGuid().ToString() + ".png";
+
+                // Need to RETURN the newly created path back to caller ...
+                e.Params["FileName"].Value = physicalPath;
+            }
 
             physicalPath = Page.MapPath("~/" + physicalPath);
 
@@ -69,6 +119,12 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
             qrCodeEncoder.QRCodeBackgroundColor = Color.White;
             qrCodeEncoder.QRCodeForegroundColor = Color.Black;
 
+            if (!string.IsNullOrEmpty(foregroundColor))
+                qrCodeEncoder.QRCodeForegroundColor = System.Drawing.ColorTranslator.FromHtml(foregroundColor);
+
+            if (!string.IsNullOrEmpty(backgroundColor))
+                qrCodeEncoder.QRCodeBackgroundColor = System.Drawing.ColorTranslator.FromHtml(backgroundColor);
+
             // 'Guessing' the version number according to number of bytes ...
             qrCodeEncoder.QRCodeVersion = GetQRCodeVersion(fullUrl, errCorrection);
 
@@ -82,7 +138,8 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
                     qrRaw,
                     qrCodeEncoder.QRCodeScale,
                     !string.IsNullOrEmpty(explanation),
-                    cornerRadius))
+                    cornerRadius,
+                    backgroundColor))
                 {
 
                     // 'Animating' the QR Code [skews the black and white]
@@ -232,7 +289,8 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
             Image imgOrig,
             int qrCodeSize,
             bool hasExplanation,
-            int rounded)
+            int rounded,
+            string backgroundColor)
         {
             int width = imgOrig.Width + (qrCodeSize * 10);
             int height = imgOrig.Height + (qrCodeSize * (hasExplanation ? 14 : 10));
@@ -240,7 +298,7 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
                 width,
                 height))
             {
-                Image afterRounded = GetRoundedRectangle(bmp, rounded);
+                Image afterRounded = GetRoundedRectangle(bmp, rounded, backgroundColor);
                 using (Graphics g = Graphics.FromImage(afterRounded))
                 {
                     g.DrawImage(
@@ -261,28 +319,40 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
             }
         }
 
-        private Image GetRoundedRectangle(Bitmap bmp, int rounded)
+        private Image GetRoundedRectangle(Bitmap bmp, int rounded, string backgroundColor)
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                if (rounded > 0)
+                using (Brush b = new SolidBrush(Color.FromArgb(255, 254, 254, 254)))
                 {
-                    using (Brush b = new SolidBrush(Color.FromArgb(255, 254, 254, 254)))
+                    if (rounded > 0)
                     {
                         g.FillRectangle(b, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                        return DrawRoundedRectangle(
-                            g,
-                            Brushes.White,
-                            new Rectangle(2, 2, bmp.Width - 4, bmp.Height - 4),
-                            rounded,
-                            RoundedCorners.All,
-                            bmp);
+                        using (Brush b2 = new SolidBrush(
+                            string.IsNullOrEmpty(backgroundColor) ?
+                                Color.White : 
+                                System.Drawing.ColorTranslator.FromHtml(backgroundColor)))
+                        {
+                            return DrawRoundedRectangle(
+                                g,
+                                b2,
+                                new Rectangle(2, 2, bmp.Width - 4, bmp.Height - 4),
+                                rounded,
+                                RoundedCorners.All,
+                                bmp);
+                        }
                     }
-                }
-                else
-                {
-                    g.FillRectangle(Brushes.White, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                    return new Bitmap(bmp);
+                    else
+                    {
+                        using (Brush b2 = new SolidBrush(
+                            string.IsNullOrEmpty(backgroundColor) ?
+                                Color.White :
+                                System.Drawing.ColorTranslator.FromHtml(backgroundColor)))
+                        {
+                            g.FillRectangle(b2, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                            return new Bitmap(bmp);
+                        }
+                    }
                 }
             }
         }

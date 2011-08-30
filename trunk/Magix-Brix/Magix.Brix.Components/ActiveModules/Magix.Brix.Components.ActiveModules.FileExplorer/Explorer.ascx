@@ -29,7 +29,7 @@
 <mux:Panel
     runat="server"
     id="prop"
-    CssClass="span-6 last fileExplorer-properties">
+    CssClass="span-8 last fileExplorer-properties">
     <mux:Label
         runat="server"
         id="header"
@@ -63,7 +63,7 @@
         id="imageSize"
         Tag="p"
         CssClass="imageSize small" />
-    <div class="span-4 height-8">
+    <div class="span-4 height-6">
         <mux:Image
             runat="server"
             OnClick="preview_Click"

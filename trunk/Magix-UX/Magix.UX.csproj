@@ -56,6 +56,7 @@
     <Compile Include="Controls\Extended\Audio\Audio.cs" />
     <Compile Include="Controls\Extended\Calendar\Calendar.cs" />
     <Compile Include="Controls\Extended\Carousel\Carousel.cs" />
+    <Compile Include="Controls\Extended\ColorPicker\ColorPicker.cs" />
     <Compile Include="Controls\Extended\InPlaceTextAreaEdit\InPlaceTextAreaEdit.cs" />
     <Compile Include="Controls\Extended\InPlaceEdit\InPlaceEdit.cs" />
     <Compile Include="Controls\Extended\Menu\Menu.cs" />
@@ -144,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Js\Uploader.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Js\ColorPicker.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

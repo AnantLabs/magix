@@ -82,8 +82,8 @@ you'd like to include";
                     a.EventName = "Magix.Core.PlaySound";
                     a.Description = @"Will play the given 'File' sound. If the sample 
 sound file doesn't work, you've probably got something wrong with the setup 
-of your Web Server. Make sure the file extension .ogg is associated with the 
-MIME type of audio/ogg. PS! For the record; Cool-Breeze.ogg and The-Last-Barfly.ogg 
+of your Web Server. Make sure the file extension .oga is associated with the 
+MIME type of audio/ogg. PS! For the record; Cool-Breeze.oga and The-Last-Barfly.ogg 
 are both songs composed by our CTO Thomas Hansen. They are both performed by Thomas Hansen and 
 his wife Inger Hoeoeg, and are to be considered licensed to you under the terms of 
 Creative Commons Attribution-ShareAlike 3.0";
@@ -91,7 +91,7 @@ Creative Commons Attribution-ShareAlike 3.0";
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "File";
-                    m.Value = "media/Cool-Breeze.ogg";
+                    m.Value = "media/Cool-Breeze.oga";
                     a.Params.Add(m);
 
                     a.Save();
@@ -121,12 +121,12 @@ radius of rounded corners, and it will be 'AntiPixelated', and have the descript
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
-                    m.Name = "BGImage";
+                    m.Name = "FGImage";
                     m.Value = "media/images/textures/marble-black.png";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
-                    m.Name = "FGImage";
+                    m.Name = "BGImage";
                     m.Value = "media/images/textures/marble-white.png";
                     a.Params.Add(m);
 
@@ -174,7 +174,7 @@ radius of rounded corners, and it will be 'AntiPixelated', and have the descript
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.ResumeSound";
                     a.EventName = "Magix.Core.ResumeSound";
-                    a.Description = @"Resumes any sound or music previously being halted through 'StopSound' 
+                    a.Description = @"Resumes any sound or music previously being halted through 'PauseSound' 
 or other similar mechanisms. PS! Will throw exception if no sounds have been played, and hence 
 no resuming can occur in any ways";
                     a.StripInput = true;
