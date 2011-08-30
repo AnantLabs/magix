@@ -139,7 +139,7 @@
                         </div>
                         <mux:Panel
                             runat="server"
-                            DefaultWidget="next3">
+                            DefaultWidget="next4">
                             <mux:TextBox
                                 runat="server"
                                 id="urlCode"
@@ -151,6 +151,13 @@
                                 OnClick="next3_Click"
                                 style="margin-top:108px;"
                                 Text="New Code!" />
+                            <mux:Button
+                                runat="server"
+                                id="next4"
+                                CssClass="span-4 last btn"
+                                OnClick="next4_Click"
+                                style="margin-top:108px;margin-right:10px;"
+                                Text="<< Back" />
                         </mux:Panel>
                     </div>
                 </mux:MultiPanelView>

@@ -449,6 +449,11 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	color:#33b;
 }
 
+.mux-multi-view-button-selected
+{
+	background-color:rgba(0,0,0,.1);
+}
+
 .mux-multi-panel
 {
 	border-top:solid 1px #999;
