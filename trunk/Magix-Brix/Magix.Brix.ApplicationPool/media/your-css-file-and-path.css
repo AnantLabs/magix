@@ -4,8 +4,39 @@
 
 
 
-html, body, form
+@-webkit-keyframes insanity {
+ from {
+   -webkit-transform: rotate(0deg);
+ }
+ to {
+   -webkit-transform: rotate(270deg);
+ }
+}
+
+@-moz-keyframes insanity {
+ from {
+   -moz-transform: rotate(0deg);
+ }
+ to {
+   -moz-transform: rotate(270deg);
+ }
+}
+
+form
 {
-	background-color:Yellow;
+   -moz-transform: rotate(270deg);
+   -webkit-transform: rotate(270deg);
+	background:transparent url(images/magix-logo.png) no-repeat top right;
+
+	-webkit-animation-name: insanity;
+	-webkit-animation-duration: 11s;
+	-webkit-animation-direction: normal;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-name: insanity;
+	-moz-animation-duration: 11s;
+	-moz-animation-direction: normal;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-timing-function: ease-in-out;
 }
 

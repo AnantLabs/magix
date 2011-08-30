@@ -418,7 +418,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Top"].Value = 2;
             node["IsSelect"].Value = true;
             node["Push"].Value = 1;
-            node["Width"].Value = 20;
+            node["Width"].Value = 23;
             node["Folder"].Value = clientImageFolder;
             node["Filter"].Value = "*.png;*.gif;*.jpg;*.jpeg;";
             node["SelectEvent"].Value = "Magix.Publishing.SelectImageForUser";

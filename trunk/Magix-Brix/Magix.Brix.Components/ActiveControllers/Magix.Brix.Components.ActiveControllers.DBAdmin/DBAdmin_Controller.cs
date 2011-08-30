@@ -39,6 +39,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Node node = e.Params;
             string container = node["Container"].Get<string>();
 
+            // TODO: Replace with Tree module ...
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.BrowseClasses",
                 container,

@@ -831,7 +831,14 @@ have relationships towards other instances in your database.</p>";
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
+                if (!e.Params.Contains("MetaObjectID") ||
+                    e.Params["MetaObjectID"].Get<int>() == -1)
+                    throw new ArgumentException("Oops, that object doesn't exist ...");
+
                 MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+
+                if (o == null)
+                    throw new ArgumentException("Oops, that object doesn't exist2 ...");
 
                 MetaObject.Property val = o.Values.Find(
                     delegate(MetaObject.Property idx)

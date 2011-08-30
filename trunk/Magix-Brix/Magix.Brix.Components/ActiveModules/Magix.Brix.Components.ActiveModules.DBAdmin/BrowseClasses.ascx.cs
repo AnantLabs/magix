@@ -24,6 +24,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     [ActiveModule]
     public class BrowseClasses : Module, IModule
     {
+        protected Label header;
         protected TreeView tree;
 
         public override void InitialLoading(Node node)
@@ -36,6 +37,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     RaiseSafeEvent(
                         "DBAdmin.Data.GetClassHierarchy",
                         DataSource);
+                    if (node.Contains("Header"))
+                        header.Text = node["Header"].Get<string>();
                 };
         }
 

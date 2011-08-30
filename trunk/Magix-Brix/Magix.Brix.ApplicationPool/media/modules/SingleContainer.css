@@ -640,23 +640,31 @@ input[type=button].clear-both
 	margin-right:0;
 }
 
+.mux-tooltip-module
+{
+	position:fixed;
+	top:0;
+	right:0;
+	min-width:129px;
+	min-height:98px;
+	width:auto;
+	height:auto;
+	background:transparent url(../images/facts.png) no-repeat top right;
+	z-index:100;
+}
+
 .tool-tip
 {
-	float:left;
-	width:390px;
+	width:129px;
 	padding:18px 40px 18px 40px;
 	overflow:hidden;
-	height:90px;
+	height:98px;
 	
-	background-image:url(../images/facts.png);
-	background-position:top center;
-	background-repeat:no-repeat;
-
-	-moz-transition-property:-moz-box-shadow, background-color, height;
+	-moz-transition-property:-moz-box-shadow, background-color, height, width;
 	-moz-transition-duration:1s;
-	-webkit-transition-property:-webkit-box-shadow, background-color, height;
+	-webkit-transition-property:-webkit-box-shadow, background-color, height, width;
 	-webkit-transition-duration:1s;
-	transition-property:box-shadow, background-color, height;
+	transition-property:box-shadow, background-color, height, width;
 	transition-duration:1s;
 
 	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.0);
@@ -671,19 +679,20 @@ input[type=button].clear-both
 .tool-tip:hover
 {
 	height:504px;
+	width:390px;
 
-	-moz-transition-property:-moz-box-shadow, background-color, height;
+	-moz-transition-property:-moz-box-shadow, background-color, height, width;
 	-moz-transition-duration:1s;
-	-webkit-transition-property:-webkit-box-shadow, background-color, height;
+	-webkit-transition-property:-webkit-box-shadow, background-color, height, width;
 	-webkit-transition-duration:1s;
-	transition-property:box-shadow, background-color, height;
+	transition-property:box-shadow, background-color, height, width;
 	transition-duration:1s;
 
 	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
 	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
 	box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
 	
-	background-color:rgba(0, 128, 0, 0.08);
+	background-color:rgba(220, 255, 220, 1);
 }
 
 .tool-tip .tip-text
@@ -1338,6 +1347,21 @@ li.tree-item-class span.mux-tree-icon
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
+
+
+
+.padded
+{
+	padding:18px 40px 18px 40px;
+}
+
+
+
+
+
+
+
+
 
 
 

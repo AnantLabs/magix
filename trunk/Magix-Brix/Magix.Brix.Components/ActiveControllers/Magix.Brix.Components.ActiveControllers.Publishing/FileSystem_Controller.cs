@@ -33,21 +33,22 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             Node node = new Node();
 
-            node["Width"].Value = 18;
+            node["Width"].Value = 22;
+            node["Top"].Value = 2;
             node["MarginBottom"].Value = 20;
             node["Last"].Value = true;
-            node["Container"].Value = "content3";
+            node["Container"].Value = "content4";
             node["Filter"].Value = "*.*";
             node["IsCreate"].Value = true;
             node["CanCreateNewCssFile"].Value = true;
             node["RootAccessFolder"].Value = "/";
             node["Folder"].Value = "/";
+            node["CssClass"].Value = "mux-rounded mux-shaded padded";
 
             RaiseEvent(
                 "Magix.FileExplorer.LaunchExplorer",
                 node);
 
-            ActiveEvents.Instance.RaiseClearControls("content4");
             ActiveEvents.Instance.RaiseClearControls("content5");
             ActiveEvents.Instance.RaiseClearControls("content6");
         }
