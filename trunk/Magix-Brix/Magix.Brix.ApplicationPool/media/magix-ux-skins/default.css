@@ -536,6 +536,51 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	color:#33b;
 }
 
+@-webkit-keyframes fire-qr-code {
+ from {
+   color: rgba(60, 0, 0, 1);
+ }
+ to {
+   color: rgba(128, 0, 0, 1);
+ }
+}
+
+@-moz-keyframes fire-qr-code {
+ from {
+   color: rgba(60, 0, 0, 1);
+ }
+ to {
+   color: rgba(128, 0, 0, 1);
+ }
+}
+
+.mux-multi-button-view
+{
+	background-color:rgba(0,0,0,0);
+}
+
+.mux-multi-button-view a
+{
+	color:rgba(90, 90, 90, .5) !important;
+}
+
+.mux-multi-view-button-selected
+{
+	background-color:rgba(0,0,0,.1);
+}
+
+.mux-multi-view-button-selected a
+{
+	-webkit-animation-name: fire-qr-code;
+	-webkit-animation-duration: 3s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: alternate;
+	-moz-animation-name: fire-qr-code;
+	-moz-animation-duration: 3s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+}
+
 .mux-multi-panel
 {
 	border-top:solid 1px #999;

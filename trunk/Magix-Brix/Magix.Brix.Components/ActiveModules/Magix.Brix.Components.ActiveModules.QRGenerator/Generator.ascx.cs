@@ -36,6 +36,9 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
         protected TabStrip mub;
         protected TextBox urlCode;
         protected Button next2;
+        protected TabButton mb1;
+        protected TabButton mb2;
+        protected TabButton mb3;
 
         public override void InitialLoading(Node node)
         {
@@ -93,6 +96,7 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
                         .Render();
 
                     FileNameGuid = Guid.NewGuid();
+                    SetActiveMultiViewIndex(0);
                 };
         }
 
@@ -112,7 +116,10 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
         {
             if (mub.ActiveMultiButtonViewIndex == 2)
             {
+                SetActiveMultiViewIndex(2);
+
                 CreateQRCode();
+
                 new EffectTimeout(500)
                     .ChainThese(
                         new EffectFocusAndSelect(urlCode))
@@ -120,6 +127,8 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
             }
             else if (mub.ActiveMultiButtonViewIndex == 1)
             {
+                SetActiveMultiViewIndex(1);
+
                 new EffectTimeout(500)
                     .ChainThese(
                         new EffectFocusAndSelect(next2))
@@ -127,6 +136,8 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
             }
             else if (mub.ActiveMultiButtonViewIndex == 0)
             {
+                SetActiveMultiViewIndex(0);
+
                 new EffectTimeout(500)
                     .ChainThese(
                         new EffectFocusAndSelect(url))
@@ -134,23 +145,52 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
             }
         }
 
+        private void SetActiveMultiViewIndex(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    mb1.CssClass = "mux-multi-button-view mux-multi-view-button-selected";
+                    mb2.CssClass = "mux-multi-button-view";
+                    mb3.CssClass = "mux-multi-button-view";
+                    break;
+                case 1:
+                    mb1.CssClass = "mux-multi-button-view";
+                    mb2.CssClass = "mux-multi-button-view mux-multi-view-button-selected";
+                    mb3.CssClass = "mux-multi-button-view";
+                    break;
+                case 2:
+                    mb1.CssClass = "mux-multi-button-view";
+                    mb2.CssClass = "mux-multi-button-view";
+                    mb3.CssClass = "mux-multi-button-view mux-multi-view-button-selected";
+                    break;
+            }
+        }
+
         protected void next1_Click(object sender, EventArgs e)
         {
             mp.SetActiveView(1);
+
             new EffectTimeout(500)
                 .ChainThese(
                     new EffectFocusAndSelect(next2))
                 .Render();
+
+            SetActiveMultiViewIndex(1);
         }
 
         protected void next2_Click(object sender, EventArgs e)
         {
             mp.SetActiveView(2);
+
             CreateQRCode();
+
             new EffectTimeout(500)
                 .ChainThese(
                     new EffectFocusAndSelect(urlCode))
                 .Render();
+
+            SetActiveMultiViewIndex(2);
         }
 
         protected void next3_Click(object sender, EventArgs e)
@@ -165,10 +205,19 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
             // Creating new 'filename' ...
             FileNameGuid = Guid.NewGuid();
 
+            SetActiveMultiViewIndex(0);
+        }
+
+        protected void next4_Click(object sender, EventArgs e)
+        {
+            mp.SetActiveView(0);
+
             new EffectTimeout(500)
                 .ChainThese(
                     new EffectFocusAndSelect(url))
                 .Render();
+
+            SetActiveMultiViewIndex(0);
         }
 
         private void CreateQRCode()
