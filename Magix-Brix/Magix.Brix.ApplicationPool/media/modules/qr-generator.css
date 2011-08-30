@@ -1,0 +1,134 @@
+﻿
+.qr-generator .mux-multi-panel-wrapper
+{
+	height:100%;
+	width:100%;
+}
+
+.qr-generator .mux-insert
+{
+	height:235px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	width:630px;
+}
+
+
+.qr-generator .mux-multi-button-view
+{
+	width:33.33333%;
+}
+
+.label
+{
+	font-weight:bold;
+}
+
+.qr-generator input[type=text]
+{
+	margin-bottom:18px;
+	display:block;
+	width:100%;
+	min-width:100%;
+
+	font-size:28px;
+	border-left:none 0;
+	border-right:none 0;
+	border-top:solid 1px #999;
+	border-bottom:solid 1px #999;
+	background-color:rgba(225, 225, 225, .5);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
+}
+
+.qr-generator input[type=text]:focus,
+.qr-generator input[type=text]:hover
+{
+	background-color:rgba(255, 255, 255, 1);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:background-color;
+	transition-duration:0.2s;
+}
+
+
+
+
+.qr-generator .btn
+{
+	float:right;
+}
+
+.qr-generator .texture-panel
+{
+	background-color:rgba(0, 0, 0, .05);
+	border:dashed 1px rgba(0, 0, 0, .5);
+	cursor:pointer;
+	padding:18px 20px 18px 20px;
+	width:188px;
+}
+
+input[type=button].mux-color-picker-image-picker
+{
+	display:block;
+	float:left;
+	width:230px;
+	margin-top:54px;
+}
+
+
+input[type=button].mux-color-picker-ok
+{
+	display:block;
+	float:left;
+	width:110px;
+	margin-top:18px;
+}
+
+.mux-qr-burn
+{
+	float:left;
+	width:18px;
+	display:block;
+	height:18px;
+	margin:0;
+	vertical-align:baseline;
+}
+
+input[type=text].auto-width
+{
+	width:auto;
+	min-width:inherit;
+	width:150px;
+	margin-right:0;
+}
+
+input[type=text].download-qr-code
+{
+	display:block;
+	float:left;
+	width:430px;
+	min-width:430px;
+	margin-right:0;
+}
+
+.qr-code-generated
+{
+	width:190px;
+	height:auto;
+	float:left;
+	display:block;
+}
+
+
+
+

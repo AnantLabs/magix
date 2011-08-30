@@ -34,6 +34,7 @@ using System.Web.UI;
 [assembly: WebResource("Magix.UX.Js.Effects.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.AjaxWait.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.Timer.js", "text/javascript")]
+[assembly: WebResource("Magix.UX.Js.ColorPicker.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.Carousel.js", "text/javascript")]
 [assembly: WebResource("Magix.UX.Js.Uploader.js", "text/javascript")]
 
