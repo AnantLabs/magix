@@ -117,6 +117,62 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level1: Will serialize the Active SingleView Form and send an email from 'Email' and 'From' 
+         * to the 'Email' field on the given form. Before the email is sendt both the 'Header' and
+         * the 'Body' will substitute every single occurency of [x] with the MetaView's property 
+         * with the same name [x]
+         */
+        [ActiveEvent(Name = "Magix.Common.SendEmailFromForm")]
+        protected void Magix_Common_SendEmailFromForm(object sender, ActiveEventArgs e)
+        {
+            if (!e.Params.Contains("OriginalWebPartID"))
+                throw new ArgumentException("This Action can only be raised from within a SingleView form");
+
+            if (!e.Params.Contains("Email"))
+                throw new ArgumentException("You do need at the very least a 'From Address' for the SendEmailFromForm Event to work");
+
+            // Getting current MetaView content...
+            Node node = new Node();
+            node["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
+
+            RaiseEvent(
+                "Magix.MetaView.SerializeSingleViewForm",
+                node);
+
+            if (node.Count == 0)
+            {
+                throw new ArgumentException("There are no forms on the screen now that can be used for raising this action. This action can only be raised from within a Single View MetaView ...");
+            }
+
+            if (!node.Contains("Email"))
+            {
+                throw new ArgumentException("The SingleView MetaView must at the minimum contain at least one field, and this field must be called 'Email'. It will serve as the To Email Address ...");
+            }
+
+            node["OriginalWebPartID"].UnTie();
+
+            string header = e.Params["Header"].Get<string>();
+            string body = e.Params["Body"].Get<string>();
+
+            // Substituting ...
+            foreach (Node idx in node)
+            {
+                header = header.Replace(string.Format("[{0}]", idx.Name), idx.Value.ToString());
+                body = body.Replace(string.Format("[{0}]", idx.Name), idx.Value.ToString());
+            }
+
+            e.Params["Header"].Value = header;
+            e.Params["Body"].Value = body;
+
+            // Have to rename from 'Email' [View Property Name] to 'To' which our Email logic understands ...
+            e.Params["To"].Value = node["Email"].Value;
+
+            RaiseEvent(
+                "Magix.Common.SendEmail",
+                e.Params);
+        }
+
+        /**
          * Level2: Will to a String.Replace on the given 'Source' or 'SourceNode'. Will replace 'OldString' or 'OldStringNode'
          * with 'NewString' or 'NewStringNode' and return the value either in 'Result' or 'ResultNode', direct
          * value [no 'Node' part] always have preference

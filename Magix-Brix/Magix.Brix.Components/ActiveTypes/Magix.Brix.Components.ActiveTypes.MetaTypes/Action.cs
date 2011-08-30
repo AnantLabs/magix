@@ -96,6 +96,11 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
                 return ret;
             }
+
+            public override string ToString()
+            {
+                return Name + ":" + Value + ":" + Children.Count;
+            }
         }
 
         public Action()
