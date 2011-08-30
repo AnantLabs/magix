@@ -203,7 +203,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         /**
          * Level2: Will 'empty' the current form. Useful in combination with Save or Clear button
          */
-        [ActiveEvent(Name = "Magix.Meta.Actions.EmptyForm")]
+        [ActiveEvent(Name = "Magix.MetaView.EmptyForm")]
         protected void Magix_Meta_Actions_EmptyForm(object sender, ActiveEventArgs e)
         {
             foreach (Control idx in ctrls.Controls)
