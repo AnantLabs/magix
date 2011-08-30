@@ -43,7 +43,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
          * Level2: Will show the given MetaView ['MetaViewName'] in MultiView mode. 
          * As in, the end user will see a Grid of all MetaObjects of the TypeName of the MetaView
          */
-        [ActiveEvent(Name = "Magix.MetaType.ViewMetaViewMultiMode")]
+        [ActiveEvent(Name = "Magix.MetaView.ViewMetaViewMultiMode")]
         protected void Magix_MetaType_ViewMetaViewMultiMode(object sender, ActiveEventArgs e)
         {
             Node node = new Node();

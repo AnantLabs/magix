@@ -10,6 +10,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Data;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using System.Globalization;
+using Magix.Brix.Components.ActiveTypes.MetaViews;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -117,12 +118,12 @@ radius of rounded corners, and it will be 'AntiPixelated', and have the descript
 
                     m = new Action.ActionParams();
                     m.Name = "URL";
-                    m.Value = "http://rasoftwarefactory.com/magix";
+                    m.Value = "http://code.google.com/p/magix";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "FGImage";
-                    m.Value = "media/images/textures/marble-black.png";
+                    m.Value = "media/images/textures/leather-black.png";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
@@ -133,13 +134,13 @@ radius of rounded corners, and it will be 'AntiPixelated', and have the descript
                     m = new Action.ActionParams();
                     m.Name = "RoundedCorners";
                     m.TypeName = typeof(int).FullName;
-                    m.Value = "25";
+                    m.Value = "125";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Scale";
                     m.TypeName = typeof(int).FullName;
-                    m.Value = "6";
+                    m.Value = "12";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
@@ -151,6 +152,17 @@ radius of rounded corners, and it will be 'AntiPixelated', and have the descript
                     m = new Action.ActionParams();
                     m.Name = "Text";
                     m.Value = "Magix!";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "FontName";
+                    m.Value = "Comic Sans MS";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "FontSize";
+                    m.TypeName = typeof(int).FullName;
+                    m.Value = "32";
                     a.Params.Add(m);
 
                     a.Save();
@@ -187,7 +199,7 @@ no resuming can occur in any ways";
                 {
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.EmptyActiveForm";
-                    a.EventName = "Magix.Meta.Actions.EmptyForm";
+                    a.EventName = "Magix.MetaView.EmptyForm";
                     a.Description = @"Will empty the currrently active Editable Form. 
 Will determine which form raised the event originally, and explicitly empty that 
 form only. Useful for things such as 'Clear Buttons' and such ...";
@@ -223,7 +235,7 @@ and transform to MetaObjects using the given 'MetaViewName'";
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "FileName";
-                    m.Value = "x.csv";
+                    m.Value = "exchange-file-name.csv";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
@@ -233,10 +245,56 @@ and transform to MetaObjects using the given 'MetaViewName'";
 
                     m = new Action.ActionParams();
                     m.Name = "MetaViewName";
-                    m.Value = "-- EXCHANGE-WITH-YOUR-OWN-META-VIEW --";
+                    m.Value = "Magix.Demo.ImportCars";
                     a.Params.Add(m);
 
                     a.Save();
+
+                    MetaView v = new MetaView();
+                    v.Name = "Magix.Demo.ImportCars";
+                    v.TypeName = "Magix.Demo.Car";
+
+                    MetaView.MetaViewProperty p = new MetaView.MetaViewProperty();
+                    p.Name = "Car";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Manufacturer";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "MPG";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Cylinders";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Displacement";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Horsepower";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Weight";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Acceleration";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Model-Year";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Origin";
+                    v.Properties.Add(p);
+
+                    v.Save();
                 }
 
                 if (Action.CountWhere(
@@ -245,23 +303,22 @@ and transform to MetaObjects using the given 'MetaViewName'";
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.ShowDefaultMessage";
                     a.EventName = "Magix.Core.ShowMessage";
-                    a.Description = @"Will show a default message to the User. 
-Mostly here for Reference Reasons so that you can have an Example Action to 
-copy for your own messages. For your convenience ... :)";
+                    a.Description = @"Will show a 'Message Box' to the User. If you add 'IsError' to true, 
+the message box will be in error mode, meaning red probably, signifying a an error";
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "Message";
-                    m.Value = "Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?Who's there ...?";
+                    m.Value = "Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... HEAD ACHE ...!!";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Header";
-                    m.Value = "Knock, knock ...";
+                    m.Value = "Who's there ...?";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Milliseconds";
-                    m.Value = "1500";
+                    m.Value = "3500";
                     m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);
 
@@ -326,11 +383,10 @@ see debugging information ...";
                     Action a = new Action();
 
                     a.Name = "Magix.DynamicEvent.ViewMetaViewMultiMode";
-                    a.EventName = "Magix.MetaType.ViewMetaViewMultiMode";
+                    a.EventName = "Magix.MetaView.ViewMetaViewMultiMode";
                     a.Description = @"Will load a grid of all Meta Objects of type already loaded
 in current activating WebPart. If you want to load a specific type, then you can override the 
-type being loaded by adding 'MetaViewTypeName' as a parameter, containing the name of the view. 
-There are many other properties you can override...";
+type being loaded by adding 'MetaViewTypeName' as a parameter, containing the name of the view";
                     a.StripInput = false;
 
                     Action.ActionParams m = new Action.ActionParams();
@@ -352,6 +408,121 @@ There are many other properties you can override...";
                     a.Params.Add(m);
 
                     a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Demo.ViewCarsInPopup")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.Demo.ViewCarsInPopup";
+                    a.EventName = "Magix.MetaView.ViewMetaViewMultiMode";
+                    a.Description = @"Will load up any Magix.Demo.Car objects 
+into a MultiView form, within a popup window, using the Magix.Demo.ImportCars MetaView";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "NoIdColumn";
+                    m.Value = "True";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "IsDelete";
+                    m.Value = "False";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "MetaViewName";
+                    m.Value = "Magix.Demo.ViewCars";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "IsInlineEdit";
+                    m.Value = "True";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Container";
+                    m.Value = "child";
+                    a.Params.Add(m);
+
+                    a.Save();
+
+                    MetaView v = new MetaView();
+                    v.Name = "Magix.Demo.ViewCars";
+                    v.TypeName = "Magix.Demo.Car";
+
+                    MetaView.MetaViewProperty p = new MetaView.MetaViewProperty();
+                    p.Name = "Car";
+                    p.ReadOnly = true;
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "MPG";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Horsepower";
+                    p.ReadOnly = true;
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Acceleration";
+                    p.ReadOnly = true;
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "select:Eco.Green:Eco";
+                    v.Properties.Add(p);
+
+                    v.Save();
+
+                    MetaObject o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    MetaObject.Property q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "Nope!";
+                    o.Values.Add(q);
+
+                    o.Save();
+
+                    o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "OK'ish";
+                    o.Values.Add(q);
+
+                    o.Save();
+
+                    o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "Good";
+                    o.Values.Add(q);
+
+                    o.Save();
+
+                    o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "SUPERB!";
+                    o.Values.Add(q);
+
+                    o.Save();
                 }
 
                 if (Action.CountWhere(
@@ -655,7 +826,7 @@ to an SMTP server which you have access to ...";
 
                     Action.ActionParams m2 = new Action.ActionParams();
                     m2.Name = "Name";
-                    m2.Value = "Magix.Common.GetSingleMetaObject";
+                    m2.Value = "Magix.DynamicEvent.GetObjectIntoNode";
                     m2.TypeName = typeof(string).FullName;
                     m.Children.Add(m2);
 
@@ -687,7 +858,7 @@ to an SMTP server which you have access to ...";
 
                     m2 = new Action.ActionParams();
                     m2.Name = "Name";
-                    m2.Value = "Magix.Common.RenameNode";
+                    m2.Value = "Magix.DynamicEvent.RenameNode";
                     m2.TypeName = typeof(string).FullName;
                     m.Children.Add(m2);
 
@@ -794,7 +965,7 @@ to an SMTP server which you have access to ...";
                     m2 = new Action.ActionParams();
                     m2.Name = "Name";
                     m2.TypeName = typeof(string).FullName;
-                    m2.Value = "Magix.MetaType.SendEmail";
+                    m2.Value = "Magix.Common.SendEmail";
                     m.Children.Add(m2);
 
                     m2 = new Action.ActionParams();

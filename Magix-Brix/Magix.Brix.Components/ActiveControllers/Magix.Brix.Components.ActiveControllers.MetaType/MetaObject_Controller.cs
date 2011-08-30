@@ -47,9 +47,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Last"].Value = true;
             node["CssClass"].Value = "edit-objects";
             node["WhiteListColumns"]["TypeName"].Value = true;
-            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 3;
             node["WhiteListColumns"]["Reference"].Value = true;
-            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 5;
             node["WhiteListColumns"]["Created"].Value = true;
             node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 3;
             node["WhiteListColumns"]["Copy"].Value = true;
