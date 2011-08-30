@@ -111,7 +111,27 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
         protected void mp_MultiButtonClicked(object sender, EventArgs e)
         {
             if (mub.ActiveMultiButtonViewIndex == 2)
+            {
                 CreateQRCode();
+                new EffectTimeout(500)
+                    .ChainThese(
+                        new EffectFocusAndSelect(urlCode))
+                    .Render();
+            }
+            else if (mub.ActiveMultiButtonViewIndex == 1)
+            {
+                new EffectTimeout(500)
+                    .ChainThese(
+                        new EffectFocusAndSelect(next2))
+                    .Render();
+            }
+            else if (mub.ActiveMultiButtonViewIndex == 0)
+            {
+                new EffectTimeout(500)
+                    .ChainThese(
+                        new EffectFocusAndSelect(url))
+                    .Render();
+            }
         }
 
         protected void next1_Click(object sender, EventArgs e)
