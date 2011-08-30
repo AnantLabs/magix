@@ -11,7 +11,8 @@
 <mux:Label
     runat="server"
     id="header"
-    Tag="h3" />
+    Tag="h2"
+    CssClass="no-bottom-margin" />
 
 <mux:TreeView
     runat="server"

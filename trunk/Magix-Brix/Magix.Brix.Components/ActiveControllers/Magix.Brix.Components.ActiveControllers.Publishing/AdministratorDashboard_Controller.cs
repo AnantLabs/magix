@@ -33,8 +33,27 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             RaiseEvent("Magix.Publishing.LoadHeader");
             RaiseEvent("Magix.Publishing.LoadAdministratorMenu");
 
-            LoadDashboard();
             LoadDesktopIcons();
+            LoadDashboard();
+        }
+
+        private void LoadDesktopIcons()
+        {
+            Node node = new Node();
+
+            RaiseEvent(
+                "Magix.Publishing.GetDashBoardDesktopPlugins",
+                node);
+
+            node["Width"].Value = 18;
+            node["Last"].Value = true;
+            node["CssClass"].Value = "dashboard";
+            node["ChildCssClass"].Value = "mux-desktop-images";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.ImageList",
+                "content3",
+                node);
         }
 
         /*
@@ -46,13 +65,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             Node node = new Node();
 
+            node["ChildCssClass"].Value = "mux-desktop-dashboard";
+            node["Append"].Value = true;
             node["Container"].Value = "content3";
             node["FullTypeName"].Value = "Dashboard-Type-META";
             node["ReuseNode"].Value = true;
             node["ID"].Value = -1;
-            node["Width"].Value = 18;
-            node["Last"].Value = true;
-            node["CssClass"].Value = "dashboard";
 
             node["WhiteListColumns"]["PagesCount"].Value = true;
             node["WhiteListColumns"]["TemplatesCount"].Value = true;
@@ -84,24 +102,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
-                node);
-        }
-
-        private void LoadDesktopIcons()
-        {
-            Node node = new Node();
-
-            RaiseEvent(
-                "Magix.Publishing.GetDashBoardDesktopPlugins",
-                node);
-
-            node["Width"].Value = 13;
-            node["Last"].Value = true;
-            node["Append"].Value = true;
-
-            LoadModule(
-                "Magix.Brix.Components.ActiveModules.CommonModules.ImageList",
-                "content3",
                 node);
         }
 
