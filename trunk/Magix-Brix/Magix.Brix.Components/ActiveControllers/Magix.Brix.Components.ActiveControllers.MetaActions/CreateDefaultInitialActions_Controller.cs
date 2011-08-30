@@ -532,51 +532,114 @@ into a MultiView form, within a popup window, using the Magix.Demo.ImportCars Me
 
                     a.Name = "Magix.DynamicEvent.SendEmail";
                     a.EventName = "Magix.Common.SendEmail";
-                    a.Description = @"Will send yourself an email to the Email address you've associated
-with your user. The email will contain a default header and a default body. Override the 
-settings if you wish to send other emails, to other recipes, with another subject and/or body. 
-PS! This Action is dependent upon that you've configured your web.config to point towards a valid 'mailSettings'.
-You _CANNOT_ use rasoftwarefactory.com for this! You might however be able to use for instance your 
-Google Account if you do some 'Googling' ... ;)";
+                    a.Description = @"Will send an email to the 'To' address";
                     a.StripInput = true;
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "Header";
-                    m.Value = null; // Intentionally - Template Action ...!
+                    m.Value = "Hello World";
                     m.TypeName = typeof(string).FullName;
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Body";
-                    m.Value = null; // Intentionally - Template Action ...!
+                    m.Value = "Hello there stranger ...";
                     m.TypeName = typeof(string).FullName;
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Email";
-                    m.Value = null; // Intentionally - Template Action ...!
+                    m.Value = "marvin@rasoftwarefactory.com";
                     m.TypeName = typeof(string).FullName;
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "From";
-                    m.Value = null; // Intentionally - Template Action ...!
+                    m.Value = "Marvin Magix";
                     m.TypeName = typeof(string).FullName;
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "To";
-                    m.Value = "[not here silly ...!]";
-
-                    Action.ActionParams m2 = new Action.ActionParams();
-                    m2.Name = "email-adr-1";
-                    m2.Value = null; // Intentionally - Template Action ...!
-                    m2.TypeName = typeof(string).FullName;
-                    m.Children.Add(m2);
-
+                    m.Value = "the-email-address-you-wish-to-send-to-goes-here@qwertyuiopasdfgzzxxqq.com";
                     a.Params.Add(m);
 
                     a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SendEmailFromForm")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.DynamicEvent.SendEmailFromForm";
+                    a.EventName = "Magix.Common.SendEmailFromForm";
+                    a.Description = @"Will send an email with the given 'Body' and 
+'Header' to the email address within the 'Email' field of the Active SingleView Form View.
+It will also replace every instance of [x] with the MetaView's property with the same named 
+value. Meaning if you've got a MetaView property called 'Name' it will replace all occurances 
+of [Name] with the value from the MetaObject's property of 'Name' in both the body and the header.
+PS! This Action can be seen in 'Action' in the 'Magix.Demo.SendEmail' MetaView";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Header";
+                    m.Value = "Hello [Name] ...";
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Body";
+                    m.Value = "... and thanx for asking me to send you an email. You're [Age] years old ...";
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Email";
+                    m.Value = "marvin@rasoftwarefactory.com";
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "From";
+                    m.Value = "Marvin Magix";
+                    m.TypeName = typeof(string).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+
+                    MetaView v = new MetaView();
+                    v.Name = "Magix.Demo.SendEmail";
+                    v.TypeName = "Magix.Demo.Email";
+
+                    MetaView.MetaViewProperty q = new MetaView.MetaViewProperty();
+                    q.Name = "Email";
+                    q.Description = "Email Address ...";
+                    v.Properties.Add(q);
+
+                    q = new MetaView.MetaViewProperty();
+                    q.Name = "Age";
+                    q.Description = "Age ...";
+                    v.Properties.Add(q);
+
+                    q = new MetaView.MetaViewProperty();
+                    q.Name = "Name";
+                    q.Description = "Full Name ...";
+                    v.Properties.Add(q);
+
+                    q = new MetaView.MetaViewProperty();
+                    q.Name = "Send";
+                    q.Description = "Send yourself a Test Email from Marvin Magix ...";
+                    q.Action = "Magix.DynamicEvent.SaveActiveForm|Magix.DynamicEvent.ShowDefaultMessage|Magix.DynamicEvent.SendEmailFromForm|Magix.DynamicEvent.EmptyActiveForm";
+                    v.Properties.Add(q);
+
+                    q = new MetaView.MetaViewProperty();
+                    q.Name = "Clear";
+                    q.Description = "Clears the form ...";
+                    q.Action = "Magix.DynamicEvent.EmptyActiveForm";
+                    v.Properties.Add(q);
+
+                    v.Save();
                 }
 
                 if (Action.CountWhere(

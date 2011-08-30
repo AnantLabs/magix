@@ -859,38 +859,45 @@ Deleting it may break these parts.</p>";
                 return;
             foreach (Node idx in eventNode)
             {
-                Action.ActionParams a = new Action.ActionParams();
-                a.Name = idx.Name;
-                switch ((idx.Value == null ? "" : idx.Value.GetType().FullName))
-                {
-                    case "System.Int32":
-                        a.TypeName = idx.Value.GetType().FullName;
-                        a.Value = idx.Value.ToString();
-                        break;
-                    case "System.DateTime":
-                        a.TypeName = idx.Value.GetType().FullName;
-                        a.Value = ((DateTime)idx.Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        break;
-                    case "System.Boolean":
-                        a.TypeName = idx.Value.GetType().FullName;
-                        a.Value = idx.Value.ToString();
-                        break;
-                    case "System.Decimal":
-                        a.TypeName = idx.Value.GetType().FullName;
-                        a.Value = ((decimal)idx.Value).ToString(CultureInfo.InvariantCulture);
-                        break;
-                    case "System.String":
-                        a.TypeName = idx.Value.GetType().FullName;
-                        a.Value = idx.Value.ToString();
-                        break;
-                    default:
-                        a.TypeName = "[Anonymous-Coward]";
-                        a.Value = (idx.Value ?? "").ToString();
-                        break;
-                }
-                lazyList.Add(a);
-                if (eventNode.Contains("Children"))
-                    FillActionParams(eventNode["Children"], a.Children);
+                FillOneActionParam(lazyList, idx);
+            }
+        }
+
+        private void FillOneActionParam(LazyList<Action.ActionParams> lazyList, Node idx)
+        {
+            Action.ActionParams a = new Action.ActionParams();
+            a.Name = idx.Name;
+            switch ((idx.Value == null ? "" : idx.Value.GetType().FullName))
+            {
+                case "System.Int32":
+                    a.TypeName = idx.Value.GetType().FullName;
+                    a.Value = idx.Value.ToString();
+                    break;
+                case "System.DateTime":
+                    a.TypeName = idx.Value.GetType().FullName;
+                    a.Value = ((DateTime)idx.Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    break;
+                case "System.Boolean":
+                    a.TypeName = idx.Value.GetType().FullName;
+                    a.Value = idx.Value.ToString();
+                    break;
+                case "System.Decimal":
+                    a.TypeName = idx.Value.GetType().FullName;
+                    a.Value = ((decimal)idx.Value).ToString(CultureInfo.InvariantCulture);
+                    break;
+                case "System.String":
+                    a.TypeName = idx.Value.GetType().FullName;
+                    a.Value = idx.Value.ToString();
+                    break;
+                default:
+                    a.Value = null;
+                    break;
+            }
+            lazyList.Add(a);
+            foreach (Node idx2 in idx)
+            {
+                if (!string.IsNullOrEmpty(idx.Name))
+                    FillOneActionParam(a.Children, idx2);
             }
         }
 
