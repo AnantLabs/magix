@@ -135,6 +135,18 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Items"]["Dox"]["Text"].Value = "Click to Download Magix' Documentation in PDF Format [Key X]";
             e.Params["Items"]["Dox"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Dox"]["Event"].Value = "Magix.Publishing.DownloadHeavyDocumentation";
+
+            e.Params["Items"]["Pages"]["Image"].Value = "media/images/press-icon.png";
+            e.Params["Items"]["Pages"]["Shortcut"].Value = "P";
+            e.Params["Items"]["Pages"]["Text"].Value = "Click to open Web Pages [Key P]";
+            e.Params["Items"]["Pages"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Pages"]["Event"].Value = "Magix.Publishing.EditPages";
+
+            e.Params["Items"]["Templates"]["Image"].Value = "media/images/blue-print-icon.png";
+            e.Params["Items"]["Templates"]["Shortcut"].Value = "M";
+            e.Params["Items"]["Templates"]["Text"].Value = "Click to open Templates [Key M]";
+            e.Params["Items"]["Templates"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Templates"]["Event"].Value = "Magix.Publishing.EditTemplates";
         }
 
         /**
