@@ -18,6 +18,7 @@
                 CssClass='<%#Eval("[CSS].Value") %>' 
                 ImageURL='<%#Eval("[Image].Value") %>' 
                 Info='<%#Eval("[Event].Value") %>' 
+                AccessKey='<%#Eval("[Shortcut].Value") %>' 
                 OnClick="ImageClicked"
                 AlternateText='<%#Eval("[Text].Value") %>'
                 ToolTip='<%#Eval("[Text].Value") %>' />

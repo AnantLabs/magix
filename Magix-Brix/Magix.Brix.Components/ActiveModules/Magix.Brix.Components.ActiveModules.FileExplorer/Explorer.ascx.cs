@@ -557,6 +557,15 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                 pl.CssClass += " viewing";
         }
 
+        [ActiveEvent(Name = "Magix.FileExplorer.FileSelected")]
+        protected void Magix_FileExplorer_FileSelected(object sender, ActiveEventArgs e)
+        {
+            new EffectTimeout(100)
+                .ChainThese(
+                    new EffectFocusAndSelect(select))
+                .Render();
+        }
+
         private void UpdateSelectedFile()
         {
             delete.Enabled = true;

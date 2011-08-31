@@ -22,6 +22,19 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     public class MetaObject_Controller : ActiveController
     {
         /**
+         * Level 2: Returns the Desktop Icon for launching Actions back to caller
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
+        protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
+        {
+            e.Params["Items"]["Objects"]["Image"].Value = "media/images/objects.png";
+            e.Params["Items"]["Objects"]["Shortcut"].Value = "B";
+            e.Params["Items"]["Objects"]["Text"].Value = "Click to view Meta Objects [Key B]";
+            e.Params["Items"]["Objects"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Objects"]["Event"].Value = "Magix.MetaType.EditMetaObjects_UnFiltered";
+        }
+
+        /**
          * Level2: Returns menu event handlers for viewing MetaObjects
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]

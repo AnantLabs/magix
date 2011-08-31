@@ -113,22 +113,26 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
             e.Params["Items"]["DBManager"]["Image"].Value = "media/images/database.png";
-            e.Params["Items"]["DBManager"]["Text"].Value = "Click to launch Database Manager";
+            e.Params["Items"]["DBManager"]["Shortcut"].Value = "D";
+            e.Params["Items"]["DBManager"]["Text"].Value = "Click to launch Database Manager [Key D]";
             e.Params["Items"]["DBManager"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["DBManager"]["Event"].Value = "Magix.Publishing.ViewClasses";
 
             e.Params["Items"]["FileExplorer"]["Image"].Value = "media/images/briefcase.png";
-            e.Params["Items"]["FileExplorer"]["Text"].Value = "Click to launch File Explorer";
+            e.Params["Items"]["FileExplorer"]["Shortcut"].Value = "F";
+            e.Params["Items"]["FileExplorer"]["Text"].Value = "Click to launch File Explorer [Key F]";
             e.Params["Items"]["FileExplorer"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["FileExplorer"]["Event"].Value = "Magix.Publishing.ViewFileSystem";
 
             e.Params["Items"]["Log"]["Image"].Value = "media/images/oscilloscope.png";
-            e.Params["Items"]["Log"]["Text"].Value = "Click to view Log";
+            e.Params["Items"]["Log"]["Shortcut"].Value = "L";
+            e.Params["Items"]["Log"]["Text"].Value = "Click to view Log [Key L]";
             e.Params["Items"]["Log"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Log"]["Event"].Value = "Magix.Publishing.ViewLog";
 
             e.Params["Items"]["Dox"]["Image"].Value = "media/images/docs.png";
-            e.Params["Items"]["Dox"]["Text"].Value = "Click to Download Magix' Documentation in PDF Format";
+            e.Params["Items"]["Dox"]["Shortcut"].Value = "X";
+            e.Params["Items"]["Dox"]["Text"].Value = "Click to Download Magix' Documentation in PDF Format [Key X]";
             e.Params["Items"]["Dox"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Dox"]["Event"].Value = "Magix.Publishing.DownloadHeavyDocumentation";
         }

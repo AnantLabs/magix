@@ -24,6 +24,19 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     public class MetaAction_Controller : ActiveController
     {
         /**
+         * Level 2: Returns the Desktop Icon for launching Actions back to caller
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
+        protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
+        {
+            e.Params["Items"]["Actions"]["Image"].Value = "media/images/lightning-icon.png";
+            e.Params["Items"]["Actions"]["Shortcut"].Value = "A";
+            e.Params["Items"]["Actions"]["Text"].Value = "Click to launch Actions [Key A]";
+            e.Params["Items"]["Actions"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Actions"]["Event"].Value = "Magix.MetaType.ViewActions";
+        }
+
+        /**
          * Level2: Will return the menu items needed to fire up 'View Meta Actions' forms 
          * for Administrator
          */
