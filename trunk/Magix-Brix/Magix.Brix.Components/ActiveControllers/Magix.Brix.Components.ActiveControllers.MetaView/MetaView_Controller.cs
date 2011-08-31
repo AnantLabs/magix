@@ -29,6 +29,19 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
     public class MetaView_Controller : ActiveController
     {
         /**
+         * Level 2: Returns the Desktop Icon for launching Actions back to caller
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
+        protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
+        {
+            e.Params["Items"]["MetaView"]["Image"].Value = "media/images/view-icon.png";
+            e.Params["Items"]["MetaView"]["Shortcut"].Value = "V";
+            e.Params["Items"]["MetaView"]["Text"].Value = "Click to view Meta Views [Key V]";
+            e.Params["Items"]["MetaView"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["MetaView"]["Event"].Value = "Magix.MetaView.ViewMetaViews";
+        }
+
+        /**
          * Level2: Will return one item back to caller which hopefully will function as the basis
          * of loading the ViewMetaViews logic
          */

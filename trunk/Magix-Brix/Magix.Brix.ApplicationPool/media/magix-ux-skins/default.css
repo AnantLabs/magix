@@ -492,9 +492,9 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	color:#000;
 	position:relative;
 
-	-moz-border-radius:5px 5px 0 0;
-	-webkit-border-radius:5px 5px 0 0;
-	border-radius:5px 5px 0 0;
+	-moz-border-radius:5px 20px 20px 5px;
+	-webkit-border-radius:5px 20px 20px 5px;
+	border-radius:5px 20px 20px 5px;
 
 	-moz-transition-property:color, text-shadow;
 	-moz-transition-duration:0.2s;

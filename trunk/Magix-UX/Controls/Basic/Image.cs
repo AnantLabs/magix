@@ -52,6 +52,26 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * What keyboard shortcut the user will have to use to mimick a 'click' on 
+         * the widget. Often the keyboard shortcut will be mixed up with other
+         * keys, depending upon your operating system or browser. For FireFox 
+         * on Windows for instance the keyboard combination is ALT+SHIFT+whatever
+         * key you choose here. So if you choose 'J' as the AccessKey, the user
+         * will have to hold down ALT+SHIFT and press 'J' to use the keyboard 
+         * shortcut.
+         */
+        public string AccessKey
+        {
+            get { return ViewState["AccessKey"] == null ? "" : (string)ViewState["AccessKey"]; }
+            set
+            {
+                if (value != AccessKey)
+                    SetJsonValue("AccessKey", value);
+                ViewState["AccessKey"] = value;
+            }
+        }
+
         protected override void RenderMuxControl(HtmlBuilder builder)
         {
             using (Element el = builder.CreateElement("img"))
@@ -64,6 +84,8 @@ namespace Magix.UX.Widgets
         {
             el.AddAttribute("src", ImageUrl);
             el.AddAttribute("alt", AlternateText);
+            if (!string.IsNullOrEmpty(AccessKey))
+                el.AddAttribute("accesskey", AccessKey);
             base.AddAttributes(el);
         }
     }
