@@ -20,7 +20,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
      * Level2: UI parts for showing a MetaView in 'MultiView Mode'. Basically shows a grid, with items
      * dependent upon the look of the view. This is a Publisher Plugin module. Basically a 
      * completely 'empty' module whos only purpose is to raise the
-     * 'Magix.MetaType.ShowMetaViewMultipleInCurrentContainer' event, whos default implementation
+     * 'Magix.MetaView.ShowMetaViewMultipleInCurrentContainer' event, whos default implementation
      * will simply in its entirety replace this Module, hence not really much to see here.
      * 
      * This is the PublisherPlugin you'd use if you'd like to see a 'list of MetaObjects' on 
@@ -56,8 +56,15 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             node["Container"].Value = this.Parent.ID;
 
             RaiseSafeEvent(
-                "Magix.MetaType.ShowMetaViewMultipleInCurrentContainer",
+                "Magix.MetaView.ShowMetaViewMultipleInCurrentContainer",
                 node);
+
+            if (node.Contains("AfterInitializingEvent"))
+            {
+                RaiseSafeEvent(
+                    node["AfterInitializingEvent"].Get<string>(), 
+                    node);
+            }
         }
 
         /**

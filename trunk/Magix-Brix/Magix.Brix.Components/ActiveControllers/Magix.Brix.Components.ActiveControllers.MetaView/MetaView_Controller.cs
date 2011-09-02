@@ -711,8 +711,8 @@ Deleting it may break these parts.</p>";
         /**
          * Level2: Will show the 'MetaViewName' MetaView within the 'current container'
          */
-        [ActiveEvent(Name = "Magix.MetaType.ShowMetaViewMultipleInCurrentContainer")]
-        protected void Magix_MetaType_ShowMetaViewMultipleInCurrentContainer(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.MetaView.ShowMetaViewMultipleInCurrentContainer")]
+        protected void Magix_MetaView_ShowMetaViewMultipleInCurrentContainer(object sender, ActiveEventArgs e)
         {
             MetaView view = MetaView.SelectFirst(
                 Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
@@ -726,7 +726,7 @@ Deleting it may break these parts.</p>";
             e.Params["MetaViewName"].Value = view.Name;
 
             RaiseEvent(
-                "Magix.MetaType.ViewMetaViewMultiMode",
+                "Magix.MetaView.ViewMetaViewMultiMode",
                 e.Params);
         }
 
@@ -760,6 +760,11 @@ Deleting it may break these parts.</p>";
                         e.Params["IsCreate"].Value = true;
                         continue;
                     }
+                    else if (idx.Name.StartsWith("init-actions:"))
+                    {
+                        CreateMetaView_BothView_InitActions(idx, e.Params);
+                        continue;
+                    }
 
                     string name = idx.Name;
 
@@ -772,15 +777,16 @@ Deleting it may break these parts.</p>";
                                 e.Params["TemplateEvent"].Get<string>() : 
                                 "Magix.MetaView.MetaView_Multiple_GetColonTemplateColumn";
                     }
-
-                    if (!string.IsNullOrEmpty(idx.Action))
+                    else if (!string.IsNullOrEmpty(idx.Action))
                     {
                         e.Params["WhiteListColumns"][name].Value = true;
                         e.Params["Type"]["Properties"][name]["ReadOnly"].Value = idx.ReadOnly;
                         e.Params["Type"]["Properties"][name]["Header"].Value = name;
                         e.Params["Type"]["Properties"][name]["NoFilter"].Value = true;
                         e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
-                            "Magix.MetaView.MultiViewActionItemTemplateColumn";
+                            e.Params.Contains("TemplateEvent") ?
+                                e.Params["TemplateEvent"].Get<string>() :
+                                "Magix.MetaView.MultiViewActionItemTemplateColumn";
                     }
 
                     e.Params["WhiteListColumns"][name].Value = true;
@@ -1014,6 +1020,44 @@ Deleting it may break these parts.</p>";
                     // Assuming some other bugger will handle this guy ...
                     break;
             }
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.RunInitActions")]
+        protected void Magix_MetaView_RunInitActions(object sender, ActiveEventArgs e)
+        {
+            ExecuteSafely(
+                delegate
+                {
+                    MetaView.MetaViewProperty p =
+                        MetaView.MetaViewProperty.SelectByID(
+                            e.Params["AfterInitializingEvent"]["ActionID"].Get<int>());
+
+                    Node node = new Node();
+
+                    foreach (string idxS in p.Action.Split('|'))
+                    {
+                        node["ActionSenderName"].Value = p.Name + "-Init";
+                        node["MetaViewName"].Value = p.MetaView.Name;
+                        node["MetaViewTypeName"].Value = p.MetaView.TypeName;
+
+                        // Settings Event Specific Features ...
+                        node["ActionName"].Value = idxS;
+                        node["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
+
+                        RaiseEvent(
+                            "Magix.MetaAction.RaiseAction",
+                            node);
+                    }
+                }, "Something went wrong while trying to execute Actions associated with your Meta View Init-Property");
+        }
+
+        private void CreateMetaView_BothView_InitActions(MetaView.MetaViewProperty p, Node inputNode)
+        {
+            if (string.IsNullOrEmpty(p.Action))
+                return;
+
+            inputNode["AfterInitializingEvent"].Value = "Magix.MetaView.RunInitActions";
+            inputNode["AfterInitializingEvent"]["ActionID"].Value = p.ID;
         }
 
         /*
@@ -1306,6 +1350,9 @@ Deleting it may break these parts.</p>";
 
             switch (typeOfControl)
             {
+                case "init-actions":
+                    CreateMetaView_SingleView_InitActions(id, p, e.Params);
+                    break;
                 case "linkedE2M":
                     CreateMetaView_SingleView_Linked(id, p, e.Params);
                     break;
@@ -1313,6 +1360,40 @@ Deleting it may break these parts.</p>";
                     // Assuming some other bugger will handle this guy ...
                     break;
             }
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void CreateMetaView_SingleView_InitActions(int id, MetaView.MetaViewProperty p, Node nodeInput)
+        {
+            if (p.Action == null)
+                return;
+
+            if (!nodeInput.Contains("IsFirstLoad") ||
+                !nodeInput["IsFirstLoad"].Get<bool>())
+                return; // Not 'Initial Loading' ...
+
+            ExecuteSafely(
+                delegate
+                {
+                    Node node = new Node();
+
+                    foreach (string idxS in p.Action.Split('|'))
+                    {
+                        node["ActionSenderName"].Value = p.Name + "-Init";
+                        node["MetaViewName"].Value = p.MetaView.Name;
+                        node["MetaViewTypeName"].Value = p.MetaView.TypeName;
+
+                        // Settings Event Specific Features ...
+                        node["ActionName"].Value = idxS;
+                        node["OriginalWebPartID"].Value = node["OriginalWebPartID"].Value;
+
+                        RaiseEvent(
+                            "Magix.MetaAction.RaiseAction",
+                            node);
+                    }
+                }, "Something went wrong while trying to execute Actions associated with your Meta View Init-Property");
         }
 
         /*
