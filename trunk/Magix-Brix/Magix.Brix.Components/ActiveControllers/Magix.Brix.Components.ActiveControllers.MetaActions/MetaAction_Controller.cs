@@ -385,8 +385,19 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListProperties"]["Value"].Value = true;
             node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
 
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-            node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+            // Making sure all Magix Actions are READ-ONLY for the user, so he doesn't start
+            // changing their names and screwing up things ...
+            if (a.Name.StartsWith("Magix"))
+            {
+                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = true;
+            }
+            else
+            {
+                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+            }
+
             node["Type"]["Properties"]["EventName"]["Header"].Value = "Event Name";
             node["Type"]["Properties"]["EventName"]["Bold"].Value = true;
             node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
@@ -569,6 +580,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         protected void Magix_MetaAction_DeleteMetaAction(object sender, ActiveEventArgs e)
         {
             int id = e.Params["ID"].Get<int>();
+
+            Action a = Action.SelectByID(id);
+            if (a.Name.StartsWith("Magix."))
+                throw new ArgumentException("Sorry, those are 'System Actions', and in general terms 'off limits'");
+
+
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             string typeName = fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1);
             Node node = e.Params;
