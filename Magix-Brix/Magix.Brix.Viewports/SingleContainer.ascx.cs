@@ -169,7 +169,10 @@ namespace Magix.Brix.Viewports
             // Need to preserve CSS files for those scenarios where 
             // you're doing a 'conventional postback' ...
             if (!AjaxManager.Instance.IsCallback && IsPostBack)
+            {
                 IncludeAllCssFiles();
+                IncludeAllJsFiles();
+            }
 
             HttpCookie cookie = Request.Cookies["UserID"];
 
@@ -203,6 +206,14 @@ namespace Magix.Brix.Viewports
             foreach (string idx in CssFiles)
             {
                 IncludeCssFile(idx);
+            }
+        }
+
+        private void IncludeAllJsFiles()
+        {
+            foreach (string idx in JsFiles)
+            {
+                IncludeJsFile(idx);
             }
         }
 
@@ -256,6 +267,16 @@ namespace Magix.Brix.Viewports
                 if (ViewState["CssFiles"] == null)
                     ViewState["CssFiles"] = new List<string>();
                 return ViewState["CssFiles"] as List<string>;
+            }
+        }
+
+        private List<string> JsFiles
+        {
+            get
+            {
+                if (ViewState["JsFiles"] == null)
+                    ViewState["JsFiles"] = new List<string>();
+                return ViewState["JsFiles"] as List<string>;
             }
         }
 
@@ -472,6 +493,48 @@ namespace Magix.Brix.Viewports
                     }
                 }
             }
+        }
+
+        /**
+         * Level2: Injects a CSS file onto the page for inclusion on the client side for you
+         */
+        [ActiveEvent(Name = "Magix.Core.AddCustomJavaScriptFile")]
+        protected void Magix_Core_AddCustomJavaScriptFile(object sender, ActiveEventArgs e)
+        {
+            if (e.Params.Contains("JSFile"))
+            {
+                string cssFile = e.Params["JSFile"].Get<String>();
+                if (!JsFiles.Contains(cssFile))
+                {
+                    JsFiles.Add(cssFile);
+                    IncludeJsFile(cssFile);
+                }
+            }
+            foreach (Node idx in e.Params)
+            {
+                if (idx.Name.IndexOf("JSFile") == 0 &&
+                    idx.Name != "JSFile")
+                {
+                    // BEGINS with CSSFile, but is NOT CSSFile directly
+                    // Meaning, will handle stuff such as "CSSFile1" and "CSSFile-Main" etc ...
+
+                    // PS!
+                    // Will add them in the order they were ADDED to the node, NOT the
+                    // alphabetical order, numerical order or anything else ...
+                    string cssFile = idx.Get<string>();
+                    if (!JsFiles.Contains(cssFile))
+                    {
+                        JsFiles.Add(cssFile);
+                        IncludeJsFile(cssFile);
+                    }
+                }
+            }
+        }
+
+        private void IncludeJsFile(string cssFile)
+        {
+            cssFile = cssFile.Replace("~/", GetApplicationBaseUrl()).ToLowerInvariant();
+            AjaxManager.Instance.IncludeScriptFromFile(cssFile);
         }
 
         private new void IncludeCssFile(string cssFile)

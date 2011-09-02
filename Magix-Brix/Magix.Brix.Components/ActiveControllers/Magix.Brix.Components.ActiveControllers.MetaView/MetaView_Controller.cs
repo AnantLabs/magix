@@ -14,6 +14,7 @@ using Magix.UX.Effects;
 using System.Collections.Generic;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using System.Globalization;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaViews
 {
@@ -767,7 +768,9 @@ Deleting it may break these parts.</p>";
                         string[] splits = name.Split(':');
                         name = splits[splits.Length - 1];
                         e.Params["Type"]["Properties"][name]["TemplateColumnEvent"].Value =
-                            "Magix.MetaView.MetaView_Multiple_GetColonTemplateColumn";
+                            e.Params.Contains("TemplateEvent") ? 
+                                e.Params["TemplateEvent"].Get<string>() : 
+                                "Magix.MetaView.MetaView_Multiple_GetColonTemplateColumn";
                     }
 
                     if (!string.IsNullOrEmpty(idx.Action))
@@ -944,29 +947,33 @@ Deleting it may break these parts.</p>";
                     return idx.Name == e.Params["Name"].Get<string>();
                 });
 
-            foreach (string idxS in p.Action.Split('|'))
-            {
-                Node node = new Node();
+            ExecuteSafely(
+                delegate
+                {
+                    foreach (string idxS in p.Action.Split('|'))
+                    {
+                        Node node = new Node();
 
-                node["ActionSenderName"].Value = name;
-                node["Value"].Value = value;
-                node["MetaViewName"].Value = v.Name;
-                node["MetaViewTypeName"].Value = v.TypeName;
-                node["ActionName"].Value = idxS;
-                node["MetaObjectID"].Value = id;
+                        node["ActionSenderName"].Value = name;
+                        node["Value"].Value = value;
+                        node["MetaViewName"].Value = v.Name;
+                        node["MetaViewTypeName"].Value = v.TypeName;
+                        node["ActionName"].Value = idxS;
+                        node["MetaObjectID"].Value = id;
 
-                // Settings Event Specific Features ...
-                node["ActionName"].Value = idxS;
-                node["OriginalWebPartID"].Value = pageObj;
+                        // Settings Event Specific Features ...
+                        node["ActionName"].Value = idxS;
+                        node["OriginalWebPartID"].Value = pageObj;
 
-                RaiseEvent(
-                    "Magix.MetaAction.RaiseAction",
-                    node);
-            }
+                        RaiseEvent(
+                            "Magix.MetaAction.RaiseAction",
+                            node);
+                    }
+                }, "Something went wrong while trying to execute Actions associated with Meta View Property");
         }
 
         /**
-         *Level3:  Will create a control type depending upon the colon-prefix of the column. For instance, if given
+         * Level3:  Will create a control type depending upon the colon-prefix of the column. For instance, if given
          * date:When it will create a Calendar, putting the Value selected into the 'When' property.
          * If given select:xx.yy:zz it will create a select list, enumerating into
          * the ObjectTypes given with the Property de-referenced. E.g. select:Gender.Sex:Male-Female will enumerate
@@ -1277,6 +1284,77 @@ Deleting it may break these parts.</p>";
         }
 
         /**
+         * Level3:  Will create a 'linkedE2M' control type depending upon the colon-prefix of the column. For instance, if given
+         * linkedE2M:Email:Name it will create a linked textbox, which is linked in its 'Name' field, which is linked 
+         * towards another field on the same form, called 'Email', such that when the Email is typed into the Email 
+         * field, Magix will automatically try to parse the name of the person from his email address
+         */
+        [ActiveEvent(Name = "Magix.MetaView.MetaView_Single_GetColonTemplateColumn")]
+        protected void Magix_MetaView_MetaView_Single_GetColonTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            MetaView v = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+
+            MetaView.MetaViewProperty p = v.Properties.Find(
+                delegate(MetaView.MetaViewProperty idx)
+                {
+                    return idx.Name.Contains(":" + e.Params["Name"].Get<string>());
+                });
+
+            string typeOfControl = p.Name.Split(':')[0];
+
+            int id = e.Params["ID"].Get<int>();
+
+            switch (typeOfControl)
+            {
+                case "linkedE2M":
+                    CreateMetaView_SingleView_Linked(id, p, e.Params);
+                    break;
+                default:
+                    // Assuming some other bugger will handle this guy ...
+                    break;
+            }
+        }
+
+        /*
+         * Helper for above. Basically just create a TextBox which is 'linked' towards its sibling 
+         * such that the name is attempted parsed out of something which resembles hopefully
+         * an email address
+         */
+        private void CreateMetaView_SingleView_Linked(int id, MetaView.MetaViewProperty p, Node node)
+        {
+            TextBox b = new TextBox();
+            b.PlaceHolder = p.Description;
+            b.ToolTip = b.PlaceHolder;
+            b.Info = p.Name.Substring(p.Name.LastIndexOf(':') + 1);
+            b.CssClass = "meta-view-form-element meta-view-form-textbox";
+
+            Node x = new Node();
+            x["JSFile"].Value = "~/media/Js/link-text-boxes.js";
+
+            RaiseEvent(
+                "Magix.Core.AddCustomJavaScriptFile",
+                x);
+
+            b.Load +=
+                delegate
+                {
+                    TextBox linked = Selector.SelectFirst<TextBox>(b.Parent,
+                        delegate(System.Web.UI.Control idx)
+                        {
+                            TextBox bb = idx as TextBox;
+                            if (bb != null)
+                                return bb.Info == p.Name.Split(':')[1];
+                            return false;
+                        });
+                    AjaxManager.Instance.WriterAtBack.Write("MUX.linkTextBoxes('{0}', '{1}');",
+                        linked.ClientID,
+                        b.ClientID);
+                };
+
+            node["Control"].Value = b;
+        }
+
+        /**
          * Level2: Loads up WYSIWYG editor for MetaView in 'SingleView Mode'
          */
         [ActiveEvent(Name = "Magix.MetaView.LoadWysiwyg")]
@@ -1299,11 +1377,19 @@ Deleting it may break these parts.</p>";
             foreach (MetaView.MetaViewProperty idx in m.Properties)
             {
                 node["Properties"]["p-" + idx.ID]["ID"].Value = idx.ID;
-                node["Properties"]["p-" + idx.ID]["Name"].Value = idx.Name;
+                string name = idx.Name;
+                node["Properties"]["p-" + idx.ID]["Name"].Value = name;
                 node["Properties"]["p-" + idx.ID]["ReadOnly"].Value = idx.ReadOnly;
                 node["Properties"]["p-" + idx.ID]["Description"].Value = idx.Description;
                 node["Properties"]["p-" + idx.ID]["Action"].Value = idx.Action;
             }
+
+            node["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
+            node["TemplateEvent"].Value = "Magix.MetaView.MetaView_Single_GetColonTemplateColumn";
+
+            RaiseEvent(
+                "DBAdmin.DynamicType.GetObjectTypeNode",
+                node);
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.MetaView.MetaView_Single",
@@ -1324,11 +1410,20 @@ Deleting it may break these parts.</p>";
             foreach (MetaView.MetaViewProperty idx in m.Properties)
             {
                 e.Params["Properties"]["p-" + idx.ID]["ID"].Value = idx.ID;
-                e.Params["Properties"]["p-" + idx.ID]["Name"].Value = idx.Name;
+                string name = idx.Name;
+                e.Params["Properties"]["p-" + idx.ID]["Name"].Value = name;
                 e.Params["Properties"]["p-" + idx.ID]["ReadOnly"].Value = idx.ReadOnly;
                 e.Params["Properties"]["p-" + idx.ID]["Description"].Value = idx.Description;
                 e.Params["Properties"]["p-" + idx.ID]["Action"].Value = idx.Action;
             }
+
+            e.Params["FullTypeName"].Value = typeof(MetaObject).FullName + "-META";
+
+            e.Params["TemplateEvent"].Value = "Magix.MetaView.MetaView_Single_GetColonTemplateColumn";
+
+            RaiseEvent(
+                "DBAdmin.DynamicType.GetObjectTypeNode",
+                e.Params);
         }
 
         /**

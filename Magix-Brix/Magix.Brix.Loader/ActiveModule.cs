@@ -20,6 +20,12 @@ namespace Magix.Brix.Loader
      */
     public abstract class ActiveModule : UserControl, IModule
     {
+        /**
+         * Level3: Helper for executing 'dangerous code' such that if an exception happens,
+         * it'll 'swallow' the exception, and show a Message box showing the exception
+         */
+        protected delegate void executor();
+
         public virtual void InitialLoading(Node node)
         {
             Load +=
@@ -148,6 +154,42 @@ namespace Magix.Brix.Loader
                     "/" : 
                     HttpContext.Current.Request.ApplicationPath + "/")
                         .Replace("Default.aspx", "").Replace("default.aspx", "");
+        }
+
+        /**
+         * Level3: Helper for execute code that you suspect might throw exceptions. Will trap exception and
+         * show a message box back to end user instead of allowing exception to penetrate through
+         * to Yellow Screen of Death. Will return true if operation didn't throw an exception
+         * and false if it did throw an exception
+         */
+        [DebuggerStepThrough]
+        protected bool ExecuteSafely(executor functor, string msg, params object[] args)
+        {
+            try
+            {
+                functor();
+                return true;
+            }
+            catch (Exception err)
+            {
+                while (err.InnerException != null)
+                    err = err.InnerException;
+
+                Node node = new Node();
+
+                node["Message"].Value =
+                    "<p>" + string.Format(msg, args) + "</p>" +
+                    "<p>Message from Server; </p>" +
+                    "<p>" + err.Message + "</p>";
+
+                node["Header"].Value = err.GetType().FullName;
+                node["IsError"].Value = true;
+
+                RaiseEvent(
+                    "Magix.Core.ShowMessage",
+                    node);
+            }
+            return false;
         }
     }
 }

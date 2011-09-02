@@ -45,6 +45,277 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level2: Will validate the given object, sent from a MetaView SingleView, such that it conforms 
+         * in its 'PropertyName' value towards the 'Type' parameter, which can either be 'email' or
+         * 'number'. Meaning if the MetaView has a Property called 'Email', then if the property 
+         * was written such; 'email:Email' - Then if the user writes anything but a legal Email 
+         * address, according to RFC 5321, minus length restrictions, in the 'Email' field, 
+         * and exception will be thrown, and the current execution chain of Actions will be 
+         * stopped and no more Actions will be executed. The Message of the Exception will be, at least
+         * to some extent, friendly. For implementers of plugins, handle this Active Event, and 
+         * check towards the 'Type' parameter which then will contain your chosen prefix. Prefixes
+         * for this method are 'email', 'number', 'mandatory', 'url' and 'full-name'.
+         * PS! Some things might get changed 
+         * during the course of this event, for instance if you have a 'url' field, without http:// 
+         * or https:// in the beginning, those characters will be appended. 'full-name' will normalize the 
+         * given value such that it says 'Hansen, Thomas', it will also Auto Capitalize. If name is given like 
+         * thomas hansen it will assume first name is first. If there's a comma, it will assert that the last 
+         * name(s) are behind the comma, and the first name(s) before it. It will still produce the result 
+         * 'Hansen, Thomas Polterguy Hoeoeg' from e.g. 'thomas poLTerguy Hoeoeg hanseN', or from 
+         * 'hansen, thomas POLTERGUY hoeoeg'. While 'Hoeoeg Hansen, Thomas Polterguy' will emerge
+         * from e.g. 'hoeoeg hansen, thomas polterGUY'. Unless the 'AcceptNull' is given, most controls 
+         * will not accept an empty value. While for 'full-name', unless 'AcceptHalfName' is given, or 
+         * 'AcceptNull' is given, it will either accept only a full name, meaning at least two names 
+         * or only one name if 'AcceptHalfName' is true. While unless 'AcceptNull' is null, it will still 
+         * need at least one name, with more than 2 letters within. It will only accept one comma
+         */
+        [ActiveEvent(Name = "Magix.Common.ValidateObjectProperty")]
+        protected void Magix_Common_ValidateObjectProperty(object sender, ActiveEventArgs e)
+        {
+            if (!e.Params.Contains("Type"))
+                throw new ArgumentException("Missing 'Type' parameter for 'Magix.Common.ValidateObjectProperty' event");
+
+            switch (e.Params["Type"].Get<string>())
+            {
+                case "email":
+                    {
+                        ValidateEmail(e.Params);
+                    } break;
+                case "number":
+                    {
+                        ValidateNumber(e.Params);
+                    } break;
+                case "mandatory":
+                    {
+                        ValidateMandatory(e.Params);
+                    } break;
+                case "url":
+                    {
+                        ValidateURL(e.Params);
+                    } break;
+                case "full-name":
+                    {
+                        ValidateFullName(e.Params);
+                    } break;
+            }
+        }
+
+        private void ValidateFullName(Node node)
+        {
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+
+            if (string.IsNullOrEmpty(valueToValidate))
+            {
+                if (!node.Contains("AcceptNull") ||
+                    !node["AcceptNull"].Get<bool>())
+                {
+                    throw new ArgumentException(
+                        string.Format("Sorry, but the '{0}' field is mandatory ... ",
+                            node["PropertyName"].Get<string>()));
+                }
+            }
+
+            string firstNames = "";
+            string lastNames = "";
+
+            if (valueToValidate.Contains(","))
+            {
+                if (valueToValidate.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Length != 2)
+                {
+                    throw new ArgumentException(@"Sorry, but this control only accepts [0, 1} comma, 
+either as a list of separated names, seaparated by spaces, 
+or with one comma signigying the end of the last name(s) and the beginning 
+of the first name(s)...");
+                }
+
+                // Assuming last name is first ...
+                lastNames = valueToValidate.Split(',')[0];
+                firstNames = valueToValidate.Split(',')[1];
+            }
+            else
+            {
+                if (valueToValidate.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length < 2)
+                {
+                    // Only one name ...
+                    // Need to verify that it's legal ...
+                    if (!node.Contains("AcceptHalfName") ||
+                        !node["AcceptHalfName"].Get<bool>())
+                    {
+                        throw new ArgumentException("Sorry, but this field requires a FULL name ...");
+                    }
+                    firstNames = valueToValidate;
+                }
+                else
+                {
+                    // Assuming there's only one last name ...
+                    firstNames = valueToValidate.Substring(0, valueToValidate.LastIndexOf(' '));
+                    string[] names = valueToValidate.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    lastNames = names[names.Length - 1];
+                }
+            }
+
+            // Removing unnecessary white-spaces at the endings ...
+            firstNames = firstNames.Trim();
+            lastNames = lastNames.Trim();
+
+            string[] allFirstNames = firstNames.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            firstNames = "";
+            foreach (string idx in allFirstNames)
+            {
+                string tmpName = char.ToUpper(idx[0]) + idx.Substring(1).Trim();
+
+                firstNames += " " + tmpName;
+            }
+
+            string[] allLastNames = lastNames.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            lastNames = "";
+            foreach (string idx in allLastNames)
+            {
+                lastNames += " " + char.ToUpper(idx[0]) + idx.Substring(1).Trim();
+            }
+
+            node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Value = 
+                ((lastNames.Length > 0 ? (lastNames + ", ") : "") + firstNames).Replace("  ", " ").Trim();
+        }
+
+        private void ValidateURL(Node node)
+        {
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+
+            if (string.IsNullOrEmpty(valueToValidate))
+            {
+                if (!node.Contains("AcceptNull") ||
+                    !node["AcceptNull"].Get<bool>())
+                {
+                    throw new ArgumentException(
+                        string.Format("Sorry, but the '{0}' field is mandatory ... ",
+                            node["PropertyName"].Get<string>()));
+                }
+            }
+            if (valueToValidate.IndexOf("http://") != 0 &&
+                valueToValidate.IndexOf("https://") != 0)
+            {
+                valueToValidate = "http://" + valueToValidate;
+
+                // Doing a little bit more than just pure validation here .... ;)
+                node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Value = valueToValidate;
+            }
+            if (valueToValidate.IndexOf(".") == -1)
+            {
+                throw new ArgumentException(
+                    string.Format("A legal URL needs to contain at least one '.'"));
+            }
+            if (valueToValidate.Substring(valueToValidate.LastIndexOf('.') + 1).Length < 1)
+            {
+                throw new ArgumentException(
+                    string.Format("The shortest top domain I'm aware of is still one character large, add at least one character to the end of this URL ..."));
+            }
+            foreach (char idx in valueToValidate)
+            {
+                if (("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$-_.+!*'(),/:").IndexOf(idx) == -1)
+                {
+                    throw new ArgumentException(
+                        string.Format("Found an illegal character in your URL '{0}'",
+                            idx));
+                }
+            }
+        }
+
+        private void ValidateMandatory(Node node)
+        {
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+
+            if (string.IsNullOrEmpty(valueToValidate))
+            {
+                throw new ArgumentException(
+                    string.Format(@"Oops, that field ['{0}'] unfortunately is Mandatory, 
+and you didn't type anything in ...",
+                        node["PropertyName"].Get<string>()));
+            }
+        }
+
+        private void ValidateNumber(Node node)
+        {
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+
+            if (string.IsNullOrEmpty(valueToValidate))
+            {
+                if (!node.Contains("AcceptNull") ||
+                    !node["AcceptNull"].Get<bool>())
+                {
+                    throw new ArgumentException(
+                        string.Format("Sorry, but the '{0}' field is mandatory ... ",
+                            node["PropertyName"].Get<string>()));
+                }
+            }
+
+            foreach (char idx in valueToValidate)
+            {
+                if (("0123456789., ").IndexOf(idx) == -1)
+                {
+                    throw new ArgumentException(
+                        string.Format(@"According to most people's definition, 
+your content in '{0}' is either not a number, or a highly irregular one if so. Content is '{1}', but 
+can only contain numerical characters to be legal",
+                        node["PropertyName"].Get<string>(),
+                        valueToValidate));
+                }
+            }
+        }
+
+        private static void ValidateEmail(Node node)
+        {
+            bool hasFront = false;
+            bool hasBack = false;
+            bool pastAt = false;
+            bool hasValidUpperDomain = false;
+            bool hasSeenDomainDot = false;
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+
+            if (string.IsNullOrEmpty(valueToValidate))
+            {
+                if (!node.Contains("AcceptNull") ||
+                    !node["AcceptNull"].Get<bool>())
+                {
+                    throw new ArgumentException(
+                        string.Format("Sorry, but the '{0}' field is mandatory ... ",
+                            node["PropertyName"].Get<string>()));
+                }
+            }
+
+            foreach (char idx in valueToValidate)
+            {
+                if (!pastAt)
+                {
+                    if (("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'*+-/=?^_`{|}~").IndexOf(idx) > 0)
+                    {
+                        hasFront = true;
+                    }
+                    else if (idx == '@')
+                    {
+                        pastAt = true;
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (idx == '.')
+                        hasSeenDomainDot = true;
+                    else if (hasSeenDomainDot)
+                    {
+                        hasValidUpperDomain = true;
+                    }
+                    else
+                        hasBack = true;
+                }
+            }
+            if (!hasBack || !hasFront || !hasValidUpperDomain)
+            {
+                throw new ArgumentException("Opps, that doesn't entirely look like a valid Email, does it ...?");
+            }
+        }
+
+        /**
          * Sets the given setting 'Name' to the given value 'Value' for the currently
          * logged in User
          */

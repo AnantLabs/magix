@@ -80,7 +80,34 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                 }
                 else
                 {
-                    CreateReadWriteControl(idx, true);
+                    string name = idx["Name"].Get<string>();
+                    if (name.IndexOf(':') > 0)
+                        name = name.Substring(name.LastIndexOf(':') + 1);
+                    if (DataSource["Type"]["Properties"][name].Contains("TemplateColumnEvent") &&
+                        !string.IsNullOrEmpty(DataSource["Type"]["Properties"][name]["TemplateColumnEvent"].Get<string>()))
+                    {
+                        string eventName = DataSource["Type"]["Properties"][name]["TemplateColumnEvent"].Get<string>();
+
+                        Node colNode = new Node();
+                        colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>();
+
+                        colNode["Name"].Value = name;
+                        colNode["Value"].Value = idx.Get<string>();
+                        colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>();
+                        colNode["ID"].Value = DataSource["ID"].Get<int>();
+                        colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
+
+                        RaiseSafeEvent(
+                            eventName,
+                            colNode);
+
+                        if (colNode.Contains("Control"))
+                            ctrls.Controls.Add(colNode["Control"].Get<Control>());
+                    }
+                    else
+                    {
+                        CreateReadWriteControl(idx, true);
+                    }
                 }
             }
         }
@@ -98,25 +125,29 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
             b.Click +=
                 delegate
                 {
-                    // TODO: Out-factor into controller
-                    foreach (string idxS in idx["Action"].Get<string>().Split('|'))
-                    {
-                        Node node = new Node();
+                    ExecuteSafely(
+                        delegate
+                        {
+                            Node node = new Node();
 
-                        node["ActionSenderName"].Value = b.Text;
-                        node["MetaViewName"].Value = DataSource["MetaViewName"].Value;
-                        node["MetaViewTypeName"].Value = DataSource["MetaViewTypeName"].Value;
+                            GetPropertyValues(node["PropertyValues"], false);
 
-                        GetPropertyValues(node["PropertyValues"], false);
+                            // TODO: Out-factor into controller
+                            foreach (string idxS in idx["Action"].Get<string>().Split('|'))
+                            {
+                                node["ActionSenderName"].Value = b.Text;
+                                node["MetaViewName"].Value = DataSource["MetaViewName"].Value;
+                                node["MetaViewTypeName"].Value = DataSource["MetaViewTypeName"].Value;
 
-                        // Settings Event Specific Features ...
-                        node["ActionName"].Value = idxS;
-                        node["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
+                                // Settings Event Specific Features ...
+                                node["ActionName"].Value = idxS;
+                                node["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
 
-                        RaiseSafeEvent(
-                            "Magix.MetaAction.RaiseAction",
-                            node);
-                    }
+                                RaiseEvent(
+                                    "Magix.MetaAction.RaiseAction",
+                                    node);
+                            }
+                        }, "Something went wrong while trying to execute Actions associated with Meta View Property");
                 };
             ctrls.Controls.Add(b);
         }

@@ -45,6 +45,129 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ValidateObjectPropertyMandatory")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ValidateObjectPropertyMandatory";
+                    a.EventName = "Magix.Common.ValidateObjectProperty";
+                    a.Description = @"Will validate the given 'PropertyName' 
+Value of the Active MetaView within the WebPart agains the 'Type' parameter. 
+Will throw an exception if validation fissles with an error message back to user, 
+meaning if you'd like to stop saving of a MetaObject due to validation fissling, 
+you'll need to have this Action before the SaveActiveForm Action. The 'Type' parameter 
+can be either 'email', 'mandatory', 'number', 'full-name' or 'url' - Plus any of the gazillion plugins
+you might have other places in your system. For this Action the 'PropertyName' is 'Name', and 
+the 'Type' is 'mandatory', which just means that if there's no value, or only spaces and 
+non-alphabetical-characters, then it's considered empty, and an exception will be thrown";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "PropertyName";
+                    m.Value = "Name";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Type";
+                    m.Value = "mandatory";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ValidateObjectPropertyFullName")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ValidateObjectPropertyFullName";
+                    a.EventName = "Magix.Common.ValidateObjectProperty";
+                    a.Description = @"Will validate the given 'PropertyName' 
+Value of the Active MetaView within the WebPart agains the 'Type' parameter. 
+Will throw an exception if validation fissles with an error message back to user, 
+meaning if you'd like to stop saving of a MetaObject due to validation fissling, 
+you'll need to have this Action before the SaveActiveForm Action. The 'Type' parameter 
+can be either 'email', 'mandatory', 'number', 'full-name' or 'url' - Plus any of the gazillion plugins
+you might have other places in your system. For this Action the 'PropertyName' is 'Name', and 
+the 'Type' is 'full-name', which means that at least two names need to be given, and the 
+names will be normalized such as 'Hansen, Thomas' with the last name(s) first and all names 
+automatically capitalized as a function of this Action. No automagic Capitalization will occur 
+if Capital letters are found in the middle of a string though, such as 'McAngus'";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "PropertyName";
+                    m.Value = "Name";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Type";
+                    m.Value = "full-name";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ValidateObjectPropertyEmail")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ValidateObjectPropertyEmail";
+                    a.EventName = "Magix.Common.ValidateObjectProperty";
+                    a.Description = @"Will validate the given 'PropertyName' 
+Value of the Active MetaView within the WebPart agains the 'Type' parameter. 
+Will throw an exception if validation fissles with an error message back to user, 
+meaning if you'd like to stop saving of a MetaObject due to validation fissling, 
+you'll need to have this Action before the SaveActiveForm Action. The 'Type' parameter 
+can be either 'email', 'mandatory', 'number', 'full-name' or 'url' - Plus any of the gazillion plugins
+you might have other places in your system. For this Action the 'PropertyName' is 'Email', and 
+the 'Type' is 'email'. Please note that if you wish to allow for _either_ a valid email 
+address, _or_ an empty value, you need to pass in 'AcceptNull' being true";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "PropertyName";
+                    m.Value = "Email";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Type";
+                    m.Value = "email";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ValidateObjectPropertyNumber")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ValidateObjectPropertyNumber";
+                    a.EventName = "Magix.Common.ValidateObjectProperty";
+                    a.Description = @"Will validate the given 'PropertyName' 
+Value of the Active MetaView within the WebPart agains the 'Type' parameter. 
+Will throw an exception if validation fissles with an error message back to user, 
+meaning if you'd like to stop saving of a MetaObject due to validation fissling, 
+you'll need to have this Action before the SaveActiveForm Action. The 'Type' parameter 
+can be either 'email', 'mandatory', 'number', 'full-name' or 'url' - Plus any of the gazillion plugins
+you might have other places in your system. For this Action the 'PropertyName' is 'Age', and 
+the 'Type' is 'number'. Please note that if you wish to allow for _either_ a valid number 
+address, _or_ an empty value, you need to pass in 'AcceptNull' being true. The valid characters 
+in a 'number' are; '0123456789,. '";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "PropertyName";
+                    m.Value = "Age";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Type";
+                    m.Value = "number";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.CreateGallery")) == 0)
                 {
                     Action a = new Action();
@@ -499,6 +622,11 @@ PS! This Action can be seen in 'Action' in the 'Magix.Demo.SendEmail' MetaView";
                     v.TypeName = "Magix.Demo.Email";
 
                     MetaView.MetaViewProperty q = new MetaView.MetaViewProperty();
+                    q.Name = "Name";
+                    q.Description = "Full Name ...";
+                    v.Properties.Add(q);
+
+                    q = new MetaView.MetaViewProperty();
                     q.Name = "Email";
                     q.Description = "Email Address ...";
                     v.Properties.Add(q);
@@ -509,14 +637,9 @@ PS! This Action can be seen in 'Action' in the 'Magix.Demo.SendEmail' MetaView";
                     v.Properties.Add(q);
 
                     q = new MetaView.MetaViewProperty();
-                    q.Name = "Name";
-                    q.Description = "Full Name ...";
-                    v.Properties.Add(q);
-
-                    q = new MetaView.MetaViewProperty();
                     q.Name = "Send";
                     q.Description = "Send yourself a Test Email from Marvin Magix ...";
-                    q.Action = "Magix.DynamicEvent.SaveActiveForm|Magix.DynamicEvent.ShowDefaultMessage|Magix.DynamicEvent.SendEmailFromForm|Magix.DynamicEvent.EmptyActiveForm";
+                    q.Action = "Magix.DynamicEvent.ValidateObjectPropertyFullName|Magix.DynamicEvent.ValidateObjectPropertyEmail|Magix.DynamicEvent.ValidateObjectPropertyNumber|Magix.DynamicEvent.SaveActiveForm|Magix.DynamicEvent.ShowDefaultMessage|Magix.DynamicEvent.SendEmailFromForm|Magix.DynamicEvent.EmptyActiveForm";
                     v.Properties.Add(q);
 
                     q = new MetaView.MetaViewProperty();

@@ -24,6 +24,39 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
     public class Logger_Controller : ActiveController
     {
         /**
+         * Level2: Logs every email sent out of Magix
+         */
+        [ActiveEvent(Name = "Magix.Core.SendEmail")]
+        protected void Magix_Core_SendEmail(object sender, ActiveEventArgs e)
+        {
+            UserBase u = UserBase.Current;
+            Node node = new Node();
+            node["LogItemType"].Value = "Magix.Core.SendEmail";
+
+            node["Header"].Value = e.Params["Header"].Get<string>();
+
+            string to = "";
+
+            foreach (Node idxEmail in e.Params["EmailAddresses"])
+            {
+                to += idxEmail.Value as string + ", ";
+            }
+
+            node["Message"].Value = 
+                "Sent from: " +
+                e.Params["AdminEmail"].Value +
+                ", Sent to: " + to +
+                ", Body: " + e.Params["Body"].Get<string>();
+
+            if (u != null)
+                node["ObjectID"].Value = u.ID;
+
+            RaiseEvent(
+                "Magix.Core.Log",
+                node);
+        }
+
+        /**
          * Level2: Handled here since it's one of the more 'common operations' and probably interesting
          * to see in retrospect in case something goes wrong
          */

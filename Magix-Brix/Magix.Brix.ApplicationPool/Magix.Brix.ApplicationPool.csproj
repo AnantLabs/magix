@@ -54,7 +54,6 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="media\blueprint\ie.css" />
     <Content Include="media\blueprint\plugins\buttons\icons\cross.png" />
     <Content Include="media\blueprint\plugins\buttons\icons\key.png" />
     <Content Include="media\blueprint\plugins\buttons\icons\tick.png" />
@@ -74,7 +73,6 @@
     <Content Include="media\blueprint\plugins\link-icons\screen.css" />
     <Content Include="media\blueprint\plugins\rtl\readme.txt" />
     <Content Include="media\blueprint\plugins\rtl\screen.css" />
-    <Content Include="media\blueprint\print.css" />
     <Content Include="media\blueprint\screen.css" />
     <Content Include="media\blueprint\src\forms.css" />
     <Content Include="media\blueprint\src\grid.css" />
@@ -193,10 +191,10 @@
     <Content Include="media\modules\SlidingMenu.css" />
     <Content Include="media\modules\web-part-templates.css" />
     <Content Include="server-error.html" />
-    <Content Include="Tmp\dont_delete_me.txt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\CompressionModule.cs" />
     <Compile Include="Code\Magix_PageStatePersister.cs" />
     <Compile Include="Default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -217,6 +215,7 @@
     <Content Include="media\html.png" />
     <Content Include="media\images\asax.png" />
     <Content Include="media\images\aspx.png" />
+    <Content Include="media\images\blue-print-icon.png" />
     <Content Include="media\images\book-front-page-believer.png" />
     <Content Include="media\images\book-front-page-CSharp-Believers.png" />
     <Content Include="media\images\book-front-page-CSharp.png" />
@@ -231,13 +230,17 @@
     <Content Include="media\images\doc.png" />
     <Content Include="media\images\docs.png" />
     <Content Include="media\images\docx.png" />
+    <Content Include="media\images\lightning-icon.png" />
     <Content Include="media\images\magix-logo.png" />
+    <Content Include="media\images\marvin-help.png" />
+    <Content Include="media\images\objects.png" />
     <Content Include="media\images\oga.png" />
     <Content Include="media\images\ogg.png" />
     <Content Include="media\images\openid_small.png" />
     <Content Include="media\images\openid_tiny.png" />
     <Content Include="media\images\oscilloscope.png" />
     <Content Include="media\images\pdf.png" />
+    <Content Include="media\images\press-icon.png" />
     <Content Include="media\images\qr-code.png" />
     <Content Include="media\images\snow.png" />
     <Content Include="media\images\spectrum.png" />
@@ -260,8 +263,10 @@
     <Content Include="media\images\Textures\sky-dark.png" />
     <Content Include="media\images\Textures\sky-light.png" />
     <Content Include="media\images\txt.png" />
+    <Content Include="media\images\view-icon.png" />
     <Content Include="media\images\wait-hourglass.png" />
     <Content Include="media\images\xml.png" />
+    <Content Include="media\Js\link-text-boxes.js" />
     <Content Include="media\modules\qr-generator.css" />
     <Content Include="media\modules\ImageGallery.css" />
     <Content Include="media\your-css-file-and-path.css" />

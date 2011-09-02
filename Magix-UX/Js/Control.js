@@ -338,6 +338,9 @@
     },
 
     destroy: function(ht) {
+      if(this.preDestroyer) {
+        this.preDestroyer();
+      }
       this._destroyChildControls();
       this.destroyThis();
       if (!ht) {
