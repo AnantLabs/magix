@@ -12,6 +12,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.UX.Widgets.Core;
 using Magix.Brix.Publishing.Common;
+using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.MetaView
 {
@@ -35,9 +36,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
     public class MetaView_Single : ActiveModule
     {
         protected Panel ctrls;
+        bool isFirstLoad;
 
         public override void InitialLoading(Node node)
         {
+            isFirstLoad = true;
             base.InitialLoading(node);
 
             Load +=
@@ -47,6 +50,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                     {
                         // Probably in 'production mode' and hence need to get our data ...
                         node["MetaViewName"].Value = ViewName;
+                        node["IsFirstLoad"].Value = isFirstLoad;
 
                         RaiseSafeEvent(
                             "Magix.MetaView.GetViewData",
@@ -70,7 +74,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         {
             foreach (Node idx in DataSource["Properties"])
             {
-                if (!string.IsNullOrEmpty(idx["Action"].Get<string>()))
+                if (!string.IsNullOrEmpty(idx["Action"].Get<string>()) && 
+                    idx["Name"].Get<string>().IndexOf(':') == -1)
                 {
                     CreateActionControl(idx);
                 }
@@ -81,33 +86,46 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                 else
                 {
                     string name = idx["Name"].Get<string>();
-                    if (name.IndexOf(':') > 0)
-                        name = name.Substring(name.LastIndexOf(':') + 1);
-                    if (DataSource["Type"]["Properties"][name].Contains("TemplateColumnEvent") &&
-                        !string.IsNullOrEmpty(DataSource["Type"]["Properties"][name]["TemplateColumnEvent"].Get<string>()))
+                    if (!name.StartsWith("init-actions:"))
                     {
-                        string eventName = DataSource["Type"]["Properties"][name]["TemplateColumnEvent"].Get<string>();
+                        if (name.IndexOf(':') > 0)
+                            name = name.Substring(name.LastIndexOf(':') + 1);
+                        if (DataSource["Type"]["Properties"][name].Contains("TemplateColumnEvent") &&
+                            !string.IsNullOrEmpty(DataSource["Type"]["Properties"][name]["TemplateColumnEvent"].Get<string>()))
+                        {
+                            string eventName = DataSource["Type"]["Properties"][name]["TemplateColumnEvent"].Get<string>();
 
-                        Node colNode = new Node();
-                        colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>();
+                            Node colNode = new Node();
+                            colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>();
 
-                        colNode["Name"].Value = name;
-                        colNode["Value"].Value = idx.Get<string>();
-                        colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>();
-                        colNode["ID"].Value = DataSource["ID"].Get<int>();
-                        colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
+                            colNode["Name"].Value = name;
+                            colNode["Value"].Value = idx.Get<string>();
+                            colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>();
+                            colNode["ID"].Value = DataSource["ID"].Get<int>();
+                            colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
+                            colNode["IsFirstLoad"].Value = isFirstLoad;
 
-                        RaiseSafeEvent(
-                            eventName,
-                            colNode);
+                            RaiseSafeEvent(
+                                eventName,
+                                colNode);
 
-                        if (colNode.Contains("Control"))
-                            ctrls.Controls.Add(colNode["Control"].Get<Control>());
+                            if (colNode.Contains("Control"))
+                                ctrls.Controls.Add(colNode["Control"].Get<Control>());
+                        }
+                        else
+                        {
+                            CreateReadWriteControl(idx, true);
+                        }
                     }
-                    else
-                    {
-                        CreateReadWriteControl(idx, true);
-                    }
+                }
+            }
+            if (isFirstLoad)
+            {
+                if (DataSource.Contains("AfterInitializingEvent"))
+                {
+                    RaiseSafeEvent(
+                        DataSource["AfterInitializingEvent"].Get<string>(),
+                        DataSource);
                 }
             }
         }
@@ -214,6 +232,27 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         {
             if (e.Params["OriginalWebPartID"].Get<int>() == DataSource["OriginalWebPartID"].Get<int>())
                 e.Params["ID"].Value = this.Parent.ID;
+        }
+
+        /**
+         * Level2: Will set Focus to the first TextBox in the form if raised from 'within' the 
+         * current MetaView, or explicitly has its 'OriginalWebPartID' overridden to 
+         * reflect another WebPart ID on the page
+         */
+        [ActiveEvent(Name = "Magix.MetaView.SetFocusToFirstTextBox")]
+        protected void Magix_MetaView_SetFocusToFirstTextBox(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["OriginalWebPartID"].Get<int>() == DataSource["OriginalWebPartID"].Get<int>())
+            {
+                TextBox b = Selector.SelectFirst<TextBox>(ctrls);
+                if (b != null)
+                {
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(b))
+                        .Render();
+                }
+            }
         }
 
         /**

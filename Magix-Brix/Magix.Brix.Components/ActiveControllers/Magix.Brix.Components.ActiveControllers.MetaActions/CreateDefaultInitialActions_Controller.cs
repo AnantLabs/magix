@@ -45,6 +45,20 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SetFocusToFirstTextBox")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.SetFocusToFirstTextBox";
+                    a.EventName = "Magix.MetaView.SetFocusToFirstTextBox";
+                    a.Description = @"Will set focus to the first control on the form if 
+raised from within the same WebPart as the form it's trying to set focu to. Works only with 
+Single Views. Explicitly set the 'OriginalWebPartID' to override to set focus to 
+another WebPart's first TextBox on the Page";
+                    a.StripInput = false;
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.ValidateObjectPropertyMandatory")) == 0)
                 {
                     Action a = new Action();
@@ -622,11 +636,6 @@ PS! This Action can be seen in 'Action' in the 'Magix.Demo.SendEmail' MetaView";
                     v.TypeName = "Magix.Demo.Email";
 
                     MetaView.MetaViewProperty q = new MetaView.MetaViewProperty();
-                    q.Name = "Name";
-                    q.Description = "Full Name ...";
-                    v.Properties.Add(q);
-
-                    q = new MetaView.MetaViewProperty();
                     q.Name = "Email";
                     q.Description = "Email Address ...";
                     v.Properties.Add(q);
@@ -634,6 +643,17 @@ PS! This Action can be seen in 'Action' in the 'Magix.Demo.SendEmail' MetaView";
                     q = new MetaView.MetaViewProperty();
                     q.Name = "Age";
                     q.Description = "Age ...";
+                    v.Properties.Add(q);
+
+                    q = new MetaView.MetaViewProperty();
+                    q.Name = "linkedE2M:Email:Name";
+                    q.Description = "Full Name ...";
+                    v.Properties.Add(q);
+
+                    q = new MetaView.MetaViewProperty();
+                    q.Name = "init-actions:FocusForm";
+                    q.Description = "Actions done during first initial loading of form ...";
+                    q.Action = "Magix.DynamicEvent.SetFocusToFirstTextBox";
                     v.Properties.Add(q);
 
                     q = new MetaView.MetaViewProperty();
