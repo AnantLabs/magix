@@ -100,6 +100,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                 RaiseEvent(
                     "Magix.MetaView.GetWebPartsContainer",
                     xx);
+
                 node["Container"].Value = xx["ID"].Get<string>();
             }
 
@@ -1022,6 +1023,23 @@ Deleting it may break these parts.</p>";
             }
         }
 
+        private void CreateMetaView_BothView_InitActions(MetaView.MetaViewProperty p, Node inputNode)
+        {
+            if (string.IsNullOrEmpty(p.Action))
+                return;
+
+            if (inputNode.Contains("IsFirstLoad"))
+            {
+                // Single edit and needs to defer the action ...
+                inputNode["AfterInitializingEvent"].Value = "Magix.MetaView.RunInitActions";
+                inputNode["AfterInitializingEvent"]["ActionID"].Value = p.ID;
+            }
+            else
+            {
+                ExecuteInitializeActions(p, inputNode["OriginalWebPartID"].Get<int>());
+            }
+        }
+
         [ActiveEvent(Name = "Magix.MetaView.RunInitActions")]
         protected void Magix_MetaView_RunInitActions(object sender, ActiveEventArgs e)
         {
@@ -1032,32 +1050,28 @@ Deleting it may break these parts.</p>";
                         MetaView.MetaViewProperty.SelectByID(
                             e.Params["AfterInitializingEvent"]["ActionID"].Get<int>());
 
-                    Node node = new Node();
-
-                    foreach (string idxS in p.Action.Split('|'))
-                    {
-                        node["ActionSenderName"].Value = p.Name + "-Init";
-                        node["MetaViewName"].Value = p.MetaView.Name;
-                        node["MetaViewTypeName"].Value = p.MetaView.TypeName;
-
-                        // Settings Event Specific Features ...
-                        node["ActionName"].Value = idxS;
-                        node["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
-
-                        RaiseEvent(
-                            "Magix.MetaAction.RaiseAction",
-                            node);
-                    }
+                    ExecuteInitializeActions(p, e.Params["OriginalWebPartID"].Get<int>());
                 }, "Something went wrong while trying to execute Actions associated with your Meta View Init-Property");
         }
 
-        private void CreateMetaView_BothView_InitActions(MetaView.MetaViewProperty p, Node inputNode)
+        private void ExecuteInitializeActions(MetaView.MetaViewProperty p, int origWebPartId)
         {
-            if (string.IsNullOrEmpty(p.Action))
-                return;
+            Node node = new Node();
 
-            inputNode["AfterInitializingEvent"].Value = "Magix.MetaView.RunInitActions";
-            inputNode["AfterInitializingEvent"]["ActionID"].Value = p.ID;
+            foreach (string idxS in p.Action.Split('|'))
+            {
+                node["ActionSenderName"].Value = p.Name + "-Init";
+                node["MetaViewName"].Value = p.MetaView.Name;
+                node["MetaViewTypeName"].Value = p.MetaView.TypeName;
+
+                // Settings Event Specific Features ...
+                node["ActionName"].Value = idxS;
+                node["OriginalWebPartID"].Value = origWebPartId;
+
+                RaiseEvent(
+                    "Magix.MetaAction.RaiseAction",
+                    node);
+            }
         }
 
         /*
@@ -1484,7 +1498,10 @@ Deleting it may break these parts.</p>";
         [ActiveEvent(Name = "Magix.MetaView.GetViewData")]
         protected void Magix_MetaView_GetViewData(object sender, ActiveEventArgs e)
         {
-            MetaView m = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
+            MetaView m = MetaView.SelectFirst(
+                Criteria.Eq(
+                    "Name", 
+                    e.Params["MetaViewName"].Get<string>()));
 
             e.Params["MetaViewTypeName"].Value = m.TypeName;
 
