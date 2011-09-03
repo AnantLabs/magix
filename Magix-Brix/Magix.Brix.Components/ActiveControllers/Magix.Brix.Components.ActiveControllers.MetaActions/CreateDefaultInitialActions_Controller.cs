@@ -761,6 +761,10 @@ Root node will become VERY large after subsequent actions. Be warned ...";
                     m2.Value = "Magix.DynamicEvent.PlaySound";
                     ar.Children.Add(m2);
 
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Params";
+                    ar.Children.Add(m2);
+
                     m3 = new Action.ActionParams();
                     m3.Name = "File";
                     m3.Value = "media/Cool-Breeze.oga";
