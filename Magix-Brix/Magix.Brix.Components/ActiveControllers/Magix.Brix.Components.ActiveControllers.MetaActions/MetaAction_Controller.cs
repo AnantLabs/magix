@@ -77,7 +77,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["CreateEventName"].Value = "Magix.Meta.CreateActionAndEdit";
             node["DeleteColumnEvent"].Value = "Magix.MetaAction.DeleteMetaAction";
 
-
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;

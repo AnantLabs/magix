@@ -151,6 +151,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["CreateEventName"].Value = "Magix.MetaView.CreateMetaViewAndEdit";
             node["DeleteColumnEvent"].Value = "Magix.MetaView.DeleteMetaView";
 
+            node["Criteria"]["C1"]["Name"].Value = "Sort";
+            node["Criteria"]["C1"]["Value"].Value = "Created";
+            node["Criteria"]["C1"]["Ascending"].Value = false;
+
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;

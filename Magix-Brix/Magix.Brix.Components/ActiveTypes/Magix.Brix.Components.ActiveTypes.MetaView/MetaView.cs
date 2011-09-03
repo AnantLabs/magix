@@ -98,11 +98,21 @@ namespace Magix.Brix.Components.ActiveTypes.MetaViews
         public LazyList<MetaViewProperty> Properties { get; set; }
 
         /**
+         * Automatically maintained by Magix to give you a date of creation 
+         * for the record
+         */
+        [ActiveField]
+        public DateTime Created { get; set; }
+
+        /**
          * Overridden to make sure Name is unique, among other things
          */
         public override void Save()
         {
             string name = Name;
+
+            if (ID == 0 || Created == DateTime.MinValue)
+                Created = DateTime.Now;
 
             int idxNo = 2;
             while (CountWhere(
