@@ -67,7 +67,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
          * will not accept an empty value. While for 'full-name', unless 'AcceptHalfName' is given, or 
          * 'AcceptNull' is given, it will either accept only a full name, meaning at least two names 
          * or only one name if 'AcceptHalfName' is true. While unless 'AcceptNull' is null, it will still 
-         * need at least one name, with more than 2 letters within. It will only accept one comma
+         * need at least one name, with more than 2 letters within. It will only accept one comma. If 
+         * the Parameter 'FirstFirst' equals to true, it'll put the First Name BEFORE the Last Name, and 
+         * use no commas
          */
         [ActiveEvent(Name = "Magix.Common.ValidateObjectProperty")]
         protected void Magix_Common_ValidateObjectProperty(object sender, ActiveEventArgs e)
@@ -174,8 +176,13 @@ of the first name(s)...");
                 lastNames += " " + char.ToUpper(idx[0]) + idx.Substring(1).Trim();
             }
 
-            node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Value = 
-                ((lastNames.Length > 0 ? (lastNames + ", ") : "") + firstNames).Replace("  ", " ").Trim();
+            if (node.Contains("FirstFirst") &&
+                node["FirstFirst"].Get<bool>())
+                node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Value =
+                    ((firstNames.Length > 0 ? (firstNames + " ") : "") + lastNames).Replace("  ", " ").Trim();
+            else
+                node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Value =
+                    ((lastNames.Length > 0 ? (lastNames + ", ") : "") + firstNames).Replace("  ", " ").Trim();
         }
 
         private void ValidateURL(Node node)

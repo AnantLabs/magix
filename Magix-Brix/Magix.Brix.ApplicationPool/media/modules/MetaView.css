@@ -32,13 +32,16 @@ input[type=text].meta-view-form-element
 }
 
 textarea.meta-view-form-textbox,
+input[type=text].meta-view-form-autocompleter,
 input[type=text].meta-view-form-textbox
 {
 	width:100%;
 	min-width:100%;
 	margin-bottom:18px;
+	margin-top:0;
 
 	font-size:28px;
+	height:32px;
 	border-left:none 0;
 	border-right:none 0;
 	border-top:solid 1px #999;
@@ -54,8 +57,10 @@ input[type=text].meta-view-form-textbox
 }
 
 textarea.meta-view-form-textbox:focus,
+input[type=text].meta-view-form-autocompleter:focus,
 input[type=text].meta-view-form-textbox:focus,
 textarea.meta-view-form-textbox:hover,
+input[type=text].meta-view-form-autocompleter:hover,
 input[type=text].meta-view-form-textbox:hover
 {
 	background-color:rgba(255, 255, 255, 1);
@@ -75,5 +80,68 @@ input[type=button].action-button
 	margin-right:0;
 	margin-left:10px;
 	min-width:110px;
+}
+
+.meta-view-form-autocompleter-wrp
+{
+	width:100%;
+	position:relative;
+	overflow:visible;
+}
+
+.mux-auto-completer-popup-wrapper
+{
+	position:absolute;
+	top:36px;
+	width:100%;
+	height:inherit;
+	overflow:visible;
+	min-height:0px;
+	-moz-border-radius:0 0 15px 15px;
+	-webkit-border-radius:0 0 15px 15px;
+	border-radius:0 0 15px 15px;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+}
+
+.mux-auto-completer-popup
+{
+	height:auto;
+	overflow:visible;
+	margin:18px 40px 18px 40px;
+}
+
+.mux-auto-completer-item
+{
+	display:block;
+	width:inherit;
+	font-size:20px;
+	height:26px;
+	text-decoration:none;
+	padding:3px 40px 7px 40px;
+	background-color:rgba(0,0,0,0);
+	-moz-transition-property:background-color;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:1s;
+	transition-property:background-color;
+	transition-duration:1s;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+
+.mux-auto-completer-item:hover
+{
+	-moz-transition-property:background-color;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:1s;
+	transition-property:background-color;
+	transition-duration:1s;
+	background-color:rgba(0,0,0,.1);
 }
 

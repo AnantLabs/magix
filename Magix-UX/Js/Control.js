@@ -242,6 +242,9 @@
             case 'esc':
               this.element.observe('keydown', this.onCheckEsc, this);
               break;
+            case 'keypress':
+              this.element.observe('keypress', this.onKeyPress, this);
+              break;
             default:
               // This one will prioritize the third event parameter, then the ctrl option and finally
               // the this.element if the two previous was undefined or not given
@@ -268,6 +271,30 @@
         this.callback('esc');
         return false;
       }
+    },
+
+    onKeyPress: function(evt) {
+      if(this.element.value == this._xiTmrVal) {
+        return;
+      }
+      this._xiTmrVal = this.element.value;
+      var T = this;
+      if(!this._xiTmr) {
+        this._xiTmr = setTimeout(
+          function() {
+            T.callBackForKeyPress();
+          }, 500);
+      } else {
+        clearTimeout(this._xiTmr);
+        this._xiTmr = setTimeout(
+          function() {
+            T.callBackForKeyPress();
+          }, 500);
+      }
+    },
+
+    callBackForKeyPress: function() {
+      this.onEvent('keypress', false);
     },
 
     getValue: function() {
@@ -316,6 +343,7 @@
       if (this._oldValue) {
         delete this._oldValue;
       }
+      this._xiTmr = null;
       eval(resp);
     },
 

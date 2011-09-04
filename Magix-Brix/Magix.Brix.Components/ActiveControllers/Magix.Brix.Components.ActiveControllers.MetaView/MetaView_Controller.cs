@@ -1346,10 +1346,21 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Level3:  Will create a 'linkedE2M' control type depending upon the colon-prefix of the column. For instance, if given
-         * linkedE2M:Email:Name it will create a linked textbox, which is linked in its 'Name' field, which is linked 
-         * towards another field on the same form, called 'Email', such that when the Email is typed into the Email 
-         * field, Magix will automatically try to parse the name of the person from his email address
+         * Level3:  Will create a; 'linkedE2M' control type depending upon the colon-prefix of the column. For instance, 
+         * if given linkedE2M:Email:Name it will create a linked textbox, which is linked in its 'Name' field, 
+         * which is linked towards another field on the same form, called 'Email', such that when the Email 
+         * is typed into the Email field, Magix will automatically try to parse the name of the person from 
+         * his email address. Or b; 'init-actions' which will basically just call all Actions in Property 
+         * during the initial load of the form. This is where you'd like to put stuff such as initialization, maybe
+         * inclusion of custom CSS files, etc. Or c; autocompleter, which will need you to point to a table 
+         * and a property name within that table, e.g. autocompleter:Customer.Name:Name will do a lookup 
+         * into the Customer Meta Objects, find all Customers that have a 'Name' property which contains 
+         * the search query in the textbox, and return as a list for the end-user to choose from, think Facebook 
+         * search. If you type e.g. 'hans' into the textbox, it'll return all hansen, johansen and so on as
+         * items for the user to select. It will never show more than 10 items at the time. PS! Although tempting,
+         * do NOT USE the autocompleter for huge tables, meaning Meta Objects which you've got thousands of items
+         * of. Due to some restrictions in the current internal algorithms, such a thing would make your 
+         * application monstrously slow
          */
         [ActiveEvent(Name = "Magix.MetaView.MetaView_Single_GetColonTemplateColumn")]
         protected void Magix_MetaView_MetaView_Single_GetColonTemplateColumn(object sender, ActiveEventArgs e)
@@ -1374,9 +1385,121 @@ Deleting it may break these parts.</p>";
                 case "linkedE2M":
                     CreateMetaView_SingleView_Linked(id, p, e.Params);
                     break;
+                case "autocompleter":
+                    CreateMetaView_SingleView_Autocompleter(id, p, e.Params);
+                    break;
                 default:
                     // Assuming some other bugger will handle this guy ...
                     break;
+            }
+        }
+
+        // TODO: Needs SIGNIFICANT refactoring, but dependent upon sub criterias in data adapter ... :(
+        // Might theoreticaly run through gazillion of records every .1 seconds or something ...!!
+        private void CreateMetaView_SingleView_Autocompleter(int id, MetaView.MetaViewProperty prop, Node node)
+        {
+            Panel wrp = new Panel();
+            wrp.CssClass = "meta-view-form-autocompleter-wrp";
+
+            Panel autoW = new Panel();
+            autoW.CssClass = "mux-auto-completer-popup-wrapper";
+            autoW.Style[Styles.display] = "none";
+
+            Panel auto = new Panel();
+            auto.CssClass = "mux-auto-completer-popup";
+
+            autoW.Controls.Add(auto);
+
+            wrp.Controls.Add(autoW);
+
+            TextBox txtBox = new TextBox();
+            txtBox.PlaceHolder = prop.Description;
+            txtBox.ToolTip = txtBox.PlaceHolder;
+            txtBox.Info = prop.Name.Substring(prop.Name.LastIndexOf(':') + 1);
+            txtBox.ID = txtBox.Info;
+            wrp.ID = "wrp-" + txtBox.ID;
+            txtBox.CssClass = "meta-view-form-element meta-view-form-autocompleter";
+
+            txtBox.BlurEffect = new EffectFadeOut(autoW, 250)
+                .JoinThese(new EffectRollUp());
+
+            txtBox.FocusedEffect = new EffectFadeIn(autoW, 250)
+                .JoinThese(new EffectRollDown());
+
+            txtBox.Load +=
+                delegate
+                {
+                    CreateAutoCompleterItems(prop, auto, txtBox);
+                };
+
+            txtBox.KeyPress +=
+                delegate
+                {
+                    if (txtBox.Text == auto.Info && txtBox.Text != "")
+                        return; // We do get some 'dead keys' here too ...
+
+                    auto.Controls.Clear();
+                    auto.ReRender();
+
+                    auto.Info = "";
+
+                    CreateAutoCompleterItems(prop, auto, txtBox);
+                };
+
+            wrp.Controls.Add(txtBox);
+
+            node["Control"].Value = wrp;
+        }
+
+        private static void CreateAutoCompleterItems(MetaView.MetaViewProperty prop, Panel auto, TextBox txtBox)
+        {
+            if (!string.IsNullOrEmpty(auto.Info))
+                return;
+            if (txtBox.Text.Trim().Length > 3)
+            {
+                string objStr = prop.Name.Split(':')[1];
+                string propertyName = objStr.Substring(objStr.LastIndexOf('.') + 1);
+                string objectType = objStr.Substring(0, objStr.LastIndexOf('.'));
+
+                // TODO: SERIOUSLY needs refactoring since first of all it'll only check
+                // towards the last thousand items, secondly because it's INSANELY in-efficient
+                // the way it's written now ...
+                // Though refactoring is dependent upon feature in Data Adapter...
+                int idxNo = 0;
+                foreach (MetaObject idx in MetaObject.Select(
+                    Criteria.Eq("TypeName", objectType),
+                    Criteria.Range(0, 1000, "Created", false)))
+                {
+                    MetaObject.Property p2 = idx.Values.Find(
+                        delegate(MetaObject.Property idx2)
+                        {
+                            return idx2.Name == propertyName;
+                        });
+                    if (p2 != null)
+                    {
+                        if (p2.Value.ToLower().Contains(txtBox.Text.Trim().ToLower()))
+                        {
+                            // Chicked Dinner ...!
+                            LinkButton btn = new LinkButton();
+                            btn.Text = p2.Value;
+                            btn.CssClass = "mux-auto-completer-item";
+                            btn.Click +=
+                                delegate
+                                {
+                                    txtBox.Text = btn.Text;
+                                    txtBox.Focus();
+                                    txtBox.Select();
+                                    auto.Info = btn.Text;
+                                    auto.Controls.Clear();
+                                    auto.ReRender();
+                                };
+                            auto.Controls.Add(btn);
+
+                            if (++idxNo >= 10)
+                                break;
+                        }
+                    }
+                }
             }
         }
 

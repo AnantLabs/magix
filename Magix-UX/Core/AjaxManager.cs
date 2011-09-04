@@ -189,6 +189,9 @@ namespace Magix.UX
                     return idx.ClientID == idOfControl;
                 });
 
+            if (ctrl == null)
+                throw new ApplicationException("There seems to be something wrong with the way you [re-] load controls in your page. The control that raised this event, doesn't exist, which means it was never re-created on the server on the second request ...");
+
             // Getting the name of the event the control raised
             string eventName = ((Page)HttpContext.Current.CurrentHandler).Request.Params["__MUX_EVENT"];
 
