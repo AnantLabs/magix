@@ -1404,7 +1404,6 @@ Deleting it may break these parts.</p>";
 
             Panel autoW = new Panel();
             autoW.CssClass = "mux-auto-completer-popup-wrapper";
-            autoW.Style[Styles.display] = "none";
 
             Panel auto = new Panel();
             auto.CssClass = "mux-auto-completer-popup";
@@ -1420,12 +1419,6 @@ Deleting it may break these parts.</p>";
             txtBox.ID = txtBox.Info;
             wrp.ID = "wrp-" + txtBox.ID;
             txtBox.CssClass = "meta-view-form-element meta-view-form-autocompleter";
-
-            txtBox.BlurEffect = new EffectFadeOut(autoW, 250)
-                .JoinThese(new EffectRollUp());
-
-            txtBox.FocusedEffect = new EffectFadeIn(autoW, 250)
-                .JoinThese(new EffectRollDown());
 
             txtBox.Load +=
                 delegate
@@ -1464,6 +1457,8 @@ Deleting it may break these parts.</p>";
         {
             if (!string.IsNullOrEmpty(auto.Info))
                 return;
+
+            int controlCount = 0;
 
             if (txtBox.Text.Trim().Length > 3)
             {
@@ -1529,36 +1524,7 @@ Deleting it may break these parts.</p>";
                                     img.Click +=
                                         delegate
                                         {
-                                            txtBox.Text = btn.Text;
-                                            txtBox.Focus();
-                                            txtBox.Select();
-                                            auto.Info = btn.Text;
-                                            auto.Controls.Clear();
-                                            auto.ReRender();
-
-                                            if (!string.IsNullOrEmpty(prop.Action))
-                                            {
-                                                ExecuteSafely(
-                                                    delegate
-                                                    {
-                                                        Node node = new Node();
-
-                                                        foreach (string idxS in prop.Action.Split('|'))
-                                                        {
-                                                            node["ActionSenderName"].Value = prop.Name + "-Init";
-                                                            node["MetaViewName"].Value = prop.MetaView.Name;
-                                                            node["MetaViewTypeName"].Value = prop.MetaView.TypeName;
-
-                                                            // Settings Event Specific Features ...
-                                                            node["ActionName"].Value = idxS;
-                                                            node["OriginalWebPartID"].Value = node["OriginalWebPartID"].Value;
-
-                                                            RaiseEvent(
-                                                                "Magix.MetaAction.RaiseAction",
-                                                                node);
-                                                        }
-                                                    }, "Something went wrong while trying to execute Actions associated with your Meta View Init-Property");
-                                            }
+                                            AutoCompleterItemSelected(prop, auto, txtBox, btn);
                                         };
                                     auto.Controls.Add(img);
                                 }
@@ -1566,12 +1532,7 @@ Deleting it may break these parts.</p>";
                             btn.Click +=
                                 delegate
                                 {
-                                    txtBox.Text = btn.Text;
-                                    txtBox.Focus();
-                                    txtBox.Select();
-                                    auto.Info = btn.Text;
-                                    auto.Controls.Clear();
-                                    auto.ReRender();
+                                    AutoCompleterItemSelected(prop, auto, txtBox, btn);
                                 };
                             auto.Controls.Add(btn);
 
@@ -1580,6 +1541,50 @@ Deleting it may break these parts.</p>";
                         }
                     }
                 }
+                controlCount = idxNo;
+            }
+
+            // Some bling ... ;)
+            new EffectSize(auto, 250, -1, 36 * controlCount)
+                .Render();
+        }
+
+        private void AutoCompleterItemSelected(MetaView.MetaViewProperty prop, Panel auto, TextBox txtBox, LinkButton btn)
+        {
+            txtBox.Text = btn.Text;
+            txtBox.Focus();
+            txtBox.Select();
+            auto.Info = btn.Text;
+            auto.Controls.Clear();
+            auto.ReRender();
+
+            // Some bling ... ;)
+            new EffectSize(auto, 250, -1, 0)
+                .Render();
+
+
+            if (!string.IsNullOrEmpty(prop.Action))
+            {
+                ExecuteSafely(
+                    delegate
+                    {
+                        Node node = new Node();
+
+                        foreach (string idxS in prop.Action.Split('|'))
+                        {
+                            node["ActionSenderName"].Value = prop.Name + "-Init";
+                            node["MetaViewName"].Value = prop.MetaView.Name;
+                            node["MetaViewTypeName"].Value = prop.MetaView.TypeName;
+
+                            // Settings Event Specific Features ...
+                            node["ActionName"].Value = idxS;
+                            node["OriginalWebPartID"].Value = node["OriginalWebPartID"].Value;
+
+                            RaiseEvent(
+                                "Magix.MetaAction.RaiseAction",
+                                node);
+                        }
+                    }, "Something went wrong while trying to execute Actions associated with your Meta View Init-Property");
             }
         }
 
