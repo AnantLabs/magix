@@ -1524,7 +1524,7 @@ Deleting it may break these parts.</p>";
                                     img.Click +=
                                         delegate
                                         {
-                                            AutoCompleterItemSelected(prop, auto, txtBox, btn);
+                                            AutoCompleterItemSelected(prop, auto, txtBox, btn, idx.ID);
                                         };
                                     auto.Controls.Add(img);
                                 }
@@ -1532,7 +1532,7 @@ Deleting it may break these parts.</p>";
                             btn.Click +=
                                 delegate
                                 {
-                                    AutoCompleterItemSelected(prop, auto, txtBox, btn);
+                                    AutoCompleterItemSelected(prop, auto, txtBox, btn, idx.ID);
                                 };
                             auto.Controls.Add(btn);
 
@@ -1549,7 +1549,7 @@ Deleting it may break these parts.</p>";
                 .Render();
         }
 
-        private void AutoCompleterItemSelected(MetaView.MetaViewProperty prop, Panel auto, TextBox txtBox, LinkButton btn)
+        private void AutoCompleterItemSelected(MetaView.MetaViewProperty prop, Panel auto, TextBox txtBox, LinkButton btn, int id)
         {
             txtBox.Text = btn.Text;
             txtBox.Focus();
@@ -1575,6 +1575,7 @@ Deleting it may break these parts.</p>";
                             node["ActionSenderName"].Value = prop.Name + "-Init";
                             node["MetaViewName"].Value = prop.MetaView.Name;
                             node["MetaViewTypeName"].Value = prop.MetaView.TypeName;
+                            node["AutoCompleterSelectedItemID"].Value = id;
 
                             // Settings Event Specific Features ...
                             node["ActionName"].Value = idxS;

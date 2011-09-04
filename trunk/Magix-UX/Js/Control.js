@@ -244,6 +244,7 @@
               break;
             case 'keypress':
               this.element.observe('keypress', this.onKeyPress, this);
+              this.element.observe('keyup', this.onKeyUp, this);
               break;
             default:
               // This one will prioritize the third event parameter, then the ctrl option and finally
@@ -273,24 +274,33 @@
       }
     },
 
+    onKeyUp: function(evt) {
+      /*var charCode = evt.which ? evt.which : evt.keyCode;
+      if(charCode == 8 || charCode == 46 || charCode == 32) {
+        this.onKeyPress();
+      }*/
+    },
+
     onKeyPress: function(evt) {
-      if(this.element.value == this._xiTmrVal) {
-        return;
-      }
-      this._xiTmrVal = this.element.value;
       var T = this;
-      if(!this._xiTmr) {
-        this._xiTmr = setTimeout(
-          function() {
-            T.callBackForKeyPress();
-          }, 500);
-      } else {
-        clearTimeout(this._xiTmr);
-        this._xiTmr = setTimeout(
-          function() {
-            T.callBackForKeyPress();
-          }, 500);
-      }
+      setTimeout(function() {
+        if(T.element.value == T._xiTmrVal) {
+          return;
+        }
+        T._xiTmrVal = T.element.value;
+        if(!T._xiTmr) {
+          T._xiTmr = setTimeout(
+            function() {
+              T.callBackForKeyPress();
+            }, 500);
+        } else {
+          clearTimeout(T._xiTmr);
+          T._xiTmr = setTimeout(
+            function() {
+              T.callBackForKeyPress();
+            }, 500);
+        }
+      }, 1);
     },
 
     callBackForKeyPress: function() {
