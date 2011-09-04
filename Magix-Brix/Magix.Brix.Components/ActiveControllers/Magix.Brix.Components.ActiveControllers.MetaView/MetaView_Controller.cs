@@ -1358,7 +1358,7 @@ Deleting it may break these parts.</p>";
          * the search query in the textbox, and return as a list for the end-user to choose from, think Facebook 
          * search. If you type e.g. 'hans' into the textbox, it'll return all hansen, johansen and so on as
          * items for the user to select. It will never show more than 10 items at the time. PS! Although tempting,
-         * do NOT USE the autocompleter for huge tables, meaning Meta Objects which you've got thousands of items
+         * do NOT USE the autocompleter for huge tables, meaning Meta Objects which you've got more than 500 items
          * of. Due to some restrictions in the current internal algorithms, such a thing would make your 
          * application monstrously slow
          */
@@ -1435,8 +1435,16 @@ Deleting it may break these parts.</p>";
             txtBox.KeyPress +=
                 delegate
                 {
+                    if (auto.Controls.Count > 0 && txtBox.Text == "")
+                    {
+                        auto.Controls.Clear();
+                        auto.ReRender();
+                        return;
+                    }
                     if (txtBox.Text == auto.Info && txtBox.Text != "")
+                    {
                         return; // We do get some 'dead keys' here too ...
+                    }
 
                     auto.Controls.Clear();
                     auto.ReRender();
@@ -1459,7 +1467,15 @@ Deleting it may break these parts.</p>";
             {
                 string objStr = prop.Name.Split(':')[1];
                 string propertyName = objStr.Substring(objStr.LastIndexOf('.') + 1);
+                string imgPropertyName = null;
+                if (propertyName.Contains(","))
+                {
+                    imgPropertyName = propertyName.Split(',')[1].Trim();
+                    propertyName = propertyName.Split(',')[0].Trim();
+                }
                 string objectType = objStr.Substring(0, objStr.LastIndexOf('.'));
+
+                string[] queries = txtBox.Text.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 // TODO: SERIOUSLY needs refactoring since first of all it'll only check
                 // towards the last thousand items, secondly because it's INSANELY in-efficient
@@ -1468,7 +1484,7 @@ Deleting it may break these parts.</p>";
                 int idxNo = 0;
                 foreach (MetaObject idx in MetaObject.Select(
                     Criteria.Eq("TypeName", objectType),
-                    Criteria.Range(0, 1000, "Created", false)))
+                    Criteria.Range(0, 500, "Created", false)))
                 {
                     MetaObject.Property p2 = idx.Values.Find(
                         delegate(MetaObject.Property idx2)
@@ -1477,12 +1493,50 @@ Deleting it may break these parts.</p>";
                         });
                     if (p2 != null)
                     {
-                        if (p2.Value.ToLower().Contains(txtBox.Text.Trim().ToLower()))
+                        bool hasMatch = false;
+                        foreach (string idx22 in queries)
+                        {
+                            if (p2.Value.Contains(idx22.ToLowerInvariant()))
+                            {
+                                hasMatch = true;
+                            }
+                            else
+                            {
+                                hasMatch = false;
+                                break;
+                            }
+                        }
+                        if (hasMatch)
                         {
                             // Chicked Dinner ...!
                             LinkButton btn = new LinkButton();
                             btn.Text = p2.Value;
                             btn.CssClass = "mux-auto-completer-item";
+                            if (imgPropertyName != null)
+                            {
+                                MetaObject.Property p3 = idx.Values.Find(
+                                    delegate(MetaObject.Property idx2)
+                                    {
+                                        return idx2.Name == imgPropertyName;
+                                    });
+                                if (p3 != null)
+                                {
+                                    Image img = new Image();
+                                    img.ImageUrl = p3.Value; auto.Controls.Add(img);
+                                    img.CssClass = "mux-auto-completer-image";
+                                    img.Click +=
+                                        delegate
+                                        {
+                                            txtBox.Text = btn.Text;
+                                            txtBox.Focus();
+                                            txtBox.Select();
+                                            auto.Info = btn.Text;
+                                            auto.Controls.Clear();
+                                            auto.ReRender();
+                                        };
+                                    auto.Controls.Add(img);
+                                }
+                            }
                             btn.Click +=
                                 delegate
                                 {
