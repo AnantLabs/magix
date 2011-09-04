@@ -155,11 +155,11 @@ input[type=button].action-button
 	height:36px;
 	z-index:100;
 	position:absolute;
-	-moz-transition-property:margin-right, width, height;
+	-moz-transition-property:margin-right, width, height, margin-top;
 	-moz-transition-duration:0.2s;
-	-webkit-transition-property:margin-right, width, height;
+	-webkit-transition-property:margin-right, width, height, margin-top;
 	-webkit-transition-duration:0.2s;
-	transition-property:margin-right, width, height;
+	transition-property:margin-right, width, height, margin-top;
 	transition-duration:0.2s;
 	cursor:pointer;
 }
@@ -167,16 +167,17 @@ input[type=button].action-button
 
 .mux-auto-completer-image:hover
 {
-	-moz-transition-property:margin-right, width, height;
+	-moz-transition-property:margin-right, width, height, margin-top;
 	-moz-transition-duration:0.2s;
-	-webkit-transition-property:margin-right, width, height;
+	-webkit-transition-property:margin-right, width, height, margin-top;
 	-webkit-transition-duration:0.2s;
-	transition-property:margin-right, width, height;
+	transition-property:margin-right, width, height, margin-top;
 	transition-duration:0.2s;
 	z-index:101;
 	width:230px;
 	height:324px;
 	margin-right:-230px;
+	margin-top:-90px;
 }
 
 
