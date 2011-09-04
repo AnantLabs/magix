@@ -280,6 +280,15 @@
  }
 }
 
+@-moz-keyframes bounce {
+ from {
+   left: 0px;
+ }
+ to {
+   left: 50px;
+ }
+}
+
 .Header-Bouncing
 {
 	position:relative;
@@ -293,9 +302,22 @@
 	-webkit-animation-duration: 4s;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: alternate;
+	-moz-animation-name: bounce;
+	-moz-animation-duration: 4s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
 }
 
 @-webkit-keyframes fire {
+ from {
+   color: rgba(255, 0, 0, 1);
+ }
+ to {
+   color: rgba(255, 200, 0, 1);
+ }
+}
+
+@-moz-keyframes fire {
  from {
    color: rgba(255, 0, 0, 1);
  }
