@@ -12,18 +12,30 @@ MUX.linkTextBoxes = function(source, dest) {
     return;
   }
   this.dest = MUX.$(dest);
-  this.source.observe('keyup', MUX.linkedTextChanged, this);
+  this.source.observe('keypress', 
+    function() {
+      setTimeout(function() {
+        MUX.linkedTextChanged();
+      }, 1)}, this);
+  this.source.observe('blur', MUX.linkedTextChanged, this);
   var T = this;
   MUX.C(this.source.id).preDestroyer = function() {
-    T.source.stopObserving('keyup', MUX.linkedTextChanged, T);
+    T.source.stopObserving('keypress', MUX.linkedTextChanged, T);
+    T.source.stopObserving('blur', MUX.linkedTextChanged, T);
   }
 };
 
 MUX.linkedTextChanged = function(e) {
-  if(!this.source || !this.source.value) {
+  if(!this.source) {
     return;
   }
   var txt = this.source.value;
+
+  if(!txt) {
+    this.dest.value = '';
+    return;
+  }
+
   // Making sure the '@' parts are gone ...
   if(txt.indexOf('@') > 0) {
     txt = txt.substring(0, txt.indexOf('@'));
