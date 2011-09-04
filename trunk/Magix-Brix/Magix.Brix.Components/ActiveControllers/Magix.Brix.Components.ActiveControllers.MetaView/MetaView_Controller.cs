@@ -552,7 +552,7 @@ Deleting it may break these parts.</p>";
 
             Panel pnl = new Panel();
             pnl.CssClass = "action-wrapper";
-            pnl.ToolTip = "Click to append an Action to this Property of the Form. Effectively rendering the contro a button, that'll raise whatever action(s) you choose to give it ...";
+            pnl.ToolTip = "Click to append an Action to this Property of the Form. Actions are being treated differently according to the type of control, but often they'll need some sort of User Interaction to be triggered. Often they will create Buttons ...";
             pnl.Click +=
                 delegate
                 {
@@ -1360,7 +1360,8 @@ Deleting it may break these parts.</p>";
          * items for the user to select. It will never show more than 10 items at the time. PS! Although tempting,
          * do NOT USE the autocompleter for huge tables, meaning Meta Objects which you've got more than 500 items
          * of. Due to some restrictions in the current internal algorithms, such a thing would make your 
-         * application monstrously slow
+         * application monstrously slow. If there are Actions associated with an autocomplater, they will be 
+         * raised with the user selects an item from the drop down list, and only then
          */
         [ActiveEvent(Name = "Magix.MetaView.MetaView_Single_GetColonTemplateColumn")]
         protected void Magix_MetaView_MetaView_Single_GetColonTemplateColumn(object sender, ActiveEventArgs e)
@@ -1459,10 +1460,11 @@ Deleting it may break these parts.</p>";
             node["Control"].Value = wrp;
         }
 
-        private static void CreateAutoCompleterItems(MetaView.MetaViewProperty prop, Panel auto, TextBox txtBox)
+        private void CreateAutoCompleterItems(MetaView.MetaViewProperty prop, Panel auto, TextBox txtBox)
         {
             if (!string.IsNullOrEmpty(auto.Info))
                 return;
+
             if (txtBox.Text.Trim().Length > 3)
             {
                 string objStr = prop.Name.Split(':')[1];
@@ -1533,6 +1535,30 @@ Deleting it may break these parts.</p>";
                                             auto.Info = btn.Text;
                                             auto.Controls.Clear();
                                             auto.ReRender();
+
+                                            if (!string.IsNullOrEmpty(prop.Action))
+                                            {
+                                                ExecuteSafely(
+                                                    delegate
+                                                    {
+                                                        Node node = new Node();
+
+                                                        foreach (string idxS in prop.Action.Split('|'))
+                                                        {
+                                                            node["ActionSenderName"].Value = prop.Name + "-Init";
+                                                            node["MetaViewName"].Value = prop.MetaView.Name;
+                                                            node["MetaViewTypeName"].Value = prop.MetaView.TypeName;
+
+                                                            // Settings Event Specific Features ...
+                                                            node["ActionName"].Value = idxS;
+                                                            node["OriginalWebPartID"].Value = node["OriginalWebPartID"].Value;
+
+                                                            RaiseEvent(
+                                                                "Magix.MetaAction.RaiseAction",
+                                                                node);
+                                                        }
+                                                    }, "Something went wrong while trying to execute Actions associated with your Meta View Init-Property");
+                                            }
                                         };
                                     auto.Controls.Add(img);
                                 }
