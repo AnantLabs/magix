@@ -45,6 +45,24 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level2: Sets the given setting 'Name' to the given value 'Value' for the currently
+         * logged in User
+         */
+        [ActiveEvent(Name = "Magix.Common.SetUserSetting")]
+        protected void Magix_Common_SetUserSetting(object sender, ActiveEventArgs e)
+        {
+            User.Current.SetSetting<string>(
+                e.Params["Name"].Get<string>(),
+                e.Params["Value"].Get<string>());
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.ScrollClientToTop")]
+        protected void Magix_MetaView_ScrollClientToTop(object sender, ActiveEventArgs e)
+        {
+            AjaxManager.Instance.WriterAtBack.Write("window.scrollTo(0, 0);");
+        }
+
+        /**
          * Level2: Will validate the given object, sent from a MetaView SingleView, such that it conforms 
          * in its 'PropertyName' value towards the 'Type' parameter, which can either be 'email' or
          * 'number'. Meaning if the MetaView has a Property called 'Email', then if the property 
@@ -320,18 +338,6 @@ can only contain numerical characters to be legal",
             {
                 throw new ArgumentException("Opps, that doesn't entirely look like a valid Email, does it ...?");
             }
-        }
-
-        /**
-         * Sets the given setting 'Name' to the given value 'Value' for the currently
-         * logged in User
-         */
-        [ActiveEvent(Name = "Magix.Common.SetUserSetting")]
-        protected void Magix_Common_SetUserSetting(object sender, ActiveEventArgs e)
-        {
-            User.Current.SetSetting<string>(
-                e.Params["Name"].Get<string>(),
-                e.Params["Value"].Get<string>());
         }
 
         /**
