@@ -45,6 +45,19 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ScrollClientToTop")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ScrollClientToTop";
+                    a.EventName = "Magix.MetaView.ScrollClientToTop";
+                    a.Description = @"Will scroll the browser all the way to the top. 
+Useful for forms which are longer than the fold, when you submit them, and want to scroll to the 
+top to display some message";
+                    a.StripInput = true;
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.LoadObjectIntoForm")) == 0)
                 {
                     Action a = new Action();
@@ -56,6 +69,49 @@ which will handle it and load up the values for the specific Meta Object into th
 editor controls";
                     a.StripInput = false;
                     a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetUserSetting")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.GetUserSetting";
+                    a.EventName = "Magix.Common.GetUserSetting";
+                    a.Description = @"Will return the 'Name' User Setting, or the 'Default' if it 
+doesn't exist into the 'Value' return value. User settings are dependent upon the user being logged 
+in and are unique per User";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Name";
+                    m.Value = "TheNameOfYourSetting";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Default";
+                    m.Value = "TheDefaultValueOfYourSetting";
+                    a.Params.Add(m);
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SetUserSetting")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.SetUserSetting";
+                    a.EventName = "Magix.Common.SetUserSetting";
+                    a.Description = @"Sets the 'Name' User setting to the 'Value' parameter's 
+value";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Name";
+                    m.Value = "TheNameOfYourSetting";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Value";
+                    m.Value = "The_NEW_DefaultValueOfYourSetting";
+                    a.Params.Add(m);
                 }
 
                 if (Action.CountWhere(
@@ -907,7 +963,9 @@ and set its name to another MetaView, then that MetaView will be rendered instea
                     a.Name = "Magix.Demo.ViewCarsInPopup";
                     a.EventName = "Magix.MetaView.ViewMetaViewMultiMode";
                     a.Description = @"Will load up any Magix.Demo.Car objects 
-into a MultiView form, within a popup window, using the Magix.Demo.ImportCars MetaView";
+into a MultiView form, within a popup window, using the Magix.Demo.ImportCars MetaView. 
+If there are no items you can run the 'Magix.DynamicEvent.ImportCSVFile' action, which 
+by default will point towards a CSV file which contains 'Cars' data";
                     a.StripInput = false;
 
                     Action.ActionParams m = new Action.ActionParams();

@@ -103,7 +103,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     WebPart.WebPartSetting s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
-<img src=""media/images/magix-logo.png"" style=""margin-left:20px;float:right;display:block;width:200px;"" alt=""Magix, where Dreams come Through ...""/>
+<img src=""media/images/magix-logo.png"" class=""horus-ra-image"" style=""margin-left:20px;float:right;display:block;width:200px;"" alt=""Magix, where Dreams come Through ...""/>
 <p>By default a user has been created with the username/password of admin/admin</p>
 <p>You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
 <h3>What is Magix ...?</h3>

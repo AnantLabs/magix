@@ -1386,6 +1386,37 @@ li.tree-item-class span.mux-tree-icon
 }
 
 
+@-webkit-keyframes rotate-ra {
+ from {
+   -webkit-transform: scale(1) rotate(0deg);
+ }
+ to {
+   -webkit-transform: scale(1) rotate(360deg);
+ }
+}
+
+@-moz-keyframes rotate-ra {
+ from {
+   -moz-transform: scale(1) rotate(0deg);
+ }
+ to {
+   -moz-transform: scale(1) rotate(360deg);
+ }
+}
+
+.horus-ra-image
+{
+	-webkit-animation-name: rotate-ra;
+	-webkit-animation-duration: 55s;
+	-webkit-animation-direction: normal;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-name: rotate-ra;
+	-moz-animation-duration: 55s;
+	-moz-animation-direction: normal;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: ease-in-out;
+}
 
 
 
