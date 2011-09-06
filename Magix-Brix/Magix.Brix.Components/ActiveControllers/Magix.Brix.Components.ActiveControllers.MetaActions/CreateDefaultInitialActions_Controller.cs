@@ -45,6 +45,20 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.LoadObjectIntoForm")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.LoadObjectIntoForm";
+                    a.EventName = "Magix.MetaView.LoadObjectIntoForm";
+                    a.Description = @"Will assume a Meta Object is just loaded correctly
+into the Node structure somehow, and pass it on to any matching TypeName Single Views 
+which will handle it and load up the values for the specific Meta Object into their specific 
+editor controls";
+                    a.StripInput = false;
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.SetFocusToFirstTextBox")) == 0)
                 {
                     Action a = new Action();
@@ -782,14 +796,14 @@ Root node will become VERY large after subsequent actions. Be warned ...";
                     a.EventName = "Magix.Common.GetSingleMetaObject";
                     a.Description = @"Will put every property from the given Meta Object, 
 into the given Node, with the name/value pair as the node name/value parts, 
-assuming they're all strings. Copy this Action, and make sure you _CHANGE_ its MetaObjectID
+assuming they're all strings. Copy this Action, and make sure you _CHANGE_ its ID
 towards pointing to the ID of a real existing Meta Object, to fill in values from one of
 your Meta Objects into a Node, maybe before sending the node into another even, using
 MultiActions or something ...";
                     a.StripInput = true;
 
                     Action.ActionParams m = new Action.ActionParams();
-                    m.Name = "MetaObjectID";
+                    m.Name = "ID";
                     m.Value = "-1";
                     m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);
@@ -805,11 +819,11 @@ MultiActions or something ...";
                     a.Name = "Magix.DynamicEvent.SetMetaObjectValue";
                     a.EventName = "Magix.MetaType.SetMetaObjectValue";
                     a.Description = @"Will set the value of the given MetaObject 
-[MetaObjectID] to the Value of your 'Value' node at the 'Name' property.";
+[ID] to the Value of your 'Value' node at the 'Name' property.";
                     a.StripInput = false;
 
                     Action.ActionParams m = new Action.ActionParams();
-                    m.Name = "MetaObjectID";
+                    m.Name = "ID";
                     m.Value = "-1";
                     m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);

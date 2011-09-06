@@ -82,6 +82,13 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
                 }
                 base.Save();
             }
+
+            public string GetName()
+            {
+                if (Name.IndexOf(':') == -1)
+                    return Name;
+                return Name.Substring(Name.LastIndexOf(':') + 1);
+            }
         }
 
         public MetaObject()

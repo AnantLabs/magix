@@ -837,18 +837,18 @@ have relationships towards other instances in your database.</p>";
 
         /**
          * Level2: Will either update the existing Value or create a new Value with the given 'Name'
-         * and make sure exists within the MetaObject ['MetaObjectID']
+         * and make sure exists within the MetaObject ['ID']
          */
         [ActiveEvent(Name = "Magix.MetaType.SetMetaObjectValue")]
         protected void Magix_MetaType_SetMetaObjectValue(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                if (!e.Params.Contains("MetaObjectID") ||
-                    e.Params["MetaObjectID"].Get<int>() == -1)
+                if (!e.Params.Contains("ID") ||
+                    e.Params["ID"].Get<int>() == -1)
                     throw new ArgumentException("Oops, that object doesn't exist ...");
 
-                MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+                MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
                 if (o == null)
                     throw new ArgumentException("Oops, that object doesn't exist2 ...");

@@ -970,7 +970,7 @@ Deleting it may break these parts.</p>";
                         node["MetaViewName"].Value = v.Name;
                         node["MetaViewTypeName"].Value = v.TypeName;
                         node["ActionName"].Value = idxS;
-                        node["MetaObjectID"].Value = id;
+                        node["ID"].Value = id;
 
                         // Settings Event Specific Features ...
                         node["ActionName"].Value = idxS;
@@ -1361,7 +1361,11 @@ Deleting it may break these parts.</p>";
          * do NOT USE the autocompleter for huge tables, meaning Meta Objects which you've got more than 500 items
          * of. Due to some restrictions in the current internal algorithms, such a thing would make your 
          * application monstrously slow. If there are Actions associated with an autocomplater, they will be 
-         * raised with the user selects an item from the drop down list, and only then
+         * raised with the user selects an item from the drop down list, and only then. If you want to add an Image 
+         * to the AutoCompleter items, and there's a Property pointing to an Image URL within the objects you're 
+         * querying for within your AutoCompleter, then you can add a comma [,] and then the name of the 
+         * property that contains the URL to the image which you want to use as the 'Avatar' for the 
+         * AutoCompleter item
          */
         [ActiveEvent(Name = "Magix.MetaView.MetaView_Single_GetColonTemplateColumn")]
         protected void Magix_MetaView_MetaView_Single_GetColonTemplateColumn(object sender, ActiveEventArgs e)
@@ -1429,6 +1433,15 @@ Deleting it may break these parts.</p>";
             txtBox.KeyPress +=
                 delegate
                 {
+                    if (node.Contains("AutoSelectedID") && node["AutoSelectedID"].Get<int>() > 0)
+                    {
+                        if (auto.Controls.Count > 0)
+                        {
+                            auto.Controls.Clear();
+                            auto.ReRender();
+                        }
+                        return;
+                    }
                     if (auto.Controls.Count > 0 && txtBox.Text == "")
                     {
                         auto.Controls.Clear();
@@ -1519,7 +1532,7 @@ Deleting it may break these parts.</p>";
                                 if (p3 != null)
                                 {
                                     Image img = new Image();
-                                    img.ImageUrl = p3.Value; auto.Controls.Add(img);
+                                    img.ImageUrl = p3.Value; 
                                     img.CssClass = "mux-auto-completer-image";
                                     img.Click +=
                                         delegate
@@ -1575,7 +1588,8 @@ Deleting it may break these parts.</p>";
                             node["ActionSenderName"].Value = prop.Name + "-Init";
                             node["MetaViewName"].Value = prop.MetaView.Name;
                             node["MetaViewTypeName"].Value = prop.MetaView.TypeName;
-                            node["AutoCompleterSelectedItemID"].Value = id;
+                            node["ID"].Value = id;
+                            node["AutoSelected"].Value = id;
 
                             // Settings Event Specific Features ...
                             node["ActionName"].Value = idxS;
@@ -1762,7 +1776,19 @@ Deleting it may break these parts.</p>";
             {
                 MetaView view = MetaView.SelectFirst(Criteria.Eq("Name", e.Params["MetaViewName"].Get<string>()));
 
-                MetaObject t = new MetaObject();
+                MetaObject t = null;
+
+                if (!e.Params.Contains("ID") ||
+                    e.Params["ID"].Get<int>() == 0)
+                {
+                    t = new MetaObject();
+                }
+                else
+                {
+                    t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+                    if (t.TypeName != view.TypeName)
+                        throw new ApplicationException("Type name of View doesn't match type name of existing Meta Object");
+                }
 
                 t.TypeName = view.TypeName;
                 t.Reference =
