@@ -36,6 +36,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
     public class MetaView_Single : ActiveModule
     {
         protected Panel ctrls;
+        protected HiddenField oId;
+
         bool isFirstLoad;
 
         public override void InitialLoading(Node node)
@@ -156,6 +158,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
                                 node["ActionSenderName"].Value = b.Text;
                                 node["MetaViewName"].Value = DataSource["MetaViewName"].Value;
                                 node["MetaViewTypeName"].Value = DataSource["MetaViewTypeName"].Value;
+                                node["ID"].Value = DataSource.Contains("ID") ? DataSource["ID"].Value : (object)0;
 
                                 // Settings Event Specific Features ...
                                 node["ActionName"].Value = idxS;
@@ -172,6 +175,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
 
         private void GetPropertyValues(Node node, bool flat)
         {
+            if (oId.Value != "0" && oId.Value != "-1" && oId.Value != "")
+                node["ID"].Value = int.Parse(oId.Value);
             foreach (Control idx in ctrls.Controls)
             {
                 BaseWebControl w = idx as BaseWebControl;
@@ -232,6 +237,26 @@ namespace Magix.Brix.Components.ActiveModules.MetaView
         {
             if (e.Params["OriginalWebPartID"].Get<int>() == DataSource["OriginalWebPartID"].Get<int>())
                 e.Params["ID"].Value = this.Parent.ID;
+        }
+
+        [ActiveEvent(Name = "Magix.MetaView.LoadObjectIntoForm")]
+        protected void Magix_MetaView_LoadObjectIntoForm(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["MetaViewName"].Get<string>() == DataSource["MetaViewName"].Get<string>())
+            {
+                foreach (Node idx in e.Params["Properties"])
+                {
+                    TextBox t = Selector.SelectFirst<TextBox>(ctrls,
+                        delegate(Control idxC)
+                        {
+                            return idxC is BaseWebControl &&
+                                (idxC as BaseWebControl).Info == idx.Name;
+                        });
+                    if (t != null)
+                        t.Text = idx.Get<string>();
+                }
+                oId.Value = e.Params["ID"].Value.ToString();
+            }
         }
 
         /**

@@ -12,3 +12,9 @@
     runat="server"
     CssClass="magix-web-part-content"
     id="ctrls" />
+
+<mux:HiddenField
+    runat="server"
+    id="oId"
+    Value="0" />
+

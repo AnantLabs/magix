@@ -556,23 +556,23 @@ can only contain numerical characters to be legal",
         }
 
         /**
-         * Level2: Will return the given MetaObject [MetaObjectID] as a Key/Value pair. Will not traverse
+         * Level2: Will return the given MetaObject [ID] as a Key/Value pair. Will not traverse
          * Child Objects though. Useful for fetching objects for any one reasons you might have,
          * as long as you know their ID
          */
         [ActiveEvent(Name = "Magix.Common.GetSingleMetaObject")]
         protected void Magix_Common_GetSingleMetaObject(object sender, ActiveEventArgs e)
         {
-            MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+            MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             if (o == null)
                 throw new ArgumentException(
                     @"Some wize-guy have deleted your object dude. 
-Update the MetaObjectID property of your Action to another Meta Object ...");
+Update the ID property of your Action to another Meta Object ...");
 
             foreach (MetaObject.Property idx in o.Values)
             {
-                e.Params[idx.Name].Value = idx.Value;
+                e.Params["Properties"][idx.GetName()].Value = idx.Value;
             }
         }
 
@@ -598,7 +598,7 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         }
 
         /**
-         * Level2: If raised from within a MetaView on a specific MetaObject ['MetaObjectID'], 
+         * Level2: If raised from within a MetaView on a specific MetaObject ['ID'], 
          * somehow, will show the Signature Module for that particular MetaObject for
          * its 'ActionSenderName' property. When Signature is done [signing complete]
          * the original content of the Container will be reloaded
@@ -607,14 +607,14 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         protected void Magix_Common_LoadSignatureForCurrentMetaObject(object sender, ActiveEventArgs e)
         {
             if (!e.Params.Contains("OriginalWebPartID") ||
-                !e.Params.Contains("MetaObjectID"))
+                !e.Params.Contains("ID"))
             {
                 throw new ArgumentException("Sorry buddy, but this Action only works from a MetaView WebPart ...");
             }
             else
             {
                 e.Params["OKEvent"].Value = "Magix.MetaView.UnLoadSignature";
-                e.Params["OKEvent"]["Params"]["MetaObjectID"].Value = e.Params["MetaObjectID"].Value;
+                e.Params["OKEvent"]["Params"]["ID"].Value = e.Params["ID"].Value;
                 e.Params["OKEvent"]["Params"]["OriginalWebPartID"].Value = e.Params["OriginalWebPartID"].Value;
                 e.Params["OKEvent"]["Params"]["Name"].Value = e.Params["ActionSenderName"].Value;
 
@@ -634,14 +634,14 @@ Update the MetaObjectID property of your Action to another Meta Object ...");
         /**
          * Level2: Helper for Signature Module, to store it correctly upon finishing and saving a new Signature.
          * Will extract the 'Signature' content and store into the 'Name' property of the given
-         * 'MetaObjectID' MetaObject and save the MetaObject
+         * 'ID' MetaObject and save the MetaObject
          */
         [ActiveEvent(Name = "Magix.MetaView.UnLoadSignature")]
         protected void Magix_Signature_UnLoadSignature(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                MetaObject o = MetaObject.SelectByID(e.Params["MetaObjectID"].Get<int>());
+                MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
                 MetaObject.Property val = o.Values.Find(
                     delegate(MetaObject.Property idx)
