@@ -33,6 +33,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected Panel propWrp;
         protected Label desc;
         protected Label propHeader;
+        protected System.Web.UI.WebControls.Repeater eventRep;
+        protected Panel eventWrp;
+        protected Label eventHeader;
 
         public override void InitialLoading(Node node)
         {
@@ -159,7 +162,13 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 propRep.DataSource = ctrlType["Properties"];
                 propRep.DataBind();
                 propWrp.ReRender();
-                propHeader.Visible = true;
+
+                eventRep.DataSource = ctrlType["Events"];
+                eventRep.DataBind();
+                eventWrp.ReRender();
+
+                propHeader.Visible = ctrlType["Properties"].Count > 0;
+                eventHeader.Visible = ctrlType["Events"].Count > 0;
             }
             else
             {
@@ -170,12 +179,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         private void ClearPropertyWindow()
         {
             propHeader.Visible = false;
+            eventHeader.Visible = false;
             type.Text = "";
             type.Info = "";
             desc.Text = "";
             propRep.DataSource = null;
             propRep.DataBind();
             propWrp.ReRender();
+            eventRep.DataSource = null;
+            eventRep.DataBind();
+            eventWrp.ReRender();
         }
 
         protected void ctrls_Click(object sender, EventArgs e)
@@ -191,11 +204,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
         protected string GetPropertyValue(object inpNode)
         {
+            string retVal = null;
             string nodeName = inpNode as string;
             Node tmp = DataSource["Surface"].Find(
                 delegate(Node idx)
                 {
-                    if (idx.Contains("_ID") && 
+                    if (idx.Contains("_ID") &&
                         idx["_ID"].Get<int>().ToString() == type.Info)
                     {
                         return true;
@@ -208,11 +222,57 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 {
                     if (idx.Name == nodeName)
                     {
-                        return idx.Get<string>();
+                        if (idx.Value != null)
+                        {
+                            switch (idx.Value.GetType().ToString())
+                            {
+                                case "System.String":
+                                    retVal = idx.Value.ToString();
+                                    break;
+                                case "System.Boolean":
+                                    retVal = idx.Value.ToString();
+                                    break;
+                            }
+                        }
                     }
                 }
             }
-            return "";
+            return retVal;
+        }
+
+        protected bool GetPropertyValueBool(object inpNode)
+        {
+            bool retVal = false;
+            string nodeName = inpNode as string;
+            Node tmp = DataSource["Surface"].Find(
+                delegate(Node idx)
+                {
+                    if (idx.Contains("_ID") &&
+                        idx["_ID"].Get<int>().ToString() == type.Info)
+                    {
+                        return true;
+                    }
+                    return false;
+                });
+            if (tmp != null && tmp.Contains("Properties"))
+            {
+                foreach (Node idx in tmp["Properties"])
+                {
+                    if (idx.Name == nodeName)
+                    {
+                        if (idx.Value != null)
+                        {
+                            switch (idx.Value.GetType().ToString())
+                            {
+                                case "System.Boolean":
+                                    retVal = bool.Parse(idx.Value.ToString());
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            return retVal;
         }
 
         protected void PropertyValueChanged(object sender, EventArgs e)
@@ -223,6 +283,28 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["Value"].Value = (sender as TextAreaEdit).Text;
             node["ControlID"].Value = int.Parse(type.Info);
             node["PropertyName"].Value = (sender as TextAreaEdit).Info;
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.ChangeFormPropertyValue",
+                node);
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.GetControlsForForm",
+                DataSource);
+
+            ctrls.Controls.Clear();
+            CreateFormControls();
+            ctrls.ReRender();
+        }
+
+        protected void PropertyValueBoolChanged(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Value;
+            node["Value"].Value = (sender as CheckBox).Checked;
+            node["ControlID"].Value = int.Parse(type.Info);
+            node["PropertyName"].Value = (sender as CheckBox).Info;
 
             RaiseSafeEvent(
                 "Magix.MetaForms.ChangeFormPropertyValue",
