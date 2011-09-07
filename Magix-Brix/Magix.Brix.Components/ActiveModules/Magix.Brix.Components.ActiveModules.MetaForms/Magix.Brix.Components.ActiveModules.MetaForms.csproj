@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AC323830-1341-411F-B86B-E1CEE976B690}</ProjectGuid>
+    <ProjectGuid>{CE5684F6-9048-4BD0-841A-DCC8564497D8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magix.Brix.Components.ActiveControllers.MetaForms</RootNamespace>
-    <AssemblyName>Magix.Brix.Components.ActiveControllers.MetaForms</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveModules.MetaForms</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveModules.MetaForms</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,21 +33,26 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MetaForms_Controller.cs" />
+    <Compile Include="EditMetaForm.ascx.cs">
+      <DependentUpon>EditMetaForm.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EditMetaForm.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Magix-UX\Magix.UX.csproj">
       <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
       <Name>Magix.UX</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Magix.Brix.Data\Magix.Brix.Data.csproj">
-      <Project>{07B4583B-D2FB-4ADE-8F4A-FBAD56C2C8E0}</Project>
-      <Name>Magix.Brix.Data %28Brix\Magix.Brix.Data\Magix.Brix.Data%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Magix.Brix.Loader\Magix.Brix.Loader.csproj">
       <Project>{0423B777-2C18-4B0F-B87E-0AD059529167}</Project>
@@ -57,9 +62,13 @@
       <Project>{F266D261-5A5F-4BB6-84F6-A71EA2B5090E}</Project>
       <Name>Magix.Brix.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.MetaForms\Magix.Brix.Components.ActiveTypes.MetaForms.csproj">
-      <Project>{F68F3789-ECFA-4AFB-A94E-97E19A8D2DB3}</Project>
-      <Name>Magix.Brix.Components.ActiveTypes.MetaForms</Name>
+    <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
+      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
+      <Name>Magix.Brix.Components %28Brix\Magix.Brix.Components\Helpers\Magix.Brix.Components%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magix.Brix.Publishing.Common\Magix.Brix.Publishing.Common.csproj">
+      <Project>{E3B5FE63-DACF-4C19-AB0F-65E42DC67993}</Project>
+      <Name>Magix.Brix.Publishing.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

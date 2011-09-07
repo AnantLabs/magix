@@ -1,0 +1,119 @@
+﻿
+
+
+.wysiwyg-meta-forms
+{
+	width:950px;
+	margin-right:10px;
+	min-height:810px;
+	margin-bottom:180px;
+	position:relative;
+	overflow-x:hidden;
+	overflow-y:auto;
+	height:auto;
+}
+
+
+.mux-meta-forms-toolbox
+{
+	min-height:180px;
+	height:auto;
+	overflow-y:auto;
+	top:216px;
+	left:0px;
+	position:absolute;
+	z-index:100000;
+}
+
+.mux-meta-forms-props
+{
+	top:18px;
+	left:0;
+	position:absolute;
+	z-index:100001;
+}
+
+.mux-toolbox-item
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+	display:block;
+	width:90px;
+	font-size:9px;
+	padding:9px 10px 9px 10px;
+	margin-right:10px;
+	margin-bottom:18px;
+	float:left;
+	text-decoration:none;
+	background-color:rgba(0,0,0,.1);
+	-moz-transition-property:-moz-box-shadow, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, color;
+	transition-duration:0.2s;
+}
+
+.mux-toolbox-item:hover
+{
+	-moz-transition-property:-moz-box-shadow, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, color;
+	transition-duration:0.2s;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.mux-meta-form-wysiwyg-wrapper
+{
+	min-height:810px;
+	position:relative;
+	overflow-y:auto;
+}
+
+.prop-editor
+{
+	position:relative;
+	width:100% !important;
+	min-width:100% !important;
+	height:18px;
+}
+
+div.prop-editor>textarea
+{
+	display:block;
+	position:absolute;
+	z-index:1; /* just needs a little bit of a push ... ;) */
+	top:0;
+	left:0;
+	margin:-1px 0 0 -1px;
+	padding:0;
+	width:100% !important;
+	min-width:100% !important;
+}
+
+div.prop-editor>a
+{
+	overflow-y:hidden;
+}
+
+.mux-wysiwyg-selected,
+input[type=button].mux-wysiwyg-selected,
+input[type=text].mux-wysiwyg-selected,
+input[type=email].mux-wysiwyg-selected,
+input[type=checkbox].mux-wysiwyg-selected,
+textarea.mux-wysiwyg-selected
+{
+	border:dashed 1px Black;
+	background-color:#ffa !important;
+	background-image:none !important;
+}
+
+

@@ -60,9 +60,6 @@ namespace Magix.UX.Widgets
         {
             switch (name)
             {
-                // Due to a bug in IE we need to trap click event in DOM instead of change if
-                // browser is IE
-                case "click":
                 case "change":
                     if (CheckedChanged != null)
                         CheckedChanged(this, new EventArgs());

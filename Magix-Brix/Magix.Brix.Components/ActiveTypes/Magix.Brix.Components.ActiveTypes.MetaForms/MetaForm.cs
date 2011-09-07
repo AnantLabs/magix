@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
              * Level3: The Name of the Node, must be unique within the collection
              */
             [ActiveField]
-            public string Name { get; set; }
+            public string Name { get; internal set; }
 
             /**
              * Level3: The value component of the node, will be transformed into the 
@@ -53,6 +53,41 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
              */
             [ActiveField]
             public LazyList<Node> Children { get; set; }
+
+            public Node this [string name]
+            {
+                get
+                {
+                    foreach (Node idx in Children)
+                    {
+                        if (idx.Name == name)
+                            return idx;
+                    }
+                    Node tmp = new Node();
+                    tmp.Name = name;
+                    Children.Add(tmp);
+                    return tmp;
+                }
+            }
+
+            /**
+             * Level3: Will find the Node with the Given property name set to 
+             * the given property value
+             */
+            public Node Find(Predicate<Node> functor)
+            {
+                if (functor(this))
+                    return this;
+                else
+                {
+                    foreach (Node idx in Children)
+                    {
+                        if (functor(idx))
+                            return idx;
+                    }
+                }
+                return null;
+            }
 
             public override void Save()
             {
@@ -87,7 +122,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
         public MetaForm()
         {
             Form = new Node();
-            Form.Name = "Form Node";
+            Form.Name = "root";
             Form.Value = "";
             Form.TypeName = typeof(string).FullName;
         }
@@ -122,25 +157,19 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                 if (_node == null)
                 {
                     _node = new Magix.Brix.Types.Node();
-                    _node = CreateNode(Form, _node);
+                    CreateNode(Form, _node);
                 }
                 return _node;
             }
         }
 
-        /**
-         * Level3: Will transform the given serialized Node into a Magix.Brix.Types.Node 
-         * tree hierarchy node structure
-         */
-        private Magix.Brix.Types.Node CreateNode(Node node, Magix.Brix.Types.Node mNode)
+        private void CreateNode(Node node, Magix.Brix.Types.Node mNode)
         {
-            mNode.Name = Form.Name;
+            mNode.Name = node.Name;
+            mNode["_ID"].Value = node.ID;
 
             switch (node.TypeName)
             {
-                case "System.String":
-                    mNode.Value = node.Value;
-                    break;
                 case "System.Int32":
                     mNode.Value = int.Parse(node.Value, CultureInfo.InvariantCulture);
                     break;
@@ -153,22 +182,25 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                 case "System.Boolean":
                     mNode.Value = bool.Parse(node.Value);
                     break;
+                case "System.String":
                 default:
-                    throw new ArgumentException("Unsupported type in MetaForm ... :( ");
+                    mNode.Value = node.Value;
+                    break;
             }
 
-            foreach (Node idx in Form.Children)
+            foreach (Node idx in node.Children)
             {
                 Magix.Brix.Types.Node tmp = new Magix.Brix.Types.Node();
                 CreateNode(idx, tmp);
                 mNode.Add(tmp);
             }
-
-            return mNode;
         }
 
         public override void Save()
         {
+            if (Name == "_ID")
+                return; // This are 'cacher nodes' or 'helper nodes' not really 'here' ...
+
             if (ID == 0)
                 Created = DateTime.Now;
 
