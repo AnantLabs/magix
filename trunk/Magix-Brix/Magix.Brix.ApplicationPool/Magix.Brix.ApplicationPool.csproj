@@ -317,6 +317,10 @@
       <Project>{2A130C6E-49FC-469C-98E7-93260CEB36D1}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.MetaActions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaForms\Magix.Brix.Components.ActiveControllers.MetaForms.csproj">
+      <Project>{AC323830-1341-411F-B86B-E1CEE976B690}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.MetaForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.MetaType\Magix.Brix.Components.ActiveControllers.MetaTypes.csproj">
       <Project>{6F72A0D1-66F2-4840-97B5-42D262F32B45}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.MetaTypes</Name>

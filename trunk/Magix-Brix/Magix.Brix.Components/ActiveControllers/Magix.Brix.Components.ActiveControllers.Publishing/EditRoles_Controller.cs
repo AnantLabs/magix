@@ -33,7 +33,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             Node node = new Node();
 
             node["FullTypeName"].Value = typeof(Role).FullName;
-            node["Container"].Value = "content3";
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["CssClass"].Value = "large-bottom-margin";
