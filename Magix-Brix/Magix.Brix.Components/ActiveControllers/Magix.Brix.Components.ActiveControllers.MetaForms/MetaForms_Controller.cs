@@ -133,33 +133,156 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         protected void Magix_MetaForms_GetControlTypes(object sender, ActiveEventArgs e)
         {
             // Button type
+            GetButton(e);
+
+            // Label type
+            GetLabel(e);
+
+            // CheckBox type
+            CreateCheckBox(e);
+
+            // CheckBox type
+            CreateTextBox(e);
+        }
+
+        private void CreateTextBox(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["TextBox"]["Name"].Value = "Magix TextBox";
+            e.Params["Controls"]["TextBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.TextBox";
+            e.Params["Controls"]["TextBox"]["ToolTip"].Value = @"Creates a TextBox type of 
+control, which you can assign Text to and Change Event Handlers";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["CssClass"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
+class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
+use multiple CSS classes for the same control";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Description"].Value = @"The 
+visible text for the end user and also the text fragment the user can change by editing the text box value";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"]["Description"].Value = @"The 
+'watermark' text of your textbox. Will show when textbox is empty, as a 'cue' to the end user for what to 
+type into it";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["Info"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["Info"]["Description"].Value = @"Additional information 
+which can be stored within your object, which is not visible for the end user in any ways, but still 
+will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
+which field your widget has been Data Bound towards within your Meta Object, or what Property 
+it is supposed to create upon creation of a new Meta Object";
+
+            e.Params["Controls"]["TextBox"]["Events"]["Change"].Value = true;
+            e.Params["Controls"]["TextBox"]["Events"]["Change"]["Description"].Value = @"Raised when 
+the text has changed, and the user chooses to 'leave the field' and move to another field on the form by 
+e.g. clicking with his mouse or using TAB such that the textbox looses focus";
+        }
+
+        private static void CreateCheckBox(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["CheckBox"]["Name"].Value = "Magix CheckBox";
+            e.Params["Controls"]["CheckBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.CheckBox";
+            e.Params["Controls"]["CheckBox"]["ToolTip"].Value = @"Creates a CheckBox type of 
+control, which you can assign Text to and Change Event Handlers";
+
+            e.Params["Controls"]["CheckBox"]["Properties"]["CssClass"].Value = typeof(string).FullName;
+            e.Params["Controls"]["CheckBox"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
+class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
+use multiple CSS classes for the same control";
+
+            e.Params["Controls"]["CheckBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["CheckBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+
+            e.Params["Controls"]["CheckBox"]["Properties"]["Checked"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["CheckBox"]["Properties"]["Checked"]["Description"].Value = @"The 
+Checked state of your CheckBox, true will 'tag it off' as checked, while false [the default] will 
+keep it 'open'";
+
+            e.Params["Controls"]["CheckBox"]["Properties"]["Info"].Value = typeof(string).FullName;
+            e.Params["Controls"]["CheckBox"]["Properties"]["Info"]["Description"].Value = @"Additional information 
+which can be stored within your object, which is not visible for the end user in any ways, but still 
+will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
+which field your widget has been Data Bound towards within your Meta Object, or what Property 
+it is supposed to create upon creation of a new Meta Object";
+
+            e.Params["Controls"]["CheckBox"]["Events"]["Change"].Value = true;
+            e.Params["Controls"]["CheckBox"]["Events"]["Change"]["Description"].Value = @"Raised when 
+the checked state has changed, either by clicking or through some other user interaction";
+        }
+
+        private static void GetLabel(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Label"]["Name"].Value = "Magix Label";
+            e.Params["Controls"]["Label"]["TypeName"].Value = "Magix.MetaForms.Plugins.Label";
+            e.Params["Controls"]["Label"]["ToolTip"].Value = @"Creates a Label type of 
+control, which you can assign Text to. Basically serves as a read-only textual fragment on your page. 
+Change which HTML tag it's being rendered with by setting its 'Tag' property";
+
+            e.Params["Controls"]["Label"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Label"]["Properties"]["Text"]["Description"].Value = @"The text visible to 
+the end user in his browser";
+
+            e.Params["Controls"]["Label"]["Properties"]["CssClass"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Label"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
+class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
+use multiple CSS classes for the same control";
+
+            e.Params["Controls"]["Label"]["Properties"]["Info"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Label"]["Properties"]["Info"]["Description"].Value = @"Additional information 
+which can be stored within your object, which is not visible for the end user in any ways, but still 
+will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
+which field your widget has been Data Bound towards within your Meta Object, or what Property 
+it is supposed to create upon creation of a new Meta Object";
+
+            e.Params["Controls"]["Label"]["Properties"]["Tag"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Label"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
+will be rendered by the control. There are many legal values for this property, some of them are 'p', 
+'div', 'span', 'label', 'li' [use panel for 'ul'] and 'address'. But also many more. Check up the 
+standard for HTML5 if you'd like to wish all its legal values. All 'normal HTML elements', which doesn't 
+need special attributes or child elements can really be described by modifying this property accordingly";
+        }
+
+        private static void GetButton(ActiveEventArgs e)
+        {
             e.Params["Controls"]["Button"]["Name"].Value = "Magix Button";
             e.Params["Controls"]["Button"]["TypeName"].Value = "Magix.MetaForms.Plugins.Button";
             e.Params["Controls"]["Button"]["ToolTip"].Value = @"Creates a Button type of 
 control, which you can assign Click actions to, from which when the user clicks, will raise 
 the actions you've associated with the button. You can have several buttons per form, and they 
 can have different Text values to differentiate them for the user";
+
             e.Params["Controls"]["Button"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
+to the end user on top of the button";
+
             e.Params["Controls"]["Button"]["Properties"]["CssClass"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
+class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
+use multiple CSS classes for the same control";
+
+            e.Params["Controls"]["Button"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+
+            e.Params["Controls"]["Button"]["Properties"]["Info"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["Info"]["Description"].Value = @"Additional information 
+which can be stored within your object, which is not visible for the end user in any ways, but still 
+will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
+which field your widget has been Data Bound towards within your Meta Object, or what Property 
+it is supposed to create upon creation of a new Meta Object";
+
             e.Params["Controls"]["Button"]["Events"]["Click"].Value = true;
-
-            // Label type
-            e.Params["Controls"]["Label"]["Name"].Value = "Magix Label";
-            e.Params["Controls"]["Label"]["TypeName"].Value = "Magix.MetaForms.Plugins.Label";
-            e.Params["Controls"]["Label"]["ToolTip"].Value = @"Creates a Label type of 
-control, which you can assign Text to. Basically serves as a read-only textual fragment on your page. 
-Change which HTML tag it's being rendered with by setting its 'Tag' property";
-            e.Params["Controls"]["Label"]["Properties"]["Text"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Label"]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Label"]["Properties"]["Tag"].Value = typeof(string).FullName;
-
-            // CheckBox type
-            e.Params["Controls"]["CheckBox"]["Name"].Value = "Magix CheckBox";
-            e.Params["Controls"]["CheckBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.CheckBox";
-            e.Params["Controls"]["CheckBox"]["ToolTip"].Value = @"Creates a CheckBox type of 
-control, which you can assign Text to and Change Event Handlers";
-            e.Params["Controls"]["CheckBox"]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"]["CheckBox"]["Events"]["Change"].Value = true;
+            e.Params["Controls"]["Button"]["Events"]["Click"]["Description"].Value = @"Raised when 
+the button is clicked";
         }
 
         /**
@@ -202,7 +325,11 @@ control, which you can assign Text to and Change Event Handlers";
                         CheckBox btn = new CheckBox();
                         e.Params["Control"].Value = btn;
                     } break;
-                    break;
+                case "Magix.MetaForms.Plugins.TextBox":
+                    {
+                        TextBox btn = new TextBox();
+                        e.Params["Control"].Value = btn;
+                    } break;
                 default:
                     // DO NOTHING. Others might handle ...
                     break;
@@ -256,7 +383,22 @@ control, which you can assign Text to and Change Event Handlers";
             {
                 MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
                 MetaForm.Node nn = FindNodeByID(f.Form, e.Params["ControlID"].Get<int>());
-                nn["Properties"][e.Params["PropertyName"].Get<string>()].Value = e.Params["Value"].Get<string>();
+                string val = null;
+                string typeName = null;
+                switch (e.Params["Value"].Value.GetType().ToString())
+                {
+                    case "System.String":
+                        val = e.Params["Value"].Value.ToString();
+                        typeName = typeof(string).FullName;
+                        break;
+                    case "System.Boolean":
+                        val = e.Params["Value"].Value.ToString();
+                        typeName = typeof(bool).FullName;
+                        break;
+                }
+                nn["Properties"][e.Params["PropertyName"].Get<string>()].Value = val;
+                if (!string.IsNullOrEmpty(typeName))
+                    nn["Properties"][e.Params["PropertyName"].Get<string>()].TypeName = typeName;
 
                 f.Form.Save();
 

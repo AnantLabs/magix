@@ -21,6 +21,7 @@
         Draggable="true"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-toolbox span-8"
         Closable="false"
+        ToolTip="Yes, you can move me by dragging me by my header with your mouse [only computers, sorry :(]"
         Caption="Widgets ...">
         <Content>
             <asp:Repeater
@@ -44,6 +45,7 @@
         id="props"
         Draggable="true"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-props span-8"
+        ToolTip="Yes, you can move me by dragging me by my header with your mouse [only computers, sorry :(]"
         Closable="false"
         Caption="Properties ...">
         <Content>
@@ -56,7 +58,7 @@
             <mux:Label
                 runat="server"
                 id="desc"
-                CssClass="span-6 last spcBottom-2"
+                CssClass="span-6 last mux-wysiwyg-description"
                 style="display:none;margin-bottom:0;"
                 Tag="p" />
             <mux:Label
@@ -64,18 +66,18 @@
                 id="propHeader"
                 CssClass="span-6 last"
                 Visible="false"
-                style="margin-top:18px;"
+                style="margin-bottom:0;"
                 Text="Properties"
                 Tag="h5" />
             <mux:Panel
                 runat="server"
-                CssClass="span-6 last spcBottom-4"
+                CssClass="span-6 last spcBottom-1"
                 id="propWrp">
                 <asp:Repeater
                     runat="server"
                     id="propRep">
                     <ItemTemplate>
-                        <div class="span-2">
+                        <div class="span-2 mux-prop-label">
                             <%#Eval("Name") %>
                         </div>
                         <div class="span-4 last">
@@ -83,8 +85,48 @@
                                 runat="server"
                                 OnTextChanged="PropertyValueChanged"
                                 Info='<%#Eval("Name") %>'
+                                ToolTip='<%#Eval("[Description].Value") %>'
                                 CssClass="span-4 last mux-in-place-edit left-float prop-editor"
+                                Visible='<%#Eval("Value").Equals("System.String") %>'
                                 Text='<%#GetPropertyValue(Eval("Name")) %>' />
+                            <mux:CheckBox
+                                runat="server"
+                                OnCheckedChanged="PropertyValueBoolChanged"
+                                Info='<%#Eval("Name") %>'
+                                ToolTip='<%#Eval("[Description].Value") %>'
+                                CssClass="last left-float prop-editor"
+                                Checked='<%#GetPropertyValueBool(Eval("Name")) %>'
+                                Visible='<%#Eval("Value").Equals("System.Boolean") %>' />
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </mux:Panel>
+            <mux:Label
+                runat="server"
+                id="eventHeader"
+                CssClass="span-6 last"
+                style="margin-bottom:0;"
+                Visible="false"
+                Text="Events"
+                Tag="h5" />
+            <mux:Panel
+                runat="server"
+                CssClass="span-6 last"
+                id="eventWrp">
+                <asp:Repeater
+                    runat="server"
+                    id="eventRep">
+                    <ItemTemplate>
+                        <div class="span-2 mux-prop-label">
+                            <%#Eval("Name") %>
+                        </div>
+                        <div class="span-4 last">
+                            <mux:LinkButton
+                                runat="server"
+                                CssClass="span-4 last"
+                                Info='<%#Eval("Name") %>'
+                                ToolTip='<%#Eval("[Description].Value") %>'
+                                Text="Actions..." />
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>
