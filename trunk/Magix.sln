@@ -156,6 +156,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveTypes.MetaForms", "Magix-Brix\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.MetaForms\Magix.Brix.Components.ActiveTypes.MetaForms.csproj", "{F68F3789-ECFA-4AFB-A94E-97E19A8D2DB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.MetaForms", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaForms\Magix.Brix.Components.ActiveModules.MetaForms.csproj", "{CE5684F6-9048-4BD0-841A-DCC8564497D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -459,6 +461,12 @@ Global
 		{F68F3789-ECFA-4AFB-A94E-97E19A8D2DB3}.Debug-MUX|Any CPU.Build.0 = Debug|Any CPU
 		{F68F3789-ECFA-4AFB-A94E-97E19A8D2DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F68F3789-ECFA-4AFB-A94E-97E19A8D2DB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Debug-MUX|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Debug-MUX|Any CPU.Build.0 = Debug|Any CPU
+		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -494,6 +502,7 @@ Global
 		{FAEFC3B9-C958-4D22-9027-17B86F3D3BCC} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
 		{050B176B-9C38-4A12-8110-C668FA303138} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
 		{041B9580-0256-4085-9114-BEC5894F85A1} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
+		{CE5684F6-9048-4BD0-841A-DCC8564497D8} = {2A2E972C-4B0E-47BE-B1C7-C132A901D933}
 		{3807790C-726E-4870-89DB-D25D80223C8A} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{124E0BB5-A992-4216-9FE3-C5CBED735888} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{2B7F49E6-2867-4E16-AAF6-2236A0FF6402} = {A28922C8-A4CB-420D-BA01-583AA4389D75}

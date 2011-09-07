@@ -242,6 +242,7 @@
     <Content Include="media\images\pdf.png" />
     <Content Include="media\images\press-icon.png" />
     <Content Include="media\images\qr-code.png" />
+    <Content Include="media\images\rosetta.png" />
     <Content Include="media\images\snow.png" />
     <Content Include="media\images\spectrum.png" />
     <Content Include="media\images\Textures\bumpy-black.png" />
@@ -267,6 +268,7 @@
     <Content Include="media\images\wait-hourglass.png" />
     <Content Include="media\images\xml.png" />
     <Content Include="media\Js\link-text-boxes.js" />
+    <Content Include="media\modules\edit-meta-forms.css" />
     <Content Include="media\modules\qr-generator.css" />
     <Content Include="media\modules\ImageGallery.css" />
     <Content Include="media\your-css-file-and-path.css" />
@@ -388,6 +390,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Menu\Magix.Brix.Components.ActiveModules.Menu.csproj">
       <Project>{654A39FC-51E7-492D-BE57-39DC99CB8686}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Menu</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaForms\Magix.Brix.Components.ActiveModules.MetaForms.csproj">
+      <Project>{CE5684F6-9048-4BD0-841A-DCC8564497D8}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.MetaForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaView\Magix.Brix.Components.ActiveModules.MetaView.csproj">
       <Project>{498CBC4B-E81C-462F-AFD6-DD9A6AA60633}</Project>

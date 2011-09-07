@@ -72,6 +72,16 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * Returns the AspectDraggable. Be VERY careful with this one, useful for 
+         * setting boundaries and such, but shouldn't very often need directly 
+         * editing.
+         */
+        public AspectDraggable Dragger
+        {
+            get { return _dragger; }
+        }
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
