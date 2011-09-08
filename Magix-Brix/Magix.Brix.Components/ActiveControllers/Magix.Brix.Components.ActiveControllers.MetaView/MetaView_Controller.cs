@@ -231,7 +231,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                         tx);
                 };
 
-            ListItem item = new ListItem("Select a MetaView ...", "");
+            ListItem item = new ListItem("Select a Meta View ...", "");
             ls.Items.Add(item);
 
             foreach (MetaView idx in MetaView.Select())

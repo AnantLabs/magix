@@ -238,7 +238,8 @@ and such";
             e.Params["Controls"][typeName]["Properties"]["TabIndex"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["TabIndex"]["Description"].Value = @"Numerical 
 value indicating which order the widget is within the 'tab hierarchy', meaning which control is next if 
-the user clicks the TAB key on the keyboard";
+the user clicks the TAB key on the keyboard. A control which has TabIndex of 2 will gain focus when 
+the user hits TAB and the widget that has currently focus has 1 as TabIndex, and so on";
 
             e.Params["Controls"][typeName]["Events"]["Click"].Value = true;
             e.Params["Controls"][typeName]["Events"]["Click"]["Description"].Value = @"Raised when 
@@ -329,7 +330,11 @@ to the end user on top of the button";
         [ActiveEvent(Name = "Magix.MetaForms.GetControlsForForm")]
         protected void Magix_MetaForms_GetControlsForForm(object sender, ActiveEventArgs e)
         {
-            MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
+            MetaForm f = null;
+            if (e.Params.Contains("MetaFormName"))
+                f = MetaForm.SelectFirst(Criteria.Eq("Name", e.Params["MetaFormName"].Get<string>()));
+            else if (e.Params.Contains("ID"))
+                f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
 
             if (e.Params.Contains("root"))
                 e.Params["root"].UnTie();
@@ -648,6 +653,43 @@ to the end user on top of the button";
                 tr.Commit();
 
                 ActiveEvents.Instance.RaiseClearControls("child");
+            }
+        }
+
+        /**
+         * Level2: Returns the select list for selecting a Meta Form back to caller
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.MetaView_Form.GetTemplateColumnSelectForm")]
+        protected void Magix_MetaForms_MetaView_Form_GetTemplateColumnSelectForm(object sender, ActiveEventArgs e)
+        {
+            SelectList ls = new SelectList();
+            e.Params["Control"].Value = ls;
+
+            ls.CssClass = "span-5";
+            ls.Style[Styles.display] = "block";
+
+            ls.SelectedIndexChanged +=
+                delegate
+                {
+                    Node tx = new Node();
+
+                    tx["WebPartID"].Value = e.Params["WebPartID"].Value;
+                    tx["Value"].Value = ls.SelectedItem.Text;
+
+                    RaiseEvent(
+                        "Magix.Publishing.ChangeWebPartSetting",
+                        tx);
+                };
+
+            ListItem item = new ListItem("Select a Meta Form ...", "");
+            ls.Items.Add(item);
+
+            foreach (MetaForm idx in MetaForm.Select())
+            {
+                ListItem it = new ListItem(idx.Name, idx.Name);
+                if (idx.Name == e.Params["Value"].Get<string>())
+                    it.Selected = true;
+                ls.Items.Add(it);
             }
         }
     }
