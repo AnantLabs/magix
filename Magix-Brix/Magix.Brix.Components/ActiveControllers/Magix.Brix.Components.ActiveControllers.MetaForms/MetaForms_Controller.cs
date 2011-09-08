@@ -21,6 +21,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
     [ActiveController]
     public class MetaForms_Controller : ActiveController
     {
+        #region [ -- 'Global' plugin event sinks ... -- ]
         /**
          * Level2: Will return the menu items needed to fire up 'View Meta Forms' forms 
          * for Administrator
@@ -58,6 +59,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             e.Params["Items"]["Forms"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Forms"]["Event"].Value = "Magix.MetaForms.ViewForms";
         }
+
+        #endregion
 
         /**
          * Level2: Will show all Meta Forms for admin
@@ -126,6 +129,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                 node);
         }
 
+        #region [ -- Plugins for Meta Form -- ]
+
         /**
          * Level2: Will return the controls that the Meta Form builder has by default, such as Button,
          * Label, CheckBox etc
@@ -151,12 +156,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             e.Params["Controls"]["TextBox"]["Name"].Value = "Magix TextBox";
             e.Params["Controls"]["TextBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.TextBox";
             e.Params["Controls"]["TextBox"]["ToolTip"].Value = @"Creates a TextBox type of 
-control, which you can assign Text to and Change Event Handlers";
+control, which you can assign Text to and TextChanged Event Handlers";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"]["TextBox"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
-class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
-use multiple CSS classes for the same control";
+            GetCommonEventsAndProperties(e, "TextBox");
 
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
@@ -172,15 +174,8 @@ visible text for the end user and also the text fragment the user can change by 
 'watermark' text of your textbox. Will show when textbox is empty, as a 'cue' to the end user for what to 
 type into it";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["Info"].Value = typeof(string).FullName;
-            e.Params["Controls"]["TextBox"]["Properties"]["Info"]["Description"].Value = @"Additional information 
-which can be stored within your object, which is not visible for the end user in any ways, but still 
-will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
-which field your widget has been Data Bound towards within your Meta Object, or what Property 
-it is supposed to create upon creation of a new Meta Object";
-
-            e.Params["Controls"]["TextBox"]["Events"]["Change"].Value = true;
-            e.Params["Controls"]["TextBox"]["Events"]["Change"]["Description"].Value = @"Raised when 
+            e.Params["Controls"]["TextBox"]["Events"]["TextChanged"].Value = true;
+            e.Params["Controls"]["TextBox"]["Events"]["TextChanged"]["Description"].Value = @"Raised when 
 the text has changed, and the user chooses to 'leave the field' and move to another field on the form by 
 e.g. clicking with his mouse or using TAB such that the textbox looses focus";
         }
@@ -190,12 +185,10 @@ e.g. clicking with his mouse or using TAB such that the textbox looses focus";
             e.Params["Controls"]["CheckBox"]["Name"].Value = "Magix CheckBox";
             e.Params["Controls"]["CheckBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.CheckBox";
             e.Params["Controls"]["CheckBox"]["ToolTip"].Value = @"Creates a CheckBox type of 
-control, which you can assign Text to and Change Event Handlers";
+control, which you can assign Text to and CheckedChanged Event Handlers. Useful for things that black and 
+white in nature, such as yes and no questions";
 
-            e.Params["Controls"]["CheckBox"]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"]["CheckBox"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
-class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
-use multiple CSS classes for the same control";
+            GetCommonEventsAndProperties(e, "CheckBox");
 
             e.Params["Controls"]["CheckBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["CheckBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
@@ -207,16 +200,82 @@ as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Wi
 Checked state of your CheckBox, true will 'tag it off' as checked, while false [the default] will 
 keep it 'open'";
 
-            e.Params["Controls"]["CheckBox"]["Properties"]["Info"].Value = typeof(string).FullName;
-            e.Params["Controls"]["CheckBox"]["Properties"]["Info"]["Description"].Value = @"Additional information 
+            e.Params["Controls"]["CheckBox"]["Events"]["CheckedChanged"].Value = true;
+            e.Params["Controls"]["CheckBox"]["Events"]["CheckedChanged"]["Description"].Value = @"Raised when 
+the checked state has changed, either by clicking or through some other user interaction";
+        }
+
+        private static void GetCommonEventsAndProperties(ActiveEventArgs e, string typeName)
+        {
+            e.Params["Controls"][typeName]["Properties"]["ID"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["ID"]["Description"].Value = @"String ID used for 
+uniquely identifying a widget later, for extracting its value or changing its state somehow. Must be unique 
+per Meta Form. Should _not_ be set for widgets inside of Repeaters or other listable types of controls. Can only 
+contain alphanumerical characters [a-z|A-Z|0-9], and it should start with an a-z|A-Z character";
+
+            e.Params["Controls"][typeName]["Properties"]["CssClass"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
+class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
+use multiple CSS classes for the same control";
+
+            e.Params["Controls"][typeName]["Properties"]["Info"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional information 
 which can be stored within your object, which is not visible for the end user in any ways, but still 
 will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
 which field your widget has been Data Bound towards within your Meta Object, or what Property 
 it is supposed to create upon creation of a new Meta Object";
 
-            e.Params["Controls"]["CheckBox"]["Events"]["Change"].Value = true;
-            e.Params["Controls"]["CheckBox"]["Events"]["Change"]["Description"].Value = @"Raised when 
-the checked state has changed, either by clicking or through some other user interaction";
+            e.Params["Controls"][typeName]["Properties"]["Dir"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["Dir"]["Description"].Value = @"Direction of text 
+on the widget. If you set it to 'rtl', it will display characters from right to left, as in the way 
+it's being done in among other things in Arabic";
+
+            e.Params["Controls"][typeName]["Properties"]["ToolTip"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["ToolTip"]["Description"].Value = @"Tooltip hint 
+given to user when he moves cursor over widget. Obviously useless, for apparent reasons, on tablets, iPhones 
+and such";
+
+            e.Params["Controls"][typeName]["Properties"]["TabIndex"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["TabIndex"]["Description"].Value = @"Numerical 
+value indicating which order the widget is within the 'tab hierarchy', meaning which control is next if 
+the user clicks the TAB key on the keyboard";
+
+            e.Params["Controls"][typeName]["Events"]["Click"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["Click"]["Description"].Value = @"Raised when 
+the widget is clicked. Most useful for buttons and such, since if used on other types of elements it will 
+partially destroy accessibility for your application";
+
+            e.Params["Controls"][typeName]["Events"]["DblClick"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["DblClick"]["Description"].Value = @"Raised when 
+the widget is double clicked. Most useful for buttons and such, since if used on other types of elements it will 
+partially destroy accessibility for your application";
+
+            e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
+the left mouse button is sqeezed, but before it's released, on top of the specific widget. Obviously, for apparent 
+reasons, not very useful for phones, iPads, Droids and Tablet development";
+
+            e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
+the left mouse button is sqeezed and released, on top of the specific widget. Obviously, for apparent 
+reasons, not very useful for phones, iPads, Droids and Tablet development";
+
+            e.Params["Controls"][typeName]["Events"]["MouseOver"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseOver"]["Description"].Value = @"Raised when 
+the mouse cursor is brought over the widget";
+
+            e.Params["Controls"][typeName]["Events"]["MouseOut"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseOut"]["Description"].Value = @"Raised when 
+the mouse cursor leaves the element, meaning the cursor is moved outside of the boundaries of the 
+widget";
+
+            e.Params["Controls"][typeName]["Events"]["KeyPress"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["KeyPress"]["Description"].Value = @"Raised when 
+a key is pressed and typed on the widget";
+
+            e.Params["Controls"][typeName]["Events"]["EscKey"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["EscKey"]["Description"].Value = @"Raised when 
+the ESC key is clicked and released on the widget";
         }
 
         private static void GetLabel(ActiveEventArgs e)
@@ -227,21 +286,11 @@ the checked state has changed, either by clicking or through some other user int
 control, which you can assign Text to. Basically serves as a read-only textual fragment on your page. 
 Change which HTML tag it's being rendered with by setting its 'Tag' property";
 
+            GetCommonEventsAndProperties(e, "Label");
+
             e.Params["Controls"]["Label"]["Properties"]["Text"].Value = typeof(string).FullName;
             e.Params["Controls"]["Label"]["Properties"]["Text"]["Description"].Value = @"The text visible to 
 the end user in his browser";
-
-            e.Params["Controls"]["Label"]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Label"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
-class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
-use multiple CSS classes for the same control";
-
-            e.Params["Controls"]["Label"]["Properties"]["Info"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Label"]["Properties"]["Info"]["Description"].Value = @"Additional information 
-which can be stored within your object, which is not visible for the end user in any ways, but still 
-will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
-which field your widget has been Data Bound towards within your Meta Object, or what Property 
-it is supposed to create upon creation of a new Meta Object";
 
             e.Params["Controls"]["Label"]["Properties"]["Tag"].Value = typeof(string).FullName;
             e.Params["Controls"]["Label"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
@@ -260,31 +309,19 @@ control, which you can assign Click actions to, from which when the user clicks,
 the actions you've associated with the button. You can have several buttons per form, and they 
 can have different Text values to differentiate them for the user";
 
-            e.Params["Controls"]["Button"]["Properties"]["Text"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
-to the end user on top of the button";
-
-            e.Params["Controls"]["Button"]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Button"]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
-class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
-use multiple CSS classes for the same control";
+            GetCommonEventsAndProperties(e, "Button");
 
             e.Params["Controls"]["Button"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["Button"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
-            e.Params["Controls"]["Button"]["Properties"]["Info"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Button"]["Properties"]["Info"]["Description"].Value = @"Additional information 
-which can be stored within your object, which is not visible for the end user in any ways, but still 
-will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
-which field your widget has been Data Bound towards within your Meta Object, or what Property 
-it is supposed to create upon creation of a new Meta Object";
-
-            e.Params["Controls"]["Button"]["Events"]["Click"].Value = true;
-            e.Params["Controls"]["Button"]["Events"]["Click"]["Description"].Value = @"Raised when 
-the button is clicked";
+            e.Params["Controls"]["Button"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
+to the end user on top of the button";
         }
+
+        #endregion
 
         /**
          * Level2: Will return the Control tree hierarchy for the Meta Form
@@ -444,6 +481,8 @@ the button is clicked";
             node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
 
             node["MetaFormNodeID"].Value = e.Params["ID"].Value;
+            node["Header"].Value = string.Format(@"Actions for '{0}'",
+                e.Params["EventName"].Get<string>());
 
             node["EventName"].Value = e.Params["EventName"].Value;
             node["CreateEventName"].Value = "Magix.MetaForms.OpenAppendNewActionDialogue";
@@ -589,8 +628,7 @@ the button is clicked";
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
         }
@@ -603,6 +641,8 @@ the button is clicked";
                 MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["ParentID"].Get<int>());
                 n["Actions"][e.Params["ParentPropertyName"].Get<string>()].Value += "|" +
                     Action.SelectByID(e.Params["ID"].Get<int>()).Name;
+                n["Actions"][e.Params["ParentPropertyName"].Get<string>()].Value =
+                    n["Actions"][e.Params["ParentPropertyName"].Get<string>()].Value.Trim('|');
                 n.Save();
 
                 tr.Commit();

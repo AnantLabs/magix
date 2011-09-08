@@ -135,8 +135,6 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
         {
             Form = new Node();
             Form.Name = "root";
-            Form.Value = "";
-            Form.TypeName = typeof(string).FullName;
         }
 
         /**

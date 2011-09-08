@@ -21,7 +21,7 @@
         Draggable="true"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-toolbox span-8"
         Closable="false"
-        ToolTip="Yes, you can move me by dragging me by my header with your mouse [only computers, sorry :(]"
+        ToolTip="The Widgets you have to your disposal within this installation of Magix. Double Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around if it obscures something you need to reach ..."
         Caption="Widgets ...">
         <Content>
             <asp:Repeater
@@ -32,7 +32,7 @@
                         runat="server"
                         CssClass="mux-toolbox-item"
                         ToolTip='<%#Eval("[ToolTip].Value") %>'
-                        OnClick="AddControlToPage"
+                        OnDblClick="AddControlToPage"
                         Info='<%#Eval("[TypeName].Value") %>'
                         Text='<%#Eval("[Name].Value") %>' />
                 </ItemTemplate>
@@ -45,7 +45,7 @@
         id="props"
         Draggable="true"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-props span-8"
-        ToolTip="Yes, you can move me by dragging me by my header with your mouse [only computers, sorry :(]"
+        ToolTip="Properties of your selected object. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around if it obscures something you need to reach ..."
         Closable="false"
         Caption="Properties ...">
         <Content>
@@ -77,10 +77,10 @@
                     runat="server"
                     id="propRep">
                     <ItemTemplate>
-                        <div class="span-2 mux-prop-label">
+                        <div class="span-3 mux-prop-label">
                             <%#Eval("Name") %>
                         </div>
-                        <div class="span-4 last">
+                        <div class="span-3 last">
                             <mux:TextAreaEdit
                                 runat="server"
                                 OnTextChanged="PropertyValueChanged"
@@ -117,17 +117,17 @@
                     runat="server"
                     id="eventRep">
                     <ItemTemplate>
-                        <div class="span-2 mux-prop-label">
+                        <div class="span-3 mux-prop-label">
                             <%#Eval("Name") %>
                         </div>
-                        <div class="span-4 last">
+                        <div class="span-3 last">
                             <mux:LinkButton
                                 runat="server"
-                                CssClass="span-4 last"
                                 Info='<%#Eval("Name") %>'
                                 OnClick="ActionsClicked"
+                                CssClass='<%#"span-3 last " + GetCssClass(Eval("[Description]")) %>'
                                 ToolTip='<%#Eval("[Description].Value") %>'
-                                Text="Actions..." />
+                                Text="Actions ..." />
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>

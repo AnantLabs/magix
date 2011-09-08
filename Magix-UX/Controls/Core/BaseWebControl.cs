@@ -127,7 +127,7 @@ namespace Magix.UX.Widgets.Core
             get { return ViewState["Dir"] == null ? "" : (string)ViewState["Dir"]; }
             set
             {
-                if (value != "rtl" && value != "ltr")
+                if (value != "rtl" && value != "ltr" && !string.IsNullOrEmpty(value))
                     throw new ArgumentException("You cannot set the Dir property to any other value than 'rtl' and 'ltr'");
                 if (value != Dir)
                     SetJsonValue("Dir", value);

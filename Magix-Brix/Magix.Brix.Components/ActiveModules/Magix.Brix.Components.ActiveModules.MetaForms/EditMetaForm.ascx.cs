@@ -191,6 +191,22 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 node);
         }
 
+        protected string GetCssClass(object tmp)
+        {
+            Node n = DataSource.Find(
+                delegate(Node idx)
+                {
+                    if (idx.Contains("_ID") && idx["_ID"].Value.ToString() == type.Info)
+                        return true;
+                    return false;
+                });
+            if (n.Contains("Actions") && 
+                n["Actions"].Contains((tmp as Node).Parent.Name) &&
+                !string.IsNullOrEmpty(n["Actions"][(tmp as Node).Parent.Name].Get<string>()))
+                return "mux-has-actions";
+            return "mux-no-actions";
+        }
+
         private void ClearPropertyWindow()
         {
             propHeader.Visible = false;
