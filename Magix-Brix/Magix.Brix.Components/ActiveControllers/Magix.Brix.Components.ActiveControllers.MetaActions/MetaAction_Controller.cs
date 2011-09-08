@@ -129,7 +129,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["SelectEvent"].Value = "Magix.MetaAction.ActionWasSelected";
             node["ParentPropertyName"].Value = e.Params["SelectEvent"].Value;
 
-
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
@@ -582,7 +581,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             Action a = Action.SelectByID(id);
             if (a.Name.StartsWith("Magix."))
-                throw new ArgumentException("Sorry, those are 'System Actions', and in general terms 'off limits'");
+                throw new ArgumentException("Sorry, those are 'System Actions', and in general terms 'off limits'. If you _really_ know what you're doing, you can delete these through the DBAdmin interface ...");
 
 
             string fullTypeName = e.Params["FullTypeName"].Get<string>();

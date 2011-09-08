@@ -125,6 +125,7 @@
                                 runat="server"
                                 CssClass="span-4 last"
                                 Info='<%#Eval("Name") %>'
+                                OnClick="ActionsClicked"
                                 ToolTip='<%#Eval("[Description].Value") %>'
                                 Text="Actions..." />
                         </div>

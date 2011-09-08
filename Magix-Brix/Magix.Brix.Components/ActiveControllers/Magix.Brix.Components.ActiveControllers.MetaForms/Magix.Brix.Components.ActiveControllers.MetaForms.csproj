@@ -61,6 +61,10 @@
       <Project>{F68F3789-ECFA-4AFB-A94E-97E19A8D2DB3}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.MetaForms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.MetaTypes\Magix.Brix.Components.ActiveTypes.MetaTypes.csproj">
+      <Project>{E1BAF1A9-58D0-4B95-8855-8D4008EAE918}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.MetaTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

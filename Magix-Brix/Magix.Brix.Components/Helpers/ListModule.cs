@@ -217,8 +217,7 @@ namespace Magix.Brix.Components
                         DataSource["FullTypeName"].Get<string>() +
                         ":ID";
                     fNode["Default"].Value = "";
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
+                    RaiseSafeEvent(
                         "DBAdmin.Data.GetFilter",
                         fNode);
                     string idFilterString = fNode["Filter"].Get<string>();
@@ -317,8 +316,7 @@ namespace Magix.Brix.Components
                         DataSource["FullTypeName"].Get<string>() + ":" + 
                         idx.Name;
                     fNode["Default"].Value = "";
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
+                    RaiseSafeEvent(
                         "DBAdmin.Data.GetFilter",
                         fNode);
                     string filterString = fNode["Filter"].Get<string>();
@@ -372,9 +370,9 @@ namespace Magix.Brix.Components
             }
         }
 
-        protected int SelectedID
+        protected string SelectedID
         {
-            get { return ViewState["SelectedID"] == null ? -1 : (int)ViewState["SelectedID"]; }
+            get { return ViewState["SelectedID"] == null ? (string)"-1" : (string)ViewState["SelectedID"]; }
             set { ViewState["SelectedID"] = value; }
         }
 
@@ -400,9 +398,9 @@ namespace Magix.Brix.Components
         {
             if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
             {
-                if (SelectedID != -1)
+                if (!SelectedID.Equals("-1"))
                 {
-                    if (e.Params["ID"].Get<int>() != SelectedID)
+                    if (!e.Params["ID"].Value.Equals(SelectedID))
                     {
                         Label l = Selector.SelectFirst<Label>(this,
                             delegate(Control idxCtrl)
@@ -414,8 +412,8 @@ namespace Magix.Brix.Components
                             l.CssClass = "";
                     }
                 }
-                SelectedID = e.Params["ID"].Get<int>();
-                if (SelectedID != -1)
+                SelectedID = e.Params["ID"].Value.ToString();
+                if (!SelectedID.Equals("-1"))
                 {
                     Label l = Selector.SelectFirst<Label>(this,
                         delegate(Control idxCtrl)
@@ -433,10 +431,10 @@ namespace Magix.Brix.Components
         {
             Label row = new Label();
             row.Tag = "tr";
-            if (node["ID"].Get<int>() == SelectedID)
+            if (node["ID"].Value.Equals(SelectedID))
                 row.CssClass = "grid-selected";
 
-            row.Info = node["ID"].Get<int>().ToString();
+            row.Info = node["ID"].Value.ToString();
 
             if (DataSource["IsSelect"].Get<bool>())
             {
@@ -451,7 +449,7 @@ namespace Magix.Brix.Components
 
                         Node n = new Node();
 
-                        n["ID"].Value = int.Parse((b2.Parent.Parent as Label).Info);
+                        n["ID"].Value = GetId((b2.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                         n["ParentID"].Value = DataSource["ParentID"].Value;
                         n["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
@@ -508,9 +506,9 @@ namespace Magix.Brix.Components
                         {
                             LinkButton b = sender as LinkButton;
                             Node n = new Node();
-                            int id = int.Parse((b.Parent.Parent as Label).Info);
+                            string id = (b.Parent.Parent as Label).Info;
                             (b.Parent.Parent as Label).CssClass = "grid-selected";
-                            if (SelectedID != -1)
+                            if (!SelectedID.Equals("-1"))
                             {
                                 if (id != SelectedID)
                                 {
@@ -525,7 +523,7 @@ namespace Magix.Brix.Components
                             }
                             SelectedID = id;
 
-                            n["ID"].Value = id;
+                            n["ID"].Value = GetId(id);
                             n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                             n["DataSource"] = DataSource;
 
@@ -552,9 +550,9 @@ namespace Magix.Brix.Components
                     {
                         LinkButton b2 = sender as LinkButton;
                         Node n = new Node();
-                        int id = int.Parse((b2.Parent.Parent as Label).Info);
+                        string id = (b2.Parent.Parent as Label).Info;
                         (b2.Parent.Parent as Label).CssClass = "grid-selected";
-                        if (SelectedID != -1)
+                        if (!SelectedID.Equals("-1"))
                         {
                             if (id != SelectedID)
                             {
@@ -569,7 +567,7 @@ namespace Magix.Brix.Components
                         }
                         SelectedID = id;
 
-                        n["ID"].Value = int.Parse((b2.Parent.Parent as Label).Info);
+                        n["ID"].Value = GetId((b2.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
                         n["ParentID"].Value = DataSource["ParentID"].Value;
                         n["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
@@ -598,9 +596,9 @@ namespace Magix.Brix.Components
                     {
                         LinkButton b = sender as LinkButton;
                         Node n = new Node();
-                        int id = int.Parse((b.Parent.Parent as Label).Info);
+                        string id = (b.Parent.Parent as Label).Info;
                         (b.Parent.Parent as Label).CssClass = "grid-selected";
-                        if (SelectedID != -1)
+                        if (!SelectedID.Equals("-1"))
                         {
                             if (id != SelectedID)
                             {
@@ -617,7 +615,7 @@ namespace Magix.Brix.Components
                         }
                         SelectedID = id;
 
-                        n["ID"].Value = int.Parse((b.Parent.Parent as Label).Info);
+                        n["ID"].Value = GetId((b.Parent.Parent as Label).Info);
                         n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
 
                         if (RaiseSafeEvent(
@@ -653,7 +651,7 @@ namespace Magix.Brix.Components
                     colNode["Name"].Value = idx.Name;
                     colNode["Value"].Value = idx.Get<string>();
                     colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>();
-                    colNode["ID"].Value = node["ID"].Get<int>();
+                    colNode["ID"].Value = GetId(node["ID"].Value.ToString());
                     colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
 
                     RaiseSafeEvent(
@@ -688,10 +686,10 @@ namespace Magix.Brix.Components
                             {
                                 LinkButton ed = sender as LinkButton;
                                 (ed.Parent.Parent as Label).CssClass = "grid-selected";
-                                int id = int.Parse((ed.Parent.Parent as Label).Info);
-                                if (SelectedID != -1)
+                                string id = (ed.Parent.Parent as Label).Info;
+                                if (!SelectedID.Equals("-1"))
                                 {
-                                    if (id != SelectedID)
+                                    if (!id.Equals(SelectedID))
                                     {
                                         Label lblx = Selector.SelectFirst<Label>(this,
                                             delegate(Control idxCtrl)
@@ -707,7 +705,7 @@ namespace Magix.Brix.Components
 
                                 Node n = new Node();
 
-                                n["ID"].Value = id;
+                                n["ID"].Value = GetId(id);
                                 n["PropertyName"].Value = column;
                                 n["IsList"].Value = bool.Parse(ed.Info);
                                 n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
@@ -763,11 +761,11 @@ namespace Magix.Brix.Components
                             delegate(object sender, EventArgs e)
                             {
                                 TextAreaEdit ed = sender as TextAreaEdit;
-                                int id = int.Parse((ed.Parent.Parent as Label).Info);
+                                string id = (ed.Parent.Parent as Label).Info;
                                 (ed.Parent.Parent as Label).CssClass = "grid-selected";
-                                if (SelectedID != -1)
+                                if (!SelectedID.Equals("-1"))
                                 {
-                                    if (id != SelectedID)
+                                    if (!id.Equals(SelectedID))
                                     {
                                         Label l2 = Selector.SelectFirst<Label>(this,
                                             delegate(Control idxCtrl)
@@ -784,10 +782,10 @@ namespace Magix.Brix.Components
                             delegate(object sender, EventArgs e)
                             {
                                 TextAreaEdit ed = sender as TextAreaEdit;
-                                int id = int.Parse((ed.Parent.Parent as Label).Info);
+                                string id = (ed.Parent.Parent as Label).Info;
                                 string column = (ed.Parent as Label).Info;
                                 Node n = new Node();
-                                n["ID"].Value = id;
+                                n["ID"].Value = GetId(id);
                                 n["PropertyName"].Value = column;
                                 n["NewValue"].Value = ed.Text;
                                 n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
@@ -806,6 +804,14 @@ namespace Magix.Brix.Components
                 row.Controls.Add(l);
             }
             return row;
+        }
+
+        private object GetId(string p)
+        {
+            int tmp = 0;
+            if (int.TryParse(p, out tmp))
+                return tmp;
+            return p;
         }
     }
 }
