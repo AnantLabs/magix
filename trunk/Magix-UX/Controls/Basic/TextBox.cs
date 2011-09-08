@@ -89,6 +89,10 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * Ghost text displayed only if there is no value in the textbox. Useful for giving 
+         * end user hints and clues about what type of field this is.
+         */
         public string PlaceHolder
         {
             get { return ViewState["PlaceHolder"] == null ? "" : (string)ViewState["PlaceHolder"]; }
@@ -100,6 +104,10 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * If true, will automatically Capitalize the first letter of the first word in 
+         * the textbox, if supported by the browser
+         */
         public bool AutoCapitalize
         {
             get { return ViewState["AutoCapitalize"] == null ? true : (bool)ViewState["AutoCapitalize"]; }
@@ -111,6 +119,10 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * If true, which is the default value, the browser will automatically correct 
+         * spelling errors and such, which can be very annoying sometimes ...
+         */
         public bool AutoCorrect
         {
             get { return ViewState["AutoCorrect"] == null ? true : (bool)ViewState["AutoCorrect"]; }
@@ -122,6 +134,10 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * If true, the default, it will try to automatically complete the form field 
+         * according to your browser's settings for names and such
+         */
         public bool AutoComplete
         {
             get { return ViewState["AutoComplete"] == null ? true : (bool)ViewState["AutoComplete"]; }

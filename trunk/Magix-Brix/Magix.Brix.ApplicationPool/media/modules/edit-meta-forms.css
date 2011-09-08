@@ -27,7 +27,7 @@
 
 .mux-meta-forms-props
 {
-	top:306px;
+	top:225px;
 	left:0;
 	position:absolute;
 	z-index:800;
@@ -144,5 +144,18 @@ textarea.mux-wysiwyg-selected
 	color:#999;
 }
 
+.mux-no-actions
+{
+	padding-left:16px;
+	margin-right:16px;
+	background:transparent url(../images/code-icons-empty.png) no-repeat -32px -16px;
+}
+
+.mux-has-actions
+{
+	padding-left:16px;
+	margin-right:16px;
+	background:transparent url(../images/code-icons.png) no-repeat -32px -16px;
+}
 
 

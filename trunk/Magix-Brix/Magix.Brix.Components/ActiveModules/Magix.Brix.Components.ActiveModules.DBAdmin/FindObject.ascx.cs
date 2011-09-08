@@ -142,23 +142,29 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             // TODO: MAJORLY REFACTOR ... !! IDIOT LOGIC ...!!
             if (Parent.Parent.Parent is Window)
             {
-                (Parent.Parent.Parent as Window).Caption = string.Format(
-                    "{0} {1}-{2}/{3}",
-                    DataSource["TypeName"].Get<string>(),
-                    ((int)DataSource["Start"].Value) + 1,
-                    DataSource["End"].Get<int>(),
-                    DataSource["SetCount"].Get<int>());
+                (Parent.Parent.Parent as Window).Caption = 
+                    DataSource.Contains("Header") ? 
+                        DataSource["Header"].Get<string>() : 
+                        string.Format(
+                        "{0} {1}-{2}/{3}",
+                        DataSource["TypeName"].Get<string>(),
+                        ((int)DataSource["Start"].Value) + 1,
+                        DataSource["End"].Get<int>(),
+                        DataSource["SetCount"].Get<int>());
             }
             else
             {
                 Node node = new Node();
 
-                node["Caption"].Value = string.Format(
-                    "{0} {1}-{2}/{3}",
-                    DataSource["TypeName"].Get<string>(),
-                    ((int)DataSource["Start"].Value) + 1,
-                    DataSource["End"].Get<int>(),
-                    DataSource["SetCount"].Get<int>());
+                node["Caption"].Value =
+                    DataSource.Contains("Header") ?
+                        DataSource["Header"].Get<string>() :
+                        string.Format(
+                        "{0} {1}-{2}/{3}",
+                        DataSource["TypeName"].Get<string>(),
+                        ((int)DataSource["Start"].Value) + 1,
+                        DataSource["End"].Get<int>(),
+                        DataSource["SetCount"].Get<int>());
 
                 RaiseSafeEvent(
                     "Magix.Core.SetFormCaption",
