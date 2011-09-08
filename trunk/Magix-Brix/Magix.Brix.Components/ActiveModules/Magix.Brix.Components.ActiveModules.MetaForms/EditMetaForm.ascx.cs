@@ -19,9 +19,9 @@ using Magix.UX.Effects;
 namespace Magix.Brix.Components.ActiveModules.MetaForms
 {
     /**
+     * Level2: Helper for editing and creating Meta Form objects
      */
     [ActiveModule]
-    [PublisherPlugin]
     public class EditMetaForm : ActiveModule
     {
         protected Window tools;
