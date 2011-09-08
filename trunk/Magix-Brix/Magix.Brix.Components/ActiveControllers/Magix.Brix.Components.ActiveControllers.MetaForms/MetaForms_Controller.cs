@@ -10,6 +10,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Components.ActiveTypes.MetaForms;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
+using Magix.Brix.Components.ActiveTypes.MetaTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaForms
 {
@@ -422,6 +423,192 @@ the button is clicked";
                     return retVal;
             }
             return null;
+        }
+
+        /**
+         * Level2: Will show the Actions associated with the Event 'EventName' on the 
+         * MetaForm.Node with the ID of 'ID'
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.ShowAllActionsAssociatedWithFormEvent")]
+        protected void Magix_MetaForms_ShowAllActionsAssociatedWithFormEvent(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["IsDelete"].Value = true;
+            node["IsCreate"].Value = true;
+            node["IsInlineEdit"].Value = false;
+            node["Container"].Value = "child";
+            node["Width"].Value = 16;
+            node["Top"].Value = 20;
+            node["FullTypeName"].Value = typeof(Action).FullName + "-META";
+            node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
+
+            node["MetaFormNodeID"].Value = e.Params["ID"].Value;
+
+            node["EventName"].Value = e.Params["EventName"].Value;
+            node["CreateEventName"].Value = "Magix.MetaForms.OpenAppendNewActionDialogue";
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 12;
+
+            node["NoIdColumn"].Value = true;
+            node["DeleteColumnEvent"].Value = "Magix.MetaForms.RemoveActionFromActionList";
+
+            node["ReuseNode"].Value = true;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        /**
+         * Level2: Sink for getting the type information for editing Actions for form element on
+         * grid system
+         */
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
+        protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(Action).FullName + "-META")
+            {
+                e.Params["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+                e.Params["Type"]["Properties"]["Name"]["NoFilter"].Value = true;
+            }
+        }
+
+        /**
+         * Level2: Sink for getting the list data for editing Actions for form element on
+         * grid system
+         */
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
+        protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() != typeof(Action).FullName + "-META")
+                return;
+
+            MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["MetaFormNodeID"].Get<int>());
+            string actionString = "";
+            if (n.Contains("Actions"))
+            {
+                if (n["Actions"].Contains(e.Params["EventName"].Get<string>()))
+                    actionString = n["Actions"][e.Params["EventName"].Get<string>()].Value;
+            }
+
+            int idxNo = 0;
+            foreach (string idx in actionString.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (idxNo >= e.Params["Start"].Get<int>() &&
+                    idxNo < e.Params["End"].Get<int>())
+                {
+                    e.Params["Objects"]["o-" + idxNo]["ID"].Value = e.Params["MetaFormNodeID"].Value.ToString() + 
+                        "|" + 
+                        idxNo + 
+                        "|" +
+                        e.Params["EventName"].Get<string>();
+                    e.Params["Objects"]["o-" + idxNo]["Properties"]["Name"].Value = idx;
+                }
+                idxNo += 1;
+            }
+            e.Params["SetCount"].Value = idxNo;
+            e.Params["LockSetCount"].Value = true;
+        }
+
+        /**
+         * Level2: Sink for deleting Meta Form Action from Event
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.RemoveActionFromActionList")]
+        protected void Magix_MetaForms_RemoveActionFromActionList(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(Action).FullName + "-META")
+            {
+                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                {
+                    MetaForm.Node n = MetaForm.Node.SelectByID(int.Parse(e.Params["ID"].Get<string>().Split('|')[0]));
+                    int idxNo = 0;
+                    int toRemove = int.Parse(e.Params["ID"].Get<string>().Split('|')[1]);
+                    string result = "";
+                    foreach (string idx in n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        if (idxNo != toRemove)
+                            result += idx + "|";
+                        idxNo += 1;
+                    }
+                    result = result.Trim('|');
+                    n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value = result;
+                    n.Save();
+                    tr.Commit();
+                }
+
+                Node node = new Node();
+                node["FullTypeName"].Value = typeof(Action).FullName + "-META";
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    node);
+            }
+        }
+
+        /**
+         * Level2: Will show the 'List of Actions form' for appending and editing and deleting
+         * actions associated with the specific Action on the specific Widget
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.OpenAppendNewActionDialogue")]
+        protected void Magix_MetaForms_OpenAppendNewActionDialogue(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["FullTypeName"].Value = typeof(Action).FullName;
+            node["Container"].Value = "child";
+            node["Width"].Value = 15;
+            node["Top"].Value = 20;
+            node["ParentID"].Value = e.Params["MetaFormNodeID"].Value;
+            node["ParentPropertyName"].Value = e.Params["EventName"].Value;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 9;
+            node["WhiteListColumns"]["Params"].Value = true;
+            node["WhiteListColumns"]["Params"]["ForcedWidth"].Value = 2;
+
+            node["NoIdColumn"].Value = true;
+            node["IsCreate"].Value = false;
+            node["IsDelete"].Value = false;
+            node["IsFind"].Value = true;
+            node["IsSelect"].Value = true;
+            node["GetContentsEventName"].Value = "DBAdmin.Data.GetContentsOfClass-Filter-Override";
+            node["SetFocus"].Value = true;
+            node["SelectEvent"].Value = "Magix.MetaForms.ActionWasSelected";
+            node["SelectEvent"]["NodeID"].Value = e.Params["PropertyID"].Get<int>();
+
+            node["Criteria"]["C1"]["Name"].Value = "Sort";
+            node["Criteria"]["C1"]["Value"].Value = "Created";
+            node["Criteria"]["C1"]["Ascending"].Value = false;
+
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["Name"]["NoFilter"].Value = false;
+            node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
+
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaForms.ActionWasSelected")]
+        protected void Magix_MetaForms_ActionWasSelected(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["ParentID"].Get<int>());
+                n["Actions"][e.Params["ParentPropertyName"].Get<string>()].Value += "|" +
+                    Action.SelectByID(e.Params["ID"].Get<int>()).Name;
+                n.Save();
+
+                tr.Commit();
+
+                ActiveEvents.Instance.RaiseClearControls("child");
+            }
         }
     }
 }

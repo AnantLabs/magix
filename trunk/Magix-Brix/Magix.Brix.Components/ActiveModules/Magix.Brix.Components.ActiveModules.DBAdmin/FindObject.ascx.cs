@@ -253,13 +253,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     // is basically only being called from the "CreateNewObject"
                     // logic, and hence the only point where we want to update the
                     // selecetd item ...
-                    int selectedID = -1;
+                    string selectedID = "0";
                     foreach (Node idx in DataSource["Objects"])
                     {
                         if (idx.Contains("ID"))
                         {
-                            int id = idx["ID"].Get<int>();
-                            if (id > selectedID)
+                            string id = idx["ID"].Value.ToString();
+                            if (id.CompareTo(selectedID) > 0)
                             {
                                 // We exploit the fact here that every single DB system in the world,
                                 // using integers as ID's, will create larger and larger ID's for us,

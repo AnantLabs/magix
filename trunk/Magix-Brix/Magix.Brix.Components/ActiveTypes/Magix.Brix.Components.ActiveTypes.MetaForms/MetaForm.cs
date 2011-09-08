@@ -114,6 +114,18 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                     }
                 }
             }
+
+            /**
+             * Level3: Returns true if the given node exists as a direct child in the Children collection
+             */
+            public bool Contains(string name)
+            {
+                return Children.Exists(
+                    delegate(Node idx)
+                    {
+                        return name == idx.Name;
+                    });
+            }
         }
 
         // Used as 'cache' ...

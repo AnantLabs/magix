@@ -176,6 +176,21 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
         }
 
+        protected void ActionsClicked(object sender, EventArgs e)
+        {
+            LinkButton b = sender as LinkButton;
+            string eventName = b.Info;
+
+            Node node = new Node();
+
+            node["EventName"].Value = eventName;
+            node["ID"].Value = int.Parse(type.Info);
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.ShowAllActionsAssociatedWithFormEvent",
+                node);
+        }
+
         private void ClearPropertyWindow()
         {
             propHeader.Visible = false;
