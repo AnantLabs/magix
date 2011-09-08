@@ -237,7 +237,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             string retVal = null;
             string nodeName = inpNode as string;
-            Node tmp = DataSource["Surface"].Find(
+            Node tmp = DataSource["root"].Find(
                 delegate(Node idx)
                 {
                     if (idx.Contains("_ID") &&

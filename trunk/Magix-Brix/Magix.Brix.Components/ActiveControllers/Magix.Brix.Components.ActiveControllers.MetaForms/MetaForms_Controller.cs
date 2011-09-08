@@ -112,7 +112,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         {
             MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
 
-            Node node = f.FormNode;
+            Node node = new Node();
             node["ID"].Value = f.ID;
 
             RaiseEvent(
