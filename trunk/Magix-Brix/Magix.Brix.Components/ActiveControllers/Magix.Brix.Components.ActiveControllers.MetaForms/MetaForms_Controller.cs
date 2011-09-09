@@ -238,7 +238,8 @@ the ESC key is clicked and released on the widget";
             e.Params["Controls"]["TextBox"]["Name"].Value = "Magix TextBox";
             e.Params["Controls"]["TextBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.TextBox";
             e.Params["Controls"]["TextBox"]["ToolTip"].Value = @"Creates a TextBox type of 
-control, which you can assign Text to and TextChanged Event Handlers";
+control, which you can assign Text to and TextChanged Event Handlers. TextBoxes are the by far most 
+common type of input control, since it can take any types of input values from the end user";
 
             GetCommonEventsAndProperties(e, "TextBox");
 
@@ -285,9 +286,9 @@ as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Wi
 
             e.Params["Controls"]["TextBox"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Default"].Value = true;
-            e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Description"].Value = @"The keyboard 
-shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
-as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+            e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
+will enable the widget [true is its default value]. If it is false, the control's value cannot be changed in 
+any ways by the end user";
 
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"].Value = true;
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"]["Description"].Value = @"Raised when 
@@ -300,12 +301,12 @@ the ESC key was clicked while the TextBox had focus, and was taking input";
 
             e.Params["Controls"]["TextBox"]["Events"]["Blur"].Value = true;
             e.Params["Controls"]["TextBox"]["Events"]["Blur"]["Description"].Value = @"Raised when 
-the user moves focus away from the TextBox by for instance clicking the TAB key while the Widget has 
+the user moves focus away from the Widget by for instance clicking the TAB key while the Widget has 
 focus, or clicking another place with his mouse or touch screen while the widget has focus";
 
             e.Params["Controls"]["TextBox"]["Events"]["Focused"].Value = true;
             e.Params["Controls"]["TextBox"]["Events"]["Focused"]["Description"].Value = @"Raised when 
-the user moves focus ONTO the TextBox by for instance clicking the TAB key such that the Widget gets 
+the user moves focus ONTO the Widget by for instance clicking the TAB key such that the Widget gets 
 focus, or clicking the widget with his mouse or touch screen";
         }
 
@@ -327,10 +328,26 @@ white in nature, such as yes and no questions";
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
+            e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"]["Default"].Value = true;
+            e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
+will enable the widget [true is its default value]. If it is false, the control's value cannot be changed in 
+any ways by the end user";
+
             e.Params["Controls"]["CheckBox"]["Properties"]["Checked"].Value = typeof(bool).FullName;
             e.Params["Controls"]["CheckBox"]["Properties"]["Checked"]["Description"].Value = @"The 
 Checked state of your CheckBox, true will 'tag it off' as checked, while false [the default] will 
 keep it 'open'";
+
+            e.Params["Controls"]["CheckBox"]["Events"]["Blur"].Value = true;
+            e.Params["Controls"]["CheckBox"]["Events"]["Blur"]["Description"].Value = @"Raised when 
+the user moves focus away from the Widget by for instance clicking the TAB key while the Widget has 
+focus, or clicking another place with his mouse or touch screen while the widget has focus";
+
+            e.Params["Controls"]["CheckBox"]["Events"]["Focused"].Value = true;
+            e.Params["Controls"]["CheckBox"]["Events"]["Focused"]["Description"].Value = @"Raised when 
+the user moves focus ONTO the Widget by for instance clicking the TAB key such that the Widget gets 
+focus, or clicking the widget with his mouse or touch screen";
 
             e.Params["Controls"]["CheckBox"]["Events"]["CheckedChanged"].Value = true;
             e.Params["Controls"]["CheckBox"]["Events"]["CheckedChanged"]["Description"].Value = @"Raised when 
@@ -354,18 +371,18 @@ Change which HTML tag it's being rendered with by setting its 'Tag' property";
             e.Params["Controls"]["Label"]["Properties"]["Text"]["Description"].Value = @"The text visible to 
 the end user in his browser";
 
-            e.Params["Controls"]["Label"]["Properties"]["For"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Label"]["Properties"]["For"]["Description"].Value = @"Will couple 
-the control with an existing CheckBox or RadioButton on the form. Set this to the 'ID' property 
-of whatever CheckBox or RadioButton you wish to associate this Label with. It probably won't work 
-in your browser unless you also set the 'Tag' property to 'label'";
-
             e.Params["Controls"]["Label"]["Properties"]["Tag"].Value = typeof(string).FullName;
             e.Params["Controls"]["Label"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
 will be rendered by the control. There are many legal values for this property, some of them are 'p', 
 'div', 'span', 'label', 'li' [use panel for 'ul'] and 'address'. But also many more. Check up the 
 standard for HTML5 if you'd like to wish all its legal values. All 'normal HTML elements', which doesn't 
 need special attributes or child elements can really be described by modifying this property accordingly";
+
+            e.Params["Controls"]["Label"]["Properties"]["For"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Label"]["Properties"]["For"]["Description"].Value = @"Will couple 
+the control with an existing CheckBox or RadioButton on the form. Set this to the 'ID' property 
+of whatever CheckBox or RadioButton you wish to associate this Label with. It probably won't work 
+in your browser unless you also set the 'Tag' property to 'label'";
         }
 
         /*
@@ -382,14 +399,30 @@ can have different Text values to differentiate them for the user";
 
             GetCommonEventsAndProperties(e, "Button");
 
+            e.Params["Controls"]["Button"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
+to the end user on top of the button";
+
+            e.Params["Controls"]["Button"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["Enabled"]["Default"].Value = true;
+            e.Params["Controls"]["Button"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
+will enable the widget [true is its default value]. If it is false, the widget cannot be clicked in 
+any ways by the end user";
+
             e.Params["Controls"]["Button"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["Button"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
-            e.Params["Controls"]["Button"]["Properties"]["Text"].Value = typeof(string).FullName;
-            e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
-to the end user on top of the button";
+            e.Params["Controls"]["Button"]["Events"]["Blur"].Value = true;
+            e.Params["Controls"]["Button"]["Events"]["Blur"]["Description"].Value = @"Raised when 
+the user moves focus away from the Widget by for instance clicking the TAB key while the Widget has 
+focus, or clicking another place with his mouse or touch screen while the widget has focus";
+
+            e.Params["Controls"]["Button"]["Events"]["Focused"].Value = true;
+            e.Params["Controls"]["Button"]["Events"]["Focused"]["Description"].Value = @"Raised when 
+the user moves focus ONTO the Widget by for instance clicking the TAB key such that the Widget gets 
+focus, or clicking the widget with his mouse or touch screen";
         }
 
         #endregion
