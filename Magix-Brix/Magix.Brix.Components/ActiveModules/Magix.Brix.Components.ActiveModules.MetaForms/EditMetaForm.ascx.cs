@@ -285,6 +285,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     }
                     return false;
                 });
+            bool found = false;
             if (tmp != null && tmp.Contains("Properties"))
             {
                 foreach (Node idx in tmp["Properties"])
@@ -294,9 +295,25 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         if (idx.Value != null)
                         {
                             retVal = idx.Value.ToString();
+                            found = true;
+                            break;
                         }
                     }
                 }
+            }
+            if (!found)
+            {
+                // Looking for default value ...
+                Node typeNode = DataSource["Controls"].Find(
+                    delegate(Node idx)
+                    {
+                        if (idx.Contains("TypeName") &&
+                            idx["TypeName"].Get<string>() == tmp["TypeName"].Get<string>())
+                            return true;
+                        return false;
+                    });
+                if (DataSource["Controls"][typeNode.Name]["Properties"][nodeName].Contains("Default"))
+                    retVal = DataSource["Controls"][typeNode.Name]["Properties"][nodeName]["Default"].Value.ToString();
             }
             return retVal;
         }
@@ -343,7 +360,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                             return true;
                         return false;
                     });
-                if (DataSource["Controls"][typeNode.Name]["Properties"][nodeName].Contains("Default"))
+                if (DataSource["Controls"][typeNode.Name]["Properties"][nodeName].Contains("Default") &&
+                    DataSource["Controls"][typeNode.Name]["Properties"][nodeName]["Default"].Value is bool)
                     retVal = DataSource["Controls"][typeNode.Name]["Properties"][nodeName]["Default"].Get<bool>();
             }
             return retVal;

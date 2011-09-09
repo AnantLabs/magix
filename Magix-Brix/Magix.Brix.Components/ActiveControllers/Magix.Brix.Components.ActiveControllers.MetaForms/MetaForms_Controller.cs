@@ -258,22 +258,55 @@ type into it";
 will automatically capitalize the first letter of the TextBox as the user is typing";
 
             e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"]["Default"].Value = true;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"]["Description"].Value = @"If true, 
 will automatically correct spelling mistakes, if possible, for the end user as he is typing";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"]["Default"].Value = true;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"]["Description"].Value = @"If true, 
+will attempt at automatically completing the field according to the user's settings within the browser. Doesn't 
+always work since it tries to parse the field type of information according to its ID, which you have little or 
+no 'absolute' control over";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"].Value = typeof(int).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"]["Default"].Value = 0;
+            e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"]["Description"].Value = @"Maximum 
+length of text accepted within widget";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Description"].Value = @"The 
+visible text for the end user and also the text fragment the user can change by editing the text box value";
 
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["Text"].Value = typeof(string).FullName;
-            e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Description"].Value = @"The 
-visible text for the end user and also the text fragment the user can change by editing the text box value";
+            e.Params["Controls"]["TextBox"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Default"].Value = true;
+            e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"].Value = true;
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"]["Description"].Value = @"Raised when 
 the text has changed, and the user chooses to 'leave the field' and move to another field on the form by 
 e.g. clicking with his mouse or using TAB such that the textbox looses focus";
+
+            e.Params["Controls"]["TextBox"]["Events"]["EscPressed"].Value = true;
+            e.Params["Controls"]["TextBox"]["Events"]["EscPressed"]["Description"].Value = @"Raised when 
+the ESC key was clicked while the TextBox had focus, and was taking input";
+
+            e.Params["Controls"]["TextBox"]["Events"]["Blur"].Value = true;
+            e.Params["Controls"]["TextBox"]["Events"]["Blur"]["Description"].Value = @"Raised when 
+the user moves focus away from the TextBox by for instance clicking the TAB key while the Widget has 
+focus, or clicking another place with his mouse or touch screen while the widget has focus";
+
+            e.Params["Controls"]["TextBox"]["Events"]["Focused"].Value = true;
+            e.Params["Controls"]["TextBox"]["Events"]["Focused"]["Description"].Value = @"Raised when 
+the user moves focus ONTO the TextBox by for instance clicking the TAB key such that the Widget gets 
+focus, or clicking the widget with his mouse or touch screen";
         }
 
         /*
