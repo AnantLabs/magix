@@ -32,7 +32,7 @@
                         runat="server"
                         CssClass="mux-toolbox-item"
                         ToolTip='<%#Eval("[ToolTip].Value") %>'
-                        OnDblClick="AddControlToPage"
+                        OnClick="AddControlToPage"
                         Info='<%#Eval("[TypeName].Value") %>'
                         Text='<%#Eval("[Name].Value") %>' />
                 </ItemTemplate>
@@ -88,6 +88,7 @@
                                 <mux:TextAreaEdit
                                     runat="server"
                                     OnTextChanged="PropertyValueChanged"
+                                    TextLength="30"
                                     Info='<%#Eval("Name") %>'
                                     CssClass="span-4 last mux-in-place-edit left-float prop-editor"
                                     Visible='<%#Eval("Value").Equals("System.String") || Eval("Value").Equals("System.Int32") %>'

@@ -161,16 +161,15 @@ input[type=email].mux-wysiwyg-selected,
 input[type=checkbox].mux-wysiwyg-selected,
 textarea.mux-wysiwyg-selected
 {
-	border:dashed 1px rgba(0,0,0,.2);
 	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
 	-webkit-transition-property:-webkit-box-shadow;
 	-webkit-transition-duration:0.2s;
 	transition-property:box-shadow;
 	transition-duration:0.2s;
-	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .9);
-	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .9);
-	box-shadow: 12px 12px 5px rgba(0, 0, 0, .9);
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5);
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5);
 }
 
 .mux-prop-label
@@ -216,5 +215,27 @@ textarea.mux-wysiwyg-selected
 	transition-property:max-height;
 	transition-duration:1s;
 	max-height:0;
+}
+
+.mux-control-selected *
+{
+	opacity:.2;
+	cursor:pointer;
+}
+
+.mux-control-selected *:hover
+{
+	opacity:1;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.2s;
+	transition-property:opacity;
+	transition-duration:0.2s;
+}
+
+.mux-control-selected *.mux-wysiwyg-selected
+{
+	opacity:1;
 }
 

@@ -56,6 +56,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             CreateFormControls();
 
             eventHeader.Click +=
@@ -66,6 +67,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     else
                         props.CssClass += " mux-hide-events";
                 };
+
             propHeader.Click +=
                 delegate
                 {
@@ -106,6 +108,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (nn.Contains("Control"))
             {
                 BaseWebControl ctrl = nn["Control"].Get<BaseWebControl>();
+                ctrl.ToolTip = "Click me to edit the Widget";
                 if (node.Contains("Properties"))
                 {
                     foreach (Node idx in node["Properties"])
@@ -224,10 +227,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 propHeader.Visible = ctrlType["Properties"].Count > 0;
                 eventHeader.Visible = ctrlType["Events"].Count > 0;
+                if (ctrls.CssClass.IndexOf(" mux-control-selected") == -1)
+                    ctrls.CssClass += " mux-control-selected";
             }
             else
             {
-                desc.Style[Styles.height] = "18px";
+                desc.Style[Styles.height] = "0";
+                if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
+                    ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
             }
         }
 
@@ -286,6 +293,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
             OldSelected = null;
             ClearPropertyWindow();
+            if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
+                ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
         }
 
         protected string GetPropertyValue(object inpNode)
