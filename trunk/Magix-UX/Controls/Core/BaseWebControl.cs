@@ -342,6 +342,9 @@ namespace Magix.UX.Widgets.Core
                 MouseOver,
                 MouseOut,
                 KeyPress,
+
+                // TODO: WTF. Why is there another on in BaseWebControlFormElementInputText ...?
+                // Called; EscPressed
                 EscKey
             };
             for (int idx = 0; idx < handlers.Length; idx++)

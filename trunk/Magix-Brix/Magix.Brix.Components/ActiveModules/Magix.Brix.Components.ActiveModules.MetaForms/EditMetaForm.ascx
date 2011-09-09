@@ -87,7 +87,7 @@
                                 Info='<%#Eval("Name") %>'
                                 ToolTip='<%#Eval("[Description].Value") %>'
                                 CssClass="span-4 last mux-in-place-edit left-float prop-editor"
-                                Visible='<%#Eval("Value").Equals("System.String") %>'
+                                Visible='<%#Eval("Value").Equals("System.String") || Eval("Value").Equals("System.Int32") %>'
                                 Text='<%#GetPropertyValue(Eval("Name")) %>' />
                             <mux:CheckBox
                                 runat="server"

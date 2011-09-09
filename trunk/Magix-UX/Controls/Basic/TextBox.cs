@@ -159,7 +159,7 @@ namespace Magix.UX.Widgets
             {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException("value", "The MaxLength property can not have a negative value.");
-                if (value != MaxLength)
+                else if (value != MaxLength)
                     SetJsonGeneric("maxLength", value.ToString());
                 ViewState["MaxLength"] = value;
             }
