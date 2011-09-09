@@ -247,6 +247,20 @@ control, which you can assign Text to and TextChanged Event Handlers";
 either 'Normal' [default], 'Password', 'Email', 'Number' or 'Phone'. Changes the input type accordingly 
 such that modern browsers can help the end user with getting the input correctly";
 
+            e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"]["Description"].Value = @"The 
+'watermark' text of your textbox. Will show when textbox is empty, as a 'cue' to the end user for what to 
+type into it";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"]["Default"].Value = true;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"]["Description"].Value = @"If true, 
+will automatically capitalize the first letter of the TextBox as the user is typing";
+
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"]["Description"].Value = @"If true, 
+will automatically correct spelling mistakes, if possible, for the end user as he is typing";
+
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
@@ -255,11 +269,6 @@ as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Wi
             e.Params["Controls"]["TextBox"]["Properties"]["Text"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Description"].Value = @"The 
 visible text for the end user and also the text fragment the user can change by editing the text box value";
-
-            e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"].Value = typeof(string).FullName;
-            e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"]["Description"].Value = @"The 
-'watermark' text of your textbox. Will show when textbox is empty, as a 'cue' to the end user for what to 
-type into it";
 
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"].Value = true;
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"]["Description"].Value = @"Raised when 

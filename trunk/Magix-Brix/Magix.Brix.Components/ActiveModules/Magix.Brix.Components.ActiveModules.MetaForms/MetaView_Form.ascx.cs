@@ -219,7 +219,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         }
 
         /**
-         * Level2: Which form to load up into the Meta Form View
+         * Level2: Which form to load up into the Meta Form View. Must be the unique Name to a Meta Form object
          */
         [ModuleSetting(ModuleEditorEventName = "Magix.MetaForms.MetaView_Form.GetTemplateColumnSelectForm")]
         public string MetaFormName
