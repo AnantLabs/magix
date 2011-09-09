@@ -180,7 +180,30 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         }
                     }
                 }
+
+                // Making sure we're rendering the styles needed ...
+                RenderStyles(ctrl as BaseWebControl, node);
+
                 parent.Controls.Add(ctrl);
+            }
+        }
+
+        private void RenderStyles(BaseWebControl ctrl, Node node)
+        {
+            if (ctrl == null)
+                return;
+
+            if (node.Contains("Properties") &&
+                node["Properties"].Contains("Style"))
+            {
+                foreach (Node idx in node["Properties"]["Style"])
+                {
+                    if (idx.Name == "_ID")
+                        continue;
+
+                    if (!string.IsNullOrEmpty(idx.Get<string>()))
+                        ctrl.Style[idx.Name] = idx.Get<string>();
+                }
             }
         }
 

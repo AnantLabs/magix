@@ -825,5 +825,29 @@ focus, or clicking the widget with his mouse or touch screen";
                 e.Params["ActionName"].UnTie();
             }
         }
+
+        /**
+         * Level2: Will make sure the widget becomes absolutized and stored as such. 
+         * Expects ID of MetaForm.Node through 'ID' and 'Left' and 'Top' pixel numbers 
+         * defining where on the local coordinate system they're supposed to be displayed
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.AbsolutizeWidget")]
+        protected void Magix_MetaForms_AbsolutizeWidget(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["ID"].Get<int>());
+
+                // The node stores style values exactly as they would be rendered out
+                // while rendered, meaning no CAPitalization of names ...
+                n["Properties"]["Style"]["left"].Value = e.Params["Left"].Value.ToString() + "px";
+                n["Properties"]["Style"]["top"].Value = e.Params["Top"].Value.ToString() + "px";
+                n["Properties"]["Style"]["position"].Value = "relative";
+
+                n.Save();
+
+                tr.Commit();
+            }
+        }
     }
 }
