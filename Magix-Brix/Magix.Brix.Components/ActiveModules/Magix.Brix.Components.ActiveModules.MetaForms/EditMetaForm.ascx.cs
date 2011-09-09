@@ -293,15 +293,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     {
                         if (idx.Value != null)
                         {
-                            switch (idx.Value.GetType().ToString())
-                            {
-                                case "System.String":
-                                    retVal = idx.Value.ToString();
-                                    break;
-                                case "System.Boolean":
-                                    retVal = idx.Value.ToString();
-                                    break;
-                            }
+                            retVal = idx.Value.ToString();
                         }
                     }
                 }
@@ -313,7 +305,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             bool retVal = false;
             string nodeName = inpNode as string;
-            Node tmp = DataSource["Surface"].Find(
+            Node tmp = DataSource["root"].Find(
                 delegate(Node idx)
                 {
                     if (idx.Contains("_ID") &&
@@ -323,23 +315,36 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     }
                     return false;
                 });
+            bool found = false;
             if (tmp != null && tmp.Contains("Properties"))
             {
                 foreach (Node idx in tmp["Properties"])
                 {
                     if (idx.Name == nodeName)
                     {
-                        if (idx.Value != null)
+                        if (idx.Value != null && 
+                            idx.Value is bool)
                         {
-                            switch (idx.Value.GetType().ToString())
-                            {
-                                case "System.Boolean":
-                                    retVal = bool.Parse(idx.Value.ToString());
-                                    break;
-                            }
+                            retVal = (bool)idx.Value;
+                            found = true;
+                            break;
                         }
                     }
                 }
+            }
+            if (!found)
+            {
+                // Looking for default value ...
+                Node typeNode = DataSource["Controls"].Find(
+                    delegate(Node idx)
+                    {
+                        if (idx.Contains("TypeName") &&
+                            idx["TypeName"].Get<string>() == tmp["TypeName"].Get<string>())
+                            return true;
+                        return false;
+                    });
+                if (DataSource["Controls"][typeNode.Name]["Properties"][nodeName].Contains("Default"))
+                    retVal = DataSource["Controls"][typeNode.Name]["Properties"][nodeName]["Default"].Get<bool>();
             }
             return retVal;
         }
