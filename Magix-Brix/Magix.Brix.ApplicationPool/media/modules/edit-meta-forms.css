@@ -78,31 +78,73 @@
 	overflow-y:auto;
 }
 
+.mux-property-row
+{
+	background-color:rgba(0,0,0,0);
+	height:auto;
+	overflow:auto;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
+	-moz-transition-property:-moz-box-shadow, background-color, max-height;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:-webkit-box-shadow, background-color, max-height;
+	-webkit-transition-duration:1s;
+	transition-property:box-shadow, background-color, max-height;
+	transition-duration:1s;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	max-height:72px;
+}
+
+.mux-property-row:hover
+{
+	background-color:rgba(0,0,0,.1);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-transition-property:-moz-box-shadow, background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, background-color;
+	transition-duration:0.2s;
+	height:auto;
+	overflow:auto;
+}
+
 .prop-editor
 {
 	position:relative;
 	width:100% !important;
 	min-width:100% !important;
-	height:18px;
+	height:auto;
+	overflow:auto;
+}
+
+div.prop-editor>a
+{
+	display:block;
+	overflow-y:auto;
+	height:auto;
+	text-decoration:none;
 }
 
 div.prop-editor>textarea
 {
 	display:block;
-	position:absolute;
-	z-index:1; /* just needs a little bit of a push ... ;) */
-	top:0;
-	left:0;
-	margin:-1px 0 0 -1px;
+	position:relative;
+	background-image: -webkit-gradient(linear, 0% 40%, 0% 100%, from(rgba(255, 255, 255, 1)), to(rgba(200, 200, 200, 1))) !important;
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 40%, rgba(200, 200, 200, 1) 100%) !important;
+	text-shadow:2px 2px 3px rgba(0,0,0,.3);
+	margin:0;
+	border:none 0;
+	border-top:solid 1px #999;
+	border-bottom:solid 1px #999;
 	padding:0;
 	width:100% !important;
 	min-width:100% !important;
-}
-
-div.prop-editor>a
-{
-	overflow-y:hidden;
-	text-decoration:none;
 }
 
 input[type=checkbox].prop-editor
@@ -120,17 +162,15 @@ input[type=checkbox].mux-wysiwyg-selected,
 textarea.mux-wysiwyg-selected
 {
 	border:dashed 1px rgba(0,0,0,.2);
-	background-color:rgba(128,255,128,.5) !important;
-	background-image:none !important;
 	-moz-transition-property:-moz-box-shadow;
 	-moz-transition-duration:0.2s;
 	-webkit-transition-property:-webkit-box-shadow;
 	-webkit-transition-duration:0.2s;
 	transition-property:box-shadow;
 	transition-duration:0.2s;
-	-webkit-box-shadow: 8px 8px 3px rgba(0, 0, 0, .9);
-	-moz-box-shadow: 8px 8px 3px rgba(0, 0, 0, .9);
-	box-shadow: 8px 8px 3px rgba(0, 0, 0, .9);
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .9);
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .9);
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .9);
 }
 
 .mux-prop-label
@@ -147,15 +187,34 @@ textarea.mux-wysiwyg-selected
 .mux-no-actions
 {
 	padding-left:16px;
-	margin-right:16px;
 	background:transparent url(../images/code-icons-empty.png) no-repeat -32px -16px;
 }
 
 .mux-has-actions
 {
 	padding-left:16px;
-	margin-right:16px;
 	background:transparent url(../images/code-icons.png) no-repeat -32px -16px;
 }
 
+.mux-hide-props .mux-property-type-row
+{
+	-moz-transition-property:max-height;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:max-height;
+	-webkit-transition-duration:1s;
+	transition-property:max-height;
+	transition-duration:1s;
+	max-height:0;
+}
+
+.mux-hide-events .mux-event-type-row
+{
+	-moz-transition-property:max-height;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:max-height;
+	-webkit-transition-duration:1s;
+	transition-property:max-height;
+	transition-duration:1s;
+	max-height:0;
+}
 

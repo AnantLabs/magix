@@ -22,7 +22,7 @@
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-toolbox span-8"
         Closable="false"
         ToolTip="The Widgets you have to your disposal within this installation of Magix. Double Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around if it obscures something you need to reach ..."
-        Caption="Widgets ...">
+        Caption="Widgets & Controls ...">
         <Content>
             <asp:Repeater
                 runat="server"
@@ -44,10 +44,10 @@
         runat="server"
         id="props"
         Draggable="true"
-        CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-props span-8"
-        ToolTip="Properties of your selected object. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around if it obscures something you need to reach ..."
+        CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-props span-8 mux-hide-events mux-hide-props"
+        ToolTip="Properties and Actions for your selected Widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around if it obscures something you need to reach ..."
         Closable="false"
-        Caption="Properties ...">
+        Caption="Properties & Actions ...">
         <Content>
             <mux:Label
                 runat="server"
@@ -66,7 +66,8 @@
                 id="propHeader"
                 CssClass="span-6 last"
                 Visible="false"
-                style="margin-bottom:0;"
+                style="margin-bottom:0;cursor:pointer;"
+                ToolTip="Click me to toggle visibility of Properties for selected Widget"
                 Text="Properties"
                 Tag="h5" />
             <mux:Panel
@@ -77,26 +78,28 @@
                     runat="server"
                     id="propRep">
                     <ItemTemplate>
-                        <div class="span-3 mux-prop-label">
-                            <%#Eval("Name") %>
-                        </div>
-                        <div class="span-3 last">
-                            <mux:TextAreaEdit
-                                runat="server"
-                                OnTextChanged="PropertyValueChanged"
-                                Info='<%#Eval("Name") %>'
-                                ToolTip='<%#Eval("[Description].Value") %>'
-                                CssClass="span-4 last mux-in-place-edit left-float prop-editor"
-                                Visible='<%#Eval("Value").Equals("System.String") || Eval("Value").Equals("System.Int32") %>'
-                                Text='<%#GetPropertyValue(Eval("Name")) %>' />
-                            <mux:CheckBox
-                                runat="server"
-                                OnCheckedChanged="PropertyValueBoolChanged"
-                                Info='<%#Eval("Name") %>'
-                                ToolTip='<%#Eval("[Description].Value") %>'
-                                CssClass="last left-float prop-editor"
-                                Checked='<%#GetPropertyValueBool(Eval("Name")) %>'
-                                Visible='<%#Eval("Value").Equals("System.Boolean") %>' />
+                        <div 
+                            title='<%#Eval("[Description].Value") %>'
+                            class="span-6 last mux-property-row mux-property-type-row">
+                            <div class="span-3 mux-prop-label">
+                                <%#Eval("Name") %>
+                            </div>
+                            <div class="span-3 last">
+                                <mux:TextAreaEdit
+                                    runat="server"
+                                    OnTextChanged="PropertyValueChanged"
+                                    Info='<%#Eval("Name") %>'
+                                    CssClass="span-4 last mux-in-place-edit left-float prop-editor"
+                                    Visible='<%#Eval("Value").Equals("System.String") || Eval("Value").Equals("System.Int32") %>'
+                                    Text='<%#GetPropertyValue(Eval("Name")) %>' />
+                                <mux:CheckBox
+                                    runat="server"
+                                    OnCheckedChanged="PropertyValueBoolChanged"
+                                    Info='<%#Eval("Name") %>'
+                                    CssClass="last left-float prop-editor"
+                                    Checked='<%#GetPropertyValueBool(Eval("Name")) %>'
+                                    Visible='<%#Eval("Value").Equals("System.Boolean") %>' />
+                            </div>
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>
@@ -105,9 +108,10 @@
                 runat="server"
                 id="eventHeader"
                 CssClass="span-6 last"
-                style="margin-bottom:0;"
+                style="margin-bottom:0;cursor:pointer;"
                 Visible="false"
-                Text="Events"
+                ToolTip="Click me to toggle visibility of Actions for selected Widget"
+                Text="Actions"
                 Tag="h5" />
             <mux:Panel
                 runat="server"
@@ -117,17 +121,20 @@
                     runat="server"
                     id="eventRep">
                     <ItemTemplate>
-                        <div class="span-3 mux-prop-label">
-                            <%#Eval("Name") %>
-                        </div>
-                        <div class="span-3 last">
-                            <mux:LinkButton
-                                runat="server"
-                                Info='<%#Eval("Name") %>'
-                                OnClick="ActionsClicked"
-                                CssClass='<%#"span-3 last " + GetCssClass(Eval("[Description]")) %>'
-                                ToolTip='<%#Eval("[Description].Value") %>'
-                                Text="Actions ..." />
+                        <div 
+                            title='<%#Eval("[Description].Value") %>'
+                            class="span-6 last mux-property-row mux-event-type-row">
+                            <div class="span-3 mux-prop-label">
+                                <%#Eval("Name") %>
+                            </div>
+                            <div class="span-3 last">
+                                <mux:LinkButton
+                                    runat="server"
+                                    Info='<%#Eval("Name") %>'
+                                    OnClick="ActionsClicked"
+                                    CssClass='<%#"span-2 " + GetCssClass(Eval("[Description]")) %>'
+                                    Text="Actions ..." />
+                            </div>
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>

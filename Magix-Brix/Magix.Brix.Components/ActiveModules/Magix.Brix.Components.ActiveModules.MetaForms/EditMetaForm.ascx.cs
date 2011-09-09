@@ -58,6 +58,23 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             base.OnLoad(e);
             CreateFormControls();
 
+            eventHeader.Click +=
+                delegate
+                {
+                    if (props.CssClass.Contains(" mux-hide-events"))
+                        props.CssClass = props.CssClass.Replace(" mux-hide-events", "");
+                    else
+                        props.CssClass += " mux-hide-events";
+                };
+            propHeader.Click +=
+                delegate
+                {
+                    if (props.CssClass.Contains(" mux-hide-props"))
+                        props.CssClass = props.CssClass.Replace(" mux-hide-props", "");
+                    else
+                        props.CssClass += " mux-hide-props";
+                };
+
             type.ClickEffect = new EffectToggle(desc, 250, false);
 
             tools.Dragger.Bounds = new Rectangle(-150, 0, 990, 450);
