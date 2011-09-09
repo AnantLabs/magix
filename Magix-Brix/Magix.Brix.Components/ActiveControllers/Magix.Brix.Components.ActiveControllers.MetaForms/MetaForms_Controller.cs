@@ -85,6 +85,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Created"]["NoFilter"].Value = true;
 
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";
@@ -163,6 +164,7 @@ per Meta Form. Should _not_ be set for widgets inside of Repeaters or other list
 contain alphanumerical characters [a-z|A-Z|0-9], and it should start with an a-z|A-Z character";
 
             e.Params["Controls"][typeName]["Properties"]["CssClass"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["CssClass"]["Default"].Value = "span-2";
             e.Params["Controls"][typeName]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
 class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
 use multiple CSS classes for the same control";
@@ -452,28 +454,33 @@ focus, or clicking the widget with his mouse or touch screen";
         [ActiveEvent(Name = "Magix.MetaForms.CreateControl")]
         protected void Magix_MetaForms_CreateControl(object sender, ActiveEventArgs e)
         {
+            // Creating our Control, if its our duty, and setting its default values ...
             switch (e.Params["TypeName"].Get<string>())
             {
                 case "Magix.MetaForms.Plugins.Button":
                     {
                         Button btn = new Button();
                         btn.Text = "[null]";
+                        btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.Label":
                     {
                         Label btn = new Label();
                         btn.Text = "[null]";
+                        btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.CheckBox":
                     {
                         CheckBox btn = new CheckBox();
+                        btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.TextBox":
                     {
                         TextBox btn = new TextBox();
+                        btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                     } break;
                 default:
