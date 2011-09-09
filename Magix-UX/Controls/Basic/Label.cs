@@ -52,24 +52,32 @@ namespace Magix.UX.Widgets
          * Useful for associating a label with an HTML FORM input element, such as 
          * a CheckBox or a RadioButton etc. Notice that this property can only be
          * legally set if the Tag property is of type "label", which is NOT the 
-         * default value. An exception will be thrown if you attempt at setting this
-         * property without changing the Tag property to "span", which is its default value.
+         * default value.
          */
         public string For
         {
             get { return ViewState["For"] == null ? "" : (string)ViewState["For"]; }
             set
             {
-                if (value != For)
-                    SetJsonGeneric("for", value.ToString());
-                ViewState["For"] = value;
+                string toSetValue = value;
+                if (!toSetValue.Contains("_"))
+                {
+                    // Assuming 'ID' and not 'ClientID' ...
+                    PreRender +=
+                        delegate
+                        {
+                            // Cheating a little bit ... ;)
+                            For = Selector.FindControl<Control>(Page, toSetValue).ClientID;
+                        };
+                }
+                if (value != toSetValue)
+                    SetJsonGeneric("for", toSetValue.ToString());
+                ViewState["For"] = toSetValue;
             }
         }
 
         protected override void OnPreRender(EventArgs e)
         {
-            if (!string.IsNullOrEmpty(For) && Tag != "label")
-                throw new ArgumentException("You cannot set the For property of a Label without changing the Tag to \"label\".");
             base.OnPreRender(e);
         }
 

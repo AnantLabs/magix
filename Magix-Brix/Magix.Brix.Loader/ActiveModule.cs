@@ -26,13 +26,29 @@ namespace Magix.Brix.Loader
          */
         protected delegate void executor();
 
+        private bool _firstLoad;
+
+        /**
+         * Level3: You _Must_ call this one, if you override it, to set the Module's DataSource property. 
+         * And in order to get some other types of wiring running correctly for the module
+         */
         public virtual void InitialLoading(Node node)
         {
+            _firstLoad = true;
+
             Load +=
                 delegate
                 {
                     DataSource = node;
                 };
+        }
+
+        /**
+         * Level3: Is true if this was the request when the Module was loaded initially, somehow
+         */
+        protected bool FirstLoad
+        {
+            get { return _firstLoad; }
         }
 
         /**

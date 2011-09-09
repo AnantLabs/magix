@@ -221,6 +221,7 @@
     <Content Include="media\images\book-front-page-CSharp.png" />
     <Content Include="media\images\book-front-page-noob.png" />
     <Content Include="media\images\briefcase.png" />
+    <Content Include="media\images\code-icons-empty.png" />
     <Content Include="media\images\config.png" />
     <Content Include="media\images\cs.png" />
     <Content Include="media\images\csproj.png" />
@@ -232,6 +233,7 @@
     <Content Include="media\images\docx.png" />
     <Content Include="media\images\lightning-icon.png" />
     <Content Include="media\images\magix-logo.png" />
+    <Content Include="media\images\marvin-headshot-tiny.png" />
     <Content Include="media\images\marvin-help.png" />
     <Content Include="media\images\objects.png" />
     <Content Include="media\images\oga.png" />
