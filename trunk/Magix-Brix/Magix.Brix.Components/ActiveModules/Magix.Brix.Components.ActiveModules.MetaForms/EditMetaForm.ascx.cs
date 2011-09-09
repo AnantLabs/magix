@@ -93,13 +93,51 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 {
                     foreach (Node idx in node["Properties"])
                     {
+                        // Skipping 'empty stuff' ...
+                        if (idx.Value == null)
+                            continue;
+
+                        if (idx.Value is string && (idx.Value as string) == string.Empty)
+                            continue;
+
                         PropertyInfo info = ctrl.GetType().GetProperty(
                             idx.Name,
                             System.Reflection.BindingFlags.Instance |
                             System.Reflection.BindingFlags.NonPublic |
                             System.Reflection.BindingFlags.Public);
+
                         if (info != null)
-                            info.GetSetMethod(true).Invoke(ctrl, new object[] { idx.Value });
+                        {
+                            object tmp = idx.Value;
+
+                            if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
+                            {
+                                switch (info.GetGetMethod(true).ReturnType.FullName)
+                                {
+                                    case "System.Boolean":
+                                        tmp = bool.Parse(tmp.ToString());
+                                        break;
+                                    case "System.DateTime":
+                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Int32":
+                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Decimal":
+                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    default:
+                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
+                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
+                                        else
+                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
+                                        break;
+                                }
+                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                            }
+                            else
+                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                        }
                     }
                 }
                 ctrl.Load +=

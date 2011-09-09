@@ -139,10 +139,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         protected void Magix_MetaForms_GetControlTypes(object sender, ActiveEventArgs e)
         {
             // Button type
-            GetButton(e);
+            CreateButton(e);
 
             // Label type
-            GetLabel(e);
+            CreateLabel(e);
 
             // CheckBox type
             CreateCheckBox(e);
@@ -151,6 +151,88 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             CreateTextBox(e);
         }
 
+        /*
+         * Helper for above ...
+         */
+        private static void GetCommonEventsAndProperties(ActiveEventArgs e, string typeName)
+        {
+            e.Params["Controls"][typeName]["Properties"]["ID"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["ID"]["Description"].Value = @"String ID used for 
+uniquely identifying a widget later, for extracting its value or changing its state somehow. Must be unique 
+per Meta Form. Should _not_ be set for widgets inside of Repeaters or other listable types of controls. Can only 
+contain alphanumerical characters [a-z|A-Z|0-9], and it should start with an a-z|A-Z character";
+
+            e.Params["Controls"][typeName]["Properties"]["CssClass"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
+class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
+use multiple CSS classes for the same control";
+
+            e.Params["Controls"][typeName]["Properties"]["Dir"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["Dir"]["Description"].Value = @"Direction of text 
+on the widget. If you set it to 'rtl', it will display characters from right to left, as in the way 
+it's being done in among other things in Arabic";
+
+            e.Params["Controls"][typeName]["Properties"]["ToolTip"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["ToolTip"]["Description"].Value = @"Tooltip hint 
+given to user when he moves cursor over widget. Obviously useless, for apparent reasons, on tablets, iPhones 
+and such";
+
+            e.Params["Controls"][typeName]["Properties"]["Info"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional information 
+which can be stored within your object, which is not visible for the end user in any ways, but still 
+will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
+which field your widget has been Data Bound towards within your Meta Object, or what Property 
+it is supposed to create upon creation of a new Meta Object";
+
+            e.Params["Controls"][typeName]["Properties"]["TabIndex"].Value = typeof(string).FullName;
+            e.Params["Controls"][typeName]["Properties"]["TabIndex"]["Description"].Value = @"Numerical 
+value indicating which order the widget is within the 'tab hierarchy', meaning which control is next if 
+the user clicks the TAB key on the keyboard. A control which has TabIndex of 2 will gain focus when 
+the user hits TAB and the widget that has currently focus has 1 as TabIndex, and so on";
+
+            // Events ...
+
+            e.Params["Controls"][typeName]["Events"]["Click"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["Click"]["Description"].Value = @"Raised when 
+the widget is clicked. Most useful for buttons and such, since if used on other types of elements it will 
+partially destroy accessibility for your application";
+
+            e.Params["Controls"][typeName]["Events"]["DblClick"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["DblClick"]["Description"].Value = @"Raised when 
+the widget is double clicked. Most useful for buttons and such, since if used on other types of elements it will 
+partially destroy accessibility for your application";
+
+            e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
+the left mouse button is squeezed, but before it's released, on top of the specific widget. Obviously, for apparent 
+reasons, not very useful for phones, iPads, Droids and Tablet development";
+
+            e.Params["Controls"][typeName]["Events"]["MouseUp"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseUp"]["Description"].Value = @"Raised when 
+the left mouse button is squeezed and released, on top of the specific widget. Obviously, for apparent 
+reasons, not very useful for phones, iPads, Droids and Tablet development";
+
+            e.Params["Controls"][typeName]["Events"]["MouseOver"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseOver"]["Description"].Value = @"Raised when 
+the mouse cursor is brought over the widget";
+
+            e.Params["Controls"][typeName]["Events"]["MouseOut"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["MouseOut"]["Description"].Value = @"Raised when 
+the mouse cursor leaves the element, meaning the cursor is moved outside of the boundaries of the 
+widget";
+
+            e.Params["Controls"][typeName]["Events"]["KeyPress"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["KeyPress"]["Description"].Value = @"Raised when 
+a key is pressed and typed on the widget";
+
+            e.Params["Controls"][typeName]["Events"]["EscKey"].Value = true;
+            e.Params["Controls"][typeName]["Events"]["EscKey"]["Description"].Value = @"Raised when 
+the ESC key is clicked and released on the widget";
+        }
+
+        /*
+         * Helper for above ...
+         */
         private void CreateTextBox(ActiveEventArgs e)
         {
             e.Params["Controls"]["TextBox"]["Name"].Value = "Magix TextBox";
@@ -159,6 +241,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 control, which you can assign Text to and TextChanged Event Handlers";
 
             GetCommonEventsAndProperties(e, "TextBox");
+
+            e.Params["Controls"]["TextBox"]["Properties"]["TextMode"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["TextMode"]["Description"].Value = @"Can be 
+either 'Normal' [default], 'Password', 'Email', 'Number' or 'Phone'. Changes the input type accordingly 
+such that modern browsers can help the end user with getting the input correctly";
 
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
@@ -180,6 +267,9 @@ the text has changed, and the user chooses to 'leave the field' and move to anot
 e.g. clicking with his mouse or using TAB such that the textbox looses focus";
         }
 
+        /*
+         * Helper for above ...
+         */
         private static void CreateCheckBox(ActiveEventArgs e)
         {
             e.Params["Controls"]["CheckBox"]["Name"].Value = "Magix CheckBox";
@@ -205,81 +295,10 @@ keep it 'open'";
 the checked state has changed, either by clicking or through some other user interaction";
         }
 
-        private static void GetCommonEventsAndProperties(ActiveEventArgs e, string typeName)
-        {
-            e.Params["Controls"][typeName]["Properties"]["ID"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["ID"]["Description"].Value = @"String ID used for 
-uniquely identifying a widget later, for extracting its value or changing its state somehow. Must be unique 
-per Meta Form. Should _not_ be set for widgets inside of Repeaters or other listable types of controls. Can only 
-contain alphanumerical characters [a-z|A-Z|0-9], and it should start with an a-z|A-Z character";
-
-            e.Params["Controls"][typeName]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
-class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
-use multiple CSS classes for the same control";
-
-            e.Params["Controls"][typeName]["Properties"]["Info"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional information 
-which can be stored within your object, which is not visible for the end user in any ways, but still 
-will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
-which field your widget has been Data Bound towards within your Meta Object, or what Property 
-it is supposed to create upon creation of a new Meta Object";
-
-            e.Params["Controls"][typeName]["Properties"]["Dir"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["Dir"]["Description"].Value = @"Direction of text 
-on the widget. If you set it to 'rtl', it will display characters from right to left, as in the way 
-it's being done in among other things in Arabic";
-
-            e.Params["Controls"][typeName]["Properties"]["ToolTip"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["ToolTip"]["Description"].Value = @"Tooltip hint 
-given to user when he moves cursor over widget. Obviously useless, for apparent reasons, on tablets, iPhones 
-and such";
-
-            e.Params["Controls"][typeName]["Properties"]["TabIndex"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["TabIndex"]["Description"].Value = @"Numerical 
-value indicating which order the widget is within the 'tab hierarchy', meaning which control is next if 
-the user clicks the TAB key on the keyboard. A control which has TabIndex of 2 will gain focus when 
-the user hits TAB and the widget that has currently focus has 1 as TabIndex, and so on";
-
-            e.Params["Controls"][typeName]["Events"]["Click"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["Click"]["Description"].Value = @"Raised when 
-the widget is clicked. Most useful for buttons and such, since if used on other types of elements it will 
-partially destroy accessibility for your application";
-
-            e.Params["Controls"][typeName]["Events"]["DblClick"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["DblClick"]["Description"].Value = @"Raised when 
-the widget is double clicked. Most useful for buttons and such, since if used on other types of elements it will 
-partially destroy accessibility for your application";
-
-            e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
-the left mouse button is sqeezed, but before it's released, on top of the specific widget. Obviously, for apparent 
-reasons, not very useful for phones, iPads, Droids and Tablet development";
-
-            e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
-the left mouse button is sqeezed and released, on top of the specific widget. Obviously, for apparent 
-reasons, not very useful for phones, iPads, Droids and Tablet development";
-
-            e.Params["Controls"][typeName]["Events"]["MouseOver"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseOver"]["Description"].Value = @"Raised when 
-the mouse cursor is brought over the widget";
-
-            e.Params["Controls"][typeName]["Events"]["MouseOut"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseOut"]["Description"].Value = @"Raised when 
-the mouse cursor leaves the element, meaning the cursor is moved outside of the boundaries of the 
-widget";
-
-            e.Params["Controls"][typeName]["Events"]["KeyPress"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["KeyPress"]["Description"].Value = @"Raised when 
-a key is pressed and typed on the widget";
-
-            e.Params["Controls"][typeName]["Events"]["EscKey"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["EscKey"]["Description"].Value = @"Raised when 
-the ESC key is clicked and released on the widget";
-        }
-
-        private static void GetLabel(ActiveEventArgs e)
+        /*
+         * Helper for above ...
+         */
+        private static void CreateLabel(ActiveEventArgs e)
         {
             e.Params["Controls"]["Label"]["Name"].Value = "Magix Label";
             e.Params["Controls"]["Label"]["TypeName"].Value = "Magix.MetaForms.Plugins.Label";
@@ -293,6 +312,12 @@ Change which HTML tag it's being rendered with by setting its 'Tag' property";
             e.Params["Controls"]["Label"]["Properties"]["Text"]["Description"].Value = @"The text visible to 
 the end user in his browser";
 
+            e.Params["Controls"]["Label"]["Properties"]["For"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Label"]["Properties"]["For"]["Description"].Value = @"Will couple 
+the control with an existing CheckBox or RadioButton on the form. Set this to the 'ID' property 
+of whatever CheckBox or RadioButton you wish to associate this Label with. It probably won't work 
+in your browser unless you also set the 'Tag' property to 'label'";
+
             e.Params["Controls"]["Label"]["Properties"]["Tag"].Value = typeof(string).FullName;
             e.Params["Controls"]["Label"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
 will be rendered by the control. There are many legal values for this property, some of them are 'p', 
@@ -301,7 +326,10 @@ standard for HTML5 if you'd like to wish all its legal values. All 'normal HTML 
 need special attributes or child elements can really be described by modifying this property accordingly";
         }
 
-        private static void GetButton(ActiveEventArgs e)
+        /*
+         * Helper for above ...
+         */
+        private static void CreateButton(ActiveEventArgs e)
         {
             e.Params["Controls"]["Button"]["Name"].Value = "Magix Button";
             e.Params["Controls"]["Button"]["TypeName"].Value = "Magix.MetaForms.Plugins.Button";
@@ -690,6 +718,29 @@ to the end user on top of the button";
                 if (idx.Name == e.Params["Value"].Get<string>())
                     it.Selected = true;
                 ls.Items.Add(it);
+            }
+        }
+
+        /**
+         * Level2: Expects to get an action-list [named actions, separated by pipes [|]] which
+         * it will execute sequentially, in the order they are in. Expects to 
+         * be raised from a WebPart, and needs 'ActionsToExecute' which is the piped 
+         * list of Actions to execute
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.RaiseActionsFromActionString")]
+        protected void Magix_MetaForms_RaiseActionsFromActionString(object sender, ActiveEventArgs e)
+        {
+            string actions = e.Params["ActionsToExecute"].Get<string>();
+
+            foreach (string idx in actions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                e.Params["ActionName"].Value = idx;
+
+                RaiseEvent(
+                    "Magix.MetaAction.RaiseAction",
+                    e.Params);
+
+                e.Params["ActionName"].UnTie();
             }
         }
     }
