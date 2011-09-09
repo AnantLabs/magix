@@ -15,6 +15,7 @@ using Magix.Brix.Publishing.Common;
 using System.Reflection;
 using System.Drawing;
 using Magix.UX.Effects;
+using Magix.UX.Aspects;
 
 namespace Magix.Brix.Components.ActiveModules.MetaForms
 {
@@ -163,9 +164,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 ctrl.Load +=
                     delegate
                     {
-                        if (ctrl.ClientID == OldSelected && 
+                        if (ctrl.ClientID == OldSelected &&
                             !ctrl.CssClass.Contains(" mux-wysiwyg-selected"))
+                        {
                             ctrl.CssClass += " mux-wysiwyg-selected";
+                            ctrl.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
+                        }
                     };
                 ctrl.Click +=
                     delegate
@@ -174,13 +178,61 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         {
                             BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
                             c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+                            c.ToolTip = "Click me to edit the Widget";
                         }
                         SetActiveControl(node);
                         OldSelected = ctrl.ClientID;
                         ctrl.CssClass += " mux-wysiwyg-selected";
+                        ctrl.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                     };
+                ctrl.Style[Styles.position] = "relative";
+
+                // Making draggable ...
+                AspectDraggable dragger = new AspectDraggable();
+                dragger.Dragged +=
+                    delegate
+                    {
+                        int left = int.Parse(ctrl.Style[Styles.left].Replace("px", ""));
+                        int top = int.Parse(ctrl.Style[Styles.top].Replace("px", ""));
+
+                        AbsolutizeWidget(left, top, node);
+                    };
+                ctrl.Controls.Add(dragger);
+
+                // Making sure we're rendering the styles needed ...
+                RenderStyles(ctrl, node);
+
                 parent.Controls.Add(ctrl);
             }
+        }
+
+        private void RenderStyles(BaseWebControl ctrl, Node node)
+        {
+            if (node.Contains("Properties") &&
+                node["Properties"].Contains("Style"))
+            {
+                foreach (Node idx in node["Properties"]["Style"])
+                {
+                    if (idx.Name == "_ID")
+                        continue;
+
+                    if (!string.IsNullOrEmpty(idx.Get<string>()))
+                        ctrl.Style[idx.Name] = idx.Get<string>();
+                }
+            }
+        }
+
+        private void AbsolutizeWidget(int left, int top, Node node)
+        {
+            Node n = new Node();
+
+            n["ID"].Value = node["_ID"].Value;
+            n["Left"].Value = left;
+            n["Top"].Value = top;
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.AbsolutizeWidget",
+                n);
         }
 
         private string OldSelected
@@ -290,6 +342,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             {
                 BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
                 c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+                c.ToolTip = "Click me to edit the Widget";
             }
             OldSelected = null;
             ClearPropertyWindow();

@@ -78,6 +78,11 @@
 	overflow-y:auto;
 }
 
+.mux-meta-form-wysiwyg-wrapper *
+{
+	cursor:pointer;
+}
+
 .mux-property-row
 {
 	background-color:rgba(0,0,0,0);
@@ -237,5 +242,6 @@ textarea.mux-wysiwyg-selected
 .mux-control-selected *.mux-wysiwyg-selected
 {
 	opacity:1;
+	cursor:move;
 }
 
