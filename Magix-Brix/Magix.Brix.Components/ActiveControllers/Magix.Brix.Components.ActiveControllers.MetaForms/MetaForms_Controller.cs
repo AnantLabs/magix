@@ -875,6 +875,9 @@ focus, or clicking the widget with his mouse or touch screen";
 
                 tr.Commit();
             }
+
+            // Signalizing to caller that he needs to refresh his view ...
+            e.Params["Refresh"].Value = true;
         }
     }
 }
