@@ -37,6 +37,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected System.Web.UI.WebControls.Repeater eventRep;
         protected Panel eventWrp;
         protected Label eventHeader;
+        protected Panel shortCutWrp;
+        protected System.Web.UI.WebControls.Repeater shortCutRep;
 
         public override void InitialLoading(Node node)
         {
@@ -224,6 +226,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
         private void AbsolutizeWidget(int left, int top, Node node)
         {
+            if (left == 0 && top == 0)
+                return;
+
             Node n = new Node();
 
             n["ID"].Value = node["_ID"].Value;
@@ -281,6 +286,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 eventHeader.Visible = ctrlType["Events"].Count > 0;
                 if (ctrls.CssClass.IndexOf(" mux-control-selected") == -1)
                     ctrls.CssClass += " mux-control-selected";
+
+                // Shortcut buttons ...
+                if (ctrlType.Contains("ShortCuts"))
+                {
+                    shortCutRep.DataSource = ctrlType["ShortCuts"];
+                    shortCutRep.DataBind();
+                    shortCutWrp.ReRender();
+                }
             }
             else
             {

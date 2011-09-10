@@ -140,6 +140,21 @@
                     </ItemTemplate>
                 </asp:Repeater>
             </mux:Panel>
+            <mux:Panel
+                runat="server"
+                id="shortCutWrp">
+                <asp:Repeater
+                    runat="server"
+                    id="shortCutRep">
+                    <ItemTemplate>
+                        <mux:LinkButton
+                            runat="server"
+                            CssClass='<%# Eval("[CssClass].Value") + " mux-shortcut-button" %>'
+                            ToolTip='<%#Eval("[ToolTip].Value") %>'
+                            Text='<%#Eval("[Text].Value") %>' />
+                    </ItemTemplate>
+                </asp:Repeater>
+            </mux:Panel>
         </Content>
     </mux:Window>
 </div>

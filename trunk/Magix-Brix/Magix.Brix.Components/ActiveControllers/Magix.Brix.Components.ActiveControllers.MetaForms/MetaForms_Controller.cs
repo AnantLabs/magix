@@ -230,6 +230,17 @@ a key is pressed and typed on the widget";
             e.Params["Controls"][typeName]["Events"]["EscKey"].Value = true;
             e.Params["Controls"][typeName]["Events"]["EscKey"]["Description"].Value = @"Raised when 
 the ESC key is clicked and released on the widget";
+
+            // Shortcut buttons ...
+            e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Text"].Value = "Delete!";
+            e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["ToolTip"].Value = "Deletes the currently selected widget. Be careful, this operation _cannot_ be undone ... !!";
+            e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["CssClass"].Value = "mux-shortcut-delete";
+            e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Event"].Value = "Magix.MetaForms.DeleteMetaFormWidgetFromForm";
+
+            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Text"].Value = "Builder ...";
+            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["ToolTip"].Value = "Opens up the 'Style Builder' such that you can create Animations and Styles for your Widget";
+            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["CssClass"].Value = "mux-shortcut-builder";
+            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
         }
 
         /*
@@ -845,6 +856,22 @@ focus, or clicking the widget with his mouse or touch screen";
                 n["Properties"]["Style"]["position"].Value = "relative";
 
                 n.Save();
+
+                tr.Commit();
+            }
+        }
+
+        /**
+         * Level2: Will delete the given 'ID' MetaForm.Node element from the MetaForm
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.DeleteMetaFormWidgetFromForm")]
+        protected void Magix_MetaForms_DeleteMetaFormWidgetFromForm(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["ID"].Get<int>());
+
+                n.Delete();
 
                 tr.Commit();
             }
