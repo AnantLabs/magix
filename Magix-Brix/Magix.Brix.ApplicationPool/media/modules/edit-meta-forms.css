@@ -338,5 +338,48 @@ textarea.mux-wysiwyg-selected
 }
 
 
+.mux-style-builder .mux-insert
+{
+	height:235px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	width:800px;
+}
 
+.mux-style-builder .mux-multi-button-view
+{
+	width:25%;
+}
+
+.mux-style-builder .texture-panel
+{
+	background-color:rgba(0, 0, 0, 0);
+	border:dashed 1px rgba(0, 0, 0, .2);
+	cursor:pointer;
+	padding:18px 20px 18px 20px;
+	-moz-transition-property:background-color;
+	-moz-transition-duration:2s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:2s;
+	transition-property:background-color;
+	transition-duration:2s;
+}
+
+input[type=button].mux-color-picker-image-picker
+{
+	display:block;
+	float:left;
+	width:230px;
+	margin-top:54px;
+	background-position:
+}
+
+input[type=button].mux-color-picker-ok
+{
+	display:block;
+	float:left;
+	width:110px;
+	margin-top:18px;
+}
 

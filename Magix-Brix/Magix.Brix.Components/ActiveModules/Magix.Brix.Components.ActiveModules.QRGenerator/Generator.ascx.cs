@@ -18,7 +18,9 @@ using Magix.UX.Effects;
 namespace Magix.Brix.Components.ActiveModules.QRGenerator
 {
     /**
-     * 
+     * Level2: Vanity QR Code Generator for creating 'beautiful' QR Codes. Also contains 
+     * an algorithm [burn] which creates more reciliant QR codes that scans faster than 
+     * conventional square dots
      */
     [ActiveModule]
     [PublisherPlugin(CanBeEmpty = true)]

@@ -38,6 +38,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StyleBuilder.ascx.cs">
+      <DependentUpon>StyleBuilder.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="EditMetaForm.ascx.cs">
       <DependentUpon>EditMetaForm.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -77,6 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MetaView_Form.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StyleBuilder.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
