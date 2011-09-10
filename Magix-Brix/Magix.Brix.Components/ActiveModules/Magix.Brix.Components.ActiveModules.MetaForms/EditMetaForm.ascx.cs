@@ -330,6 +330,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 ctrls.Controls.Clear();
                 CreateFormControls();
                 ctrls.ReRender();
+
+                if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
+                    ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
             }
         }
 
@@ -500,6 +503,28 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["Value"].Value = (sender as TextAreaEdit).Text;
             node["ControlID"].Value = int.Parse(type.Info);
             node["PropertyName"].Value = (sender as TextAreaEdit).Info;
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.ChangeFormPropertyValue",
+                node);
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.GetControlsForForm",
+                DataSource);
+
+            ctrls.Controls.Clear();
+            CreateFormControls();
+            ctrls.ReRender();
+        }
+
+        protected void PropertyValueIntChanged(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Value;
+            node["Value"].Value = (sender as InPlaceEdit).Text;
+            node["ControlID"].Value = int.Parse(type.Info);
+            node["PropertyName"].Value = (sender as InPlaceEdit).Info;
 
             RaiseSafeEvent(
                 "Magix.MetaForms.ChangeFormPropertyValue",

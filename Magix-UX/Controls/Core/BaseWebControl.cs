@@ -254,7 +254,7 @@ namespace Magix.UX.Widgets.Core
          * on the subject CSS to understand how to use this property. But 
          * specifically for Magix UX, any style properties added, removed, changed
          * and so on any times during its life-cycle, will automatically, and extremely 
-         * bandwidth efficient be changed/added/removed automagically by the core
+         * bandwidth efficient be changed/added/removed Automagixally by the core
          * engine of MUX.
          */
         public virtual StyleCollection Style

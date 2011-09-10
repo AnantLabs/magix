@@ -21,7 +21,7 @@
         Draggable="true"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-toolbox span-8"
         Closable="false"
-        ToolTip="The Widgets you have to your disposal within this installation of Magix. Double Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around if it obscures something you need to reach ..."
+        ToolTip="The Widgets you have to your disposal within this installation of Magix. Double Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around by its Header if it obscures something you need to reach ..."
         Caption="Widgets & Controls ...">
         <Content>
             <asp:Repeater
@@ -45,7 +45,7 @@
         id="props"
         Draggable="true"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-props span-8 mux-hide-events mux-hide-props"
-        ToolTip="Properties and Actions for your selected Widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around if it obscures something you need to reach ..."
+        ToolTip="Properties and Actions for your selected Widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around by its Header if it obscures something you need to reach ..."
         Closable="false"
         Caption="Properties & Actions ...">
         <Content>
@@ -53,8 +53,9 @@
                 runat="server"
                 id="type"
                 style="cursor:pointer;"
+                CssClass="mux-section-header"
                 ToolTip="Click me for a more thorough Description of the Widget"
-                Tag="h4" />
+                Tag="h5" />
             <mux:Label
                 runat="server"
                 id="desc"
@@ -64,7 +65,7 @@
             <mux:Label
                 runat="server"
                 id="propHeader"
-                CssClass="span-6 last"
+                CssClass="span-6 last mux-section-header"
                 Visible="false"
                 style="margin-bottom:0;cursor:pointer;"
                 ToolTip="Click me to toggle visibility of Properties for selected Widget"
@@ -91,7 +92,15 @@
                                     TextLength="30"
                                     Info='<%#Eval("Name") %>'
                                     CssClass="span-4 last mux-in-place-edit left-float prop-editor"
-                                    Visible='<%#Eval("Value").Equals("System.String") || Eval("Value").Equals("System.Int32") %>'
+                                    Visible='<%#Eval("Value").Equals("System.String") %>'
+                                    Text='<%#GetPropertyValue(Eval("Name")) %>' />
+                                <mux:InPlaceEdit
+                                    runat="server"
+                                    OnTextChanged="PropertyValueIntChanged"
+                                    TextLength="5"
+                                    Info='<%#Eval("Name") %>'
+                                    CssClass="span-2 last mux-in-place-edit left-float prop-editor"
+                                    Visible='<%#Eval("Value").Equals("System.Int32") %>'
                                     Text='<%#GetPropertyValue(Eval("Name")) %>' />
                                 <mux:CheckBox
                                     runat="server"
@@ -108,7 +117,7 @@
             <mux:Label
                 runat="server"
                 id="eventHeader"
-                CssClass="span-6 last"
+                CssClass="span-6 last mux-section-header"
                 style="margin-bottom:0;cursor:pointer;"
                 Visible="false"
                 ToolTip="Click me to toggle visibility of Actions for selected Widget"
