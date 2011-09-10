@@ -303,6 +303,36 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
         }
 
+        protected void ShortCutButtonClicked(object sender, EventArgs e)
+        {
+            Node node = new Node();
+            node["ID"].Value = int.Parse(type.Info);
+
+            RaiseSafeEvent(
+                (sender as BaseWebControl).Info,
+                node);
+
+            if (node.Contains("Refresh"))
+            {
+                if (!string.IsNullOrEmpty(OldSelected))
+                {
+                    BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
+                    c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+                    c.ToolTip = "Click me to edit the Widget";
+                }
+                OldSelected = "";
+                ClearPropertyWindow();
+
+                RaiseSafeEvent(
+                    "Magix.MetaForms.GetControlsForForm",
+                    DataSource);
+
+                ctrls.Controls.Clear();
+                CreateFormControls();
+                ctrls.ReRender();
+            }
+        }
+
         protected void ActionsClicked(object sender, EventArgs e)
         {
             LinkButton b = sender as LinkButton;
@@ -347,6 +377,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             eventRep.DataSource = null;
             eventRep.DataBind();
             eventWrp.ReRender();
+            shortCutRep.DataSource = null;
+            shortCutRep.DataBind();
+            shortCutWrp.ReRender();
         }
 
         protected void ctrls_Click(object sender, EventArgs e)

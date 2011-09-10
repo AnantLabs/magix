@@ -151,6 +151,8 @@
                             runat="server"
                             CssClass='<%# Eval("[CssClass].Value") + " mux-shortcut-button" %>'
                             ToolTip='<%#Eval("[ToolTip].Value") %>'
+                            Info='<%#Eval("[Event].Value") %>'
+                            OnClick="ShortCutButtonClicked"
                             Text='<%#Eval("[Text].Value") %>' />
                     </ItemTemplate>
                 </asp:Repeater>
