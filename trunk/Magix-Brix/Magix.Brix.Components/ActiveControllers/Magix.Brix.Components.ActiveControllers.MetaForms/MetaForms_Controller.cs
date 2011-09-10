@@ -161,18 +161,22 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             e.Params["Controls"][typeName]["Properties"]["ID"]["Description"].Value = @"String ID used for 
 uniquely identifying a widget later, for extracting its value or changing its state somehow. Must be unique 
 per Meta Form. Should _not_ be set for widgets inside of Repeaters or other listable types of controls. Can only 
-contain alphanumerical characters [a-z|A-Z|0-9], and it should start with an a-z|A-Z character";
+contain alphanumerical characters [a-z|A-Z|0-9], and it should start with an a-z|A-Z character. In fact, unless 
+you are certain about what you're doing, and what you want to achieve, you probably should _NOT_ mess 
+with this property";
 
             e.Params["Controls"][typeName]["Properties"]["CssClass"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["CssClass"]["Default"].Value = "span-2";
             e.Params["Controls"][typeName]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
 class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
-use multiple CSS classes for the same control";
+use multiple CSS classes for the same control. If you do not know what a CSS class is, or all of this is 
+rubbish to you, you would probably be better of not using this property, but instead indirectly through 
+the Builder Short Cut Button create your animations and styles for your Widgets";
 
             e.Params["Controls"][typeName]["Properties"]["Dir"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["Dir"]["Description"].Value = @"Direction of text 
-on the widget. If you set it to 'rtl', it will display characters from right to left, as in the way 
-it's being done in among other things in Arabic";
+on the widget. If you set it to rtl, it will display characters from right to left, as in the way 
+it is being done in among other things in Arabic";
 
             e.Params["Controls"][typeName]["Properties"]["ToolTip"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["ToolTip"]["Description"].Value = @"Tooltip hint 
@@ -182,13 +186,16 @@ and such";
             e.Params["Controls"][typeName]["Properties"]["Info"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional information 
 which can be stored within your object, which is not visible for the end user in any ways, but still 
-will follow your Widget around as a small piece of 'information storage'. Mostly used for figuring out 
+will follow your Widget around as a small piece of information storage. Mostly used for figuring out 
 which field your widget has been Data Bound towards within your Meta Object, or what Property 
-it is supposed to create upon creation of a new Meta Object";
+it is supposed to create upon creation of a new Meta Object. If you want to create or edit 
+objects of type xxx and you have a field which should be linked towards its yyy property, then 
+you should set the Info field on that Widget to yyy to be able to Automagixally databind your 
+field towards your Meta Object property";
 
             e.Params["Controls"][typeName]["Properties"]["TabIndex"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["TabIndex"]["Description"].Value = @"Numerical 
-value indicating which order the widget is within the 'tab hierarchy', meaning which control is next if 
+value indicating which order the widget is within the tab hierarchy, meaning which control is next if 
 the user clicks the TAB key on the keyboard. A control which has TabIndex of 2 will gain focus when 
 the user hits TAB and the widget that has currently focus has 1 as TabIndex, and so on";
 
@@ -206,7 +213,7 @@ partially destroy accessibility for your application";
 
             e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
             e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
-the left mouse button is squeezed, but before it's released, on top of the specific widget. Obviously, for apparent 
+the left mouse button is squeezed, but before it is released, on top of the specific widget. Obviously, for apparent 
 reasons, not very useful for phones, iPads, Droids and Tablet development";
 
             e.Params["Controls"][typeName]["Events"]["MouseUp"].Value = true;
@@ -238,7 +245,7 @@ the ESC key is clicked and released on the widget";
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Event"].Value = "Magix.MetaForms.DeleteMetaFormWidgetFromForm";
 
             e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Text"].Value = "Builder ...";
-            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["ToolTip"].Value = "Opens up the 'Style Builder' such that you can create Animations and Styles for your Widget";
+            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["ToolTip"].Value = "Opens up the Style Builder such that you can create Animations and Styles for your Widget as you please. Ad some Candy to your widgets by changing the way they Animate, Behave and Look like. Fonts, colors, etc, etc, etc. It's all done from here ... ;)";
             e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["CssClass"].Value = "mux-shortcut-builder";
             e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
         }
@@ -258,12 +265,12 @@ common type of input control, since it can take any types of input values from t
 
             e.Params["Controls"]["TextBox"]["Properties"]["TextMode"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["TextMode"]["Description"].Value = @"Can be 
-either 'Normal' [default], 'Password', 'Email', 'Number' or 'Phone'. Changes the input type accordingly 
+either Normal [default], Password, Email, Number or Phone. Changes the input type accordingly 
 such that modern browsers can help the end user with getting the input correctly";
 
             e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"]["Description"].Value = @"The 
-'watermark' text of your textbox. Will show when textbox is empty, as a 'cue' to the end user for what to 
+watermark text of your textbox. Will show when textbox is empty, as a cue to the end user for what to 
 type into it";
 
             e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"].Value = typeof(bool).FullName;
@@ -279,9 +286,9 @@ will automatically correct spelling mistakes, if possible, for the end user as h
             e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"].Value = typeof(bool).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"]["Default"].Value = true;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"]["Description"].Value = @"If true, 
-will attempt at automatically completing the field according to the user's settings within the browser. Doesn't 
+will attempt at automatically completing the field according to the user settings within the browser. Doesn not 
 always work since it tries to parse the field type of information according to its ID, which you have little or 
-no 'absolute' control over";
+no absolute control over";
 
             e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"].Value = typeof(int).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"]["Default"].Value = 0;
@@ -300,12 +307,12 @@ as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Wi
             e.Params["Controls"]["TextBox"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
-will enable the widget [true is its default value]. If it is false, the control's value cannot be changed in 
+will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
 any ways by the end user";
 
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"].Value = true;
             e.Params["Controls"]["TextBox"]["Events"]["TextChanged"]["Description"].Value = @"Raised when 
-the text has changed, and the user chooses to 'leave the field' and move to another field on the form by 
+the text has changed, and the user chooses to leave the field and move to another field on the form by 
 e.g. clicking with his mouse or using TAB such that the textbox looses focus";
 
             e.Params["Controls"]["TextBox"]["Events"]["EscPressed"].Value = true;
@@ -344,13 +351,13 @@ as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Wi
             e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
             e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
-will enable the widget [true is its default value]. If it is false, the control's value cannot be changed in 
+will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
 any ways by the end user";
 
             e.Params["Controls"]["CheckBox"]["Properties"]["Checked"].Value = typeof(bool).FullName;
             e.Params["Controls"]["CheckBox"]["Properties"]["Checked"]["Description"].Value = @"The 
-Checked state of your CheckBox, true will 'tag it off' as checked, while false [the default] will 
-keep it 'open'";
+Checked state of your CheckBox, true will tag it off as checked, while false [the default] will 
+keep it open";
 
             e.Params["Controls"]["CheckBox"]["Events"]["Blur"].Value = true;
             e.Params["Controls"]["CheckBox"]["Events"]["Blur"]["Description"].Value = @"Raised when 
@@ -376,7 +383,7 @@ the checked state has changed, either by clicking or through some other user int
             e.Params["Controls"]["Label"]["TypeName"].Value = "Magix.MetaForms.Plugins.Label";
             e.Params["Controls"]["Label"]["ToolTip"].Value = @"Creates a Label type of 
 control, which you can assign Text to. Basically serves as a read-only textual fragment on your page. 
-Change which HTML tag it's being rendered with by setting its 'Tag' property";
+Change which HTML tag it is being rendered with by setting its Tag property";
 
             GetCommonEventsAndProperties(e, "Label");
 
@@ -386,16 +393,16 @@ the end user in his browser";
 
             e.Params["Controls"]["Label"]["Properties"]["Tag"].Value = typeof(string).FullName;
             e.Params["Controls"]["Label"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
-will be rendered by the control. There are many legal values for this property, some of them are 'p', 
-'div', 'span', 'label', 'li' [use panel for 'ul'] and 'address'. But also many more. Check up the 
-standard for HTML5 if you'd like to wish all its legal values. All 'normal HTML elements', which doesn't 
+will be rendered by the control. There are many legal values for this property, some of them are p, 
+div, span, label, li [use panel for ul] and address. But also many more. Check up the 
+standard for HTML5 if you would like to wish all its legal values. All normal HTML elements, which doesn not 
 need special attributes or child elements can really be described by modifying this property accordingly";
 
             e.Params["Controls"]["Label"]["Properties"]["For"].Value = typeof(string).FullName;
             e.Params["Controls"]["Label"]["Properties"]["For"]["Description"].Value = @"Will couple 
-the control with an existing CheckBox or RadioButton on the form. Set this to the 'ID' property 
-of whatever CheckBox or RadioButton you wish to associate this Label with. It probably won't work 
-in your browser unless you also set the 'Tag' property to 'label'";
+the control with an existing CheckBox or RadioButton on the form. Set this to the ID property 
+of whatever CheckBox or RadioButton you wish to associate this Label with. It probably will not work 
+in your browser unless you also set the Tag property to label";
         }
 
         /*
@@ -407,7 +414,7 @@ in your browser unless you also set the 'Tag' property to 'label'";
             e.Params["Controls"]["Button"]["TypeName"].Value = "Magix.MetaForms.Plugins.Button";
             e.Params["Controls"]["Button"]["ToolTip"].Value = @"Creates a Button type of 
 control, which you can assign Click actions to, from which when the user clicks, will raise 
-the actions you've associated with the button. You can have several buttons per form, and they 
+the actions you have associated with the button. You can have several buttons per form, and they 
 can have different Text values to differentiate them for the user";
 
             GetCommonEventsAndProperties(e, "Button");
@@ -527,6 +534,12 @@ focus, or clicking the widget with his mouse or touch screen";
                     throw new ArgumentException("That parent doesn't exist");
 
                 int count = parent["Surface"].Children.Count;
+
+                foreach (MetaForm.Node idx in parent["Surface"].Children)
+                {
+                    if (int.Parse(idx.Name.Substring(2)) >= count)
+                        count = int.Parse(idx.Name.Substring(2)) + 1;
+                }
 
                 parent["Surface"]["c-" + count]["TypeName"].Value = e.Params["TypeName"].Get<string>();
 
