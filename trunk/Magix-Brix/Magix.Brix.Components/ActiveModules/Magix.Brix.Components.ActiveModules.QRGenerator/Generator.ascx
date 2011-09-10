@@ -81,7 +81,7 @@
                             OnClick="fgText_Click"
                             ToolTip="Click to Change Color or Texture used in rendering the QR Code's Foreground Color"
                             id="fgText">
-                            Foreground Color/Texture
+                            &nbsp;
                         </mux:Panel>
                         <mux:Panel
                             runat="server"
@@ -89,7 +89,7 @@
                             OnClick="bgText_Click"
                             ToolTip="Click to Change Color or Texture used in rendering the QR Code's Background Color"
                             id="bgText">
-                            Background Color/Texture
+                            &nbsp;
                         </mux:Panel>
                         <div class="span-4 last" style="margin-bottom:18px;">
                             <mux:CheckBox
@@ -127,6 +127,7 @@
                 </mux:MultiPanelView>
                 <mux:MultiPanelView 
                     runat="server" 
+                    DefaultWidget="next4"
                     ID="mpv3">
                     <div class="mux-insert">
                         <mux:Image

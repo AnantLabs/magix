@@ -17,12 +17,15 @@ using System.Drawing;
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
     /**
+     * Level2: Colorpicker Module for allowing the end user [or you] to pick colors in the system. Also
+     * has support for picking images for use as textures as alternatives to picking color
      */
     [ActiveModule]
     public class PickColorOrImage : ActiveModule
     {
         protected ColorPicker clr;
         protected Button getImage;
+        protected Button ok;
 
         public override void InitialLoading(Node node)
         {
@@ -31,10 +34,22 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             Load +=
                 delegate
                 {
-                    new EffectTimeout(500)
-                        .ChainThese(
-                            new EffectFocusAndSelect(getImage))
-                        .Render();
+                    if (DataSource.Contains("NoImage") && 
+                        DataSource["NoImage"].Get<bool>())
+                    {
+                        getImage.Visible = false;
+                        new EffectTimeout(500)
+                            .ChainThese(
+                                new EffectFocusAndSelect(ok))
+                            .Render();
+                    }
+                    else
+                    {
+                        new EffectTimeout(500)
+                            .ChainThese(
+                                new EffectFocusAndSelect(getImage))
+                            .Render();
+                    }
                     if (DataSource.Contains("Color"))
                         clr.Value = System.Drawing.ColorTranslator.FromHtml(DataSource["Color"].Get<string>());
                     else
@@ -44,20 +59,13 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
 
         protected void getImage_Click(object sender, EventArgs e)
         {
-            RaiseSafeEvent("Magix.Core.FilePicker.SelectFileInsteadOfColor");
-        }
-
-        [ActiveEvent(Name = "Magix.Core.ColorPicker.FileSelected")]
-        protected void Magix_Core_ColorPicker_FileSelected(object sender, ActiveEventArgs e)
-        {
-            string file = e.Params["Folder"].Get<string>() + e.Params["FileName"].Get<string>();
-
-            Node node = new Node();
-            node["FileName"].Value = file;
+            Node tmp = new Node();
+            if (DataSource.Contains("Top"))
+                tmp["Top"].Value = DataSource["Top"].Value;
 
             RaiseSafeEvent(
-                DataSource["SelectEvent"].Get<string>(),
-                node);
+                "Magix.Core.FilePicker.SelectFileInsteadOfColor",
+                tmp);
         }
 
         protected void ok_Click(object sender, EventArgs e)
@@ -85,6 +93,23 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         protected void cancel_Click(object sender, EventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        /**
+         * Level2: Will raise the SelectEvent with the 'FileName' property set to an image
+         * file the end user has just selected
+         */
+        [ActiveEvent(Name = "Magix.Core.ColorPicker.FileSelected")]
+        protected void Magix_Core_ColorPicker_FileSelected(object sender, ActiveEventArgs e)
+        {
+            string file = e.Params["Folder"].Get<string>() + e.Params["FileName"].Get<string>();
+
+            Node node = new Node();
+            node["FileName"].Value = file;
+
+            RaiseSafeEvent(
+                DataSource["SelectEvent"].Get<string>(),
+                node);
         }
     }
 }

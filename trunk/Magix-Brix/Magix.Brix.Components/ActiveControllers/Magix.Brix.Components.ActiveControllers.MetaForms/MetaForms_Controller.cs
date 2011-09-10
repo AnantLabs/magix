@@ -892,5 +892,25 @@ focus, or clicking the widget with his mouse or touch screen";
             // Signalizing to caller that he needs to refresh his view ...
             e.Params["Refresh"].Value = true;
         }
+
+        /**
+         * Level2: Will open up the Style Builder for creating Animations and Styles for your widget.
+         * The Event Handler needs an 'ID' parameter which defines which MetaForm.Node object 
+         * to actually modify the style of upon saving of your style
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.OpenStyleBuilderForWidget")]
+        protected void Magix_MetaForms_OpenStyleBuilderForWidget(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+            node["ID"].Value = e.Params["ID"].Value;
+            node["Caption"].Value = "Magix Style Builder for Widget ...";
+            node["Width"].Value = 24;
+            node["Top"].Value = 20;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.MetaForms.StyleBuilder",
+                "child",
+                node);
+        }
     }
 }
