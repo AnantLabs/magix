@@ -245,3 +245,52 @@ textarea.mux-wysiwyg-selected
 	cursor:move;
 }
 
+.mux-shortcut-button
+{
+	display:block;
+	float:left;
+	width:60px;
+	padding-left:10px;
+	margin-right:10px;
+	height:18px;
+	margin-top:18px;
+	background-color:rgba(0,0,0,.1);
+	text-decoration:none;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-border-radius:1px 15px 15px 1px;
+	-webkit-border-radius:1px 15px 15px 1px;
+	border-radius:1px 15px 15px 1px;
+	-moz-transition-property:-moz-box-shadow, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, color;
+	transition-duration:0.2s;
+}
+
+.mux-shortcut-button:hover
+{
+	-moz-transition-property:-moz-box-shadow, color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, color;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, color;
+	transition-duration:0.2s;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.mux-shortcut-delete
+{
+}
+
+.mux-shortcut-builder
+{
+}
+
+
+
+
