@@ -167,7 +167,7 @@
                             Tag="label"
                             For="chkFloat"
                             CssClass="span-3 last"
-                            ToolTip="Whether or not the Widget will be in 'float mode' or not. Float mode means that it'll float to the left as long as there's space enough to display it in its entirety, including its margins and such to the right of the last element within the same float hierarchy. To use floating of elements, you need to also use Block Displaying of the widget, plus also an explicit width or height of the element" />
+                            ToolTip="Whether or not the Widget will be in 'float mode' or not. Float mode means that it'll float to the left as long as there's space enough to display it in its entirety, including its margins and such to the right of the last element within the same float hierarchy. To use floating of elements, you need to also use Block Displaying of the widget, plus also an explicit width or height of the element. Float mode is in general i good thing, and the way you _should_ prefer, in general, to display your Widgets, since it give you more flexibility later" />
                         <mux:CheckBox
                             runat="server"
                             style="width:20px;display:block;float:left;clear:both;"
@@ -187,11 +187,23 @@
                         <mux:Label
                             runat="server"
                             id="lblChkBlock"
-                            Text="Display Block"
+                            Text="Force Block"
                             Tag="label"
                             For="chkBlock"
                             CssClass="span-3 last"
                             ToolTip="If true, the Widget will be rendered as a 'Block Level Element', which among other things is a prerequisite for being able to 'float' the element" />
+                        <mux:CheckBox
+                            runat="server"
+                            style="width:20px;display:block;float:left;clear:both;"
+                            id="chkInline" />
+                        <mux:Label
+                            runat="server"
+                            id="lblChkInline"
+                            Text="Force Inline"
+                            Tag="label"
+                            For="chkBlock"
+                            CssClass="span-3 last"
+                            ToolTip="If true, the Widget will be rendered as an 'Inline Level Element', which is the opposite of Block Level Element, and intended for widgets that are supposed to just be fragments of other widgets" />
                     </div>
                     <p class="span-16 clear-both last mux-info-text" title="... Sorry guys. But hey, feel free to override it somehow, and change it if you like to :)">
                         (*) All units are in pixels ...
