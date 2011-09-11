@@ -345,6 +345,7 @@ textarea.mux-wysiwyg-selected
 	-webkit-border-radius:5px;
 	border-radius:5px;
 	width:800px;
+	position:relative;
 }
 
 .mux-style-builder .mux-multi-button-view
@@ -354,16 +355,38 @@ textarea.mux-wysiwyg-selected
 
 .mux-style-builder .texture-panel
 {
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
 	background-color:rgba(0, 0, 0, 0);
-	border:dashed 1px rgba(0, 0, 0, .2);
+	border:dashed 1px rgba(255, 200, 200, .5);
 	cursor:pointer;
 	padding:18px 20px 18px 20px;
-	-moz-transition-property:background-color;
-	-moz-transition-duration:2s;
-	-webkit-transition-property:background-color;
-	-webkit-transition-duration:2s;
-	transition-property:background-color;
-	transition-duration:2s;
+	-moz-transition-property:background-color, -moz-box-shadow, -moz-border-radius;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color, -webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-duration:.5s;
+	transition-property:background-color, box-shadow, border-radius;
+	transition-duration:.5s;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+
+.mux-style-builder .texture-panel:hover
+{
+	-moz-transition-property:background-color, -moz-box-shadow, -moz-border-radius;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color, -webkit-box-shadow, -webkit-border-radius;
+	-webkit-transition-duration:.5s;
+	transition-property:background-color, box-shadow, border-radius;
+	transition-duration:.5s;
+	-webkit-box-shadow: 2px 2px 3px rgba(255, 0, 0, .8);
+	-moz-box-shadow: 2px 2px 3px rgba(255, 0, 0, .8);
+	box-shadow: 2px 2px 3px rgba(255, 0, 0, .8);
+	-moz-border-radius:25px;
+	-webkit-border-radius:25px;
+	border-radius:25px;
 }
 
 input[type=button].mux-color-picker-image-picker
@@ -383,3 +406,43 @@ input[type=button].mux-color-picker-ok
 	margin-top:18px;
 }
 
+.mux-editable-part
+{
+	padding:18px 20px 18px 20px;
+	height:135px;
+	margin-bottom:18px;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, 0.2)), to(rgba(128, 128, 128, 0.2))) !important;
+	background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(128, 128, 128, 0.2) 100%) !important;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+}
+
+.mux-editable-part:hover
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow;
+	transition-duration:0.2s;
+}
+
+.mux-info-text
+{
+	font-style:italic;
+	color:#999;
+}
+
+.next-button
+{
+	position:absolute;
+	bottom:0;
+	right:10px;
+}

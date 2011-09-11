@@ -346,7 +346,6 @@
     },
 
     setStyle: function(prop, val) {
-console.log(prop + " - " + val);
       this.style[prop] = val;
     },
 

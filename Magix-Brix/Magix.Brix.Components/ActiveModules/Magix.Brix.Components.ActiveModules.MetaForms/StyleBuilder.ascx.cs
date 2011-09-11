@@ -30,8 +30,20 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected TabButton mb2;
         protected TabButton mb3;
         protected TabButton mb4;
+
+        protected TextBox marginLeft;
+        protected TextBox marginTop;
+        protected TextBox marginRight;
+        protected TextBox marginBottom;
+        protected TextBox paddingLeft;
+        protected TextBox paddingTop;
+        protected TextBox paddingRight;
+        protected TextBox paddingBottom;
+        protected TextBox borderWidth;
+
         protected Panel fgText;
         protected Panel bgText;
+        protected Panel borderColorPnl;
 
         public override void InitialLoading(Node node)
         {
@@ -41,11 +53,17 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 delegate
                 {
                     SetActiveMultiViewIndex(0);
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(marginLeft))
+                        .Render();
                 };
         }
 
         private void SetActiveMultiViewIndex(int index)
         {
+            mp.SetActiveView(index);
+
             switch (index)
             {
                 case 0:
@@ -95,6 +113,31 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
         }
 
+        protected void borderColorPnl_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["Top"].Value = 20;
+
+            node["SelectEvent"].Value = "Magix.MetaForms.FGColorColorWasPickedForBorder";
+            node["Caption"].Value = "Pick Foreground Color for Border";
+            node["NoImage"].Value = true;
+
+            if (DataSource["Style"].Contains("border-color"))
+                node["Color"].Value = DataSource["Style"]["border-color"].Value;
+            else
+                node["Color"].Value = "#000000";
+
+            RaiseSafeEvent(
+                "Magix.Core.PickColorOrImage",
+                node);
+        }
+
+        protected void next1_Click(object sender, EventArgs e)
+        {
+            SetActiveMultiViewIndex(1);
+        }
+
         protected void fgText_Click(object sender, EventArgs e)
         {
             Node node = new Node();
@@ -132,6 +175,17 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             RaiseSafeEvent(
                 "Magix.Core.PickColorOrImage",
                 node);
+        }
+
+        /**
+         * Level2: Sets the border-color property of the Widget
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.FGColorColorWasPickedForBorder")]
+        protected void Magix_MetaForms_FGColorColorWasPickedForBorders(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("child");
+            string color = e.Params["Color"].Get<string>();
+            borderColorPnl.Style[Styles.backgroundColor] = color;
         }
 
         /**
