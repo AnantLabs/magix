@@ -461,8 +461,8 @@
       if (this.options.enabled) {
         this._caption = true;
         this._beginPtrPos = this.pointer(event);
-        this._beginX = parseInt(this.parent.element.getStyle('left'), 10);
-        this._beginY = parseInt(this.parent.element.getStyle('top'), 10);
+        this._beginX = parseInt(this.parent.element.getStyle('left'), 10) || 0;
+        this._beginY = parseInt(this.parent.element.getStyle('top'), 10) || 0;
       }
     },
 
@@ -472,8 +472,8 @@
       }
       delete this._caption;
       delete this._beginPtrPos;
-      var x = parseInt(this.parent.element.getStyle('left'), 10);
-      var y = parseInt(this.parent.element.getStyle('top'), 10);
+      var x = parseInt(this.parent.element.getStyle('left'), 10) || 0;
+      var y = parseInt(this.parent.element.getStyle('top'), 10) || 0;
       if (this.options.callback) {
         var dummy = new MUX.Ajax({
           args: '__MUX_CONTROL_CALLBACK=' + this.id + '&__MUX_EVENT=Moved' + '&x=' + x + '&y=' + y,
