@@ -240,7 +240,7 @@
                 DefaultWidget="next2"
                 ID="mpv2">
                 <div class="mux-insert">
-                    <div class="span-4 mux-editable-part pushLeft-4">
+                    <div class="span-4 mux-editable-part pushLeft-2">
                         <h5 title="The styles for your font, such as Type Name and whether or not it should render Bold, Italics and so on">Style</h5>
                         <span 
                             title="Select a Typeface for your Font ..."
@@ -326,16 +326,6 @@
                     <div class="span-4 mux-editable-part">
                         <h5 title="Alignment of text within the element and other values, such as height of a line of text, etc">Alignment</h5>
                         <span 
-                            title="Size of your Font ..."
-                            class="span-2">Size: </span>
-                        <mux:TextBox
-                            runat="server"
-                            id="fontSize"
-                            PlaceHolder="Height ..."
-                            ToolTip="Font Size ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
-                        <span 
                             title="Select an Alignment for your Text ..."
                             style="margin-top:18px;"
                             class="span-2">Alignment: </span>
@@ -372,7 +362,40 @@
                             <mux:ListItem Text="Top" Value="top" />
                         </mux:SelectList>
                     </div>
-                    <p class="span-6 pushLeft-4 clear-both last mux-info-text" title="... Sorry Guys 2.0! ;)">
+                    <div class="span-4 mux-editable-part">
+                        <h5 title="Size of Fonts and Surface of your Widget">Size</h5>
+                        <span 
+                            title="Size of your Font ..."
+                            class="span-2">Font Size: </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="fontSize"
+                            PlaceHolder="Size ..."
+                            ToolTip="Font Size ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Width of Widget. PS! The width comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px wide and has 15 pixels of left and right padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit width!"
+                            class="span-2">Width: </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="width"
+                            PlaceHolder="Width ..."
+                            ToolTip="Width of Widget, which comes in addition to Padding and Borders ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Height of Widget. PS! The height comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px tall and has 15 pixels of top and bottom padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit height!"
+                            class="span-2">Height: </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="height"
+                            PlaceHolder="Height ..."
+                            ToolTip="Height of Widget, which comes in addition to Padding and Borders ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                    </div>
+                    <p class="span-6 pushLeft-2 clear-both last mux-info-text" title="... Sorry Guys 2.0! ;)">
                         (*) All units are in pixels ...
                     </p>
                     <mux:Button
