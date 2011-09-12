@@ -169,3 +169,175 @@
 
 
 
+
+
+
+/*
+ * Pulsar over 2 seconds
+ */
+@-webkit-keyframes pulsar-2 {
+0% {
+	-webkit-animation-timing-function: ease-out;
+	-webkit-box-shadow: 0px 0px 50px rgba(255, 240, 0, 0);
+}
+100% {
+	-webkit-animation-timing-function: ease-in;
+	-webkit-box-shadow: 0px 0px 50px rgba(255, 240, 0, 1);
+}
+}
+
+@-moz-keyframes pulsar-2 {
+0% {
+	-moz-animation-timing-function: ease-out;
+	-moz-box-shadow: 0px 0px 25px rgba(200, 200, 255, 0);
+}
+100% {
+	-moz-animation-timing-function: ease-in;
+	-moz-box-shadow: 0px 0px 25px rgba(200, 200, 255, 1);
+}
+}
+
+.pulsar-2
+{
+	-webkit-animation-name: pulsar-2;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: alternate;
+	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-delay: 0s;
+	-moz-animation-name: pulsar-2;
+	-moz-animation-duration: 1s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+	-moz-animation-fill-mode: forwards;
+	-moz-animation-delay: 0s;
+}
+
+
+
+
+
+
+
+/*
+ * Flashlight effect over 3 seconds
+ */
+@-webkit-keyframes flashlight-3 {
+0% {
+	-webkit-box-shadow: -50px -50px 3px rgba(0,0,0,.2);
+}
+20% {
+	-webkit-box-shadow: 50px 50px 3px rgba(0,0,0,.2);
+}
+40% {
+	-webkit-box-shadow: -50px 0px 3px rgba(0,0,0,.2);
+}
+60% {
+	-webkit-box-shadow: 50px -25px 3px rgba(0,0,0,.2);
+	color:inherit;
+}
+80% {
+	-webkit-box-shadow: 0px 0px 3px rgba(0,0,0,.2);
+	color:Yellow;
+}
+100% {
+	-webkit-box-shadow: -50px -50px 3px rgba(0,0,0,.2);
+	color:inherit;
+}
+}
+
+@-moz-keyframes flashlight-3 {
+0% {
+	-moz-box-shadow: -50px -50px 3px rgba(0,0,0,.2);
+}
+20% {
+	-moz-box-shadow: 50px 50px 3px rgba(0,0,0,.2);
+}
+40% {
+	-moz-box-shadow: -50px 0px 3px rgba(0,0,0,.2);
+}
+60% {
+	-moz-box-shadow: 50px -25px 3px rgba(0,0,0,.2);
+	color:inherit;
+}
+80% {
+	-moz-box-shadow: 0px 0px 3px rgba(0,0,0,.2);
+	color:Yellow;
+}
+100% {
+	-moz-box-shadow: -50px -50px 3px rgba(0,0,0,.2);
+	color:inherit;
+}
+}
+
+.flashlight-3
+{
+	-webkit-animation-name: flashlight-3;
+	-webkit-animation-duration: 3s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: forward;
+	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-delay: 0s;
+	-webkit-animation-timing-function: ease-out;
+	-moz-animation-name: flashlight-3;
+	-moz-animation-duration: 3s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: forward;
+	-moz-animation-fill-mode: forwards;
+	-moz-animation-delay: 0s;
+	-moz-animation-timing-function: ease-out;
+}
+
+
+
+
+
+
+/*
+ * Blink for 1 seconds
+ */
+@-webkit-keyframes blink-1 {
+0% {
+	-webkit-transform: scale(1) rotate(0deg);
+	color:Black;
+}
+100% {
+	-webkit-transform: scale(3) rotate(15deg);
+	color:Yellow;
+}
+}
+
+@-moz-keyframes blink-1 {
+0% {
+   -moz-transform: rotate(0deg) scale(1);
+   color:Black;
+}
+100% {
+   -moz-transform: rotate(360deg) scale(3);
+   color:Yellow;
+}
+}
+
+.blink-1
+{
+	-webkit-animation-name: blink-1;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: alternate;
+	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-delay: 0s;
+	-webkit-animation-timing-function: ease-in;
+	-moz-animation-name: blink-1;
+	-moz-animation-duration: 1s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+	-moz-animation-fill-mode: forwards;
+	-moz-animation-delay: 0s;
+	-moz-animation-timing-function: ease-in;
+}
+
+
+
+
+
+

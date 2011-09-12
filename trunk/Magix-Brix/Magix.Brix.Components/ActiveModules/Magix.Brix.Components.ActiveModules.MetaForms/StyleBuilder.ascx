@@ -542,6 +542,7 @@
                             runat="server"
                             ToolTip="Add an Animation to your Widget from your Animation Storage ... "
                             CssClass="span-2 last"
+                            style="margin-bottom:18px;"
                             OnSelectedIndexChanged="animations_SelectedIndexChanged"
                             id="animations">
                             <mux:ListItem Text="" Value="" />
