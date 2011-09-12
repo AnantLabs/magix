@@ -134,6 +134,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (_ctrl == null)
                 return;
 
+            if (DataSource.Contains("CSSClass"))
+                _ctrl.CssClass = DataSource["CSSClass"].Get<string>();
+            else
+                _ctrl.CssClass = "";
+
             if (!string.IsNullOrEmpty(marginLeft.Text))
                 _ctrl.Style[Styles.marginLeft] = marginLeft.Text + "px";
             else
@@ -275,17 +280,25 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 stl += shadowColor.Style[Styles.backgroundColor];
                 _ctrl.Style["-moz-box-shadow"] = stl;
                 _ctrl.Style["-webkit-box-shadow"] = stl;
-                _ctrl.Style["-op-box-shadow"] = stl;
-                _ctrl.Style["-ie-box-shadow"] = stl;
+                _ctrl.Style["-o-box-shadow"] = stl;
+                _ctrl.Style["-ms-box-shadow"] = stl;
                 _ctrl.Style["box-shadow"] = stl;
             }
             else
             {
                 _ctrl.Style["-moz-box-shadow"] = "";
                 _ctrl.Style["-webkit-box-shadow"] = "";
-                _ctrl.Style["-op-box-shadow"] = "";
-                _ctrl.Style["-ie-box-shadow"] = "";
+                _ctrl.Style["-o-box-shadow"] = "";
+                _ctrl.Style["-ms-box-shadow"] = "";
                 _ctrl.Style["box-shadow"] = "";
+            }
+            if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
+            {
+                string gradient = string.Format("-moz-linear-gradient({0} 0%, {1} 100%)",
+                    gradientStart.Style[Styles.backgroundColor],
+                    gradientStop.Style[Styles.backgroundColor]);
+                _ctrl.Style[Styles.backgroundImage] = gradient;
+
             }
         }
 
@@ -374,7 +387,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (_ctrl != null)
             {
                 string cssClass = animations.SelectedItem.Value;
-                _ctrl.CssClass += DataSource["CSSClass"].Get<string>() + " " + cssClass;
+                _ctrl.CssClass = DataSource["CSSClass"].Get<string>() + " " + cssClass;
             }
         }
 
