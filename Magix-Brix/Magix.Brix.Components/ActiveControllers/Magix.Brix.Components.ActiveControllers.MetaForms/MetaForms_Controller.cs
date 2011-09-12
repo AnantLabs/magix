@@ -11,6 +11,7 @@ using Magix.Brix.Components.ActiveTypes.MetaForms;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
+using System.IO;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaForms
 {
@@ -911,12 +912,11 @@ focus, or clicking the widget with his mouse or touch screen";
 
             node["ID"].Value = e.Params["ID"].Value;
             node["TypeName"].Value = nx["TypeName"].Value;
-            node["CSSClass"].Value = 
-                nx.Contains("CSSClass") ? 
-                    nx["CssClass"].Value : 
+            node["CSSClass"].Value =
+                nx.Contains("Properties") && nx["Properties"].Contains("CssClass") ? 
+                    nx["Properties"]["CssClass"].Value : 
                     "";
             node["Caption"].Value = "Magix Style Builder for Widget ...";
-            node["CSSClass"].Value = e.Params["CSSClass"].Value;
             node["Width"].Value = 24;
             node["Top"].Value = 20;
 
@@ -926,7 +926,6 @@ focus, or clicking the widget with his mouse or touch screen";
                 node);
         }
 
-        // TODO: Implement support for dynamic animations somehow ...
         /**
          * Level2: Returns all existing Animations within 'Animations' as a 
          * list of 'Name'/'CSSClass' items
@@ -934,8 +933,34 @@ focus, or clicking the widget with his mouse or touch screen";
         [ActiveEvent(Name = "Magix.MetaForms.GetAnimations")]
         protected void Magix_MetaForms_GetAnimations(object sender, ActiveEventArgs e)
         {
-            e.Params["Animations"]["a-1"]["Name"].Value = "Rock Around The Clock!";
-            e.Params["Animations"]["a-1"]["CSSClass"].Value = "rock-around-the-clock";
+            string fullAnimationCssFilePath = Page.Server.MapPath("~/media/modules/animations.css");
+            using (TextReader reader = new StreamReader(File.OpenRead(fullAnimationCssFilePath)))
+            {
+                string wholeContent = reader.ReadToEnd();
+                wholeContent = wholeContent.Replace("\r\n", "\n");
+                int idxNo = 0;
+                foreach (string idx in wholeContent.Split(
+                    new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (idx.StartsWith(".") &&
+                        !idx.Contains(" ") &&
+                        !idx.Contains(":"))
+                    {
+                        e.Params["Animations"]["a-" + idxNo]["Name"].Value = idx.Substring(1);
+                        e.Params["Animations"]["a-" + idxNo]["CSSClass"].Value = idx.Trim('.').Trim(',');
+                        idxNo += 1;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Level2: Includes the animation.css file onto ever single first loading
+         */
+        [ActiveEvent(Name = "Magix.Core.InitialLoading")]
+        protected void Magix_Core_InitialLoading(object sender, ActiveEventArgs e)
+        {
+            IncludeCssFile("media/modules/animations.css");
         }
     }
 }

@@ -37,33 +37,44 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected TextBox marginTop;
         protected TextBox marginRight;
         protected TextBox marginBottom;
+        protected TextBox borderWidth;
+        protected SelectList borderStyle;
+        protected Panel borderColorPnl;
         protected TextBox paddingLeft;
         protected TextBox paddingTop;
         protected TextBox paddingRight;
         protected TextBox paddingBottom;
-        protected TextBox borderWidth;
+        protected CheckBox chkFloat;
+        protected CheckBox chkClear;
+        protected CheckBox chkBlock;
+        protected CheckBox chkInline;
 
         protected SelectList fontName;
         protected CheckBox chkBold;
         protected CheckBox chkItalic;
         protected CheckBox chkUnderline;
         protected CheckBox chkStrikethrough;
-        protected TextBox lineHeight;
+        protected TextBox fontSize;
         protected SelectList textAlign;
         protected SelectList textVerticalAlign;
 
         protected Panel fgText;
         protected Panel bgText;
-        protected Panel borderColorPnl;
         protected TextBox shadowHorizontalOffset;
         protected TextBox shadowVerticalOffset;
         protected TextBox shadowBlur;
+        protected Panel shadowColor;
         protected Panel gradientStart;
         protected Panel gradientStop;
-        protected Panel shadowColor;
+        protected TextBox roundedCornersTopLeft;
+        protected TextBox roundedCornersTopRight;
+        protected TextBox roundedCornersBottomLeft;
+        protected TextBox roundedCornersBottomRight;
 
         protected SelectList animations;
         protected Panel preview;
+
+        protected BaseWebControl _ctrl;
 
         public override void InitialLoading(Node node)
         {
@@ -99,6 +110,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 if (nn.Contains("Control"))
                 {
+                    if (nn["Control"].Get<Control>() is BaseWebControl)
+                    {
+                        _ctrl = nn["Control"].Get<BaseWebControl>();
+                        nn["Control"].Get<BaseWebControl>().CssClass = DataSource["CSSClass"].Get<string>();
+                    }
                     preview.Controls.Add(nn["Control"].Get<Control>());
                     hasControl = true;
                 }
@@ -115,6 +131,162 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
         private void SetStylesForPreviewWidget()
         {
+            if (_ctrl == null)
+                return;
+
+            if (!string.IsNullOrEmpty(marginLeft.Text))
+                _ctrl.Style[Styles.marginLeft] = marginLeft.Text + "px";
+            else
+                _ctrl.Style[Styles.marginLeft] = "";
+
+            if (!string.IsNullOrEmpty(marginTop.Text))
+                _ctrl.Style[Styles.marginTop] = marginTop.Text + "px";
+            else
+                _ctrl.Style[Styles.marginTop] = "";
+
+            if (!string.IsNullOrEmpty(marginRight.Text))
+                _ctrl.Style[Styles.marginRight] = marginRight.Text + "px";
+            else
+                _ctrl.Style[Styles.marginRight] = "";
+
+            if (!string.IsNullOrEmpty(marginBottom.Text))
+                _ctrl.Style[Styles.marginBottom] = marginBottom.Text + "px";
+            else
+                _ctrl.Style[Styles.marginBottom] = "";
+
+            if (!string.IsNullOrEmpty(borderWidth.Text))
+                _ctrl.Style[Styles.borderWidth] = borderWidth.Text + "px";
+            else
+                _ctrl.Style[Styles.borderWidth] = "";
+
+            if (borderStyle.SelectedIndex != 0)
+                _ctrl.Style[Styles.borderStyle] = borderStyle.SelectedItem.Value;
+            else
+                _ctrl.Style[Styles.borderStyle] = "";
+
+            if (!string.IsNullOrEmpty(borderColorPnl.Style[Styles.backgroundColor]))
+                _ctrl.Style[Styles.backgroundColor] = borderColorPnl.Style[Styles.backgroundColor];
+            else
+                _ctrl.Style[Styles.backgroundColor] = "";
+
+            if (!string.IsNullOrEmpty(paddingLeft.Text))
+                _ctrl.Style[Styles.paddingLeft] = paddingLeft.Text + "px";
+            else
+                _ctrl.Style[Styles.paddingLeft] = "";
+
+            if (!string.IsNullOrEmpty(paddingTop.Text))
+                _ctrl.Style[Styles.paddingTop] = paddingTop.Text + "px";
+            else
+                _ctrl.Style[Styles.paddingTop] = "";
+
+            if (!string.IsNullOrEmpty(paddingRight.Text))
+                _ctrl.Style[Styles.paddingRight] = paddingRight.Text + "px";
+            else
+                _ctrl.Style[Styles.paddingRight] = "";
+
+            if (!string.IsNullOrEmpty(paddingBottom.Text))
+                _ctrl.Style[Styles.paddingBottom] = paddingBottom.Text + "px";
+            else
+                _ctrl.Style[Styles.paddingBottom] = "";
+
+            if (chkFloat.Checked)
+                _ctrl.Style[Styles.floating] = "left";
+            else
+                _ctrl.Style[Styles.floating] = "";
+
+            if (chkClear.Checked)
+                _ctrl.Style[Styles.clear] = "both";
+            else
+                _ctrl.Style[Styles.clear] = "";
+
+            if (chkBlock.Checked)
+                _ctrl.Style[Styles.display] = "block";
+            else if (chkInline.Checked)
+                _ctrl.Style[Styles.display] = "inline";
+            else
+                _ctrl.Style[Styles.display] = "";
+
+            if (fontName.SelectedIndex != 0)
+                _ctrl.Style[Styles.fontFamily] = fontName.SelectedItem.Value;
+            else
+                _ctrl.Style[Styles.fontFamily] = "";
+
+            if (chkBold.Checked)
+                _ctrl.Style[Styles.fontWeight] = "bold";
+            else
+                _ctrl.Style[Styles.fontWeight] = "";
+
+            if (chkItalic.Checked)
+                _ctrl.Style[Styles.fontStyle] = "italic";
+
+            _ctrl.Style[Styles.textDecoration] = "";
+
+            if (chkUnderline.Checked)
+                _ctrl.Style[Styles.textDecoration] += " underline";
+
+            if (chkStrikethrough.Checked)
+                _ctrl.Style[Styles.textDecoration] += " line-through";
+
+            if (!string.IsNullOrEmpty(fontSize.Text))
+                _ctrl.Style[Styles.fontSize] = fontSize.Text + "px";
+            else
+                _ctrl.Style[Styles.fontSize] = "";
+
+            if (textAlign.SelectedIndex != 0)
+                _ctrl.Style[Styles.textAlign] = textAlign.SelectedItem.Value;
+            else
+                _ctrl.Style[Styles.textAlign] = "";
+
+            if (textVerticalAlign.SelectedIndex != 0)
+                _ctrl.Style[Styles.verticalAlign] = textVerticalAlign.SelectedItem.Value;
+            else
+                _ctrl.Style[Styles.verticalAlign] = "";
+
+            if (!string.IsNullOrEmpty(fgText.Style[Styles.backgroundColor]))
+                _ctrl.Style[Styles.backgroundColor] = fgText.Style[Styles.backgroundColor];
+            else
+                _ctrl.Style[Styles.backgroundColor] = "";
+
+            if (!string.IsNullOrEmpty(bgText.Style[Styles.backgroundColor]))
+            {
+                _ctrl.Style[Styles.backgroundColor] = bgText.Style[Styles.backgroundColor];
+                bgText.Style[Styles.backgroundImage] = "";
+            }
+            else if (!string.IsNullOrEmpty(bgText.Style[Styles.backgroundImage]))
+            {
+                bgText.Style[Styles.backgroundImage] = bgText.Style[Styles.backgroundImage];
+                bgText.Style[Styles.backgroundAttachment] = "scroll";
+                bgText.Style[Styles.backgroundPosition] = "0 0";
+                bgText.Style[Styles.backgroundRepeat] = "no-repeat";
+                bgText.Style[Styles.backgroundColor] = "";
+            }
+            else
+            {
+                bgText.Style[Styles.backgroundImage] = "";
+                bgText.Style[Styles.backgroundColor] = "";
+            }
+
+            if (!string.IsNullOrEmpty(shadowColor.Style[Styles.backgroundColor]))
+            {
+                string stl = "";
+                stl += shadowHorizontalOffset.Text + "px ";
+                stl += shadowVerticalOffset.Text + "px ";
+                stl += shadowBlur.Text + "px ";
+                stl += shadowColor.Style[Styles.backgroundColor];
+                _ctrl.Style["-moz-box-shadow"] = stl;
+                _ctrl.Style["-webkit-box-shadow"] = stl;
+                _ctrl.Style["-op-box-shadow"] = stl;
+                _ctrl.Style["-ie-box-shadow"] = stl;
+                _ctrl.Style["box-shadow"] = stl;
+            }
+            else
+            {
+                _ctrl.Style["-moz-box-shadow"] = "";
+                _ctrl.Style["-webkit-box-shadow"] = "";
+                _ctrl.Style["-op-box-shadow"] = "";
+                _ctrl.Style["-ie-box-shadow"] = "";
+                _ctrl.Style["box-shadow"] = "";
+            }
         }
 
         private void DataBindAnimations()
@@ -194,6 +366,15 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             else if (mub.ActiveMultiButtonViewIndex == 0)
             {
                 SetActiveMultiViewIndex(0);
+            }
+        }
+
+        protected void animations_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_ctrl != null)
+            {
+                string cssClass = animations.SelectedItem.Value;
+                _ctrl.CssClass += DataSource["CSSClass"].Get<string>() + " " + cssClass;
             }
         }
 

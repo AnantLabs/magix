@@ -358,8 +358,8 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             {
                 Node n = new Node();
                 n["Message"].Value = "Couldn't create file! You must rename the existing 'empty.css' file before you can create new CSS files.";
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+
+                RaiseSafeEvent(
                     "Magix.Core.ShowMessage",
                     n);
             }
