@@ -902,8 +902,21 @@ focus, or clicking the widget with his mouse or touch screen";
         protected void Magix_MetaForms_OpenStyleBuilderForWidget(object sender, ActiveEventArgs e)
         {
             Node node = new Node();
+
+            RaiseEvent(
+                "Magix.MetaForms.GetAnimations",
+                node);
+
+            MetaForm.Node nx = MetaForm.Node.SelectByID(e.Params["ID"].Get<int>());
+
             node["ID"].Value = e.Params["ID"].Value;
+            node["TypeName"].Value = nx["TypeName"].Value;
+            node["CSSClass"].Value = 
+                nx.Contains("CSSClass") ? 
+                    nx["CssClass"].Value : 
+                    "";
             node["Caption"].Value = "Magix Style Builder for Widget ...";
+            node["CSSClass"].Value = e.Params["CSSClass"].Value;
             node["Width"].Value = 24;
             node["Top"].Value = 20;
 
@@ -911,6 +924,18 @@ focus, or clicking the widget with his mouse or touch screen";
                 "Magix.Brix.Components.ActiveModules.MetaForms.StyleBuilder",
                 "child",
                 node);
+        }
+
+        // TODO: Implement support for dynamic animations somehow ...
+        /**
+         * Level2: Returns all existing Animations within 'Animations' as a 
+         * list of 'Name'/'CSSClass' items
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.GetAnimations")]
+        protected void Magix_MetaForms_GetAnimations(object sender, ActiveEventArgs e)
+        {
+            e.Params["Animations"]["a-1"]["Name"].Value = "Rock Around The Clock!";
+            e.Params["Animations"]["a-1"]["CSSClass"].Value = "rock-around-the-clock";
         }
     }
 }
