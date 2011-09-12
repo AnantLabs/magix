@@ -31,8 +31,8 @@
             ID="mb3" />
         <mux:TabButton
             runat="server" 
-            ToolTip="Allows you to attach Animations and such for your Widget. [ Be Careful!! These guys tends to steal a lot of battery and power, especially on smaller devices, which again increases our collective Carbon Footprint ... They are fun [Animations], I know. And I want you to have fun! Just don't 'blow up the world' while you're 'having fun' due to increasing our collective energy usage by orders of magnitudes due to 'funny Animations'... ;) ]"
-            Text="Animations"
+            ToolTip="Allows you to attach Animations and such for your Widget, before you wrap up. [ Be Careful!! These guys tends to steal a lot of battery and power, especially on smaller devices, which again increases our collective Carbon Footprint ... They are fun [Animations], I know. And I want you to have fun! Just don't 'blow up the world' while you're 'having fun' due to increasing our collective energy usage by orders of magnitudes due to 'funny Animations'... ;) ]"
+            Text="Finish"
             ID="mb4" />
     </mux:TabStrip>
     <mux:MultiPanel 
@@ -251,25 +251,25 @@
                             CssClass="span-2 last"
                             id="fontName">
                             <mux:ListItem Text="" Value="" />
-                            <mux:ListItem Text="Arial" />
-                            <mux:ListItem Text="Helvetica" />
-                            <mux:ListItem Text="Times New Roman" />
-                            <mux:ListItem Text="Courier New" />
-                            <mux:ListItem Text="Palatino" />
-                            <mux:ListItem Text="Garamond" />
-                            <mux:ListItem Text="Bookman" />
-                            <mux:ListItem Text="Avant Garde" />
-                            <mux:ListItem Text="Verdana" />
-                            <mux:ListItem Text="Georgia" />
-                            <mux:ListItem Text="Comic Sans MS" />
-                            <mux:ListItem Text="Trebuchet MS" />
-                            <mux:ListItem Text="Arial Black" />
-                            <mux:ListItem Text="Impact" />
-                            <mux:ListItem Text="Lexograph" />
-                            <mux:ListItem Text="Bleeding Cowboys" />
-                            <mux:ListItem Text="Ultra Classic" />
-                            <mux:ListItem Text="Groovieee" />
-                            <mux:ListItem Text="Bananas" />
+                            <mux:ListItem Text="Arial" Value="Arial" />
+                            <mux:ListItem Text="Helvetica" Value="Helvetica" />
+                            <mux:ListItem Text="Times New Roman" Value="Times New Roman" />
+                            <mux:ListItem Text="Courier New" Value="Courier New" />
+                            <mux:ListItem Text="Palatino" Value="Palatino" />
+                            <mux:ListItem Text="Garamond" Value="Garamond" />
+                            <mux:ListItem Text="Bookman" Value="Bookman" />
+                            <mux:ListItem Text="Avant Garde" Value="Avant Garde" />
+                            <mux:ListItem Text="Verdana" Value="Verdana" />
+                            <mux:ListItem Text="Georgia" Value="Georgia" />
+                            <mux:ListItem Text="Comic Sans MS" Value="Comic Sans MS" />
+                            <mux:ListItem Text="Trebuchet MS" Value="Trebuchet MS" />
+                            <mux:ListItem Text="Arial Black" Value="Arial Black" />
+                            <mux:ListItem Text="Impact" Value="Impact" />
+                            <mux:ListItem Text="Lexograph" Value="Lexograph" />
+                            <mux:ListItem Text="Bleeding Cowboys" Value="Bleeding Cowboys" />
+                            <mux:ListItem Text="Ultra Classic" Value="Ultra Classic" />
+                            <mux:ListItem Text="Groovieee" Value="Groovieee" />
+                            <mux:ListItem Text="Bananas" Value="Bananas" />
                         </mux:SelectList>
                         <mux:Label
                             runat="server"
@@ -326,13 +326,13 @@
                     <div class="span-4 mux-editable-part">
                         <h5 title="Alignment of text within the element and other values, such as height of a line of text, etc">Alignment</h5>
                         <span 
-                            title="Line Height of your Font ..."
-                            class="span-2">Height: </span>
+                            title="Size of your Font ..."
+                            class="span-2">Size: </span>
                         <mux:TextBox
                             runat="server"
-                            id="lineHeight"
+                            id="fontSize"
                             PlaceHolder="Height ..."
-                            ToolTip="Line Height ..."
+                            ToolTip="Font Size ..."
                             TextMode="Number"
                             CssClass="span-2 last" />
                         <span 
@@ -531,6 +531,7 @@
             </mux:MultiPanelView>
             <mux:MultiPanelView 
                 runat="server" 
+                DefaultWidget="finish"
                 ID="mpv4">
                 <div class="mux-insert">
                     <div class="span-4 mux-editable-part">
@@ -541,14 +542,14 @@
                             runat="server"
                             ToolTip="Add an Animation to your Widget from your Animation Storage ... "
                             CssClass="span-2 last"
+                            OnSelectedIndexChanged="animations_SelectedIndexChanged"
                             id="animations">
                             <mux:ListItem Text="" Value="" />
                         </mux:SelectList>
                         <p class="span-4 last mux-explanation">
                             Above are your pre-defined Animations which you can choose 
-                            from. You can add as many animations as you wish to your Widget, 
-                            but be _careful_ with them. They tend to use much power on especially
-                            Smart Phones and Tablets, which is a problem
+                            from. Be _careful_ with Animations. They tend to use much 
+                            power on Smart Phones, Tablets but also other computers.
                         </p>
                         <p class="span-4 last mux-explanation">
                             You can create your own Animation using the Animation Builder ...
@@ -563,7 +564,7 @@
                         Text="Finish!"
                         OnClick="finish_Click"
                         CssClass="span-4 last next-button"
-                        ToolTip="Wraps it up, and saves the Styles as properties onto the Widget. PS! Will OVERWRITE ANY previous settings you hav in your Style collection of your Widget ... !!"
+                        ToolTip="Wraps it up, and saves the Styles as properties onto the Widget. PS! This might _overwrite_ any existing settings you have in the Style collection of your Widget ... !!"
                         id="finish" />
                 </div>
             </mux:MultiPanelView>

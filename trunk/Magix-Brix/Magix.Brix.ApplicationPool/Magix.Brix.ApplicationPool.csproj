@@ -270,6 +270,7 @@
     <Content Include="media\images\wait-hourglass.png" />
     <Content Include="media\images\xml.png" />
     <Content Include="media\Js\link-text-boxes.js" />
+    <Content Include="media\modules\animations.css" />
     <Content Include="media\modules\edit-meta-forms.css" />
     <Content Include="media\modules\qr-generator.css" />
     <Content Include="media\modules\ImageGallery.css" />
