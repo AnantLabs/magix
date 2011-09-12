@@ -6,6 +6,41 @@ html, body
     height:110%;
 }
 
+@font-face
+{
+    font-family: 'Lexograph';
+    src: local("Lexographer"), url('../Fonts/lexograph.ttf') format('truetype');
+}
+
+@font-face
+{
+    font-family: 'Bleeding Cowboys';
+    src: url('../Fonts/Bleeding Cowboys.ttf') format('truetype');
+}
+
+@font-face
+{
+    font-family: 'Ultra Classic';
+    src: url('../Fonts/CHOPS___.TTF') format('truetype');
+}
+
+@font-face
+{
+    font-family: 'Groovieee';
+    src: url('../Fonts/kberry.ttf') format('truetype');
+}
+
+@font-face
+{
+    font-family: 'Bananas';
+    src: url('../Fonts/Hawaii_Killer.ttf') format('truetype');
+}
+
+.Header-Gothic-Western
+{
+	font-family: 'Bleeding Cowboys';
+}
+
 
 /* BluePrint.css "plugins"... */
 div.down-1, .down-1 {margin-top:1.5em;}
