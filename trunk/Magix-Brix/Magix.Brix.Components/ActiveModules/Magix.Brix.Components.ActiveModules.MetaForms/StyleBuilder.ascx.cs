@@ -260,7 +260,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 _ctrl.Style[Styles.verticalAlign] = "";
 
             if (!string.IsNullOrEmpty(fgText.Style[Styles.backgroundColor]))
-                _ctrl.Style[Styles.backgroundColor] = fgText.Style[Styles.backgroundColor];
+                _ctrl.Style[Styles.color] = fgText.Style[Styles.backgroundColor];
             else
                 _ctrl.Style[Styles.backgroundColor] = "";
 
@@ -309,7 +309,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 string gradient = string.Format("-moz-linear-gradient({0} 0%, {1} 100%)",
                     gradientStart.Style[Styles.backgroundColor],
                     gradientStop.Style[Styles.backgroundColor]);
-                _ctrl.Style[Styles.backgroundImage] = gradient;
+                if (_ctrl.Style["background-image"] != null)
+                    gradient = _ctrl.Style["background-image"] + "," + gradient;
+                _ctrl.Style["background-image"] = gradient;
             }
 
             string rounded = "";
@@ -471,101 +473,100 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             Node node = new Node();
 
-            if (DataSource.Contains("CSSClass"))
-                node["CssClass"].Value = DataSource["CSSClass"].Get<string>();
+            node["CssClass"].Value = _ctrl.CssClass;
 
             if (!string.IsNullOrEmpty(marginLeft.Text))
-                node["margin-left"].Value = marginLeft.Text + "px";
+                node["Style"]["margin-left"].Value = marginLeft.Text + "px";
 
             if (!string.IsNullOrEmpty(marginTop.Text))
-                node["margin-top"].Value = marginTop.Text + "px";
+                node["Style"]["margin-top"].Value = marginTop.Text + "px";
 
             if (!string.IsNullOrEmpty(marginRight.Text))
-                node["margin-right"].Value = marginRight.Text + "px";
+                node["Style"]["margin-right"].Value = marginRight.Text + "px";
 
             if (!string.IsNullOrEmpty(marginBottom.Text))
-                node["margin-bottom"].Value = marginBottom.Text + "px";
+                node["Style"]["margin-bottom"].Value = marginBottom.Text + "px";
 
             if (!string.IsNullOrEmpty(borderWidth.Text))
-                node["border-width"].Value = borderWidth.Text + "px";
+                node["Style"]["border-width"].Value = borderWidth.Text + "px";
 
             if (borderStyle.SelectedIndex != 0)
-                node["border-style"].Value = borderStyle.SelectedItem.Value;
+                node["Style"]["border-style"].Value = borderStyle.SelectedItem.Value;
 
             if (!string.IsNullOrEmpty(borderColorPnl.Style[Styles.backgroundColor]))
-                node["border-color"].Value = borderColorPnl.Style[Styles.backgroundColor];
+                node["Style"]["border-color"].Value = borderColorPnl.Style[Styles.backgroundColor];
 
             if (!string.IsNullOrEmpty(paddingLeft.Text))
-                node["padding-left"].Value = paddingLeft.Text + "px";
+                node["Style"]["padding-left"].Value = paddingLeft.Text + "px";
 
             if (!string.IsNullOrEmpty(paddingTop.Text))
-                node["padding-top"].Value = paddingTop.Text + "px";
+                node["Style"]["padding-top"].Value = paddingTop.Text + "px";
 
             if (!string.IsNullOrEmpty(paddingRight.Text))
-                node["padding-right"].Value = paddingRight.Text + "px";
+                node["Style"]["padding-right"].Value = paddingRight.Text + "px";
 
             if (!string.IsNullOrEmpty(paddingBottom.Text))
-                node["padding-bottom"].Value = paddingBottom.Text + "px";
+                node["Style"]["padding-bottom"].Value = paddingBottom.Text + "px";
 
             if (chkFloat.Checked)
-                node["float"].Value = "left";
+                node["Style"]["float"].Value = "left";
 
             if (chkClear.Checked)
-                node["clear"].Value = "both";
+                node["Style"]["clear"].Value = "both";
 
             if (chkBlock.Checked)
-                node["display"].Value = "block";
+                node["Style"]["display"].Value = "block";
             else if (chkInline.Checked)
-                node["display"].Value = "inline";
+                node["Style"]["display"].Value = "inline";
 
             if (fontName.SelectedIndex != 0)
-                node["font-family"].Value = fontName.SelectedItem.Value;
+                node["Style"]["font-family"].Value = fontName.SelectedItem.Value;
 
             if (chkBold.Checked)
-                node["font-weight"].Value = "bold";
+                node["Style"]["font-weight"].Value = "bold";
 
             if (chkItalic.Checked)
-                node["text-style"].Value = "italic";
+                node["Style"]["text-style"].Value = "italic";
 
             if (chkUnderline.Checked)
-                node["text-decoration"].Value = "underline";
+                node["Style"]["text-decoration"].Value = "underline";
 
             if (chkStrikethrough.Checked)
             {
-                string t = node["text-decoration"].Value as string;
+                string t = node["Style"]["text-decoration"].Value as string;
                 t += " line-through";
-                node["text-decoration"].Value = t;
+                node["Style"]["text-decoration"].Value = t;
             }
 
             if (!string.IsNullOrEmpty(fontSize.Text))
-                node["font-size"].Value = fontSize.Text + "px";
+                node["Style"]["font-size"].Value = fontSize.Text + "px";
 
             if (!string.IsNullOrEmpty(width.Text))
-                node["width"].Value = width.Text + "px";
+                node["Style"]["width"].Value = width.Text + "px";
 
             if (!string.IsNullOrEmpty(height.Text))
-                node["height"].Value = height.Text + "px";
+                node["Style"]["height"].Value = height.Text + "px";
 
             if (textAlign.SelectedIndex != 0)
-                node["text-align"].Value = textAlign.SelectedItem.Value;
+                node["Style"]["text-align"].Value = textAlign.SelectedItem.Value;
 
             if (textVerticalAlign.SelectedIndex != 0)
-                node["vertical-align"].Value = textVerticalAlign.SelectedItem.Value;
+                node["Style"]["vertical-align"].Value = textVerticalAlign.SelectedItem.Value;
 
             if (!string.IsNullOrEmpty(fgText.Style[Styles.backgroundColor]))
-                node["color"].Value = fgText.Style[Styles.backgroundColor];
+                node["Style"]["color"].Value = fgText.Style[Styles.backgroundColor];
 
             if (!string.IsNullOrEmpty(bgText.Style[Styles.backgroundColor]))
             {
-                node["background-color"].Value = bgText.Style[Styles.backgroundColor];
+                node["Style"]["background-color"].Value = bgText.Style[Styles.backgroundColor];
             }
             else if (!string.IsNullOrEmpty(bgText.Style[Styles.backgroundImage]))
             {
-                node["background-image"].Value = bgText.Style[Styles.backgroundImage];
-                node["background-attachment"].Value = "scroll";
-                node["background-position"].Value = "0 0";
-                node["background-repeat"].Value = "no-repeat";
-                node["background-color"].Value = "";
+                node["Style"]["background-image"].Value = bgText.Style[Styles.backgroundImage];
+                node["Style"]["background-attachment"].Value = "scroll";
+                node["Style"]["background-position"].Value = "0 0";
+                node["Style"]["background-repeat"].Value = "no-repeat";
+                node["Style"]["background-color"].Value = "";
             }
 
             if (!string.IsNullOrEmpty(shadowColor.Style[Styles.backgroundColor]))
@@ -576,21 +577,61 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 stl += shadowBlur.Text + "px ";
                 stl += shadowColor.Style[Styles.backgroundColor];
 
-                node["-moz-box-shadow"].Value = stl;
-                node["-webkit-box-shadow"].Value = stl;
-                node["-o-box-shadow"].Value = stl;
-                node["-ms-box-shadow"].Value = stl;
-                node["box-shadow"].Value = stl;
+                node["Style"]["-moz-box-shadow"].Value = stl;
+                node["Style"]["-webkit-box-shadow"].Value = stl;
+                node["Style"]["-o-box-shadow"].Value = stl;
+                node["Style"]["-ms-box-shadow"].Value = stl;
+                node["Style"]["box-shadow"].Value = stl;
             }
             if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
             {
                 string gradient = string.Format("-moz-linear-gradient({0} 0%, {1} 100%)",
                     gradientStart.Style[Styles.backgroundColor],
                     gradientStop.Style[Styles.backgroundColor]);
-                if (node["background-image"].Value != null)
-                    gradient = node["background-image"].Value as string + "," + gradient;
-                node["background-image"].Value = gradient;
+                if (node["Style"]["background-image"].Value != null)
+                    gradient = node["Style"]["background-image"].Value as string + "," + gradient;
+                node["Style"]["background-image"].Value = gradient;
             }
+
+            string rounded = "";
+            if (!string.IsNullOrEmpty(roundedCornersTopLeft.Text))
+                rounded += roundedCornersTopLeft.Text + "px ";
+            else
+                rounded += "0px ";
+
+            if (!string.IsNullOrEmpty(roundedCornersTopRight.Text))
+                rounded += roundedCornersTopRight.Text + "px ";
+            else
+                rounded += "0px ";
+
+            if (!string.IsNullOrEmpty(roundedCornersBottomRight.Text))
+                rounded += roundedCornersBottomRight.Text + "px ";
+            else
+                rounded += "0px ";
+
+            if (!string.IsNullOrEmpty(roundedCornersBottomLeft.Text))
+                rounded += roundedCornersBottomLeft.Text + "px ";
+            else
+                rounded += "0px ";
+
+            if (rounded != "0px 0px 0px 0px")
+            {
+                node["Style"]["-moz-border-radius"].Value = rounded;
+                node["Style"]["-webkit-border-radius"].Value = rounded;
+                node["Style"]["-o-border-radius"].Value = rounded;
+                node["Style"]["-ms-border-radius"].Value = rounded;
+                node["Style"]["border-radius"].Value = rounded;
+            }
+
+            node["ID"].Value = DataSource["ID"].Get<int>();
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.SetWidgetStyles",
+                node);
+
+            ActiveEvents.Instance.RaiseClearControls("child");
+
+            RaiseSafeEvent("Magix.MetaForms.RefreshEditableMetaForm");
         }
 
         protected void fgText_Click(object sender, EventArgs e)

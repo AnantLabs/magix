@@ -585,5 +585,23 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             CreateFormControls();
             ctrls.ReRender();
         }
+
+        /**
+         * Level2: Refreshes and re-databinds the currently edited Meta Form. Useful if you've 
+         * got wizards and similar types of Action Buttons that modifies the form/widgets somehow, 
+         * and you need to re-render them with their new settings
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.RefreshEditableMetaForm")]
+        protected void Magix_MetaForms_RefreshEditableMetaForm(object sender, ActiveEventArgs e)
+        {
+            // Refreshing form ...
+            RaiseSafeEvent(
+                "Magix.MetaForms.GetControlsForForm",
+                DataSource);
+
+            ctrls.Controls.Clear();
+            CreateFormControls();
+            ctrls.ReRender();
+        }
     }
 }
