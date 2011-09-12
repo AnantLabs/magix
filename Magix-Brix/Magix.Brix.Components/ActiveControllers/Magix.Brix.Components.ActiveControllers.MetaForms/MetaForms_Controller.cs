@@ -962,5 +962,27 @@ focus, or clicking the widget with his mouse or touch screen";
         {
             IncludeCssFile("media/modules/animations.css");
         }
+
+        /**
+         * Level2: Updates and save all the incoming 'Style' values into the MetaForms.Node given
+         * through ID which should point to a Widget, with a 'Properties'/'Style' node
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.SetWidgetStyles")]
+        protected void Magix_MetaForms_SetWidgetStylesMagix_MetaForms_GetAnimations(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["ID"].Get<int>());
+
+                foreach (Node idx in e.Params["Style"])
+                {
+                    n["Properties"]["Style"][idx.Name].Value = idx.Get<string>();
+                }
+                n["Properties"]["CssClass"].Value = e.Params["CssClass"].Get<string>();
+                n.Save();
+
+                tr.Commit();
+            }
+        }
     }
 }
