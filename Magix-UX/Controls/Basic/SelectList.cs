@@ -232,5 +232,17 @@ namespace Magix.UX.Widgets
                 el.AddAttribute("size", Size.ToString());
             base.AddAttributes(el);
         }
+
+        public void SetSelectedItemAccordingToValue(string val)
+        {
+            foreach (ListItem idx in Items)
+            {
+                if (idx.Value == val)
+                {
+                    idx.Selected = true;
+                    break;
+                }
+            }
+        }
     }
 }

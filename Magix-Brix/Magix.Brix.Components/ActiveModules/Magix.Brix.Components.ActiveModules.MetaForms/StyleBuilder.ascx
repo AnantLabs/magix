@@ -109,6 +109,7 @@
                             style="margin-bottom:18px;"
                             CssClass="span-2 last"
                             id="borderStyle">
+                            <mux:ListItem Text="None" Value="" />
                             <mux:ListItem Text="Solid" Value="solid" />
                             <mux:ListItem Text="Dashed" Value="dashed" />
                             <mux:ListItem Text="Dotted" Value="dotted" />

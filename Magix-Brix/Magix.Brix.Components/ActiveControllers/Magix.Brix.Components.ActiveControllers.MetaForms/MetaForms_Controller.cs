@@ -916,6 +916,16 @@ focus, or clicking the widget with his mouse or touch screen";
                 nx.Contains("Properties") && nx["Properties"].Contains("CssClass") ? 
                     nx["Properties"]["CssClass"].Value : 
                     "";
+
+            if (nx.Contains("Properties") &&
+                nx["Properties"].Contains("Style"))
+            {
+                foreach (MetaForm.Node idx in nx["Properties"]["Style"].Children)
+                {
+                    node["Properties"]["Style"][idx.Name].Value = idx.Value;
+                }
+            }
+
             node["Caption"].Value = "Magix Style Builder for Widget ...";
             node["Width"].Value = 24;
             node["Top"].Value = 20;
@@ -973,6 +983,8 @@ focus, or clicking the widget with his mouse or touch screen";
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["ID"].Get<int>());
+
+                n["Properties"]["Style"].Children.Clear();
 
                 foreach (Node idx in e.Params["Style"])
                 {

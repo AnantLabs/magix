@@ -537,9 +537,26 @@ namespace Magix.UX.Widgets.Core
                         first = false;
                     else
                         builder.Append(",");
+
+                    string val = values[idxKey];
+                    string key2 = idxKey;
+
+                    switch (idxKey)
+                    {
+                        case "backgroundImage":
+                        {
+                            if (val.Contains("linear-gradient"))
+                            {
+                                val = val.Replace(
+                                    "linear-gradient",
+                                    StyleCollection.GetBrowserPrefix() + "linear-gradient");
+                            }
+                        } break;
+                    }
+
                     builder.AppendFormat("[\"{0}\",\"{1}\"]",
-                        idxKey,
-                        values[idxKey].Replace("\\", "\\\\").Replace("\"", "\\\""));
+                        key2,
+                        val.Replace("\\", "\\\\").Replace("\"", "\\\""));
                 }
                 builder.Append("]");
             }
