@@ -268,10 +268,49 @@ namespace Magix.UX.Widgets
                 {
                     value = _styleValues[idxKey].BeforeViewStateTrackingValue;
                 }
+
                 if (value != null)
-                    retVal += idxKey + ":" + value + ";";
+                {
+                    string key = idxKey;
+                    switch (idxKey)
+                    {
+                        case "box-shadow":
+                        case "border-radius":
+                            key = GetBrowserPrefix() + key;
+                            break;
+                        case "background-image":
+                        {
+                            if (value.Contains("linear-gradient"))
+                            {
+                                value = value.Replace(
+                                    "linear-gradient", 
+                                    GetBrowserPrefix() + "linear-gradient");
+                            }
+                        } break;
+                    }
+                    retVal += key + ":" + value + ";";
+                }
             }
             return retVal;
+        }
+
+        public static string GetBrowserPrefix()
+        {
+            switch (HttpContext.Current.Request.Browser.Browser.ToLower())
+            {
+                case "webkit":
+                case "chrome":
+                case "applemac-safari":
+                    return "-webkit-";
+                case "firefox":
+                    return "-moz-";
+                case "opera":
+                    return "-o-";
+                case "ie":
+                    return "-ms-";
+                default:
+                    return ""; // Assuming standard compliance ...
+            }
         }
 
         internal bool IsTrackingViewState

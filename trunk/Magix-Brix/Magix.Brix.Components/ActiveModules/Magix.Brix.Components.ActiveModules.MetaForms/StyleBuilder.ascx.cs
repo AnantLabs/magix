@@ -124,10 +124,144 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (!hasControl)
             {
                 Label l = new Label();
+                _ctrl = l;
                 l.Tag = "div";
                 l.Text = "Howdie There ... :)";
                 l.ToolTip = "Depending upon which Widget you attach this Style Collection to later, some things might not necessary look exactly like they do here, since we do not know which Widget type you intend to attach this Style collection to, and we just have to 'guess' on a 'div' HTML element. If that's not the case, some parts of your style collection might not necessary render exactly like they do here ...";
                 preview.Controls.Add(l);
+            }
+
+            if (_ctrl != null)
+            {
+                if (this.FirstLoad &&
+                    DataSource.Contains("Properties") &&
+                    DataSource["Properties"].Contains("Style"))
+                {
+                    foreach (Node idx in DataSource["Properties"]["Style"])
+                    {
+                        string val = idx.Get<string>();
+
+                        switch (idx.Name)
+                        {
+                            case "margin-left":
+                                marginLeft.Text = val.Replace("px", "");
+                                break;
+                            case "margin-right":
+                                marginRight.Text = val.Replace("px", "");
+                                break;
+                            case "margin-top":
+                                marginTop.Text = val.Replace("px", "");
+                                break;
+                            case "margin-bottom":
+                                marginBottom.Text = val.Replace("px", "");
+                                break;
+                            case "border-width":
+                                borderWidth.Text = val.Replace("px", "");
+                                break;
+                            case "border-style":
+                                borderStyle.SetSelectedItemAccordingToValue(val);
+                                break;
+                            case "border-color":
+                                borderColorPnl.Style[Styles.backgroundColor] = val;
+                                break;
+                            case "padding-left":
+                                paddingLeft.Text = val.Replace("px", "");
+                                break;
+                            case "padding-right":
+                                paddingRight.Text = val.Replace("px", "");
+                                break;
+                            case "padding-top":
+                                paddingTop.Text = val.Replace("px", "");
+                                break;
+                            case "padding-bottom":
+                                paddingBottom.Text = val.Replace("px", "");
+                                break;
+                            case "float":
+                                chkFloat.Checked = (val == "left");
+                                break;
+                            case "clear":
+                                chkClear.Checked = (val == "both");
+                                break;
+                            case "display":
+                                if (val == "block")
+                                {
+                                    chkBlock.Checked = true;
+                                    chkInline.Checked = false;
+                                }
+                                else if (val == "inline")
+                                {
+                                    chkBlock.Checked = false;
+                                    chkInline.Checked = true;
+                                }
+                                break;
+                            case "font-family":
+                                fontName.SetSelectedItemAccordingToValue(val);
+                                break;
+                            case "font-weight":
+                                if (val == "bold")
+                                    chkBold.Checked = true;
+                                break;
+                            case "font-style":
+                                if (val.Contains("italic"))
+                                    chkItalic.Checked = true;
+                                break;
+                            case "text-decoration":
+                                if (val.Contains("underline"))
+                                    chkUnderline.Checked = true;
+                                if (val.Contains("line-through"))
+                                    chkStrikethrough.Checked = true;
+                                break;
+                            case "text-align":
+                                textAlign.SetSelectedItemAccordingToValue(val);
+                                break;
+                            case "vertical-align":
+                                textVerticalAlign.SetSelectedItemAccordingToValue(val);
+                                break;
+                            case "font-size":
+                                fontSize.Text = val.Replace("px", "");
+                                break;
+                            case "width":
+                                width.Text = val.Replace("px", "");
+                                break;
+                            case "height":
+                                height.Text = val.Replace("px", "");
+                                break;
+                            case "color":
+                                fgText.Style[Styles.backgroundColor] = val;
+                                break;
+                            case "background-color":
+                                bgText.Style[Styles.backgroundColor] = val;
+                                break;
+                            case "background-image":
+                                {
+                                    // Might contain also gradient(s) ...
+                                    if (val.Contains("linear-gradient"))
+                                    {
+                                        gradientStart.Style[Styles.backgroundColor] = 
+                                            val.Substring(val.IndexOf('#'), 7);
+                                        gradientStop.Style[Styles.backgroundColor] = 
+                                            val.Substring(val.LastIndexOf('#'), 7);
+                                        if (val.Contains("url("))
+                                            val = val.Trim().Split(',')[0];
+                                    }
+                                    if (!string.IsNullOrEmpty(val))
+                                        bgText.Style[Styles.backgroundImage] = val;
+                                } break;
+                            case "box-shadow":
+                                shadowHorizontalOffset.Text = val.Trim().Split(' ')[0].Replace("px", "");
+                                shadowVerticalOffset.Text = val.Trim().Split(' ')[1].Replace("px", "");
+                                shadowBlur.Text = val.Trim().Split(' ')[2].Replace("px", "");
+                                shadowColor.Style[Styles.backgroundColor] = val.Trim().Split(' ')[3];
+                                break;
+                            case "border-radius":
+                                roundedCornersTopLeft.Text = val.Trim().Split(' ')[0].Replace("px", "");
+                                roundedCornersTopRight.Text = val.Trim().Split(' ')[1].Replace("px", "");
+                                roundedCornersBottomRight.Text = val.Trim().Split(' ')[2].Replace("px", "");
+                                roundedCornersBottomLeft.Text = val.Trim().Split(' ')[3].Replace("px", "");
+                                break;
+                        }
+                    }
+                }
             }
         }
 
@@ -172,7 +306,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 _ctrl.Style[Styles.borderStyle] = "";
 
             if (!string.IsNullOrEmpty(borderColorPnl.Style[Styles.backgroundColor]))
-                _ctrl.Style[Styles.backgroundColor] = borderColorPnl.Style[Styles.backgroundColor];
+                _ctrl.Style[Styles.borderColor] = borderColorPnl.Style[Styles.backgroundColor];
             else
                 _ctrl.Style[Styles.backgroundColor] = "";
 
@@ -247,7 +381,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (!string.IsNullOrEmpty(height.Text))
                 _ctrl.Style[Styles.height] = height.Text + "px";
             else
-                _ctrl.Style[Styles.width] = "";
+                _ctrl.Style[Styles.height] = "";
 
             if (textAlign.SelectedIndex != 0)
                 _ctrl.Style[Styles.textAlign] = textAlign.SelectedItem.Value;
@@ -262,7 +396,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (!string.IsNullOrEmpty(fgText.Style[Styles.backgroundColor]))
                 _ctrl.Style[Styles.color] = fgText.Style[Styles.backgroundColor];
             else
-                _ctrl.Style[Styles.backgroundColor] = "";
+                _ctrl.Style[Styles.color] = "";
 
             if (!string.IsNullOrEmpty(bgText.Style[Styles.backgroundColor]))
             {
@@ -290,23 +424,15 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 stl += shadowVerticalOffset.Text + "px ";
                 stl += shadowBlur.Text + "px ";
                 stl += shadowColor.Style[Styles.backgroundColor];
-                _ctrl.Style["-moz-box-shadow"] = stl;
-                _ctrl.Style["-webkit-box-shadow"] = stl;
-                _ctrl.Style["-o-box-shadow"] = stl;
-                _ctrl.Style["-ms-box-shadow"] = stl;
                 _ctrl.Style["box-shadow"] = stl;
             }
             else
             {
-                _ctrl.Style["-moz-box-shadow"] = "";
-                _ctrl.Style["-webkit-box-shadow"] = "";
-                _ctrl.Style["-o-box-shadow"] = "";
-                _ctrl.Style["-ms-box-shadow"] = "";
                 _ctrl.Style["box-shadow"] = "";
             }
             if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
             {
-                string gradient = string.Format("-moz-linear-gradient({0} 0%, {1} 100%)",
+                string gradient = string.Format("linear-gradient({0} 0%, {1} 100%)",
                     gradientStart.Style[Styles.backgroundColor],
                     gradientStop.Style[Styles.backgroundColor]);
                 if (_ctrl.Style["background-image"] != null)
@@ -337,10 +463,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if (rounded != "0px 0px 0px 0px")
             {
-                _ctrl.Style["-moz-border-radius"] = rounded;
-                _ctrl.Style["-webkit-border-radius"] = rounded;
-                _ctrl.Style["-o-border-radius"] = rounded;
-                _ctrl.Style["-ms-border-radius"] = rounded;
                 _ctrl.Style["border-radius"] = rounded;
             }
         }
@@ -526,7 +648,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 node["Style"]["font-weight"].Value = "bold";
 
             if (chkItalic.Checked)
-                node["Style"]["text-style"].Value = "italic";
+                node["Style"]["font-style"].Value = "italic";
 
             if (chkUnderline.Checked)
                 node["Style"]["text-decoration"].Value = "underline";
@@ -577,15 +699,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 stl += shadowBlur.Text + "px ";
                 stl += shadowColor.Style[Styles.backgroundColor];
 
-                node["Style"]["-moz-box-shadow"].Value = stl;
-                node["Style"]["-webkit-box-shadow"].Value = stl;
-                node["Style"]["-o-box-shadow"].Value = stl;
-                node["Style"]["-ms-box-shadow"].Value = stl;
                 node["Style"]["box-shadow"].Value = stl;
             }
             if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
             {
-                string gradient = string.Format("-moz-linear-gradient({0} 0%, {1} 100%)",
+                string gradient = string.Format("linear-gradient({0} 0%, {1} 100%)",
                     gradientStart.Style[Styles.backgroundColor],
                     gradientStop.Style[Styles.backgroundColor]);
                 if (node["Style"]["background-image"].Value != null)
@@ -616,10 +734,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if (rounded != "0px 0px 0px 0px")
             {
-                node["Style"]["-moz-border-radius"].Value = rounded;
-                node["Style"]["-webkit-border-radius"].Value = rounded;
-                node["Style"]["-o-border-radius"].Value = rounded;
-                node["Style"]["-ms-border-radius"].Value = rounded;
                 node["Style"]["border-radius"].Value = rounded;
             }
 
