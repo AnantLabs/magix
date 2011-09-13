@@ -275,7 +275,6 @@ namespace Magix.UX.Widgets
                     switch (idxKey)
                     {
                         case "box-shadow":
-                        case "border-radius":
                             key = GetBrowserPrefix() + key;
                             break;
                         case "background-image":
@@ -299,6 +298,7 @@ namespace Magix.UX.Widgets
             switch (HttpContext.Current.Request.Browser.Browser.ToLower())
             {
                 case "webkit":
+                case "safari":
                 case "chrome":
                 case "applemac-safari":
                     return "-webkit-";
