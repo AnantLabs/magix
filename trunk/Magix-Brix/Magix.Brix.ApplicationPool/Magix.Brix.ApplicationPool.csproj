@@ -276,14 +276,14 @@
     <Content Include="media\modules\ImageGallery.css" />
     <Content Include="media\your-css-file-and-path.css" />
     <Content Include="Tmp\test-qr-code.png" />
-    <None Include="media\Cool-Breeze.oga" />
+    <Content Include="media\Cool-Breeze.oga" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
-    <None Include="media\The-Last-Barfly.oga" />
+    <Content Include="media\The-Last-Barfly.oga" />
     <None Include="Tmp\exchange-with-your-own-csv-file.csv" />
-    <None Include="Tmp\Magix-For-Believers.pdf" />
-    <None Include="Tmp\Magix-For-Believing-CSharp-People.pdf" />
-    <None Include="Tmp\Magix-For-CSharp-People.pdf" />
-    <None Include="Tmp\Magix-For-Noobs.pdf" />
+    <Content Include="Tmp\Magix-For-Believers.pdf" />
+    <Content Include="Tmp\Magix-For-Believing-CSharp-People.pdf" />
+    <Content Include="Tmp\Magix-For-CSharp-People.pdf" />
+    <Content Include="Tmp\Magix-For-Noobs.pdf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Magix-UX\Magix.UX.csproj">
