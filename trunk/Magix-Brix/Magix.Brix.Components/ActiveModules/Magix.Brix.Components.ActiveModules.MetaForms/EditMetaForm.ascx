@@ -12,7 +12,8 @@
     <mux:Panel
         runat="server"
         OnClick="ctrls_Click"
-        CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-16 push-8 last"
+        ToolTip="Click me to select the form object"
+        CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-24 prepend-top last"
         id="ctrls" />
 
     <mux:Window
@@ -23,7 +24,7 @@
         OnClick="tools_Click"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-toolbox span-8"
         Closable="false"
-        ToolTip="The Widgets you have to your disposal within this installation of Magix. Double Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around by its Header if it obscures something you need to reach ..."
+        ToolTip="The Widgets you have to your disposal within this installation of Magix. Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around by its Header if it obscures something you need to reach ..."
         Caption="Widgets & Controls ...">
         <Content>
             <asp:Repeater
@@ -53,10 +54,18 @@
         Closable="false"
         Caption="Properties & Actions ...">
         <Content>
+            <mux:SelectList
+                runat="server"
+                id="selWidg"
+                OnSelectedIndexChanged="selWidg_SelectedIndexChanged"
+                style="margin-bottom:18px;"
+                CssClass="span-6 last">
+                <mux:ListItem Text="Selected Widget ..." Value="" />
+            </mux:SelectList>
             <mux:Label
                 runat="server"
                 id="type"
-                style="cursor:pointer;"
+                style="cursor:pointer;clear:both;margin-bottom:0;"
                 CssClass="mux-section-header"
                 ToolTip="Click me for a more thorough Description of the Widget"
                 Tag="h5" />
@@ -71,7 +80,7 @@
                 id="propHeader"
                 CssClass="span-6 last mux-section-header"
                 Visible="false"
-                style="margin-bottom:0;cursor:pointer;"
+                style="margin-bottom:0;cursor:pointer;margin-top:18px;"
                 ToolTip="Click me to toggle visibility of Properties for selected Widget"
                 Text="Properties"
                 Tag="h5" />

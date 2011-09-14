@@ -259,13 +259,9 @@ namespace Magix.Brix.Types
             if (functor(this))
                 return this;
 
-            foreach (Node idx in this)
+            foreach (Node idx in _children)
             {
-                if (functor(idx))
-                    return idx;
-
                 Node tmp = idx.Find(functor);
-
                 if (tmp != null)
                     return tmp;
             }
