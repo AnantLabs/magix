@@ -53,7 +53,70 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                     tlsRep.DataSource = DataSource["Controls"];
                     tlsRep.DataBind();
+
+                    SetWindowPropertiesPositionsAccordingToSettings();
+                    SetWindowToolsPositionsAccordingToSettings();
+                    SetTopWindow();
                 };
+        }
+
+        private void SetTopWindow()
+        {
+            Node node = new Node();
+
+            node["SectionName"].Value = "Magix.MetaForms.TopWindow";
+
+            RaiseSafeEvent(
+                "Magix.Core.LoadSettingsSection",
+                node);
+
+            if (node.Contains("Section"))
+            {
+                if (node["Section"]["Window"].Get<string>() == "tools")
+                {
+                    tools.Style[Styles.zIndex] = "501";
+                    props.Style[Styles.zIndex] = "500";
+                }
+                else
+                {
+                    tools.Style[Styles.zIndex] = "500";
+                    props.Style[Styles.zIndex] = "501";
+                }
+            }
+        }
+
+        private void SetWindowToolsPositionsAccordingToSettings()
+        {
+            Node node = new Node();
+
+            node["SectionName"].Value = "Magix.MetaForms.ToolsWindowPosition";
+
+            RaiseSafeEvent(
+                "Magix.Core.LoadSettingsSection",
+                node);
+
+            if (node.Contains("Section"))
+            {
+                tools.Style[Styles.left] = int.Parse(node["Section"]["X"].Get<string>()).ToString() + "px";
+                tools.Style[Styles.top] = int.Parse(node["Section"]["Y"].Get<string>()).ToString() + "px";
+            }
+        }
+
+        private void SetWindowPropertiesPositionsAccordingToSettings()
+        {
+            Node node = new Node();
+
+            node["SectionName"].Value = "Magix.MetaForms.PropertyWindowPosition";
+
+            RaiseSafeEvent(
+                "Magix.Core.LoadSettingsSection",
+                node);
+
+            if (node.Contains("Section"))
+            {
+                props.Style[Styles.left] = int.Parse(node["Section"]["X"].Get<string>()).ToString() + "px";
+                props.Style[Styles.top] = int.Parse(node["Section"]["Y"].Get<string>()).ToString() + "px";
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -586,6 +649,74 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.Controls.Clear();
             CreateFormControls();
             ctrls.ReRender();
+        }
+
+        protected void tools_Dragged(object sender, EventArgs e)
+        {
+            int x = int.Parse(tools.Style[Styles.left].Replace("px", ""));
+            int y = int.Parse(tools.Style[Styles.top].Replace("px", ""));
+
+            Node node = new Node();
+
+            node["Section"]["X"].Value = x.ToString();
+            node["Section"]["Y"].Value = y.ToString();
+            node["SectionName"].Value = "Magix.MetaForms.ToolsWindowPosition";
+
+            RaiseSafeEvent(
+                "Magix.Core.SaveSettingsSection",
+                node);
+        }
+
+        protected void props_Dragged(object sender, EventArgs e)
+        {
+            int x = int.Parse(props.Style[Styles.left].Replace("px", ""));
+            int y = int.Parse(props.Style[Styles.top].Replace("px", ""));
+
+            Node node = new Node();
+
+            node["Section"]["X"].Value = x.ToString();
+            node["Section"]["Y"].Value = y.ToString();
+            node["SectionName"].Value = "Magix.MetaForms.PropertyWindowPosition";
+
+            RaiseSafeEvent(
+                "Magix.Core.SaveSettingsSection",
+                node);
+        }
+
+        protected void tools_Click(object sender, EventArgs e)
+        {
+            if (props.Style[Styles.zIndex] != "500")
+            {
+                props.Style[Styles.zIndex] = "500";
+                tools.Style[Styles.zIndex] = "501";
+
+                Node node = new Node();
+
+                node["SectionName"].Value = "Magix.MetaForms.TopWindow";
+                node["Section"]["Window"].Value = "tools";
+
+                RaiseSafeEvent(
+                    "Magix.Core.SaveSettingsSection",
+                    node);
+            }
+        }
+
+        protected void props_Click(object sender, EventArgs e)
+        {
+            if (tools.Style[Styles.zIndex] != "500")
+            {
+                tools.Style[Styles.zIndex] = "500";
+                props.Style[Styles.zIndex] = "501";
+
+                Node node = new Node();
+
+                node["SectionName"].Value = "Magix.MetaForms.TopWindow";
+                node["Section"]["Window"].Value = "props";
+
+                RaiseSafeEvent(
+                    "Magix.Core.SaveSettingsSection",
+                    node);
+            }
         }
 
         /**

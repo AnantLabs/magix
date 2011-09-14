@@ -6,6 +6,7 @@
 
 using System;
 using Magix.Brix.Loader;
+using Magix.Brix.Types;
 
 namespace Magix.Brix.Components.ActiveControllers.Settings
 {
@@ -59,6 +60,43 @@ namespace Magix.Brix.Components.ActiveControllers.Settings
                     .FullName)
             {
                 Magix.Brix.Components.ActiveTypes.Settings.Instance.Reload();
+            }
+        }
+
+        /**
+         * Level2: Allows for saving of a list of key/value pairs of settings in one swoop.
+         * Settings are in the 'Section' list of nodes, while the name of the Section Group is in
+         * the 'SectionName' parameter
+         */
+        [ActiveEvent(Name = "Magix.Core.SaveSettingsSection")]
+        protected void Magix_Core_SaveSettingsSection(object sender, ActiveEventArgs e)
+        {
+            string sectionGroupName = e.Params["SectionName"].Get<string>();
+
+            if (string.IsNullOrEmpty(sectionGroupName))
+                throw new Exception("We'll need a SectionName parameter for that bugger ...");
+
+            foreach (Node idx in e.Params["Section"])
+            {
+                Magix.Brix.Components.ActiveTypes.Settings.Instance[sectionGroupName + "." + idx.Name] = idx.Get<string>();
+            }
+        }
+
+        /**
+         * Level2: Returns a 'Section' of settings according to how they were previously saved, if it exists
+         */
+        [ActiveEvent(Name = "Magix.Core.LoadSettingsSection")]
+        protected void Magix_Core_LoadSettingsSection(object sender, ActiveEventArgs e)
+        {
+            string sectionGroupName = e.Params["SectionName"].Get<string>();
+
+            if (string.IsNullOrEmpty(sectionGroupName))
+                throw new Exception("We'll need a SectionName parameter for this bugger ...");
+
+            foreach (string idx in Magix.Brix.Components.ActiveTypes.Settings.Instance.Keys)
+            {
+                if (idx.IndexOf(sectionGroupName) == 0)
+                    e.Params["Section"][idx.Replace(sectionGroupName + ".", "")].Value = Magix.Brix.Components.ActiveTypes.Settings.Instance[idx];
             }
         }
     }

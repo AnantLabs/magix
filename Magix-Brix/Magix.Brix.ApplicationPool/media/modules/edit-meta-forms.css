@@ -22,7 +22,7 @@
 	top:18px;
 	left:0px;
 	position:absolute;
-	z-index:799;
+	z-index:500;
 }
 
 .mux-meta-forms-props
@@ -30,7 +30,7 @@
 	top:225px;
 	left:0;
 	position:absolute;
-	z-index:800;
+	z-index:500;
 }
 
 .mux-toolbox-item
