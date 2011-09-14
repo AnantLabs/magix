@@ -22,15 +22,10 @@ namespace Magix.UX.Widgets
      */
     public class TextArea : BaseWebControlFormElementInputText
     {
-        protected override void RenderMuxControl(HtmlBuilder builder)
-        {
-            using (Element el = builder.CreateElement("textarea"))
-            {
-                AddAttributes(el);
-                el.Write(Text);
-            }
-        }
-
+        /**
+         * Ghost text displayed only if there is no value in the textbox. Useful for giving 
+         * end user hints and clues about what type of field this is.
+         */
         public string PlaceHolder
         {
             get { return ViewState["PlaceHolder"] == null ? "" : (string)ViewState["PlaceHolder"]; }
@@ -39,6 +34,15 @@ namespace Magix.UX.Widgets
                 if (value != PlaceHolder)
                     SetJsonGeneric("placeholder", value);
                 ViewState["PlaceHolder"] = value;
+            }
+        }
+
+        protected override void RenderMuxControl(HtmlBuilder builder)
+        {
+            using (Element el = builder.CreateElement("textarea"))
+            {
+                AddAttributes(el);
+                el.Write(Text);
             }
         }
 

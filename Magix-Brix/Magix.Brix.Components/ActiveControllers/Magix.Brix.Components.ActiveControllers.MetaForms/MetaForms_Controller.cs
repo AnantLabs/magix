@@ -140,49 +140,305 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         [ActiveEvent(Name = "Magix.MetaForms.GetControlTypes")]
         protected void Magix_MetaForms_GetControlTypes(object sender, ActiveEventArgs e)
         {
-            // Button type
             CreateButton(e);
-
-            // Label type
             CreateLabel(e);
-
-            // CheckBox type
             CreateCheckBox(e);
-
-            // CheckBox type
             CreateTextBox(e);
+            CreateHiddenField(e);
+            CreateHyperLink(e);
+            CreateImage(e);
+            CreateLinkButton(e);
+            CreatTextArea(e);
+            CreateRadioButton(e);
+        }
+
+        private void CreateRadioButton(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["RadioButton"]["Name"].Value = "RadioButton";
+            e.Params["Controls"]["RadioButton"]["TypeName"].Value = "Magix.MetaForms.Plugins.RadioButton";
+            e.Params["Controls"]["RadioButton"]["ToolTip"].Value = @"Creates a RadioButton type of 
+control, which you can assign Text to and CheckedChanged Event Handlers. Useful for multiple 
+choice types of input data, such as; Milk, Beer or Water";
+
+            GetCommonEventsAndProperties(e, "RadioButton", true);
+
+            e.Params["Controls"]["RadioButton"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["RadioButton"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+
+            e.Params["Controls"]["RadioButton"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["RadioButton"]["Properties"]["Enabled"]["Default"].Value = true;
+            e.Params["Controls"]["RadioButton"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
+will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
+any ways by the end user";
+
+            e.Params["Controls"]["RadioButton"]["Properties"]["Checked"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["RadioButton"]["Properties"]["Checked"]["Description"].Value = @"The 
+Checked state of your RadioButton, true will tag it off as checked, while false [the default] will 
+keep it open";
+
+            e.Params["Controls"]["RadioButton"]["Properties"]["GroupName"].Value = typeof(string).FullName;
+            e.Params["Controls"]["RadioButton"]["Properties"]["GroupName"]["Description"].Value = @"The 
+group of RadioButtons the RadioButton will belong to. If you've got three RadioButtons, and they are 
+all a part of the same single-selection from multiple choices, then only one of them can be 
+checked at the same time. So checking off one, will uncheck off any previously checked RadioButtons within 
+the same GrouName value";
+
+            e.Params["Controls"]["RadioButton"]["Events"]["Blur"].Value = true;
+            e.Params["Controls"]["RadioButton"]["Events"]["Blur"]["Description"].Value = @"Raised when 
+the user moves focus away from the Widget by for instance clicking the TAB key while the Widget has 
+focus, or clicking another place with his mouse or touch screen while the widget has focus";
+
+            e.Params["Controls"]["RadioButton"]["Events"]["Focused"].Value = true;
+            e.Params["Controls"]["RadioButton"]["Events"]["Focused"]["Description"].Value = @"Raised when 
+the user moves focus ONTO the Widget by for instance clicking the TAB key such that the Widget gets 
+focus, or clicking the widget with his mouse or touch screen";
+
+            e.Params["Controls"]["RadioButton"]["Events"]["CheckedChanged"].Value = true;
+            e.Params["Controls"]["RadioButton"]["Events"]["CheckedChanged"]["Description"].Value = @"Raised when 
+the checked state has changed, either by clicking or through some other user interaction";
+        }
+
+        private void CreatTextArea(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["TextArea"]["Name"].Value = "TextArea";
+            e.Params["Controls"]["TextArea"]["TypeName"].Value = "Magix.MetaForms.Plugins.TextArea";
+            e.Params["Controls"]["TextArea"]["ToolTip"].Value = @"Creates a TextArea type of 
+control, which you can assign Text to and TextChanged Event Handlers";
+
+            GetCommonEventsAndProperties(e, "TextArea", true);
+
+            e.Params["Controls"]["TextArea"]["Properties"]["PlaceHolder"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextArea"]["Properties"]["PlaceHolder"]["Description"].Value = @"The 
+watermark text of your TextArea. Will show when TextArea is empty, as a cue to the end user for what to 
+type into it";
+
+            e.Params["Controls"]["TextArea"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextArea"]["Properties"]["Text"]["Description"].Value = @"The 
+visible text for the end user and also the text fragment the user can change by editing the text box value";
+
+            e.Params["Controls"]["TextArea"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextArea"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+
+            e.Params["Controls"]["TextArea"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextArea"]["Properties"]["Enabled"]["Default"].Value = true;
+            e.Params["Controls"]["TextArea"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
+will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
+any ways by the end user";
+
+            e.Params["Controls"]["TextArea"]["Events"]["TextChanged"].Value = true;
+            e.Params["Controls"]["TextArea"]["Events"]["TextChanged"]["Description"].Value = @"Raised when 
+the text has changed, and the user chooses to leave the field and move to another field on the form by 
+e.g. clicking with his mouse or using TAB such that the TextArea looses focus";
+
+            e.Params["Controls"]["TextArea"]["Events"]["Blur"].Value = true;
+            e.Params["Controls"]["TextArea"]["Events"]["Blur"]["Description"].Value = @"Raised when 
+the user moves focus away from the Widget by for instance clicking the TAB key while the Widget has 
+focus, or clicking another place with his mouse or touch screen while the widget has focus";
+
+            e.Params["Controls"]["TextArea"]["Events"]["Focused"].Value = true;
+            e.Params["Controls"]["TextArea"]["Events"]["Focused"]["Description"].Value = @"Raised when 
+the user moves focus ONTO the Widget by for instance clicking the TAB key such that the Widget gets 
+focus, or clicking the widget with his mouse or touch screen";
+        }
+
+        private void CreateLinkButton(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["LinkButton"]["Name"].Value = "LinkButton";
+            e.Params["Controls"]["LinkButton"]["TypeName"].Value = "Magix.MetaForms.Plugins.LinkButton";
+            e.Params["Controls"]["LinkButton"]["ToolTip"].Value = @"Creates a LinkButton type of 
+control, which you can assign Click actions to, from which when the user clicks, will raise 
+the actions you have associated with the LinkButton. You can have multiple LinkButtons per form, and they 
+can have different Text values to differentiate them for the user";
+
+            GetCommonEventsAndProperties(e, "LinkButton", true);
+
+            e.Params["Controls"]["LinkButton"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["LinkButton"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
+to the end user on top of the LinkButton";
+
+            e.Params["Controls"]["LinkButton"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["LinkButton"]["Properties"]["Enabled"]["Default"].Value = true;
+            e.Params["Controls"]["LinkButton"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
+will enable the widget [true is its default value]. If it is false, the widget cannot be clicked in 
+any ways by the end user";
+
+            e.Params["Controls"]["LinkButton"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["LinkButton"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+
+            e.Params["Controls"]["LinkButton"]["Events"]["Blur"].Value = true;
+            e.Params["Controls"]["LinkButton"]["Events"]["Blur"]["Description"].Value = @"Raised when 
+the user moves focus away from the Widget by for instance clicking the TAB key while the Widget has 
+focus, or clicking another place with his mouse or touch screen while the widget has focus";
+
+            e.Params["Controls"]["LinkButton"]["Events"]["Focused"].Value = true;
+            e.Params["Controls"]["LinkButton"]["Events"]["Focused"]["Description"].Value = @"Raised when 
+the user moves focus ONTO the Widget by for instance clicking the TAB key such that the Widget gets 
+focus, or clicking the widget with his mouse or touch screen";
+        }
+
+        private void CreateImage(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Image"]["Name"].Value = "Image";
+            e.Params["Controls"]["Image"]["TypeName"].Value = "Magix.MetaForms.Plugins.Image";
+            e.Params["Controls"]["Image"]["ToolTip"].Value = @"Creates an Image type of 
+control, which you can assign an Image URL to";
+
+            GetCommonEventsAndProperties(e, "Image", true);
+
+            e.Params["Controls"]["Image"]["Properties"]["AlternateText"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Image"]["Properties"]["AlternateText"]["Description"].Value = @"The 
+text shown if the image is broken. Also highly useful for conveying information about the image 
+to people who have challenged eye sight and such. _SET THIS PROPERTY_ to something intelligent, since 
+it is rude not to";
+
+            e.Params["Controls"]["Image"]["Properties"]["ImageUrl"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Image"]["Properties"]["ImageUrl"]["Description"].Value = @"The 
+actual URL to the Image used. Can be relative or absolute [starting with http://]";
+
+            e.Params["Controls"]["Image"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Image"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox 
+for instance";
+        }
+
+        private void CreateHyperLink(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["HyperLink"]["Name"].Value = "HyperLink";
+            e.Params["Controls"]["HyperLink"]["TypeName"].Value = "Magix.MetaForms.Plugins.HyperLink";
+            e.Params["Controls"]["HyperLink"]["ToolTip"].Value = @"Creates a HyperLink type of 
+control, which you can assign a URL to, which once clicked will bring the user to that URL";
+
+            GetCommonEventsAndProperties(e, "HyperLink", true);
+
+            e.Params["Controls"]["HyperLink"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["HyperLink"]["Properties"]["Text"]["Description"].Value = @"The 
+visible text for the end user";
+
+            e.Params["Controls"]["HyperLink"]["Properties"]["URL"].Value = typeof(string).FullName;
+            e.Params["Controls"]["HyperLink"]["Properties"]["URL"]["Description"].Value = @"The 
+actual URL the user will be brought to when he clicks the hyperlink";
+
+            e.Params["Controls"]["HyperLink"]["Properties"]["Target"].Value = typeof(string).FullName;
+            e.Params["Controls"]["HyperLink"]["Properties"]["Target"]["Description"].Value = @"The 
+named browser window you wish to use, unless you want the current window to be replaced. Or _blank 
+to make sure it is always a new window";
+
+            e.Params["Controls"]["HyperLink"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["HyperLink"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox 
+for instance";
         }
 
         /*
          * Helper for above ...
          */
-        private static void GetCommonEventsAndProperties(ActiveEventArgs e, string typeName)
+        private void CreateHiddenField(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["HiddenField"]["Name"].Value = "HiddenField";
+            e.Params["Controls"]["HiddenField"]["TypeName"].Value = "Magix.MetaForms.Plugins.HiddenField";
+            e.Params["Controls"]["HiddenField"]["ToolTip"].Value = @"Creates a HiddenField type of 
+control, which you can assign Values to. A hidden field widget is not visible for the end user, 
+but is still a value control, and can be databinded to hold values the user shouldn not see, but must still 
+somehow follow him as he proceeds through the flow of your process";
+
+            GetCommonEventsAndProperties(e, "HiddenField", false);
+
+            e.Params["Controls"]["HiddenField"]["Properties"]["Value"].Value = typeof(string).FullName;
+            e.Params["Controls"]["HiddenField"]["Properties"]["Value"]["Description"].Value = @"The 
+visible text for the end user and also the text fragment the user can change by editing the text box value";
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private static void GetCommonEventsAndProperties(ActiveEventArgs e, string typeName, bool isWebControl)
         {
             e.Params["Controls"][typeName]["Properties"]["ID"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["ID"]["Description"].Value = @"String ID used for 
 uniquely identifying a widget later, for extracting its value or changing its state somehow. Must be unique 
 per Meta Form. Should _not_ be set for widgets inside of Repeaters or other listable types of controls. Can only 
 contain alphanumerical characters [a-z|A-Z|0-9], and it should start with an a-z|A-Z character. In fact, unless 
-you are certain about what you're doing, and what you want to achieve, you probably should _NOT_ mess 
+you are certain about what you are doing, and what you want to achieve, you probably should _NOT_ mess 
 with this property";
 
-            e.Params["Controls"][typeName]["Properties"]["CssClass"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["CssClass"]["Default"].Value = "span-2";
-            e.Params["Controls"][typeName]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
+            if (isWebControl)
+            {
+                e.Params["Controls"][typeName]["Properties"]["CssClass"].Value = typeof(string).FullName;
+                e.Params["Controls"][typeName]["Properties"]["CssClass"]["Default"].Value = "span-2";
+                e.Params["Controls"][typeName]["Properties"]["CssClass"]["Description"].Value = @"The CSS 
 class of the control. CSS classes can be concatenated by adding spaces between them if you wish to 
 use multiple CSS classes for the same control. If you do not know what a CSS class is, or all of this is 
 rubbish to you, you would probably be better of not using this property, but instead indirectly through 
 the Builder Short Cut Button create your animations and styles for your Widgets";
 
-            e.Params["Controls"][typeName]["Properties"]["Dir"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["Dir"]["Description"].Value = @"Direction of text 
+                e.Params["Controls"][typeName]["Properties"]["Dir"].Value = typeof(string).FullName;
+                e.Params["Controls"][typeName]["Properties"]["Dir"]["Description"].Value = @"Direction of text 
 on the widget. If you set it to rtl, it will display characters from right to left, as in the way 
 it is being done in among other things in Arabic";
 
-            e.Params["Controls"][typeName]["Properties"]["ToolTip"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["ToolTip"]["Description"].Value = @"Tooltip hint 
+                e.Params["Controls"][typeName]["Properties"]["ToolTip"].Value = typeof(string).FullName;
+                e.Params["Controls"][typeName]["Properties"]["ToolTip"]["Description"].Value = @"Tooltip hint 
 given to user when he moves cursor over widget. Obviously useless, for apparent reasons, on tablets, iPhones 
 and such";
+
+                e.Params["Controls"][typeName]["Properties"]["TabIndex"].Value = typeof(string).FullName;
+                e.Params["Controls"][typeName]["Properties"]["TabIndex"]["Description"].Value = @"Numerical 
+value indicating which order the widget is within the tab hierarchy, meaning which control is next if 
+the user clicks the TAB key on the keyboard. A control which has TabIndex of 2 will gain focus when 
+the user hits TAB and the widget that has currently focus has 1 as TabIndex, and so on";
+
+                // events ...
+
+                e.Params["Controls"][typeName]["Events"]["Click"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["Click"]["Description"].Value = @"Raised when 
+the widget is clicked. Most useful for buttons and such, since if used on other types of elements it will 
+partially destroy accessibility for your application";
+
+                e.Params["Controls"][typeName]["Events"]["DblClick"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["DblClick"]["Description"].Value = @"Raised when 
+the widget is double clicked. Most useful for buttons and such, since if used on other types of elements it will 
+partially destroy accessibility for your application";
+
+                e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
+the left mouse button is squeezed, but before it is released, on top of the specific widget. Obviously, for apparent 
+reasons, not very useful for phones, iPads, Droids and Tablet development";
+
+                e.Params["Controls"][typeName]["Events"]["MouseUp"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["MouseUp"]["Description"].Value = @"Raised when 
+the left mouse button is squeezed and released, on top of the specific widget. Obviously, for apparent 
+reasons, not very useful for phones, iPads, Droids and Tablet development";
+
+                e.Params["Controls"][typeName]["Events"]["MouseOver"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["MouseOver"]["Description"].Value = @"Raised when 
+the mouse cursor is brought over the widget";
+
+                e.Params["Controls"][typeName]["Events"]["MouseOut"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["MouseOut"]["Description"].Value = @"Raised when 
+the mouse cursor leaves the element, meaning the cursor is moved outside of the boundaries of the 
+widget";
+
+                e.Params["Controls"][typeName]["Events"]["KeyPress"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["KeyPress"]["Description"].Value = @"Raised when 
+a key is pressed and typed on the widget";
+
+                e.Params["Controls"][typeName]["Events"]["EscKey"].Value = true;
+                e.Params["Controls"][typeName]["Events"]["EscKey"]["Description"].Value = @"Raised when 
+the ESC key is clicked and released on the widget";
+
+                e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Text"].Value = "Builder ...";
+                e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["ToolTip"].Value = "Opens up the Style Builder such that you can create Animations and Styles for your Widget as you please. Add some Candy to your widgets by changing the way they Animate, Behave and Look like. Fonts, colors, etc, etc, etc. It is all done from here ... ;)";
+                e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["CssClass"].Value = "mux-shortcut-builder";
+                e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
+            }
 
             e.Params["Controls"][typeName]["Properties"]["Info"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional information 
@@ -194,61 +450,11 @@ objects of type xxx and you have a field which should be linked towards its yyy 
 you should set the Info field on that Widget to yyy to be able to Automagixally databind your 
 field towards your Meta Object property";
 
-            e.Params["Controls"][typeName]["Properties"]["TabIndex"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["TabIndex"]["Description"].Value = @"Numerical 
-value indicating which order the widget is within the tab hierarchy, meaning which control is next if 
-the user clicks the TAB key on the keyboard. A control which has TabIndex of 2 will gain focus when 
-the user hits TAB and the widget that has currently focus has 1 as TabIndex, and so on";
-
-            // Events ...
-
-            e.Params["Controls"][typeName]["Events"]["Click"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["Click"]["Description"].Value = @"Raised when 
-the widget is clicked. Most useful for buttons and such, since if used on other types of elements it will 
-partially destroy accessibility for your application";
-
-            e.Params["Controls"][typeName]["Events"]["DblClick"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["DblClick"]["Description"].Value = @"Raised when 
-the widget is double clicked. Most useful for buttons and such, since if used on other types of elements it will 
-partially destroy accessibility for your application";
-
-            e.Params["Controls"][typeName]["Events"]["MouseDown"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseDown"]["Description"].Value = @"Raised when 
-the left mouse button is squeezed, but before it is released, on top of the specific widget. Obviously, for apparent 
-reasons, not very useful for phones, iPads, Droids and Tablet development";
-
-            e.Params["Controls"][typeName]["Events"]["MouseUp"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseUp"]["Description"].Value = @"Raised when 
-the left mouse button is squeezed and released, on top of the specific widget. Obviously, for apparent 
-reasons, not very useful for phones, iPads, Droids and Tablet development";
-
-            e.Params["Controls"][typeName]["Events"]["MouseOver"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseOver"]["Description"].Value = @"Raised when 
-the mouse cursor is brought over the widget";
-
-            e.Params["Controls"][typeName]["Events"]["MouseOut"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["MouseOut"]["Description"].Value = @"Raised when 
-the mouse cursor leaves the element, meaning the cursor is moved outside of the boundaries of the 
-widget";
-
-            e.Params["Controls"][typeName]["Events"]["KeyPress"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["KeyPress"]["Description"].Value = @"Raised when 
-a key is pressed and typed on the widget";
-
-            e.Params["Controls"][typeName]["Events"]["EscKey"].Value = true;
-            e.Params["Controls"][typeName]["Events"]["EscKey"]["Description"].Value = @"Raised when 
-the ESC key is clicked and released on the widget";
-
             // Shortcut buttons ...
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Text"].Value = "Delete!";
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["ToolTip"].Value = "Deletes the currently selected widget. Be careful, this operation _cannot_ be undone ... !!";
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["CssClass"].Value = "mux-shortcut-delete";
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Event"].Value = "Magix.MetaForms.DeleteMetaFormWidgetFromForm";
-
-            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Text"].Value = "Builder ...";
-            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["ToolTip"].Value = "Opens up the Style Builder such that you can create Animations and Styles for your Widget as you please. Add some Candy to your widgets by changing the way they Animate, Behave and Look like. Fonts, colors, etc, etc, etc. It's all done from here ... ;)";
-            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["CssClass"].Value = "mux-shortcut-builder";
-            e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
         }
 
         /*
@@ -256,13 +462,13 @@ the ESC key is clicked and released on the widget";
          */
         private void CreateTextBox(ActiveEventArgs e)
         {
-            e.Params["Controls"]["TextBox"]["Name"].Value = "Magix TextBox";
+            e.Params["Controls"]["TextBox"]["Name"].Value = "TextBox";
             e.Params["Controls"]["TextBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.TextBox";
             e.Params["Controls"]["TextBox"]["ToolTip"].Value = @"Creates a TextBox type of 
 control, which you can assign Text to and TextChanged Event Handlers. TextBoxes are the by far most 
 common type of input control, since it can take any types of input values from the end user";
 
-            GetCommonEventsAndProperties(e, "TextBox");
+            GetCommonEventsAndProperties(e, "TextBox", true);
 
             e.Params["Controls"]["TextBox"]["Properties"]["TextMode"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["TextMode"]["Description"].Value = @"Can be 
@@ -336,13 +542,13 @@ focus, or clicking the widget with his mouse or touch screen";
          */
         private static void CreateCheckBox(ActiveEventArgs e)
         {
-            e.Params["Controls"]["CheckBox"]["Name"].Value = "Magix CheckBox";
+            e.Params["Controls"]["CheckBox"]["Name"].Value = "CheckBox";
             e.Params["Controls"]["CheckBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.CheckBox";
             e.Params["Controls"]["CheckBox"]["ToolTip"].Value = @"Creates a CheckBox type of 
 control, which you can assign Text to and CheckedChanged Event Handlers. Useful for things that black and 
 white in nature, such as yes and no questions";
 
-            GetCommonEventsAndProperties(e, "CheckBox");
+            GetCommonEventsAndProperties(e, "CheckBox", true);
 
             e.Params["Controls"]["CheckBox"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
             e.Params["Controls"]["CheckBox"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
@@ -380,13 +586,13 @@ the checked state has changed, either by clicking or through some other user int
          */
         private static void CreateLabel(ActiveEventArgs e)
         {
-            e.Params["Controls"]["Label"]["Name"].Value = "Magix Label";
+            e.Params["Controls"]["Label"]["Name"].Value = "Label";
             e.Params["Controls"]["Label"]["TypeName"].Value = "Magix.MetaForms.Plugins.Label";
             e.Params["Controls"]["Label"]["ToolTip"].Value = @"Creates a Label type of 
 control, which you can assign Text to. Basically serves as a read-only textual fragment on your page. 
 Change which HTML tag it is being rendered with by setting its Tag property";
 
-            GetCommonEventsAndProperties(e, "Label");
+            GetCommonEventsAndProperties(e, "Label", true);
 
             e.Params["Controls"]["Label"]["Properties"]["Text"].Value = typeof(string).FullName;
             e.Params["Controls"]["Label"]["Properties"]["Text"]["Description"].Value = @"The text visible to 
@@ -411,14 +617,14 @@ in your browser unless you also set the Tag property to label";
          */
         private static void CreateButton(ActiveEventArgs e)
         {
-            e.Params["Controls"]["Button"]["Name"].Value = "Magix Button";
+            e.Params["Controls"]["Button"]["Name"].Value = "Button";
             e.Params["Controls"]["Button"]["TypeName"].Value = "Magix.MetaForms.Plugins.Button";
             e.Params["Controls"]["Button"]["ToolTip"].Value = @"Creates a Button type of 
 control, which you can assign Click actions to, from which when the user clicks, will raise 
 the actions you have associated with the button. You can have several buttons per form, and they 
 can have different Text values to differentiate them for the user";
 
-            GetCommonEventsAndProperties(e, "Button");
+            GetCommonEventsAndProperties(e, "Button", true);
 
             e.Params["Controls"]["Button"]["Properties"]["Text"].Value = typeof(string).FullName;
             e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
@@ -499,6 +705,58 @@ focus, or clicking the widget with his mouse or touch screen";
                 case "Magix.MetaForms.Plugins.TextBox":
                     {
                         TextBox btn = new TextBox();
+                        btn.CssClass = "span-2";
+                        e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.HiddenField":
+                    {
+                        if (e.Params.Contains("Preview") &&
+                            e.Params["Preview"].Get<bool>())
+                        {
+                            TextBox btn = new TextBox();
+                            btn.Style[Styles.position] = "absolute";
+                            btn.Style[Styles.top] = "0px";
+                            btn.Style[Styles.left] = "0px";
+                            btn.Style[Styles.width] = "150px";
+                            btn.ToolTip = "Will render as a HiddenField in non-preview modes ... However, we cannot render it as a hidden field while in WYSIWYG mode since those are invisible, and you wouldn not have any things to select to be able to modify its properties ...";
+                            e.Params["Control"].Value = btn;
+                        }
+                        else
+                        {
+                            HiddenField btn = new HiddenField();
+                            e.Params["Control"].Value = btn;
+                        }
+                    } break;
+                case "Magix.MetaForms.Plugins.Image":
+                    {
+                        Image btn = new Image();
+                        btn.CssClass = "span-2";
+                        btn.AlternateText = "Anonymous Coward Image";
+                        e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.HyperLink":
+                    {
+                        HyperLink btn = new HyperLink();
+                        btn.CssClass = "span-2";
+                        btn.Text = "Anonymous Coward Anchor Text";
+                        e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.LinkButton":
+                    {
+                        LinkButton btn = new LinkButton();
+                        btn.CssClass = "span-2";
+                        btn.Text = "Anonymous Coward Anchor Text";
+                        e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.TextArea":
+                    {
+                        TextArea btn = new TextArea();
+                        btn.CssClass = "span-2";
+                        e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.RadioButton":
+                    {
+                        RadioButton btn = new RadioButton();
                         btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                     } break;
