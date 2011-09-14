@@ -150,8 +150,38 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             CreateLinkButton(e);
             CreatTextArea(e);
             CreateRadioButton(e);
+            CreateCalendar(e);
         }
 
+        /*
+         * Helper for above ...
+         */
+        private void CreateCalendar(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Calendar"]["Name"].Value = "Calendar";
+            e.Params["Controls"]["Calendar"]["TypeName"].Value = "Magix.MetaForms.Plugins.Calendar";
+            e.Params["Controls"]["Calendar"]["ToolTip"].Value = @"Creates a Calendar type of 
+control, which you can use if you need the end user to pick a specific date";
+
+            GetCommonEventsAndProperties(e, "Calendar", true);
+
+            e.Params["Controls"]["Calendar"]["Properties"]["Value"].Value = typeof(DateTime).FullName;
+            e.Params["Controls"]["Calendar"]["Properties"]["Value"]["Description"].Value = @"The 
+DateTime selected date of the Calendar";
+
+            e.Params["Controls"]["Calendar"]["Events"]["DateChanged"].Value = true;
+            e.Params["Controls"]["Calendar"]["Events"]["DateChanged"]["Description"].Value = @"Raised when 
+the DateTime Value has changed";
+
+            e.Params["Controls"]["Calendar"]["Events"]["DateSelected"].Value = true;
+            e.Params["Controls"]["Calendar"]["Events"]["DateSelected"]["Description"].Value = @"Raised when 
+the DateTime Value has changed, byt the end user clicking a specific date, versus just browsing around in years as 
+the DateChanged event does";
+        }
+
+        /*
+         * Helper for above ...
+         */
         private void CreateRadioButton(ActiveEventArgs e)
         {
             e.Params["Controls"]["RadioButton"]["Name"].Value = "RadioButton";
@@ -200,6 +230,9 @@ focus, or clicking the widget with his mouse or touch screen";
 the checked state has changed, either by clicking or through some other user interaction";
         }
 
+        /*
+         * Helper for above ...
+         */
         private void CreatTextArea(ActiveEventArgs e)
         {
             e.Params["Controls"]["TextArea"]["Name"].Value = "TextArea";
@@ -245,6 +278,9 @@ the user moves focus ONTO the Widget by for instance clicking the TAB key such t
 focus, or clicking the widget with his mouse or touch screen";
         }
 
+        /*
+         * Helper for above ...
+         */
         private void CreateLinkButton(ActiveEventArgs e)
         {
             e.Params["Controls"]["LinkButton"]["Name"].Value = "LinkButton";
@@ -282,6 +318,9 @@ the user moves focus ONTO the Widget by for instance clicking the TAB key such t
 focus, or clicking the widget with his mouse or touch screen";
         }
 
+        /*
+         * Helper for above ...
+         */
         private void CreateImage(ActiveEventArgs e)
         {
             e.Params["Controls"]["Image"]["Name"].Value = "Image";
@@ -308,6 +347,9 @@ as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Wi
 for instance";
         }
 
+        /*
+         * Helper for above ...
+         */
         private void CreateHyperLink(ActiveEventArgs e)
         {
             e.Params["Controls"]["HyperLink"]["Name"].Value = "HyperLink";
@@ -730,7 +772,6 @@ focus, or clicking the widget with his mouse or touch screen";
                 case "Magix.MetaForms.Plugins.Image":
                     {
                         Image btn = new Image();
-                        btn.CssClass = "span-2";
                         btn.AlternateText = "Anonymous Coward Image";
                         e.Params["Control"].Value = btn;
                     } break;
@@ -759,6 +800,24 @@ focus, or clicking the widget with his mouse or touch screen";
                         RadioButton btn = new RadioButton();
                         btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.Calendar":
+                    {
+                        if (e.Params.Contains("Preview") &&
+                            e.Params["Preview"].Get<bool>())
+                        {
+                            Label btn = new Label();
+                            btn.CssClass = "mux-calendar mux-rounded mux-shaded";
+                            btn.Tag = "div";
+                            btn.Text = "Will render as a Calendar in front-web";
+                            e.Params["Control"].Value = btn;
+                        }
+                        else
+                        {
+                            Calendar btn = new Calendar();
+                            btn.CssClass = "mux-calendar mux-rounded mux-shaded";
+                            e.Params["Control"].Value = btn;
+                        }
                     } break;
                 default:
                     // DO NOTHING. Others might handle ...

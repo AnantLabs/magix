@@ -67,7 +67,9 @@ namespace Magix.UX.Widgets
                         delegate
                         {
                             // Cheating a little bit ... ;)
-                            For = Selector.FindControl<Control>(Page, toSetValue).ClientID;
+                            Control ctrl = Selector.FindControl<Control>(Page, toSetValue);
+                            if (ctrl != null)
+                                For = ctrl.ClientID;
                         };
                 }
                 if (value != toSetValue)

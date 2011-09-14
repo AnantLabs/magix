@@ -39,6 +39,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected Label eventHeader;
         protected Panel shortCutWrp;
         protected System.Web.UI.WebControls.Repeater shortCutRep;
+        protected SelectList selWidg;
 
         public override void InitialLoading(Node node)
         {
@@ -57,7 +58,32 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     SetWindowPropertiesPositionsAccordingToSettings();
                     SetWindowToolsPositionsAccordingToSettings();
                     SetTopWindow();
+                    CreateSelectWidgetSelectList();
                 };
+        }
+
+        private void CreateSelectWidgetSelectList()
+        {
+            selWidg.Items.Clear();
+            selWidg.Items.Add(new ListItem("Selected Widget ...", ""));
+            DataSource["root"]["Surface"].Find(
+                delegate(Node idx)
+                {
+                    if (idx.Name.IndexOf("c-") == 0 && 
+                        idx.Contains("TypeName"))
+                    {
+                        string text = idx["TypeName"].Get<string>();
+                        if (idx.Contains("Properties") &&
+                            idx["Properties"].Contains("ID"))
+                            text += "[" + idx["Properties"]["ID"].Value.ToString() + "]";
+
+                        ListItem li = new ListItem();
+                        li.Text = text;
+                        li.Value = idx["_ID"].Value.ToString();
+                        selWidg.Items.Add(li);
+                    }
+                    return false;
+                });
         }
 
         private void SetTopWindow()
@@ -241,16 +267,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 ctrl.Click +=
                     delegate
                     {
-                        if (!string.IsNullOrEmpty(OldSelected))
-                        {
-                            BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
-                            c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
-                            c.ToolTip = "Click me to edit the Widget";
-                        }
+                        Control tmp = ctrl;
                         SetActiveControl(node);
-                        OldSelected = ctrl.ClientID;
-                        ctrl.CssClass += " mux-wysiwyg-selected";
-                        ctrl.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                     };
                 ctrl.Style[Styles.position] = "relative";
 
@@ -268,6 +286,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 // Making sure we're rendering the styles needed ...
                 RenderStyles(ctrl, node);
+
+                if (string.IsNullOrEmpty(ctrl.ID))
+                    ctrl.ID = "ID" + node["_ID"].Value.ToString();
 
                 parent.Controls.Add(ctrl);
             }
@@ -313,6 +334,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
         private void SetActiveControl(Node node)
         {
+            if (!string.IsNullOrEmpty(OldSelected))
+            {
+                BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
+                c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+                c.ToolTip = "Click me to edit the Widget";
+                OldSelected = null;
+                if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
+                    ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
+            }
+
             ClearPropertyWindow();
 
             if (node == null || 
@@ -334,11 +365,13 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     }
                 }
             }
+
             if (ctrlType != null)
             {
                 type.Text = ctrlType["Name"].Get<string>();
                 type.Info = node["_ID"].Value.ToString();
                 desc.Text = ctrlType["ToolTip"].Get<string>();
+
                 propRep.DataSource = ctrlType["Properties"];
                 propRep.DataBind();
                 propWrp.ReRender();
@@ -365,6 +398,23 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 desc.Style[Styles.height] = "0";
                 if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
                     ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
+            }
+            selWidg.SetSelectedItemAccordingToValue(node["_ID"].Value.ToString());
+
+            Control ctrl = Selector.FindControl<Control>(ctrls, 
+                node.Contains("Properties") && node["Properties"].Contains("ID") ?
+                    node["Properties"]["ID"].Value.ToString() : 
+                    ("ID" + node["_ID"].Value.ToString()));
+
+            if (ctrl != null)
+            {
+                OldSelected = ctrl.ClientID;
+                if (ctrl is BaseWebControl)
+                {
+                    BaseWebControl ctrl2 = ctrl as BaseWebControl;
+                    ctrl2.CssClass += " mux-wysiwyg-selected";
+                    ctrl2.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
+                }
             }
         }
 
@@ -434,6 +484,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
         private void ClearPropertyWindow()
         {
+            selWidg.SelectedIndex = 0;
+
             propHeader.Visible = false;
             eventHeader.Visible = false;
             type.Text = "";
@@ -580,6 +632,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.Controls.Clear();
             CreateFormControls();
             ctrls.ReRender();
+            CreateSelectWidgetSelectList();
         }
 
         protected void PropertyValueIntChanged(object sender, EventArgs e)
@@ -602,6 +655,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.Controls.Clear();
             CreateFormControls();
             ctrls.ReRender();
+            CreateSelectWidgetSelectList();
         }
 
         protected void PropertyValueBoolChanged(object sender, EventArgs e)
@@ -624,6 +678,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.Controls.Clear();
             CreateFormControls();
             ctrls.ReRender();
+            CreateSelectWidgetSelectList();
         }
 
         protected void AddControlToPage(object sender, EventArgs e)
@@ -649,6 +704,32 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.Controls.Clear();
             CreateFormControls();
             ctrls.ReRender();
+            CreateSelectWidgetSelectList();
+        }
+
+        protected void selWidg_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string sel = selWidg.SelectedItem.Value;
+            ClearPropertyWindow();
+            if (string.IsNullOrEmpty(sel))
+            {
+                SetActiveControl(null);
+                return; // No controls selected ...
+            }
+
+
+            Node ct = DataSource["root"]["Surface"].Find(
+                delegate(Node idx)
+                {
+                    if (idx.Name == "_ID" &&
+                        idx.Value.ToString() == sel)
+                    {
+                        return true;
+                    }
+                    return false;
+                });
+            if (ct != null)
+                SetActiveControl(ct.Parent);
         }
 
         protected void tools_Dragged(object sender, EventArgs e)
@@ -735,6 +816,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.Controls.Clear();
             CreateFormControls();
             ctrls.ReRender();
+            CreateSelectWidgetSelectList();
         }
     }
 }
