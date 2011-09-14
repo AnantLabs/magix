@@ -103,6 +103,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             Node nn = new Node();
 
             nn["TypeName"].Value = node["TypeName"].Get<string>();
+            nn["Preview"].Value = true;
 
             RaiseSafeEvent(
                 "Magix.MetaForms.CreateControl",
@@ -111,7 +112,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (nn.Contains("Control"))
             {
                 BaseWebControl ctrl = nn["Control"].Get<BaseWebControl>();
-                ctrl.ToolTip = "Click me to edit the Widget";
+                if (string.IsNullOrEmpty(ctrl.ToolTip))
+                    ctrl.ToolTip = "Click me to edit the Widget";
                 if (node.Contains("Properties"))
                 {
                     foreach (Node idx in node["Properties"])

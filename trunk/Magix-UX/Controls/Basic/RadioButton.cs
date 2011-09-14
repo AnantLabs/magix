@@ -79,7 +79,6 @@ namespace Magix.UX.Widgets
         {
             switch (name)
             {
-                case "click":
                 case "change":
                     if (CheckedChanged != null)
                         CheckedChanged(this, new EventArgs());

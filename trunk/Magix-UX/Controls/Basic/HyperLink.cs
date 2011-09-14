@@ -12,6 +12,7 @@ using Magix.UX.Widgets.Core;
 
 namespace Magix.UX.Widgets
 {
+    // TODO: Implement Blur and Focused events ...
     /**
      * A wrapper around a hyper link or anchor HTML element (anchor HTML element ...)
      * Sometimes you will need to create links that might change or needs
@@ -50,6 +51,11 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * Which browser window the URL will be opened in. _blank will assure it'll always be a new
+         * window, while most other names will then only open a new window if there's no window 
+         * already opened with that name
+         */
         public string Target
         {
             get { return ViewState["Target"] == null ? "" : (string)ViewState["Target"]; }
@@ -58,6 +64,26 @@ namespace Magix.UX.Widgets
                 if (value != Target)
                     this.SetJsonGeneric("target", value);
                 ViewState["Target"] = value;
+            }
+        }
+
+        /**
+         * What keyboard shortcut the user will have to use to mimick a 'click' on 
+         * the widget. Often the keyboard shortcut will be mixed up with other
+         * keys, depending upon your operating system or browser. For FireFox 
+         * on Windows for instance the keyboard combination is ALT+SHIFT+whatever
+         * key you choose here. So if you choose 'J' as the AccessKey, the user
+         * will have to hold down ALT+SHIFT and press 'J' to use the keyboard 
+         * shortcut.
+         */
+        public string AccessKey
+        {
+            get { return ViewState["AccessKey"] == null ? "" : (string)ViewState["AccessKey"]; }
+            set
+            {
+                if (value != AccessKey)
+                    SetJsonValue("AccessKey", value);
+                ViewState["AccessKey"] = value;
             }
         }
 
@@ -73,7 +99,10 @@ namespace Magix.UX.Widgets
         protected override void AddAttributes(Element el)
         {
             el.AddAttribute("href", URL);
-            el.AddAttribute("target", Target);
+            if (!string.IsNullOrEmpty(AccessKey))
+                el.AddAttribute("target", Target);
+            if (!string.IsNullOrEmpty(AccessKey))
+                el.AddAttribute("accesskey", AccessKey);
             base.AddAttributes(el);
         }
 	}
