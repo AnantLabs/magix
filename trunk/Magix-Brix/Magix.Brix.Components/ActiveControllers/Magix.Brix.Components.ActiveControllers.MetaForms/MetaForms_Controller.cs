@@ -1185,7 +1185,7 @@ focus, or clicking the widget with his mouse or touch screen";
                 // while rendered, meaning no CAPitalization of names ...
                 n["Properties"]["Style"]["left"].Value = e.Params["Left"].Value.ToString() + "px";
                 n["Properties"]["Style"]["top"].Value = e.Params["Top"].Value.ToString() + "px";
-                n["Properties"]["Style"]["position"].Value = "relative";
+                n["Properties"]["Style"]["position"].Value = "absolute";
 
                 n.Save();
 
@@ -1230,10 +1230,27 @@ focus, or clicking the widget with his mouse or touch screen";
 
             node["ID"].Value = e.Params["ID"].Value;
             node["TypeName"].Value = nx["TypeName"].Value;
+
             node["CSSClass"].Value =
                 nx.Contains("Properties") && nx["Properties"].Contains("CssClass") ? 
                     nx["Properties"]["CssClass"].Value : 
                     "";
+
+            if (nx.Contains("Properties"))
+            {
+                foreach (MetaForm.Node idx in nx["Properties"].Children)
+                {
+                    switch (idx.Name)
+                    {
+                        case "CssClass":
+                        case "ID":
+                            break;
+                        default:
+                            node["Properties"][idx.Name].Value = idx.Value;
+                            break;
+                    }
+                }
+            }
 
             if (nx.Contains("Properties") &&
                 nx["Properties"].Contains("Style"))
@@ -1312,6 +1329,19 @@ focus, or clicking the widget with his mouse or touch screen";
                 n.Save();
 
                 tr.Commit();
+            }
+        }
+
+        /**
+         * Level2: Overridden to make sure we can clean out our Content 4++ when deletion of MetaForms
+         * occurs
+         */
+        [ActiveEvent(Name = "DBAdmin.Common.ComplexInstanceDeletedConfirmed")]
+        protected void DBAdmin_Common_ComplexInstanceDeletedConfirmed(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaForm).FullName)
+            {
+                ActiveEvents.Instance.RaiseClearControls("content4");
             }
         }
     }

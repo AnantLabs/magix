@@ -59,6 +59,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected TextBox fontSize;
         protected TextBox width;
         protected TextBox height;
+        protected TextBox left;
+        protected TextBox top;
 
         protected Panel fgText;
         protected Panel bgText;
@@ -133,8 +135,55 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if (_ctrl != null)
             {
-                if (this.FirstLoad &&
-                    DataSource.Contains("Properties") &&
+                if (DataSource.Contains("Properties"))
+                {
+                    foreach (Node idx in DataSource["Properties"])
+                    {
+                        // Skipping 'empty stuff' ...
+                        if (idx.Value == null)
+                            continue;
+
+                        PropertyInfo info = _ctrl.GetType().GetProperty(
+                            idx.Name,
+                            System.Reflection.BindingFlags.Instance |
+                            System.Reflection.BindingFlags.NonPublic |
+                            System.Reflection.BindingFlags.Public);
+
+                        if (info != null)
+                        {
+                            object tmp = idx.Value;
+
+                            if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
+                            {
+                                switch (info.GetGetMethod(true).ReturnType.FullName)
+                                {
+                                    case "System.Boolean":
+                                        tmp = bool.Parse(tmp.ToString());
+                                        break;
+                                    case "System.DateTime":
+                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Int32":
+                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Decimal":
+                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    default:
+                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
+                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
+                                        else
+                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
+                                        break;
+                                }
+                                info.GetSetMethod(true).Invoke(_ctrl, new object[] { tmp });
+                            }
+                            else
+                                info.GetSetMethod(true).Invoke(_ctrl, new object[] { tmp });
+                        }
+                    }
+                }
+                if (DataSource.Contains("Properties") &&
                     DataSource["Properties"].Contains("Style"))
                 {
                     foreach (Node idx in DataSource["Properties"]["Style"])
@@ -225,6 +274,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                 break;
                             case "height":
                                 height.Text = val.Replace("px", "");
+                                break;
+                            case "left":
+                                left.Text = val.Replace("px", "");
+                                break;
+                            case "top":
+                                top.Text = val.Replace("px", "");
                                 break;
                             case "color":
                                 fgText.Style[Styles.backgroundColor] = val;
@@ -382,6 +437,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 _ctrl.Style[Styles.height] = height.Text + "px";
             else
                 _ctrl.Style[Styles.height] = "";
+
+            if (!string.IsNullOrEmpty(left.Text))
+                _ctrl.Style[Styles.left] = left.Text + "px";
+            else
+                _ctrl.Style[Styles.left] = "";
+
+            if (!string.IsNullOrEmpty(top.Text))
+                _ctrl.Style[Styles.top] = top.Text + "px";
+            else
+                _ctrl.Style[Styles.top] = "";
 
             if (textAlign.SelectedIndex != 0)
                 _ctrl.Style[Styles.textAlign] = textAlign.SelectedItem.Value;
@@ -668,6 +733,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if (!string.IsNullOrEmpty(height.Text))
                 node["Style"]["height"].Value = height.Text + "px";
+
+            if (!string.IsNullOrEmpty(left.Text))
+                node["Style"]["left"].Value = left.Text + "px";
+
+            if (!string.IsNullOrEmpty(top.Text))
+                node["Style"]["top"].Value = top.Text + "px";
 
             if (textAlign.SelectedIndex != 0)
                 node["Style"]["text-align"].Value = textAlign.SelectedItem.Value;
