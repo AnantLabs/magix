@@ -818,8 +818,37 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.ReRender();
             CreateSelectWidgetSelectList();
 
-            // Only need to re-render since the actual DataSource is updated ...
-            eventWrp.ReRender();
+            Node ctrlType = null;
+            Node typeNode = DataSource["root"]["Surface"].Find(
+                delegate(Node idx)
+                {
+                    return idx.Name == "_ID" &&
+                        idx.Value.ToString() == selWidg.SelectedItem.Value;
+                }).Parent;
+            string typeName = typeNode["TypeName"].Get<string>();
+            if (DataSource.Contains("Controls"))
+            {
+                foreach (Node idx in DataSource["Controls"])
+                {
+                    if (idx.Contains("TypeName") &&
+                        idx["TypeName"].Get<string>() == typeName)
+                    {
+                        ctrlType = idx;
+                        break;
+                    }
+                }
+            }
+
+            if (ctrlType != null)
+            {
+                propRep.DataSource = ctrlType["Properties"];
+                propRep.DataBind();
+                propWrp.ReRender();
+
+                eventRep.DataSource = ctrlType["Events"];
+                eventRep.DataBind();
+                eventWrp.ReRender();
+            }
         }
     }
 }
