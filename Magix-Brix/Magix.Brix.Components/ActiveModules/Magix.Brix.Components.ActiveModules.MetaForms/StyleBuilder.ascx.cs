@@ -285,7 +285,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                 fgText.Style[Styles.backgroundColor] = val;
                                 break;
                             case "background-color":
-                                bgText.Style[Styles.backgroundColor] = val;
+                                if (val.Contains("url("))
+                                {
+                                    if (val.Contains(","))
+                                        val = val.Split(',')[0];
+                                    bgText.Style[Styles.backgroundColor] = val;
+                                }
                                 break;
                             case "background-image":
                                 {
@@ -482,6 +487,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 _ctrl.Style[Styles.backgroundColor] = "";
             }
 
+            if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
+            {
+                string gradient = string.Format("linear-gradient({0} 0%, {1} 100%)",
+                    gradientStart.Style[Styles.backgroundColor],
+                    gradientStop.Style[Styles.backgroundColor]);
+                if (!string.IsNullOrEmpty(_ctrl.Style["background-image"]))
+                    gradient = _ctrl.Style["background-image"] + "," + gradient;
+                _ctrl.Style["background-image"] = gradient;
+            }
+
             if (!string.IsNullOrEmpty(shadowColor.Style[Styles.backgroundColor]))
             {
                 string stl = "";
@@ -494,15 +509,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             else
             {
                 _ctrl.Style["box-shadow"] = "";
-            }
-            if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
-            {
-                string gradient = string.Format("linear-gradient({0} 0%, {1} 100%)",
-                    gradientStart.Style[Styles.backgroundColor],
-                    gradientStop.Style[Styles.backgroundColor]);
-                if (_ctrl.Style["background-image"] != null)
-                    gradient = _ctrl.Style["background-image"] + "," + gradient;
-                _ctrl.Style["background-image"] = gradient;
             }
 
             string rounded = "";
@@ -522,9 +528,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 rounded += "0px ";
 
             if (!string.IsNullOrEmpty(roundedCornersBottomLeft.Text))
-                rounded += roundedCornersBottomLeft.Text + "px ";
+                rounded += roundedCornersBottomLeft.Text + "px";
             else
-                rounded += "0px ";
+                rounded += "0px";
 
             if (rounded != "0px 0px 0px 0px")
             {
@@ -805,7 +811,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (!string.IsNullOrEmpty(roundedCornersBottomLeft.Text))
                 rounded += roundedCornersBottomLeft.Text + "px ";
             else
-                rounded += "0px ";
+                rounded += "0px";
 
             if (rounded != "0px 0px 0px 0px")
             {
