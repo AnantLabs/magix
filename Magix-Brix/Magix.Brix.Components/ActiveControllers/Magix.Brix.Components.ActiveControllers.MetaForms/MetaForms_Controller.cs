@@ -922,8 +922,8 @@ focus, or clicking the widget with his mouse or touch screen";
          * Level2: Will show the Actions associated with the Event 'EventName' on the 
          * MetaForm.Node with the ID of 'ID'
          */
-        [ActiveEvent(Name = "Magix.MetaForms.ShowAllActionsAssociatedWithFormEvent")]
-        protected void Magix_MetaForms_ShowAllActionsAssociatedWithFormEvent(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.MetaForms.ShowAllActionsAssociatedWithFormWidgetEvent")]
+        protected void Magix_MetaForms_ShowAllActionsAssociatedWithFormWidgetEvent(object sender, ActiveEventArgs e)
         {
             Node node = new Node();
 
@@ -937,6 +937,40 @@ focus, or clicking the widget with his mouse or touch screen";
             node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
 
             node["MetaFormNodeID"].Value = e.Params["ID"].Value;
+            node["Header"].Value = string.Format(@"Actions for '{0}'",
+                e.Params["EventName"].Get<string>());
+
+            node["EventName"].Value = e.Params["EventName"].Value;
+            node["CreateEventName"].Value = "Magix.MetaForms.OpenAppendNewActionDialogue";
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 12;
+
+            node["NoIdColumn"].Value = true;
+            node["DeleteColumnEvent"].Value = "Magix.MetaForms.RemoveActionFromActionList";
+
+            node["ReuseNode"].Value = true;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        [ActiveEvent(Name = "Magix.MetaForms.ShowAllActionsAssociatedWithMainFormEvent")]
+        protected void Magix_MetaForms_ShowAllActionsAssociatedWithMainFormEvent(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["IsDelete"].Value = true;
+            node["IsCreate"].Value = true;
+            node["IsInlineEdit"].Value = false;
+            node["Container"].Value = "child";
+            node["Width"].Value = 16;
+            node["Top"].Value = 20;
+            node["FullTypeName"].Value = typeof(Action).FullName + "-META";
+            node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
+
+            node["MetaFormID"].Value = e.Params["ID"].Value;
             node["Header"].Value = string.Format(@"Actions for '{0}'",
                 e.Params["EventName"].Get<string>());
 
@@ -980,8 +1014,22 @@ focus, or clicking the widget with his mouse or touch screen";
             if (e.Params["FullTypeName"].Get<string>() != typeof(Action).FullName + "-META")
                 return;
 
-            MetaForm.Node n = MetaForm.Node.SelectByID(e.Params["MetaFormNodeID"].Get<int>());
             string actionString = "";
+            MetaForm.Node n = null;
+            if (e.Params.Contains("MetaFormNodeID"))
+            {
+                n = MetaForm.Node.SelectByID(e.Params["MetaFormNodeID"].Get<int>());
+            }
+            else if (e.Params.Contains("MetaFormID"))
+            {
+                MetaForm f = MetaForm.SelectByID(e.Params["MetaFormID"].Get<int>());
+                n = f.Form;
+            }
+            else
+            {
+                throw new ArgumentException("Sorry, I don't know how to retrieve those objects without either a MetaFormNodeID or a MetaFormID");
+            }
+
             if (n.Contains("Actions"))
             {
                 if (n["Actions"].Contains(e.Params["EventName"].Get<string>()))
@@ -994,7 +1042,7 @@ focus, or clicking the widget with his mouse or touch screen";
                 if (idxNo >= e.Params["Start"].Get<int>() &&
                     idxNo < e.Params["End"].Get<int>())
                 {
-                    e.Params["Objects"]["o-" + idxNo]["ID"].Value = e.Params["MetaFormNodeID"].Value.ToString() + 
+                    e.Params["Objects"]["o-" + idxNo]["ID"].Value = n.ID + 
                         "|" + 
                         idxNo + 
                         "|" +
@@ -1040,6 +1088,7 @@ focus, or clicking the widget with his mouse or touch screen";
                     "Magix.Core.UpdateGrids",
                     node);
             }
+            RaiseEvent("Magix.MetaForms.RefreshEditableMetaForm");
         }
 
         /**
@@ -1055,7 +1104,13 @@ focus, or clicking the widget with his mouse or touch screen";
             node["Container"].Value = "child";
             node["Width"].Value = 15;
             node["Top"].Value = 20;
-            node["ParentID"].Value = e.Params["MetaFormNodeID"].Value;
+            if (e.Params.Contains("MetaFormNodeID"))
+                node["ParentID"].Value = e.Params["MetaFormNodeID"].Value;
+            else
+            {
+                MetaForm f = MetaForm.SelectByID(e.Params["MetaFormID"].Get<int>());
+                node["ParentID"].Value = f.Form.ID;
+            }
             node["ParentPropertyName"].Value = e.Params["EventName"].Value;
 
             node["WhiteListColumns"]["Name"].Value = true;

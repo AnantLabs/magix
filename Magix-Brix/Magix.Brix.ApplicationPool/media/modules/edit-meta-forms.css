@@ -154,6 +154,40 @@
 	overflow:auto;
 }
 
+.mux-init-actions-row
+{
+	background-color:rgba(0,0,0,0);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
+	-moz-transition-property:-moz-box-shadow, background-color;
+	-moz-transition-duration:1s;
+	-webkit-transition-property:-webkit-box-shadow, background-color;
+	-webkit-transition-duration:1s;
+	transition-property:box-shadow, background-color;
+	transition-duration:1s;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	margin-bottom:18px;
+}
+
+.mux-init-actions-row:hover
+{
+	background-color:rgba(0,0,0,.1);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-transition-property:-moz-box-shadow, background-color;
+	-moz-transition-duration:0.2s;
+	-webkit-transition-property:-webkit-box-shadow, background-color;
+	-webkit-transition-duration:0.2s;
+	transition-property:box-shadow, background-color;
+	transition-duration:0.2s;
+	height:auto;
+	overflow:auto;
+}
+
 .mux-section-header
 {
 	background-color:Transparent;
@@ -271,12 +305,14 @@ textarea.mux-wysiwyg-selected
 
 .mux-no-actions
 {
+	text-decoration:none;
 	padding-left:16px;
 	background:transparent url(../images/code-icons-empty.png) no-repeat -32px -16px;
 }
 
 .mux-has-actions
 {
+	text-decoration:none;
 	padding-left:16px;
 	background:transparent url(../images/code-icons.png) no-repeat -32px -16px;
 }

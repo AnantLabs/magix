@@ -40,6 +40,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected Panel shortCutWrp;
         protected System.Web.UI.WebControls.Repeater shortCutRep;
         protected SelectList selWidg;
+        protected LinkButton formInitActions;
 
         public override void InitialLoading(Node node)
         {
@@ -59,13 +60,15 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     SetWindowToolsPositionsAccordingToSettings();
                     SetTopWindow();
                     CreateSelectWidgetSelectList();
+
+                    SetFormActive();
                 };
         }
 
         private void CreateSelectWidgetSelectList()
         {
             selWidg.Items.Clear();
-            selWidg.Items.Add(new ListItem("Selected Widget ...", ""));
+            selWidg.Items.Add(new ListItem("Meta Form", ""));
             DataSource["root"]["Surface"].Find(
                 delegate(Node idx)
                 {
@@ -420,9 +423,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
         }
 
-        // TODO: Implement settings for form ...
         private void SetFormActive()
         {
+            formInitActions.CssClass = GetCssClassInitActionsForm();
         }
 
         protected void ShortCutButtonClicked(object sender, EventArgs e)
@@ -473,6 +476,19 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 node);
         }
 
+        protected string GetCssClassInitActionsForm()
+        {
+            if (DataSource["root"].Contains("Actions") &&
+                DataSource["root"]["Actions"].Contains("InitialLoading"))
+            {
+                if (!string.IsNullOrEmpty(DataSource["root"]["Actions"]["InitialLoading"].Get<string>()))
+                {
+                    return "span-2 last mux-has-actions";
+                }
+            }
+            return "span-2 last mux-no-actions";
+        }
+
         protected string GetCssClass(object tmp)
         {
             Node n = DataSource.Find(
@@ -509,6 +525,18 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             shortCutWrp.ReRender();
         }
 
+        protected void formInitActions_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["ID"].Value = DataSource["ID"].Value;
+            node["EventName"].Value = "InitialLoading";
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.ShowAllActionsAssociatedWithMainFormEvent",
+                node);
+        }
+
         protected void ctrls_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(OldSelected))
@@ -521,6 +549,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ClearPropertyWindow();
             if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
                 ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
+
+            SetFormActive();
         }
 
         protected string GetPropertyValue(object inpNode)
@@ -824,6 +854,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             CreateFormControls();
             ctrls.ReRender();
             CreateSelectWidgetSelectList();
+
+            formInitActions.CssClass = GetCssClassInitActionsForm();
+
+            if (string.IsNullOrEmpty(selWidg.SelectedItem.Value))
+                return; // Might be our Form ...
 
             Node ctrlType = null;
             Node typeNode = DataSource["root"]["Surface"].Find(
