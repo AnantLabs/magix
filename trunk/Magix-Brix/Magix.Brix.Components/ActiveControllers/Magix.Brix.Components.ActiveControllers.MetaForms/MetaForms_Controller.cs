@@ -1103,9 +1103,10 @@ focus, or clicking the widget with his mouse or touch screen";
                 n.Save();
 
                 tr.Commit();
-
-                ActiveEvents.Instance.RaiseClearControls("child");
             }
+
+            ActiveEvents.Instance.RaiseClearControls("child");
+            RaiseEvent("Magix.MetaForms.RefreshEditableMetaForm");
         }
 
         /**
