@@ -35,6 +35,18 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
         protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
         {
+            ActiveEvents.Instance.CreateEventMapping(
+                "Magix.Core.SaveSettingsSection",
+                "Magix.Core.SaveSettingsSection-Override");
+            ActiveEvents.Instance.CreateEventMapping(
+                "Magix.Core.LoadSettingsSection",
+                "Magix.Core.LoadSettingsSection-Override");
+            ActiveEvents.Instance.CreateEventMapping(
+                "Magix.Core.SaveSettingsSection-Passover",
+                "Magix.Core.SaveSettingsSection");
+            ActiveEvents.Instance.CreateEventMapping(
+                "Magix.Core.LoadSettingsSection-Passover",
+                "Magix.Core.LoadSettingsSection");
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 // Creating a couple of default User/Role objects, so our CMS users
@@ -65,6 +77,34 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 }
                 tr.Commit();
             }
+        }
+
+        /**
+         * Level2: Overridden to make sure setting sections are saved and loaded per user
+         */
+        [ActiveEvent(Name = "Magix.Core.SaveSettingsSection-Override")]
+        protected void Magix_Core_SaveSettingsSection_Override(object sender, ActiveEventArgs e)
+        {
+            if (User.Current != null)
+                e.Params["SectionName"].Value = User.Current.Username + "-" + 
+                    e.Params["SectionName"].Get<string>();
+            RaiseEvent(
+                "Magix.Core.SaveSettingsSection-Passover",
+                e.Params);
+        }
+
+        /**
+         * Level2: Overridden to make sure setting sections are saved and loaded per user
+         */
+        [ActiveEvent(Name = "Magix.Core.LoadSettingsSection-Override")]
+        protected void Magix_Core_LoadSettingsSection_Override(object sender, ActiveEventArgs e)
+        {
+            if (User.Current != null)
+                e.Params["SectionName"].Value = User.Current.Username + "-" +
+                    e.Params["SectionName"].Get<string>();
+            RaiseEvent(
+                "Magix.Core.LoadSettingsSection-Passover",
+                e.Params);
         }
 
         /**

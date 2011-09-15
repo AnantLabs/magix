@@ -19,17 +19,53 @@
 	height:auto;
 	overflow-y:auto;
 	top:18px;
-	left:0px;
+	left:310px;
 	position:absolute;
 	z-index:500;
+	opacity:.3;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.5s;
+	transition-property:opacity;
+	transition-duration:0.5s;
+}
+
+.mux-meta-forms-toolbox:hover
+{
+	opacity:1;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.5s;
+	transition-property:opacity;
+	transition-duration:0.5s;
 }
 
 .mux-meta-forms-props
 {
-	top:225px;
-	left:0;
+	top:18px;
+	left:630px;
 	position:absolute;
 	z-index:500;
+	opacity:.3;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.5s;
+	transition-property:opacity;
+	transition-duration:0.5s;
+}
+
+.mux-meta-forms-props:hover
+{
+	opacity:1;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:0.5s;
+	transition-property:opacity;
+	transition-duration:0.5s;
 }
 
 .mux-toolbox-item

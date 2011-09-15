@@ -345,9 +345,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             ClearPropertyWindow();
 
-            if (node == null || 
+            if (node == null ||
                 !node.Contains("TypeName"))
+            {
+                SetFormActive();
                 return;
+            }
 
             string typeName = node["TypeName"].Get<string>();
 
@@ -415,6 +418,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     ctrl2.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                 }
             }
+        }
+
+        private void SetFormActive()
+        {
         }
 
         protected void ShortCutButtonClicked(object sender, EventArgs e)
