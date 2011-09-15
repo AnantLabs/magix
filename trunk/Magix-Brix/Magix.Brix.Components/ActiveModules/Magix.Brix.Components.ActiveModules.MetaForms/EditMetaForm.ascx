@@ -12,7 +12,7 @@
     <mux:Panel
         runat="server"
         OnClick="ctrls_Click"
-        ToolTip="Click me to select the form object"
+        ToolTip="Deselect Widget, if any are selected ..."
         CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-24 prepend-top last"
         id="ctrls" />
 
@@ -60,8 +60,20 @@
                 OnSelectedIndexChanged="selWidg_SelectedIndexChanged"
                 style="margin-bottom:18px;"
                 CssClass="span-6 last">
-                <mux:ListItem Text="Selected Widget ..." Value="" />
+                <mux:ListItem Text="Meta Form" Value="" />
             </mux:SelectList>
+            <div 
+                title="These actions will be raised as your Form is being initially loaded. Meaning, only when a Meta Form is being initially loaded, these Actions will run"
+                class="span-6 last mux-init-actions-row">
+                <div class="span-3">
+                    Init Actions:
+                </div>
+                <mux:LinkButton
+                    runat="server"
+                    id="formInitActions"
+                    OnClick="formInitActions_Click"
+                    Text="Actions ..." />
+            </div>
             <mux:Label
                 runat="server"
                 id="type"
