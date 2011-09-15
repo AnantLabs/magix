@@ -587,6 +587,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     mb2.CssClass = "mux-multi-button-view";
                     mb3.CssClass = "mux-multi-button-view";
                     mb4.CssClass = "mux-multi-button-view mux-multi-view-button-selected";
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(animations))
+                        .Render();
                     SetStylesForPreviewWidget();
                     break;
             }
