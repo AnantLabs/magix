@@ -757,9 +757,7 @@ focus, or clicking the widget with his mouse or touch screen";
                         {
                             TextBox btn = new TextBox();
                             btn.Style[Styles.position] = "absolute";
-                            btn.Style[Styles.top] = "0px";
-                            btn.Style[Styles.left] = "0px";
-                            btn.Style[Styles.width] = "150px";
+                            btn.CssClass = "span-2";
                             btn.ToolTip = "Will render as a HiddenField in non-preview modes ... However, we cannot render it as a hidden field while in WYSIWYG mode since those are invisible, and you wouldn not have any things to select to be able to modify its properties ...";
                             e.Params["Control"].Value = btn;
                         }
@@ -773,6 +771,7 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         Image btn = new Image();
                         btn.AlternateText = "Anonymous Coward Image";
+                        btn.Style[Styles.floating] = "left";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.HyperLink":

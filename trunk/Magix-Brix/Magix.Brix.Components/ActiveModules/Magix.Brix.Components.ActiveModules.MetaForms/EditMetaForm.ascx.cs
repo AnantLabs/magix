@@ -277,7 +277,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         int left = int.Parse(ctrl.Style[Styles.left].Replace("px", ""));
                         int top = int.Parse(ctrl.Style[Styles.top].Replace("px", ""));
 
-                        AbsolutizeWidget(left, top, node);
+                        AbsolutizeWidget(left, top, node, ctrl);
                     };
                 ctrl.Controls.Add(dragger);
 
@@ -307,10 +307,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
         }
 
-        private void AbsolutizeWidget(int left, int top, Node node)
+        private void AbsolutizeWidget(int left, int top, Node node, BaseWebControl ctrl)
         {
             if (left == 0 && top == 0)
                 return;
+
+            ctrl.Style[Styles.position] = "absolute";
 
             Node n = new Node();
 
