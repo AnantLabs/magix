@@ -817,6 +817,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             CreateFormControls();
             ctrls.ReRender();
             CreateSelectWidgetSelectList();
+
+            // Only need to re-render since the actual DataSource is updated ...
+            eventWrp.ReRender();
         }
     }
 }
