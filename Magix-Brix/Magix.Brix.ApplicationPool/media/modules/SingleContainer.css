@@ -652,6 +652,7 @@ input[type=button].clear-both
 
 .web-part
 {
+	position:relative;
 	-moz-transition-property:margin, padding, width, height;
 	-moz-transition-duration:1s;
 	-webkit-transition-property:margin, padding, width, height;

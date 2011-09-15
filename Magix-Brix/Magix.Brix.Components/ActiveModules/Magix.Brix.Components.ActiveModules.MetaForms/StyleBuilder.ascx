@@ -16,8 +16,8 @@
         ID="mub">
         <mux:TabButton 
             runat="server" 
-            ToolTip="Allows you to set margins, padding and border of Widget"
-            Text="Spacing"
+            ToolTip="Allows you to set margins, padding, size and border of Widget"
+            Text="Sizing"
             ID="mb1" />
         <mux:TabButton
             runat="server" 
@@ -174,55 +174,57 @@
                             CssClass="span-2 last" />
                     </div>
                     <div class="span-4 mux-editable-part last">
-                        <h5 title="Miscelanous properties of importance, but not really belonging to any particular category">Misc.</h5>
-                        <mux:CheckBox
+                        <h5 title="Size of Fonts and Surface of your Widget">Size</h5>
+                        <span 
+                            title="Size of your Font ..."
+                            class="span-2">Font Size: </span>
+                        <mux:TextBox
                             runat="server"
-                            style="width:20px;display:block;float:left;"
-                            id="chkFloat" />
-                        <mux:Label
+                            id="fontSize"
+                            PlaceHolder="Size ..."
+                            ToolTip="Font Size ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Width of Widget. PS! The width comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px wide and has 15 pixels of left and right padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit width!"
+                            class="span-2">Width: </span>
+                        <mux:TextBox
                             runat="server"
-                            id="lblChkFloat"
-                            Text="Float Left"
-                            Tag="label"
-                            For="chkFloat"
-                            CssClass="span-3 last"
-                            ToolTip="Whether or not the Widget will be in 'float mode' or not. Float mode means that it'll float to the left as long as there's space enough to display it in its entirety, including its margins and such to the right of the last element within the same float hierarchy. To use floating of elements, you need to also use Block Displaying of the widget, plus also an explicit width or height of the element. Float mode is in general i good thing, and the way you _should_ prefer, in general, to display your Widgets, since it give you more flexibility later" />
-                        <mux:CheckBox
+                            id="width"
+                            PlaceHolder="Width ..."
+                            ToolTip="Width of Widget, which comes in addition to Padding and Borders ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Height of Widget. PS! The height comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px tall and has 15 pixels of top and bottom padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit height!"
+                            class="span-2">Height: </span>
+                        <mux:TextBox
                             runat="server"
-                            style="width:20px;display:block;float:left;clear:both;"
-                            id="chkClear" />
-                        <mux:Label
+                            id="height"
+                            PlaceHolder="Height ..."
+                            ToolTip="Height of Widget, which comes in addition to Padding and Borders ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Left position of Widget. Relative to the container"
+                            class="span-2">Left: </span>
+                        <mux:TextBox
                             runat="server"
-                            id="lblChkClear"
-                            Text="Clear Floating"
-                            Tag="label"
-                            For="chkClear"
-                            CssClass="span-3 last"
-                            ToolTip="Whether or not the Widget will clear the floating hierarchy before being rendered. Think of clearing the floating hierarchy as a very hard Carriage Return that will bring you all the way to the left, regardless of whether or not there is room to the right of whatever widget you're currently to the right of" />
-                        <mux:CheckBox
+                            id="left"
+                            PlaceHolder="Left ..."
+                            ToolTip="Left position of Widget ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Top position of Widget. Relative to the container"
+                            class="span-2">Top: </span>
+                        <mux:TextBox
                             runat="server"
-                            style="width:20px;display:block;float:left;clear:both;"
-                            id="chkBlock" />
-                        <mux:Label
-                            runat="server"
-                            id="lblChkBlock"
-                            Text="Force Block"
-                            Tag="label"
-                            For="chkBlock"
-                            CssClass="span-3 last"
-                            ToolTip="If true, the Widget will be rendered as a 'Block Level Element', which among other things is a prerequisite for being able to 'float' the element" />
-                        <mux:CheckBox
-                            runat="server"
-                            style="width:20px;display:block;float:left;clear:both;"
-                            id="chkInline" />
-                        <mux:Label
-                            runat="server"
-                            id="lblChkInline"
-                            Text="Force Inline"
-                            Tag="label"
-                            For="chkInline"
-                            CssClass="span-3 last"
-                            ToolTip="If true, the Widget will be rendered as an 'Inline Level Element', which is the opposite of Block Level Element, and intended for widgets that are supposed to just be fragments of other widgets" />
+                            id="top"
+                            PlaceHolder="Left ..."
+                            ToolTip="Top position of Widget ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
                     </div>
                     <p class="span-6 clear-both last mux-info-text" title="... Sorry guys. But hey, feel free to override it somehow, and change it if you like to :)">
                         (*) All units are in pixels ...
@@ -364,37 +366,55 @@
                         </mux:SelectList>
                     </div>
                     <div class="span-4 mux-editable-part">
-                        <h5 title="Size of Fonts and Surface of your Widget">Size</h5>
-                        <span 
-                            title="Size of your Font ..."
-                            class="span-2">Font Size: </span>
-                        <mux:TextBox
+                        <h5 title="Miscelanous properties of importance, but not really belonging to any particular category">Misc.</h5>
+                        <mux:CheckBox
                             runat="server"
-                            id="fontSize"
-                            PlaceHolder="Size ..."
-                            ToolTip="Font Size ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
-                        <span 
-                            title="Width of Widget. PS! The width comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px wide and has 15 pixels of left and right padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit width!"
-                            class="span-2">Width: </span>
-                        <mux:TextBox
+                            style="width:20px;display:block;float:left;"
+                            id="chkFloat" />
+                        <mux:Label
                             runat="server"
-                            id="width"
-                            PlaceHolder="Width ..."
-                            ToolTip="Width of Widget, which comes in addition to Padding and Borders ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
-                        <span 
-                            title="Height of Widget. PS! The height comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px tall and has 15 pixels of top and bottom padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit height!"
-                            class="span-2">Height: </span>
-                        <mux:TextBox
+                            id="lblChkFloat"
+                            Text="Float Left"
+                            Tag="label"
+                            For="chkFloat"
+                            CssClass="span-3 last"
+                            ToolTip="Whether or not the Widget will be in 'float mode' or not. Float mode means that it'll float to the left as long as there's space enough to display it in its entirety, including its margins and such to the right of the last element within the same float hierarchy. To use floating of elements, you need to also use Block Displaying of the widget, plus also an explicit width or height of the element. Float mode is in general i good thing, and the way you _should_ prefer, in general, to display your Widgets, since it give you more flexibility later" />
+                        <mux:CheckBox
                             runat="server"
-                            id="height"
-                            PlaceHolder="Height ..."
-                            ToolTip="Height of Widget, which comes in addition to Padding and Borders ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
+                            style="width:20px;display:block;float:left;clear:both;"
+                            id="chkClear" />
+                        <mux:Label
+                            runat="server"
+                            id="lblChkClear"
+                            Text="Clear Floating"
+                            Tag="label"
+                            For="chkClear"
+                            CssClass="span-3 last"
+                            ToolTip="Whether or not the Widget will clear the floating hierarchy before being rendered. Think of clearing the floating hierarchy as a very hard Carriage Return that will bring you all the way to the left, regardless of whether or not there is room to the right of whatever widget you're currently to the right of" />
+                        <mux:CheckBox
+                            runat="server"
+                            style="width:20px;display:block;float:left;clear:both;"
+                            id="chkBlock" />
+                        <mux:Label
+                            runat="server"
+                            id="lblChkBlock"
+                            Text="Force Block"
+                            Tag="label"
+                            For="chkBlock"
+                            CssClass="span-3 last"
+                            ToolTip="If true, the Widget will be rendered as a 'Block Level Element', which among other things is a prerequisite for being able to 'float' the element" />
+                        <mux:CheckBox
+                            runat="server"
+                            style="width:20px;display:block;float:left;clear:both;"
+                            id="chkInline" />
+                        <mux:Label
+                            runat="server"
+                            id="lblChkInline"
+                            Text="Force Inline"
+                            Tag="label"
+                            For="chkInline"
+                            CssClass="span-3 last"
+                            ToolTip="If true, the Widget will be rendered as an 'Inline Level Element', which is the opposite of Block Level Element, and intended for widgets that are supposed to just be fragments of other widgets" />
                     </div>
                     <p class="span-6 pushLeft-2 clear-both last mux-info-text" title="... Sorry Guys 2.0! ;)">
                         (*) All units are in pixels ...
