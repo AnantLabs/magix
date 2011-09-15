@@ -1088,6 +1088,8 @@ focus, or clicking the widget with his mouse or touch screen";
                     "Magix.Core.UpdateGrids",
                     node);
             }
+
+            // Mking sure we refresh our properties in our UI ...
             RaiseEvent("Magix.MetaForms.RefreshEditableMetaForm");
         }
 
