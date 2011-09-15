@@ -18,6 +18,7 @@ using System.Collections.Generic;
 namespace Magix.Brix.Components.ActiveModules.MetaForms
 {
     /**
+     * Level2: Encapsulates a MetaForm through a PublisherPlugin which you can inject into your sites
      */
     [ActiveModule]
     [PublisherPlugin]
@@ -37,7 +38,27 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     RaiseSafeEvent(
                         "Magix.MetaForms.GetControlsForForm",
                         DataSource);
+
+                    ExecuteInitActions();
                 };
+        }
+
+        private void ExecuteInitActions()
+        {
+            if (!DataSource["root"].Contains("Actions") ||
+                !DataSource["root"]["Actions"].Contains("InitialLoading") ||
+                string.IsNullOrEmpty(DataSource["root"]["Actions"]["InitialLoading"].Get<string>()))
+                return;
+
+            string actions = DataSource["root"]["Actions"]["InitialLoading"].Get<string>();
+
+            DataSource["ActionsToExecute"].Value = actions;
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.RaiseActionsFromActionString",
+                DataSource);
+
+            DataSource["ActionsToExecute"].UnTie();
         }
 
         protected override void OnLoad(EventArgs e)
