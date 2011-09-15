@@ -514,8 +514,8 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 .mux-multi-button .mux-multi-button-view-button
 {
-	height:25px;
-	padding:0 40px 5px 40px;
+	height:36px;
+	padding:0 40px 0px 40px;
 	display:block;
 	text-shadow:2px 2px 5px rgba(0, 0, 0, 0.2);
 	text-decoration:none;
