@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["Help"]["Image"].Value = "media/images/marvin-help.png";
+            e.Params["Items"]["Help"]["Image"].Value = "media/images/desktop-icons/marvin-help.png";
             e.Params["Items"]["Help"]["Shortcut"].Value = "H";
             e.Params["Items"]["Help"]["Text"].Value = "Click to have Marvin Magix Rescue you ... [Key H]";
             e.Params["Items"]["Help"]["CSS"].Value = "mux-desktop-icon";

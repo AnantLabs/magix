@@ -27,7 +27,7 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
         [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["QRCode"]["Image"].Value = "media/images/qr-code.png";
+            e.Params["Items"]["QRCode"]["Image"].Value = "media/images/desktop-icons/qr-code.png";
             e.Params["Items"]["QRCode"]["Shortcut"].Value = "Q";
             e.Params["Items"]["QRCode"]["Text"].Value = "Click to launch Vanity QR Code Generator [Key Q]";
             e.Params["Items"]["QRCode"]["CSS"].Value = "mux-desktop-icon";

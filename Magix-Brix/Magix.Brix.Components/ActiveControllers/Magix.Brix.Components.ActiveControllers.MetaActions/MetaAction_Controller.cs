@@ -29,7 +29,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["Actions"]["Image"].Value = "media/images/lightning-icon.png";
+            e.Params["Items"]["Actions"]["Image"].Value = "media/images/desktop-icons/lightning-icon.png";
             e.Params["Items"]["Actions"]["Shortcut"].Value = "A";
             e.Params["Items"]["Actions"]["Text"].Value = "Click to launch Actions [Key A]";
             e.Params["Items"]["Actions"]["CSS"].Value = "mux-desktop-icon";

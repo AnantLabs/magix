@@ -27,7 +27,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
-            e.Params["Items"]["Objects"]["Image"].Value = "media/images/objects.png";
+            e.Params["Items"]["Objects"]["Image"].Value = "media/images/desktop-icons/objects.png";
             e.Params["Items"]["Objects"]["Shortcut"].Value = "B";
             e.Params["Items"]["Objects"]["Text"].Value = "Click to view Meta Objects [Key B]";
             e.Params["Items"]["Objects"]["CSS"].Value = "mux-desktop-icon";

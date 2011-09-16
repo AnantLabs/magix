@@ -963,7 +963,7 @@
 
 .Header-Giftwrapped
 {
-	background-image:url('../images/snow.png') !important;
+	background-image:url('../images/Textures/snow.png') !important;
 	background-position:top left;
 	background-repeat:repeat;
 	border:none;
@@ -1452,7 +1452,7 @@
 
 .Menu-Giftwrapped
 {
-	background-image:url('../images/snow.png') !important;
+	background-image:url('../images/Textures/snow.png') !important;
 	background-position:top left;
 	background-repeat:repeat;
 	border:none;
@@ -1749,7 +1749,7 @@
 
 .Content-Giftwrapped
 {
-	background-image:url('../images/snow.png') !important;
+	background-image:url('../images/Textures/snow.png') !important;
 	background-repeat:repeat;
 	border:none;
 	-webkit-box-shadow: 0 0 35px rgba(255, 255, 255, 1);
