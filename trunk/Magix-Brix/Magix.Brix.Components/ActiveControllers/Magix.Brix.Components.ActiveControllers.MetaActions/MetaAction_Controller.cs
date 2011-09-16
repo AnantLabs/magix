@@ -205,6 +205,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 {
                     Node node = new Node();
                     node["ID"].Value = id;
+
                     RaiseEvent(
                         "Magix.MetaAction.CopyActionAndEdit",
                         node);
@@ -249,17 +250,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             Node n = new Node();
 
             n["FullTypeName"].Value = typeof(Action).FullName;
-            n["ID"].Value = cloneID;
 
             RaiseEvent(
-                "DBAdmin.Grid.SetActiveRow",
+                "Magix.Core.UpdateGrids",
                 n);
 
             n = new Node();
             n["FullTypeName"].Value = typeof(Action).FullName;
+            n["ID"].Value = cloneID;
 
             RaiseEvent(
-                "Magix.Core.UpdateGrids",
+                "DBAdmin.Grid.SetActiveRow",
                 n);
 
             n = new Node();

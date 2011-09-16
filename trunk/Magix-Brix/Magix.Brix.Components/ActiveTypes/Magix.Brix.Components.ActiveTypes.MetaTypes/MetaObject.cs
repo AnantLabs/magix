@@ -193,11 +193,13 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         }
 
         /**
-         * Will return a deep copy of the entire Meta Object, with all its Child Objects being cloned,
+         * Level3: Will return a deep copy of the entire Meta Object, with all its Child Objects being cloned,
          * and all its properties being cloned. WARNING; Might take insane amounts of time, if 
-         * your object graph is huge
+         * your object graph is huge. WARNING; This method, will due to the layout graph of the 
+         * Children property actually SAVE the MetaObject before it returns it, meaning;
+         * you don't need to call save yourself
          */
-        public MetaObject Clone()
+        public MetaObject CloneAndSave()
         {
             return DeepClone(this);
         }
@@ -215,7 +217,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 
             foreach (MetaObject idx in Children)
             {
-                MetaObject n = idx.Clone();
+                MetaObject n = idx.CloneAndSave();
                 ret.Children.Add(n);
             }
 

@@ -78,15 +78,18 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
-
             node["WhiteListColumns"]["Created"].Value = true;
             node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 3;
 
             node["ReuseNode"].Value = true;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Created"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaForms.GetCopyMetaFormTemplateColumn";
 
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";
@@ -96,13 +99,123 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             node["IDColumnName"].Value = "Edit";
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.MetaForms.EditForm";
+            node["CreateEventName"].Value = "Magix.MetaForms.CreateNewMetaForm";
 
             node["Container"].Value = "content3";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        /**
+         * Level2: Will return a LinkButton, which once clicked will copy and edit
+         * a specific MetaForm
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.GetCopyMetaFormTemplateColumn")]
+        protected void Magix_MetaForms_GetCopyMetaFormTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            string name = e.Params["Name"].Get<string>();
+            string fullTypeName = e.Params["FullTypeName"].Get<string>();
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            // Creating our SelectList
+            LinkButton ls = new LinkButton();
+            ls.Text = "Copy";
+            ls.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.MetaForms.CopyFormAndEdit",
+                        node);
+                };
+
+            // Stuffing our newly created control into the return parameters, so
+            // our Grid control can put it where it feels for it ... :)
+            e.Params["Control"].Value = ls;
+        }
+
+        /**
+         * Level2: Performs a Deep-Copy of the MetaForm and start editing it immediately
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.CopyFormAndEdit")]
+        protected void Magix_MetaForms_CopyFormAndEdit(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "Magix.MetaForms.CopyForm",
+                e.Params);
+
+            object cloneID = e.Params["NewID"].Value;
+
+            Node n = new Node();
+
+            n["FullTypeName"].Value = typeof(MetaForm).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                n);
+
+            n = new Node();
+            n["FullTypeName"].Value = typeof(MetaForm).FullName;
+            n["ID"].Value = cloneID;
+
+            RaiseEvent(
+                "DBAdmin.Grid.SetActiveRow",
+                n);
+
+            n = new Node();
+            n["ID"].Value = cloneID;
+
+            RaiseEvent(
+                "Magix.MetaForms.EditForm",
+                n);
+        }
+
+        /**
+         * Level2: Performs a Deep-Copy of the Form and returns the ID of the new MetaForm as 'NewID'
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.CopyForm")]
+        protected void Magix_MetaAction_CopyAction(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaForm a = MetaForm.SelectByID(e.Params["ID"].Get<int>());
+                MetaForm clone = a.Clone();
+
+                clone.Save();
+
+                tr.Commit();
+
+                e.Params["NewID"].Value = clone.ID;
+            }
+        }
+
+        /**
+         * Level2: Creates a new MetaForm and edits it in content4
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.CreateNewMetaForm")]
+        protected void Magix_MetaForms_CreateNewMetaForm(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaForm f = new MetaForm();
+                f.Name = "Default";
+                f.Save();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["ID"].Value = f.ID;
+
+                RaiseEvent(
+                    "Magix.MetaForms.EditForm",
+                    node);
+            }
         }
 
         /**
@@ -906,6 +1019,8 @@ focus, or clicking the widget with his mouse or touch screen";
                 parent.Save();
 
                 tr.Commit();
+
+                e.Params["NewControlID"].Value = parent["Surface"]["c-" + count].ID;
             }
         }
 
