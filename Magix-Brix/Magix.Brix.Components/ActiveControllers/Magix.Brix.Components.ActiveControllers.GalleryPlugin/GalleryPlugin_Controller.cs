@@ -77,6 +77,10 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.Publishing.Gallery.EditGallery";
 
+            node["Criteria"]["C1"]["Name"].Value = "Sort";
+            node["Criteria"]["C1"]["Value"].Value = "Created";
+            node["Criteria"]["C1"]["Ascending"].Value = false;
+
             node["ReuseNode"].Value = true;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
@@ -385,7 +389,7 @@ Image was uploaded as '{0}' and attached to Gallery '{1}'",
             ListItem item = new ListItem("Select a Gallery ...", "");
             ls.Items.Add(item);
 
-            foreach (Gallery idx in Gallery.Select())
+            foreach (Gallery idx in Gallery.Select(Criteria.Sort("Created", false)))
             {
                 ListItem i = new ListItem(
                     idx.Name + " - [" + idx.Images.Count + " img]", 

@@ -54,6 +54,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["IDColumnValue"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.Publishing.EditTemplate";
 
+            node["Criteria"]["C1"]["Name"].Value = "Sort";
+            node["Criteria"]["C1"]["Value"].Value = "Created";
+            node["Criteria"]["C1"]["Ascending"].Value = false;
+
             node["ReuseNode"].Value = true;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
@@ -185,17 +189,17 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 Node n = new Node();
 
                 n["FullTypeName"].Value = typeof(WebPageTemplate).FullName;
-                n["ID"].Value = clone.ID;
 
                 RaiseEvent(
-                    "DBAdmin.Grid.SetActiveRow",
+                    "Magix.Core.UpdateGrids",
                     n);
 
                 n = new Node();
                 n["FullTypeName"].Value = typeof(WebPageTemplate).FullName;
+                n["ID"].Value = clone.ID;
 
                 RaiseEvent(
-                    "Magix.Core.UpdateGrids",
+                    "DBAdmin.Grid.SetActiveRow",
                     n);
 
                 n = new Node();

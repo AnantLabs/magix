@@ -1351,7 +1351,7 @@ focus, or clicking the widget with his mouse or touch screen";
             ListItem item = new ListItem("Select a Meta Form ...", "");
             ls.Items.Add(item);
 
-            foreach (MetaForm idx in MetaForm.Select())
+            foreach (MetaForm idx in MetaForm.Select(Criteria.Sort("Created", false)))
             {
                 ListItem it = new ListItem(idx.Name, idx.Name);
                 if (idx.Name == e.Params["Value"].Get<string>())

@@ -118,8 +118,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             else
                 node["Message"].Value = e.Params["Message"].Get<string>();
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                sender,
+            RaiseEvent(
                 "Magix.Core.Log",
                 node);
         }
@@ -236,8 +235,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             {
                 n["ObjectID"].Value = UserBase.Current.ID;
             }
-            ActiveEvents.Instance.RaiseActiveEvent(
-                sender,
+            RaiseEvent(
                 "Magix.Core.Log",
                 n);
 
@@ -258,8 +256,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -276,8 +273,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -296,8 +292,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -314,8 +309,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -332,8 +326,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -350,8 +343,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -368,8 +360,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -387,8 +378,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -406,8 +396,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
@@ -424,11 +413,33 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
                 {
                     node["ObjectID"].Value = UserBase.Current.ID;
                 }
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    sender,
+                RaiseEvent(
                     "Magix.Core.Log",
                     node);
             }
+        }
+
+        /**
+         * Level2: Logs the creation of every QR Code [and change to them]
+         */
+        [ActiveEvent(Name = "Magix.QRCodes.CreateQRCode")]
+        protected void Magix_QRCodes_CreateQRCode(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+            node["LogItemType"].Value = "Magix.QRCodes.CodeCreated";
+            if (UserBase.Current != null)
+            {
+                node["ObjectID"].Value = UserBase.Current.ID;
+                node["Header"].Value = "QR Code was created by " + UserBase.Current.Username;
+            }
+            else
+                node["Header"].Value = "Anonyous Coward just created a QR Code";
+
+            node["Message"].Value = "File: " + e.Params["FileName"].Value;
+
+            RaiseEvent(
+                "Magix.Core.Log",
+                node);
         }
     }
 }

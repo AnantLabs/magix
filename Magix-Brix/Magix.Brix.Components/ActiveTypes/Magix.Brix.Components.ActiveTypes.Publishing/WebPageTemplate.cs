@@ -34,7 +34,6 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         [ActiveField]
         public string Name { get; set; }
 
-        // TODO: Change logic. Bug while deleting or something ...
         /**
          * Our 'WebPart-recipes'. Contains the recipe for every webpart that
          * should be added to our page. The number of WebPartTemplates, and their settings,
@@ -43,6 +42,12 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
          */
         [ActiveField]
         public LazyList<WebPartTemplate> Containers { get; set; }
+
+        /**
+         * Automatically kept track of. Keeps the 'created date' of the object
+         */
+        [ActiveField]
+        public DateTime Created { get; private set; }
 
         public WebPageTemplate Clone()
         {
@@ -82,6 +87,9 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
 
         public override void Save()
         {
+            if (ID == 0)
+                Created = DateTime.Now;
+
             int idxNo = 1;
             foreach (WebPartTemplate idx in Containers)
             {
