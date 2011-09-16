@@ -464,6 +464,7 @@
         this._beginX = parseInt(this.parent.element.getStyle('left'), 10) || 0;
         this._beginY = parseInt(this.parent.element.getStyle('top'), 10) || 0;
       }
+      return false;
     },
 
     onMouseUp: function(event) {
