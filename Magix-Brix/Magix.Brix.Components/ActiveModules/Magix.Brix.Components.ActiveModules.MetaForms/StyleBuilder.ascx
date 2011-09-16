@@ -421,7 +421,6 @@
                             runat="server"
                             ToolTip="Positioning within the flow layout of your form for your widget. Normally we strongly suggest using the BluePrint Css grid layout, in floating mode. Meaning, either relative or static positioning, with NO VALUES for left and right, and all positioning done through the CSS classes embedded within BluePrint. Though sometimes you might need absolute positioning, or something. Feel free to apply as much damage as you feel for ;) - PS! Fixed mostly does _not_ work on neither Tablets nor Smart Phones ..."
                             CssClass="span-4 last"
-                            style="margin-bottom:18px;"
                             id="position">
                             <mux:ListItem Text="Select Positioning ..." Value="" />
                             <mux:ListItem Text="Static" Value="static" />
@@ -429,6 +428,44 @@
                             <mux:ListItem Text="Absolute" Value="absolute" />
                             <mux:ListItem Text="Fixed" Value="fixed" />
                         </mux:SelectList>
+                        <span 
+                            title="Horizontal Offset of Text Shadow. If it's a positive number, the shadow will be that many pixels to the right of the text. If the offset is negative, the shadow will be to the left of the text. Doing a 45 degrees shadow with e.g. 3x3x2 will mimick the way the sun sits on the sky psychologically for our retinas around 10AM, and make the result seem more fresh. According to some theories ... ;)"
+                            class="span-2">Horz. Offset: </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="textShadowHorizontalOffset"
+                            PlaceHolder="Hors."
+                            ToolTip="Horizontal Text Shadow Offset ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Verical Offset of Text Shadow. If it's a positive number, the shadow will be that many pixels below the text. If the offset is negative, the shadow will be above the text. Doing a 45 degrees shadow with e.g. 3x3x2 will mimicks the way the sun sits on the sky psychologically for our retinas, and make the result seem more fresh. According to some theories ... ;)"
+                            class="span-2">Vert. Offset: </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="textShadowVerticalOffset"
+                            PlaceHolder="Vert."
+                            ToolTip="Vertical Text Shadow Offset ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span 
+                            title="Blur Radius, the higher the number, the more 'fuzzy edges' your Shadow will have..."
+                            class="span-2">Blur: </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="textShadowBlur"
+                            PlaceHolder="Blur ..."
+                            ToolTip="Blur ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <mux:Button
+                            runat="server"
+                            CssClass="span-4 height-1 texture-panel last"
+                            Text="Text Shadow Color"
+                            style="padding-top:9px;padding-bottom:9px;margin-bottom:0;"
+                            OnClick="textShadowColor_Click"
+                            ToolTip="Click to Change the Text Shadow Color for your Widget"
+                            id="textShadowColor" />
                     </div>
                     <p class="span-6 clear-both last mux-info-text" title="... Sorry Guys 2.0! ;)">
                         (*) All units are in pixels ...
@@ -469,7 +506,7 @@
                     <div class="span-4 mux-editable-part">
                         <h5 title="Shadow for your Widget">Shadow</h5>
                         <span 
-                            title="Horizontal Offset. If it's a positive number, the shadow will be that many pixels to the right of the widget. If the offset is negative, the shadow will be to the left of the widget. Doing a 45 degrees shadow with e.g. 3x3x2 will mimick the way the sun sits on the sky psychologically for our retinas, and make the result seem more 'fresh'. According to some theories ... ;)"
+                            title="Horizontal Offset. If it's a positive number, the shadow will be that many pixels to the right of the widget. If the offset is negative, the shadow will be to the left of the widget. Doing a 45 degrees shadow with e.g. 3x3x2 will mimick the way the sun sits on the sky psychologically for our retinas, and make the result seem more fresh. According to some theories ... ;)"
                             class="span-2">Horz. Offset: </span>
                         <mux:TextBox
                             runat="server"
@@ -479,7 +516,7 @@
                             TextMode="Number"
                             CssClass="span-2 last" />
                         <span 
-                            title="Verical Offset. If it's a positive number, the shadow will be that many pixels below the widget. If the offset is negative, the shadow will be above the widget. Doing a 45 degrees shadow with e.g. 3x3x2 will mimicks the way the sun sits on the sky psychologically for our retinas, and make the result seem more 'fresh'. According to some theories ... ;)"
+                            title="Verical Offset. If it's a positive number, the shadow will be that many pixels below the widget. If the offset is negative, the shadow will be above the widget. Doing a 45 degrees shadow with e.g. 3x3x2 will mimicks the way the sun sits on the sky psychologically for our retinas, and make the result seem more fresh. According to some theories ... ;)"
                             class="span-2">Vert. Offset: </span>
                         <mux:TextBox
                             runat="server"
@@ -498,7 +535,6 @@
                             ToolTip="Blur ..."
                             TextMode="Number"
                             CssClass="span-2 last" />
-                        </mux:Panel>
                         <mux:Button
                             runat="server"
                             CssClass="span-4 height-1 texture-panel last"

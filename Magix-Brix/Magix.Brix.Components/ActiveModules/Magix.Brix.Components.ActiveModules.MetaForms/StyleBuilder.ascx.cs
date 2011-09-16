@@ -62,6 +62,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected TextBox left;
         protected TextBox top;
         protected SelectList position;
+        protected TextBox textShadowHorizontalOffset;
+        protected TextBox textShadowVerticalOffset;
+        protected TextBox textShadowBlur;
+        protected Button textShadowColor;
 
         protected Button fgText;
         protected Button bgText;
@@ -317,6 +321,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                 shadowBlur.Text = val.Trim().Split(' ')[2].Replace("px", "");
                                 shadowColor.Style[Styles.backgroundColor] = val.Trim().Split(' ')[3];
                                 break;
+                            case "text-shadow":
+                                textShadowHorizontalOffset.Text = val.Trim().Split(' ')[0].Replace("px", "");
+                                textShadowVerticalOffset.Text = val.Trim().Split(' ')[1].Replace("px", "");
+                                textShadowBlur.Text = val.Trim().Split(' ')[2].Replace("px", "");
+                                textShadowColor.Style[Styles.backgroundColor] = val.Trim().Split(' ')[3];
+                                break;
                             case "border-radius":
                                 roundedCornersTopLeft.Text = val.Trim().Split(' ')[0].Replace("px", "");
                                 roundedCornersTopRight.Text = val.Trim().Split(' ')[1].Replace("px", "");
@@ -514,6 +524,20 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 stl += shadowBlur.Text + "px ";
                 stl += shadowColor.Style[Styles.backgroundColor];
                 _ctrl.Style["box-shadow"] = stl;
+            }
+            else
+            {
+                _ctrl.Style["box-shadow"] = "";
+            }
+
+            if (!string.IsNullOrEmpty(textShadowColor.Style[Styles.backgroundColor]))
+            {
+                string stl = "";
+                stl += textShadowHorizontalOffset.Text + "px ";
+                stl += textShadowVerticalOffset.Text + "px ";
+                stl += textShadowBlur.Text + "px ";
+                stl += textShadowColor.Style[Styles.backgroundColor];
+                _ctrl.Style["text-shadow"] = stl;
             }
             else
             {
@@ -794,6 +818,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 node["Style"]["box-shadow"].Value = stl;
             }
+            if (!string.IsNullOrEmpty(textShadowColor.Style[Styles.backgroundColor]))
+            {
+                string stl = "";
+                stl += textShadowHorizontalOffset.Text + "px ";
+                stl += textShadowVerticalOffset.Text + "px ";
+                stl += textShadowBlur.Text + "px ";
+                stl += textShadowColor.Style[Styles.backgroundColor];
+
+                node["Style"]["text-shadow"].Value = stl;
+            }
             if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
             {
                 string gradient = string.Format("linear-gradient({0} 0%, {1} 100%)",
@@ -925,6 +959,26 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         }
 
 
+        protected void textShadowColor_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["Top"].Value = 20;
+            node["NoImage"].Value = true;
+
+            node["SelectEvent"].Value = "Magix.MetaForms.TextShadowColorWasPicked";
+            node["Caption"].Value = "Pick Color for Shadow";
+
+            if (DataSource["Style"].Contains("text-shadow"))
+                node["Color"].Value = "#" + DataSource["Style"]["text-shadow"].Value.ToString().Split('#')[1];
+            else
+                node["Color"].Value = "#000000";
+
+            RaiseSafeEvent(
+                "Magix.Core.PickColorOrImage",
+                node);
+        }
+
         protected void shadowColor_Click(object sender, EventArgs e)
         {
             Node node = new Node();
@@ -936,7 +990,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["Caption"].Value = "Pick Color for Shadow";
 
             if (DataSource["Style"].Contains("box-shadow"))
-                node["Color"].Value = DataSource["Style"]["box-shadow"]["Color"].Value;
+                node["Color"].Value = "#" + DataSource["Style"]["box-shadow"].Value.ToString().Split('#')[1];
             else
                 node["Color"].Value = "#000000";
 
@@ -990,6 +1044,17 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ActiveEvents.Instance.RaiseClearControls("child");
             string color = e.Params["Color"].Get<string>();
             gradientStop.Style[Styles.backgroundColor] = color;
+        }
+
+        /**
+         * Level2: Will set the Text Shadow Color for the widget to the 'Color' value given
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.TextShadowColorWasPicked")]
+        protected void Magix_MetaForms_TextShadowColorWasPicked(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("child");
+            string color = e.Params["Color"].Get<string>();
+            textShadowColor.Style[Styles.backgroundColor] = color;
         }
 
         /**
