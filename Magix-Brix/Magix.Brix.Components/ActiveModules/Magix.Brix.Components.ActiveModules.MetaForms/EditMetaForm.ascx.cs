@@ -206,6 +206,21 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 BaseWebControl ctrl = nn["Control"].Get<BaseWebControl>();
                 if (string.IsNullOrEmpty(ctrl.ToolTip))
                     ctrl.ToolTip = "Click me to edit the Widget";
+
+                if (nn.Contains("HasSurface") &&
+                    nn["HasSurface"].Get<bool>())
+                {
+                    // Child controls
+                    if (node.Contains("Surface"))
+                    {
+                        foreach (Node idx in node["Surface"])
+                        {
+                            CreateSingleControl(idx, ctrl);
+                        }
+                    }
+                }
+
+                // Properties
                 if (node.Contains("Properties"))
                 {
                     foreach (Node idx in node["Properties"])
@@ -726,8 +741,39 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             Node node = new Node();
 
             node["ID"].Value = DataSource["ID"].Value;
-            node["ParentControl"].Value = null; // Meaning the 'Root Node' will be the parent control
             node["TypeName"].Value = b.Info;
+
+            if (!string.IsNullOrEmpty(OldSelected))
+            {
+                int idid = int.Parse(type.Info);
+                Node tp = DataSource["root"]["Surface"].Find(
+                    delegate(Node idx)
+                    {
+                        return idx.Name == "_ID" &&
+                            idx.Value != null &&
+                            idx.Value is int &&
+                            (int)idx.Value == idid;
+                    });
+
+                bool hasSurface = DataSource["Controls"].Find(
+                delegate(Node idx)
+                {
+                    return
+                        idx.Name == "TypeName" &&
+                        idx.Get<string>() == tp.Parent["TypeName"].Get<string>() &&
+                        idx.Parent.Contains("HasSurface") &&
+                        idx.Parent["HasSurface"].Get<bool>();
+                }) != null;
+
+                if (hasSurface)
+                    node["ParentControl"].Value = OldSelected.Substring(OldSelected.LastIndexOf("_ID") + 3);
+                else
+                    node["ParentControl"].Value = null; // Meaning the 'Root Node' will be the parent control
+
+                node["HasSurface"].Value = true;
+            }
+            else
+                node["ParentControl"].Value = null; // Meaning the 'Root Node' will be the parent control
 
             RaiseSafeEvent(
                 "Magix.MetaForms.AppendControlToForm",
