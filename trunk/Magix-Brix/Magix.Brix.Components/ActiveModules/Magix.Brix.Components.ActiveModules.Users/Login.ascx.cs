@@ -72,7 +72,8 @@ namespace Magix.Brix.Components.ActiveModules.Users
             if (!node["Success"].Get<bool>())
             {
                 Node n = new Node();
-                n["Message"].Value = "Sorry, no access ...";
+                n["IsError"].Value = true;
+                n["Message"].Value = "Sorry username " + node["Username"].Value + ", has no access with that password, if that user even exists. I wouldn't really know to be honest ...";
 
                 RaiseEvent(
                     "Magix.Core.ShowMessage",

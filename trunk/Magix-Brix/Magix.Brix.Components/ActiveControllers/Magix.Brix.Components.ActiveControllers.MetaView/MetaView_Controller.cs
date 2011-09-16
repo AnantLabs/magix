@@ -194,10 +194,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
                         tx);
                 };
 
-            ListItem item = new ListItem("Select a MetaView ...", "");
+            ListItem item = new ListItem("Select a Meta View ...", "");
             ls.Items.Add(item);
 
-            foreach (MetaView idx in MetaView.Select())
+            foreach (MetaView idx in MetaView.Select(Criteria.Sort("Created", false)))
             {
                 ListItem it = new ListItem(idx.Name, idx.TypeName + idx.Name.ToString());
                 if (idx.Name == e.Params["Value"].Get<string>())
@@ -305,17 +305,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             Node n = new Node();
 
             n["FullTypeName"].Value = typeof(MetaView).FullName;
-            n["ID"].Value = e.Params["NewID"].Value;
 
             RaiseEvent(
-                "DBAdmin.Grid.SetActiveRow",
+                "Magix.Core.UpdateGrids",
                 n);
 
             n = new Node();
             n["FullTypeName"].Value = typeof(MetaView).FullName;
+            n["ID"].Value = e.Params["NewID"].Value;
 
             RaiseEvent(
-                "Magix.Core.UpdateGrids",
+                "DBAdmin.Grid.SetActiveRow",
                 n);
 
             n = new Node();
