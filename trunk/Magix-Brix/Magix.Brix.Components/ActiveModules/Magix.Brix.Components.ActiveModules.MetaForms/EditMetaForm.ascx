@@ -54,14 +54,6 @@
         Closable="false"
         Caption="Properties & Actions ...">
         <Content>
-            <mux:SelectList
-                runat="server"
-                id="selWidg"
-                OnSelectedIndexChanged="selWidg_SelectedIndexChanged"
-                style="margin-bottom:18px;"
-                CssClass="span-6 last">
-                <mux:ListItem Text="Meta Form" Value="" />
-            </mux:SelectList>
             <div 
                 title="These actions will be raised as your Form is being initially loaded. Meaning, only when a Meta Form is being initially loaded, these Actions will run"
                 class="span-6 last mux-init-actions-row">
@@ -74,6 +66,14 @@
                     OnClick="formInitActions_Click"
                     Text="Actions ..." />
             </div>
+            <mux:SelectList
+                runat="server"
+                id="selWidg"
+                OnSelectedIndexChanged="selWidg_SelectedIndexChanged"
+                style="margin-bottom:18px;"
+                CssClass="span-6 last">
+                <mux:ListItem Text="Meta Form" Value="" />
+            </mux:SelectList>
             <mux:Label
                 runat="server"
                 id="type"

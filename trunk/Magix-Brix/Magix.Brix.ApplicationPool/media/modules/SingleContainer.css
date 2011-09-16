@@ -742,7 +742,7 @@ input[type=button].clear-both
 	min-height:98px;
 	width:auto;
 	height:auto;
-	background:transparent url(../images/facts.png) no-repeat top right;
+	background:transparent url(../images/desktop-icons/facts.png) no-repeat top right;
 	z-index:100;
 }
 
@@ -996,26 +996,26 @@ div.has-no-action
 .edit-templates
 {
 	min-height:180px;
-	background:Transparent url(../images/architecture.png) no-repeat 0 0;
+	background:Transparent url(../images/desktop-icons/architecture.png) no-repeat 0 0;
 }
 
 
 .edit-actions
 {
 	min-height:180px;
-	background:Transparent url(../images/lightning.png) no-repeat 0 0;
+	background:Transparent url(../images/desktop-icons/lightning.png) no-repeat 0 0;
 }
 
 .edit-objects
 {
 	min-height:180px;
-	background:Transparent url(../images/file-cabinet.png) no-repeat 0 0;
+	background:Transparent url(../images/desktop-icons/file-cabinet.png) no-repeat 0 0;
 }
 
 .edit-views
 {
 	min-height:180px;
-	background:Transparent url(../images/view.png) no-repeat 0 0;
+	background:Transparent url(../images/desktop-icons/desktop-icons/view.png) no-repeat 0 0;
 }
 
 .error-message
