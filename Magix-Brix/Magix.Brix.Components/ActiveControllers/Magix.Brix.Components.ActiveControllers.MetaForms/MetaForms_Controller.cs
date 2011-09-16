@@ -151,6 +151,27 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             CreatTextArea(e);
             CreateRadioButton(e);
             CreateCalendar(e);
+            CreatePanel(e);
+        }
+
+        private void CreatePanel(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Panel"]["Name"].Value = "Panel";
+            e.Params["Controls"]["Panel"]["TypeName"].Value = "Magix.MetaForms.Plugins.Panel";
+            e.Params["Controls"]["Panel"]["ToolTip"].Value = @"Creates a Panel type of 
+control, which you can use as a Panel for hosting other types of Controls. Renders as a div by default, 
+which is highly useful in regards to Pinch Zooming and such for dividing your page up into 
+zoomable elements";
+
+            GetCommonEventsAndProperties(e, "Panel", true);
+
+            e.Params["Controls"]["Panel"]["Properties"]["Tag"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Panel"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
+will be rendered by the control. There are many legal values for this property, some of them are p, 
+div, span, label, li [use panel for ul] and address. But also many more. Check up the 
+standard for HTML5 if you would like to wish all its legal values. All normal HTML elements, which does not 
+need special attributes or child elements can really be described by modifying this property accordingly. 
+Also HTML5 types of elements, such as address and section";
         }
 
         /*
@@ -817,6 +838,17 @@ focus, or clicking the widget with his mouse or touch screen";
                             btn.CssClass = "mux-calendar mux-rounded mux-shaded";
                             e.Params["Control"].Value = btn;
                         }
+                    } break;
+                case "Magix.MetaForms.Plugins.Panel":
+                    {
+                        Panel btn = new Panel();
+                        btn.CssClass = "span-2 height-2";
+                        if (e.Params.Contains("Preview") &&
+                            e.Params["Preview"].Get<bool>())
+                        {
+                            btn.Style[Styles.border] = "dashed 1px rgba(0,0,0,.2)";
+                        }
+                        e.Params["Control"].Value = btn;
                     } break;
                 default:
                     // DO NOTHING. Others might handle ...

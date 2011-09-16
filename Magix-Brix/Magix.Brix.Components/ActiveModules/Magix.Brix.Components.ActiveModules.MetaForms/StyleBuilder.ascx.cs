@@ -78,6 +78,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected SelectList animations;
         protected Panel preview;
 
+        protected Button finish;
+
         protected BaseWebControl _ctrl;
 
         public override void InitialLoading(Node node)
@@ -183,7 +185,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         }
                     }
                 }
-                if (DataSource.Contains("Properties") &&
+                if (FirstLoad && 
+                    DataSource.Contains("Properties") &&
                     DataSource["Properties"].Contains("Style"))
                 {
                     foreach (Node idx in DataSource["Properties"]["Style"])
@@ -285,12 +288,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                 fgText.Style[Styles.backgroundColor] = val;
                                 break;
                             case "background-color":
-                                if (val.Contains("url("))
-                                {
-                                    if (val.Contains(","))
-                                        val = val.Split(',')[0];
-                                    bgText.Style[Styles.backgroundColor] = val;
-                                }
+                                bgText.Style[Styles.backgroundColor] = val;
                                 break;
                             case "background-image":
                                 {
@@ -303,6 +301,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                             val.Substring(val.LastIndexOf('#'), 7);
                                         if (val.Contains("url("))
                                             val = val.Trim().Split(',')[0];
+                                        else
+                                            val = "";
                                     }
                                     if (!string.IsNullOrEmpty(val))
                                         bgText.Style[Styles.backgroundImage] = val;
@@ -595,7 +595,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     mb4.CssClass = "mux-multi-button-view mux-multi-view-button-selected";
                     new EffectTimeout(500)
                         .ChainThese(
-                            new EffectFocusAndSelect(animations))
+                            new EffectFocusAndSelect(finish))
                         .Render();
                     SetStylesForPreviewWidget();
                     break;
