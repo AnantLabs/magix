@@ -275,7 +275,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         if (ctrl.ClientID == OldSelected &&
                             !ctrl.CssClass.Contains(" mux-wysiwyg-selected"))
                         {
-                            ctrl.CssClass += " mux-wysiwyg-selected";
+                            AddSelectedCssClass(ctrl);
                             ctrl.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                         }
                     };
@@ -306,6 +306,20 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     ctrl.ID = "ID" + node["_ID"].Value.ToString();
 
                 parent.Controls.Add(ctrl);
+            }
+        }
+
+        private void AddSelectedCssClass(BaseWebControl ctrl)
+        {
+            if (!ctrl.CssClass.Contains(" mux-wysiwyg-selected"))
+                ctrl.CssClass += " mux-wysiwyg-selected";
+
+            BaseWebControl idx = ctrl.Parent as BaseWebControl;
+            while (idx != null && idx != ctrls)
+            {
+                if (!idx.CssClass.Contains(" mux-wysiwyg-selected"))
+                    idx.CssClass += " mux-wysiwyg-selected";
+                idx = idx.Parent as BaseWebControl;
             }
         }
 
@@ -354,7 +368,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (!string.IsNullOrEmpty(OldSelected))
             {
                 BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
-                c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+                RemoveActiveCssClass(c);
                 c.ToolTip = "Click me to edit the Widget";
                 OldSelected = null;
                 if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
@@ -432,9 +446,23 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 if (ctrl is BaseWebControl)
                 {
                     BaseWebControl ctrl2 = ctrl as BaseWebControl;
-                    ctrl2.CssClass += " mux-wysiwyg-selected";
+                    AddSelectedCssClass(ctrl2);
                     ctrl2.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                 }
+            }
+        }
+
+        private void RemoveActiveCssClass(BaseWebControl c)
+        {
+            c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+
+            BaseWebControl idx = c.Parent as BaseWebControl;
+            while (idx != null && idx != ctrls)
+            {
+                if (idx.CssClass.Contains(" mux-wysiwyg-selected"))
+                    idx.CssClass = idx.CssClass.Replace(" mux-wysiwyg-selected", "");
+                
+                idx = idx.Parent as BaseWebControl;
             }
         }
 
@@ -457,7 +485,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 if (!string.IsNullOrEmpty(OldSelected))
                 {
                     BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
-                    c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+                    RemoveActiveCssClass(c);
                     c.ToolTip = "Click me to edit the Widget";
                 }
                 OldSelected = "";
@@ -557,7 +585,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (!string.IsNullOrEmpty(OldSelected))
             {
                 BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
-                c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+                RemoveActiveCssClass(c);
                 c.ToolTip = "Click me to edit the Widget";
             }
             OldSelected = null;
@@ -773,7 +801,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 node["HasSurface"].Value = true;
             }
             else
+            {
                 node["ParentControl"].Value = null; // Meaning the 'Root Node' will be the parent control
+                node["HasSurface"].Value = true;
+            }
 
             RaiseSafeEvent(
                 "Magix.MetaForms.AppendControlToForm",

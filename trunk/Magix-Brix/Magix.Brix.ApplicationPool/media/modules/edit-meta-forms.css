@@ -281,15 +281,78 @@ input[type=email].mux-wysiwyg-selected,
 input[type=checkbox].mux-wysiwyg-selected,
 textarea.mux-wysiwyg-selected
 {
+	-moz-transition-property:-moz-box-shadow, opacity;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-box-shadow, opacity;
+	-webkit-transition-duration:1.2s;
+	transition-property:box-shadow, opacity;
+	transition-duration:1.2s;
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+}
+
+.mux-wysiwyg-selected .mux-wysiwyg-selected,
+.mux-wysiwyg-selected input[type=button].mux-wysiwyg-selected,
+.mux-wysiwyg-selected input[type=text].mux-wysiwyg-selected,
+.mux-wysiwyg-selected input[type=email].mux-wysiwyg-selected,
+.mux-wysiwyg-selected input[type=checkbox].mux-wysiwyg-selected,
+.mux-wysiwyg-selected textarea.mux-wysiwyg-selected
+{
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:1.2s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:1.2s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
-	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5);
-	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5);
-	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5);
+	transition-duration:1.2s;
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-transition-delay:1.2s;
+	-webkit-transition-delay:1.2s;
+	transition-delay:1.2s;
+}
+
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected input[type=button].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected input[type=text].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected input[type=email].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected input[type=checkbox].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected textarea.mux-wysiwyg-selected
+{
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:1.2s;
+	transition-property:box-shadow;
+	transition-duration:1.2s;
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-transition-delay:2.4s;
+	-webkit-transition-delay:2.4s;
+	transition-delay:2.4s;
+}
+
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=button].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=text].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=email].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=checkbox].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected textarea.mux-wysiwyg-selected
+{
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:1.2s;
+	transition-property:box-shadow;
+	transition-duration:1.2s;
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-transition-delay:3.6s;
+	-webkit-transition-delay:3.6s;
+	transition-delay:3.6s;
 }
 
 .mux-prop-label
@@ -341,6 +404,12 @@ textarea.mux-wysiwyg-selected
 
 .mux-control-selected *
 {
+	-moz-transition-property:-moz-box-shadow, opacity;
+	-moz-transition-duration:1.2s;
+	-webkit-transition-property:-webkit-box-shadow, opacity;
+	-webkit-transition-duration:1.2s;
+	transition-property:box-shadow, opacity;
+	transition-duration:1.2s;
 	opacity:.2;
 	cursor:pointer;
 }
