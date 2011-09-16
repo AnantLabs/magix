@@ -609,4 +609,5 @@ input[type=button].mux-color-picker-ok
 {
 	margin-top:0;
 	margin-bottom:0;
+	position:relative;
 }

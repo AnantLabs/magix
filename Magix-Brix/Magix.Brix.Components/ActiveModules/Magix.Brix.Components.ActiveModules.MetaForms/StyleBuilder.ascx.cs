@@ -61,6 +61,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected TextBox height;
         protected TextBox left;
         protected TextBox top;
+        protected SelectList position;
 
         protected Button fgText;
         protected Button bgText;
@@ -284,6 +285,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                             case "top":
                                 top.Text = val.Replace("px", "");
                                 break;
+                            case "position":
+                                position.SetSelectedItemAccordingToValue(val);
+                                break;
                             case "color":
                                 fgText.Style[Styles.backgroundColor] = val;
                                 break;
@@ -452,6 +456,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 _ctrl.Style[Styles.top] = top.Text + "px";
             else
                 _ctrl.Style[Styles.top] = "";
+
+            if (position.SelectedIndex != 0)
+                _ctrl.Style[Styles.position] = position.SelectedItem.Value;
+            else
+                _ctrl.Style[Styles.position] = "";
 
             if (textAlign.SelectedIndex != 0)
                 _ctrl.Style[Styles.textAlign] = textAlign.SelectedItem.Value;
@@ -749,6 +758,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if (!string.IsNullOrEmpty(top.Text))
                 node["Style"]["top"].Value = top.Text + "px";
+
+            if (position.SelectedIndex != 0)
+                node["Style"]["position"].Value = position.SelectedItem.Value;
 
             if (textAlign.SelectedIndex != 0)
                 node["Style"]["text-align"].Value = textAlign.SelectedItem.Value;
