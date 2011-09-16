@@ -39,7 +39,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected TextBox marginBottom;
         protected TextBox borderWidth;
         protected SelectList borderStyle;
-        protected Panel borderColorPnl;
+        protected Button borderColorPnl;
         protected TextBox paddingLeft;
         protected TextBox paddingTop;
         protected TextBox paddingRight;
@@ -62,14 +62,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected TextBox left;
         protected TextBox top;
 
-        protected Panel fgText;
-        protected Panel bgText;
+        protected Button fgText;
+        protected Button bgText;
         protected TextBox shadowHorizontalOffset;
         protected TextBox shadowVerticalOffset;
         protected TextBox shadowBlur;
-        protected Panel shadowColor;
-        protected Panel gradientStart;
-        protected Panel gradientStop;
+        protected Button shadowColor;
+        protected Button gradientStart;
+        protected Button gradientStop;
         protected TextBox roundedCornersTopLeft;
         protected TextBox roundedCornersTopRight;
         protected TextBox roundedCornersBottomLeft;
@@ -585,7 +585,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     mb4.CssClass = "mux-multi-button-view";
                     new EffectTimeout(500)
                         .ChainThese(
-                            new EffectFocusAndSelect(shadowHorizontalOffset))
+                            new EffectFocusAndSelect(fgText))
                         .Render();
                     break;
                 case 3:
@@ -595,7 +595,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     mb4.CssClass = "mux-multi-button-view mux-multi-view-button-selected";
                     new EffectTimeout(500)
                         .ChainThese(
-                            new EffectFocusAndSelect(finish))
+                            new EffectFocusAndSelect(animations))
                         .Render();
                     SetStylesForPreviewWidget();
                     break;
@@ -1020,6 +1020,28 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 // There are TWO popups here now ...
                 ActiveEvents.Instance.RaiseClearControls("child");
+            }
+        }
+
+        /**
+         * Level2: Overridden to set focus back to first element in active MultiViewPanel
+         */
+        [ActiveEvent(Name = "Magix.Core.RefreshWindowContent")]
+        protected void Magix_Core_RefreshWindowContent(object sender, ActiveEventArgs e)
+        {
+            switch (mp.ActiveMultiPanelViewIndex)
+            {
+                case 0:
+                    marginLeft.Focus();
+                    break;
+                case 1:
+                    fontName.Focus();
+                    break;
+                case 2: fgText.Focus();
+                    break;
+                case 3:
+                    animations.Focus();
+                    break;
             }
         }
     }

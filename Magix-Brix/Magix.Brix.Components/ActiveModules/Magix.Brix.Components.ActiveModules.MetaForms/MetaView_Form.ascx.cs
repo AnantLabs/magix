@@ -74,12 +74,15 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             {
                 foreach (Node idx in DataSource["root"]["Surface"])
                 {
+                    if (idx.Name == "_ID")
+                        continue;
+
                     CreateSingleControl(idx, ctrls);
                 }
             }
         }
 
-        private void CreateSingleControl(Node node, BaseWebControl parent)
+        private void CreateSingleControl(Node node, Control parent)
         {
             Node nn = new Node();
 
@@ -93,6 +96,18 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             {
                 Control ctrl = nn["Control"].Get<Control>();
 
+                // Child controls
+                if (node.Contains("Surface"))
+                {
+                    foreach (Node idx in node["Surface"])
+                    {
+                        if (idx.Name == "_ID")
+                            continue;
+                        CreateSingleControl(idx, ctrl);
+                    }
+                }
+
+                // Properties
                 if (node.Contains("Properties"))
                 {
                     foreach (Node idx in node["Properties"])
@@ -143,6 +158,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                 info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
                         }
                     }
+                }
+
+                // Actions ...
+                if (node.Contains("Actions"))
+                {
                     foreach (Node idx in node["Actions"])
                     {
                         // Skipping 'empty stuff' ...
@@ -166,11 +186,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                             wrp.EventName = idx.Name;
                             wrp.Form = this;
 
-                            MethodInfo method = 
+                            MethodInfo method =
                                 typeof(ActionWrapper)
                                     .GetMethod(
-                                        "RaiseActions", 
-                                        BindingFlags.NonPublic | 
+                                        "RaiseActions",
+                                        BindingFlags.NonPublic |
                                         BindingFlags.Instance |
                                         BindingFlags.FlattenHierarchy);
 

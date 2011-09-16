@@ -639,8 +639,8 @@ namespace Magix.Brix.Viewports
          * Level2: Will clear the incoming 'Position' container for controls, and unload and clean
          * up everything in regards to any modules within that container
          */
-        [ActiveEvent(Name = "ClearControls")]
-        protected void ClearControls(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Core.ClearViewportContainer")]
+        protected void Magix_Core_ClearViewportContainer(object sender, ActiveEventArgs e)
         {
             string container = e.Params["Position"].Value as string;
 
