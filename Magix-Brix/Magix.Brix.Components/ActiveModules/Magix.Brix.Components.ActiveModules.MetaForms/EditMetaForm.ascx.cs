@@ -472,7 +472,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["ID"].Value = int.Parse(type.Info);
 
             RaiseSafeEvent(
-                "Magix.MetaForms.ShowAllActionsAssociatedWithFormEvent",
+                "Magix.MetaForms.ShowAllActionsAssociatedWithFormWidgetEvent",
                 node);
         }
 
