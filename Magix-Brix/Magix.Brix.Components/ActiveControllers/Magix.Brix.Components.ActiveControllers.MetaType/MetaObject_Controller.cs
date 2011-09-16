@@ -113,6 +113,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 {
                     Node tmp = new Node();
                     tmp["ID"].Value = id;
+
                     RaiseEvent(
                         "Magix.MetaType.CopyMetaObject",
                         tmp);
@@ -126,21 +127,20 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         "Magix.Core.UpdateGrids",
                         node);
 
+                    Node n = new Node();
+                    n["FullTypeName"].Value = typeof(MetaObject).FullName;
+                    n["ID"].Value = tmp["NewID"].Value;
+
+                    RaiseEvent(
+                        "DBAdmin.Grid.SetActiveRow",
+                        n);
+
                     node = new Node();
-                    node["ID"].Value = id;
+                    node["ID"].Value = tmp["NewID"].Value;
 
                     RaiseEvent(
                         "Magix.MetaType.EditONEMetaObject_UnFiltered",
                         node);
-
-                    node = new Node();
-                    node["ID"].Value = id;
-                    node["FullTypeName"].Value = typeof(MetaObject).FullName;
-
-                    RaiseEvent(
-                        "DBAdmin.Grid.SetActiveRow",
-                        node);
-
                 };
 
 
@@ -158,8 +158,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             int id = e.Params["ID"].Get<int>();
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                MetaObject n = MetaObject.SelectByID(id).Clone();
+                MetaObject n = MetaObject.SelectByID(id).CloneAndSave();
                 tr.Commit();
+                e.Params["NewID"].Value = n.ID;
             }
         }
 

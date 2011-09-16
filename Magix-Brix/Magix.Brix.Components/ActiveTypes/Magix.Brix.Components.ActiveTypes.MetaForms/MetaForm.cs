@@ -127,6 +127,19 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                         return name == idx.Name;
                     });
             }
+
+            internal Node Clone()
+            {
+                Node tmp = new Node();
+                tmp.Name = Name;
+                tmp.TypeName = TypeName;
+                tmp.Value = Value;
+                foreach (Node idx in Children)
+                {
+                    tmp.Children.Add(idx.Clone());
+                }
+                return tmp;
+            }
         }
 
         // Used as 'cache' ...
@@ -232,6 +245,26 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
             Name = name;
 
             base.Save();
+        }
+
+        /**
+         * Will return a deep copy of the entire Meta Object, with all its Child Objects being cloned,
+         * and all its properties being cloned. WARNING; Might take insane amounts of time, if 
+         * your object graph is huge
+         */
+        public MetaForm Clone()
+        {
+            return DeepClone(this);
+        }
+
+        private MetaForm DeepClone(MetaForm metaObject)
+        {
+            MetaForm ret = new MetaForm();
+
+            ret.Name = metaObject.Name;
+            ret.Form = metaObject.Form.Clone();
+
+            return ret;
         }
     }
 }

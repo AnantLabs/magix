@@ -819,6 +819,19 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             CreateFormControls();
             ctrls.ReRender();
             CreateSelectWidgetSelectList();
+
+            if(!string.IsNullOrEmpty(OldSelected))
+            {
+                RemoveActiveCssClass(Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected));
+            }
+
+            OldSelected = Selector.FindControl<Control>(ctrls, "ID" + node["NewControlID"].Value.ToString()).ClientID;
+            SetActiveControl(DataSource["root"]["Surface"].Find(
+                delegate(Node idx)
+                {
+                    return idx.Name == "_ID" && 
+                        idx.Get<int>() == node["NewControlID"].Get<int>();
+                }).Parent);
         }
 
         protected void selWidg_SelectedIndexChanged(object sender, EventArgs e)
