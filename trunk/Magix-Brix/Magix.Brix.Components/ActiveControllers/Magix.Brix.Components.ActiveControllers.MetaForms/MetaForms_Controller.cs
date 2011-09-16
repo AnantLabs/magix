@@ -158,6 +158,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         {
             e.Params["Controls"]["Panel"]["Name"].Value = "Panel";
             e.Params["Controls"]["Panel"]["TypeName"].Value = "Magix.MetaForms.Plugins.Panel";
+            e.Params["Controls"]["Panel"]["HasSurface"].Value = true;
             e.Params["Controls"]["Panel"]["ToolTip"].Value = @"Creates a Panel type of 
 control, which you can use as a Panel for hosting other types of Controls. Renders as a div by default, 
 which is highly useful in regards to Pinch Zooming and such for dividing your page up into 
@@ -843,12 +844,15 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         Panel btn = new Panel();
                         btn.CssClass = "span-2 height-2";
+
                         if (e.Params.Contains("Preview") &&
                             e.Params["Preview"].Get<bool>())
                         {
                             btn.Style[Styles.border] = "dashed 1px rgba(0,0,0,.2)";
                         }
+
                         e.Params["Control"].Value = btn;
+                        e.Params["HasSurface"].Value = true;
                     } break;
                 default:
                     // DO NOTHING. Others might handle ...
@@ -867,20 +871,27 @@ focus, or clicking the widget with his mouse or touch screen";
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
+
                 Magix.Brix.Components.ActiveTypes.MetaForms.MetaForm.Node parent = null;
                 if (e.Params.Contains("ParentControl") &&
                     e.Params["ParentControl"].Value != null)
                 {
+                    int id = int.Parse(e.Params["ParentControl"].Value.ToString());
                     parent = f.Form.Find(
                         delegate(MetaForm.Node idx)
                         {
-                            return idx.Name == "ID" && (e.Params["ParentControl"]).Equals(idx.Value);
+                            return idx.ID == id;
                         });
                 }
                 else
                     parent = f.Form;
+
                 if (parent == null)
                     throw new ArgumentException("That parent doesn't exist");
+
+                if (!e.Params.Contains("HasSurface") ||
+                    !e.Params["HasSurface"].Get<bool>())
+                    throw new ArgumentException("That control cannot have Child Controls. De-select it, and select another control, or select the form itself before you try to add controls to your Meta Form ...");
 
                 int count = parent["Surface"].Children.Count;
 

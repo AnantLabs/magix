@@ -82,8 +82,9 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                 {
                     foreach (Node idx in Children)
                     {
-                        if (functor(idx))
-                            return idx;
+                        Node tmp = idx.Find(functor);
+                        if (tmp != null)
+                            return tmp;
                     }
                 }
                 return null;

@@ -478,7 +478,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 _ctrl.Style[Styles.backgroundImage] = bgText.Style[Styles.backgroundImage];
                 _ctrl.Style[Styles.backgroundAttachment] = "scroll";
                 _ctrl.Style[Styles.backgroundPosition] = "0 0";
-                _ctrl.Style[Styles.backgroundRepeat] = "no-repeat";
+                _ctrl.Style[Styles.backgroundRepeat] = "repeat";
                 _ctrl.Style[Styles.backgroundColor] = "";
             }
             else
@@ -768,7 +768,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 node["Style"]["background-image"].Value = bgText.Style[Styles.backgroundImage];
                 node["Style"]["background-attachment"].Value = "scroll";
                 node["Style"]["background-position"].Value = "0 0";
-                node["Style"]["background-repeat"].Value = "no-repeat";
+                node["Style"]["background-repeat"].Value = "repeat";
                 node["Style"]["background-color"].Value = "";
             }
 
@@ -1014,7 +1014,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 bgText.Style[Styles.backgroundImage] = "url(" + img + ")";
                 bgText.Style[Styles.backgroundAttachment] = "scroll";
                 bgText.Style[Styles.backgroundPosition] = "0 0";
-                bgText.Style[Styles.backgroundRepeat] = "no-repeat";
+                bgText.Style[Styles.backgroundRepeat] = "repeat";
 
                 bgText.Style[Styles.backgroundColor] = "";
 
