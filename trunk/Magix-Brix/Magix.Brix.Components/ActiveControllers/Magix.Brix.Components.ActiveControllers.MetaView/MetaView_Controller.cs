@@ -378,7 +378,7 @@ Deleting it may break these parts.</p>";
 
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "ClearControls",
+                    "Magix.Core.ClearViewportContainer",
                     n);
 
                 RaiseEvent(

@@ -100,9 +100,9 @@ namespace Magix.Brix.Loader
         [DebuggerStepThrough]
         public void RaiseClearControls(string position)
         {
-            Node tmp = new Node("ClearControls");
+            Node tmp = new Node("Magix.Core.ClearViewportContainer");
             tmp["Position"].Value = position;
-            RaiseActiveEvent(this, "ClearControls", tmp);
+            RaiseActiveEvent(this, "Magix.Core.ClearViewportContainer", tmp);
         }
 
         /**

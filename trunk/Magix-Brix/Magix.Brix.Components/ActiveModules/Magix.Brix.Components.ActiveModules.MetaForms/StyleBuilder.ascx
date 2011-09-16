@@ -120,15 +120,14 @@
                             <mux:ListItem Text="Outset" Value="outset" />
                             <mux:ListItem Text="Ridge" Value="ridge" />
                         </mux:SelectList>
-                        <mux:Panel
+                        <mux:Button
                             runat="server"
-                            CssClass="span-3 height-1 texture-panel last"
+                            CssClass="span-4 height-1 texture-panel last"
                             OnClick="borderColorPnl_Click"
                             ToolTip="Click to Change Color for Borders"
                             style="padding-top:9px;padding-bottom:9px;"
-                            id="borderColorPnl">
-                            Border Color
-                        </mux:Panel>
+                            Text="Border Color"
+                            id="borderColorPnl" />
                     </div>
                     <div class="span-4 mux-editable-part">
                         <h5 title="Padding is spacing between inside of the element before children or textual fragments are rendered. Useful for creating distance between the borders of a Widget and where child fragments and text properties are being rendered">Padding</h5>
@@ -243,7 +242,7 @@
                 DefaultWidget="next2"
                 ID="mpv2">
                 <div class="mux-insert">
-                    <div class="span-4 mux-editable-part pushLeft-2">
+                    <div class="span-4 mux-editable-part">
                         <h5 title="The styles for your font, such as Type Name and whether or not it should render Bold, Italics and so on">Style</h5>
                         <span 
                             title="Select a Typeface for your Font ..."
@@ -366,7 +365,7 @@
                         </mux:SelectList>
                     </div>
                     <div class="span-4 mux-editable-part">
-                        <h5 title="Miscelanous properties of importance, but not really belonging to any particular category">Misc.</h5>
+                        <h5 title="Display of Widget, type of box-model, floating layout, etc">Display</h5>
                         <mux:CheckBox
                             runat="server"
                             style="width:20px;display:block;float:left;"
@@ -416,7 +415,22 @@
                             CssClass="span-3 last"
                             ToolTip="If true, the Widget will be rendered as an 'Inline Level Element', which is the opposite of Block Level Element, and intended for widgets that are supposed to just be fragments of other widgets" />
                     </div>
-                    <p class="span-6 pushLeft-2 clear-both last mux-info-text" title="... Sorry Guys 2.0! ;)">
+                    <div class="span-4 mux-editable-part">
+                        <h5 title="Miscelanous properties">Misc.</h5>
+                        <mux:SelectList
+                            runat="server"
+                            ToolTip="Positioning within the flow layout of your form for your widget. Normally we strongly suggest using the BluePrint Css grid layout, in floating mode. Meaning, either relative or static positioning, with NO VALUES for left and right, and all positioning done through the CSS classes embedded within BluePrint. Though sometimes you might need absolute positioning, or something. Feel free to apply as much damage as you feel for ;) - PS! Fixed mostly does _not_ work on neither Tablets nor Smart Phones ..."
+                            CssClass="span-4 last"
+                            style="margin-bottom:18px;"
+                            id="position">
+                            <mux:ListItem Text="Select Positioning ..." Value="" />
+                            <mux:ListItem Text="Static" Value="static" />
+                            <mux:ListItem Text="Relative" Value="relative" />
+                            <mux:ListItem Text="Absolute" Value="absolute" />
+                            <mux:ListItem Text="Fixed" Value="fixed" />
+                        </mux:SelectList>
+                    </div>
+                    <p class="span-6 clear-both last mux-info-text" title="... Sorry Guys 2.0! ;)">
                         (*) All units are in pixels ...
                     </p>
                     <mux:Button
@@ -435,24 +449,22 @@
                 <div class="mux-insert">
                     <div class="span-4 mux-editable-part">
                         <h5 title="The Colors for your Widget, both Foreground color [text-color] and background color or image. You can use an Image as an element's 'background' instead of a color">Colors</h5>
-                        <mux:Panel
+                        <mux:Button
                             runat="server"
-                            CssClass="span-3 height-1 texture-panel last"
+                            CssClass="span-4 height-1 texture-panel last"
                             style="padding-top:9px;padding-bottom:9px;"
+                            Text="Text Color"
                             OnClick="fgText_Click"
                             ToolTip="Click to Change Color for Widget"
-                            id="fgText">
-                            Text Color
-                        </mux:Panel>
-                        <mux:Panel
+                            id="fgText" />
+                        <mux:Button
                             runat="server"
-                            CssClass="span-3 height-1 texture-panel last"
+                            CssClass="span-4 height-1 texture-panel last"
+                            Text="BG Color / Image"
                             style="margin-top:18px;padding-top:9px;padding-bottom:9px;"
                             OnClick="bgText_Click"
                             ToolTip="Click to Change Background Color or Background Image for your Widget"
-                            id="bgText">
-                            BG Color / Image
-                        </mux:Panel>
+                            id="bgText" />
                     </div>
                     <div class="span-4 mux-editable-part">
                         <h5 title="Shadow for your Widget">Shadow</h5>
@@ -487,36 +499,33 @@
                             TextMode="Number"
                             CssClass="span-2 last" />
                         </mux:Panel>
-                        <mux:Panel
+                        <mux:Button
                             runat="server"
-                            CssClass="span-3 height-1 texture-panel last"
+                            CssClass="span-4 height-1 texture-panel last"
+                            Text="Shadow Color"
                             style="padding-top:9px;padding-bottom:9px;"
                             OnClick="shadowColor_Click"
                             ToolTip="Click to Change the Shadow Color for your Widget"
-                            id="shadowColor">
-                            Shadow Color
-                        </mux:Panel>
+                            id="shadowColor" />
                     </div>
                     <div class="span-4 mux-editable-part">
                         <h5 title="Gradient Background color settings for your widget, which will come in addition to any images or colors you have previously defined. Meaning, the Gradient will be rendered 'first', and then any other colors and background images will be rendered 'on top of' the gradient, meaning unless your color or image has transparency within, or is completely lacking, then the Gradient won't show">Gradient Background</h5>
-                        <mux:Panel
+                        <mux:Button
                             runat="server"
-                            CssClass="span-3 height-1 texture-panel last"
+                            CssClass="span-4 height-1 texture-panel last"
+                            Text="Start Color"
                             style="padding-top:9px;padding-bottom:9px;margin-bottom:18px;"
                             OnClick="gradientStart_Click"
                             ToolTip="Click to Change starting color for your Gradient"
-                            id="gradientStart">
-                            Start Color
-                        </mux:Panel>
-                        <mux:Panel
+                            id="gradientStart" />
+                        <mux:Button
                             runat="server"
-                            CssClass="span-3 height-1 texture-panel last"
+                            CssClass="span-4 height-1 texture-panel last"
+                            Text="End Color"
                             style="padding-top:9px;padding-bottom:9px;"
                             OnClick="gradientStop_Click"
                             ToolTip="Click to Change ending color for your Gradient"
-                            id="gradientStop">
-                            End Color
-                        </mux:Panel>
+                            id="gradientStop" />
                     </div>
                     <div class="span-4 mux-editable-part">
                         <h5 title="Rounded corners. All values here are 'radius' values, and will basically create rounded corners on your widget. Magix allows for setting the Radius Property for all four different corners to different values, which might create some nifty opportunities for the creative soul ... ;)">Rounded Corners</h5>
