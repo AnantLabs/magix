@@ -399,6 +399,9 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["ForcedSize"]["height"].Value = 234;
             }
 
+            if (e.Params.Contains("Top"))
+                node["Top"].Value = e.Params["Top"].Value;
+
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.ConfigureFilters",
                 "child",

@@ -355,8 +355,8 @@ differently than the next person out there! </p>
         /**
          * Level2: Will create a new WebPage being the child of the given 'ID' WebPage
          */
-        [ActiveEvent(Name = "Magix.Publishing.CreateChild")]
-        protected void Magix_Publishing_CreateChild(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.CreateChildWebPage")]
+        protected void Magix_Publishing_CreateChildWebPage(object sender, ActiveEventArgs e)
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
@@ -404,7 +404,7 @@ differently than the next person out there! </p>
 
             node["Caption"].Value = @"Are you CERTAIN ...?";
             node["Text"].Value = string.Format(@"
-<p>Are you sure you wish to delete this Page? This operation is ireversible, and will affect {0} pages</p>",
+<p>Are you sure you wish to delete this Page? This operation is ireversible, and will affect {0} other pages</p>",
                 affectedPages);
             node["OK"]["ID"].Value = o.ID;
             node["OK"]["Event"].Value = "Magix.Publishing.DeletePageObject-Confirmed";

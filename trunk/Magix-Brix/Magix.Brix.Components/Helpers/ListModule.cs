@@ -167,7 +167,9 @@ namespace Magix.Brix.Components
                 node["WhiteListColumns"] = DataSource["WhiteListColumns"];
 
             RaiseSafeEvent(
-                "DBAdmin.Form.ConfigureFilterForColumn",
+                DataSource.Contains("ConfigureFiltersEvent") ? 
+                    DataSource["ConfigureFiltersEvent"].Get<string>() : 
+                    "DBAdmin.Form.ConfigureFilterForColumn",
                 node);
         }
 
