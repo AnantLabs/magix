@@ -1287,6 +1287,7 @@ focus, or clicking the widget with his mouse or touch screen";
             node["SetFocus"].Value = true;
             node["SelectEvent"].Value = "Magix.MetaForms.ActionWasSelected";
             node["SelectEvent"]["NodeID"].Value = e.Params["PropertyID"].Get<int>();
+            node["ConfigureFiltersEvent"].Value = "Magix.MetaForms.ConfigureFilterForColumns";
 
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";
@@ -1304,6 +1305,24 @@ focus, or clicking the widget with his mouse or touch screen";
                 node);
         }
 
+        /**
+         * Level2: Ads up Top=20 and nothing more before it forwards to
+         * 'DBAdmin.Form.ConfigureFilterForColumn'
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.ConfigureFilterForColumns")]
+        protected void Magix_MetaForms_ConfigureFilterForColumns(object sender, ActiveEventArgs e)
+        {
+            e.Params["Top"].Value = 20;
+
+            RaiseEvent(
+                "DBAdmin.Form.ConfigureFilterForColumn",
+                e.Params);
+        }
+
+        /**
+         * Level2: Will append the given 'ID' Action into the given 'ParentPropertyName' Event name
+         * and save the MetaForm.Node
+         */
         [ActiveEvent(Name = "Magix.MetaForms.ActionWasSelected")]
         protected void Magix_MetaForms_ActionWasSelected(object sender, ActiveEventArgs e)
         {
@@ -1354,8 +1373,10 @@ focus, or clicking the widget with his mouse or touch screen";
             foreach (MetaForm idx in MetaForm.Select(Criteria.Sort("Created", false)))
             {
                 ListItem it = new ListItem(idx.Name, idx.Name);
+
                 if (idx.Name == e.Params["Value"].Get<string>())
                     it.Selected = true;
+
                 ls.Items.Add(it);
             }
         }

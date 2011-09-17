@@ -306,7 +306,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             node["ID"].Value = DataSource["ID"].Get<int>();
 
             RaiseEvent(
-                "Magix.Publishing.CreateChild",
+                "Magix.Publishing.CreateChildWebPage",
                 node);
         }
 
