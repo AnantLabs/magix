@@ -12,6 +12,8 @@ using Magix.Brix.Data;
 using Magix.UX.Widgets;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using System.IO;
+using Magix.UX.Widgets.Core;
+using System.Reflection;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaForms
 {
@@ -265,6 +267,36 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             CreateRadioButton(e);
             CreateCalendar(e);
             CreatePanel(e);
+            CreateRepeater(e);
+        }
+
+        private void CreateRepeater(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Repeater"]["Name"].Value = "Repeater";
+            e.Params["Controls"]["Repeater"]["TypeName"].Value = "Magix.MetaForms.Plugins.Repeater";
+            e.Params["Controls"]["Repeater"]["HasSurface"].Value = true;
+            e.Params["Controls"]["Repeater"]["List"].Value = true;
+            e.Params["Controls"]["Repeater"]["ToolTip"].Value = @"Creates a Repeater type of 
+control, which you can use for conveying information which are lists or similar. Utilizing the 
+repeater, you can for instance create your own Data Grids to display lists of information or objects. The 
+Widgets you add to a Repeater should first of all _NOT_ have ID values, secondly they will not render 
+as one widget, but in fact rather be used as a template for repeating whatever DataSource you have 
+databinded your repeater towards such that the number of items in your node structure for 
+the node you DataBind your repeater towards, will define how many times the repeater will repeat itself, 
+rendering every single control you have asked it to to n times. To understand Repeaters, it is crucial that 
+you understand the Eval DataBind method of Magix";
+
+            GetCommonEventsAndProperties(e, "Repeater", true);
+
+            e.Params["Controls"]["Repeater"]["Properties"]["Tag"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Repeater"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
+will be rendered by the widget. There are many legal values for this property, some of them are p, 
+div, span, label, li, ul. But also many more. Check up the 
+standard for HTML5 if you would like to wish all its legal values. All normal HTML elements, which does not 
+need special attributes or child elements can really be described by modifying this property accordingly. 
+Also HTML5 types of elements, such as address and section. However, realize that since this is a Repeater, 
+it is expected to repeat its value several times according to how many items you DataBind your Repeater 
+towards. Just thinking out loud here ... ;)";
         }
 
         private void CreatePanel(ActiveEventArgs e)
@@ -281,10 +313,10 @@ zoomable elements";
 
             e.Params["Controls"]["Panel"]["Properties"]["Tag"].Value = typeof(string).FullName;
             e.Params["Controls"]["Panel"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
-will be rendered by the control. There are many legal values for this property, some of them are p, 
-div, span, label, li [use panel for ul] and address. But also many more. Check up the 
-standard for HTML5 if you would like to wish all its legal values. All normal HTML elements, which does not 
-need special attributes or child elements can really be described by modifying this property accordingly. 
+will be rendered by the widget. There are many legal values for this property, some of them are p, 
+div, span, label, li, ul and address. But also many more. Check up the 
+standard for HTML5 if you would like to wish all its legal values. All normal HTML elements 
+can really be described by modifying this property accordingly. 
 Also HTML5 types of elements, such as address and section";
         }
 
@@ -967,9 +999,212 @@ focus, or clicking the widget with his mouse or touch screen";
                         e.Params["Control"].Value = btn;
                         e.Params["HasSurface"].Value = true;
                     } break;
+                case "Magix.MetaForms.Plugins.Repeater":
+                    {
+                        Panel btn = new Panel();
+                        btn.CssClass = "span-2 height-2";
+
+                        if (e.Params.Contains("Preview") &&
+                            e.Params["Preview"].Get<bool>())
+                        {
+                            e.Params["List"].Value = true;
+                            btn.Style[Styles.border] = "dashed 1px rgba(0,0,0,.2)";
+                        }
+
+                        e.Params["Control"].Value = btn;
+                        e.Params["HasSurface"].Value = true;
+                        e.Params["CreateChildControlsEvent"].Value = "Magix.MetaForms.CreateRepeaterChildControlCollection";
+                    } break;
                 default:
                     // DO NOTHING. Others might handle ...
                     break;
+            }
+
+            SetProperties(e.Params);
+        }
+
+        private void SetProperties(Node node)
+        {
+            System.Web.UI.Control ctrl = node["Control"].Value as System.Web.UI.Control;
+
+            if (node.Contains("ControlNode") &&
+                node["ControlNode"].Value != null &&
+                (node["ControlNode"].Value as Node).Contains("Properties"))
+            {
+                foreach (Node idx in (node["ControlNode"].Value as Node)["Properties"])
+                {
+                    if (idx.Name == "_ID")
+                        continue;
+
+                    // Skipping 'empty stuff' ...
+                    if (idx.Value == null)
+                        continue;
+
+                    PropertyInfo info = ctrl.GetType().GetProperty(
+                        idx.Name,
+                        System.Reflection.BindingFlags.Instance |
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Public);
+
+                    if (info != null)
+                    {
+                        object tmp = idx.Value;
+
+                        if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
+                        {
+                            switch (info.GetGetMethod(true).ReturnType.FullName)
+                            {
+                                case "System.Boolean":
+                                    tmp = bool.Parse(tmp.ToString());
+                                    break;
+                                case "System.DateTime":
+                                    tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                    break;
+                                case "System.Int32":
+                                    tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                    break;
+                                case "System.Decimal":
+                                    tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                    break;
+                                default:
+                                    if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
+                                        tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
+                                    else
+                                        throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
+                                    break;
+                            }
+                            info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                        }
+                        else
+                            info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                    }
+                }
+            }
+
+            // Only setting ID if it's undefined in properties ...
+            if (string.IsNullOrEmpty(ctrl.ID))
+                ctrl.ID = "ID" + node["_ID"].Value.ToString();
+        }
+
+        /**
+         * Level2: Will databind a Repeater towards the incoming Node structure according to 
+         * how the Repeater is supposed to be DataBinded, which again is according to its Info field.
+         * Will also Databind [obviously!] every Child Widget of your Repeater, and basically 
+         * create as many rows as there are items in your Databinded Node.
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.CreateRepeaterChildControlCollection")]
+        protected void Magix_MetaForms_CreateRepeaterChildControlCollection(object sender, ActiveEventArgs e)
+        {
+            // Yet again, looks stupid, but feels safish ...
+            if (e.Params.Contains("Preview") &&
+                    e.Params["Preview"].Get<bool>())
+            {
+                CreateSingleRepeaterControl(
+                    e.Params.Contains("Preview") ?
+                        e.Params["Preview"].Get<bool>() :
+                        false,
+                    e.Params["Controls"].Value as Node,
+                    e.Params["Control"].Value as System.Web.UI.Control,
+                    e.Params.Contains("OldSelected") ? 
+                        e.Params["OldSelected"].Get<string>() : 
+                        null);
+            }
+            else
+            {
+                // TODO: Implement ...
+            }
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void CreateSingleRepeaterControl(bool preview, Node ctrls, System.Web.UI.Control ctrl, string oldSelected)
+        {
+            foreach (Node idx in ctrls)
+            {
+                if (idx.Name == "_ID")
+                    continue;
+
+                Node nn = new Node();
+
+                nn["TypeName"].Value = idx["TypeName"].Get<string>();
+
+                if (preview)
+                    nn["Preview"].Value = preview;
+
+                nn["ControlNode"].Value = idx;
+                nn["_ID"].Value = idx["_ID"].Value;
+
+                RaiseEvent(
+                    "Magix.MetaForms.CreateControl",
+                    nn);
+
+                nn["ControlNode"].UnTie(); // to be sure ...
+
+                if (nn.Contains("Control"))
+                {
+                    System.Web.UI.Control ct = nn["Control"].Value as System.Web.UI.Control;
+
+                    if (preview && ct is BaseWebControl)
+                    {
+                        BaseWebControl ctr = ct as BaseWebControl;
+
+                        object id = idx["_ID"].Value;
+
+                        ctr.Click +=
+                            delegate
+                            {
+                                Node t = new Node();
+                                t["ID"].Value = id;
+
+                                RaiseEvent(
+                                    "Magix.MetaForms.SetActiveEditingMetaFormWidget",
+                                    t);
+                            };
+                        ctr.Load +=
+                            delegate
+                            {
+                                if (ctr.ClientID == oldSelected &&
+                                    !ctr.CssClass.Contains(" mux-wysiwyg-selected"))
+                                {
+                                    AddSelectedCssClass(ctr);
+                                    ctr.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
+                                }
+                            };
+                        ctr.Style[Styles.position] = "relative";
+                    }
+
+                    ctrl.Controls.Add(ct);
+
+                    if (idx.Contains("Surface"))
+                    {
+                        foreach (Node idx2 in idx["Surface"])
+                        {
+                            if (idx2.Name == "_ID")
+                                continue;
+
+                            CreateSingleRepeaterControl(preview, idx2, ct, oldSelected);
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void AddSelectedCssClass(BaseWebControl ctrl)
+        {
+            if (!ctrl.CssClass.Contains(" mux-wysiwyg-selected"))
+                ctrl.CssClass += " mux-wysiwyg-selected";
+
+            BaseWebControl idx = ctrl.Parent as BaseWebControl;
+            while (idx != null && idx.ID != "ctrls")
+            {
+                if (!idx.CssClass.Contains(" mux-wysiwyg-selected"))
+                    idx.CssClass += " mux-wysiwyg-selected";
+
+                idx = idx.Parent as BaseWebControl;
             }
         }
 
@@ -1037,6 +1272,11 @@ focus, or clicking the widget with his mouse or touch screen";
                 MetaForm.Node nn = FindNodeByID(f.Form, e.Params["ControlID"].Get<int>());
                 string val = null;
                 string typeName = null;
+                if (e.Params["PropertyName"].Get<string>() == "ID")
+                {
+                    // Need to signalize a re-render, and de-select need back to caller ...
+                    e.Params["ReRender"].Value = true;
+                }
                 switch (e.Params["Value"].Value.GetType().ToString())
                 {
                     case "System.String":

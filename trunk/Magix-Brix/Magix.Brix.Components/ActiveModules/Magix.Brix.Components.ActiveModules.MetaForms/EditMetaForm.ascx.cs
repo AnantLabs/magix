@@ -185,6 +185,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             {
                 foreach (Node idx in DataSource["root"]["Surface"])
                 {
+                    if (idx.Name == "_ID")
+                        continue;
+
                     CreateSingleControl(idx, ctrls);
                 }
             }
@@ -196,10 +199,17 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             nn["TypeName"].Value = node["TypeName"].Get<string>();
             nn["Preview"].Value = true;
+            nn["ControlNode"].Value = node;
+            nn["_ID"].Value = node["_ID"].Value;
+
+            if (!string.IsNullOrEmpty(OldSelected))
+                nn["OldSelected"].Value = OldSelected;
 
             RaiseSafeEvent(
                 "Magix.MetaForms.CreateControl",
                 nn);
+
+            nn["ControlNode"].UnTie(); // to be sure ....
 
             if (nn.Contains("Control"))
             {
@@ -213,62 +223,34 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     // Child controls
                     if (node.Contains("Surface"))
                     {
-                        foreach (Node idx in node["Surface"])
+                        if (nn.Contains("CreateChildControlsEvent"))
                         {
-                            CreateSingleControl(idx, ctrl);
+                            Node tmp = new Node();
+
+                            // Yup, looks stupidish, but feel very safe ... ;)
+                            tmp["Controls"].Value = node["Surface"];
+                            tmp["Control"].Value = ctrl;
+                            tmp["Preview"].Value = true;
+                            if (!string.IsNullOrEmpty(OldSelected))
+                                tmp["OldSelected"].Value = OldSelected;
+
+                            RaiseEvent( // No safe here, if this one fucks up, we're fucked ... !!
+                                nn["CreateChildControlsEvent"].Get<string>(),
+                                tmp);
                         }
-                    }
-                }
-
-                // Properties
-                if (node.Contains("Properties"))
-                {
-                    foreach (Node idx in node["Properties"])
-                    {
-                        // Skipping 'empty stuff' ...
-                        if (idx.Value == null)
-                            continue;
-
-                        PropertyInfo info = ctrl.GetType().GetProperty(
-                            idx.Name,
-                            System.Reflection.BindingFlags.Instance |
-                            System.Reflection.BindingFlags.NonPublic |
-                            System.Reflection.BindingFlags.Public);
-
-                        if (info != null)
+                        else
                         {
-                            object tmp = idx.Value;
-
-                            if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
+                            foreach (Node idx in node["Surface"])
                             {
-                                switch (info.GetGetMethod(true).ReturnType.FullName)
-                                {
-                                    case "System.Boolean":
-                                        tmp = bool.Parse(tmp.ToString());
-                                        break;
-                                    case "System.DateTime":
-                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Int32":
-                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Decimal":
-                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    default:
-                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
-                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
-                                        else
-                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
-                                        break;
-                                }
-                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                                if (idx.Name == "_ID")
+                                    continue;
+
+                                CreateSingleControl(idx, ctrl);
                             }
-                            else
-                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
                         }
                     }
                 }
+
                 ctrl.Load +=
                     delegate
                     {
@@ -282,7 +264,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 ctrl.Click +=
                     delegate
                     {
-                        Control tmp = ctrl;
                         SetActiveControl(node);
                     };
                 ctrl.Style[Styles.position] = "relative";
@@ -301,9 +282,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 // Making sure we're rendering the styles needed ...
                 RenderStyles(ctrl, node);
-
-                if (string.IsNullOrEmpty(ctrl.ID))
-                    ctrl.ID = "ID" + node["_ID"].Value.ToString();
 
                 parent.Controls.Add(ctrl);
             }
@@ -371,8 +349,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 RemoveActiveCssClass(c);
                 c.ToolTip = "Click me to edit the Widget";
                 OldSelected = null;
-                if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
-                    ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
             }
 
             ClearPropertyWindow();
@@ -416,8 +392,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 propHeader.Visible = ctrlType["Properties"].Count > 0;
                 eventHeader.Visible = ctrlType["Events"].Count > 0;
-                if (ctrls.CssClass.IndexOf(" mux-control-selected") == -1)
-                    ctrls.CssClass += " mux-control-selected";
 
                 // Shortcut buttons ...
                 if (ctrlType.Contains("ShortCuts"))
@@ -430,8 +404,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             else
             {
                 desc.Style[Styles.height] = "0";
-                if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
-                    ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
             }
             selWidg.SetSelectedItemAccordingToValue(node["_ID"].Value.ToString());
 
@@ -498,9 +470,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 ctrls.Controls.Clear();
                 CreateFormControls();
                 ctrls.ReRender();
-
-                if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
-                    ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
+                CreateSelectWidgetSelectList();
             }
         }
 
@@ -590,8 +560,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
             OldSelected = null;
             ClearPropertyWindow();
-            if (ctrls.CssClass.IndexOf(" mux-control-selected") != -1)
-                ctrls.CssClass = ctrls.CssClass.Replace(" mux-control-selected", "");
 
             SetFormActive();
         }
@@ -704,6 +672,13 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             RaiseSafeEvent(
                 "Magix.MetaForms.ChangeFormPropertyValue",
                 node);
+            if (node.Contains("ReRender") &&
+                node["ReRender"].Get<bool>())
+            {
+                // Oops ...!
+                OldSelected = null;
+                ClearPropertyWindow();
+            }
 
             RaiseSafeEvent(
                 "Magix.MetaForms.GetControlsForForm",
@@ -796,7 +771,19 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 if (hasSurface)
                     node["ParentControl"].Value = OldSelected.Substring(OldSelected.LastIndexOf("_ID") + 3);
                 else
-                    node["ParentControl"].Value = null; // Meaning the 'Root Node' will be the parent control
+                {
+                    // Finding first surface upwards in hierarchy ...
+                    Node x = tp.Parent;
+                    while (x != null)
+                    {
+                        if (x.Name == "Surface")
+                        {
+                            node["ParentControl"].Value = x.Parent["_ID"].Value;
+                            break;
+                        }
+                        x = x.Parent;
+                    }
+                }
 
                 node["HasSurface"].Value = true;
             }
@@ -981,6 +968,20 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 eventRep.DataBind();
                 eventWrp.ReRender();
             }
+        }
+
+        /**
+         * Level2: Sets the currently active editing Widget to the given 'ID'
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.SetActiveEditingMetaFormWidget")]
+        protected void Magix_MetaForms_SetActiveEditingMetaFormWidget(object sender, ActiveEventArgs e)
+        {
+            SetActiveControl(DataSource["root"]["Surface"].Find(
+                delegate(Node idx)
+                {
+                    return idx.Name == "_ID" &&
+                        idx.Get<int>() == e.Params["ID"].Get<int>();
+                }).Parent);
         }
     }
 }
