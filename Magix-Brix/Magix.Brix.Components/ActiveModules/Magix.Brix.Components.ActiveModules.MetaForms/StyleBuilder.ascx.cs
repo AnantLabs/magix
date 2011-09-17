@@ -114,6 +114,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 Node nn = new Node();
 
                 nn["TypeName"].Value = DataSource["TypeName"].Get<string>();
+                nn["_ID"].Value = DataSource["ID"].Value;
 
                 RaiseSafeEvent(
                     "Magix.MetaForms.CreateControl",
