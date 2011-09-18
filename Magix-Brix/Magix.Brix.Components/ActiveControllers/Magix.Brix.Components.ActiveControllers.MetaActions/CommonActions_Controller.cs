@@ -56,6 +56,23 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 e.Params["Value"].Get<string>());
         }
 
+        /**
+         * Level2: Will return objects of given 'TypeName' back to caller as 'Objects' with
+         * every instance within 'Objects' will contain one 'ID' node, and another node
+         * called 'Properties' which will contain values for every Property within that
+         * object within a flat hierarchy
+         */
+        [ActiveEvent(Name = "Magix.Common.GetActiveTypeObjects")]
+        protected void Magix_Common_GetActiveTypeObjects(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                "DBAdmin.Data.GetContentsOfClass",
+                e.Params);
+        }
+
+        /**
+         * Level2: Will scroll the Client browser all the way back to the top
+         */
         [ActiveEvent(Name = "Magix.MetaView.ScrollClientToTop")]
         protected void Magix_MetaView_ScrollClientToTop(object sender, ActiveEventArgs e)
         {

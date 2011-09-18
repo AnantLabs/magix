@@ -14,6 +14,7 @@ using Magix.UX.Widgets.Core;
 using Magix.Brix.Publishing.Common;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Magix.Brix.Components.ActiveModules.MetaForms
 {
@@ -38,8 +39,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     RaiseSafeEvent(
                         "Magix.MetaForms.GetControlsForForm",
                         DataSource);
-
-                    ExecuteInitActions();
                 };
         }
 
@@ -54,9 +53,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             DataSource["ActionsToExecute"].Value = actions;
 
-            RaiseSafeEvent(
-                "Magix.MetaForms.RaiseActionsFromActionString",
-                DataSource);
+            ExecuteSafely(
+                delegate
+                {
+                    RaiseEvent(
+                        "Magix.MetaForms.RaiseActionsFromActionString",
+                        DataSource);
+                },
+                "Something went wrong while running your InitialLoading actions ...");
 
             DataSource["ActionsToExecute"].UnTie();
         }
@@ -65,6 +69,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             base.OnLoad(e);
             CreateFormControls();
+            if (FirstLoad)
+                ExecuteInitActions();
         }
 
         private void CreateFormControls()
@@ -72,13 +78,18 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (DataSource.Contains("root") &&
                 DataSource["root"].Contains("Surface"))
             {
-                foreach (Node idx in DataSource["root"]["Surface"])
-                {
-                    if (idx.Name == "_ID")
-                        continue;
+                ExecuteSafely(
+                    delegate
+                    {
+                        foreach (Node idx in DataSource["root"]["Surface"])
+                        {
+                            if (idx.Name == "_ID")
+                                continue;
 
-                    CreateSingleControl(idx, ctrls);
-                }
+                            CreateSingleControl(idx, ctrls);
+                        }
+                    },
+                    "Something went wrong while trying to create one of your Form Widgets, hence entire operation was aborted");
             }
         }
 
@@ -87,8 +98,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             Node nn = new Node();
 
             nn["TypeName"].Value = node["TypeName"].Get<string>();
+            nn["ControlNode"].Value = node;
+            nn["_ID"].Value = node["_ID"].Value;
 
-            RaiseSafeEvent(
+            RaiseEvent(
                 "Magix.MetaForms.CreateControl",
                 nn);
 
@@ -99,11 +112,32 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 // Child controls
                 if (node.Contains("Surface"))
                 {
-                    foreach (Node idx in node["Surface"])
+                    if (nn.Contains("CreateChildControlsEvent"))
                     {
-                        if (idx.Name == "_ID")
-                            continue;
-                        CreateSingleControl(idx, ctrl);
+                        // Listable control type ...
+                        Node tmp = new Node();
+
+                        // Yup, looks stupidish, but feel very safe ... ;)
+                        tmp["Controls"].Value = node["Surface"];
+                        tmp["Control"].Value = ctrl;
+                        if (node.Contains("Properties") &&
+                            node["Properties"].Contains("Info"))
+                        {
+                            tmp["DataSource"].Value = GetObjectFromExpression(node["Properties"]["Info"].Get<string>(), false);
+                        }
+
+                        RaiseEvent( // No safe here, if this one fucks up, we're fucked ... !!
+                            nn["CreateChildControlsEvent"].Get<string>(),
+                            tmp);
+                    }
+                    else
+                    {
+                        foreach (Node idx in node["Surface"])
+                        {
+                            if (idx.Name == "_ID")
+                                continue;
+                            CreateSingleControl(idx, ctrl);
+                        }
                     }
                 }
 
@@ -290,6 +324,189 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             get { return ViewState["MetaFormName"] as string; }
             set { ViewState["MetaFormName"] = value; }
+        }
+
+        /**
+         * Level2: Will DataBind every Widget of your MetaForm such that every Widget property which 
+         * starts with 'DataSource' and then any number of square brackets, e.g. 
+         * DataSource["Objects"][0]["ID"] will
+         * then fetch the first Node child of 'Objects' node from your DataSource and databind whatever 
+         * property you are putting this value into
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.DataBindForm")]
+        protected void Magix_MetaForms_DataBindForm(object sender, ActiveEventArgs e)
+        {
+            ctrls.Controls.Clear();
+            CreateFormControls();
+            ctrls.ReRender();
+
+            DataBindHardLinkedProperties();
+        }
+
+        /*
+         * Helper for above, will databind all expressions starting with 'DataSource', as in all the 
+         * non-relative ones, or 'static ones' ...
+         */
+        private void DataBindHardLinkedProperties()
+        {
+            // First the 'hard linked' ones ...
+            DataSource["root"].Find(
+                delegate(Node idx)
+                {
+                    if (idx.Parent.Name == "Properties" &&
+                        idx.Name != "_ID" &&
+                        idx.Value != null &&
+                        idx.Value.ToString().StartsWith("DataSource"))
+                    {
+                        // Only 'non-relative' data bindings ... [relative ones starts with a '[' ... ]
+                        int id = (int)idx.Parent.Parent["_ID"].Value;
+                        Control c = Selector.FindControl<Control>(ctrls, "ID" + id);
+
+                        if (c != null)
+                        {
+                            PropertyInfo prop = c.GetType().GetProperty(idx.Name,
+                                BindingFlags.Instance |
+                                BindingFlags.NonPublic |
+                                BindingFlags.Public);
+
+                            if (prop != null)
+                            {
+                                Type toConvert = prop.PropertyType;
+                                object val = GetExpression(idx.Value as string);
+                                switch (toConvert.FullName)
+                                {
+                                    case "System.String":
+                                        val = val.ToString();
+                                        break;
+                                    case "System.Boolean":
+                                        val = bool.Parse(val.ToString());
+                                        break;
+                                    case "System.DateTime":
+                                        val = DateTime.ParseExact(val.ToString(), "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Decimal":
+                                        val = Decimal.Parse(val.ToString(), CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Int":
+                                        val = int.Parse(val.ToString(), CultureInfo.InvariantCulture);
+                                        break;
+                                }
+                                if (val != null)
+                                {
+                                    prop.GetSetMethod(true).Invoke(c, new object[] { val });
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                });
+        }
+
+        /*
+         * Takes in e.g. DataSource[Object].Name or DataSource[Object][0].Value and returns a
+         * string representation of that expression [invariant culture, ISO standardish ...]
+         */
+        private string GetExpression(string expr)
+        {
+            if (expr == null)
+                return null;
+
+            object p = GetObjectFromExpression(expr, true);
+
+            switch (p.GetType().FullName)
+            {
+                case "System.String":
+                    return p.ToString();
+                case "System.Boolean":
+                    return p.ToString();
+                case "System.DateTime":
+                    return ((DateTime)p).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                case "System.Decimal":
+                    return ((decimal)p).ToString(CultureInfo.InvariantCulture);
+                case "System.Int32":
+                    return ((int)p).ToString(CultureInfo.InvariantCulture);
+                default:
+                    return expr; // 
+            }
+        }
+
+        /*
+         * Helper for above, will return either the Name, Value or Node itself as an object to caller [above]
+         * according to how the expressions looks like, e.g. DataSource[Objects].Value
+         */
+        private object GetObjectFromExpression(string expr, bool doThrow)
+        {
+            if (expr.StartsWith("DataSource"))
+            {
+                // 'Static' value, not 'relative' ...
+                // Scanning forwards from after 'DataSource' ...
+                Node x = DataSource;
+                bool isInside = false;
+                string bufferNodeName = null;
+                string lastEntity = null;
+                for (int idx = 10; idx < expr.Length; idx++)
+                {
+                    char tmp = expr[idx];
+                    if (isInside)
+                    {
+                        if (tmp == ']')
+                        {
+                            lastEntity = "";
+                            if (!x.Contains(bufferNodeName))
+                            {
+                                if (doThrow)
+                                    throw new ArgumentException("Data expression '" + expr + "' doesn't exists in DataSource ...");
+                                return null;
+                            }
+
+                            if (string.IsNullOrEmpty(bufferNodeName))
+                                throw new ArgumentException("Opps, empty node name/index ...");
+
+                            bool allNumber = true;
+                            foreach (char idxC in bufferNodeName)
+                            {
+                                if (("0123456789").IndexOf(idxC) == -1)
+                                {
+                                    allNumber = false;
+                                    break;
+                                }
+                            }
+                            if (allNumber)
+                            {
+                                int intIdx = int.Parse(bufferNodeName);
+                                if (x.Count >= intIdx)
+                                    x = x[intIdx];
+                                return null;
+                            }
+                            else
+                            {
+                                x = x[bufferNodeName];
+                            }
+                            bufferNodeName = "";
+                            isInside = false;
+                            continue;
+                        }
+                        bufferNodeName += tmp;
+                    }
+                    else
+                    {
+                        if (tmp == '[')
+                        {
+                            bufferNodeName = "";
+                            isInside = true;
+                            continue;
+                        }
+                        lastEntity += tmp;
+                    }
+                }
+                if (lastEntity == ".Value")
+                    return x.Value;
+                else if (lastEntity == ".Name")
+                    return x.Name;
+                else if (lastEntity == "")
+                    return x;
+            }
+            return null;
         }
     }
 }

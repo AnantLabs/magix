@@ -58,6 +58,43 @@ top to display some message";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetActiveTypeObjects")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.GetActiveTypeObjects";
+                    a.EventName = "Magix.Common.GetActiveTypeObjects";
+                    a.Description = @"Will return the Active Types of the given fully qualified name 
+'FullTypeName', as list within 'Objects'. Every node within 'Objects' will have an 'ID' property 
+in addition to a 'Properties' property, which will contain every property you are requesting";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "FullTypeName";
+                    m.Value = typeof(MetaObject).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.DataBindForm")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.DataBindForm";
+                    a.EventName = "Magix.MetaForms.DataBindForm";
+                    a.Description = @"Will databind the form, which means it will evaluate 
+every single expression, in every single property of every single widget on the Active Form 
+such that every property that start with DataSource['xxx'] will become evaluated towards the 
+DataSource of your WebForm using its expression. You can use expressions such as 
+DataSource['Objects'][0]['Property'].Name or DataSource['FullTypeName'].Value, etc. 
+The values of those nodes will be attempted converted into whatever the type of the property is 
+according to the standard conversion logic in Magix";
+                    a.StripInput = false;
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.LoadObjectIntoForm")) == 0)
                 {
                     Action a = new Action();
