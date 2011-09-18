@@ -1370,16 +1370,138 @@ focus, or clicking the widget with his mouse or touch screen";
 
                         if (idx.Contains("Surface"))
                         {
-                            foreach (Node idx2 in idx["Surface"])
+                            if (idx.Contains("CreateChildControlsEvent"))
                             {
-                                if (idx2.Name == "_ID")
-                                    continue;
+                                // Listable control type ...
+                                Node tmp = new Node();
 
-                                CreateSingleRepeaterControl(preview, idx2, ct, oldSelected, dataSource);
+                                // Yup, looks stupidish, but feel very safe ... ;)
+                                tmp["Controls"].Value = idx["Surface"];
+                                tmp["Control"].Value = ct;
+                                if (idx.Contains("Properties") &&
+                                    idx["Properties"].Contains("Info"))
+                                {
+                                    tmp["DataSource"].Value = GetObjectFromExpression(idx["Properties"]["Info"].Get<string>(), dataSource);
+                                }
+
+                                RaiseEvent( // No safe here, if this one fucks up, we're fucked ... !!
+                                    nn["CreateChildControlsEvent"].Get<string>(),
+                                    tmp);
+                            }
+                            else
+                            {
+                                foreach (Node idx3 in idx["Surface"])
+                                {
+                                    if (idx3.Name == "_ID")
+                                        continue;
+
+                                    CreateSingleControl(
+                                        preview, 
+                                        idx3, 
+                                        ct, 
+                                        (dataSource == null || dataSource.Count <= idxNo ? null : dataSource[idxNo]), 
+                                        oldSelected);
+                                }
                             }
                         }
                     }
                 }
+            }
+        }
+
+        private void CreateSingleControl(
+            bool preview, 
+            Node node, 
+            System.Web.UI.Control parent, 
+            Node dataSource, 
+            string oldSelected)
+        {
+            Node nn = new Node();
+
+            nn["TypeName"].Value = node["TypeName"].Get<string>();
+            nn["ControlNode"].Value = node;
+            nn["_ID"].Value = node["_ID"].Value;
+            if (dataSource != null)
+                nn["DataSource"].Value = dataSource;
+            if (preview)
+                nn["Preview"].Value = true;
+            if (!string.IsNullOrEmpty(oldSelected))
+                nn["OldSelected"].Value = oldSelected;
+
+            RaiseEvent(
+                "Magix.MetaForms.CreateControl",
+                nn);
+
+            if (nn.Contains("Control"))
+            {
+                System.Web.UI.Control ctrl = nn["Control"].Get<System.Web.UI.Control>();
+
+                if (preview && ctrl is BaseWebControl)
+                {
+                    BaseWebControl ctr = ctrl as BaseWebControl;
+
+                    object id = nn["_ID"].Value;
+
+                    ctr.Click +=
+                        delegate
+                        {
+                            Node t = new Node();
+                            t["ID"].Value = id;
+
+                            RaiseEvent(
+                                "Magix.MetaForms.SetActiveEditingMetaFormWidget",
+                                t);
+                        };
+                    ctr.Load +=
+                        delegate
+                        {
+                            if (ctr.ClientID == oldSelected &&
+                                !ctr.CssClass.Contains(" mux-wysiwyg-selected"))
+                            {
+                                AddSelectedCssClass(ctr);
+                                ctr.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
+                            }
+                        };
+                }
+
+
+                // Child controls
+                if (node.Contains("Surface"))
+                {
+                    if (nn.Contains("CreateChildControlsEvent"))
+                    {
+                        // Listable control type ...
+                        Node tmp = new Node();
+
+                        // Yup, looks stupidish, but feel very safe ... ;)
+                        tmp["Controls"].Value = node["Surface"];
+                        tmp["Control"].Value = ctrl;
+                        if (node.Contains("Properties") &&
+                            node["Properties"].Contains("Info"))
+                        {
+                            tmp["DataSource"].Value = GetObjectFromExpression(node["Properties"]["Info"].Get<string>(), dataSource);
+                        }
+
+                        RaiseEvent( // No safe here, if this one fucks up, we're fucked ... !!
+                            nn["CreateChildControlsEvent"].Get<string>(),
+                            tmp);
+                    }
+                    else
+                    {
+                        foreach (Node idx in node["Surface"])
+                        {
+                            if (idx.Name == "_ID")
+                                continue;
+
+                            CreateSingleControl(preview, idx, ctrl, dataSource, oldSelected);
+                        }
+                    }
+                }
+
+                // Making sure we're rendering the styles needed ...
+                RenderStyles(ctrl as BaseWebControl, node);
+
+                parent.Controls.Add(ctrl);
             }
         }
 
