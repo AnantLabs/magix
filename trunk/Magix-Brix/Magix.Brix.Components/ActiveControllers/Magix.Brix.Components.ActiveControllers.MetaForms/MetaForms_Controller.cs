@@ -288,6 +288,25 @@ you understand the Eval DataBind method of Magix";
 
             GetCommonEventsAndProperties(e, "Repeater", true);
 
+            // The Repeater has a 'unique' type of Info property logic, and hence need its own
+            // more thorough explanation ...
+            e.Params["Controls"]["Repeater"]["Properties"]["Info"]["Description"].Value = @"The Info 
+property is unique when it comes to all List controls, including the Repeater, because it defines 
+which DataSource expression it should use. Valid values includes; DataSource[Objects], 
+DataSource[2][Properties], or relative paths [Actions][3] etc if the Repeater is itself 
+within another Listable type of control. However, the DataBinding expression must 
+return a listable type of collection. Whenever you are dealing with Listable types of controls, then 
+the databinding expressions can become relative. Meaning if they do not start with DataSource, the 
+databinding will occur towards the current index property node of the first listable control upwards in 
+the hierarchy from the control currently being databinded. Example, you are databinding a Repeater 
+with DataSource[Objects] and then have a button databinding its Text value with [Properties][Name].Value. 
+Then the first button, which is the one in your first Repeater row will render with whatever value is 
+in the DataSource[Objects][0][Properties][Name].Value, converted into Text, since the Text property of 
+the Button is of type Text. The second Repeater row will contain the value of DataSource[Objects][1] ... 
+etc ... And you will get one repeater row for every item within DataSource[Objects]. 
+This is true for all Listable Widgets, such as the Repeater";
+
+            
             e.Params["Controls"]["Repeater"]["Properties"]["Tag"].Value = typeof(string).FullName;
             e.Params["Controls"]["Repeater"]["Properties"]["Tag"]["Description"].Value = @"Which HTML tag 
 will be rendered by the widget. There are many legal values for this property, some of them are p, 
@@ -377,7 +396,7 @@ keep it open";
 
             e.Params["Controls"]["RadioButton"]["Properties"]["GroupName"].Value = typeof(string).FullName;
             e.Params["Controls"]["RadioButton"]["Properties"]["GroupName"]["Description"].Value = @"The 
-group of RadioButtons the RadioButton will belong to. If you've got three RadioButtons, and they are 
+group of RadioButtons the RadioButton will belong to. If you have got three RadioButtons, and they are 
 all a part of the same single-selection from multiple choices, then only one of them can be 
 checked at the same time. So checking off one, will uncheck off any previously checked RadioButtons within 
 the same GrouName value";
@@ -650,14 +669,9 @@ the ESC key is clicked and released on the widget";
             }
 
             e.Params["Controls"][typeName]["Properties"]["Info"].Value = typeof(string).FullName;
-            e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional information 
-which can be stored within your object, which is not visible for the end user in any ways, but still 
-will follow your Widget around as a small piece of information storage. Mostly used for figuring out 
-which field your widget has been Data Bound towards within your Meta Object, or what Property 
-it is supposed to create upon creation of a new Meta Object. If you want to create or edit 
-objects of type xxx and you have a field which should be linked towards its yyy property, then 
-you should set the Info field on that Widget to yyy to be able to Automagixally databind your 
-field towards your Meta Object property";
+            e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional 
+information which can be stored within your object, which is not visible for the end user in any 
+ways, but still will follow your Widget around as a small piece of information storage";
 
             // Shortcut buttons ...
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Text"].Value = "Delete!";
@@ -1009,6 +1023,23 @@ focus, or clicking the widget with his mouse or touch screen";
                         {
                             e.Params["List"].Value = true;
                             btn.Style[Styles.border] = "dashed 1px rgba(0,0,0,.2)";
+                            if (e.Params.Contains("ControlNode"))
+                            {
+                                Node c = e.Params["ControlNode"].Value as Node;
+                                if (c.Contains("Properties") &&
+                                    c["Properties"].Contains("Info") &&
+                                    ((c["Properties"]["Info"].Value as string ?? "").StartsWith("DataSource") ||
+                                    (c["Properties"]["Info"].Value as string ?? "").StartsWith("[")))
+                                {
+                                    Label d = new Label();
+                                    d.Style[Styles.position] = "absolute";
+                                    d.Style[Styles.bottom] = "0";
+                                    d.Style[Styles.right] = "0";
+                                    d.Style[Styles.opacity] = ".5";
+                                    d.Text = "data:" + c["Properties"]["Info"].Value as string;
+                                    btn.Controls.Add(d);
+                                }
+                            }
                         }
 
                         e.Params["Control"].Value = btn;
@@ -1021,11 +1052,43 @@ focus, or clicking the widget with his mouse or touch screen";
             }
 
             SetProperties(e.Params);
+
+            // Making sure we're rendering the styles needed ...
+            RenderStyles(e.Params["Control"].Value as BaseWebControl, e.Params);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void RenderStyles(BaseWebControl ctrl, Node node)
+        {
+            if (ctrl == null)
+                return;
+
+            if (!node.Contains("ControlNode"))
+                return;
+
+            node = node["ControlNode"].Value as Node;
+
+            if (node.Contains("Properties") &&
+                node["Properties"].Contains("Style"))
+            {
+                foreach (Node idx in node["Properties"]["Style"])
+                {
+                    if (idx.Name == "_ID")
+                        continue;
+
+                    if (!string.IsNullOrEmpty(idx.Get<string>()))
+                        ctrl.Style[idx.Name] = idx.Get<string>();
+                }
+            }
         }
 
         private void SetProperties(Node node)
         {
             System.Web.UI.Control ctrl = node["Control"].Value as System.Web.UI.Control;
+
+            Node dataSource = node.Contains("DataSource") ? node["DataSource"].Value as Node : null;
 
             if (node.Contains("ControlNode") &&
                 node["ControlNode"].Value != null &&
@@ -1050,10 +1113,16 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         object tmp = idx.Value;
 
+                        if (dataSource != null && tmp is string && (tmp as string).StartsWith("["))
+                            tmp = GetExpression(tmp as string, dataSource);
+
                         if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
                         {
                             switch (info.GetGetMethod(true).ReturnType.FullName)
                             {
+                                case "System.String":
+                                    tmp = tmp.ToString();
+                                    break;
                                 case "System.Boolean":
                                     tmp = bool.Parse(tmp.ToString());
                                     break;
@@ -1086,6 +1155,109 @@ focus, or clicking the widget with his mouse or touch screen";
                 ctrl.ID = "ID" + node["_ID"].Value.ToString();
         }
 
+        private string GetExpression(string expr, Node dataSource)
+        {
+            if (expr == null)
+                return null;
+
+            if (dataSource == null)
+                return null;
+
+            object p = GetObjectFromExpression(expr, dataSource);
+
+            if (p == null)
+                return null;
+
+            switch (p.GetType().FullName)
+            {
+                case "System.String":
+                    return p.ToString();
+                case "System.Boolean":
+                    return p.ToString();
+                case "System.DateTime":
+                    return ((DateTime)p).ToString("yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                case "System.Decimal":
+                    return ((decimal)p).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                case "System.Int32":
+                    return ((int)p).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                default:
+                    return expr; // 
+            }
+        }
+
+        private object GetObjectFromExpression(string expr, Node dataSource)
+        {
+            if (expr.StartsWith("["))
+            {
+                // 'Static' value, not 'relative' ...
+                // Scanning forwards from after 'DataSource' ...
+                Node x = dataSource;
+                bool isInside = false;
+                string bufferNodeName = null;
+                string lastEntity = null;
+                for (int idx = 0; idx < expr.Length; idx++)
+                {
+                    char tmp = expr[idx];
+                    if (isInside)
+                    {
+                        if (tmp == ']')
+                        {
+                            lastEntity = "";
+                            if (!x.Contains(bufferNodeName))
+                            {
+                                return null;
+                            }
+
+                            if (string.IsNullOrEmpty(bufferNodeName))
+                                throw new ArgumentException("Opps, empty node name/index ...");
+
+                            bool allNumber = true;
+                            foreach (char idxC in bufferNodeName)
+                            {
+                                if (("0123456789").IndexOf(idxC) == -1)
+                                {
+                                    allNumber = false;
+                                    break;
+                                }
+                            }
+                            if (allNumber)
+                            {
+                                int intIdx = int.Parse(bufferNodeName);
+                                if (x.Count >= intIdx)
+                                    x = x[intIdx];
+                                return null;
+                            }
+                            else
+                            {
+                                x = x[bufferNodeName];
+                            }
+                            bufferNodeName = "";
+                            isInside = false;
+                            continue;
+                        }
+                        bufferNodeName += tmp;
+                    }
+                    else
+                    {
+                        if (tmp == '[')
+                        {
+                            bufferNodeName = "";
+                            isInside = true;
+                            continue;
+                        }
+                        lastEntity += tmp;
+                    }
+                }
+                if (lastEntity == ".Value")
+                    return x.Value;
+                else if (lastEntity == ".Name")
+                    return x.Name;
+                else if (lastEntity == "")
+                    return x;
+            }
+            return null;
+        }
+
         /**
          * Level2: Will databind a Repeater towards the incoming Node structure according to 
          * how the Repeater is supposed to be DataBinded, which again is according to its Info field.
@@ -1100,90 +1272,111 @@ focus, or clicking the widget with his mouse or touch screen";
                     e.Params["Preview"].Get<bool>())
             {
                 CreateSingleRepeaterControl(
-                    e.Params.Contains("Preview") ?
-                        e.Params["Preview"].Get<bool>() :
-                        false,
+                    true,
                     e.Params["Controls"].Value as Node,
                     e.Params["Control"].Value as System.Web.UI.Control,
                     e.Params.Contains("OldSelected") ? 
                         e.Params["OldSelected"].Get<string>() : 
+                        null,
                         null);
             }
             else
             {
-                // TODO: Implement ...
+                CreateSingleRepeaterControl(
+                    false,
+                    e.Params["Controls"].Value as Node,
+                    e.Params["Control"].Value as System.Web.UI.Control,
+                    null,
+                    e.Params.Contains("DataSource") ? e.Params["DataSource"].Value as Node : null);
             }
         }
 
         /*
          * Helper for above ...
          */
-        private void CreateSingleRepeaterControl(bool preview, Node ctrls, System.Web.UI.Control ctrl, string oldSelected)
+        private void CreateSingleRepeaterControl(
+            bool preview, 
+            Node ctrls, 
+            System.Web.UI.Control ctrl, 
+            string oldSelected,
+            Node dataSource)
         {
-            foreach (Node idx in ctrls)
+            int rows = 0;
+            if (preview)
+                rows = 1;
+            else if (dataSource != null)
+                rows = dataSource.Count;
+
+            for (int idxNo = 0; idxNo < rows; idxNo++)
             {
-                if (idx.Name == "_ID")
-                    continue;
-
-                Node nn = new Node();
-
-                nn["TypeName"].Value = idx["TypeName"].Get<string>();
-
-                if (preview)
-                    nn["Preview"].Value = preview;
-
-                nn["ControlNode"].Value = idx;
-                nn["_ID"].Value = idx["_ID"].Value;
-
-                RaiseEvent(
-                    "Magix.MetaForms.CreateControl",
-                    nn);
-
-                nn["ControlNode"].UnTie(); // to be sure ...
-
-                if (nn.Contains("Control"))
+                foreach (Node idx in ctrls)
                 {
-                    System.Web.UI.Control ct = nn["Control"].Value as System.Web.UI.Control;
+                    if (idx.Name == "_ID")
+                        continue;
 
-                    if (preview && ct is BaseWebControl)
+                    Node nn = new Node();
+
+                    nn["TypeName"].Value = idx["TypeName"].Get<string>();
+
+                    if (preview)
+                        nn["Preview"].Value = preview;
+
+                    nn["ControlNode"].Value = idx;
+                    nn["_ID"].Value = idx["_ID"].Value;
+
+                    if (dataSource != null)
+                        nn["DataSource"].Value = dataSource[idxNo];
+
+                    RaiseEvent(
+                        "Magix.MetaForms.CreateControl",
+                        nn);
+
+                    nn["ControlNode"].UnTie(); // to be sure ...
+
+                    if (nn.Contains("Control"))
                     {
-                        BaseWebControl ctr = ct as BaseWebControl;
+                        System.Web.UI.Control ct = nn["Control"].Value as System.Web.UI.Control;
 
-                        object id = idx["_ID"].Value;
-
-                        ctr.Click +=
-                            delegate
-                            {
-                                Node t = new Node();
-                                t["ID"].Value = id;
-
-                                RaiseEvent(
-                                    "Magix.MetaForms.SetActiveEditingMetaFormWidget",
-                                    t);
-                            };
-                        ctr.Load +=
-                            delegate
-                            {
-                                if (ctr.ClientID == oldSelected &&
-                                    !ctr.CssClass.Contains(" mux-wysiwyg-selected"))
-                                {
-                                    AddSelectedCssClass(ctr);
-                                    ctr.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
-                                }
-                            };
-                        ctr.Style[Styles.position] = "relative";
-                    }
-
-                    ctrl.Controls.Add(ct);
-
-                    if (idx.Contains("Surface"))
-                    {
-                        foreach (Node idx2 in idx["Surface"])
+                        if (preview && ct is BaseWebControl)
                         {
-                            if (idx2.Name == "_ID")
-                                continue;
+                            BaseWebControl ctr = ct as BaseWebControl;
 
-                            CreateSingleRepeaterControl(preview, idx2, ct, oldSelected);
+                            object id = idx["_ID"].Value;
+
+                            ctr.Click +=
+                                delegate
+                                {
+                                    Node t = new Node();
+                                    t["ID"].Value = id;
+
+                                    RaiseEvent(
+                                        "Magix.MetaForms.SetActiveEditingMetaFormWidget",
+                                        t);
+                                };
+                            ctr.Load +=
+                                delegate
+                                {
+                                    if (ctr.ClientID == oldSelected &&
+                                        !ctr.CssClass.Contains(" mux-wysiwyg-selected"))
+                                    {
+                                        AddSelectedCssClass(ctr);
+                                        ctr.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
+                                    }
+                                };
+                            ctr.Style[Styles.position] = "relative";
+                        }
+
+                        ctrl.Controls.Add(ct);
+
+                        if (idx.Contains("Surface"))
+                        {
+                            foreach (Node idx2 in idx["Surface"])
+                            {
+                                if (idx2.Name == "_ID")
+                                    continue;
+
+                                CreateSingleRepeaterControl(preview, idx2, ct, oldSelected, dataSource);
+                            }
                         }
                     }
                 }
