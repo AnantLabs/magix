@@ -15,8 +15,16 @@ using Magix.UX.Effects;
 
 namespace Magix.UX.Widgets
 {
+    /**
+     * Encapsulates a Rating Control, for allowing the end user to choose number of stars, or 1-x 
+     * value of something
+     */
     public class RatingControl : Panel
     {
+        /**
+         * Raised when the user chose to click one of the stars [or other types of objects you are using to signify the value]
+         * Use the Value property to retrieve which value the end user gave the object
+         */
         public event EventHandler Rated;
 
         public RatingControl()
@@ -24,6 +32,9 @@ namespace Magix.UX.Widgets
             CssClass = "mux-rating";
         }
 
+        /**
+         * Maximum number of stars [rating objects]
+         */
         [DefaultValue(5)]
         public int MaxValue
         {
@@ -31,20 +42,29 @@ namespace Magix.UX.Widgets
             set { ViewState["MaxValue"] = value; }
         }
 
-        [DefaultValue(0)]
+        /**
+         * Its value, [1 - MaxValue]
+         */
+        [DefaultValue(1)]
         public int Value
         {
-            get { return ViewState["Value"] == null ? 0 : (int)ViewState["Value"]; }
+            get { return ViewState["Value"] == null ? 1 : (int)ViewState["Value"]; }
             set { ViewState["Value"] = value; }
         }
 
-        [DefaultValue(0)]
+        /**
+         * Will show the average score using different colors if you wish
+         */
+        [DefaultValue(1)]
         public int Average
         {
-            get { return ViewState["Average"] == null ? 0 : (int)ViewState["Average"]; }
+            get { return ViewState["Average"] == null ? 1 : (int)ViewState["Average"]; }
             set { ViewState["Average"] = value; }
         }
 
+        /**
+         * If true [default] the control is enabled, else disabled
+         */
         [DefaultValue(true)]
         public bool Enabled
         {
@@ -52,6 +72,9 @@ namespace Magix.UX.Widgets
             set { ViewState["Enabled"] = value; }
         }
 
+        /**
+         * If true, will show alternative icons for every second star
+         */
         public bool ShowAlternativeIcons
         {
             get { return ViewState["ShowAlternativeIcons"] == null ? true : (bool)ViewState["ShowAlternativeIcons"]; }
@@ -67,32 +90,19 @@ namespace Magix.UX.Widgets
         protected override void CreateChildControls()
         {
             base.CreateChildControls();
+
+            EnsureID();
+
             for (int idx = 0; idx < MaxValue; idx++)
             {
                 Label l = new Label();
-                l.ID = "rat" + idx;
+                l.ID = ID + "x" + idx;
                 l.Info = idx.ToString();
+
                 if (Enabled)
                     l.Click += l_Click;
+
                 Controls.Add(l);
-                if (Enabled)
-                {
-                    l.ClickEffect = new EffectGeneric(
-                        string.Format(@"
-function() {{
-  for(var idx = 0; idx <= {1}; idx++) {{
-    MUX.$('{0}_rat' + idx).addClassName('mux-rating-star-checked');
-    MUX.$('{0}_rat' + idx).removeClassName('mux-rating-star-unchecked');
-  }}
-  for(var idx = {1} + 1; idx < {2}; idx++) {{
-    MUX.$('{0}_rat' + idx).addClassName('mux-rating-star-unchecked');
-    MUX.$('{0}_rat' + idx).removeClassName('mux-rating-star-checked');
-  }}
-}}",
-                        this.ClientID,
-                        idx,
-                        MaxValue));
-                }
             }
         }
 
@@ -100,7 +110,7 @@ function() {{
         {
             Label l = sender as Label;
             int score = int.Parse(l.Info);
-            Value = score;
+            Value = score + 1;
             if (Rated != null)
             {
                 Rated(this, new EventArgs());
@@ -115,43 +125,41 @@ function() {{
 
         private void SetCssClass()
         {
-            if (!this.HasRendered || !AjaxManager.Instance.IsCallback)
+            for (int idx = 0; idx < (MaxValue - 1); idx++)
             {
-                for (int idx = 0; idx < MaxValue; idx++)
+                Label l = Selector.FindControl<Label>(this, ID + "x" + idx);
+                string tmp = "mux-rating-star";
+                if ((Value - 1) >= idx)
                 {
-                    Label l = Selector.FindControl<Label>(this, "rat" + idx);
-                    l.CssClass = "mux-rating-star";
-                    if (Value >= idx)
+                    tmp += " mux-rating-star-checked";
+                }
+                else
+                {
+                    if ((Average - 1) >= idx)
                     {
-                        l.CssClass += " mux-rating-star-checked";
+                        tmp += " mux-rating-star-average";
                     }
                     else
                     {
-                        if (Average >= idx)
-                        {
-                            l.CssClass += " mux-rating-star-average";
-                        }
-                        else
-                        {
-                            l.CssClass += " mux-rating-star-unchecked";
-                        }
-                    }
-                    if (ShowAlternativeIcons)
-                    {
-                        if (idx == 0)
-                        {
-                            l.CssClass += " mux-rating-star-min";
-                        }
-                        else if (idx == MaxValue - 1)
-                        {
-                            l.CssClass += " mux-rating-star-max";
-                        }
-                        else if ((MaxValue - (MaxValue % 2)) / 2 == idx)
-                        {
-                            l.CssClass += " mux-rating-star-mid";
-                        }
+                        tmp += " mux-rating-star-unchecked";
                     }
                 }
+                if (ShowAlternativeIcons)
+                {
+                    if (idx == 0)
+                    {
+                        tmp += " mux-rating-star-min";
+                    }
+                    else if (idx == (MaxValue - 2))
+                    {
+                        tmp += " mux-rating-star-max";
+                    }
+                    else if (((MaxValue - 1) - ((MaxValue - 1) % 2)) / 2 == idx)
+                    {
+                        tmp += " mux-rating-star-mid";
+                    }
+                }
+                l.CssClass = tmp;
             }
         }
     }

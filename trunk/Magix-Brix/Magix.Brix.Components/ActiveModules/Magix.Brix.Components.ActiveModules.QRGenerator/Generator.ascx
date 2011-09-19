@@ -41,27 +41,111 @@
                     DefaultWidget="next1"
                     ID="mpv1">
                     <div class="mux-insert first">
-                        <div class="label">
-                            URL
-                        </div>
-                        <div class="last">
-                            <mux:TextBox
+                        <mux:Panel
+                            runat="server"
+                            style="display:none;"
+                            id="mecardPnl">
+                            <div class="span-7">
+                                Description
+                            </div>
+                            <div class="span-7 last">
+                                Name
+                            </div>
+                            <div class="span-7">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="desc2"
+                                    style="margin-bottom:0;"
+                                    PlaceHolder="Description ..."
+                                    CssClass="span-7 last" />
+                            </div>
+                            <div class="span-7 last">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="name"
+                                    style="margin-bottom:0;"
+                                    PlaceHolder="Full Name ..."
+                                    CssClass="span-7 last" />
+                            </div>
+                            <div class="span-7">
+                                Phone No.
+                            </div>
+                            <div class="span-7 last">
+                                Email
+                            </div>
+                            <div class="span-7">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="phone"
+                                    style="margin-bottom:0;"
+                                    PlaceHolder="Phone ..."
+                                    CssClass="span-7 last" />
+                            </div>
+                            <div class="span-7 last">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="email"
+                                    style="margin-bottom:0;"
+                                    PlaceHolder="Email ..."
+                                    CssClass="span-7 last" />
+                            </div>
+                            <div class="span-7">
+                                WebSite
+                            </div>
+                            <div class="span-7 last">
+                                Address
+                            </div>
+                            <div class="span-7">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="website"
+                                    PlaceHolder="URL ..."
+                                    CssClass="span-7 last" />
+                            </div>
+                            <div class="span-7 last">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="address"
+                                    PlaceHolder="Address ..."
+                                    CssClass="span-7 last" />
+                            </div>
+                            <mux:LinkButton
                                 runat="server"
-                                id="url"
-                                CssClass="span-12 last"
-                                Text="http://code.google.com/p/magix" />
-                        </div>
-                        <div class="label">
-                            Description
-                        </div>
-                        <div class="last">
-                            <mux:TextBox
-                                runat="server"
-                                id="description"
-                                CssClass="span-12 last"
-                                style="margin-bottom:54px;"
-                                Text="Magix!" />
-                        </div>
+                                id="urlGo"
+                                CssClass="span-5"
+                                OnClick="urlGo_Click"
+                                Text="URL ..." />
+                        </mux:Panel>
+                        <mux:Panel
+                            runat="server"
+                            id="urlPnl">
+                            <div class="label">
+                                URL
+                            </div>
+                            <div class="last">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="url"
+                                    CssClass="span-12 last"
+                                    Text="http://code.google.com/p/magix" />
+                            </div>
+                            <div class="label">
+                                Description
+                            </div>
+                            <div class="last">
+                                <mux:TextBox
+                                    runat="server"
+                                    id="description"
+                                    CssClass="span-12 last"
+                                    Text="Magix!" />
+                                <mux:LinkButton
+                                    runat="server"
+                                    id="vCard"
+                                    style="margin-bottom:36px;"
+                                    OnClick="vCard_Click"
+                                    Text="MECARD ..." />
+                            </div>
+                        </mux:Panel>
                         <mux:Button
                             runat="server"
                             id="next1"
