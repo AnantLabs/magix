@@ -298,6 +298,7 @@ namespace Magix.UX.Widgets
             switch (HttpContext.Current.Request.Browser.Browser.ToLower())
             {
                 case "webkit":
+                case "applewebkit":
                 case "safari":
                 case "chrome":
                 case "applemac-safari":

@@ -42,6 +42,16 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
         protected TabButton mb2;
         protected TabButton mb3;
 
+        protected Panel urlPnl;
+        protected Panel mecardPnl;
+
+        protected TextBox desc2;
+        protected TextBox name;
+        protected TextBox phone;
+        protected TextBox email;
+        protected TextBox website;
+        protected TextBox address;
+
         public override void InitialLoading(Node node)
         {
             base.InitialLoading(node);
@@ -169,6 +179,24 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
             }
         }
 
+        protected void vCard_Click(object sender, EventArgs e)
+        {
+            new EffectFadeOut(urlPnl, 250)
+                .ChainThese(
+                    new EffectFadeIn(mecardPnl, 250),
+                    new EffectFocusAndSelect(desc2))
+                .Render();
+        }
+
+        protected void urlGo_Click(object sender, EventArgs e)
+        {
+            new EffectFadeOut(mecardPnl, 250)
+                .ChainThese(
+                    new EffectFadeIn(urlPnl, 250),
+                    new EffectFocusAndSelect(description))
+                .Render();
+        }
+
         protected void next1_Click(object sender, EventArgs e)
         {
             mp.SetActiveView(1);
@@ -226,8 +254,22 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
         {
             DataSource["Scale"].Value = 5;
             DataSource["ErrCor"].Value = "Q";
-            DataSource["URL"].Value = url.Text;
-            DataSource["Text"].Value = description.Text;
+            if (urlPnl.Style[Styles.display] != "none")
+            {
+                DataSource["URL"].Value = url.Text;
+            }
+            else
+            {
+                // MECard ...
+                string text = string.Format(@"MECARD:N:{0};TEL:{1};EMAIL:{2};URL:{3};ADR:{4};",
+                    name.Text,
+                    phone.Text,
+                    email.Text,
+                    website.Text,
+                    address.Text);
+                DataSource["URL"].Value = text;
+                DataSource["Text"].Value = desc2.Text;
+            }
             if (borderRadius.Text.Length > 0)
                 DataSource["RoundedCorners"].Value = int.Parse(borderRadius.Text);
             else

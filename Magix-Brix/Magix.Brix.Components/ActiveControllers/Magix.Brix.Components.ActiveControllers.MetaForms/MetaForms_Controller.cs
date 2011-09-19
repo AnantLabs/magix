@@ -268,6 +268,44 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             CreateCalendar(e);
             CreatePanel(e);
             CreateRepeater(e);
+            CreateStars(e);
+        }
+
+        private void CreateStars(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Stars"]["Name"].Value = "Stars";
+            e.Params["Controls"]["Stars"]["TypeName"].Value = "Magix.MetaForms.Plugins.Stars";
+            e.Params["Controls"]["Stars"]["ToolTip"].Value = @"Creates a Stars type of 
+control, which you can use for collecting rating information from your end user";
+
+            GetCommonEventsAndProperties(e, "Stars", true);
+
+            e.Params["Controls"]["Stars"]["Properties"]["Value"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["Value"]["Description"].Value = @"The 
+value of the Stars Widget. The value of the Value property cannot be higher then the MaxValue property 
+of your widget";
+
+            e.Params["Controls"]["Stars"]["Properties"]["MaxValue"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["MaxValue"]["Description"].Value = @"The 
+maximum legal value of the Stars Widget";
+
+            e.Params["Controls"]["Stars"]["Properties"]["ShowAlternativeIcons"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["ShowAlternativeIcons"]["Description"].Value = @"if true, 
+will render alternative icons CSS classes every second star icon";
+
+            e.Params["Controls"]["Stars"]["Properties"]["Average"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["Average"]["Description"].Value = @"The 
+average value of the Stars Widget";
+
+            e.Params["Controls"]["Stars"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["Enabled"]["Default"].Value = true;
+            e.Params["Controls"]["Stars"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
+will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
+any ways by the end user";
+
+            e.Params["Controls"]["Stars"]["Events"]["Rated"].Value = true;
+            e.Params["Controls"]["Stars"]["Events"]["Rated"]["Description"].Value = @"Raised when 
+the user chose to click one of your stars [rating images] to give it a new value";
         }
 
         private void CreateRepeater(ActiveEventArgs e)
@@ -284,7 +322,8 @@ as one widget, but in fact rather be used as a template for repeating whatever D
 databinded your repeater towards such that the number of items in your node structure for 
 the node you DataBind your repeater towards, will define how many times the repeater will repeat itself, 
 rendering every single control you have asked it to to n times. To understand Repeaters, it is crucial that 
-you understand the Eval DataBind method of Magix";
+you understand the DataSource property of your Modules [Meta Forms e.g.] and understand how to fetch objects, or 
+create lists of Nodes somehow which you can DataBind the repeater towards";
 
             GetCommonEventsAndProperties(e, "Repeater", true);
 
@@ -1028,8 +1067,8 @@ focus, or clicking the widget with his mouse or touch screen";
                                 Node c = e.Params["ControlNode"].Value as Node;
                                 if (c.Contains("Properties") &&
                                     c["Properties"].Contains("Info") &&
-                                    ((c["Properties"]["Info"].Value as string ?? "").StartsWith("DataSource") ||
-                                    (c["Properties"]["Info"].Value as string ?? "").StartsWith("[")))
+                                    ((c["Properties"]["Info"].Value as string ?? "").StartsWith("{DataSource") ||
+                                    (c["Properties"]["Info"].Value as string ?? "").StartsWith("{[")))
                                 {
                                     Label d = new Label();
                                     d.Style[Styles.position] = "absolute";
@@ -1046,6 +1085,12 @@ focus, or clicking the widget with his mouse or touch screen";
                         e.Params["HasSurface"].Value = true;
                         e.Params["CreateChildControlsEvent"].Value = "Magix.MetaForms.CreateRepeaterChildControlCollection";
                     } break;
+                case "Magix.MetaForms.Plugins.Stars":
+                    {
+                        RatingControl btn = new RatingControl();
+
+                        e.Params["Control"].Value = btn;
+                    } break;
                 default:
                     // DO NOTHING. Others might handle ...
                     break;
@@ -1053,8 +1098,96 @@ focus, or clicking the widget with his mouse or touch screen";
 
             SetProperties(e.Params);
 
+            if (!e.Params.Contains("Preview") ||
+                !e.Params["Preview"].Get<bool>())
+            {
+                SetActions(e.Params);
+            }
+
             // Making sure we're rendering the styles needed ...
             RenderStyles(e.Params["Control"].Value as BaseWebControl, e.Params);
+        }
+
+        /*
+         * Helper for above
+         */
+        private class ActionWrapper
+        {
+            public string EventName;
+            public Node DataSource;
+            public string Actions;
+
+            protected void RaiseActions(object sender, EventArgs e)
+            {
+                DataSource["ActionsToExecute"].Value = Actions;
+
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    sender,
+                    "Magix.MetaForms.RaiseActionsFromActionString",
+                    DataSource);
+
+                DataSource["ActionsToExecute"].UnTie();
+            }
+        }
+
+        /*
+         * Helper for above
+         */
+        private void SetActions(Node node)
+        {
+            System.Web.UI.Control ctrl = node["Control"].Value as System.Web.UI.Control;
+
+            Node dataSource = node.Contains("DataSource") ? node["DataSource"].Value as Node : null;
+
+            // Actions ...
+            if (node.Contains("ControlNode") && (node["ControlNode"].Value as Node).Contains("Actions"))
+            {
+                foreach (Node idx in node["ControlNode"].Get<Node>()["Actions"])
+                {
+                    // Skipping 'empty stuff' ...
+                    if (idx.Value == null)
+                        continue;
+
+                    if (idx.Name == "_ID")
+                        continue;
+
+                    if (idx.Value is string && (idx.Value as string) == string.Empty)
+                        continue;
+
+                    EventInfo info = ctrl.GetType().GetEvent(
+                        idx.Name,
+                        System.Reflection.BindingFlags.Instance |
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Public);
+
+                    if (info != null)
+                    {
+                        // Helper logic to keep event name for being able to do 
+                        // lookup into action lists according to control and event name ...
+                        ActionWrapper wrp = new ActionWrapper();
+                        wrp.EventName = idx.Name;
+                        wrp.Actions = idx.Value.ToString();
+                        wrp.DataSource = node;
+
+                        MethodInfo method =
+                            typeof(ActionWrapper)
+                                .GetMethod(
+                                    "RaiseActions",
+                                    BindingFlags.NonPublic |
+                                    BindingFlags.Instance |
+                                    BindingFlags.FlattenHierarchy);
+
+                        Delegate del = Delegate.CreateDelegate(
+                            info.EventHandlerType,
+                            wrp,
+                            method);
+
+                        info.AddEventHandler(
+                            ctrl,
+                            del);
+                    }
+                }
+            }
         }
 
         /*
@@ -1113,36 +1246,52 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         object tmp = idx.Value;
 
-                        if (dataSource != null && tmp is string && (tmp as string).StartsWith("["))
+                        if (dataSource != null &&
+                            tmp is string &&
+                            (tmp as string).StartsWith("{"))
+                        {
                             tmp = GetExpression(tmp as string, dataSource);
+                        }
 
                         if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
                         {
-                            switch (info.GetGetMethod(true).ReturnType.FullName)
+                            try
                             {
-                                case "System.String":
-                                    tmp = tmp.ToString();
-                                    break;
-                                case "System.Boolean":
-                                    tmp = bool.Parse(tmp.ToString());
-                                    break;
-                                case "System.DateTime":
-                                    tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                    break;
-                                case "System.Int32":
-                                    tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                    break;
-                                case "System.Decimal":
-                                    tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                    break;
-                                default:
-                                    if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
-                                        tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
-                                    else
-                                        throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
-                                    break;
+                                switch (info.GetGetMethod(true).ReturnType.FullName)
+                                {
+                                    case "System.String":
+                                        tmp = tmp.ToString();
+                                        break;
+                                    case "System.Boolean":
+                                        tmp = bool.Parse(tmp.ToString());
+                                        break;
+                                    case "System.DateTime":
+                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Int32":
+                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Decimal":
+                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    default:
+                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
+                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
+                                        else
+                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
+                                        break;
+                                }
+                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
                             }
-                            info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                            catch
+                            {
+                                if (!node.Contains("Preview") ||
+                                    !node["Preview"].Get<bool>())
+                                {
+                                    throw;
+                                }
+                                ; // Do nothing, since it's probably a databound expression or something ...
+                            }
                         }
                         else
                             info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
@@ -1187,6 +1336,8 @@ focus, or clicking the widget with his mouse or touch screen";
 
         private object GetObjectFromExpression(string expr, Node dataSource)
         {
+            expr = expr.Trim('{').Trim('}');
+
             if (expr.StartsWith("["))
             {
                 // 'Static' value, not 'relative' ...
@@ -1325,7 +1476,13 @@ focus, or clicking the widget with his mouse or touch screen";
                     nn["_ID"].Value = idx["_ID"].Value;
 
                     if (dataSource != null)
+                    {
                         nn["DataSource"].Value = dataSource[idxNo];
+                        if (dataSource[idxNo].Contains("ID"))
+                        {
+                            nn["_ID"].Value = nn["_ID"].Value.ToString() + dataSource[idxNo]["ID"].Value;
+                        }
+                    }
 
                     RaiseEvent(
                         "Magix.MetaForms.CreateControl",
@@ -1422,7 +1579,13 @@ focus, or clicking the widget with his mouse or touch screen";
             nn["ControlNode"].Value = node;
             nn["_ID"].Value = node["_ID"].Value;
             if (dataSource != null)
+            {
                 nn["DataSource"].Value = dataSource;
+                if (dataSource.Contains("ID"))
+                {
+                    nn["_ID"].Value = nn["_ID"].Value.ToString() + dataSource["ID"].Value;
+                }
+            }
             if (preview)
                 nn["Preview"].Value = true;
             if (!string.IsNullOrEmpty(oldSelected))

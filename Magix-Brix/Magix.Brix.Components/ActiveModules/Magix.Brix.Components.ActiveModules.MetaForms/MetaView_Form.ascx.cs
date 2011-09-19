@@ -42,6 +42,16 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 };
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            CreateFormControls();
+
+            if (FirstLoad)
+                ExecuteInitActions();
+        }
+
         private void ExecuteInitActions()
         {
             if (!DataSource["root"].Contains("Actions") ||
@@ -63,14 +73,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 "Something went wrong while running your InitialLoading actions ...");
 
             DataSource["ActionsToExecute"].UnTie();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            CreateFormControls();
-            if (FirstLoad)
-                ExecuteInitActions();
         }
 
         private void CreateFormControls()
@@ -436,8 +438,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
          */
         private object GetObjectFromExpression(string expr, bool doThrow)
         {
-            if (expr.StartsWith("DataSource"))
+            if (expr.StartsWith("{DataSource"))
             {
+                expr = expr.Trim('{').Trim('}');
                 // 'Static' value, not 'relative' ...
                 // Scanning forwards from after 'DataSource' ...
                 Node x = DataSource;
