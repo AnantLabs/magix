@@ -275,6 +275,7 @@
     <Content Include="media\your-css-file-and-path.css" />
     <Content Include="Tmp\test-qr-code.png" />
     <Content Include="media\Cool-Breeze.oga" />
+    <Content Include="App_Browsers\browsers.browser" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
     <Content Include="media\The-Last-Barfly.oga" />
     <None Include="Tmp\exchange-with-your-own-csv-file.csv" />

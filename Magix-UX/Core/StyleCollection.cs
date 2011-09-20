@@ -281,9 +281,28 @@ namespace Magix.UX.Widgets
                         {
                             if (value.Contains("linear-gradient"))
                             {
-                                value = value.Replace(
-                                    "linear-gradient", 
-                                    GetBrowserPrefix() + "linear-gradient");
+                                if (HttpContext.Current.Request.Browser.MobileDeviceManufacturer == "Apple" ||
+                                    HttpContext.Current.Request.Browser.MobileDeviceManufacturer == "Google")
+                                {
+                                    string value2 = "";
+                                    if (value.Contains("url"))
+                                    {
+                                        value2 = "url(" + value.Split('(')[1].Split(')')[0] + "), ";
+                                    }
+                                    string col1 = "#" + value.Split('#')[1].Substring(0, 6);
+                                    string col2 = "#" + value.Split('#')[2].Substring(0, 6);
+                                    value = value2 + 
+                                        string.Format(
+                                            "-webkit-gradient(linear, 0% 0%, 0% 100%, from({0}), to({1}))", 
+                                            col1, 
+                                            col2);
+                                }
+                                else
+                                {
+                                    value = value.Replace(
+                                        "linear-gradient",
+                                        GetBrowserPrefix() + "linear-gradient");
+                                }
                             }
                         } break;
                     }
@@ -295,10 +314,17 @@ namespace Magix.UX.Widgets
 
         public static string GetBrowserPrefix()
         {
+            if (HttpContext.Current.Request.Browser.MobileDeviceManufacturer == "Apple" ||
+                HttpContext.Current.Request.Browser.MobileDeviceManufacturer == "Google")
+                return "-webkit-";
+
             switch (HttpContext.Current.Request.Browser.Browser.ToLower())
             {
                 case "webkit":
                 case "applewebkit":
+                case "ipad":
+                case "iphone":
+                case "android":
                 case "safari":
                 case "chrome":
                 case "applemac-safari":
