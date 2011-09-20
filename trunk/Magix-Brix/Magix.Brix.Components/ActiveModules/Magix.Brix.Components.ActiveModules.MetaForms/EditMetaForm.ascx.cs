@@ -41,6 +41,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected System.Web.UI.WebControls.Repeater shortCutRep;
         protected SelectList selWidg;
         protected LinkButton formInitActions;
+        protected Button toggleTools;
+        protected Button toggleProperties;
 
         public override void InitialLoading(Node node)
         {
@@ -80,8 +82,19 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                             idx["Properties"].Contains("ID"))
                             text += "[" + idx["Properties"]["ID"].Value.ToString() + "]";
 
+                        string min = "";
+                        Node tmpN = idx.Parent;
+                        while (tmpN != null)
+                        {
+                            if (tmpN.Name != null &&
+                                tmpN.Name.StartsWith("c-"))
+                                min += "-";
+
+                            tmpN = tmpN.Parent;
+                        }
+
                         ListItem li = new ListItem();
-                        li.Text = text;
+                        li.Text += min + text;
                         li.Value = idx["_ID"].Value.ToString();
                         selWidg.Items.Add(li);
                     }
@@ -108,8 +121,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 }
                 else
                 {
-                    tools.Style[Styles.zIndex] = "500";
-                    props.Style[Styles.zIndex] = "501";
+                    tools.Style[Styles.zIndex] = "501";
+                    props.Style[Styles.zIndex] = "500";
                 }
             }
         }
@@ -152,6 +165,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             base.OnLoad(e);
 
+            toggleProperties.ClickEffect = new EffectToggle(props, 250, true);
+            toggleTools.ClickEffect = new EffectToggle(tools, 250, true);
+
             CreateFormControls();
 
             eventHeader.Click +=
@@ -173,9 +189,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 };
 
             type.ClickEffect = new EffectToggle(desc, 250, false);
-
-            tools.Dragger.Bounds = new Rectangle(-150, 0, 990, 450);
-            props.Dragger.Bounds = new Rectangle(-150, 0, 990, 450);
         }
 
         private void CreateFormControls()
@@ -193,7 +206,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
         }
 
-        private void CreateSingleControl(Node node, BaseWebControl parent)
+        private void CreateSingleControl(Node node, Control parent)
         {
             Node nn = new Node();
 
@@ -213,9 +226,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if (nn.Contains("Control"))
             {
-                BaseWebControl ctrl = nn["Control"].Get<BaseWebControl>();
-                if (string.IsNullOrEmpty(ctrl.ToolTip))
-                    ctrl.ToolTip = "Click me to edit the Widget";
+                Control ctrl = nn["Control"].Get<Control>();
 
                 if (nn.Contains("HasSurface") &&
                     nn["HasSurface"].Get<bool>())
@@ -254,50 +265,68 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 ctrl.Load +=
                     delegate
                     {
-                        if (ctrl.ClientID == OldSelected &&
-                            !ctrl.CssClass.Contains(" mux-wysiwyg-selected"))
+                        if (ctrl is BaseWebControl)
+                        {
+                            if ((ctrl as BaseWebControl).ClientID == OldSelected &&
+                                !(ctrl as BaseWebControl).CssClass.Contains(" mux-wysiwyg-selected"))
+                            {
+                                AddSelectedCssClass(ctrl);
+                                (ctrl as BaseWebControl).ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
+                            }
+                        }
+                        else if (ctrl.ClientID == OldSelected)
                         {
                             AddSelectedCssClass(ctrl);
-                            ctrl.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                         }
                     };
-                ctrl.Click +=
-                    delegate
-                    {
-                        SetActiveControl(node);
-                    };
-                ctrl.Style[Styles.position] = "relative";
 
-                // Making draggable ...
-                AspectDraggable dragger = new AspectDraggable();
-                dragger.Dragged +=
-                    delegate
-                    {
-                        int left = int.Parse(ctrl.Style[Styles.left].Replace("px", ""));
-                        int top = int.Parse(ctrl.Style[Styles.top].Replace("px", ""));
+                if (ctrl is BaseWebControl)
+                {
+                    (ctrl as BaseWebControl).Click +=
+                        delegate
+                        {
+                            SetActiveControl(node);
+                        };
+                    (ctrl as BaseWebControl).Style[Styles.position] = "relative";
 
-                        AbsolutizeWidget(left, top, node, ctrl);
-                    };
-                ctrl.Controls.Add(dragger);
+                    // Making draggable ...
+                    AspectDraggable dragger = new AspectDraggable();
+                    dragger.Dragged +=
+                        delegate
+                        {
+                            int left = int.Parse((ctrl as BaseWebControl).Style[Styles.left].Replace("px", ""));
+                            int top = int.Parse((ctrl as BaseWebControl).Style[Styles.top].Replace("px", ""));
+
+                            AbsolutizeWidget(left, top, node, (ctrl as BaseWebControl));
+                        };
+                    (ctrl as BaseWebControl).Controls.Add(dragger);
+                }
 
                 // Making sure we're rendering the styles needed ...
-                RenderStyles(ctrl, node);
+                if (ctrl is BaseWebControl)
+                    RenderStyles((ctrl as BaseWebControl), node);
 
                 parent.Controls.Add(ctrl);
             }
         }
 
-        private void AddSelectedCssClass(BaseWebControl ctrl)
+        private void AddSelectedCssClass(Control ctrlIn)
         {
-            if (!ctrl.CssClass.Contains(" mux-wysiwyg-selected"))
+            BaseWebControl ctrl = ctrlIn as BaseWebControl;
+
+            if (ctrl != null && 
+                !ctrl.CssClass.Contains(" mux-wysiwyg-selected"))
                 ctrl.CssClass += " mux-wysiwyg-selected";
 
-            BaseWebControl idx = ctrl.Parent as BaseWebControl;
+            Control idx = ctrlIn.Parent as Control;
             while (idx != null && idx != ctrls)
             {
-                if (!idx.CssClass.Contains(" mux-wysiwyg-selected"))
-                    idx.CssClass += " mux-wysiwyg-selected";
-                idx = idx.Parent as BaseWebControl;
+                if (idx is BaseWebControl)
+                {
+                    if (!(idx as BaseWebControl).CssClass.Contains(" mux-wysiwyg-selected"))
+                        (idx as BaseWebControl).CssClass += " mux-wysiwyg-selected";
+                }
+                idx = idx.Parent;
             }
         }
 
@@ -345,9 +374,13 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             if (!string.IsNullOrEmpty(OldSelected))
             {
-                BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
-                RemoveActiveCssClass(c);
-                c.ToolTip = "Click me to edit the Widget";
+                Control c = Selector.FindControlClientID<Control>(ctrls, OldSelected);
+                if (c != null)
+                {
+                    RemoveActiveCssClass(c);
+                    if (c is BaseWebControl)
+                        (c as BaseWebControl).ToolTip = "Click me to edit the Widget";
+                }
                 OldSelected = null;
             }
 
@@ -415,26 +448,36 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (ctrl != null)
             {
                 OldSelected = ctrl.ClientID;
+                AddSelectedCssClass(ctrl);
                 if (ctrl is BaseWebControl)
                 {
                     BaseWebControl ctrl2 = ctrl as BaseWebControl;
-                    AddSelectedCssClass(ctrl2);
                     ctrl2.ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                 }
             }
         }
 
-        private void RemoveActiveCssClass(BaseWebControl c)
+        private void RemoveActiveCssClass(Control cIn)
         {
-            c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+            if (cIn == null)
+                return;
 
-            BaseWebControl idx = c.Parent as BaseWebControl;
+            BaseWebControl c = cIn as BaseWebControl;
+
+            if (c != null)
+                c.CssClass = c.CssClass.Replace(" mux-wysiwyg-selected", "");
+
+            Control idx = cIn.Parent;
             while (idx != null && idx != ctrls)
             {
-                if (idx.CssClass.Contains(" mux-wysiwyg-selected"))
-                    idx.CssClass = idx.CssClass.Replace(" mux-wysiwyg-selected", "");
+                if (idx is BaseWebControl)
+                {
+                    BaseWebControl idx1 = idx as BaseWebControl;
+                    if (idx1.CssClass.Contains(" mux-wysiwyg-selected"))
+                        idx1.CssClass = idx1.CssClass.Replace(" mux-wysiwyg-selected", "");
+                }
                 
-                idx = idx.Parent as BaseWebControl;
+                idx = idx.Parent;
             }
         }
 
@@ -456,9 +499,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             {
                 if (!string.IsNullOrEmpty(OldSelected))
                 {
-                    BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
+                    Control c = Selector.FindControlClientID<Control>(ctrls, OldSelected);
                     RemoveActiveCssClass(c);
-                    c.ToolTip = "Click me to edit the Widget";
+                    if (c is BaseWebControl)
+                        (c as BaseWebControl).ToolTip = "Click me to edit the Widget";
                 }
                 OldSelected = "";
                 ClearPropertyWindow();
@@ -554,9 +598,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             if (!string.IsNullOrEmpty(OldSelected))
             {
-                BaseWebControl c = Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected);
+                Control c = Selector.FindControlClientID<Control>(ctrls, OldSelected);
                 RemoveActiveCssClass(c);
-                c.ToolTip = "Click me to edit the Widget";
+                if (c is BaseWebControl)
+                    (c as BaseWebControl).ToolTip = "Click me to edit the Widget";
             }
             OldSelected = null;
             ClearPropertyWindow();
@@ -809,7 +854,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if(!string.IsNullOrEmpty(OldSelected))
             {
-                RemoveActiveCssClass(Selector.FindControlClientID<BaseWebControl>(ctrls, OldSelected));
+                RemoveActiveCssClass(Selector.FindControlClientID<Control>(ctrls, OldSelected));
             }
 
             OldSelected = Selector.FindControl<Control>(ctrls, "ID" + node["NewControlID"].Value.ToString()).ClientID;

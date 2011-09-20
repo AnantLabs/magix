@@ -54,7 +54,8 @@ namespace Magix.UX.Widgets
         private void GetValue()
         {
             string value = Page.Request.Params[ClientID];
-            Value = value;
+            if (value != null)
+                Value = value;
         }
 
         protected override void RenderMuxControl(HtmlBuilder builder)

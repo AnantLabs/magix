@@ -9,11 +9,21 @@
 <link href="media/modules/edit-meta-forms.css" rel="stylesheet" type="text/css" />
 
 <div class="wysiwyg-meta-forms">
+    <mux:Button
+        runat="server"
+        id="toggleTools"
+        CssClass="span-4 prepend-top"
+        Text="Widgets ..." />
+    <mux:Button
+        runat="server"
+        id="toggleProperties"
+        CssClass="span-4 prepend-top"
+        Text="Properties ..." />
     <mux:Panel
         runat="server"
         OnClick="ctrls_Click"
         ToolTip="Deselect Widget, if any are selected ..."
-        CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-24 prepend-top last"
+        CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-24 prepend-top last clear-both"
         id="ctrls" />
 
     <mux:Window
@@ -22,10 +32,11 @@
         Draggable="true"
         OnDragged="tools_Dragged"
         OnClick="tools_Click"
+        style="display:none;"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-toolbox span-8"
         Closable="false"
         ToolTip="The Widgets you have to your disposal within this installation of Magix. Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around by its Header if it obscures something you need to reach ..."
-        Caption="Widgets & Controls ...">
+        Caption="Widgets">
         <Content>
             <asp:Repeater
                 runat="server"
@@ -47,6 +58,7 @@
         runat="server"
         id="props"
         Draggable="true"
+        style="display:none;"
         OnDragged="props_Dragged"
         OnClick="props_Click"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-props span-8 mux-hide-events mux-hide-props"

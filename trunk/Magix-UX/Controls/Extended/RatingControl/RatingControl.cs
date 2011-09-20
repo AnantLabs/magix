@@ -43,22 +43,22 @@ namespace Magix.UX.Widgets
         }
 
         /**
-         * Its value, [1 - MaxValue]
+         * Its value, [0 - MaxValue], 0 equals no-value
          */
-        [DefaultValue(1)]
+        [DefaultValue(0)]
         public int Value
         {
-            get { return ViewState["Value"] == null ? 1 : (int)ViewState["Value"]; }
+            get { return ViewState["Value"] == null ? 0 : (int)ViewState["Value"]; }
             set { ViewState["Value"] = value; }
         }
 
         /**
          * Will show the average score using different colors if you wish
          */
-        [DefaultValue(1)]
+        [DefaultValue(0)]
         public int Average
         {
-            get { return ViewState["Average"] == null ? 1 : (int)ViewState["Average"]; }
+            get { return ViewState["Average"] == null ? 0 : (int)ViewState["Average"]; }
             set { ViewState["Average"] = value; }
         }
 

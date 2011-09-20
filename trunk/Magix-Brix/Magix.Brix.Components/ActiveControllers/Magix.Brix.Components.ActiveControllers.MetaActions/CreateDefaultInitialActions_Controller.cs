@@ -58,6 +58,37 @@ top to display some message";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.CreateNodeFromMetaForm")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.CreateNodeFromMetaForm";
+                    a.EventName = "Magix.MetaForms.CreateNodeFromMetaForm";
+                    a.Description = @"Will put every Info field on your Meta Form 
+into the Node structure underneath the 'Object' node";
+                    a.StripInput = false;
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.SaveNodeSerializedFromMetaForm")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.SaveNodeSerializedFromMetaForm";
+                    a.EventName = "Magix.MetaForms.SaveNodeSerializedFromMetaForm";
+                    a.Description = @"Will serialize the 'Object' node in your DataSource 
+down do a graph depending upon how the Object node looks like";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "TypeName";
+                    m.Value = "Magix.Demo.Rating";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.GetActiveTypeObjects")) == 0)
                 {
                     Action a = new Action();

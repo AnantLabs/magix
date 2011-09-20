@@ -7,8 +7,8 @@
 	margin-right:10px;
 	min-height:810px;
 	position:relative;
-	overflow-x:hidden;
-	overflow-y:auto;
+	overflow-x:visible;
+	overflow-y:visible;
 	height:auto;
 }
 
@@ -18,28 +18,10 @@
 	min-height:180px;
 	height:auto;
 	overflow-y:auto;
-	top:18px;
-	left:310px;
+	top:180px;
+	left:630px;
 	position:absolute;
 	z-index:500;
-	opacity:.3;
-	-moz-transition-property:opacity;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:0.5s;
-	transition-property:opacity;
-	transition-duration:0.5s;
-}
-
-.mux-meta-forms-toolbox:hover
-{
-	opacity:1;
-	-moz-transition-property:opacity;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:0.5s;
-	transition-property:opacity;
-	transition-duration:0.5s;
 }
 
 .mux-meta-forms-props
@@ -48,24 +30,6 @@
 	left:630px;
 	position:absolute;
 	z-index:500;
-	opacity:.3;
-	-moz-transition-property:opacity;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:0.5s;
-	transition-property:opacity;
-	transition-duration:0.5s;
-}
-
-.mux-meta-forms-props:hover
-{
-	opacity:1;
-	-moz-transition-property:opacity;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:0.5s;
-	transition-property:opacity;
-	transition-duration:0.5s;
 }
 
 .mux-toolbox-item
@@ -111,6 +75,7 @@
 	min-height:810px;
 	position:relative;
 	overflow-y:auto;
+	overflow-x:hidden;
 }
 
 .mux-meta-form-wysiwyg-wrapper *

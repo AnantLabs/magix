@@ -102,6 +102,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             nn["TypeName"].Value = node["TypeName"].Get<string>();
             nn["ControlNode"].Value = node;
             nn["_ID"].Value = node["_ID"].Value;
+            nn["DataSourceRootNode"].Value = DataSource;
 
             RaiseEvent(
                 "Magix.MetaForms.CreateControl",
@@ -122,6 +123,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         // Yup, looks stupidish, but feel very safe ... ;)
                         tmp["Controls"].Value = node["Surface"];
                         tmp["Control"].Value = ctrl;
+                        tmp["DataSourceRootNode"].Value = DataSource;
                         if (node.Contains("Properties") &&
                             node["Properties"].Contains("Info"))
                         {
@@ -196,68 +198,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     }
                 }
 
-                // Actions ...
-                if (node.Contains("Actions"))
-                {
-                    foreach (Node idx in node["Actions"])
-                    {
-                        // Skipping 'empty stuff' ...
-                        if (idx.Value == null)
-                            continue;
-
-                        if (idx.Value is string && (idx.Value as string) == string.Empty)
-                            continue;
-
-                        EventInfo info = ctrl.GetType().GetEvent(
-                            idx.Name,
-                            System.Reflection.BindingFlags.Instance |
-                            System.Reflection.BindingFlags.NonPublic |
-                            System.Reflection.BindingFlags.Public);
-
-                        if (info != null)
-                        {
-                            // Helper logic to keep event name for being able to do 
-                            // lookup into action lists according to control and event name ...
-                            ActionWrapper wrp = new ActionWrapper();
-                            wrp.EventName = idx.Name;
-                            wrp.Form = this;
-
-                            MethodInfo method =
-                                typeof(ActionWrapper)
-                                    .GetMethod(
-                                        "RaiseActions",
-                                        BindingFlags.NonPublic |
-                                        BindingFlags.Instance |
-                                        BindingFlags.FlattenHierarchy);
-
-                            if (FirstLoad)
-                            {
-                                // We only do this once, since we're storing it 'cached' in the ViewState
-                                // upon FirstLoad of Module ...
-                                string evtName = idx.Name;
-                                string evts = idx.Value.ToString();
-
-                                ctrl.Init +=
-                                    delegate
-                                    {
-                                        if (!ActionsForWidgets.ContainsKey(ctrl.ClientID))
-                                            ActionsForWidgets[ctrl.ClientID] = new Dictionary<string, string>();
-                                        ActionsForWidgets[ctrl.ClientID][evtName] = evts;
-                                    };
-                            }
-
-                            Delegate del = Delegate.CreateDelegate(
-                                info.EventHandlerType,
-                                wrp,
-                                method);
-
-                            info.AddEventHandler(
-                                ctrl,
-                                del);
-                        }
-                    }
-                }
-
                 // Making sure we're rendering the styles needed ...
                 RenderStyles(ctrl as BaseWebControl, node);
 
@@ -284,40 +224,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             }
         }
 
-        private class ActionWrapper
-        {
-            public string EventName;
-            public MetaView_Form Form;
-
-            protected void RaiseActions(object sender, EventArgs e)
-            {
-                Form.RaiseActionsForEvent(sender, e, EventName);
-            }
-        }
-
-        internal void RaiseActionsForEvent(object sender, EventArgs e, string EventName)
-        {
-            string actions = ActionsForWidgets[(sender as Control).ClientID][EventName];
-
-            DataSource["ActionsToExecute"].Value = actions;
-
-            RaiseSafeEvent(
-                "Magix.MetaForms.RaiseActionsFromActionString",
-                DataSource);
-
-            DataSource["ActionsToExecute"].UnTie();
-        }
-
-        private Dictionary<string, Dictionary<string, string>> ActionsForWidgets
-        {
-            get
-            {
-                if (ViewState["ActionsForWidgets"] == null)
-                    ViewState["ActionsForWidgets"] = new Dictionary<string, Dictionary<string, string>>();
-                return ViewState["ActionsForWidgets"] as Dictionary<string, Dictionary<string, string>>;
-            }
-        }
-
         /**
          * Level2: Which form to load up into the Meta Form View. Must be the unique Name to a Meta Form object
          */
@@ -326,6 +232,84 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             get { return ViewState["MetaFormName"] as string; }
             set { ViewState["MetaFormName"] = value; }
+        }
+
+        /**
+         * Level2: Will serialize all Form Widgets with a valid Info field value such that a Node structure 
+         * is created according to the form widget values
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.CreateNodeFromMetaForm")]
+        protected void Magix_MetaForms_CreateNodeFromMetaForm(object sender, ActiveEventArgs e)
+        {
+            foreach (BaseControl idx in Selector.Select<BaseControl>(
+                ctrls,
+                delegate(Control idxI)
+                {
+                    return idxI is BaseWebControl &&
+                        !string.IsNullOrEmpty((idxI as BaseWebControl).Info);
+                }))
+            {
+                string dataFieldName = idx.Info;
+                if (dataFieldName.Contains(":"))
+                {
+                    dataFieldName = dataFieldName.Split(':')[1];
+                }
+                if (string.IsNullOrEmpty(dataFieldName))
+                    continue;
+
+                SerializeControlValueIntoDataSourceNode(idx, dataFieldName);
+            }
+        }
+
+        private void SerializeControlValueIntoDataSourceNode(BaseControl ctrl, string dataFieldName)
+        {
+            Node typeNode = GetTypeNode(ctrl);
+
+            Node node = DataSource;
+
+            node["Control"].Value = ctrl;
+            node["TypeNode"].Value = typeNode;
+            node["DataFieldName"].Value = dataFieldName;
+
+            RaiseEvent(
+                "Magix.MetaForms.SerializeControlIntoNode",
+                node);
+
+            DataSource["Control"].UnTie();
+            DataSource["TypeNode"].UnTie();
+            DataSource["DataFieldName"].UnTie();
+        }
+
+        private Node GetTypeNode(BaseControl idx)
+        {
+            Node typeNode = null;
+            if (idx.ID.StartsWith("ID"))
+            {
+                int id =
+                    idx.ID.Contains("x") ?
+                        int.Parse(idx.ID.Substring(2).Split('x')[0]) :
+                        int.Parse(idx.ID.Substring(2));
+                typeNode = DataSource["root"]["Surface"].Find(
+                    delegate(Node idxN)
+                    {
+                        return idxN.Name == "_ID" &&
+                            ((idxN.Value.ToString().Contains("x") &&
+                            int.Parse(idxN.Value.ToString().Split('x')[0]) == id) ||
+                            int.Parse(idxN.Value.ToString()) == id);
+                    }).Parent;
+            }
+            else
+            {
+                string id = idx.ID;
+                typeNode = DataSource["root"]["Surface"].Find(
+                    delegate(Node idxN)
+                    {
+                        return idxN.Name == "ID" &&
+                            idxN.Parent.Name == "Properties" &&
+                            idxN.Value.ToString() == id;
+                    });
+            }
+            return typeNode;
         }
 
         /**
@@ -440,7 +424,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             if (expr.StartsWith("{DataSource"))
             {
-                expr = expr.Trim('{').Trim('}');
+                expr = expr.Substring(expr.IndexOf("{") + 1);
+                expr = expr.Substring(0, expr.LastIndexOf("}"));
+
                 // 'Static' value, not 'relative' ...
                 // Scanning forwards from after 'DataSource' ...
                 Node x = DataSource;
