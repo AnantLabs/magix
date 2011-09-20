@@ -30,7 +30,7 @@
     height:100%;
     z-index:100;
     text-align:center;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(180, 180, 180, 0.7)), to(rgba(0, 0, 0, 0.7)));
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(180, 180, 180, 0.7)), to(rgba(0, 0, 0, 0.7)));
 	background-image: -moz-linear-gradient(rgba(180, 180, 180, 0.7) 0%, rgba(0, 0, 0, 0.7) 100%);
 }
 

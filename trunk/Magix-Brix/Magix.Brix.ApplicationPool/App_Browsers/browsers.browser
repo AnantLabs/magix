@@ -1,0 +1,35 @@
+﻿<browsers>
+  <gateway id="IPad" parentID="Safari">
+    <identification>
+      <userAgent match="iPad" />
+    </identification>
+
+    <capabilities>
+      <capability name="mobileDeviceModel"               value="IPad" />
+      <capability name="mobileDeviceManufacturer"        value="Apple" />
+      <capability name="isMobileDevice"                  value="true" />
+    </capabilities>
+  </gateway>
+  <gateway id="IPhone" parentID="Safari">
+    <identification>
+      <userAgent match="iPhone" />
+    </identification>
+
+    <capabilities>
+      <capability name="mobileDeviceModel"               value="IPhone" />
+      <capability name="mobileDeviceManufacturer"        value="Apple" />
+      <capability name="isMobileDevice"                  value="true" />
+    </capabilities>
+  </gateway>
+  <gateway id="Android" parentID="Safari">
+    <identification>
+      <userAgent match="Android" />
+    </identification>
+
+    <capabilities>
+      <capability name="mobileDeviceModel"               value="Android" />
+      <capability name="mobileDeviceManufacturer"        value="Google" />
+      <capability name="isMobileDevice"                  value="true" />
+    </capabilities>
+  </gateway>
+</browsers>
