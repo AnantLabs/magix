@@ -93,7 +93,7 @@ namespace Magix.UX.Widgets
 
             EnsureID();
 
-            for (int idx = 0; idx < MaxValue; idx++)
+            for (int idx = 0; idx <= MaxValue; idx++)
             {
                 Label l = new Label();
                 l.ID = ID + "x" + idx;
@@ -125,7 +125,7 @@ namespace Magix.UX.Widgets
 
         private void SetCssClass()
         {
-            for (int idx = 0; idx < (MaxValue - 1); idx++)
+            for (int idx = 0; idx <= (MaxValue - 1); idx++)
             {
                 Label l = Selector.FindControl<Label>(this, ID + "x" + idx);
                 string tmp = "mux-rating-star";
@@ -150,7 +150,7 @@ namespace Magix.UX.Widgets
                     {
                         tmp += " mux-rating-star-min";
                     }
-                    else if (idx == (MaxValue - 2))
+                    else if (idx == (MaxValue - 1))
                     {
                         tmp += " mux-rating-star-max";
                     }
