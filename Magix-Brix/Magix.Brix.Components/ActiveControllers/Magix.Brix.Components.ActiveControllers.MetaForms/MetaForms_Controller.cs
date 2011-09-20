@@ -14,6 +14,7 @@ using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using System.IO;
 using Magix.UX.Widgets.Core;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaForms
 {
@@ -293,7 +294,7 @@ maximum legal value of the Stars Widget";
             e.Params["Controls"]["Stars"]["Properties"]["ShowAlternativeIcons"]["Description"].Value = @"if true, 
 will render alternative icons CSS classes every second star icon";
 
-            e.Params["Controls"]["Stars"]["Properties"]["Average"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["Average"].Value = typeof(int).FullName;
             e.Params["Controls"]["Stars"]["Properties"]["Average"]["Description"].Value = @"The 
 average value of the Stars Widget";
 
@@ -376,6 +377,14 @@ div, span, label, li, ul and address. But also many more. Check up the
 standard for HTML5 if you would like to wish all its legal values. All normal HTML elements 
 can really be described by modifying this property accordingly. 
 Also HTML5 types of elements, such as address and section";
+
+            e.Params["Controls"]["Panel"]["Properties"]["DefaultWidget"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Panel"]["Properties"]["DefaultWidget"]["Description"].Value = @"If you 
+set this one to the ID of for instance a button on your form, then that button will be clicked when the 
+user is typing in text in for instance a TextBox and then press Enter or Return. As long as anything 
+underneath this Panel in the Widget Hierarchy has focus, and is not swallowing Carriage Returns, such as 
+the TextArea is, then the button with the ID of the DefaultWidget, if defined, will be clicked when 
+the user hits his Return key";
         }
 
         /*
@@ -620,7 +629,7 @@ somehow follow him as he proceeds through the flow of your process";
 
             e.Params["Controls"]["HiddenField"]["Properties"]["Value"].Value = typeof(string).FullName;
             e.Params["Controls"]["HiddenField"]["Properties"]["Value"]["Description"].Value = @"The 
-visible text for the end user and also the text fragment the user can change by editing the text box value";
+value of the Widget";
         }
 
         /*
@@ -935,6 +944,230 @@ focus, or clicking the widget with his mouse or touch screen";
         }
 
         /**
+         * Level2: Will create MetaObject(s) from the given 'Object' node, with 
+         * the given 'TypeName' and save the Meta Objects to your data storage
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.SaveNodeSerializedFromMetaForm")]
+        protected void Magix_MetaForms_SaveNodeSerializedFromMetaForm(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                Node node = e.Params;
+
+                MetaObject o = new MetaObject();
+
+                o.TypeName = node["TypeName"].Get<string>();
+
+                o.Reference = "MetaForm";
+
+                foreach (Node idx in node["Object"])
+                {
+                    if (idx.Contains("IsCollection") &&
+                        idx["IsCollection"].Get<bool>())
+                    {
+                        foreach (Node idxI in idx)
+                        {
+                            if (idxI.Name == "IsCollection" || idxI.Name == "TypeName")
+                                continue;
+
+                            MetaObject o2 = CreateMetaObject(
+                                idxI,
+                                idx["TypeName"].Get<string>(),
+                                e.Params);
+                            o2.Save(); // not owner ...
+                            o.Children.Add(o2);
+                        }
+                    }
+                    else if (idx.Name == "TypeName")
+                    {
+                        ; // nothing ...
+                    }
+                    else
+                    {
+                        MetaObject.Property p = new MetaObject.Property();
+                        p.Name = idx.Name;
+                        p.Value = idx.Value.ToString();
+                        o.Values.Add(p);
+                    }
+                }
+
+                o.Save();
+
+                tr.Commit();
+            }
+        }
+
+        private MetaObject CreateMetaObject(Node idxI, string typeName, Node root)
+        {
+            MetaObject o = new MetaObject();
+
+            o.TypeName = typeName;
+            o.Reference = "MetaForm";
+
+            foreach (Node idx in idxI)
+            {
+                if (idx.Contains("IsCollection") &&
+                    idx["IsCollection"].Get<bool>())
+                {
+                    foreach (Node idxI2 in idx)
+                    {
+                        MetaObject o2 = CreateMetaObject(
+                            idxI2,
+                            idx["TypeName"].Get<string>(),
+                            root);
+                        o2.Save(); // not owner ...
+                        o.Children.Add(o2);
+                    }
+                }
+                else
+                {
+                    MetaObject.Property p = new MetaObject.Property();
+                    p.Name = idx.Name;
+                    p.Value = idx.Value.ToString();
+                    o.Values.Add(p);
+                }
+            }
+
+            return o;
+        }
+
+        /**
+         * Level2: Will serialize one Widget [BaseControl instance] into the given node. The control should 
+         * exist as an instane in the 'Control' parameter, and the MetaForm serialized
+         * type node should exist in 'TypeNode'
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.SerializeControlIntoNode")]
+        protected void Magix_MetaForms_SerializeControlIntoNode(object sender, ActiveEventArgs e)
+        {
+            string typeName = (e.Params["TypeNode"].Value as Node)["TypeName"].Get<string>();
+            switch (typeName)
+            {
+                case "Magix.MetaForms.Plugins.Button":
+                case "Magix.MetaForms.Plugins.Label":
+                case "Magix.MetaForms.Plugins.CheckBox":
+                case "Magix.MetaForms.Plugins.TextBox":
+                case "Magix.MetaForms.Plugins.HiddenField":
+                case "Magix.MetaForms.Plugins.Image":
+                case "Magix.MetaForms.Plugins.HyperLink":
+                case "Magix.MetaForms.Plugins.LinkButton":
+                case "Magix.MetaForms.Plugins.TextArea":
+                case "Magix.MetaForms.Plugins.RadioButton":
+                case "Magix.MetaForms.Plugins.Calendar":
+                case "Magix.MetaForms.Plugins.Panel":
+                case "Magix.MetaForms.Plugins.Stars":
+                    BaseControl ctrl = e.Params["Control"].Value as BaseControl;
+                    SerializeControlIntoNode(
+                        e.Params, 
+                        ctrl, 
+                        e.Params["TypeNode"].Value as Node,
+                        e.Params["DataFieldName"].Get<string>());
+                    break;
+                case "Magix.MetaForms.Plugins.Repeater":
+                    // Don't really need to do anything here ...
+                    break;
+            }
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void SerializeControlIntoNode(
+            Node destinationNode, 
+            BaseControl ctrl, 
+            Node ctrlNode,
+            string dataFieldName)
+        {
+            string valOfCtrl = GetValueOfControl(ctrl, ctrlNode);
+            if (string.IsNullOrEmpty(valOfCtrl))
+                return;
+
+            List<string> path = new List<string>();
+            path.Add(dataFieldName);
+
+            Node idx = ctrlNode.Parent;
+            while(idx != null)
+            {
+                if (idx.Contains("Properties"))
+                {
+                    if (idx["Properties"].Contains("Info"))
+                    {
+                        string info = idx["Properties"]["Info"].Get<string>();
+                        if (info.Contains(":"))
+                            info = info.Substring(info.IndexOf(':') + 1);
+
+                        if (idx.Contains("TypeName") &&
+                            idx["TypeName"].Get<string>() == "Magix.MetaForms.Plugins.Repeater")
+                        {
+                            info = "rep:" + info;
+                        }
+                        path.Add(info);
+                    }
+                }
+                idx = idx.Parent;
+            }
+
+            path.Reverse();
+
+            Node tmp = destinationNode["Object"];
+
+            bool curIsRep = false;
+
+            foreach (string i in path)
+            {
+                string key = i;
+
+                bool repeater = false;
+                if (key.StartsWith("rep:"))
+                {
+                    repeater = true;
+                    key = key.Split(':')[1];
+                }
+                if (!repeater)
+                {
+                    tmp = tmp[key];
+                }
+                else
+                {
+                    tmp = tmp[key];
+                    tmp["IsCollection"].Value = true;
+                    tmp["TypeName"].Value = key;
+                    string ctrlCommonID = ctrl.ID.Split('x')[1];
+                    tmp = tmp[ctrlCommonID];
+                }
+            }
+            tmp.Value = valOfCtrl;
+        }
+
+        private string GetValueOfControl(BaseControl ctrl, Node ctrlNode)
+        {
+            switch (ctrlNode["TypeName"].Get<string>())
+            {
+                case "Magix.MetaForms.Plugins.CheckBox":
+                    return (ctrl as CheckBox).Checked.ToString();
+                case "Magix.MetaForms.Plugins.TextBox":
+                    return (ctrl as TextBox).Text;
+                case "Magix.MetaForms.Plugins.HiddenField":
+                    return (ctrl as HiddenField).Value;
+                case "Magix.MetaForms.Plugins.TextArea":
+                    return (ctrl as TextArea).Text;
+                case "Magix.MetaForms.Plugins.RadioButton":
+                    return (ctrl as RadioButton).Checked.ToString();
+                case "Magix.MetaForms.Plugins.Calendar":
+                    return (ctrl as Calendar).Value.ToString("yyyy.MM.dd HH:mm:ss");
+                case "Magix.MetaForms.Plugins.Stars":
+                    if (!(ctrl is RatingControl))
+                        return null;
+
+                    if ((ctrl as RatingControl).Value == 0)
+                        return null;
+
+                    return (ctrl as RatingControl).Value.ToString();
+                default:
+                    return null;
+            }
+        }
+
+        /**
          * Level2: Will create one of the default internally installed types for the 
          * Meta Form system, which includes e.g. Button, CheckBox and Label etc
          */
@@ -972,20 +1205,8 @@ focus, or clicking the widget with his mouse or touch screen";
                     } break;
                 case "Magix.MetaForms.Plugins.HiddenField":
                     {
-                        if (e.Params.Contains("Preview") &&
-                            e.Params["Preview"].Get<bool>())
-                        {
-                            TextBox btn = new TextBox();
-                            btn.Style[Styles.position] = "absolute";
-                            btn.CssClass = "span-2";
-                            btn.ToolTip = "Will render as a HiddenField in non-preview modes ... However, we cannot render it as a hidden field while in WYSIWYG mode since those are invisible, and you wouldn not have any things to select to be able to modify its properties ...";
-                            e.Params["Control"].Value = btn;
-                        }
-                        else
-                        {
-                            HiddenField btn = new HiddenField();
-                            e.Params["Control"].Value = btn;
-                        }
+                        HiddenField btn = new HiddenField();
+                        e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.Image":
                     {
@@ -1042,12 +1263,6 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         Panel btn = new Panel();
                         btn.CssClass = "span-2 height-2";
-
-                        if (e.Params.Contains("Preview") &&
-                            e.Params["Preview"].Get<bool>())
-                        {
-                            btn.Style[Styles.border] = "dashed 1px rgba(0,0,0,.2)";
-                        }
 
                         e.Params["Control"].Value = btn;
                         e.Params["HasSurface"].Value = true;
@@ -1167,7 +1382,7 @@ focus, or clicking the widget with his mouse or touch screen";
                         ActionWrapper wrp = new ActionWrapper();
                         wrp.EventName = idx.Name;
                         wrp.Actions = idx.Value.ToString();
-                        wrp.DataSource = node;
+                        wrp.DataSource = node["DataSourceRootNode"].Value as Node;
 
                         MethodInfo method =
                             typeof(ActionWrapper)
@@ -1336,7 +1551,8 @@ focus, or clicking the widget with his mouse or touch screen";
 
         private object GetObjectFromExpression(string expr, Node dataSource)
         {
-            expr = expr.Trim('{').Trim('}');
+            expr = expr.Substring(expr.IndexOf("{") + 1);
+            expr = expr.Substring(0, expr.LastIndexOf("}"));
 
             if (expr.StartsWith("["))
             {
@@ -1429,6 +1645,7 @@ focus, or clicking the widget with his mouse or touch screen";
                     e.Params.Contains("OldSelected") ? 
                         e.Params["OldSelected"].Get<string>() : 
                         null,
+                        null,
                         null);
             }
             else
@@ -1438,7 +1655,8 @@ focus, or clicking the widget with his mouse or touch screen";
                     e.Params["Controls"].Value as Node,
                     e.Params["Control"].Value as System.Web.UI.Control,
                     null,
-                    e.Params.Contains("DataSource") ? e.Params["DataSource"].Value as Node : null);
+                    e.Params.Contains("DataSource") ? e.Params["DataSource"].Value as Node : null,
+                    e.Params["DataSourceRootNode"].Value as Node);
             }
         }
 
@@ -1450,7 +1668,8 @@ focus, or clicking the widget with his mouse or touch screen";
             Node ctrls, 
             System.Web.UI.Control ctrl, 
             string oldSelected,
-            Node dataSource)
+            Node dataSource,
+            Node root)
         {
             int rows = 0;
             if (preview)
@@ -1474,13 +1693,14 @@ focus, or clicking the widget with his mouse or touch screen";
 
                     nn["ControlNode"].Value = idx;
                     nn["_ID"].Value = idx["_ID"].Value;
+                    nn["DataSourceRootNode"].Value = root;
 
                     if (dataSource != null)
                     {
                         nn["DataSource"].Value = dataSource[idxNo];
                         if (dataSource[idxNo].Contains("ID"))
                         {
-                            nn["_ID"].Value = nn["_ID"].Value.ToString() + dataSource[idxNo]["ID"].Value;
+                            nn["_ID"].Value = nn["_ID"].Value.ToString() + "x" + dataSource[idxNo]["ID"].Value;
                         }
                     }
 
@@ -1583,7 +1803,7 @@ focus, or clicking the widget with his mouse or touch screen";
                 nn["DataSource"].Value = dataSource;
                 if (dataSource.Contains("ID"))
                 {
-                    nn["_ID"].Value = nn["_ID"].Value.ToString() + dataSource["ID"].Value;
+                    nn["_ID"].Value = nn["_ID"].Value.ToString() + "x" + dataSource["ID"].Value;
                 }
             }
             if (preview)
@@ -1766,9 +1986,21 @@ focus, or clicking the widget with his mouse or touch screen";
                         typeName = typeof(bool).FullName;
                         break;
                 }
-                nn["Properties"][e.Params["PropertyName"].Get<string>()].Value = val;
-                if (!string.IsNullOrEmpty(typeName))
-                    nn["Properties"][e.Params["PropertyName"].Get<string>()].TypeName = typeName;
+                if (string.IsNullOrEmpty(val))
+                {
+                    nn["Properties"][e.Params["PropertyName"].Get<string>()].Delete();
+                    nn["Properties"].Children.RemoveAll(
+                        delegate(MetaForm.Node idxN)
+                        {
+                            return e.Params["PropertyName"].Get<string>() == idxN.Name;
+                        });
+                }
+                else
+                {
+                    nn["Properties"][e.Params["PropertyName"].Get<string>()].Value = val;
+                    if (!string.IsNullOrEmpty(typeName))
+                        nn["Properties"][e.Params["PropertyName"].Get<string>()].TypeName = typeName;
+                }
 
                 f.Form.Save();
 
