@@ -365,8 +365,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     colNode["ID"].Value = DataSource["Object"]["ID"].Get<int>();
                     colNode["OriginalWebPartID"].Value = DataSource["OriginalWebPartID"].Value;
 
-                    ActiveEvents.Instance.RaiseActiveEvent(
-                        this,
+                    if (DataSource["Type"]["Properties"][node.Name].Contains("ReadOnly"))
+                        colNode["ReadOnly"].Value = DataSource["Type"]["Properties"][node.Name]["ReadOnly"].Value;
+
+                    RaiseEvent(
                         eventName,
                         colNode);
 

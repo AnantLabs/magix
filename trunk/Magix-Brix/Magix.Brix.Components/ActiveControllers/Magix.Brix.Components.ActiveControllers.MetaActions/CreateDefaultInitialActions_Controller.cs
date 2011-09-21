@@ -470,10 +470,10 @@ no resuming can occur in any ways";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.DynamicEvent.EmptyActiveForm")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.EmptyAndClearActiveForm")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "Magix.DynamicEvent.EmptyActiveForm";
+                    a.Name = "Magix.DynamicEvent.EmptyAndClearActiveForm";
                     a.EventName = "Magix.MetaView.EmptyForm";
                     a.Description = @"Will empty the currrently active Editable Form. 
 Will determine which form raised the event originally, and explicitly empty that 
@@ -494,6 +494,65 @@ given URL parameter";
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "URL";
                     m.Value = "http://google.com";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.PutGETParameterIntoDataSource")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.PutGETParameterIntoDataSource";
+                    a.EventName = "Magix.Common.PutGETParameterIntoDataSource";
+                    a.Description = @"Will get the given parameter from the URL string and put it 
+into the given node";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "ParamName";
+                    m.Value = "ID";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "ConvertToType";
+                    m.Value = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.Transform")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.Transform";
+                    a.EventName = "Magix.Common.Transform";
+                    a.Description = @"Will transform the given parameter node immutably [will not change the 
+source] and return as a new Node collection according to the expression(s) in the 'Expression' parameter";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Expression";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetMetaObjectGraph")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.GetMetaObjectGraph";
+                    a.EventName = "Magix.Common.GetMetaObjectGraph";
+                    a.Description = @"Will return the entire Graph [warning, might be HUGE!] for 
+the MetaObject given, with all its Children Meta Objects too";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "ID";
+                    m.Value = "-1";
+                    m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);
 
                     a.Save();

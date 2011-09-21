@@ -235,11 +235,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         }
 
         /**
-         * Level2: Will serialize all Form Widgets with a valid Info field value such that a Node structure 
-         * is created according to the form widget values
+         * Level2: Will empty the form, and set all of its values back to their defaults, but only the ones 
+         * with a valid Info field, and which are editable for the end user
          */
-        [ActiveEvent(Name = "Magix.MetaForms.CreateNodeFromMetaForm")]
-        protected void Magix_MetaForms_CreateNodeFromMetaForm(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.MetaView.EmptyForm")]
+        protected void Magix_MetaView_EmptyForm(object sender, ActiveEventArgs e)
         {
             foreach (BaseControl idx in Selector.Select<BaseControl>(
                 ctrls,
@@ -257,6 +257,56 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 if (string.IsNullOrEmpty(dataFieldName))
                     continue;
 
+                EmptyControlValues(idx);
+            }
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void EmptyControlValues(BaseControl ctrl)
+        {
+            Node typeNode = GetTypeNode(ctrl);
+
+            Node node = DataSource;
+
+            node["Control"].Value = ctrl;
+            node["TypeNode"].Value = typeNode;
+
+            RaiseEvent(
+                "Magix.MetaForms.EmptySingleWidgetInstance",
+                node);
+
+            DataSource["Control"].UnTie();
+            DataSource["TypeNode"].UnTie();
+        }
+
+        /**
+         * Level2: Will serialize all Form Widgets with a valid Info field value such that a Node structure 
+         * is created according to the form widget values
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.CreateNodeFromMetaForm")]
+        protected void Magix_MetaForms_CreateNodeFromMetaForm(object sender, ActiveEventArgs e)
+        {
+            // Removing any previous saved objects ...
+            DataSource["Object"].UnTie();
+
+            foreach (BaseControl idx in Selector.Select<BaseControl>(
+                ctrls,
+                delegate(Control idxI)
+                {
+                    return idxI is BaseControl &&
+                        !string.IsNullOrEmpty((idxI as BaseControl).Info);
+                }))
+            {
+                string dataFieldName = idx.Info;
+                if (dataFieldName.Contains(":"))
+                {
+                    dataFieldName = dataFieldName.Split(':')[1];
+                }
+                if (string.IsNullOrEmpty(dataFieldName))
+                    continue;
+
                 SerializeControlValueIntoDataSourceNode(idx, dataFieldName);
             }
         }
@@ -264,6 +314,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         private void SerializeControlValueIntoDataSourceNode(BaseControl ctrl, string dataFieldName)
         {
             Node typeNode = GetTypeNode(ctrl);
+
+            if (typeNode == null)
+                return; //Oops ...!
 
             Node node = DataSource;
 
@@ -285,18 +338,37 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             Node typeNode = null;
             if (idx.ID.StartsWith("ID"))
             {
-                int id =
-                    idx.ID.Contains("x") ?
-                        int.Parse(idx.ID.Substring(2).Split('x')[0]) :
-                        int.Parse(idx.ID.Substring(2));
-                typeNode = DataSource["root"]["Surface"].Find(
-                    delegate(Node idxN)
-                    {
-                        return idxN.Name == "_ID" &&
-                            ((idxN.Value.ToString().Contains("x") &&
-                            int.Parse(idxN.Value.ToString().Split('x')[0]) == id) ||
-                            int.Parse(idxN.Value.ToString()) == id);
-                    }).Parent;
+                int id = -1;
+                if (idx.ID.Contains("x"))
+                {
+                    string[] t = idx.ID.Substring(2).Split('x');
+                    id = int.Parse(t[t.Length - 1]);
+                }
+                else if (idx.ID.StartsWith("ID"))
+                    id = int.Parse(idx.ID.Substring(2));
+
+                if (id != -1)
+                {
+                    typeNode = DataSource["root"]["Surface"].Find(
+                        delegate(Node idxN)
+                        {
+                            if (idxN.Name == "_ID")
+                            {
+                                if (idx.ID.Contains("x") &&
+                                    idxN.Value != null &&
+                                    idxN.Value.ToString().Contains("x"))
+                                {
+                                    string[] h = idxN.Value.ToString().Split('x');
+                                    return h[h.Length - 1] == id.ToString();
+                                }
+                                else
+                                    return idxN.Value.ToString() == id.ToString();
+                            }
+                            return false;
+                        });
+                    if (typeNode != null)
+                        typeNode = typeNode.Parent;
+                }
             }
             else
             {
@@ -342,7 +414,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     if (idx.Parent.Name == "Properties" &&
                         idx.Name != "_ID" &&
                         idx.Value != null &&
-                        idx.Value.ToString().StartsWith("DataSource"))
+                        idx.Value.ToString().StartsWith("{DataSource"))
                     {
                         // Only 'non-relative' data bindings ... [relative ones starts with a '[' ... ]
                         int id = (int)idx.Parent.Parent["_ID"].Value;
@@ -359,27 +431,30 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                             {
                                 Type toConvert = prop.PropertyType;
                                 object val = GetExpression(idx.Value as string);
-                                switch (toConvert.FullName)
-                                {
-                                    case "System.String":
-                                        val = val.ToString();
-                                        break;
-                                    case "System.Boolean":
-                                        val = bool.Parse(val.ToString());
-                                        break;
-                                    case "System.DateTime":
-                                        val = DateTime.ParseExact(val.ToString(), "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Decimal":
-                                        val = Decimal.Parse(val.ToString(), CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Int":
-                                        val = int.Parse(val.ToString(), CultureInfo.InvariantCulture);
-                                        break;
-                                }
                                 if (val != null)
                                 {
-                                    prop.GetSetMethod(true).Invoke(c, new object[] { val });
+                                    switch (toConvert.FullName)
+                                    {
+                                        case "System.String":
+                                            val = val.ToString();
+                                            break;
+                                        case "System.Boolean":
+                                            val = bool.Parse(val.ToString());
+                                            break;
+                                        case "System.DateTime":
+                                            val = DateTime.ParseExact(val.ToString(), "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                            break;
+                                        case "System.Decimal":
+                                            val = Decimal.Parse(val.ToString(), CultureInfo.InvariantCulture);
+                                            break;
+                                        case "System.Int":
+                                            val = int.Parse(val.ToString(), CultureInfo.InvariantCulture);
+                                            break;
+                                    }
+                                    if (val != null)
+                                    {
+                                        prop.GetSetMethod(true).Invoke(c, new object[] { val });
+                                    }
                                 }
                             }
                         }
@@ -398,6 +473,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 return null;
 
             object p = GetObjectFromExpression(expr, true);
+
+            if (p == null)
+                return null;
 
             switch (p.GetType().FullName)
             {
@@ -441,12 +519,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         if (tmp == ']')
                         {
                             lastEntity = "";
-                            if (!x.Contains(bufferNodeName))
-                            {
-                                if (doThrow)
-                                    throw new ArgumentException("Data expression '" + expr + "' doesn't exists in DataSource ...");
-                                return null;
-                            }
 
                             if (string.IsNullOrEmpty(bufferNodeName))
                                 throw new ArgumentException("Opps, empty node name/index ...");
@@ -463,12 +535,17 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                             if (allNumber)
                             {
                                 int intIdx = int.Parse(bufferNodeName);
-                                if (x.Count >= intIdx)
+                                if (x.Count > intIdx)
                                     x = x[intIdx];
-                                return null;
+                                else
+                                    return null;
                             }
                             else
                             {
+                                if (!x.Contains(bufferNodeName))
+                                {
+                                    return null;
+                                }
                                 x = x[bufferNodeName];
                             }
                             bufferNodeName = "";
