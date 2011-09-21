@@ -944,6 +944,80 @@ focus, or clicking the widget with his mouse or touch screen";
         }
 
         /**
+         * Level2: Expects a Widget in the 'Control' parameter, and the Type Node
+         * from the Meta Form as 'TypeNode'. Will empty and clear the control value 
+         * of the widget
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.EmptySingleWidgetInstance")]
+        protected void Magix_MetaForms_EmptySingleWidgetInstance(object sender, ActiveEventArgs e)
+        {
+            System.Web.UI.Control ctrl = e.Params["Control"].Get<System.Web.UI.Control>();
+
+            Node typeNode = e.Params["TypeNode"].Get<Node>();
+
+            if (typeNode == null)
+                return; // Oops ...!
+
+            string typeName = typeNode["TypeName"].Get<string>();
+
+            switch (typeName)
+            {
+                case "Magix.MetaForms.Plugins.CheckBox":
+                    {
+                        bool val = false;
+                        if (typeNode.Contains("Properties") &&
+                            typeNode["Properties"].Contains("Checked"))
+                            val = bool.Parse(typeNode["Properties"]["Checked"].Value.ToString());
+                        (ctrl as CheckBox).Checked = val;
+                    } break;
+                case "Magix.MetaForms.Plugins.TextBox":
+                    {
+                        string val = "";
+                        if (typeNode.Contains("Properties") &&
+                            typeNode["Properties"].Contains("Text"))
+                            val = typeNode["Properties"]["Text"].Get<string>();
+                        (ctrl as TextBox).Text = val;
+                    } break;
+                case "Magix.MetaForms.Plugins.TextArea":
+                    {
+                        string val = "";
+                        if (typeNode.Contains("Properties") &&
+                            typeNode["Properties"].Contains("Text"))
+                            val = typeNode["Properties"]["Text"].Get<string>();
+                        (ctrl as TextArea).Text = val;
+                    } break;
+                case "Magix.MetaForms.Plugins.RadioButton":
+                    {
+                        bool val = false;
+                        if (typeNode.Contains("Properties") &&
+                            typeNode["Properties"].Contains("Checked"))
+                            val = bool.Parse(typeNode["Properties"]["Checked"].Value.ToString()); ;
+                        (ctrl as RadioButton).Checked = val;
+                    } break;
+                case "Magix.MetaForms.Plugins.Calendar":
+                    {
+                        DateTime val = DateTime.Now;
+                        if (typeNode.Contains("Properties") &&
+                            typeNode["Properties"].Contains("Value"))
+                            val = DateTime.ParseExact(typeNode["Properties"]["Value"].Value.ToString(), "yyyy.MM.hh HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                        (ctrl as Calendar).Value = val;
+                    } break;
+                case "Magix.MetaForms.Plugins.Stars":
+                    {
+                        if (ctrl is RatingControl)
+                        {
+                            int val = 0;
+                            if (typeNode.Contains("Properties") &&
+                                typeNode["Properties"].Contains("Value"))
+                                val = int.Parse(typeNode["Properties"]["Checked"].Value.ToString());;
+                            (ctrl as RatingControl).Value = val;
+                        }
+                    } break;
+            }
+            
+        }
+
+        /**
          * Level2: Will create MetaObject(s) from the given 'Object' node, with 
          * the given 'TypeName' and save the Meta Objects to your data storage
          */
@@ -1033,7 +1107,7 @@ focus, or clicking the widget with his mouse or touch screen";
 
         /**
          * Level2: Will serialize one Widget [BaseControl instance] into the given node. The control should 
-         * exist as an instane in the 'Control' parameter, and the MetaForm serialized
+         * exist as an instance in the 'Control' parameter, and the MetaForm serialized
          * type node should exist in 'TypeNode'
          */
         [ActiveEvent(Name = "Magix.MetaForms.SerializeControlIntoNode")]
@@ -1042,29 +1116,21 @@ focus, or clicking the widget with his mouse or touch screen";
             string typeName = (e.Params["TypeNode"].Value as Node)["TypeName"].Get<string>();
             switch (typeName)
             {
-                case "Magix.MetaForms.Plugins.Button":
-                case "Magix.MetaForms.Plugins.Label":
                 case "Magix.MetaForms.Plugins.CheckBox":
                 case "Magix.MetaForms.Plugins.TextBox":
-                case "Magix.MetaForms.Plugins.HiddenField":
-                case "Magix.MetaForms.Plugins.Image":
-                case "Magix.MetaForms.Plugins.HyperLink":
-                case "Magix.MetaForms.Plugins.LinkButton":
                 case "Magix.MetaForms.Plugins.TextArea":
                 case "Magix.MetaForms.Plugins.RadioButton":
+                case "Magix.MetaForms.Plugins.HiddenField":
                 case "Magix.MetaForms.Plugins.Calendar":
-                case "Magix.MetaForms.Plugins.Panel":
                 case "Magix.MetaForms.Plugins.Stars":
-                    BaseControl ctrl = e.Params["Control"].Value as BaseControl;
-                    SerializeControlIntoNode(
-                        e.Params, 
-                        ctrl, 
-                        e.Params["TypeNode"].Value as Node,
-                        e.Params["DataFieldName"].Get<string>());
-                    break;
-                case "Magix.MetaForms.Plugins.Repeater":
-                    // Don't really need to do anything here ...
-                    break;
+                    {
+                        BaseControl ctrl = e.Params["Control"].Value as BaseControl;
+                        SerializeControlIntoNode(
+                            e.Params,
+                            ctrl,
+                            e.Params["TypeNode"].Value as Node,
+                            e.Params["DataFieldName"].Get<string>());
+                    } break;
             }
         }
 
@@ -1078,6 +1144,7 @@ focus, or clicking the widget with his mouse or touch screen";
             string dataFieldName)
         {
             string valOfCtrl = GetValueOfControl(ctrl, ctrlNode);
+
             if (string.IsNullOrEmpty(valOfCtrl))
                 return;
 
@@ -1110,8 +1177,6 @@ focus, or clicking the widget with his mouse or touch screen";
 
             Node tmp = destinationNode["Object"];
 
-            bool curIsRep = false;
-
             foreach (string i in path)
             {
                 string key = i;
@@ -1131,7 +1196,8 @@ focus, or clicking the widget with his mouse or touch screen";
                     tmp = tmp[key];
                     tmp["IsCollection"].Value = true;
                     tmp["TypeName"].Value = key;
-                    string ctrlCommonID = ctrl.ID.Split('x')[1];
+                    string[] x = ctrl.ID.Split('x');
+                    string ctrlCommonID = x[x.Length - 2];
                     tmp = tmp[ctrlCommonID];
                 }
             }
@@ -1355,7 +1421,8 @@ focus, or clicking the widget with his mouse or touch screen";
             Node dataSource = node.Contains("DataSource") ? node["DataSource"].Value as Node : null;
 
             // Actions ...
-            if (node.Contains("ControlNode") && (node["ControlNode"].Value as Node).Contains("Actions"))
+            if (node.Contains("ControlNode") && 
+                (node["ControlNode"].Value as Node).Contains("Actions"))
             {
                 foreach (Node idx in node["ControlNode"].Get<Node>()["Actions"])
                 {
@@ -1468,48 +1535,56 @@ focus, or clicking the widget with his mouse or touch screen";
                             tmp = GetExpression(tmp as string, dataSource);
                         }
 
-                        if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
+                        if (tmp == null)
                         {
-                            try
-                            {
-                                switch (info.GetGetMethod(true).ReturnType.FullName)
-                                {
-                                    case "System.String":
-                                        tmp = tmp.ToString();
-                                        break;
-                                    case "System.Boolean":
-                                        tmp = bool.Parse(tmp.ToString());
-                                        break;
-                                    case "System.DateTime":
-                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Int32":
-                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Decimal":
-                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    default:
-                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
-                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
-                                        else
-                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
-                                        break;
-                                }
-                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
-                            }
-                            catch
-                            {
-                                if (!node.Contains("Preview") ||
-                                    !node["Preview"].Get<bool>())
-                                {
-                                    throw;
-                                }
-                                ; // Do nothing, since it's probably a databound expression or something ...
-                            }
+                            if (info.PropertyType.IsClass)
+                                info.GetSetMethod(true).Invoke(ctrl, new object[] { null });
                         }
                         else
-                            info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                        {
+                            if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
+                            {
+                                try
+                                {
+                                    switch (info.GetGetMethod(true).ReturnType.FullName)
+                                    {
+                                        case "System.String":
+                                            tmp = tmp.ToString();
+                                            break;
+                                        case "System.Boolean":
+                                            tmp = bool.Parse(tmp.ToString());
+                                            break;
+                                        case "System.DateTime":
+                                            tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                            break;
+                                        case "System.Int32":
+                                            tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                            break;
+                                        case "System.Decimal":
+                                            tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                            break;
+                                        default:
+                                            if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
+                                                tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
+                                            else
+                                                throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
+                                            break;
+                                    }
+                                    info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                                }
+                                catch
+                                {
+                                    if (!node.Contains("Preview") ||
+                                        !node["Preview"].Get<bool>())
+                                    {
+                                        throw;
+                                    }
+                                    ; // Do nothing, since it's probably a databound expression or something ...
+                                }
+                            }
+                            else
+                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                        }
                     }
                 }
             }
@@ -1700,7 +1775,12 @@ focus, or clicking the widget with his mouse or touch screen";
                         nn["DataSource"].Value = dataSource[idxNo];
                         if (dataSource[idxNo].Contains("ID"))
                         {
-                            nn["_ID"].Value = nn["_ID"].Value.ToString() + "x" + dataSource[idxNo]["ID"].Value;
+                            nn["_ID"].Value = 
+                                nn["_ID"].Value.ToString() + 
+                                "x" + 
+                                ctrls.Parent["_ID"].Value +
+                                "x" + 
+                                dataSource[idxNo]["ID"].Value;
                         }
                     }
 
@@ -1803,7 +1883,7 @@ focus, or clicking the widget with his mouse or touch screen";
                 nn["DataSource"].Value = dataSource;
                 if (dataSource.Contains("ID"))
                 {
-                    nn["_ID"].Value = nn["_ID"].Value.ToString() + "x" + dataSource["ID"].Value;
+                    nn["_ID"].Value = parent.ID + "x" + nn["_ID"].Value.ToString();
                 }
             }
             if (preview)
@@ -2342,16 +2422,20 @@ focus, or clicking the widget with his mouse or touch screen";
         {
             string actions = e.Params["ActionsToExecute"].Get<string>();
 
-            foreach (string idx in actions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                e.Params["ActionName"].Value = idx;
+            ExecuteSafely(
+                delegate
+                {
+                    foreach (string idx in actions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        e.Params["ActionName"].Value = idx;
 
-                RaiseEvent(
-                    "Magix.MetaAction.RaiseAction",
-                    e.Params);
+                        RaiseEvent(
+                            "Magix.MetaAction.RaiseAction",
+                            e.Params);
 
-                e.Params["ActionName"].UnTie();
-            }
+                        e.Params["ActionName"].UnTie();
+                    }
+                }, "Something went wrong while executing your Actions ...");
         }
 
         /**

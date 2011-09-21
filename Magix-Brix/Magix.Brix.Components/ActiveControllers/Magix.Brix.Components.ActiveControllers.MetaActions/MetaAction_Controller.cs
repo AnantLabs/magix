@@ -335,9 +335,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             CreateRunParamButton(a);
 
-            CreateCreateParamButton(a);
+            if (!a.Name.StartsWith("Magix."))
+                CreateCreateParamButton(a);
 
-            CreateDeleteParamButton(a);
+            if (!a.Name.StartsWith("Magix."))
+                CreateDeleteParamButton(a);
 
             ActiveEvents.Instance.RaiseClearControls("content6");
         }
@@ -355,7 +357,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Top"].Value = 1;
             node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             node["ActionItemID"].Value = a.ID;
-            node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParam";
+
+            if (a.Name.StartsWith("Magix."))
+                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParamReadOnly";
+            else
+                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParam";
+
             node["GetItemsEvent"].Value = "Magix.MetaAction.GetActionItemTree";
             node["NoClose"].Value = true;
 
@@ -386,23 +393,26 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             // Making sure all Magix Actions are READ-ONLY for the user, so he doesn't start
             // changing their names and screwing up things ...
-            if (a.Name.StartsWith("Magix"))
+            if (a.Name.StartsWith("Magix."))
             {
+                // These are 'template actions', not intended for being edited at all
                 node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
                 node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
             }
             else
             {
                 node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
             }
 
             node["Type"]["Properties"]["EventName"]["Header"].Value = "Event Name";
             node["Type"]["Properties"]["EventName"]["Bold"].Value = true;
-            node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["StripInput"]["Header"].Value = "Strip Input Node";
             node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.DataPlugins.GetTemplateColumns.CheckBox";
-            node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
 
             node["Width"].Value = 18;
             node["Last"].Value = true;
@@ -639,7 +649,6 @@ Deleting it may break these parts.</p>";
             }
         }
 
-        // TODO: Too long ...!! [refactor]
         /**
          * Level2: Will initiate editing of Parameter for Action unless it's already being edited, at
          * which point it'll be 'brought to front'
@@ -647,10 +656,26 @@ Deleting it may break these parts.</p>";
         [ActiveEvent(Name = "Magix.MetaAction.EditParam")]
         private void Magix_Meta_EditParam(object sender, ActiveEventArgs e)
         {
-            Action.ActionParams p = 
+            ViewParameter(e, false);
+        }
+
+        /**
+         * Level2: Will initiate viewing of Parameter for Action unless it's already being viewed, at
+         * which point it'll be 'brought to front'
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.EditParamReadOnly")]
+        private void Magix_Meta_EditParamReadOnly(object sender, ActiveEventArgs e)
+        {
+            ViewParameter(e, true);
+        }
+
+        private void ViewParameter(ActiveEventArgs e, bool readOnly)
+        {
+            Action.ActionParams p =
                 Action.ActionParams.SelectByID(int.Parse(e.Params["SelectedItemID"].Value.ToString()));
 
             Node ch = new Node();
+
             ch["ID"].Value = p.ID;
 
             // Checks to see if Item is already being edited ...
@@ -673,8 +698,9 @@ Deleting it may break these parts.</p>";
                 node["WhiteListProperties"]["Value"].Value = true;
                 node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 4;
 
-                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-                node["Type"]["Properties"]["Value"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = readOnly;
+                node["Type"]["Properties"]["Value"]["ReadOnly"].Value = readOnly;
+                node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = readOnly;
                 node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn";
 
                 node["Width"].Value = 18;
@@ -741,6 +767,9 @@ Deleting it may break these parts.</p>";
 
             SelectList ls = new SelectList();
             ls.CssClass = "gridSelect";
+
+            if (e.Params.Contains("ReadOnly"))
+                ls.Enabled = !e.Params["ReadOnly"].Get<bool>();
 
             ls.SelectedIndexChanged +=
                 delegate
@@ -960,6 +989,40 @@ referring to the exact ID of an action, and needing to be an integer ...");
                 node = new Node();
             }
 
+            string eventName = action.EventName;
+
+            if (eventName.Contains("("))
+            {
+                string expr = eventName.Split('(')[1].Split(')')[0].Trim();
+
+                eventName = eventName.Substring(0, eventName.IndexOf("(")).Trim();
+
+                bool isInside = false;
+                string nodePath = "";
+                for (int idx = 0; idx < expr.Length; idx++)
+                {
+                    if (isInside)
+                    {
+                        if (expr[idx] == ']')
+                        {
+                            node = node[nodePath];
+                            nodePath = "";
+                            isInside = false;
+                            continue;
+                        }
+                        nodePath += expr[idx];
+                    }
+                    else
+                    {
+                        if (expr[idx] == '[')
+                        {
+                            isInside = true;
+                            continue;
+                        }
+                    }
+                }
+            }
+
             foreach (Action.ActionParams idx in action.Params)
             {
                 GetActionParameters(node, idx);
@@ -974,7 +1037,7 @@ referring to the exact ID of an action, and needing to be an integer ...");
             }
 
             RaiseEvent(
-                action.EventName,
+                eventName,
                 node);
         }
 

@@ -80,6 +80,74 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level2: Will put the given 'ParamName' GET parameter into the given node under
+         * the name of the Parameter
+         */
+        [ActiveEvent(Name = "Magix.Common.PutGETParameterIntoDataSource")]
+        protected void Magix_Common_PutGETParameterIntoDataSource(object sender, ActiveEventArgs e)
+        {
+            string nameOfParam = e.Params["ParamName"].Get<string>();
+            if (string.IsNullOrEmpty(nameOfParam))
+                throw new ArgumentException("Need a name of a specific GET parameter ...");
+
+            object tmp = Page.Request.Params[nameOfParam];
+
+            if (e.Params.Contains("ConvertToType"))
+            {
+                switch (e.Params["ConvertToType"].Get<string>())
+                {
+                    case "System.Int32":
+                        tmp = int.Parse(tmp.ToString());
+                        break;
+                    case "System.Boolean":
+                        tmp = bool.Parse(tmp.ToString());
+                        break;
+                    case "System.Decimal":
+                        tmp = decimal.Parse(tmp.ToString());
+                        break;
+                    case "System.DateTime":
+                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        break;
+                    default:
+                        throw new ArgumentException("Dont't know how to convert to that type ...");
+                }
+            }
+
+            if (tmp != null)
+                e.Params[nameOfParam].Value = tmp;
+        }
+
+        /**
+         * Level2: Will return an entire Graph of an object [all its child objects too] 
+         * to caller in the 'Object' return parameter. Expects to find the ID 
+         * of the MetaObject to fetch in the 'ID' parameter
+         */
+        [ActiveEvent(Name = "Magix.Common.GetMetaObjectGraph")]
+        protected void Magix_Common_GetMetaObjectGraph(object sender, ActiveEventArgs e)
+        {
+            MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+            SerializeMetaObject(o, e.Params["Object"]);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void SerializeMetaObject(MetaObject o, Node node)
+        {
+            node["TypeName"].Value = o.TypeName;
+            node["Reference"].Value = o.Reference;
+            foreach (MetaObject.Property idx in o.Values)
+            {
+                node[idx.Name].Value = idx.Value;
+            }
+            foreach (MetaObject idx in o.Children)
+            {
+                SerializeMetaObject(idx, node[idx.TypeName]["o-" + idx.ID]);
+            }
+        }
+
+        /**
          * Level2: Will validate the given object, sent from a MetaView SingleView, such that it conforms 
          * in its 'PropertyName' value towards the 'Type' parameter, which can either be 'email' or
          * 'number'. Meaning if the MetaView has a Property called 'Email', then if the property 
@@ -135,11 +203,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         ValidateFullName(e.Params);
                     } break;
             }
+            e.Params["Type"].UnTie();
+            e.Params["PropertyName"].UnTie();
         }
 
         private void ValidateFullName(Node node)
         {
-            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -222,7 +292,7 @@ of the first name(s)...");
 
         private void ValidateURL(Node node)
         {
-            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -265,7 +335,7 @@ of the first name(s)...");
 
         private void ValidateMandatory(Node node)
         {
-            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -278,7 +348,7 @@ and you didn't type anything in ...",
 
         private void ValidateNumber(Node node)
         {
-            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -312,7 +382,7 @@ can only contain numerical characters to be legal",
             bool pastAt = false;
             bool hasValidUpperDomain = false;
             bool hasSeenDomainDot = false;
-            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
+            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -415,6 +485,26 @@ can only contain numerical characters to be legal",
             RaiseEvent(
                 "Magix.Core.SendEmail",
                 node);
+        }
+
+        /**
+         * Level2: Will transform the input node [immutably] according to the 
+         * expressions within its 'Expression' parameter node and its children. 
+         * Will not change the source node [given parameters] in any ways, but 
+         * is 100% Immutable and will entirely change the Parameters and return and 
+         * entirely new Node parameters tree collection
+         */
+        [ActiveEvent(Name = "Magix.Common.Transform")]
+        protected void Magix_Common_TransformNode(object sender, ActiveEventArgs e)
+        {
+            if (!e.Params.Contains("Expression"))
+                throw new ArgumentException("TransformNode needs an 'Expression' node to understand how to transform your source node into the requested result");
+
+            Node expr = e.Params["Expression"];
+
+            Node retVal = new Node();
+
+            e.Params = retVal;
         }
 
         /**

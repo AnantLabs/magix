@@ -36,10 +36,15 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Panel pnl = new Panel();
 
             CheckBox ch = new CheckBox();
+
             ch.Style[Styles.floating] = "left";
             ch.Style[Styles.width] = "15px";
             ch.Style[Styles.display] = "block";
             ch.Checked = bool.Parse(e.Params["Value"].Value.ToString());
+
+            if (e.Params.Contains("ReadOnly"))
+                ch.Enabled = !e.Params["ReadOnly"].Get<bool>();
+
             ch.CheckedChanged +=
                 delegate
                 {
