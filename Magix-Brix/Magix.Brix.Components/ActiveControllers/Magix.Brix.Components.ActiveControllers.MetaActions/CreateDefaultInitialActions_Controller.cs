@@ -71,6 +71,29 @@ into the Node structure underneath the 'Object' node";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.LoadMetaForm")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.LoadMetaForm";
+                    a.EventName = "Magix.MetaForms.LoadMetaForm";
+                    a.Description = @"Will load the given 'MetaFormName' into the 
+given 'Container' WebPart";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "MetaFormName";
+                    m.Value = "-- SUPPLY_THE_NAME_OF_YOUR_OWN_META_FORM_HERE --";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Container";
+                    m.Value = "content2";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.SaveNodeSerializedFromMetaForm")) == 0)
                 {
                     Action a = new Action();
@@ -546,13 +569,20 @@ source] and return as a new Node collection according to the expression(s) in th
                     a.Name = "Magix.DynamicEvent.GetMetaObjectGraph";
                     a.EventName = "Magix.Common.GetMetaObjectGraph";
                     a.Description = @"Will return the entire Graph [warning, might be HUGE!] for 
-the MetaObject given, with all its Children Meta Objects too";
+the MetaObject given, with all its Children Meta Objects too within the 'Object' node of your 
+parameter";
                     a.StripInput = false;
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "ID";
-                    m.Value = "-1";
                     m.TypeName = typeof(int).FullName;
+                    m.Value = "-1";
+
+                    if (MetaObject.Count > 0)
+                    {
+                        m.Value = MetaObject.SelectFirst().ID.ToString();
+                    }
+
                     a.Params.Add(m);
 
                     a.Save();
@@ -990,6 +1020,125 @@ MultiActions or something ...";
                     m.Value = "-1";
                     m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ReplaceStringLiteral")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.DynamicEvent.ReplaceStringLiteral";
+                    a.EventName = "Magix.Common.ReplaceStringLiteral";
+                    a.Description = @"Expects three parameters, 'Replace', 'Replacement' and 
+'Source'. Will replace every occurency of 'Replace' in the 'Source' Node Expression 
+with either the expression or the value in the 'Replacement' parameter";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Source";
+                    m.Value = "{[MyText].Value}";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Replace";
+                    m.Value = "Who's there?";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Replacement";
+                    m.Value = "{[HelloWorld].Value}";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "HelloWorld";
+                    m.Value = "Magix!";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "MyText";
+                    m.Value = "Who's there? Who's there? Who's there? I'm here !! :)";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetMetaObjects")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.DynamicEvent.GetMetaObjects";
+                    a.EventName = "Magix.MetaObjects.GetMetaObjects";
+                    a.Description = @"Will return from 'Start' to 'End' MetaObjects 
+sorted according to newest first of Type Name 'MetaTypeName'. If you set 'Ascending' to false, 
+it will sort according to oldest first. Modify the 'Start' and 'End' parameters to 
+change your data extraction";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "MetaTypeName";
+                    m.Value = "Eco";
+                    a.Params.Add(m);// TODO: Implement Set Focus to Meta Forms ...
+
+                    m = new Action.ActionParams();
+                    m.Name = "Start";
+                    m.Value = "0";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "End";
+                    m.Value = "2";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetNextMetaObjects")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.DynamicEvent.GetNextMetaObjects";
+                    a.EventName = "Magix.MetaObjects.GetNextMetaObjects";
+                    a.Description = @"Will return from 'Start' to 'End' MetaObjects 
+sorted according to newest first of Type Name 'MetaTypeName'. But only AFTER both 
+'Start' and 'End' have been incremented by 'End' - 'Start'. If you set 'Ascending' to false, 
+it will sort according to oldest first. Modify the 'Start' and 'End' parameters to 
+change your data extraction. Useful for chaining together with its Previous counterpart, and its 
+get specific extraction counterpart";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "MetaTypeName";
+                    m.Value = "Eco";
+                    a.Params.Add(m);// TODO: Implement Set Focus to Meta Forms ...
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetPreviousMetaObjects")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.DynamicEvent.GetPreviousMetaObjects";
+                    a.EventName = "Magix.MetaObjects.GetPreviousMetaObjects";
+                    a.Description = @"Will return from 'Start' to 'End' MetaObjects 
+sorted according to newest first of Type Name 'MetaTypeName'. But only AFTER both 
+'Start' and 'End' have been decremented by 'End' - 'Start'. If you set 'Ascending' to false, 
+it will sort according to oldest first. Modify the 'Start' and 'End' parameters to 
+change your data extraction. Useful for chaining together with its Previous counterpart, and its 
+get specific extraction counterpart";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "MetaTypeName";
+                    m.Value = "Eco";
+                    a.Params.Add(m);// TODO: Implement Set Focus to Meta Forms ...
 
                     a.Save();
                 }

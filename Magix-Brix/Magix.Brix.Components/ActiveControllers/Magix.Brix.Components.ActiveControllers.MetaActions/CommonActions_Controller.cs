@@ -16,6 +16,7 @@ using System.Globalization;
 using Magix.Brix.Components.ActiveTypes.MetaViews;
 using System.IO;
 using Magix.UX;
+using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -71,12 +72,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Will scroll the Client browser all the way back to the top
+         * Level2: Will scroll the Client browser all the way back to the top over a period
+         * of 500 Milliseconds [.5 seconds]
          */
         [ActiveEvent(Name = "Magix.MetaView.ScrollClientToTop")]
         protected void Magix_MetaView_ScrollClientToTop(object sender, ActiveEventArgs e)
         {
-            AjaxManager.Instance.WriterAtBack.Write("window.scrollTo(0, 0);");
+            new EffectScrollBrowser(500).Render();
         }
 
         /**
@@ -128,6 +130,179 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
             SerializeMetaObject(o, e.Params["Object"]);
+        }
+
+        /**
+         * Level2: Will return from 'Start' to 'End', sorted according to newest first 
+         * Meta Objects of type 'MetaTypeName' in the 'Objects' parameter. If you set 
+         * 'Ascending' to true, it will sort according to oldest first
+         */
+        [ActiveEvent(Name = "Magix.MetaObjects.GetMetaObjects")]
+        protected void Magix_MetaObjects_GetMetaObjects(object sender, ActiveEventArgs e)
+        {
+            string typeName = e.Params["MetaTypeName"].Get<string>();
+            if (string.IsNullOrEmpty(typeName))
+                throw new ArgumentException("You need to specify a 'MetaTypeName' parameter");
+
+            int start = e.Params["Start"].Get<int>(-1);
+            int end = e.Params["End"].Get<int>(-1);
+
+            if (end == -1)
+                throw new ArgumentException("You need to specify an 'End' parameter");
+
+            bool ascending = false;
+
+            if (e.Params.Contains("Ascending"))
+                ascending = e.Params["Ascending"].Get<bool>();
+
+            foreach (MetaObject idx in
+                MetaObject.Select(
+                    Criteria.Eq("TypeName", typeName),
+                    Criteria.Range(start, end, "Created", ascending)))
+            {
+                GetOneObject(e.Params["Objects"], idx);
+            }
+        }
+
+        /**
+         * Level2: Requires 'Start', 'End' and 'MetaTypeName', just like its GetMetaObjects event counterpart.
+         * Will first UnTie the 'Objects' node, then it will increase 'Start' and 'End' by 'End' - 'Start', 
+         * and the same increase for 'End', and then return these objects to the caller in 'Objects'. You can 
+         * also add 'Ascending' as a boolean to signigy sorting order. It will also return its new 'Start' and 
+         * 'End' value according to which objects where actually fetched. Will display a message to user if there 
+         * are no more objects to be fetched
+         */
+        [ActiveEvent(Name = "Magix.MetaObjects.GetNextMetaObjects")]
+        protected void Magix_MetaObjects_GetNextMetaObjects(object sender, ActiveEventArgs e)
+        {
+            string typeName = e.Params["MetaTypeName"].Get<string>();
+            if (string.IsNullOrEmpty(typeName))
+                throw new ArgumentException("You need to specify a 'MetaTypeName' parameter");
+
+            int start = e.Params["Start"].Get<int>(-1);
+            int end = e.Params["End"].Get<int>(-1);
+
+            if (end == -1 || 
+                start == -1)
+                throw new ArgumentException("You need to specify a 'Start' and 'End' parameter");
+
+            e.Params["Objects"].UnTie();
+
+            int delta = end - start;
+
+            start += delta;
+            end += delta;
+
+            int objCount = MetaObject.CountWhere(Criteria.Eq("TypeName", typeName));
+
+            if (end > objCount)
+            {
+                ShowMessage("No more objects here ...");
+                start = objCount - delta;
+                end = objCount;
+            }
+
+            bool ascending = false;
+
+            if (e.Params.Contains("Ascending"))
+                ascending = e.Params["Ascending"].Get<bool>();
+
+            foreach (MetaObject idx in
+                MetaObject.Select(
+                    Criteria.Eq("TypeName", typeName),
+                    Criteria.Range(start, end, "Created", ascending)))
+            {
+                GetOneObject(e.Params["Objects"], idx);
+            }
+
+            e.Params["Start"].Value = start;
+            e.Params["End"].Value = end;
+        }
+
+        /**
+         * Level2: Requires 'Start', 'End' and 'MetaTypeName', just like its GetMetaObjects event counterpart.
+         * Will first UnTie the 'Objects' node, then it will decrease 'Start' and 'End' by 'End' - 'Start', 
+         * and the same decrease for 'End', and then return these objects to the caller in 'Objects'. You can 
+         * also add 'Ascending' as a boolean to signigy sorting order. It will also return its new 'Start' and 
+         * 'End' value according to which objects where actually fetched. Will display a message to user if there 
+         * are no more objects to be fetched
+         */
+        [ActiveEvent(Name = "Magix.MetaObjects.GetPreviousMetaObjects")]
+        protected void Magix_MetaObjects_GetPreviousMetaObjects(object sender, ActiveEventArgs e)
+        {
+            Node old = e.Params["Objects"].UnTie();
+
+            string typeName = e.Params["MetaTypeName"].Get<string>();
+            if (string.IsNullOrEmpty(typeName))
+                throw new ArgumentException("You need to specify a 'MetaTypeName' parameter");
+
+            int start = e.Params["Start"].Get<int>(-1);
+            int end = e.Params["End"].Get<int>(-1);
+
+            if (end == -1)
+                throw new ArgumentException("You need to specify an 'End' parameter");
+
+            int delta = end - start;
+
+            start -= delta;
+            end -= delta;
+
+            if (start < 0)
+            {
+                ShowMessage("These are the first objects of that type at the moment ...");
+                start = 0;
+                end = delta;
+            }
+
+            bool ascending = false;
+
+            if (e.Params.Contains("Ascending"))
+                ascending = e.Params["Ascending"].Get<bool>();
+
+            foreach (MetaObject idx in
+                MetaObject.Select(
+                    Criteria.Eq("TypeName", typeName),
+                    Criteria.Range(start, end, "Created", ascending)))
+            {
+                GetOneObject(e.Params["Objects"], idx);
+            }
+
+            if (!e.Params.Contains("Objects") ||
+                e.Params["Objects"].Count == 0)
+            {
+                // No more objects, showing user ...
+                // And retying old object back in loop ...
+                e.Params["Object"] = old;
+
+                ShowMessage("Sorry, there are no more objects to be fetched of that type ... ");
+            }
+            else
+            {
+                e.Params["Start"].Value = start;
+                e.Params["End"].Value = end;
+            }
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private static void GetOneObject(Node node, MetaObject o)
+        {
+            node["o-" + o.ID]["ID"].Value = o.ID;
+            node["o-" + o.ID]["TypeName"].Value = o.TypeName;
+            node["o-" + o.ID]["Created"].Value = o.Created.ToString("yyyy.MM.dd HH:mm:ss");
+
+            foreach (MetaObject.Property idx in o.Values)
+            {
+                node["o-" + o.ID]["Properties"][idx.Name]["ID"].Value = idx.ID;
+                node["o-" + o.ID]["Properties"][idx.Name]["Name"].Value = idx.Name;
+                node["o-" + o.ID]["Properties"][idx.Name]["Value"].Value = idx.Value;
+            }
+
+            foreach (MetaObject idx in o.Children)
+            {
+                GetOneObject(node["o-" + o.ID]["Objects"], idx);
+            }
         }
 
         /*
@@ -500,11 +675,198 @@ can only contain numerical characters to be legal",
             if (!e.Params.Contains("Expression"))
                 throw new ArgumentException("TransformNode needs an 'Expression' node to understand how to transform your source node into the requested result");
 
-            Node expr = e.Params["Expression"];
-
             Node retVal = new Node();
 
-            e.Params = retVal;
+            Node expr = e.Params["Expression"];
+
+            Transform(expr, e.Params, retVal);
+
+            e.Params["Expression"] = retVal;
+        }
+
+        private void Transform(Node expr, Node source, Node destination)
+        {
+            destination.Name = (GetExpressionValue(expr.Name, source) ?? "").ToString();
+            destination.Value = GetExpressionValue(expr.Value as string, source);
+
+            if (expr.Value != null &&
+                expr.Value.ToString().Contains(":{") &&
+                expr.Value.ToString().Contains("}"))
+            {
+                // We have children declaration ...
+                destination.AddRange(
+                    GetExpressionValue(expr.Value.ToString().Split(':')[1], source) 
+                        as IEnumerable<Node>);
+            }
+
+            foreach (Node idx in expr)
+            {
+                Node x = new Node();
+                destination.Add(x);
+                Transform(idx, source, x);
+            }
+        }
+
+        /**
+         * Level2: Documented, although not directly accessible for anyone outside of code, though used
+         * heavily in virtually every single module and component which uses Expressions, which are
+         * statements of text starting with '{', without the quotes. This method will return one out of 
+         * four different possible values, a null value, meaning 'empty value', as in for instance; 
+         * 'not found' or 'didn't have a value'. It can also return itself, if you try to check a
+         * text literal for its expression value, and it contains no expression, it will return 
+         * 'itself' such as if for instance your expression parameter was for instance; 'Hello World...',
+         * it would return; 'Hello World...'. If your expression starts with a '{', it will be treated 
+         * as a 'lookup' into your given source Node structure, for instance the expression;
+         * {[Objects][0][Email].Value} will return whatever happens to be at the Value property of 
+         * the 'Email' node, which is in the 'first child' of the 'Objects' node within your DataSource, if 
+         * you're in a Form of some sort for instance. While; {[0].Name} will return the name of the 
+         * first node, and {[Objects]} will return all nodes in the 'Objects' node
+         */
+        private object GetExpressionValue(string expression, Node source)
+        {
+            if (expression == null)
+                return null;
+
+            if (!expression.StartsWith("{"))
+            {
+                if (!expression.Contains("{"))
+                    return expression;
+                return expression;
+            }
+
+            string expr = expression.Split('{')[1].Split('}')[0];
+
+            Node x = source;
+
+            bool isInside = false;
+            string bufferNodeName = null;
+            string lastEntity = null;
+
+            for (int idx = 0; idx < expr.Length; idx++)
+            {
+                char tmp = expr[idx];
+                if (isInside)
+                {
+                    if (tmp == ']')
+                    {
+                        lastEntity = "";
+                        if (!x.Contains(bufferNodeName))
+                        {
+                            return null;
+                        }
+
+                        if (string.IsNullOrEmpty(bufferNodeName))
+                            throw new ArgumentException("Opps, empty node name/index ...");
+
+                        bool allNumber = true;
+                        foreach (char idxC in bufferNodeName)
+                        {
+                            if (("0123456789").IndexOf(idxC) == -1)
+                            {
+                                allNumber = false;
+                                break;
+                            }
+                        }
+                        if (allNumber)
+                        {
+                            int intIdx = int.Parse(bufferNodeName);
+                            if (x.Count >= intIdx)
+                                x = x[intIdx];
+                            return null;
+                        }
+                        else
+                        {
+                            x = x[bufferNodeName];
+                        }
+                        bufferNodeName = "";
+                        isInside = false;
+                        continue;
+                    }
+                    bufferNodeName += tmp;
+                }
+                else
+                {
+                    if (tmp == '[')
+                    {
+                        bufferNodeName = "";
+                        isInside = true;
+                        continue;
+                    }
+                    lastEntity += tmp;
+                }
+            }
+            if (lastEntity == ".Value")
+                return x.Value;
+            else if (lastEntity == ".Name")
+                return x.Name;
+            else if (lastEntity == "")
+                return x;
+
+            return null;
+        }
+
+        /**
+         * Level2: Will replace all occurencies of 'Replace' Value, which must be an Expression with 
+         * the expression in 'Replacement' Value node, within the 'Source' expression. For instance, 
+         * if you have a node in your DataSource 
+         * at DataSource[Object][Properties][Email].Value containing;
+         * "sdfouh sdfouh sdfu sdfigqweeqw !!Name!! mumbo-jumbo" and you want to replace all occurencies 
+         * of the string literal '!!Name!!' with whatever happens to be in your current 
+         * DataSource[Name][0].Value, then the Node structure you'd have to create to pass into 
+         * this Event is;
+         * [Replace].Value equals '!!Name!!'
+         * [Replacement].Value equals '{[Name][0].Value}'
+         * [Source].Value = '[Object][Properties][Email].Value'
+         * Both 'Replace' and 'Replacement' might either be static text or Expressions. 
+         * All three parameters must somehow point to single instances, and not Node lists
+         * or anything, but they can all end with either 'Value' or 'Name'
+         */
+        [ActiveEvent(Name = "Magix.Common.ReplaceStringLiteral")]
+        protected void Magix_Common_ReplaceStringLiteral(object sender, ActiveEventArgs e)
+        {
+            string replace = e.Params["Replace"].Get<string>();
+            if (string.IsNullOrEmpty(replace))
+                throw new ArgumentException("You must supply a 'Replace' parameter to the ReplaceStringLiteral Event");
+
+            string replacement = e.Params["Replacement"].Get<string>();
+            if (string.IsNullOrEmpty(replacement))
+                throw new ArgumentException("You must supply a 'Replacement' parameter to the ReplaceStringLiteral Event");
+
+            string source = e.Params["Source"].Get<string>();
+            if (string.IsNullOrEmpty(source))
+                throw new ArgumentException("You must supply a 'Source' parameter to the ReplaceStringLiteral Event");
+
+            ReplaceStringLiteral(replace, replacement, source, e.Params);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void ReplaceStringLiteral(string replace, string replacement, string source, Node node)
+        {
+            object replaceObj = GetExpressionValue(replace, node) as string;
+            if (replaceObj == null)
+                throw new ArgumentException("Invalid 'Replace' parameter; " + replace);
+
+            object replacementObj = GetExpressionValue(replacement, node);
+            if (replacementObj == null)
+                throw new ArgumentException("Invalid 'Replacement' parameter; " + replacement);
+
+            string tmp = GetExpressionValue(source, node) as string;
+            if (tmp == null) // must be string ...!!
+                throw new ArgumentException("Invalid 'Source' parameter; " + replacement);
+
+            string nodeStr = source.Trim().Trim('{').Trim('}').Trim();
+            bool isValue = nodeStr.EndsWith(".Value");
+            nodeStr = nodeStr.Substring(0, nodeStr.LastIndexOf('.'));
+            nodeStr = "{" + nodeStr + "}";
+
+            Node tmp2 = GetExpressionValue(nodeStr, node) as Node;
+
+            if (isValue)
+                tmp2.Value = tmp2.Value.ToString().Replace(replaceObj.ToString(), replacementObj.ToString());
+            else
+                tmp2.Name = tmp2.Value.ToString().Replace(replaceObj.ToString(), replacementObj.ToString());
         }
 
         /**

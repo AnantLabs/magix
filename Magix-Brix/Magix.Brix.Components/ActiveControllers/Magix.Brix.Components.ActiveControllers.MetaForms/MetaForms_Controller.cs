@@ -1066,6 +1066,7 @@ focus, or clicking the widget with his mouse or touch screen";
                 }
 
                 o.Save();
+                e.Params["Object"]["ID"].Value = o.ID;
 
                 tr.Commit();
             }
@@ -2422,10 +2423,32 @@ focus, or clicking the widget with his mouse or touch screen";
         {
             string actions = e.Params["ActionsToExecute"].Get<string>();
 
+            BaseWebControl ctrl = sender as BaseWebControl;
+
+            string infoValue = "";
+
+            if (ctrl != null)
+            {
+                infoValue = ctrl.Info;
+                if (!string.IsNullOrEmpty(infoValue))
+                {
+                    int tmpInt = 0;
+
+                    if (int.TryParse(infoValue, out tmpInt))
+                        e.Params["WidgetInfo"].Value = tmpInt;
+                    else
+                        e.Params["WidgetInfo"].Value = infoValue;
+                }
+            }
+
             ExecuteSafely(
                 delegate
                 {
-                    foreach (string idx in actions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                    foreach (
+                        string idx in 
+                            actions.Split(
+                                new char[] { '|' }, 
+                                StringSplitOptions.RemoveEmptyEntries))
                     {
                         e.Params["ActionName"].Value = idx;
 
@@ -2612,6 +2635,31 @@ focus, or clicking the widget with his mouse or touch screen";
             {
                 ActiveEvents.Instance.RaiseClearControls("content4");
             }
+        }
+
+        /**
+         * Level2: Epects a 'MetaFormName' pointing to a name of a specific Meta Form, and a 
+         * 'Container' which normally would be between content1 to content7 or just child. 
+         * The 'Container' must be based upon a WebPartTemplate which is of type MetaView_Form.
+         * Meaning, if there's not already a MetaForm in the location your 'Container' parameter 
+         * is pointing to, then the Action will choke and break
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.LoadMetaForm")]
+        protected void Magix_MetaForms_LoadMetaForm(object sender, ActiveEventArgs e)
+        {
+            string container = e.Params["Container"].Get<string>();
+
+            if (string.IsNullOrEmpty(container))
+                throw new ArgumentException("Excuse me, load the module _where_  ...? [no 'Container' parameter given ... ]");
+
+            string metaFormName = e.Params["MetaFormName"].Get<string>();
+
+            if (string.IsNullOrEmpty(metaFormName))
+                throw new ArgumentException("Excuse me, _which_ Meta Form should we load  ...? [no 'MetaFormName' parameter given ... ]");
+
+            RaiseEvent(
+                "Magix.MetaForms.LoadNewMetaForm",
+                e.Params);
         }
     }
 }

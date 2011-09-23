@@ -14,7 +14,6 @@ using Magix.UX.Widgets.Core;
 
 namespace Magix.UX.Widgets
 {
-    // TODO: Doesn't work in Safari ...
     /**
      * Level4: Widget encapsulating an HTML5 drag and drop File Uploader control,
      * with progree bar and support for multiple files
@@ -121,7 +120,9 @@ namespace Magix.UX.Widgets
             using (Element el = builder.CreateElement("div"))
             {
                 AddAttributes(el);
+
                 RenderChildren(builder.Writer);
+
                 using (Element ul = builder.CreateElement("ul"))
                 {
                     ul.AddAttribute("id", this.ClientID + "_ul");

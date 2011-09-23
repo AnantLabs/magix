@@ -42,7 +42,6 @@ namespace Magix.Brix.Viewports
         protected Panel wrp;
         protected Window[] wnd;
         protected DynamicPanel[] child;
-        protected AspectSmartScroll scroll;
         protected Image ajaxWait;
         protected Panel debug;
         protected Timer timer;
