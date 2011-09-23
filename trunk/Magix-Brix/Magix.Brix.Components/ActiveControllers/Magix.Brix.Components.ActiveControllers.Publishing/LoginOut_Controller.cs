@@ -28,10 +28,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
     public class LoginOut_Controller : ActiveController
     {
         /**
-         * Level2: Basically just checks to see if the given username/password 
+         * Level2: Basically just checks to see if the given 'Username'/'Password' 
          * combination exists, and if so sets the User.Current object, which
          * is static per request, returning the logged in user. Then if successful,
-         * raises the 'Magix.Core.UserLoggedIn' event
+         * raises the 'Magix.Core.UserLoggedIn' event. Normally this implies 
+         * a re-direct of the entire page, going to the 'root page level' automatically 
+         * if the login attempt was successful
          */
         [ActiveEvent(Name = "Magix.Core.LogInUser")]
         protected void Magix_Core_LogInUser(object sender, ActiveEventArgs e)

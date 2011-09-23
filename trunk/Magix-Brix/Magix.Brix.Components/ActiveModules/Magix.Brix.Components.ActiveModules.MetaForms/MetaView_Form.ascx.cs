@@ -235,6 +235,33 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         }
 
         /**
+         * Level2: Expects a 'Container' parameter, and if it matches the Container of this specific module, 
+         * it will change the MetaForm, load that specific MetaForm into itself, and run the Init Actions
+         * of that specific MetaForm as if it was just loaded normally
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.LoadNewMetaForm")]
+        protected void Magix_MetaForms_LoadNewMetaForm(object sender, ActiveEventArgs e)
+        {
+            if (this.Parent.ID == e.Params["Container"].Get<string>())
+            {
+                MetaFormName = e.Params["MetaFormName"].Get<string>();
+
+                DataSource["MetaFormName"].Value = MetaFormName;
+                DataSource["root"].UnTie();
+                DataSource["Controls"].UnTie();
+
+                RaiseSafeEvent(
+                    "Magix.MetaForms.GetControlsForForm",
+                    DataSource);
+
+                ctrls.Controls.Clear();
+                CreateFormControls();
+                ExecuteInitActions();
+                ctrls.ReRender();
+            }
+        }
+
+        /**
          * Level2: Will empty the form, and set all of its values back to their defaults, but only the ones 
          * with a valid Info field, and which are editable for the end user
          */
