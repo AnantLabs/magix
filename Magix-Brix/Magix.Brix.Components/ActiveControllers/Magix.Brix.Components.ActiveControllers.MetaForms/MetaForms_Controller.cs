@@ -1022,7 +1022,8 @@ focus, or clicking the widget with his mouse or touch screen";
          * the given 'TypeName' and save the Meta Objects to your data storage. If the 'Object'
          * node contains an 'ID' child node, then the system will assume this is the ID
          * for an existing Meta Object, fetch that Object and instead of creating a new object, 
-         * update the values for the existing on
+         * update the values for the existing on. If it's updating an existing object, it will 
+         * delete all existing properties of that specific object if 'CleanProperties' is true
          */
         [ActiveEvent(Name = "Magix.MetaForms.SaveNodeSerializedFromMetaForm")]
         protected void Magix_MetaForms_SaveNodeSerializedFromMetaForm(object sender, ActiveEventArgs e)
@@ -1031,11 +1032,16 @@ focus, or clicking the widget with his mouse or touch screen";
             {
                 Node node = e.Params;
 
+                bool clean = e.Params.Contains("CleanProperties") && 
+                    e.Params["CleanProperties"].Get<bool>();
+
                 MetaObject o = new MetaObject();
 
                 if (node["Object"].Contains("ID"))
                 {
                     o = MetaObject.SelectByID(int.Parse(node["Object"]["ID"].Value.ToString()));
+                    if (clean)
+                        o.Values.Clear(); // TODO: Implement cleaning for child objects ...
                 }
 
                 o.TypeName = node["TypeName"].Get<string>();

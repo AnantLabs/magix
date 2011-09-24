@@ -108,6 +108,12 @@ down do a graph depending upon how the Object node looks like";
                     m.Value = "Magix.Demo.Rating";
                     a.Params.Add(m);
 
+                    m = new Action.ActionParams();
+                    m.Name = "CleanProperties";
+                    m.Value = "True";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
                     a.Save();
                 }
 
