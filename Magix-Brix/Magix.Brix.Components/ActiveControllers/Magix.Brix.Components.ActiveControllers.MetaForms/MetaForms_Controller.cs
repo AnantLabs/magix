@@ -1019,7 +1019,10 @@ focus, or clicking the widget with his mouse or touch screen";
 
         /**
          * Level2: Will create MetaObject(s) from the given 'Object' node, with 
-         * the given 'TypeName' and save the Meta Objects to your data storage
+         * the given 'TypeName' and save the Meta Objects to your data storage. If the 'Object'
+         * node contains an 'ID' child node, then the system will assume this is the ID
+         * for an existing Meta Object, fetch that Object and instead of creating a new object, 
+         * update the values for the existing on
          */
         [ActiveEvent(Name = "Magix.MetaForms.SaveNodeSerializedFromMetaForm")]
         protected void Magix_MetaForms_SaveNodeSerializedFromMetaForm(object sender, ActiveEventArgs e)
@@ -1029,6 +1032,11 @@ focus, or clicking the widget with his mouse or touch screen";
                 Node node = e.Params;
 
                 MetaObject o = new MetaObject();
+
+                if (node["Object"].Contains("ID"))
+                {
+                    o = MetaObject.SelectByID(int.Parse(node["Object"]["ID"].Value.ToString()));
+                }
 
                 o.TypeName = node["TypeName"].Get<string>();
 
@@ -1056,12 +1064,28 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         ; // nothing ...
                     }
+                    else if (idx.Name == "ID")
+                    {
+                        ; // nothing ...
+                    }
                     else
                     {
-                        MetaObject.Property p = new MetaObject.Property();
-                        p.Name = idx.Name;
-                        p.Value = idx.Value.ToString();
-                        o.Values.Add(p);
+                        MetaObject.Property old = o.Values.Find(
+                            delegate(MetaObject.Property idxP)
+                            {
+                                return idxP.Name == idx.Name;
+                            });
+                        if (old != null)
+                        {
+                            old.Value = idx.Value.ToString();
+                        }
+                        else
+                        {
+                            MetaObject.Property p = new MetaObject.Property();
+                            p.Name = idx.Name;
+                            p.Value = idx.Value.ToString();
+                            o.Values.Add(p);
+                        }
                     }
                 }
 
@@ -1096,10 +1120,22 @@ focus, or clicking the widget with his mouse or touch screen";
                 }
                 else
                 {
-                    MetaObject.Property p = new MetaObject.Property();
-                    p.Name = idx.Name;
-                    p.Value = idx.Value.ToString();
-                    o.Values.Add(p);
+                    MetaObject.Property old = o.Values.Find(
+                        delegate(MetaObject.Property idxP)
+                        {
+                            return idxP.Name == idx.Name;
+                        });
+                    if (old != null)
+                    {
+                        old.Value = idx.Value.ToString();
+                    }
+                    else
+                    {
+                        MetaObject.Property p = new MetaObject.Property();
+                        p.Name = idx.Name;
+                        p.Value = idx.Value.ToString();
+                        o.Values.Add(p);
+                    }
                 }
             }
 
@@ -1535,57 +1571,58 @@ focus, or clicking the widget with his mouse or touch screen";
                         {
                             tmp = GetExpression(tmp as string, dataSource);
                         }
-
-                        if (tmp == null)
+                        else if (tmp != null &&
+                            tmp is string &&
+                            (tmp as string).StartsWith("{") &&
+                            (!node.Contains("Preview") ||
+                            !node["Preview"].Get<bool>()) &&
+                            GetExpression(tmp as string, dataSource) == null)
                         {
-                            if (info.PropertyType.IsClass)
-                                info.GetSetMethod(true).Invoke(ctrl, new object[] { null });
+                            continue;
+                        }
+                        if (tmp != null && 
+                            tmp.GetType() != info.GetGetMethod(true).ReturnType)
+                        {
+                            try
+                            {
+                                switch (info.GetGetMethod(true).ReturnType.FullName)
+                                {
+                                    case "System.String":
+                                        tmp = tmp.ToString();
+                                        break;
+                                    case "System.Boolean":
+                                        tmp = bool.Parse(tmp.ToString());
+                                        break;
+                                    case "System.DateTime":
+                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Int32":
+                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    case "System.Decimal":
+                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        break;
+                                    default:
+                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
+                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
+                                        else
+                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
+                                        break;
+                                }
+                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
+                            }
+                            catch
+                            {
+                                if (!node.Contains("Preview") ||
+                                    !node["Preview"].Get<bool>())
+                                {
+                                    throw;
+                                }
+                                ; // Do nothing, since it's probably a databound expression or something ...
+                            }
                         }
                         else
-                        {
-                            if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
-                            {
-                                try
-                                {
-                                    switch (info.GetGetMethod(true).ReturnType.FullName)
-                                    {
-                                        case "System.String":
-                                            tmp = tmp.ToString();
-                                            break;
-                                        case "System.Boolean":
-                                            tmp = bool.Parse(tmp.ToString());
-                                            break;
-                                        case "System.DateTime":
-                                            tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                            break;
-                                        case "System.Int32":
-                                            tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                            break;
-                                        case "System.Decimal":
-                                            tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                            break;
-                                        default:
-                                            if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
-                                                tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
-                                            else
-                                                throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
-                                            break;
-                                    }
-                                    info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
-                                }
-                                catch
-                                {
-                                    if (!node.Contains("Preview") ||
-                                        !node["Preview"].Get<bool>())
-                                    {
-                                        throw;
-                                    }
-                                    ; // Do nothing, since it's probably a databound expression or something ...
-                                }
-                            }
-                            else
-                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
-                        }
+                            info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
                     }
                 }
             }
@@ -1774,6 +1811,7 @@ focus, or clicking the widget with his mouse or touch screen";
                     if (dataSource != null)
                     {
                         nn["DataSource"].Value = dataSource[idxNo];
+
                         if (dataSource[idxNo].Contains("ID"))
                         {
                             nn["_ID"].Value = 

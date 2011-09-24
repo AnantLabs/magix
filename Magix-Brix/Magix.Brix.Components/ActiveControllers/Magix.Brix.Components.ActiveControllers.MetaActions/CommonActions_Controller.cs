@@ -129,6 +129,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             MetaObject o = MetaObject.SelectByID(e.Params["ID"].Get<int>());
 
+            e.Params["Object"].UnTie();
+
             SerializeMetaObject(o, e.Params["Object"]);
         }
 
@@ -154,6 +156,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             if (e.Params.Contains("Ascending"))
                 ascending = e.Params["Ascending"].Get<bool>();
+
+            e.Params["Objects"].UnTie();
 
             foreach (MetaObject idx in
                 MetaObject.Select(
@@ -258,6 +262,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             if (e.Params.Contains("Ascending"))
                 ascending = e.Params["Ascending"].Get<bool>();
+
+            e.Params["Objects"].UnTie();
 
             foreach (MetaObject idx in
                 MetaObject.Select(
@@ -1044,6 +1050,8 @@ can only contain numerical characters to be legal",
                 throw new ArgumentException(
                     @"Some wize-guy have deleted your object dude. 
 Update the ID property of your Action to another Meta Object ...");
+
+            e.Params["Properties"].UnTie();
 
             foreach (MetaObject.Property idx in o.Values)
             {

@@ -370,7 +370,14 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                             catch (Exception err)
                             {
                                 Node node = new Node();
-                                node["Message"].Value = err.Message;
+
+                                node["Message"].Value =
+                                    "<p>Something went wrong</p>" +
+                                    "<p>Message from Server; </p>" +
+                                    "<p>" + err.Message + "</p>" +
+                                    "<p>Stack Trace; </p>" +
+                                    "<p>" + err.StackTrace + "</p>";
+
                                 node["IsError"].Value = true;
 
                                 RaiseSafeEvent(
