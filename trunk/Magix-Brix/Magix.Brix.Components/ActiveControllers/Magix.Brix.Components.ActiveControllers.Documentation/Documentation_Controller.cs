@@ -1072,9 +1072,11 @@ clicking a button, or something similar</p>
                     catch (Exception err)
                     {
                         Node xx = new Node();
+
                         xx["Message"].Value = err.Message +
                             "File; " +
-                            idx.FullName;
+                            idx.FullName + ", Stack Trace; " + err.StackTrace;
+
                         xx["IsError"].Value = true;
 
                         RaiseEvent(

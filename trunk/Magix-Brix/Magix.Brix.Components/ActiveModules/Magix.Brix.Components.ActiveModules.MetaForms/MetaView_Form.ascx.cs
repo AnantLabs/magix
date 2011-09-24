@@ -15,6 +15,7 @@ using Magix.Brix.Publishing.Common;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Globalization;
+using Magix.UX.Effects;
 
 namespace Magix.Brix.Components.ActiveModules.MetaForms
 {
@@ -144,83 +145,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         }
                     }
                 }
-
-                // Properties
-                if (node.Contains("Properties"))
-                {
-                    foreach (Node idx in node["Properties"])
-                    {
-                        // Skipping 'empty stuff' ...
-                        if (idx.Value == null)
-                            continue;
-
-                        if (idx.Value is string && (idx.Value as string) == string.Empty)
-                            continue;
-
-                        PropertyInfo info = ctrl.GetType().GetProperty(
-                            idx.Name,
-                            System.Reflection.BindingFlags.Instance |
-                            System.Reflection.BindingFlags.NonPublic |
-                            System.Reflection.BindingFlags.Public);
-
-                        if (info != null)
-                        {
-                            object tmp = idx.Value;
-
-                            if (tmp.GetType() != info.GetGetMethod(true).ReturnType)
-                            {
-                                switch (info.GetGetMethod(true).ReturnType.FullName)
-                                {
-                                    case "System.Boolean":
-                                        tmp = bool.Parse(tmp.ToString());
-                                        break;
-                                    case "System.DateTime":
-                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Int32":
-                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Decimal":
-                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    default:
-                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
-                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
-                                        else
-                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
-                                        break;
-                                }
-                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
-                            }
-                            else
-                                info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
-                        }
-                    }
-                }
-
-                // Making sure we're rendering the styles needed ...
-                RenderStyles(ctrl as BaseWebControl, node);
-
                 parent.Controls.Add(ctrl);
-            }
-        }
-
-        private void RenderStyles(BaseWebControl ctrl, Node node)
-        {
-            if (ctrl == null)
-                return;
-
-            if (node.Contains("Properties") &&
-                node["Properties"].Contains("Style"))
-            {
-                foreach (Node idx in node["Properties"]["Style"])
-                {
-                    if (idx.Name == "_ID")
-                        continue;
-
-                    if (!string.IsNullOrEmpty(idx.Get<string>()))
-                        ctrl.Style[idx.Name] = idx.Get<string>();
-                }
             }
         }
 
@@ -258,6 +183,27 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 CreateFormControls();
                 ExecuteInitActions();
                 ctrls.ReRender();
+            }
+        }
+
+        /**
+         * Level2: Will set Focus to the first TextBox in the form if raised from 'within' the 
+         * current Meta Form, or explicitly has its 'OriginalWebPartID' overridden to 
+         * reflect another WebPart ID on the page
+         */
+        [ActiveEvent(Name = "Magix.MetaView.SetFocusToFirstTextBox")]
+        protected void Magix_MetaView_SetFocusToFirstTextBox(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["OriginalWebPartID"].Get<int>() == DataSource["OriginalWebPartID"].Get<int>())
+            {
+                TextBox b = Selector.SelectFirst<TextBox>(ctrls);
+                if (b != null)
+                {
+                    new EffectTimeout(500)
+                        .ChainThese(
+                            new EffectFocusAndSelect(b))
+                        .Render();
+                }
             }
         }
 

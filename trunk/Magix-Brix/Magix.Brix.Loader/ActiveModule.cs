@@ -130,7 +130,7 @@ namespace Magix.Brix.Loader
 
                 Node m = new Node();
 
-                m["Message"].Value = tmp.Message;
+                m["Message"].Value = tmp.Message + ", StackTrace; " + err.StackTrace;
                 m["Milliseconds"].Value = 10000;
                 m["IsError"].Value = true;
 
@@ -196,7 +196,9 @@ namespace Magix.Brix.Loader
                 node["Message"].Value =
                     "<p>" + string.Format(msg, args) + "</p>" +
                     "<p>Message from Server; </p>" +
-                    "<p>" + err.Message + "</p>";
+                    "<p>" + err.Message + "</p>" +
+                    "<p>Stack Trace; </p>" +
+                    "<p>" + err.StackTrace + "</p>";
 
                 node["Header"].Value = err.GetType().FullName;
                 node["IsError"].Value = true;
