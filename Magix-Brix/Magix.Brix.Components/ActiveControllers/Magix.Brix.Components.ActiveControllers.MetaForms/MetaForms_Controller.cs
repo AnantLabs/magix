@@ -290,15 +290,15 @@ of your widget";
             e.Params["Controls"]["Stars"]["Properties"]["MaxValue"]["Description"].Value = @"The 
 maximum legal value of the Stars Widget";
 
-            e.Params["Controls"]["Stars"]["Properties"]["ShowAlternativeIcons"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["ShowAlternativeIcons"].Value = typeof(string).FullName;
             e.Params["Controls"]["Stars"]["Properties"]["ShowAlternativeIcons"]["Description"].Value = @"if true, 
 will render alternative icons CSS classes every second star icon";
 
-            e.Params["Controls"]["Stars"]["Properties"]["Average"].Value = typeof(int).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["Average"].Value = typeof(string).FullName;
             e.Params["Controls"]["Stars"]["Properties"]["Average"]["Description"].Value = @"The 
 average value of the Stars Widget";
 
-            e.Params["Controls"]["Stars"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Stars"]["Properties"]["Enabled"].Value = typeof(string).FullName;
             e.Params["Controls"]["Stars"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["Stars"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
 will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
@@ -399,7 +399,7 @@ control, which you can use if you need the end user to pick a specific date";
 
             GetCommonEventsAndProperties(e, "Calendar", true);
 
-            e.Params["Controls"]["Calendar"]["Properties"]["Value"].Value = typeof(DateTime).FullName;
+            e.Params["Controls"]["Calendar"]["Properties"]["Value"].Value = typeof(string).FullName;
             e.Params["Controls"]["Calendar"]["Properties"]["Value"]["Description"].Value = @"The 
 DateTime selected date of the Calendar";
 
@@ -431,13 +431,13 @@ choice types of input data, such as; Milk, Beer or Water";
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
-            e.Params["Controls"]["RadioButton"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["RadioButton"]["Properties"]["Enabled"].Value = typeof(string).FullName;
             e.Params["Controls"]["RadioButton"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["RadioButton"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
 will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
 any ways by the end user";
 
-            e.Params["Controls"]["RadioButton"]["Properties"]["Checked"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["RadioButton"]["Properties"]["Checked"].Value = typeof(string).FullName;
             e.Params["Controls"]["RadioButton"]["Properties"]["Checked"]["Description"].Value = @"The 
 Checked state of your RadioButton, true will tag it off as checked, while false [the default] will 
 keep it open";
@@ -490,7 +490,7 @@ visible text for the end user and also the text fragment the user can change by 
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
-            e.Params["Controls"]["TextArea"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextArea"]["Properties"]["Enabled"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextArea"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["TextArea"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
 will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
@@ -530,7 +530,7 @@ can have different Text values to differentiate them for the user";
             e.Params["Controls"]["LinkButton"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
 to the end user on top of the LinkButton";
 
-            e.Params["Controls"]["LinkButton"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["LinkButton"]["Properties"]["Enabled"].Value = typeof(string).FullName;
             e.Params["Controls"]["LinkButton"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["LinkButton"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
 will enable the widget [true is its default value]. If it is false, the widget cannot be clicked in 
@@ -751,24 +751,24 @@ such that modern browsers can help the end user with getting the input correctly
 watermark text of your textbox. Will show when textbox is empty, as a cue to the end user for what to 
 type into it";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"]["Default"].Value = true;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoCapitalize"]["Description"].Value = @"If true, 
 will automatically capitalize the first letter of the TextBox as the user is typing";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"]["Default"].Value = true;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoCorrect"]["Description"].Value = @"If true, 
 will automatically correct spelling mistakes, if possible, for the end user as he is typing";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"]["Default"].Value = true;
             e.Params["Controls"]["TextBox"]["Properties"]["AutoComplete"]["Description"].Value = @"If true, 
 will attempt at automatically completing the field according to the user settings within the browser. Doesn not 
 always work since it tries to parse the field type of information according to its ID, which you have little or 
 no absolute control over";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"].Value = typeof(int).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"]["Default"].Value = 0;
             e.Params["Controls"]["TextBox"]["Properties"]["MaxLength"]["Description"].Value = @"Maximum 
 length of text accepted within widget";
@@ -782,7 +782,7 @@ visible text for the end user and also the text fragment the user can change by 
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
-            e.Params["Controls"]["TextBox"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["Enabled"].Value = typeof(string).FullName;
             e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["TextBox"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
 will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
@@ -826,13 +826,13 @@ white in nature, such as yes and no questions";
 shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
 as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
 
-            e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"].Value = typeof(string).FullName;
             e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["CheckBox"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
 will enable the widget [true is its default value]. If it is false, the control value cannot be changed in 
 any ways by the end user";
 
-            e.Params["Controls"]["CheckBox"]["Properties"]["Checked"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["CheckBox"]["Properties"]["Checked"].Value = typeof(string).FullName;
             e.Params["Controls"]["CheckBox"]["Properties"]["Checked"]["Description"].Value = @"The 
 Checked state of your CheckBox, true will tag it off as checked, while false [the default] will 
 keep it open";
@@ -901,7 +901,7 @@ can have different Text values to differentiate them for the user";
             e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
 to the end user on top of the button";
 
-            e.Params["Controls"]["Button"]["Properties"]["Enabled"].Value = typeof(bool).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["Enabled"].Value = typeof(string).FullName;
             e.Params["Controls"]["Button"]["Properties"]["Enabled"]["Default"].Value = true;
             e.Params["Controls"]["Button"]["Properties"]["Enabled"]["Description"].Value = @"If true, 
 will enable the widget [true is its default value]. If it is false, the widget cannot be clicked in 
