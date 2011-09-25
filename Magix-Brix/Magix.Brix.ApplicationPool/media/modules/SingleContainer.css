@@ -6,6 +6,11 @@ html, body
     height:110%;
 }
 
+a
+{
+	text-decoration:none;
+}
+
 @font-face
 {
     font-family: 'Lexograph';
@@ -743,7 +748,7 @@ input[type=button].clear-both
 	width:auto;
 	height:auto;
 	background:transparent url(../images/desktop-icons/facts.png) no-repeat top right;
-	z-index:100;
+	z-index:700;
 }
 
 .tool-tip

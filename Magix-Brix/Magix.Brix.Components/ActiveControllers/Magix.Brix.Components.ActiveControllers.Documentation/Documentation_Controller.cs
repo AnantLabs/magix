@@ -81,7 +81,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         {
             e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
 
-            Node tmp = e.Params["Items"]["Admin"]["Items"]["DoxDotNet"];
+            Node tmp = e.Params["Items"]["Admin"]["Items"]["System"]["Items"]["DoxDotNet"];
             tmp["Caption"].Value = "Class Browser ...";
             tmp["Event"]["Name"].Value = "Magix.MetaType.ViewDoxygenFiles";
         }

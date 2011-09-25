@@ -19,6 +19,22 @@ namespace Magix.Bri.Components.ActiveControllers.ClipBoard
     public class ClipBoard_Controller : ActiveController
     {
         /**
+         * Level2: Will return the menu items needed to fire up 'View Clopboard'
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
+        protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
+        {
+            if (!e.Params["Items"].Contains("Admin"))
+            {
+                e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Caption"].Value = "System";
+            }
+
+            e.Params["Items"]["Admin"]["Items"]["ClipBoard"]["Caption"].Value = "Clipboard ...";
+            e.Params["Items"]["Admin"]["Items"]["ClipBoard"]["Event"]["Name"].Value = "Magix.ClipBoard.ViewClipboard";
+        }
+
+        /**
          * Level2: Will take the incoming 'ClipBoardNode' and append it into the current user's
          * Session object
          */
@@ -33,6 +49,36 @@ namespace Magix.Bri.Components.ActiveControllers.ClipBoard
                 throw new ArgumentException("You need to add up a ClipBoardNode parameter if you want to append to the clipboard. And this Parameter must be of type Node");
 
             ClipBoard.Add(tmp);
+
+            RaiseEvent("Magix.ClipBoard.ShowClipBoard");
+        }
+
+        /**
+         * Level2: Will load the clipboard module into the floater Container
+         */
+        [ActiveEvent(Name = "Magix.ClipBoard.ShowClipBoard")]
+        protected void Magix_ClipBoard_ShowClipBoard(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["CssClass"].Value = "mux-clipboard";
+
+            int idxNo = 0;
+            foreach (Node idx in ClipBoard)
+            {
+                string tooltip = idx.ToJSONString();
+                if (tooltip.Length > 200)
+                    tooltip = tooltip.Substring(0, 200) + "...";
+                node["ClipBoard"]["i-" + idxNo]["Name"].Value = idx.Name;
+                node["ClipBoard"]["i-" + idxNo]["ToolTip"].Value = tooltip;
+                node["ClipBoard"]["i-" + idxNo]["ID"].Value = idxNo;
+                idxNo += 1;
+            }
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.ClipBoard.Clips",
+                "floater",
+                node);
         }
 
         private List<Node> ClipBoard
