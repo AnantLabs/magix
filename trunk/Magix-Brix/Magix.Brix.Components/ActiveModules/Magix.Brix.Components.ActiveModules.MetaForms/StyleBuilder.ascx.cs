@@ -151,6 +151,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         if (idx.Value == null)
                             continue;
 
+                        if (idx.Value is string &&
+                            (idx.Value.ToString()).StartsWith("{"))
+                            continue;
+
                         PropertyInfo info = _ctrl.GetType().GetProperty(
                             idx.Name,
                             System.Reflection.BindingFlags.Instance |
