@@ -716,7 +716,7 @@ the ESC key is clicked and released on the widget";
                 e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
             }
 
-            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Text"].Value = "Copy";
+            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Text"].Value = "Copy ...";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["ToolTip"].Value = "Copies the widget onto your Clipboard such that you can paste in another copy of it somewhere you'd like";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["CssClass"].Value = "mux-shortcut-copy";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Event"].Value = "Magix.MetaForms.CopyWidget";

@@ -200,16 +200,19 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (!e.Params["Items"].Contains("Admin"))
             {
                 e.Params["Items"]["Admin"]["Caption"].Value = "Admin";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Caption"].Value = "System";
             }
-            if (!e.Params["Items"]["Admin"]["Items"].Contains("DBAdmin"))
+            if (!e.Params["Items"]["Admin"]["Items"]["System"]["Items"].Contains("DBAdmin"))
             {
-                e.Params["Items"]["Admin"]["Items"]["DBAdmin"]["Caption"].Value = "Database ...";
-                e.Params["Items"]["Admin"]["Items"]["DBAdmin"]["Event"]["Name"].Value = "Magix.Publishing.ViewClasses";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Caption"].Value = "System";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Items"]["DBAdmin"]["Caption"].Value = "Database ...";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Items"]["DBAdmin"]["Event"]["Name"].Value = "Magix.Publishing.ViewClasses";
             }
-            if (!e.Params["Items"]["Admin"]["Items"].Contains("Explorer"))
+            if (!e.Params["Items"]["Admin"]["Items"]["System"]["Items"].Contains("Explorer"))
             {
-                e.Params["Items"]["Admin"]["Items"]["Explorer"]["Caption"].Value = "File system ...";
-                e.Params["Items"]["Admin"]["Items"]["Explorer"]["Event"]["Name"].Value = "Magix.Publishing.ViewFileSystem";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Caption"].Value = "System";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Items"]["Explorer"]["Caption"].Value = "File system ...";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Items"]["Explorer"]["Event"]["Name"].Value = "Magix.Publishing.ViewFileSystem";
             }
             if (!e.Params["Items"]["Admin"]["Items"].Contains("Roles"))
             {
@@ -221,10 +224,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 e.Params["Items"]["Admin"]["Items"]["Users"]["Caption"].Value = "Users ...";
                 e.Params["Items"]["Admin"]["Items"]["Users"]["Event"]["Name"].Value = "Magix.Publishing.EditUsers";
             }
-            if (!e.Params["Items"]["Admin"]["Items"].Contains("Log"))
+            if (!e.Params["Items"]["Admin"]["Items"]["System"]["Items"].Contains("Log"))
             {
-                e.Params["Items"]["Admin"]["Items"]["Log"]["Caption"].Value = "Log ...";
-                e.Params["Items"]["Admin"]["Items"]["Log"]["Event"]["Name"].Value = "Magix.Publishing.ViewLog";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Caption"].Value = "System";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Items"]["Log"]["Caption"].Value = "Log ...";
+                e.Params["Items"]["Admin"]["Items"]["System"]["Items"]["Log"]["Event"]["Name"].Value = "Magix.Publishing.ViewLog";
             }
 
             if (!e.Params["Items"].Contains("LogOut"))

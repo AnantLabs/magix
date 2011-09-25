@@ -269,6 +269,7 @@
     <Content Include="media\images\xml.png" />
     <Content Include="media\Js\link-text-boxes.js" />
     <Content Include="media\modules\animations.css" />
+    <Content Include="media\modules\clipboard.css" />
     <Content Include="media\modules\edit-meta-forms.css" />
     <Content Include="media\modules\qr-generator.css" />
     <Content Include="media\modules\ImageGallery.css" />
@@ -372,6 +373,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Calendars\Magix.Brix.Components.ActiveModules.Calendars.csproj">
       <Project>{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Calendars</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.ClipBoard\Magix.Brix.Components.ActiveModules.ClipBoard.csproj">
+      <Project>{7C5ADCAB-7AA8-42D5-98BB-803DC64F05CD}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.ClipBoard</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.CommonModules\Magix.Brix.Components.ActiveModules.CommonModules.csproj">
       <Project>{2C0DF1A7-E048-4236-B66A-CC78C0B3E382}</Project>
