@@ -91,16 +91,16 @@
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, .0);
-	-moz-transition-property:-moz-box-shadow, background-color, max-height;
+	-moz-transition-property:-moz-box-shadow, background-color, opacity;
 	-moz-transition-duration:1s;
-	-webkit-transition-property:-webkit-box-shadow, background-color, max-height;
+	-webkit-transition-property:-webkit-box-shadow, background-color, opacity;
 	-webkit-transition-duration:1s;
-	transition-property:box-shadow, background-color, max-height;
+	transition-property:box-shadow, background-color, opacity;
 	transition-duration:1s;
 	-moz-border-radius:2px;
 	-webkit-border-radius:2px;
 	border-radius:2px;
-	max-height:72px;
+	opacity:1;
 }
 
 .mux-property-row:hover
@@ -347,24 +347,26 @@ textarea.mux-wysiwyg-selected
 
 .mux-hide-props .mux-property-type-row
 {
-	-moz-transition-property:max-height;
-	-moz-transition-duration:1s;
-	-webkit-transition-property:max-height;
-	-webkit-transition-duration:1s;
-	transition-property:max-height;
-	transition-duration:1s;
-	max-height:0;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:.5s;
+	transition-property:opacity;
+	transition-duration:.5s;
+	opacity:0;
+	display:none;
 }
 
 .mux-hide-events .mux-event-type-row
 {
-	-moz-transition-property:max-height;
-	-moz-transition-duration:1s;
-	-webkit-transition-property:max-height;
-	-webkit-transition-duration:1s;
-	transition-property:max-height;
-	transition-duration:1s;
-	max-height:0;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:.5s;
+	transition-property:opacity;
+	transition-duration:.5s;
+	opacity:0;
+	display:none;
 }
 
 .mux-control-selected *
@@ -439,6 +441,10 @@ textarea.mux-wysiwyg-selected
 }
 
 .mux-shortcut-builder
+{
+}
+
+.mux-shortcut-copy
 {
 }
 

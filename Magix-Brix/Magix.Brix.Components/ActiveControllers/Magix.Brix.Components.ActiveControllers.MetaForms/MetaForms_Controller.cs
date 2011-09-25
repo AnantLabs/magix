@@ -80,7 +80,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             node["CssClass"].Value = "large-bottom-margin";
 
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 6;
             node["WhiteListColumns"]["Created"].Value = true;
             node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 4;
             node["WhiteListColumns"]["Copy"].Value = true;
@@ -715,6 +715,11 @@ the ESC key is clicked and released on the widget";
                 e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["CssClass"].Value = "mux-shortcut-builder";
                 e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
             }
+
+            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Text"].Value = "Copy";
+            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["ToolTip"].Value = "Copies the widget onto your Clipboard such that you can paste in another copy of it somewhere you'd like";
+            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["CssClass"].Value = "mux-shortcut-copy";
+            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Event"].Value = "Magix.MetaForms.CopyWidget";
 
             e.Params["Controls"][typeName]["Properties"]["Info"].Value = typeof(string).FullName;
             e.Params["Controls"][typeName]["Properties"]["Info"]["Description"].Value = @"Additional 
@@ -2704,6 +2709,28 @@ focus, or clicking the widget with his mouse or touch screen";
             RaiseEvent(
                 "Magix.MetaForms.LoadNewMetaForm",
                 e.Params);
+        }
+
+        /**
+         * Level2: Will create a copy of the widget [MetaForm.Node] with the given 'ID' which it will put 
+         * into your 'clipboard', meaning you can paste in another copy of that widget later somewhere 
+         * else into your MetaForms. Will copy the entire Widget and all of its Child Controls too
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.CopyWidget")]
+        protected void Magix_MetaForms_CopyWidget(object sender, ActiveEventArgs e)
+        {
+            MetaForm.Node node = MetaForm.Node.SelectByID(e.Params["ID"].Get<int>());
+
+            MetaForm.Node clone = node.Clone();
+
+            Node n = clone.ConvertToNode();
+
+            Node tmp = new Node();
+            tmp["ClipBoardNode"].Value = n;
+
+            RaiseEvent(
+                "Magix.ClipBoard.CopyNode",
+                tmp);
         }
     }
 }
