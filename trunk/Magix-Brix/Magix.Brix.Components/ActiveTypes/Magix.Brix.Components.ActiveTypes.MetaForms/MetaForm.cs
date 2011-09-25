@@ -128,7 +128,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                     });
             }
 
-            internal Node Clone()
+            public Node Clone()
             {
                 Node tmp = new Node();
                 tmp.Name = Name;
@@ -139,6 +139,13 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                     tmp.Children.Add(idx.Clone());
                 }
                 return tmp;
+            }
+
+            public Magix.Brix.Types.Node ConvertToNode()
+            {
+                Magix.Brix.Types.Node r = new Magix.Brix.Types.Node();
+                MetaForm.CreateNode(this, r);
+                return r;
             }
         }
 
@@ -187,10 +194,11 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
             }
         }
 
-        private void CreateNode(Node node, Magix.Brix.Types.Node mNode)
+        internal static void CreateNode(Node node, Magix.Brix.Types.Node mNode)
         {
             mNode.Name = node.Name;
-            mNode["_ID"].Value = node.ID;
+            if (node.ID > 0)
+                mNode["_ID"].Value = node.ID;
 
             switch (node.TypeName)
             {

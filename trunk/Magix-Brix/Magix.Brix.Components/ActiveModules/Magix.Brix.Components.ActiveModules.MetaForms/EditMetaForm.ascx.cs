@@ -41,8 +41,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected System.Web.UI.WebControls.Repeater shortCutRep;
         protected SelectList selWidg;
         protected LinkButton formInitActions;
-        protected Button toggleTools;
-        protected Button toggleProperties;
 
         public override void InitialLoading(Node node)
         {
@@ -61,10 +59,60 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     SetWindowPropertiesPositionsAccordingToSettings();
                     SetWindowToolsPositionsAccordingToSettings();
                     SetTopWindow();
+                    SetPropertiesEventsVisible();
                     CreateSelectWidgetSelectList();
 
                     SetFormActive();
                 };
+        }
+
+        private void SetPropertiesEventsVisible()
+        {
+            Node node = new Node();
+
+            node["SectionName"].Value = "Magix.MetaForms.ShowOrHideEvents";
+
+            RaiseSafeEvent(
+                "Magix.Core.LoadSettingsSection",
+                node);
+
+            if (node.Contains("Section"))
+            {
+                if (node["Section"]["HideEvents"].Value != null &&
+                    node["Section"]["HideEvents"].Value.ToString() == "True")
+                {
+                    if (!props.CssClass.Contains(" mux-hide-events"))
+                        props.CssClass += " mux-hide-events";
+                }
+                else
+                {
+                    if (props.CssClass.Contains(" mux-hide-events"))
+                        props.CssClass = props.CssClass.Replace(" mux-hide-events", "");
+                }
+            }
+
+            node = new Node();
+
+            node["SectionName"].Value = "Magix.MetaForms.ShowOrHideProperties";
+
+            RaiseSafeEvent(
+                "Magix.Core.LoadSettingsSection",
+                node);
+
+            if (node.Contains("Section"))
+            {
+                if (node["Section"]["HideProperties"].Value != null &&
+                    node["Section"]["HideProperties"].Value.ToString() == "True")
+                {
+                    if (!props.CssClass.Contains(" mux-hide-props"))
+                        props.CssClass += " mux-hide-props";
+                }
+                else
+                {
+                    if (props.CssClass.Contains(" mux-hide-props"))
+                        props.CssClass = props.CssClass.Replace(" mux-hide-props", "");
+                }
+            }
         }
 
         private void CreateSelectWidgetSelectList()
@@ -165,30 +213,71 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             base.OnLoad(e);
 
-            toggleProperties.ClickEffect = new EffectToggle(props, 250, true);
-            toggleTools.ClickEffect = new EffectToggle(tools, 250, true);
-
             CreateFormControls();
 
             eventHeader.Click +=
                 delegate
                 {
                     if (props.CssClass.Contains(" mux-hide-events"))
+                    {
                         props.CssClass = props.CssClass.Replace(" mux-hide-events", "");
+
+                        Node node = new Node();
+
+                        node["Section"]["HideEvents"].Value = false.ToString();
+                        node["SectionName"].Value = "Magix.MetaForms.ShowOrHideEvents";
+
+                        RaiseSafeEvent(
+                            "Magix.Core.SaveSettingsSection",
+                            node);
+                    }
                     else
+                    {
                         props.CssClass += " mux-hide-events";
+
+                        Node node = new Node();
+
+                        node["Section"]["HideEvents"].Value = true.ToString();
+                        node["SectionName"].Value = "Magix.MetaForms.ShowOrHideEvents";
+
+                        RaiseSafeEvent(
+                            "Magix.Core.SaveSettingsSection",
+                            node);
+                    }
                 };
 
             propHeader.Click +=
                 delegate
                 {
                     if (props.CssClass.Contains(" mux-hide-props"))
+                    {
                         props.CssClass = props.CssClass.Replace(" mux-hide-props", "");
+
+                        Node node = new Node();
+
+                        node["Section"]["HideProperties"].Value = false.ToString();
+                        node["SectionName"].Value = "Magix.MetaForms.ShowOrHideProperties";
+
+                        RaiseSafeEvent(
+                            "Magix.Core.SaveSettingsSection",
+                            node);
+                    }
                     else
+                    {
                         props.CssClass += " mux-hide-props";
+
+                        Node node = new Node();
+
+                        node["Section"]["HideProperties"].Value = true.ToString();
+                        node["SectionName"].Value = "Magix.MetaForms.ShowOrHideProperties";
+
+                        RaiseSafeEvent(
+                            "Magix.Core.SaveSettingsSection",
+                            node);
+                    }
                 };
 
-            type.ClickEffect = new EffectToggle(desc, 250, false);
+            type.ClickEffect = new EffectToggle(desc, 250, true);
         }
 
         private void CreateFormControls()
@@ -592,21 +681,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             RaiseSafeEvent(
                 "Magix.MetaForms.ShowAllActionsAssociatedWithMainFormEvent",
                 node);
-        }
-
-        protected void ctrls_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(OldSelected))
-            {
-                Control c = Selector.FindControlClientID<Control>(ctrls, OldSelected);
-                RemoveActiveCssClass(c);
-                if (c is BaseWebControl)
-                    (c as BaseWebControl).ToolTip = "Click me to edit the Widget";
-            }
-            OldSelected = null;
-            ClearPropertyWindow();
-
-            SetFormActive();
         }
 
         protected string GetPropertyValue(object inpNode)

@@ -9,20 +9,8 @@
 <link href="media/modules/edit-meta-forms.css" rel="stylesheet" type="text/css" />
 
 <div class="wysiwyg-meta-forms">
-    <mux:Button
-        runat="server"
-        id="toggleTools"
-        CssClass="span-4 prepend-top"
-        Text="Widgets ..." />
-    <mux:Button
-        runat="server"
-        id="toggleProperties"
-        CssClass="span-4 prepend-top"
-        Text="Properties ..." />
     <mux:Panel
         runat="server"
-        OnClick="ctrls_Click"
-        ToolTip="Deselect Widget, if any are selected ..."
         CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-24 prepend-top last clear-both"
         id="ctrls" />
 
@@ -32,10 +20,8 @@
         Draggable="true"
         OnDragged="tools_Dragged"
         OnClick="tools_Click"
-        style="display:none;"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-toolbox span-8"
         Closable="false"
-        ToolTip="The Widgets you have to your disposal within this installation of Magix. Click any particular widget you wish to append into the control collection, on either the form, or the currently selected composite widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around by its Header if it obscures something you need to reach ..."
         Caption="Widgets">
         <Content>
             <asp:Repeater
@@ -58,11 +44,9 @@
         runat="server"
         id="props"
         Draggable="true"
-        style="display:none;"
         OnDragged="props_Dragged"
         OnClick="props_Click"
         CssClass="mux-window mux-rounded mux-shaded mux-meta-forms-props span-8 mux-hide-events mux-hide-props"
-        ToolTip="Properties and Actions for your selected Widget. If you have a mouse somewhere in your proximity, you can 'drag and drop' this window around by its Header if it obscures something you need to reach ..."
         Closable="false"
         Caption="Properties & Actions ...">
         <Content>
@@ -70,7 +54,7 @@
                 title="These actions will be raised as your Form is being initially loaded. Meaning, only when a Meta Form is being initially loaded, these Actions will run"
                 class="span-6 last mux-init-actions-row">
                 <div class="span-3">
-                    Init Actions:
+                    Form Init Actions:
                 </div>
                 <mux:LinkButton
                     runat="server"
@@ -78,13 +62,14 @@
                     OnClick="formInitActions_Click"
                     Text="Actions ..." />
             </div>
+            <hr style="background-color:#bbb;" />
             <mux:SelectList
                 runat="server"
                 id="selWidg"
                 OnSelectedIndexChanged="selWidg_SelectedIndexChanged"
                 style="margin-bottom:18px;"
                 CssClass="span-6 last">
-                <mux:ListItem Text="Meta Form" Value="" />
+                <mux:ListItem Text="Select Widget ..." Value="" />
             </mux:SelectList>
             <mux:Label
                 runat="server"
