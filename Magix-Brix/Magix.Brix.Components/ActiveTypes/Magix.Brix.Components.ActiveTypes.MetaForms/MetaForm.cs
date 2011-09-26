@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
              * Level3: The Name of the Node, must be unique within the collection
              */
             [ActiveField]
-            public string Name { get; internal set; }
+            public string Name { get; set; }
 
             /**
              * Level3: The value component of the node, will be transformed into the 
@@ -146,6 +146,42 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                 Magix.Brix.Types.Node r = new Magix.Brix.Types.Node();
                 MetaForm.CreateNode(this, r);
                 return r;
+            }
+
+            public static Node FromNode(Magix.Brix.Types.Node node)
+            {
+                Node mNode = new Node();
+                mNode.Name = node.Name;
+
+                if (node.Value != null)
+                {
+                    switch (mNode.TypeName)
+                    {
+                        case "System.Int32":
+                            mNode.Value = node.Value.ToString();
+                            break;
+                        case "System.Decimal":
+                            mNode.Value = ((decimal)node.Value).ToString(CultureInfo.InvariantCulture);
+                            break;
+                        case "System.DateTime":
+                            mNode.Value = ((DateTime)node.Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                            break;
+                        case "System.Boolean":
+                            mNode.Value = ((bool)node.Value).ToString();
+                            break;
+                        case "System.String":
+                        default:
+                            mNode.Value = node.Value.ToString();
+                            break;
+                    }
+                }
+
+                foreach (Magix.Brix.Types.Node idx in node)
+                {
+                    mNode.Children.Add(FromNode(idx));
+                }
+
+                return mNode;
             }
         }
 

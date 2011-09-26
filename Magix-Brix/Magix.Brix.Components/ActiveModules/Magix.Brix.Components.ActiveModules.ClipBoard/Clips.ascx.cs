@@ -36,5 +36,29 @@ namespace Magix.Brix.Components.ActiveModules.ClipBoard
                     rep.DataBind();
                 };
         }
+
+        protected void PasteClipboardItem(object sender, EventArgs e)
+        {
+            LinkButton b = sender as LinkButton;
+            int id = int.Parse(b.Info);
+
+            Node node = new Node();
+
+            node["ID"].Value = id;
+
+            RaiseSafeEvent("Magix.ClipBoard.PrepareToPasteNode");
+        }
+
+        protected void DeleteClipboardItem(object sender, EventArgs e)
+        {
+            LinkButton b = sender as LinkButton;
+            int id = int.Parse(b.Info);
+
+            Node node = new Node();
+
+            node["ID"].Value = id;
+
+            RaiseSafeEvent("Magix.ClipBoard.RemoveItemFromClipBoard");
+        }
     }
 }

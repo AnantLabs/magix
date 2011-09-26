@@ -27,11 +27,15 @@
                         runat="server"
                         ToolTip="Click me to Paste the Node into whatever specific context you've got selected currently on your page ..."
                         CssClass="span-3 last"
+                        OnClick="PasteClipboardItem"
+                        Info='<%#Eval("[ID].Value") %>'
                         style="margin-top:9px;margin-bottom:9px;"
                         Text="Paste" />
                     <mux:LinkButton
                         runat="server"
                         ToolTip="Click me to delete the Clipboard Item from your Clipboard ..."
+                        OnClick="DeleteClipboardItem"
+                        Info='<%#Eval("[ID].Value") %>'
                         CssClass="span-3 last"
                         Text="Delete" />
                 </div>
