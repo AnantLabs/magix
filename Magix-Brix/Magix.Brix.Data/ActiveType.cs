@@ -28,7 +28,7 @@ namespace Magix.Brix.Data
             ParentDocument = -1;
         }
 
-        public virtual int ID { get; internal set; }
+        public virtual int ID { get; set; }
 
         public int ParentDocument { get; set; }
 
@@ -66,7 +66,7 @@ namespace Magix.Brix.Data
          * Level3: The data storage associated ID of the object. Often the primary
          * key if you're using a database as your data storage.
          */
-        override public int ID { get; internal set; }
+        override public int ID { get; set; }
 
         /**
          * Level3: Returns the number of objects in your data storage which is of type T.

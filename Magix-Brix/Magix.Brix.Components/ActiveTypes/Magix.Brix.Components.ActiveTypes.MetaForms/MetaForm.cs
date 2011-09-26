@@ -54,6 +54,9 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
             [ActiveField]
             public LazyList<Node> Children { get; set; }
 
+            [ActiveField(BelongsTo = true)]
+            public Node ParentNode { get; set; }
+
             public Node this [string name]
             {
                 get

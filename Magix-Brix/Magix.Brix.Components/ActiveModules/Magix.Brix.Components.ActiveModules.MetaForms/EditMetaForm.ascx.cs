@@ -41,6 +41,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected System.Web.UI.WebControls.Repeater shortCutRep;
         protected SelectList selWidg;
         protected LinkButton formInitActions;
+        protected CheckBox chkAllowDragging;
 
         public override void InitialLoading(Node node)
         {
@@ -63,7 +64,34 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     CreateSelectWidgetSelectList();
 
                     SetFormActive();
+
+                    GetDragAndDropSettings();
                 };
+        }
+
+        private void GetDragAndDropSettings()
+        {
+            Node node = new Node();
+
+            node["SectionName"].Value = "Magix.MetaForms.AllowDragAndDrop";
+
+            RaiseSafeEvent(
+                "Magix.Core.LoadSettingsSection",
+                node);
+
+            if (node.Contains("Section"))
+            {
+                if (node["Section"]["Allow"].Value != null &&
+                    node["Section"]["Allow"].Value.ToString() == "True")
+                {
+                    DataSource["DragAndDrop"].Value = true;
+                }
+                else
+                {
+                    DataSource["DragAndDrop"].Value = false;
+                }
+                chkAllowDragging.Checked = DataSource["DragAndDrop"].Get<bool>();
+            }
         }
 
         private void SetPropertiesEventsVisible()
@@ -280,6 +308,24 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             type.ClickEffect = new EffectToggle(desc, 250, true);
         }
 
+        protected void chkAllowDragging_CheckedChanged(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["Section"]["Allow"].Value = (sender as CheckBox).Checked.ToString();
+            node["SectionName"].Value = "Magix.MetaForms.AllowDragAndDrop";
+
+            RaiseSafeEvent(
+                "Magix.Core.SaveSettingsSection",
+                node);
+
+            DataSource["DragAndDrop"].Value = (sender as CheckBox).Checked;
+
+            ctrls.Controls.Clear();
+            CreateFormControls();
+            ctrls.ReRender();
+        }
+
         private void CreateFormControls()
         {
             if (DataSource.Contains("root") && 
@@ -315,38 +361,39 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
             if (nn.Contains("Control"))
             {
+                if (nn.Contains("HasSurface") && 
+                    !node.Contains("Surface"))
+                {
+                    node.Add(new Node("Surface"));
+                }
                 Control ctrl = nn["Control"].Get<Control>();
 
-                if (nn.Contains("HasSurface") &&
-                    nn["HasSurface"].Get<bool>())
+                // Child controls
+                if (node.Contains("Surface"))
                 {
-                    // Child controls
-                    if (node.Contains("Surface"))
+                    if (nn.Contains("CreateChildControlsEvent"))
                     {
-                        if (nn.Contains("CreateChildControlsEvent"))
+                        Node tmp = new Node();
+
+                        // Yup, looks stupidish, but feel very safe ... ;)
+                        tmp["Controls"].Value = node["Surface"];
+                        tmp["Control"].Value = ctrl;
+                        tmp["Preview"].Value = true;
+                        if (!string.IsNullOrEmpty(OldSelected))
+                            tmp["OldSelected"].Value = OldSelected;
+
+                        RaiseEvent( // No safe here, if this one fucks up, we're fucked ... !!
+                            nn["CreateChildControlsEvent"].Get<string>(),
+                            tmp);
+                    }
+                    else
+                    {
+                        foreach (Node idx in node["Surface"])
                         {
-                            Node tmp = new Node();
+                            if (idx.Name == "_ID")
+                                continue;
 
-                            // Yup, looks stupidish, but feel very safe ... ;)
-                            tmp["Controls"].Value = node["Surface"];
-                            tmp["Control"].Value = ctrl;
-                            tmp["Preview"].Value = true;
-                            if (!string.IsNullOrEmpty(OldSelected))
-                                tmp["OldSelected"].Value = OldSelected;
-
-                            RaiseEvent( // No safe here, if this one fucks up, we're fucked ... !!
-                                nn["CreateChildControlsEvent"].Get<string>(),
-                                tmp);
-                        }
-                        else
-                        {
-                            foreach (Node idx in node["Surface"])
-                            {
-                                if (idx.Name == "_ID")
-                                    continue;
-
-                                CreateSingleControl(idx, ctrl);
-                            }
+                            CreateSingleControl(idx, ctrl);
                         }
                     }
                 }
@@ -360,7 +407,6 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                 !(ctrl as BaseWebControl).CssClass.Contains(" mux-wysiwyg-selected"))
                             {
                                 AddSelectedCssClass(ctrl);
-                                (ctrl as BaseWebControl).ToolTip = "Drag and Drop me to position me absolutely [which is _not_ a generally good idea BTW]";
                             }
                         }
                         else if (ctrl.ClientID == OldSelected)
@@ -378,17 +424,20 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         };
                     (ctrl as BaseWebControl).Style[Styles.position] = "relative";
 
-                    // Making draggable ...
-                    AspectDraggable dragger = new AspectDraggable();
-                    dragger.Dragged +=
-                        delegate
-                        {
-                            int left = int.Parse((ctrl as BaseWebControl).Style[Styles.left].Replace("px", ""));
-                            int top = int.Parse((ctrl as BaseWebControl).Style[Styles.top].Replace("px", ""));
+                    if (DataSource["DragAndDrop"].Get<bool>())
+                    {
+                        // Making draggable ...
+                        AspectDraggable dragger = new AspectDraggable();
+                        dragger.Dragged +=
+                            delegate
+                            {
+                                int left = int.Parse((ctrl as BaseWebControl).Style[Styles.left].Replace("px", ""));
+                                int top = int.Parse((ctrl as BaseWebControl).Style[Styles.top].Replace("px", ""));
 
-                            AbsolutizeWidget(left, top, node, (ctrl as BaseWebControl));
-                        };
-                    (ctrl as BaseWebControl).Controls.Add(dragger);
+                                AbsolutizeWidget(left, top, node, (ctrl as BaseWebControl));
+                            };
+                        (ctrl as BaseWebControl).Controls.Add(dragger);
+                    }
                 }
 
                 // Making sure we're rendering the styles needed ...
@@ -868,43 +917,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (!string.IsNullOrEmpty(OldSelected))
             {
                 int idid = int.Parse(type.Info);
-                Node tp = DataSource["root"]["Surface"].Find(
-                    delegate(Node idx)
-                    {
-                        return idx.Name == "_ID" &&
-                            idx.Value != null &&
-                            idx.Value is int &&
-                            (int)idx.Value == idid;
-                    });
-
-                bool hasSurface = DataSource["Controls"].Find(
-                delegate(Node idx)
-                {
-                    return
-                        idx.Name == "TypeName" &&
-                        idx.Get<string>() == tp.Parent["TypeName"].Get<string>() &&
-                        idx.Parent.Contains("HasSurface") &&
-                        idx.Parent["HasSurface"].Get<bool>();
-                }) != null;
-
-                if (hasSurface)
-                    node["ParentControl"].Value = OldSelected.Substring(OldSelected.LastIndexOf("_ID") + 3);
-                else
-                {
-                    // Finding first surface upwards in hierarchy ...
-                    Node x = tp.Parent;
-                    while (x != null)
-                    {
-                        if (x.Name == "Surface")
-                        {
-                            node["ParentControl"].Value = x.Parent["_ID"].Value;
-                            break;
-                        }
-                        x = x.Parent;
-                    }
-                }
-
-                node["HasSurface"].Value = true;
+                node["ParentControl"].Value = idid;
             }
             else
             {
