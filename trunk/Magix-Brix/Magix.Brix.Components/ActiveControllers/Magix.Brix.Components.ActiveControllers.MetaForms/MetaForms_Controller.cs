@@ -2192,6 +2192,17 @@ focus, or clicking the widget with his mouse or touch screen";
         private void ResetTree(MetaForm.Node node)
         {
             node.ID = 0;
+
+            List<MetaForm.Node> ids = new List<MetaForm.Node>();
+            foreach (MetaForm.Node idx in node.Children)
+            {
+                if (idx.Name == "_ID")
+                    ids.Add(idx);
+            }
+            foreach (MetaForm.Node idx in ids)
+            {
+                node.Children.Remove(idx);
+            }
             foreach (MetaForm.Node idx in node.Children)
             {
                 ResetTree(idx);
@@ -2855,14 +2866,21 @@ focus, or clicking the widget with his mouse or touch screen";
             {
                 Node paste = e.Params["PasteNode"].Value as Node;
 
+
+
+
+
                 MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
 
-                MetaForm.Node parent = f.Form;
+                int id = -1;
 
+                bool hasSurface = true;
+
+                Magix.Brix.Components.ActiveTypes.MetaForms.MetaForm.Node parent = null;
                 if (e.Params.Contains("ParentControl") &&
                     e.Params["ParentControl"].Value != null)
                 {
-                    int id = int.Parse(e.Params["ParentControl"].Value.ToString());
+                    id = int.Parse(e.Params["ParentControl"].Value.ToString());
                     parent = f.Form.Find(
                         delegate(MetaForm.Node idx)
                         {
@@ -2872,25 +2890,92 @@ focus, or clicking the widget with his mouse or touch screen";
                 else
                     parent = f.Form;
 
-                if (!parent.Contains("Surface"))
+                if (parent == null)
+                    throw new ArgumentException("That parent doesn't exist");
+
+                if (parent.Name != "root" &&
+                    parent["TypeName"].Value != "Magix.MetaForms.Plugins.Panel" &&
+                    parent["TypeName"].Value != "Magix.MetaForms.Plugins.Repeater")
                 {
-                    // TODO: search for first ancestor with 'Surface' ...
-                    // TODO: Also do this in AppendControl ...
-                    parent = f.Form;
+                    // Need to inject the Widget to the 'left' of the currently selected widget ...
+
+                    hasSurface = false;
+
+                    parent = parent.ParentNode;
+
+                    while (parent != null)
+                    {
+                        if (parent.Contains("TypeName"))
+                        {
+                            if (parent["TypeName"].Value == "Magix.MetaForms.Plugins.Panel" ||
+                                parent["TypeName"].Value != "Magix.MetaForms.Plugins.Repeater")
+                            {
+                                break;
+                            }
+                        }
+                        parent = parent.ParentNode;
+                    }
+                    if (parent == null)
+                        parent = f.Form;
                 }
 
-                MetaForm.Node n = MetaForm.Node.FromNode(paste);
-
-                int count = parent["Surface"].Children.Count;
-
-                foreach (MetaForm.Node idx in parent["Surface"].Children)
+                if (hasSurface)
                 {
-                    if (int.Parse(idx.Name.Substring(2)) >= count)
-                        count = int.Parse(idx.Name.Substring(2)) + 1;
-                }
+                    // Appending ...
+                    int count = parent["Surface"].Children.Count;
 
-                n.Name = "c-" + count;
-                parent["Surface"].Children.Add(n);
+                    foreach (MetaForm.Node idx in parent["Surface"].Children)
+                    {
+                        if (int.Parse(idx.Name.Substring(2)) >= count)
+                            count = int.Parse(idx.Name.Substring(2)) + 1;
+                    }
+
+                    MetaForm.Node nNode = MetaForm.Node.FromNode(paste);
+                    nNode.Name = "c-" + count;
+
+                    parent["Surface"].Children.Add( nNode);
+
+                    parent.Save();
+
+                    e.Params["NewControlID"].Value = parent["Surface"]["c-" + count].ID;
+                }
+                else
+                {
+                    // Inserting left of id widget ...
+                    // Appending ...
+                    int count = parent["Surface"].Children.Count;
+
+                    foreach (MetaForm.Node idx in parent["Surface"].Children)
+                    {
+                        if (int.Parse(idx.Name.Substring(2)) >= count)
+                            count = int.Parse(idx.Name.Substring(2)) + 1;
+                    }
+
+                    int x = 0;
+                    for (int idxU = 0; idxU < parent["Surface"].Children.Count; idxU++)
+                    {
+                        if (parent["Surface"].Children[idxU].ID == id)
+                        {
+                            x = idxU;
+                            break;
+                        }
+                    }
+
+                    MetaForm.Node nNode = MetaForm.Node.FromNode(paste);
+                    nNode.Name = "c-" + count;
+
+                    parent["Surface"].Children.Insert(x + 1, nNode);
+
+                    // Looks funny, but keeps all of our Widget 'in memory' while they're deleted and re-created
+                    // in database ...
+                    TravereTree(parent["Surface"]);
+                    DeleteTree(parent["Surface"]);
+                    ResetTree(parent["Surface"]);
+
+                    parent.Save();
+
+                    e.Params["NewControlID"].Value = nNode.ID;
+                }
 
                 parent.Save();
 
