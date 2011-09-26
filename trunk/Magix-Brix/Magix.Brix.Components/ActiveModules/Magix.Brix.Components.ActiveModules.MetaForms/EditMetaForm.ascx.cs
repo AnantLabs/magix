@@ -1102,5 +1102,54 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         idx.Get<int>() == e.Params["ID"].Get<int>();
                 }).Parent);
         }
+
+        /**
+         * Level2: Handled to make it possible to Paste Widget Hierarchies and similar 
+         * onto the form
+         */
+        [ActiveEvent(Name = "Magix.ClipBoard.PasteItem")]
+        protected void Magix_ClipBoard_PasteItem(object sender, ActiveEventArgs e)
+        {
+            Node paste = e.Params["PasteNode"].Value as Node;
+
+            Node destination = null;
+
+            if(!string.IsNullOrEmpty(OldSelected))
+            {
+                string selID = OldSelected.Substring(OldSelected.LastIndexOf("_ID") + 3);
+
+                int slId = int.Parse(selID);
+
+                destination = DataSource["root"]["Surface"].Find(
+                    delegate(Node idx)
+                    {
+                        return idx.Name == "_ID" &&
+                            idx.Get<int>() == slId;
+                    });
+            }
+
+            Node ac = new Node();
+
+            ac["ID"].Value = DataSource["ID"].Value;
+
+            ac["PasteNode"].Value = paste;
+            ac["MetaForm"].Value = DataSource["ID"].Value;
+            if (destination != null)
+                ac["ParentControl"].Value = destination.Value;
+
+            RaiseSafeEvent(
+                "Magix.MetaForms.PasteWidgetNodeIntoMetaForm",
+                ac);
+
+            // Refreshing form ...
+            RaiseSafeEvent(
+                "Magix.MetaForms.GetControlsForForm",
+                DataSource);
+
+            ctrls.Controls.Clear();
+            CreateFormControls();
+            ctrls.ReRender();
+            CreateSelectWidgetSelectList();
+        }
     }
 }

@@ -2732,5 +2732,50 @@ focus, or clicking the widget with his mouse or touch screen";
                 "Magix.ClipBoard.CopyNode",
                 tmp);
         }
+
+        /**
+         * Level2: Will clone and attach the newly cloned Node [given through 'PasteNode'] to the 
+         * given MetaForm ['ID'] and if given as a child to the given 'ParentControl' Widget
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.PasteWidgetNodeIntoMetaForm")]
+        protected void Magix_MetaForms_PasteWidgetNodeIntoMetaForm(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                Node paste = e.Params["PasteNode"].Value as Node;
+
+                MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
+
+                MetaForm.Node parent = f.Form;
+
+                if (e.Params.Contains("ParentControl") &&
+                    e.Params["ParentControl"].Value != null)
+                {
+                    int id = int.Parse(e.Params["ParentControl"].Value.ToString());
+                    parent = f.Form.Find(
+                        delegate(MetaForm.Node idx)
+                        {
+                            return idx.ID == id;
+                        });
+                }
+                else
+                    parent = f.Form;
+
+                if (!parent.Contains("Surface"))
+                {
+                    // TODO: search for first ancestor with 'Surface' ...
+                    // TODO: Also do this in AppendControl ...
+                    parent = f.Form;
+                }
+
+                MetaForm.Node n = MetaForm.Node.FromNode(paste);
+                n.Name = "c-" + parent["Surface"].Children.Count;
+                parent["Surface"].Children.Add(n);
+
+                parent.Save();
+
+                tr.Commit();
+            }
+        }
     }
 }

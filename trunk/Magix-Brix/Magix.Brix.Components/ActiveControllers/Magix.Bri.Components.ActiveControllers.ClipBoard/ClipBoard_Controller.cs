@@ -31,7 +31,7 @@ namespace Magix.Bri.Components.ActiveControllers.ClipBoard
             }
 
             e.Params["Items"]["Admin"]["Items"]["ClipBoard"]["Caption"].Value = "Clipboard ...";
-            e.Params["Items"]["Admin"]["Items"]["ClipBoard"]["Event"]["Name"].Value = "Magix.ClipBoard.ViewClipboard";
+            e.Params["Items"]["Admin"]["Items"]["ClipBoard"]["Event"]["Name"].Value = "Magix.ClipBoard.ShowClipBoard";
         }
 
         /**
@@ -81,6 +81,26 @@ namespace Magix.Bri.Components.ActiveControllers.ClipBoard
                 node);
         }
 
+        /**
+         * Level2: Will erase the given 'ID' item from the ClipBoard
+         */
+        [ActiveEvent(Name = "Magix.ClipBoard.RemoveItemFromClipBoard")]
+        protected void Magix_ClipBoard_RemoveItemFromClipBoard(object sender, ActiveEventArgs e)
+        {
+            int id = e.Params["ID"].Get<int>();
+            ClipBoard.RemoveAt(id);
+
+            if (ClipBoard.Count > 0)
+            {
+                // TODO: Too easy of a shortcut ...
+                RaiseEvent("Magix.ClipBoard.ShowClipBoard");
+            }
+            else
+            {
+                ActiveEvents.Instance.RaiseClearControls("floater");
+            }
+        }
+
         private List<Node> ClipBoard
         {
             get
@@ -89,6 +109,24 @@ namespace Magix.Bri.Components.ActiveControllers.ClipBoard
                     Page.Session["Magix.Brix.Components.ActiveControllers.ClipBoard"] = new List<Node>();
                 return Page.Session["Magix.Brix.Components.ActiveControllers.ClipBoard"] as List<Node>;
             }
+        }
+
+        /**
+         * Level2; Will prepare to send the PasteItem event. Expects the 'ID' to point to a ClipBoard 
+         * Item ID
+         */
+        [ActiveEvent(Name = "Magix.ClipBoard.PrepareToPasteNode")]
+        protected void Magix_ClipBoard_PrepareToPasteNode(object sender, ActiveEventArgs e)
+        {
+            Node node = ClipBoard[e.Params["ID"].Get<int>()];
+
+            Node tmp = new Node();
+
+            tmp["PasteNode"].Value = node;
+
+            RaiseEvent(
+                "Magix.ClipBoard.PasteItem",
+                tmp);
         }
     }
 }
