@@ -239,6 +239,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
             node["Last"].Value = true;
             node["Width"].Value = 24;
+            node["Top"].Value = 2;
             node["Overflowized"].Value = true;
 
             LoadModule(
@@ -270,6 +271,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             CreatePanel(e);
             CreateRepeater(e);
             CreateStars(e);
+            CreateRuler(e);
+        }
+
+        private void CreateRuler(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Ruler"]["Name"].Value = "Ruler";
+            e.Params["Controls"]["Ruler"]["TypeName"].Value = "Magix.MetaForms.Plugins.Ruler";
+            e.Params["Controls"]["Ruler"]["ToolTip"].Value = @"Creates a Horizontal Ruler that 
+might be useful for separating content horizontally from other content";
+
+            GetCommonEventsAndProperties(e, "Ruler", true);
         }
 
         private void CreateStars(ActiveEventArgs e)
@@ -1381,6 +1393,12 @@ focus, or clicking the widget with his mouse or touch screen";
                         e.Params["Control"].Value = btn;
                         e.Params["HasSurface"].Value = true;
                     } break;
+                case "Magix.MetaForms.Plugins.Ruler":
+                    {
+                        Label btn = new Label();
+                        btn.Tag = "hr";
+                        e.Params["Control"].Value = btn;
+                    } break;
                 case "Magix.MetaForms.Plugins.Repeater":
                     {
                         Panel btn = new Panel();
@@ -2048,11 +2066,15 @@ focus, or clicking the widget with his mouse or touch screen";
             {
                 MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
 
+                int id = -1;
+
+                bool hasSurface = true;
+
                 Magix.Brix.Components.ActiveTypes.MetaForms.MetaForm.Node parent = null;
                 if (e.Params.Contains("ParentControl") &&
                     e.Params["ParentControl"].Value != null)
                 {
-                    int id = int.Parse(e.Params["ParentControl"].Value.ToString());
+                    id = int.Parse(e.Params["ParentControl"].Value.ToString());
                     parent = f.Form.Find(
                         delegate(MetaForm.Node idx)
                         {
@@ -2065,25 +2087,114 @@ focus, or clicking the widget with his mouse or touch screen";
                 if (parent == null)
                     throw new ArgumentException("That parent doesn't exist");
 
-                if (!e.Params.Contains("HasSurface") ||
-                    !e.Params["HasSurface"].Get<bool>())
-                    throw new ArgumentException("That control cannot have Child Controls. De-select it, and select another control, or select the form itself before you try to add controls to your Meta Form ...");
-
-                int count = parent["Surface"].Children.Count;
-
-                foreach (MetaForm.Node idx in parent["Surface"].Children)
+                if (parent.Name != "root" && 
+                    parent["TypeName"].Value != "Magix.MetaForms.Plugins.Panel" &&
+                    parent["TypeName"].Value != "Magix.MetaForms.Plugins.Repeater")
                 {
-                    if (int.Parse(idx.Name.Substring(2)) >= count)
-                        count = int.Parse(idx.Name.Substring(2)) + 1;
+                    // Need to inject the Widget to the 'left' of the currently selected widget ...
+
+                    hasSurface = false;
+
+                    parent = parent.ParentNode;
+
+                    while (parent != null)
+                    {
+                        if (parent.Contains("TypeName"))
+                        {
+                            if (parent["TypeName"].Value == "Magix.MetaForms.Plugins.Panel" ||
+                                parent["TypeName"].Value != "Magix.MetaForms.Plugins.Repeater")
+                            {
+                                break;
+                            }
+                        }
+                        parent = parent.ParentNode;
+                    }
+                    if (parent == null)
+                        parent = f.Form;
                 }
 
-                parent["Surface"]["c-" + count]["TypeName"].Value = e.Params["TypeName"].Get<string>();
+                if (hasSurface)
+                {
+                    // Appending ...
+                    int count = parent["Surface"].Children.Count;
 
-                parent.Save();
+                    foreach (MetaForm.Node idx in parent["Surface"].Children)
+                    {
+                        if (int.Parse(idx.Name.Substring(2)) >= count)
+                            count = int.Parse(idx.Name.Substring(2)) + 1;
+                    }
+
+                    parent["Surface"]["c-" + count]["TypeName"].Value = e.Params["TypeName"].Get<string>();
+
+                    parent.Save();
+
+                    e.Params["NewControlID"].Value = parent["Surface"]["c-" + count].ID;
+                }
+                else
+                {
+                    // Inserting left of id widget ...
+                    // Appending ...
+                    int count = parent["Surface"].Children.Count;
+
+                    foreach (MetaForm.Node idx in parent["Surface"].Children)
+                    {
+                        if (int.Parse(idx.Name.Substring(2)) >= count)
+                            count = int.Parse(idx.Name.Substring(2)) + 1;
+                    }
+
+                    int x = 0;
+                    for (int idxU = 0; idxU < parent["Surface"].Children.Count; idxU++)
+                    {
+                        if (parent["Surface"].Children[idxU].ID == id)
+                        {
+                            x = idxU;
+                            break;
+                        }
+                    }
+
+                    MetaForm.Node xn = new MetaForm.Node();
+                    xn.Name = "c-" + count;
+                    parent["Surface"].Children.Insert(x, xn);
+
+                    // Looks funny, but keeps all of our Widget 'in memory' while they're deleted and re-created
+                    // in database ...
+                    TravereTree(parent["Surface"]);
+                    DeleteTree(parent["Surface"]);
+                    ResetTree(parent["Surface"]);
+
+                    parent["Surface"]["c-" + count]["TypeName"].Value = e.Params["TypeName"].Get<string>();
+                    parent.Save();
+
+                    e.Params["NewControlID"].Value = xn.ID;
+                }
 
                 tr.Commit();
+            }
+        }
 
-                e.Params["NewControlID"].Value = parent["Surface"]["c-" + count].ID;
+        private void DeleteTree(MetaForm.Node node)
+        {
+            node.Delete();
+            foreach (MetaForm.Node idx in node.Children)
+            {
+                DeleteTree(idx);
+            }
+        }
+
+        private void TravereTree(MetaForm.Node node)
+        {
+            foreach (MetaForm.Node idx in node.Children)
+            {
+                TravereTree(idx);
+            }
+        }
+
+        private void ResetTree(MetaForm.Node node)
+        {
+            node.ID = 0;
+            foreach (MetaForm.Node idx in node.Children)
+            {
+                ResetTree(idx);
             }
         }
 
@@ -2769,7 +2880,16 @@ focus, or clicking the widget with his mouse or touch screen";
                 }
 
                 MetaForm.Node n = MetaForm.Node.FromNode(paste);
-                n.Name = "c-" + parent["Surface"].Children.Count;
+
+                int count = parent["Surface"].Children.Count;
+
+                foreach (MetaForm.Node idx in parent["Surface"].Children)
+                {
+                    if (int.Parse(idx.Name.Substring(2)) >= count)
+                        count = int.Parse(idx.Name.Substring(2)) + 1;
+                }
+
+                n.Name = "c-" + count;
                 parent["Surface"].Children.Add(n);
 
                 parent.Save();

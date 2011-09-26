@@ -63,12 +63,16 @@ namespace Magix.UX.Widgets
             string retVal = base.GetClientSideScriptOptions();
             if (!string.IsNullOrEmpty(DefaultWidget))
             {
-                if (!string.IsNullOrEmpty(retVal))
-                    retVal += ",";
-                retVal += 
-                    string.Format(
-                        "defaultWidget:'{0}'", 
-                        Selector.FindControl<Control>(this, DefaultWidget).ClientID);
+                Control widg = Selector.FindControl<Control>(this, DefaultWidget);
+                if (widg != null)
+                {
+                    if (!string.IsNullOrEmpty(retVal))
+                        retVal += ",";
+                    retVal +=
+                        string.Format(
+                            "defaultWidget:'{0}'",
+                            widg.ClientID);
+                }
             }
             return retVal;
         }

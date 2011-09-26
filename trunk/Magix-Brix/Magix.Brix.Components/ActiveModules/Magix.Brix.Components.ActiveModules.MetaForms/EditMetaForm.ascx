@@ -9,6 +9,17 @@
 <link href="media/modules/edit-meta-forms.css" rel="stylesheet" type="text/css" />
 
 <div class="wysiwyg-meta-forms">
+    <mux:CheckBox
+        runat="server"
+        OnCheckedChanged="chkAllowDragging_CheckedChanged"
+        style="display:block;float:left;width:18px;"
+        id="chkAllowDragging" />
+    <mux:Label
+        runat="server"
+        Tag="label"
+        For="chkAllowDragging"
+        ToolTip="If true, allows you to drag and drop Widgets around to absolutely position them. This feature is a emergency feature, and shouldn't be used unless you _really_ have to, since it destroys the flow-layout of the form, and makes your apps harder to get to work with devices and such ..."
+        Text="Allow Dragging and Dropping" />
     <mux:Panel
         runat="server"
         CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-24 prepend-top last clear-both"
