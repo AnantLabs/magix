@@ -2154,7 +2154,7 @@ focus, or clicking the widget with his mouse or touch screen";
 
                     MetaForm.Node xn = new MetaForm.Node();
                     xn.Name = "c-" + count;
-                    parent["Surface"].Children.Insert(x, xn);
+                    parent["Surface"].Children.Insert(x + 1, xn);
 
                     // Looks funny, but keeps all of our Widget 'in memory' while they're deleted and re-created
                     // in database ...
