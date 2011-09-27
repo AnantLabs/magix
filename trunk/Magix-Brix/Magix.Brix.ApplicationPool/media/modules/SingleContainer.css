@@ -717,9 +717,9 @@ input[type=button].clear-both
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+	-moz-border-radius:60px;
+	-webkit-border-radius:60px;
+	border-radius:60px;
 	-moz-transition-property:-moz-box-shadow, opacity;
 	-moz-transition-duration:0.2s;
 	-webkit-transition-property:-webkit-box-shadow, opacity;
