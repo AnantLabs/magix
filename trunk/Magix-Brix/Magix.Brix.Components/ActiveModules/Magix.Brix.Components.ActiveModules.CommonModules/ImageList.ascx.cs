@@ -17,6 +17,8 @@ using Magix.UX;
 namespace Magix.Brix.Components.ActiveModules.CommonModules
 {
     /**
+     * Level2: Modules for displaying a List of Images. Pass in your Image list in the 'Items' parameter
+     * to the LoadModule method
      */
     [ActiveModule]
     public class ImageList : ActiveModule
@@ -44,6 +46,16 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
 
             // TODO: Parameters ...?
             RaiseSafeEvent(img.Info);
+        }
+
+        protected string GetTooltip(object objTip)
+        {
+            if (DataSource.Contains("DisplayTooltips") &&
+                !DataSource["DisplayTooltips"].Get<bool>())
+                return "";
+
+            string toolTip = objTip as string;
+            return toolTip;
         }
     }
 }
