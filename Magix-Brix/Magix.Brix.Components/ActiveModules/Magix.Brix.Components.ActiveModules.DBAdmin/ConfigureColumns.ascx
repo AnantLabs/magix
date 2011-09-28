@@ -16,7 +16,7 @@
         runat="server"
         id="rep">
         <HeaderTemplate>
-            <table class="viewObjects singleInstance noMargin">
+            <table class="viewObjects mux-grid-single-edit noMargin">
         </HeaderTemplate>
         <FooterTemplate>
             </table>

@@ -124,7 +124,7 @@
                                     OnTextChanged="PropertyValueChanged"
                                     TextLength="30"
                                     Info='<%#Eval("Name") %>'
-                                    CssClass="span-4 last mux-in-place-edit left-float prop-editor"
+                                    CssClass="span-4 last mux-in-place-edit mux-left-float prop-editor"
                                     Visible='<%#Eval("Value").Equals("System.String") %>'
                                     Text='<%#GetPropertyValue(Eval("Name")) %>' />
                                 <mux:InPlaceEdit
@@ -132,14 +132,14 @@
                                     OnTextChanged="PropertyValueIntChanged"
                                     TextLength="5"
                                     Info='<%#Eval("Name") %>'
-                                    CssClass="span-2 last mux-in-place-edit left-float prop-editor"
+                                    CssClass="span-2 last mux-in-place-edit mux-left-float prop-editor"
                                     Visible='<%#Eval("Value").Equals("System.Int32") %>'
                                     Text='<%#GetPropertyValue(Eval("Name")) %>' />
                                 <mux:CheckBox
                                     runat="server"
                                     OnCheckedChanged="PropertyValueBoolChanged"
                                     Info='<%#Eval("Name") %>'
-                                    CssClass="last left-float prop-editor"
+                                    CssClass="last mux-left-float prop-editor"
                                     Checked='<%#GetPropertyValueBool(Eval("Name")) %>'
                                     Visible='<%#Eval("Value").Equals("System.Boolean") %>' />
                             </div>

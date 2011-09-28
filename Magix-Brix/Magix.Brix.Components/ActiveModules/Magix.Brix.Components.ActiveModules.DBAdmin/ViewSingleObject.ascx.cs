@@ -93,7 +93,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 Label tb = new Label();
                 tb.Tag = "table";
-                tb.CssClass = "viewObjects singleInstance";
+                tb.CssClass = "viewObjects mux-grid-single-edit";
 
                 // Header rows
                 tb.Controls.Add(CreateHeaderRow());

@@ -1861,7 +1861,7 @@
 {
 }
 
-.Excerpt-Shady-Fady .excerpt-item
+.Excerpt-Shady-Fady .mux-excerpt-item
 {
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
@@ -1879,7 +1879,7 @@
 	transition-duration:1.2s;
 }
 
-.Excerpt-Shady-Fady .excerpt-item:hover
+.Excerpt-Shady-Fady .mux-excerpt-item:hover
 {
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .1);
@@ -1897,7 +1897,7 @@
 {
 }
 
-.Excerpt-Coin-Flip .excerpt-item *
+.Excerpt-Coin-Flip .mux-excerpt-item *
 {
 	-webkit-transform: rotateY(0deg);
 	-moz-transform: rotate(0deg);
@@ -1910,7 +1910,7 @@
 	transition-duration:.7s;
 }
 
-.Excerpt-Coin-Flip .excerpt-item:hover *
+.Excerpt-Coin-Flip .mux-excerpt-item:hover *
 {
 	-webkit-transform: rotateY(360deg);
 	-moz-transform: rotate(360deg);
@@ -1927,7 +1927,7 @@
 {
 }
 
-.Excerpt-Zoom .excerpt-item
+.Excerpt-Zoom .mux-excerpt-item
 {
 	background-color:rgba(0, 0, 0, 0);
 	-webkit-transform: scale(1);
@@ -1948,7 +1948,7 @@
 	transition-duration:.6s;
 }
 
-.Excerpt-Zoom .excerpt-item:hover
+.Excerpt-Zoom .mux-excerpt-item:hover
 {
 	z-index:1;
 	background-color:rgba(255, 255, 255, 1);
@@ -1969,7 +1969,7 @@
 	transition-duration:.6s;
 }
 
-.Excerpt-Zoom .excerpt-item:hover *
+.Excerpt-Zoom .mux-excerpt-item:hover *
 {
 	-webkit-transform-origin:top 50%;
 	-webkit-transform: scale(.8);

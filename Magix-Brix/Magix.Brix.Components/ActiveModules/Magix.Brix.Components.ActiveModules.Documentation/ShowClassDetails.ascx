@@ -18,21 +18,21 @@
         runat="server"
         id="content"
         Tag="div" />
-    <div class="dox-methods">
+    <div class="mux-dox-methods">
         <asp:Repeater
             runat="server"
             id="rep">
             <ItemTemplate>
-                <div class="one-dox-method">
-                    <span class="dox-access">
+                <div class="mux-one-dox-method">
+                    <span class="mux-dox-access">
                         <%#Eval("[Access].Value") %>
                     </span>
-                    <span class="dox-returns">
+                    <span class="mux-dox-returns">
                         <%#Eval("[Returns].Value") %>
                     </span>
-                    <span class="dox-name"><%#Eval("[Name].Value") %></span>
-                    <span class="dox-pars"><%#GetParams(Eval("[Pars]")) %></span>
-                    <div class="push-4 span-14 last dox-description">
+                    <span class="mux-dox-name"><%#Eval("[Name].Value") %></span>
+                    <span class="mux-dox-pars"><%#GetParams(Eval("[Pars]")) %></span>
+                    <div class="push-4 span-14 last mux-dox-description">
                         <%#Eval("[DescriptionHTML].Value") %>
                     </div>
                 </div>

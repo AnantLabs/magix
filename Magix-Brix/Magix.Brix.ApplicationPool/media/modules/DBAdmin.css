@@ -1,10 +1,10 @@
 ﻿/* TreItems for Class "Explorer" ... */
-li.tree-item-namespace span.mux-tree-icon
+li.mux-tree-item-namespace span.mux-tree-icon
 {
 	background:transparent url(../images/tree.png) no-repeat 0 0;
 }
 
-li.tree-item-class span.mux-tree-icon
+li.mux-tree-item-class span.mux-tree-icon
 {
 	background:transparent url(../images/tree.png) no-repeat 0 -18px;
 }
@@ -259,7 +259,7 @@ table.viewObjects>tbody>tr.grid-selected
 	border-radius:2px;
 }
 
-table.singleInstance>tbody>tr.header>td:hover
+table.mux-grid-single-edit>tbody>tr.header>td:hover
 {
 	background-image:none;
 	background-color:Transparent;
@@ -272,7 +272,7 @@ table.singleInstance>tbody>tr.header>td:hover
 	box-shadow: none;
 }
 
-table.singleInstance>tbody>tr>td>div.mux-in-place-edit>textarea
+table.mux-grid-single-edit>tbody>tr>td>div.mux-in-place-edit>textarea
 {
 	margin-top:-10px;
 }

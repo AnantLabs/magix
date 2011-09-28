@@ -786,7 +786,7 @@ clicking a button, or something similar</p>
             }
             else
                 node["ToolTip"].Value = fullName;
-            node["CssClass"].Value = "tree-item-namespace";
+            node["CssClass"].Value = "mux-tree-item-namespace";
         }
 
         /*
@@ -800,7 +800,7 @@ clicking a button, or something similar</p>
                 outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.Description;
             else
                 outerMostNamespace["Items"][cls.FullName]["ToolTip"].Value = cls.FullName;
-            outerMostNamespace["Items"][cls.FullName]["CssClass"].Value = "tree-item-class";
+            outerMostNamespace["Items"][cls.FullName]["CssClass"].Value = "mux-tree-item-class";
         }
 
         #endregion

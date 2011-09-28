@@ -12,7 +12,7 @@
     runat="server"
     id="header"
     Tag="h2"
-    CssClass="no-bottom-margin" />
+    CssClass="mux-no-bottom-margin" />
 
 <mux:TreeView
     runat="server"

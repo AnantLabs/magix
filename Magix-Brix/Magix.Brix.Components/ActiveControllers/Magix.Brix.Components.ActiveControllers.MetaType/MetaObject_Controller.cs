@@ -235,7 +235,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             if (string.IsNullOrEmpty(m.TypeName))
             {
-                cssClass = "no-typename";
+                cssClass = "mux-no-typename";
             }
             else
             {
@@ -243,25 +243,25 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 switch (rnd % 7) // TODO: Improve statistical probability by 'smoothening' it ...
                 {
                     case 0:
-                        cssClass = "type-1";
+                        cssClass = "mux-grid-bg-type-1";
                         break;
                     case 1:
-                        cssClass = "type-2";
+                        cssClass = "mux-grid-bg-type-2";
                         break;
                     case 2:
-                        cssClass = "type-3";
+                        cssClass = "mux-grid-bg-type-3";
                         break;
                     case 3:
-                        cssClass = "type-4";
+                        cssClass = "mux-grid-bg-type-4";
                         break;
                     case 4:
-                        cssClass = "type-5";
+                        cssClass = "mux-grid-bg-type-5";
                         break;
                     case 5:
-                        cssClass = "type-6";
+                        cssClass = "mux-grid-bg-type-6";
                         break;
                     case 6:
-                        cssClass = "type-7";
+                        cssClass = "mux-grid-bg-type-7";
                         break;
                 }
             }
@@ -607,7 +607,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // Creating our Edit Value
             TextAreaEdit inplace = new TextAreaEdit();
             inplace.Text = value;
-            inplace.CssClass = "mux-in-place-edit larger left-float";
+            inplace.CssClass = "mux-in-place-edit larger mux-left-float";
 
             // Supplying our Event Handler for the Changed Event ...
             inplace.TextChanged +=
@@ -634,7 +634,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             LinkButton lb = new LinkButton();
             lb.Text = "&nbsp;";
-            lb.CssClass = "remove-property";
+            lb.CssClass = "mux-remove-property";
             lb.ToolTip = "Click to Permanently Remove Property ...";
             lb.Click +=
                 delegate
