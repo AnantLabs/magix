@@ -44,7 +44,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                         {
                             Label lbl = new Label();
                             lbl.Tag = "p";
-                            lbl.CssClass = "excerpt-excerpt";
+                            lbl.CssClass = "mux-excerpt-text";
                             string text = idx.Settings.Find(
                                 delegate(WebPart.WebPartSetting idxI)
                                 {
@@ -79,7 +79,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 !ch["STOP"].Get<bool>())
             {
                 Panel pnl = new Panel();
-                pnl.CssClass = "excerpt-item";
+                pnl.CssClass = "mux-excerpt-item";
                 pnl.Click +=
                     delegate
                     {

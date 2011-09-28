@@ -43,7 +43,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["CanCreateNewCssFile"].Value = true;
             node["RootAccessFolder"].Value = "/";
             node["Folder"].Value = "/";
-            node["CssClass"].Value = "mux-rounded mux-shaded padded";
+            node["CssClass"].Value = "mux-rounded mux-shaded mux-padded";
 
             RaiseEvent(
                 "Magix.FileExplorer.LaunchExplorer",

@@ -10,5 +10,5 @@
 
 <mux:Panel
     runat="server"
-    CssClass="excerpts-all"
+    CssClass="mux-excerpts-all"
     id="pnl" />

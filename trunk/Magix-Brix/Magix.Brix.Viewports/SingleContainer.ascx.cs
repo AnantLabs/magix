@@ -603,11 +603,11 @@ namespace Magix.Brix.Viewports
                 if (e.Params.Contains("IsError") &&
                     e.Params["IsError"].Get<bool>())
                 {
-                    message.CssClass += " error-message";
+                    message.CssClass += " mux-error-message";
                 }
                 else
                 {
-                    message.CssClass = message.CssClass.Replace(" error-message", "");
+                    message.CssClass = message.CssClass.Replace(" mux-error-message", "");
                 }
 
                 if (firstMessage)

@@ -63,7 +63,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         {
             Button b = new Button();
             b.ID = "loginBtn";
-            b.CssClass = "logout-btn";
+            b.CssClass = "mux-logout-btn";
             b.Text = "Logout";
             b.Click +=
                 delegate
@@ -98,19 +98,19 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             TextBox t = new TextBox();
             t.PlaceHolder = "Username ...";
             t.ID = "unm";
-            t.CssClass = "username";
+            t.CssClass = "mux-username";
             pnl.Controls.Add(t);
 
             TextBox p = new TextBox();
             p.PlaceHolder = "Password ...";
             p.ID = "pwd";
             p.TextMode = TextBox.TextBoxMode.Password;
-            p.CssClass = "password";
+            p.CssClass = "mux-password";
             pnl.Controls.Add(p);
 
             Button b = new Button();
             b.ID = "loginBtn";
-            b.CssClass = "login-btn";
+            b.CssClass = "mux-login-btn";
             b.Text = "Login";
             b.Click +=
                 delegate
@@ -165,7 +165,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             System.Web.UI.WebControls.Button b = new System.Web.UI.WebControls.Button();
             b.ID = "loginBtn";
-            b.CssClass = "login-btn";
+            b.CssClass = "mux-login-btn";
             b.Text = "Login";
             b.Click +=
                 delegate
@@ -216,7 +216,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             System.Web.UI.WebControls.Button b = new System.Web.UI.WebControls.Button();
             b.ID = "loginBtn";
-            b.CssClass = "login-btn";
+            b.CssClass = "mux-login-btn";
             b.Text = "Login";
             b.Click +=
                 delegate

@@ -9,7 +9,7 @@
 <mux:Label
     runat="server"
     Tag="h2"
-    CssClass="no-bottom-margin"
+    CssClass="mux-no-bottom-margin"
     id="header" />
 
 <mux:TreeView

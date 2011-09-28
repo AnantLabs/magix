@@ -10,5 +10,5 @@
 
 <mux:Panel
     runat="server"
-    CssClass="login-wrapper"
+    CssClass="mux-login-wrapper"
     id="pnl" />

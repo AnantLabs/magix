@@ -59,7 +59,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["FullTypeName"].Value = typeof(Action).FullName;
             node["Container"].Value = "content3";
-            node["CssClass"].Value = "edit-actions";
+            node["CssClass"].Value = "mux-edit-actions";
             node["Width"].Value = 18;
             node["Last"].Value = true;
 

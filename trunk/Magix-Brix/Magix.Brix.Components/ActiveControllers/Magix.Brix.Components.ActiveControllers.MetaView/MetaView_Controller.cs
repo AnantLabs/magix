@@ -134,7 +134,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["Container"].Value = "content3";
             node["Width"].Value = 18;
             node["Last"].Value = true;
-            node["CssClass"].Value = "edit-views";
+            node["CssClass"].Value = "mux-edit-views";
 
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 6;
@@ -551,12 +551,12 @@ Deleting it may break these parts.</p>";
             MetaView.MetaViewProperty p = MetaView.MetaViewProperty.SelectByID(e.Params["ID"].Get<int>());
 
             Panel pnl = new Panel();
-            pnl.CssClass = "action-wrapper";
+            pnl.CssClass = "mux-action-wrapper";
             pnl.ToolTip = "Click to append an Action to this Property of the Form. Actions are being treated differently according to the type of control, but often they'll need some sort of User Interaction to be triggered. Often they will create Buttons ...";
             pnl.Click +=
                 delegate
                 {
-                    pnl.CssClass += " action-wrapper-hover";
+                    pnl.CssClass += " mux-action-wrapper-hover";
 
                     Node node = new Node();
                     node["ID"].Value = p.ID;
@@ -576,20 +576,20 @@ Deleting it may break these parts.</p>";
 
             if (!string.IsNullOrEmpty(p.Action))
             {
-                pnl.CssClass += " has-action";
+                pnl.CssClass += " mux-has-action";
             }
             else
             {
-                pnl.CssClass += " has-no-action";
+                pnl.CssClass += " mux-has-no-action";
             }
 
             Panel grow = new Panel();
-            grow.CssClass = "grower";
+            grow.CssClass = "mux-grower";
             grow.ToolTip = "These are the Actions you've already assigned to this Property. Click the 'x' to remove any of these actions.";
             grow.Click +=
                 delegate
                 {
-                    pnl.CssClass = pnl.CssClass.Replace(" action-wrapper-hover", "");
+                    pnl.CssClass = pnl.CssClass.Replace(" mux-action-wrapper-hover", "");
                 };
 
             string[] actions = 
@@ -605,7 +605,7 @@ Deleting it may break these parts.</p>";
                 LinkButton btn = new LinkButton();
                 btn.Text = "X";
                 btn.ToolTip = "Click to remove Action from the property";
-                btn.CssClass = "clear-both span-1 delete-action";
+                btn.CssClass = "clear-both span-1 mux-delete-action";
                 btn.Click +=
                     delegate
                     {
@@ -641,11 +641,11 @@ Deleting it may break these parts.</p>";
             Button bt = new Button();
             bt.Text = "Close";
             bt.ToolTip = "Close this Action Popup Window";
-            bt.CssClass = "bottom-right span-3";
+            bt.CssClass = "mux-bottom-right span-3";
             bt.Click +=
                 delegate
                 {
-                    pnl.CssClass = pnl.CssClass.Replace(" action-wrapper-hover", "");
+                    pnl.CssClass = pnl.CssClass.Replace(" mux-action-wrapper-hover", "");
                     ActiveEvents.Instance.RaiseClearControls("content6");
                 };
             grow.Controls.Add(bt);
@@ -1163,7 +1163,7 @@ Deleting it may break these parts.</p>";
 
             Panel panel = new Panel();
             panel.ID = "pnl" + id;
-            panel.CssClass = "calendar-wrapper";
+            panel.CssClass = "mux-calendar-wrapper";
 
             Magix.UX.Widgets.Calendar c = new Magix.UX.Widgets.Calendar();
             c.ID = "cal" + id;
@@ -1244,7 +1244,7 @@ Deleting it may break these parts.</p>";
                     return idxI.Name == gridPropertyName;
                 });
             MetaObject o4 = null;
-            string cssClass = "status-unknown";
+            string cssClass = "mux-status-unknown";
             if (val != null)
             {
                 foreach (MetaObject idx in Cache<IEnumerable<MetaObject>>(
@@ -1278,7 +1278,7 @@ Deleting it may break these parts.</p>";
             }
 
             b.Text = "&nbsp;";
-            b.CssClass = "multi-choice " + cssClass;
+            b.CssClass = "mux-multi-choice " + cssClass;
             string choiceVal = val == null ? "" : val.Value;
 
             b.Text = choiceVal;
@@ -1306,7 +1306,7 @@ Deleting it may break these parts.</p>";
                     }
                     if (next == null)
                         next = MetaObject.SelectFirst(Criteria.Eq("TypeName", type));
-                    b.CssClass = "multi-choice " + next.Values.Find(
+                    b.CssClass = "mux-multi-choice " + next.Values.Find(
                         delegate(MetaObject.Property idxI)
                         {
                             return idxI.Name == propertyCss;
