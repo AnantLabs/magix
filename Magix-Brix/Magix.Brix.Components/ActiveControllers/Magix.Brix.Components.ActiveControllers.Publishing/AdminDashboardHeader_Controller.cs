@@ -43,7 +43,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["Width"].Value = 18;
                 node["Top"].Value = 1;
                 node["Last"].Value = true;
-                node["CssClass"].Value = "headerModule";
+                node["CssClass"].Value = "mux-header-module";
 
                 LoadModule(
                     "Magix.Brix.Components.ActiveModules.CommonModules.Header",

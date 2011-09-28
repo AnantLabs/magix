@@ -37,7 +37,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                     // TODO: WTF ...? Isn't this common for all ...?
                     // I seriously need to stop smoking pot ... ;)
                     if (node.Contains("OverflowWebPart"))
-                        (this.Parent as DynamicPanel).CssClass += " web-part-overflow";
+                        (this.Parent as DynamicPanel).CssClass += " mux-web-part-overflow";
                 };
         }
 

@@ -351,7 +351,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             Node node = new Node();
 
-            node["CssClass"].Value = "clear-left";
+            node["CssClass"].Value = "clear-both";
             node["Width"].Value = 6;
             node["MarginBottom"].Value = 10;
             node["Top"].Value = 1;
@@ -710,7 +710,7 @@ Deleting it may break these parts.</p>";
                 node["Padding"].Value = 6;
                 node["Container"].Value = "content6";
                 node["IsList"].Value = false;
-                node["CssClass"].Value = "small-editer";
+                node["CssClass"].Value = "mux-small-editer";
                 node["PullTop"].Value = 18;
                 node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
                 node["ID"].Value = p.ID;
@@ -740,7 +740,7 @@ Deleting it may break these parts.</p>";
 
             cc["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             cc["CssClass"].Value = "";
-            cc["Replace"].Value = " selected-action";
+            cc["Replace"].Value = " mux-selected-action-param";
 
             RaiseEvent(
                 "DBAdmin.Form.ChangeCssClassOfModule",
@@ -750,7 +750,7 @@ Deleting it may break these parts.</p>";
 
             cc["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             cc["ID"].Value = p.ID;
-            cc["CssClass"].Value = " selected-action";
+            cc["CssClass"].Value = " mux-selected-action-param";
 
             RaiseEvent(
                 "DBAdmin.Form.ChangeCssClassOfModule",
@@ -768,7 +768,7 @@ Deleting it may break these parts.</p>";
             Action.ActionParams p = Action.ActionParams.SelectByID(e.Params["ID"].Get<int>());
 
             SelectList ls = new SelectList();
-            ls.CssClass = "gridSelect";
+            ls.CssClass = "mux-grid-select";
 
             if (e.Params.Contains("ReadOnly"))
                 ls.Enabled = !e.Params["ReadOnly"].Get<bool>();

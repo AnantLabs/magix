@@ -10,7 +10,7 @@
 
 <mux:Panel
     runat="server"
-    CssClass="panelSingleObject"
+    CssClass="mux-grid-single-object"
     id="pnl" />
 
 <mux:Panel

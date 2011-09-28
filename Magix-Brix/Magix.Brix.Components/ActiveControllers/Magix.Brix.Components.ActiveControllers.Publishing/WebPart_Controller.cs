@@ -121,7 +121,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
                 node["OriginalWebPartID"].Value = page.ID;
 
-                node["CssClass"].Value = "web-part" + " " + page.Container.CssClass;
+                node["CssClass"].Value = "mux-web-part" + " " + page.Container.CssClass;
 
                 if (page.Container.Overflow)
                     node["OverflowWebPart"].Value = true;
@@ -147,9 +147,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node["Top"].Value = page.Container.MarginTop;
                 node["Width"].Value = page.Container.Width;
 
-                string cssClass = "web-part";
+                string cssClass = "mux-web-part";
                 if (page.Container.Overflow)
-                    cssClass += " web-part-overflow";
+                    cssClass += " mux-web-part-overflow";
                 cssClass += " " + page.Container.CssClass;
                 node["CssClass"].Value = cssClass;
 

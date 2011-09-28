@@ -648,7 +648,7 @@
                     <mux:Panel
                         runat="server"
                         id="preview"
-                        CssClass="span-15 height-10 last yellow-background mux-widget-preview" />
+                        CssClass="span-15 height-10 last mux-wysiwyg-surface mux-widget-preview" />
                     <mux:Button
                         runat="server"
                         Text="Finish!"

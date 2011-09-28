@@ -32,7 +32,7 @@
 
 <mux:Panel
     runat="server"
-    CssClass="mux-shaded mux-rounded height-10 mux-debug"
+    CssClass="mux-shaded mux-rounded mux-debug-panel"
     Visible="false"
     id="debug" />
 
@@ -74,7 +74,7 @@
         id="floater" />
     <mux:Panel
         runat="server"
-        CssClass="span-24 last childContainer"
+        CssClass="span-24 last mux-child-container"
         Visible="false"
         id="pnlAll" />
     <mux:Window 
@@ -82,6 +82,7 @@
         CssClass="mux-shaded mux-rounded mux-window magix-message last"
         Caption="Message from Marvin ..."
         style="display:none;"
+        Draggable="false"
         Closable="false"
         id="message">
         <Content>

@@ -47,7 +47,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             node["Width"].Value = 18;
             node["Last"].Value = true;
-            node["CssClass"].Value = "dashboard";
+            node["CssClass"].Value = "mux-dashboard";
             node["ChildCssClass"].Value = "mux-desktop-images";
 
             node["DisplayTooltips"].Value = false;
@@ -67,7 +67,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             Node node = new Node();
 
-            node["ChildCssClass"].Value = "mux-desktop-dashboard";
+            node["ChildCssClass"].Value = "mux-desktop-dashboard-items-grid";
             node["Append"].Value = true;
             node["Container"].Value = "content3";
             node["FullTypeName"].Value = "Dashboard-Type-META";

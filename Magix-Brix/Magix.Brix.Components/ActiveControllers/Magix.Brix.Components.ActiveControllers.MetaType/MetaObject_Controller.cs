@@ -58,7 +58,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Container"].Value = "content3";
             node["Width"].Value = 18;
             node["Last"].Value = true;
-            node["CssClass"].Value = "edit-objects";
+            node["CssClass"].Value = "mux-edit-objects";
+
             node["WhiteListColumns"]["TypeName"].Value = true;
             node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 3;
             node["WhiteListColumns"]["Reference"].Value = true;
@@ -329,7 +330,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Text"].Value = "+";
             node["ToolTip"].Value = "Click to create a New Property for your Object ...";
-            node["ButtonCssClass"].Value = "span-2 clear-left";
+            node["ButtonCssClass"].Value = "span-2 clear-both";
             node["Append"].Value = true;
             node["Event"].Value = "Magix.MetaType.CreateNewMetaObject-Value-AndEdit";
             node["Event"]["ObjectID"].Value = m.ID;

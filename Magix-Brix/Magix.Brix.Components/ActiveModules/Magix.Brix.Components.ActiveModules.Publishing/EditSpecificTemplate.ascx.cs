@@ -54,7 +54,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         // Creating Window ...
                         Window w = new Window();
-                        w.CssClass += " web-part";
+                        w.CssClass += " mux-web-part";
                         if (overflow)
                             w.CssClass += " overflow-design";
 

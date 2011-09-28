@@ -80,7 +80,7 @@ namespace Magix.Brix.Viewports
                     LinkButton b = new LinkButton();
                     b.Text = idx.Left;
                     b.ID = "bb-" + idxNo;
-                    b.CssClass = "clear-left span-6";
+                    b.CssClass = "clear-both span-6";
                     Tuple<string, Node> tmp = idx;
 
                     b.Click += delegate(object sender, EventArgs e)
@@ -868,10 +868,6 @@ namespace Magix.Brix.Viewports
                         if (e.Params["Parameters"].Contains("Absolute"))
                         {
                             cssClass += " absolutized";
-                        }
-                        if (e.Params["Parameters"].Contains("Clear"))
-                        {
-                            cssClass += " cleared";
                         }
                         if (e.Params["Parameters"].Contains("Relativize"))
                         {
