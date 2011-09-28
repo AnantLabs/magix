@@ -112,6 +112,7 @@ namespace Magix.UX.Widgets
             _dragger.ID = "dragger";
             if (Dragged != null)
                 _dragger.Dragged += DraggerDropped;
+            _dragger.Handle = _caption.ClientID;
             Controls.Add(_dragger);
         }
 
