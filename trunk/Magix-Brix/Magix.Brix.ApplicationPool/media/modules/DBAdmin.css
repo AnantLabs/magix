@@ -220,6 +220,12 @@ table.viewObjects>tbody>tr>td>div.larger>a
 	overflow:hidden;
 }
 
+table.viewObjects>tbody>tr>td>div.larger>input[type=text]
+{
+	width:100%;
+	margin-left:0;
+}
+
 table.viewObjects>tbody>tr>td>div.mux-in-place-edit>textarea
 {
 	display:block;

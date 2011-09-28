@@ -11,6 +11,7 @@
 <mux:SlidingMenu 
     runat="server" 
     OnLeafMenuItemClicked="slid_LeafMenuItemClicked"
+    CssClass="mux-sliding-menu mux-rounded mux-shaded"
     ID="slid">
     <mux:SlidingMenuLevel 
         runat="server" 

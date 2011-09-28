@@ -404,7 +404,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             else
             {
                 node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
                 node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["EventName"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
                 node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
             }
