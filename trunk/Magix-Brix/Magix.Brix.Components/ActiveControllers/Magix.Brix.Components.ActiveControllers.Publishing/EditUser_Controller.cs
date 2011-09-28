@@ -169,7 +169,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             // Creating our SelectList
             SelectList ls = new SelectList();
-            ls.CssClass = "gridSelect";
+            ls.CssClass = "mux-grid-select";
             ls.Info = id.ToString();
             ls.Items.Add(new ListItem("None", "-1"));
 
@@ -259,10 +259,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         private static void LoadEditUserImage(User user)
         {
             Node node = new Node();
+
             node["Append"].Value = false;
             node["Events"]["Click"].Value = "Magix.Publishing.ChangeAvatarForUser";
             node["Events"]["Click"]["ID"].Value = user.ID;
-            node["ChildCssClass"].Value = "span-4 height-20 blockImage blockImage-clear";
+            node["ChildCssClass"].Value = "span-4 height-20 blockImage clear-both";
             node["Seed"].Value = user.ID;
             node["Padding"].Value = 6;
             node["Top"].Value = 1;

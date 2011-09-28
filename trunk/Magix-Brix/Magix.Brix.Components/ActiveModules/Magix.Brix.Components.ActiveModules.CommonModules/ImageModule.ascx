@@ -16,6 +16,6 @@
     <mux:Label
         runat="server"
         Tag="p"
-        CssClass="imageDescription small"
+        CssClass="mux-image-description small"
         id="lbl" />
 </mux:Panel>

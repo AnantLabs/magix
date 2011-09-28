@@ -236,7 +236,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Last"].Value = true;
 
             // Adding some yellowish bg which reads 'full actual page size' [normally]
-            node["CssClass"].Value = "yellow-background";
+            node["CssClass"].Value = "mux-wysiwyg-surface";
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Publishing.EditSpecificTemplate",
@@ -484,8 +484,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             WebPageTemplate t = WebPageTemplate.SelectByID(id);
 
             SelectList ls = new SelectList();
-            ls.CssClass = "span-3";
-            ls.Style[Styles.display] = "block";
+
+            ls.CssClass = "span-3 mux-grid-select";
 
             ls.SelectedIndexChanged +=
                 delegate

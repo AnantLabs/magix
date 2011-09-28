@@ -22,7 +22,7 @@
         Text="Allow Dragging and Dropping" />
     <mux:Panel
         runat="server"
-        CssClass="yellow-background mux-meta-form-wysiwyg-wrapper span-24 prepend-top last clear-both"
+        CssClass="mux-wysiwyg-surface mux-meta-form-wysiwyg-wrapper span-24 prepend-top last clear-both"
         id="ctrls" />
 
     <mux:Window

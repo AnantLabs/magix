@@ -605,7 +605,7 @@ Deleting it may break these parts.</p>";
                 LinkButton btn = new LinkButton();
                 btn.Text = "X";
                 btn.ToolTip = "Click to remove Action from the property";
-                btn.CssClass = "clear-left span-1 delete-action";
+                btn.CssClass = "clear-both span-1 delete-action";
                 btn.Click +=
                     delegate
                     {
@@ -1085,7 +1085,7 @@ Deleting it may break these parts.</p>";
         {
             SelectList ls = new SelectList();
 
-            ls.CssClass = "span-2 gridSelect";
+            ls.CssClass = "span-2 mux-grid-select";
             ls.Style[Styles.display] = "block";
 
             string typeProperty = p.Name.Split(':')[1];
@@ -1691,7 +1691,7 @@ Deleting it may break these parts.</p>";
             node["Top"].Value = 2;
             node["MarginBottom"].Value = 20;
             node["PullTop"].Value = 28;
-            node["CssClass"].Value = "yellow-background";
+            node["CssClass"].Value = "mux-wysiwyg-surface";
             node["MetaViewTypeName"].Value = m.TypeName;
             node["MetaViewName"].Value = m.Name;
 

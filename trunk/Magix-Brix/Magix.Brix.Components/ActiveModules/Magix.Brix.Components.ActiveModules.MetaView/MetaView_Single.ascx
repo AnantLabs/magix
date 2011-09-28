@@ -10,7 +10,7 @@
 
 <mux:Panel
     runat="server"
-    CssClass="magix-web-part-content"
+    CssClass="mux-web-part-content"
     id="ctrls" />
 
 <mux:HiddenField

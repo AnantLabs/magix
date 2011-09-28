@@ -64,8 +64,8 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             {
                 node["Text"].Value = TipOfToday.Instance.Current(UserBase.Current.Username);
             }
-            node["ChildCssClass"].Value = "tool-tip";
             node["CssClass"].Value = "mux-tooltip-module";
+            node["ChildCssClass"].Value = "mux-tool-tip";
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.TipOfToday",
@@ -136,7 +136,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             // Loading 'change level button' ...
             Node node = new Node();
 
-            node["ButtonCssClass"].Value = "span-8 clear-left down-1";
+            node["ButtonCssClass"].Value = "span-8 clear-both down-1";
             node["Append"].Value = true;
 
             // TODO: Marketing campaign around E@ster E9g ... :P

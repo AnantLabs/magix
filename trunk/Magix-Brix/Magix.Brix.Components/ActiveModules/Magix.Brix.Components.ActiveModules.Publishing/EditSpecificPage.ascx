@@ -54,5 +54,5 @@
 
 <mux:Panel
     runat="server"
-    CssClass="span-24 last down-1 yellow-background"
+    CssClass="span-24 last down-1 mux-wysiwyg-surface"
     id="parts" />

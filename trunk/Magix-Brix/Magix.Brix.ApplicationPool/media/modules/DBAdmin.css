@@ -15,7 +15,7 @@ li.tree-item-class span.mux-tree-icon
 
 
 /* Table for viewing objects in DBAdmin */
-div.panelSingleObject
+div.mux-grid-single-object
 {
 	float:left;
 	margin-right:10px;
