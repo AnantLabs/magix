@@ -4,9 +4,6 @@
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
-
-
-
 /* Common HTML elements */
 
 html, body
@@ -1668,5 +1665,50 @@ input[type=text].mux-color-value:focus
 	-moz-animation-duration: 2s;
 	-moz-animation-iteration-count: infinite;
 	-moz-animation-direction: alternate;
+}
+
+/* Ajax Wait widget */
+.mux-ajax-wait
+{
+	position:fixed;
+	top:0;
+	right:0;
+	width:250px;
+	height:36px;
+	padding:36px 36px 18px 36px;
+	z-index:100000;
+
+	-moz-border-radius:0 0 0 50px;
+	-webkit-border-radius:0 0 0 50px;
+	-o-border-radius:0 0 0 50px;
+	-ms-border-radius:0 0 0 50px;
+	border-radius:0 0 0 50px;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, 1)), to(rgba(64, 64, 64, 1)));
+	background-image: -webkit-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
+	background-image: -moz-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
+	background-image: -o-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
+	background-image: -ms-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
+	background-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
+
+	-webkit-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
+	-o-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
+	-ms-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
+}
+
+.mux-ajax-wait p
+{
+	display:block;
+	color:#efefef;
+}
+
+.mux-ajax-wait img
+{
+	display:block;
+	position:fixed;
+	top:30px;
+	right:25px;
 }
 

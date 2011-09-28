@@ -16,7 +16,7 @@
         id="next"
         OnClick="next_Click"
         ToolTip="Next Carpe Diem ..."
-        CssClass="navButton"
+        CssClass="mux-navigation-button"
         Text="&gt;" />
 
     <mux:Button
@@ -24,13 +24,13 @@
         id="previous"
         OnClick="previous_Click"
         ToolTip="Previous Carpe Diem ..."
-        CssClass="navButton"
+        CssClass="mux-navigation-button"
         Text="&lt;" />
 
     <mux:Label
         runat="server"
         Tag="div"
-        CssClass="tip-text"
+        CssClass="mux-tip-text"
         id="lbl" />
 
 </mux:Panel>

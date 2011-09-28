@@ -12,7 +12,7 @@
 
 <mux:AjaxWait 
     runat="server" 
-    CssClass="ajax-wait"
+    CssClass="mux-ajax-wait"
     Delay="500"
     MaxOpacity="0.8"
     id="waiter">
@@ -79,7 +79,7 @@
         id="pnlAll" />
     <mux:Window 
         runat="server" 
-        CssClass="mux-shaded mux-rounded mux-window magix-message last"
+        CssClass="mux-shaded mux-rounded mux-window mux-message last"
         Caption="Message from Marvin ..."
         style="display:none;"
         Draggable="false"
