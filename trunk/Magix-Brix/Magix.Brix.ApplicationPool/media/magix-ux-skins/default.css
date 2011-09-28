@@ -1473,13 +1473,6 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 }
 
 
-
-
-
-
-
-
-
 /* InPlaceEdit */
 .mux-in-place-edit
 {
@@ -1499,13 +1492,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 }
 
 
-
-
-
-
-
-
-
+/* Color Picker */
 .mux-color-picker
 {
 	width:390px;
@@ -1520,30 +1507,44 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	display:block;
 	float:left;
 	margin-right:10px;
+	
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:.5s;
+	
 	cursor:crosshair;
 	position:relative;
 }
 
 .mux-color-picker canvas:hover
 {
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 }
 
 .mux-color-picker-preview
@@ -1567,33 +1568,15 @@ input[type=text].mux-color-value
 	width:110px;
 	display:block;
 	float:left;
-	border-left:none 0 !important;
-	border-right:none 0 !important;
 	font-size:10px;
-	border-top:solid 1px #999;
-	border-bottom:solid 1px #999;
 	margin:18px 10px 0 0;
 	height:16px;
 	line-height:16px;
-	background-color:#ccc;
-	-moz-transition-property:background-color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:background-color;
-	-webkit-transition-duration:0.2s;
-	transition-property:background-color;
-	transition-duration:0.2s;
 }
 
 input[type=text].mux-color-value:hover,
 input[type=text].mux-color-value:focus
 {
-	background-color:#fff;
-	-moz-transition-property:background-color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:background-color;
-	-webkit-transition-duration:0.2s;
-	transition-property:background-color;
-	transition-duration:0.2s;
 }
 
 
