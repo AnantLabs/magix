@@ -135,6 +135,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             IncludeCssFile("media/magix-ux-skins/default.css");
             IncludeCssFile("media/modules/SingleContainer.css");
+
+            if (Page.Request.Params["dashboard"] == "true")
+            {
+                IncludeCssFile("media/modules/dashboard.css");
+            }
         }
     }
 }

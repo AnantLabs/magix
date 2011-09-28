@@ -263,7 +263,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Append"].Value = false;
             node["Events"]["Click"].Value = "Magix.Publishing.ChangeAvatarForUser";
             node["Events"]["Click"]["ID"].Value = user.ID;
-            node["ChildCssClass"].Value = "span-4 height-20 blockImage clear-both";
+            node["ChildCssClass"].Value = "span-4 height-20 mux-block-image clear-both";
             node["Seed"].Value = user.ID;
             node["Padding"].Value = 6;
             node["Top"].Value = 1;

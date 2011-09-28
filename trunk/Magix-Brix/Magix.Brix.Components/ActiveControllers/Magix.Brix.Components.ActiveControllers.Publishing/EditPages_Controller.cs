@@ -45,7 +45,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     
                     WebPartTemplate c1 = new WebPartTemplate();
                     c1.Name = "Menu";
-                    c1.CssClass = "menu";
+                    c1.CssClass = "menu mux-rounded mux-shaded";
                     c1.ViewportContainer = "content1";
                     c1.Width = 6;
                     c1.Height = 20;

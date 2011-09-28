@@ -1,6 +1,12 @@
-﻿
+﻿/*
+ * Magix - A Web Application Framework for Humans
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
+ */
+
 html, body
 {
+	/* We don't want 'jumping' to occur when scrollbars are becoming visible ... */
     height:110%;
 }
 
@@ -34,11 +40,11 @@ html, body
     src: url('../Fonts/Hawaii_Killer.ttf') format('truetype');
 }
 
-.blockImage
+.mux-block-image
 {
 }
 
-.blockImage img
+.mux-block-image img
 {
 	display:block;
 	cursor:pointer;
@@ -69,7 +75,7 @@ html, body
 	transition-duration:.5s;
 }
 
-.blockImage img:hover
+.mux-block-image img:hover
 {
 
 	-moz-border-radius:15px;
@@ -96,50 +102,6 @@ html, body
 	transition-duration:.5s;
 }
 
-.ajax-wait
-{
-	position:fixed;
-	top:0;
-	right:0;
-	width:250px;
-	height:36px;
-	padding:36px 36px 18px 36px;
-	z-index:100000;
-
-	-moz-border-radius:0 0 0 50px;
-	-webkit-border-radius:0 0 0 50px;
-	-o-border-radius:0 0 0 50px;
-	-ms-border-radius:0 0 0 50px;
-	border-radius:0 0 0 50px;
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, 1)), to(rgba(64, 64, 64, 1)));
-	background-image: -webkit-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
-	background-image: -moz-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
-	background-image: -o-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
-	background-image: -ms-linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
-	background-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(64, 64, 64, 1) 100%);
-
-	-webkit-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
-	-moz-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
-	-o-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
-	-ms-box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
-	box-shadow: -2px 2px 3px rgba(0, 0, 0, .2);
-}
-
-.ajax-wait p
-{
-	display:block;
-	color:#efefef;
-}
-
-.ajax-wait img
-{
-	display:block;
-	position:fixed;
-	top:30px;
-	right:25px;
-}
-
 .main
 {
 	height:auto;
@@ -163,7 +125,7 @@ html, body
 	max-height:auto !important;
 }
 
-.magix-message
+.mux-message
 {
 	width:390px;
 
@@ -187,10 +149,10 @@ html, body
 	background-image: linear-gradient(rgba(245, 255, 245, 1) 0%, rgba(180, 210, 180, 1) 80%);
 }
 
-.magix-message .mux-window-content
+.mux-message .mux-window-content
 {
-	padding-bottom:0 !important;
-	padding-top:0 !important;
+	padding-bottom:0;
+	padding-top:0;
 }
 
 .mux-child-container
@@ -217,9 +179,9 @@ html, body
 
 select.mux-grid-select
 {
-	margin-top:1px !important;
+	margin-top:1px;
 	display:block;
-	margin-bottom:0 !important;
+	margin-bottom:0;
 	height:16px;
 	width:100%;
 	font-size:.8em;
@@ -229,7 +191,7 @@ select.mux-grid-select
 input[type=checkbox].mux-grid-select
 {
 	display:block;
-	margin-bottom:0 !important;
+	margin-bottom:0;
 	height:16px;
 	line-height:1.875em;
 	border:none 0;
@@ -241,6 +203,7 @@ input[type=checkbox].mux-grid-select
 	white-space:nowrap;
 }
 
+/* It's tempting to put into dashboard, but no ...! ;) */
 .mux-debug-panel
 {
 	position:fixed;
@@ -298,40 +261,6 @@ input[type=number].clear-both
 	clear:both;
 }
 
-.mux-wysiwyg-surface
-{
-	background:Transparent url(../images/wire-grid.png) repeat 0 0;
-	margin-bottom:72px;
-}
-
-.mux-small-editer
-{
-	position:relative;
-}
-
-.mux-small-editer .mux-grid-single-object
-{
-	margin-top:126px;
-	width:270px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	-o-border-radius:5px;
-	-ms-border-radius:5px;
-	border-radius:5px;
-
-	background-color:rgba(128, 128, 255, .1);
-}
-
-.mux-small-editer .mux-selected-action-param
-{
-	margin-top:0;
-	position:absolute;
-	top:0;
-	left:240px;
-
-	background-color:rgba(255, 255, 0, .06);
-}
-
 .mux-web-part-content
 {
 	width:100%;
@@ -360,551 +289,9 @@ input[type=number].clear-both
 
 .mux-web-part-overflow
 {
-	overflow-y:auto;
+	overflow-y:auto !important;
+	overflow-x:hidden !important;
 	height:auto !important;
-}
-
-.mux-dashboard
-{
-}
-
-.mux-dashboard .mux-grid-single-object
-{
-	margin-right:0;
-}
-
-.mux-desktop-dashboard-items-grid
-{
-	float:left;
-	width:190px;
-	opacity:.3;
-	
-	-moz-transition-property:opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:opacity;
-	-ms-transition-duration:.5s;
-	transition-property:opacity;
-	transition-duration:.5s;
-}
-
-.mux-desktop-dashboard-items-grid:hover
-{
-	opacity:1;
-
-	-moz-transition-property:opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:opacity;
-	-ms-transition-duration:.5s;
-	transition-property:opacity;
-	transition-duration:.5s;
-}
-
-.mux-desktop-images
-{
-	float:left;
-	width:490px;
-}
-
-@-webkit-keyframes desktop-animations {
- 0% {
-	-webkit-transform: scale(1) rotate(0deg);
-	-webkit-animation-timing-function: ease-out;
-	-webkit-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
- }
- 50% {
-	-webkit-transform: scale(2.5) rotate(720deg);
-	-webkit-animation-timing-function: ease-in;
-	opacity:1;
-	-webkit-box-shadow: 0px 0px 13px rgba(225, 255, 225, 1);
- }
- 100% {
-	-webkit-transform: scale(1) rotate(0deg);
-	-webkit-animation-timing-function: ease-in;
-	-webkit-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
- }
-}
-
-@-moz-keyframes desktop-animations {
- 0% {
-	-moz-transform: scale(1) rotate(0deg);
-	-moz-animation-timing-function: ease-out;
-	-moz-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
- }
- 50% {
-	-moz-transform: scale(2.5) rotate(720deg);
-	-moz-animation-timing-function: ease-in;
-	opacity:1;
-	-moz-box-shadow: 0px 0px 13px rgba(225, 255, 225, 1);
- }
- 100% {
-	-moz-transform: scale(1) rotate(0deg);
-	-moz-animation-timing-function: ease-in;
-	-moz-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
- }
-}
-
-.mux-desktop-images img:nth-child(1),
-.mux-desktop-images img:nth-child(2),
-.mux-desktop-images img:nth-child(3),
-.mux-desktop-images img:nth-child(4),
-.mux-desktop-images img:nth-child(5),
-.mux-desktop-images img:nth-child(6),
-.mux-desktop-images img:nth-child(7),
-.mux-desktop-images img:nth-child(8),
-.mux-desktop-images img:nth-child(9),
-.mux-desktop-images img:nth-child(10),
-.mux-desktop-images img:nth-child(11),
-.mux-desktop-images img:nth-child(12)
-{
-	-webkit-animation-name: desktop-animations;
-	-webkit-animation-duration: 1s;
-	-webkit-animation-direction: normal;
-	-webkit-animation-iteration-count: 1;
-	
-	-moz-animation-name: desktop-animations;
-	-moz-animation-duration: 1s;
-	-moz-animation-direction: normal;
-	-moz-animation-iteration-count: 1;
-}
-
-.mux-desktop-images img:nth-child(1)
-{
-	-webkit-animation-delay: 22s;
-	-moz-animation-delay: 22s;
-}
-
-.mux-desktop-images img:nth-child(2)
-{
-	-webkit-animation-delay: 22.1s;
-	-moz-animation-delay: 22.1s;
-}
-
-.mux-desktop-images img:nth-child(3)
-{
-	-webkit-animation-delay: 22.2s;
-	-moz-animation-delay: 22.2s;
-}
-
-.mux-desktop-images img:nth-child(4)
-{
-	-webkit-animation-delay: 22.3s;
-	-moz-animation-delay: 22.3s;
-}
-
-.mux-desktop-images img:nth-child(5)
-{
-	-webkit-animation-delay: 22.4s;
-	-moz-animation-delay: 22.4s;
-}
-
-.mux-desktop-images img:nth-child(6)
-{
-	-webkit-animation-delay: 22.5s;
-	-moz-animation-delay: 22.5s;
-}
-
-.mux-desktop-images img:nth-child(7)
-{
-	-webkit-animation-delay: 22.6s;
-	-moz-animation-delay: 22.6s;
-}
-
-.mux-desktop-images img:nth-child(8)
-{
-	-webkit-animation-delay: 22.7s;
-	-moz-animation-delay: 22.7s;
-}
-
-.mux-desktop-images img:nth-child(9)
-{
-	-webkit-animation-delay: 22.8s;
-	-moz-animation-delay: 22.8s;
-}
-
-.mux-desktop-images img:nth-child(10)
-{
-	-webkit-animation-delay: 22.9s;
-	-moz-animation-delay: 22.9s;
-}
-
-.mux-desktop-images img:nth-child(11)
-{
-	-webkit-animation-delay: 23s;
-	-moz-animation-delay: 23s;
-}
-
-.mux-desktop-images img:nth-child(12)
-{
-	-webkit-animation-delay: 23.1s;
-	-moz-animation-delay: 23.1s;
-}
-
-.mux-desktop-icon
-{
-	opacity:.3;
-	
-	-moz-border-radius:60px;
-	-webkit-border-radius:60px;
-	-o-border-radius:60px;
-	-ms-border-radius:60px;
-	border-radius:60px;
-	
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
-	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
-	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
-
-	-moz-transition-property:-moz-box-shadow, opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, opacity;
-	-ms-transition-duration:.5s;
-	transition-property:box-shadow, opacity;
-	transition-duration:.5s;
-
-	cursor:pointer;
-	margin-right:10px;
-}
-
-.mux-desktop-icon:hover
-{
-	opacity:1;
-
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-
-	-moz-transition-property:-moz-box-shadow, opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, opacity;
-	-ms-transition-duration:.5s;
-	transition-property:box-shadow, opacity;
-	transition-duration:.5s;
-}
-
-.mux-tooltip-module
-{
-	position:fixed;
-	top:36px;
-	right:40px;
-	min-width:119px;
-	min-height:98px;
-	width:auto;
-	height:auto;
-	background:transparent url(../images/desktop-icons/facts.png) no-repeat top right;
-	background-color:rgba(220, 255, 220, 0);
-	z-index:700;
-	border:none 0;
-}
-
-.mux-tool-tip
-{
-	width:119px;
-	overflow:hidden;
-	height:104px;
-	
-	-moz-transition-property:-moz-box-shadow, background-color, height, width;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, background-color, height, width;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, background-color, height, width;
-	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, background-color, height, width;
-	-ms-transition-duration:.5s;
-	transition-property:box-shadow, background-color, height, width;
-	transition-duration:.5s;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0);
-	-o-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0);
-	-ms-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0);
-	box-shadow: 1px 1px 2px rgba(30, 30, 30, 0);
-
-	-moz-border-radius:15px;
-	-webkit-border-radius:15px;
-	-o-border-radius:15px;
-	-ms-border-radius:15px;
-	border-radius:15px;
-}
-
-.mux-tool-tip:hover
-{
-	height:504px;
-	width:390px;
-	padding:18px 40px 18px 0px;
-
-	-moz-transition-property:-moz-box-shadow, background-color, height, width;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, background-color, height, width;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, background-color, height, width;
-	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, background-color, height, width;
-	-ms-transition-duration:.5s;
-	transition-property:box-shadow, background-color, height, width;
-	transition-duration:.5s;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .8);
-	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, .8);
-	-o-box-shadow: 1px 1px 2px rgba(0, 0, 0, .8);
-	-ms-box-shadow: 1px 1px 2px rgba(0, 0, 0, .8);
-	box-shadow: 1px 1px 2px rgba(0, 0, 0, .8);
-	
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(240, 255, 240, 1)), to(rgba(195, 255, 215, 1)));
-	background-image: -webkit-linear-gradient(rgba(240, 255, 240, 1) 0%, rgba(195, 255, 215, 1) 100%);
-	background-image: -moz-linear-gradient(rgba(240, 255, 240, 1) 0%, rgba(195, 255, 215, 1) 100%);
-	background-image: -o-linear-gradient(rgba(240, 255, 240, 1) 0%, rgba(195, 255, 215, 1) 100%);
-	background-image: -ms-linear-gradient(rgba(240, 255, 240, 1) 0%, rgba(195, 255, 215, 1) 100%);
-	background-image: linear-gradient(rgba(240, 255, 240, 1) 0%, rgba(195, 255, 215, 1) 100%);
-}
-
-.mux-tool-tip .tip-text
-{
-	margin-right:-155%;
-	margin-left:150%;
-	color:rgba(0, 0, 0, 0.2);
-
-	-webkit-border-radius:5px;
-	-moz-border-radius:5px;
-	-o-border-radius:5px;
-	-ms-border-radius:5px;
-	border-radius:5px;
-	
-	-moz-transition-property:color, margin-right, margin-left;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:color, margin-right, margin-left;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:color, margin-right, margin-left;
-	-o-transition-duration:.5s;
-	-ms-transition-property:color, margin-right, margin-left;
-	-ms-transition-duration:.5s;
-	transition-property:color, margin-right, margin-left;
-	transition-duration:.5s;
-}
-
-.mux-tool-tip:hover .tip-text
-{
-	margin-right:40px;
-	margin-left:40px;
-	color:rgba(0, 0, 0, 1);
-
-	-moz-transition-property:color, margin-right, margin-left;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:color, margin-right, margin-left;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:color, margin-right, margin-left;
-	-o-transition-duration:.5s;
-	-ms-transition-property:color, margin-right, margin-left;
-	-ms-transition-duration:.5s;
-	transition-property:color, margin-right, margin-left;
-	transition-duration:.5s;
-}
-
-.mux-tool-tip .navButton
-{
-	opacity:0;
-	width:30px;
-	margin:0 0 18px 10px;
-	float:right;
-
-	-moz-transition-property:opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:.5s;
-	transition-property:opacity;
-	transition-duration:.5s;
-}
-
-.mux-tool-tip:hover .navButton
-{
-	opacity:1;
-
-	-moz-transition-property:opacity;
-	-moz-transition-duration:1.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:1.5s;
-	transition-property:opacity;
-	transition-duration:1.5s;
-}
-
-.mux-tool-tip .tip-text em
-{
-	color:rgba(0, 0, 0, 0.2);
-
-	-moz-transition-property:color;
-	-moz-transition-duration:3s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:3s;
-	transition-property:color;
-	transition-duration:3s;
-	
-}
-
-.mux-tool-tip:hover .tip-text em
-{
-	color:rgba(105, 5, 0, 1);
-
-	-moz-transition-property:color;
-	-moz-transition-duration:3s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:3s;
-	-o-transition-property:color;
-	-o-transition-duration:3s;
-	-ms-transition-property:color;
-	-ms-transition-duration:3s;
-	transition-property:color;
-	transition-duration:3s;
-}
-
-.mux-tool-tip .tip-text a
-{
-	color:rgba(0, 0, 0, .2);
-	text-decoration:none;
-
-	-moz-transition-property:color;
-	-moz-transition-duration:1s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:1s;
-	-o-transition-property:color;
-	-o-transition-duration:1s;
-	-ms-transition-property:color;
-	-ms-transition-duration:1s;
-	transition-property:color;
-	transition-duration:1s;
-}
-
-.mux-tool-tip:hover .tip-text a
-{
-	color:rgba(55, 0, 155, 1);
-	font-weight:500;
-	text-decoration:underline;
-
-	-moz-transition-property:color;
-	-moz-transition-duration:1s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:1s;
-	-o-transition-property:color;
-	-o-transition-duration:1s;
-	-ms-transition-property:color;
-	-ms-transition-duration:1s;
-	transition-property:color;
-	transition-duration:1s;
-}
-
-div.mux-action-wrapper
-{
-	position:relative;
-	overflow:visible;
-	height:18px;
-	width:20px;
-
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
-	-o-border-radius:10px;
-	-ms-border-radius:10px;
-	border-radius:10px;
-
-	cursor:pointer;
-}
-
-div.mux-action-wrapper .mux-grower
-{
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	-o-border-radius:5px;
-	-ms-border-radius:5px;
-	border-radius:5px;
-
-	padding:18px 40px 18px 40px;
-	position:absolute;
-	top:0;
-	left:0;
-	width:0;
-	height:0;
-	margin-left:-120px;
-	z-index:-1;
-	background-color:rgba(128, 255, 128, .1);
-	opacity:0;
-	font-size:.9em;
-
-	-moz-transition-property:width, height, background-color, opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:width, height, background-color, opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:width, height, background-color, opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:width, height, background-color, opacity;
-	-ms-transition-duration:.5s;
-	transition-property:width, height, background-color, opacity;
-	transition-duration:.5s;
-
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
-	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
-	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, .5);
-}
-
-div.mux-action-wrapper-hover .mux-grower
-{
-	width:230px;
-	height:180px;
-	opacity:1;
-	z-index:100;
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
-	background-image: -webkit-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
-	background-image: -o-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
-	background-image: -ms-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
-	background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
-
-	-moz-transition-property:width, height, background-color, opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:width, height, background-color, opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:width, height, background-color, opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:width, height, background-color, opacity;
-	-ms-transition-duration:.5s;
-	transition-property:width, height, background-color, opacity;
-	transition-duration:.5s;
-}
-
-div.mux-has-action
-{
-	background:rgba(128, 255, 128, .2) url(../images/code-icons.png) no-repeat -28px -16px;
-}
-
-div.mux-has-no-action
-{
-	background-color:rgba(255, 128, 128, .2);
-}
-
-.mux-delete-action
-{
-	display:block;
-	float:left;
-	margin-left:-20px;
-	width:10px;
 }
 
 .mux-bottom-right
@@ -912,29 +299,6 @@ div.mux-has-no-action
 	position:absolute;
 	bottom:18px;
 	right:10px;
-}
-
-
-
-.mux-edit-templates
-{
-	min-height:180px;
-}
-
-
-.mux-edit-actions
-{
-	min-height:180px;
-}
-
-.mux-edit-objects
-{
-	min-height:180px;
-}
-
-.edit-views
-{
-	min-height:180px;
 }
 
 .mux-error-message
@@ -970,8 +334,6 @@ div.mux-has-no-action
 	font-style:italic;
 }
 
-
-
 .mux-login-wrapper
 {
 }
@@ -1001,8 +363,8 @@ div.mux-has-no-action
 	transition-duration:.5s;
 }
 
-.mux-login-wrapper .username:focus,
-.mux-login-wrapper .password:focus
+.mux-login-wrapper .mux-username:focus,
+.mux-login-wrapper .mux-password:focus
 {
 	background-color:rgba(255, 255, 255, 1);
 
@@ -1030,42 +392,6 @@ div.mux-has-no-action
 	width:110px;
 }
 
-.mux-remove-property
-{
-	width:30px;
-	height:18px;
-	float:right;
-	background:Transparent url(../images/delete.png) no-repeat top right;
-	opacity:.1;
-
-	-moz-transition-property:opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:opacity;
-	-ms-transition-duration:.5s;
-	transition-property:opacity;
-	transition-duration:.5s;
-}
-
-.mux-remove-property:hover
-{
-	opacity:1;
-
-	-moz-transition-property:opacity;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:opacity;
-	-o-transition-duration:.5s;
-	-ms-transition-property:opacity;
-	-ms-transition-duration:.5s;
-	transition-property:opacity;
-	transition-duration:.5s;
-}
-
 .mux-left-float
 {
 	float:left;
@@ -1078,46 +404,6 @@ div.mux-has-no-action
 	position:absolute;
 	top:0;
 	left:0;
-}
-
-.mux-no-typename .mux-grid-single-edit
-{
-	background-color:rgba(255, 0, 0, .2);
-}
-
-.mux-grid-bg-type-1 .mux-grid-single-edit
-{
-	background-color:rgba(0, 128, 0, .03);
-}
-
-.mux-grid-bg-type-2 .mux-grid-single-edit
-{
-	background-color:rgba(128, 0, 0, .03);
-}
-
-.mux-grid-bg-type-3 .mux-grid-single-edit
-{
-	background-color:rgba(0, 0, 128, .03);
-}
-
-.mux-grid-bg-type-4 .mux-grid-single-edit
-{
-	background-color:rgba(128, 128, 0, .03);
-}
-
-.mux-grid-bg-type-5 .mux-grid-single-edit
-{
-	background-color:rgba(0, 128, 128, .03);
-}
-
-.mux-grid-bg-type-6 .mux-grid-single-edit
-{
-	background-color:rgba(128, 0, 128, .03);
-}
-
-.mux-grid-bg-type-7 .mux-grid-single-edit
-{
-	background-color:rgba(128, 255, 128, .03);
 }
 
 .mux-multi-choice
@@ -1156,122 +442,30 @@ div.mux-has-no-action
 	background-color:rgba(0, 128, 0, .1);
 }
 
+.mux-status-blue
+{
+	background-color:rgba(0, 0, 128, .1);
+}
+
+.mux-status-purple
+{
+	background-color:rgba(128, 0, 128, .1);
+}
+
+.mux-status-indigo
+{
+	background-color:rgba(0, 128, 128, .1);
+}
 
 .mux-calendar-wrapper
 {
 	position:relative;
 }
 
-/* TreItems for Class "Explorer" ... */
-li.mux-tree-item-namespace span.mux-tree-icon
-{
-	background:transparent url(../images/tree.png) no-repeat 0 0;
-}
-
-li.mux-tree-item-class span.mux-tree-icon
-{
-	background:transparent url(../images/tree.png) no-repeat 0 -18px;
-}
-
-.mux-dox-methods
-{
-	margin-top:18px;
-	font-size:10px;
-}
-
-.mux-one-dox-method
-{
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	-o-border-radius:5px;
-	-ms-border-radius:5px;
-	border-radius:5px;
-
-	background-color:rgba(0, 0, 0, 0);
-	height:auto;
-	width:100%;
-	overflow:auto;
-	cursor:pointer;
-	clear:both;
-	
-	-moz-transition-property:background-color;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:background-color;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:background-color;
-	-o-transition-duration:.5s;
-	-ms-transition-property:background-color;
-	-ms-transition-duration:.5s;
-	transition-property:background-color;
-	transition-duration:.5s;
-}
-
-.mux-one-dox-method:hover
-{
-	background-color:rgba(0, 128, 0, .1);
-
-	-moz-transition-property:background-color;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:background-color;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:background-color;
-	-o-transition-duration:.5s;
-	-ms-transition-property:background-color;
-	-ms-transition-duration:.5s;
-	transition-property:background-color;
-	transition-duration:.5s;
-}
-
-.mux-dox-access
-{
-	display:block;
-	float:left;
-	width:70px;
-	margin-right:10px;
-	color:#999;
-}
-
-.mux-dox-returns
-{
-	display:block;
-	float:left;
-	width:70px;
-	margin-right:10px;
-	color:#999;
-}
-
-.mux-dox-name
-{
-	display:block;
-	float:left;
-	width:270px;
-	margin-right:10px;
-	color:#000;
-}
-
-.mux-dox-pars
-{
-	display:block;
-	float:left;
-	width:270px;
-	color:#000;
-}
-
-.mux-dox-description
-{
-	display:block;
-	float:left;
-	color:#999;
-	font-style:italic;
-	margin-bottom:0;
-}
-
 .mux-no-bottom-margin
 {
 	margin-bottom:0;
 }
-
-
 
 .mux-padded
 {
@@ -1311,11 +505,3 @@ li.mux-tree-item-class span.mux-tree-icon
 	-moz-animation-iteration-count: 1;
 	-moz-animation-timing-function: ease-in-out;
 }
-
-
-
-
-
-
-
-
