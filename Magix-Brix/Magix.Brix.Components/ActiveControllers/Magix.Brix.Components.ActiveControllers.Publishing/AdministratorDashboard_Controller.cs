@@ -50,6 +50,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["CssClass"].Value = "dashboard";
             node["ChildCssClass"].Value = "mux-desktop-images";
 
+            node["DisplayTooltips"].Value = false;
+
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.ImageList",
                 "content3",

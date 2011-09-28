@@ -711,6 +711,139 @@ input[type=button].clear-both
 	width:490px;
 }
 
+@-webkit-keyframes desktop-animations {
+ 0% {
+	-webkit-transform: scale(1) rotate(0deg);
+	-webkit-animation-timing-function: ease-out;
+	-webkit-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
+ }
+ 50% {
+	-webkit-transform: scale(2.5) rotate(720deg);
+	-webkit-animation-timing-function: ease-in;
+	opacity:1;
+	-webkit-box-shadow: 0px 0px 13px rgba(225, 255, 225, 1);
+ }
+ 100% {
+	-webkit-transform: scale(1) rotate(0deg);
+	-webkit-animation-timing-function: ease-in;
+	-webkit-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
+ }
+}
+
+@-moz-keyframes desktop-animations {
+ 0% {
+	-moz-transform: scale(1) rotate(0deg);
+	-moz-animation-timing-function: ease-out;
+	-moz-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
+ }
+ 50% {
+	-moz-transform: scale(2.5) rotate(720deg);
+	-moz-animation-timing-function: ease-in;
+	opacity:1;
+	-moz-box-shadow: 0px 0px 13px rgba(225, 255, 225, 1);
+ }
+ 100% {
+	-moz-transform: scale(1) rotate(0deg);
+	-moz-animation-timing-function: ease-in;
+	-moz-box-shadow: 0px 0px 13px rgba(225, 255, 225, 0);
+ }
+}
+
+.mux-desktop-images img:nth-child(1),
+.mux-desktop-images img:nth-child(2),
+.mux-desktop-images img:nth-child(3),
+.mux-desktop-images img:nth-child(4),
+.mux-desktop-images img:nth-child(5),
+.mux-desktop-images img:nth-child(6),
+.mux-desktop-images img:nth-child(7),
+.mux-desktop-images img:nth-child(8),
+.mux-desktop-images img:nth-child(9),
+.mux-desktop-images img:nth-child(10),
+.mux-desktop-images img:nth-child(11),
+.mux-desktop-images img:nth-child(12)
+{
+	-webkit-animation-name: desktop-animations;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-direction: normal;
+	-webkit-animation-iteration-count: 1;
+	-moz-animation-name: desktop-animations;
+	-moz-animation-duration: 1s;
+	-moz-animation-direction: normal;
+	-moz-animation-iteration-count: 1;
+}
+
+.mux-desktop-images img:nth-child(1)
+{
+	-webkit-animation-delay: 22s;
+	-moz-animation-delay: 22s;
+}
+
+.mux-desktop-images img:nth-child(2)
+{
+	-webkit-animation-delay: 22.1s;
+	-moz-animation-delay: 22.1s;
+}
+
+.mux-desktop-images img:nth-child(3)
+{
+	-webkit-animation-delay: 22.2s;
+	-moz-animation-delay: 22.2s;
+}
+
+.mux-desktop-images img:nth-child(4)
+{
+	-webkit-animation-delay: 22.3s;
+	-moz-animation-delay: 22.3s;
+}
+
+.mux-desktop-images img:nth-child(5)
+{
+	-webkit-animation-delay: 22.4s;
+	-moz-animation-delay: 22.4s;
+}
+
+.mux-desktop-images img:nth-child(6)
+{
+	-webkit-animation-delay: 22.5s;
+	-moz-animation-delay: 22.5s;
+}
+
+.mux-desktop-images img:nth-child(7)
+{
+	-webkit-animation-delay: 22.6s;
+	-moz-animation-delay: 22.6s;
+}
+
+.mux-desktop-images img:nth-child(8)
+{
+	-webkit-animation-delay: 22.7s;
+	-moz-animation-delay: 22.7s;
+}
+
+.mux-desktop-images img:nth-child(9)
+{
+	-webkit-animation-delay: 22.8s;
+	-moz-animation-delay: 22.8s;
+}
+
+.mux-desktop-images img:nth-child(10)
+{
+	-webkit-animation-delay: 22.9s;
+	-moz-animation-delay: 22.9s;
+}
+
+.mux-desktop-images img:nth-child(11)
+{
+	-webkit-animation-delay: 23s;
+	-moz-animation-delay: 23s;
+}
+
+.mux-desktop-images img:nth-child(12)
+{
+	-webkit-animation-delay: 23.1s;
+	-moz-animation-delay: 23.1s;
+}
+
 .mux-desktop-icon
 {
 	opacity:.3;
@@ -738,25 +871,12 @@ input[type=button].clear-both
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
-.mux-tooltip-module
-{
-	position:fixed;
-	top:0;
-	right:0;
-	min-width:129px;
-	min-height:98px;
-	width:auto;
-	height:auto;
-	background:transparent url(../images/desktop-icons/facts.png) no-repeat top right;
-	z-index:700;
-}
-
 .tool-tip
 {
-	width:129px;
+	width:1px;
 	padding:18px 40px 18px 40px;
 	overflow:hidden;
-	height:98px;
+	height:68px;
 	
 	-moz-transition-property:-moz-box-shadow, background-color, height, width;
 	-moz-transition-duration:1s;
@@ -780,17 +900,32 @@ input[type=button].clear-both
 	width:390px;
 
 	-moz-transition-property:-moz-box-shadow, background-color, height, width;
-	-moz-transition-duration:1s;
+	-moz-transition-duration:.1s;
 	-webkit-transition-property:-webkit-box-shadow, background-color, height, width;
-	-webkit-transition-duration:1s;
+	-webkit-transition-duration:.1s;
 	transition-property:box-shadow, background-color, height, width;
-	transition-duration:1s;
+	transition-duration:.1s;
 
 	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
 	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
 	box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.3);
 	
 	background-color:rgba(220, 255, 220, 1);
+}
+
+.mux-tooltip-module
+{
+	position:fixed;
+	top:9px;
+	right:20px;
+	min-width:119px;
+	min-height:98px;
+	width:auto;
+	height:auto;
+	background:transparent url(../images/desktop-icons/facts.png) no-repeat top right;
+	background-color:rgba(220, 255, 220, 0);
+	z-index:700;
+	border:none 0;
 }
 
 .tool-tip .tip-text
@@ -1001,26 +1136,22 @@ div.has-no-action
 .edit-templates
 {
 	min-height:180px;
-	background:Transparent url(../images/desktop-icons/architecture.png) no-repeat 0 0;
 }
 
 
 .edit-actions
 {
 	min-height:180px;
-	background:Transparent url(../images/desktop-icons/lightning.png) no-repeat 0 0;
 }
 
 .edit-objects
 {
 	min-height:180px;
-	background:Transparent url(../images/desktop-icons/file-cabinet.png) no-repeat 0 0;
 }
 
 .edit-views
 {
 	min-height:180px;
-	background:Transparent url(../images/desktop-icons/desktop-icons/view.png) no-repeat 0 0;
 }
 
 .error-message
