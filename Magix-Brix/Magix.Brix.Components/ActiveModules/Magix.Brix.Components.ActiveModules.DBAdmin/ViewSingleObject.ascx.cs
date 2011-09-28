@@ -358,6 +358,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         DataSource["Type"]["Properties"][node.Name]["TemplateColumnEvent"].Get<string>();
 
                     Node colNode = new Node();
+
                     colNode["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>(); ;
                     colNode["MetaViewName"].Value = DataSource["MetaViewName"].Get<string>(); ;
                     colNode["Name"].Value = node.Name;
@@ -479,29 +480,73 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             {
                                 default:
                                     {
-                                        TextAreaEdit ed = new TextAreaEdit();
-                                        ed.TextLength = 500;
-                                        ed.Text = node.Value as string;
-                                        ed.CssClass += " larger";
-                                        ed.Info = node.Name;
-                                        ed.TextChanged +=
-                                            delegate(object sender, EventArgs e)
-                                            {
-                                                TextAreaEdit edit = sender as TextAreaEdit;
-                                                int id = DataSource["Object"]["ID"].Get<int>();
-                                                string column = edit.Info;
-                                                Node n = new Node();
-                                                n["ID"].Value = id;
-                                                n["PropertyName"].Value = column;
-                                                n["NewValue"].Value = edit.Text;
-                                                n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                                                RaiseSafeEvent(
-                                                    DataSource.Contains("ChangeSimplePropertyValue") ? 
-                                                        DataSource["ChangeSimplePropertyValue"].Get<string>() :
-                                                        "DBAdmin.Data.ChangeSimplePropertyValue",
-                                                    n);
-                                            };
-                                        c1.Controls.Add(ed);
+                                        string ctrlType = typeof(TextAreaEdit).FullName;
+
+                                        if (DataSource["Type"]["Properties"][node.Name].Contains("ControlType"))
+                                        {
+                                            ctrlType = DataSource["Type"]["Properties"][node.Name]["ControlType"].Get<string>();
+                                        }
+                                        switch (ctrlType)
+                                        {
+                                            case "Magix.Brix.Components.TextAreaEdit":
+                                                {
+                                                    TextAreaEdit ed = new TextAreaEdit();
+                                                    ed.TextLength = 500;
+                                                    ed.Text = node.Value as string;
+                                                    ed.CssClass += " larger";
+                                                    ed.Info = node.Name;
+                                                    ed.TextChanged +=
+                                                        delegate(object sender, EventArgs e)
+                                                        {
+                                                            TextAreaEdit edit = sender as TextAreaEdit;
+                                                            int id = DataSource["Object"]["ID"].Get<int>();
+                                                            string column = edit.Info;
+
+                                                            Node n = new Node();
+
+                                                            n["ID"].Value = id;
+                                                            n["PropertyName"].Value = column;
+                                                            n["NewValue"].Value = edit.Text;
+                                                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
+                                                            RaiseSafeEvent(
+                                                                DataSource.Contains("ChangeSimplePropertyValue") ?
+                                                                    DataSource["ChangeSimplePropertyValue"].Get<string>() :
+                                                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                                                n);
+                                                        };
+                                                    c1.Controls.Add(ed);
+                                                } break;
+                                            case "Magix.UX.Widgets.InPlaceEdit":
+                                                {
+                                                    InPlaceEdit ed = new InPlaceEdit();
+                                                    ed.Text = node.Value as string;
+                                                    ed.CssClass += " larger";
+                                                    ed.Info = node.Name;
+                                                    ed.TextChanged +=
+                                                        delegate(object sender, EventArgs e)
+                                                        {
+                                                            InPlaceEdit edit = sender as InPlaceEdit;
+                                                            int id = DataSource["Object"]["ID"].Get<int>();
+                                                            string column = edit.Info;
+
+                                                            Node n = new Node();
+
+                                                            n["ID"].Value = id;
+                                                            n["PropertyName"].Value = column;
+                                                            n["NewValue"].Value = edit.Text;
+                                                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
+                                                            RaiseSafeEvent(
+                                                                DataSource.Contains("ChangeSimplePropertyValue") ?
+                                                                    DataSource["ChangeSimplePropertyValue"].Get<string>() :
+                                                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                                                n);
+                                                        };
+                                                    c1.Controls.Add(ed);
+                                                } break;
+                                        }
+
                                     } break;
                             }
                         }

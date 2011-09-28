@@ -1084,34 +1084,19 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 /* InPlaceEdit */
 .mux-in-place-edit
 {
-	background-image:url(pen.png);
-	background-repeat:no-repeat;
+	color:rgba(185,225,255);
 }
 
 .mux-in-place-edit a
 {
-	padding-left:20px;
-	min-width:150px;
 	display:inline-block;
-	height:22px;
 }
 
-.mux-in-place-edit input
-{
-	margin-left:20px;
-	width:148px;
-	display:inline-block;
-	border:solid 1px #aaf;
-	height:20px;
-}
-
+.mux-in-place-edit input[type=text],
 .mux-in-place-edit textarea
 {
-	margin-left:20px;
-	width:248px;
 	display:inline-block;
-	height:180px;
-	border:solid 1px #aaf;
+	width:100%;
 }
 
 

@@ -1,47 +1,87 @@
-﻿
+﻿/*
+ * Magix - A Web Application Framework for Humans
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
+ */
+
+/* Common HTML elements */
 
 html, body
 {
 	font-family:Arial;
 }
 
-
-
-.main
+a
 {
+	color:rgba(0,100,180,1);
+
+	-moz-transition-property:color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color;
+	-ms-transition-duration:.5s;
+	transition-property:color;
+	transition-duration:.5s;
 }
 
+a:hover,
+a:focus
+{
+	color:rgba(0,180,225,1);
 
-/* button, input type = button */
+	-moz-transition-property:color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color;
+	-ms-transition-duration:.5s;
+	transition-property:color;
+	transition-duration:.5s;
+}
+
 input[type=button],
 input[type=submit]
 {
 	display:inline-block;
 	border:none 0;
-	font-size:24px;
-	height:36px;
-	font-weight:normal;
-	color:#111;
-
-	text-shadow:2px 2px 2px #999;
+	font-size:1.5em;
+	height:2em;
+	color:rgba(0,100,180,1);
 
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
+	border-radius:5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
+	background-image: -webkit-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: -o-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 
-	-moz-transition-property:-moz-box-shadow, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, color;
-	transition-duration:0.2s;
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
 }
 
 input[type=button]:focus,
@@ -49,161 +89,145 @@ input[type=submit]:focus,
 input[type=button]:hover,
 input[type=submit]:hover
 {
-	-webkit-box-shadow: 2px 2px 3px #444;
-	-moz-box-shadow: 2px 2px 3px #444;
-	box-shadow: 2px 2px 3px #444;
-	color:#06c;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
 }
 
 input[type=button]:disabled,
 input[type=submit]:disabled
 {
-	color:#999;
+	color:rgba(128, 128, 128, .5);
+}
+
+input[type=button]:disabled:hover,
+input[type=submit]:disabled:hover
+{
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 }
 
 input[type=text],
 input[type=email],
+input[type=number],
 input[type=password]
 {
+	display:inline-block;
+	border:none 0;
+	border-top:solid 1px rgba(0, 120, 20, .2);
+	border-bottom:solid 1px rgba(0, 120, 20, .2);
+	color:rgba(0, 120, 20, 1);
+	background-color:rgba(245,255,250,1);
 }
 
-input[type=radio]
+input[type=radio],
+input[type=checkbox]
 {
-	margin:0 0 0 0 !important;
-}
-
-p>input[type=checkbox]
-{
-	height:16px;
-	float:left;
-	display:block;
-	width:16px;
-	margin:1px 2px 1px 0;
-}
-
-p>label
-{
-	display:block;
-	float:left;
-	height:16px;
-	margin:0 0 2px 0;
 }
 
 select
 {
-	margin:0;
-	border:none 0;
+	margin-top:0;
+	margin-bottom:0;
+	border:solid 1px rgba(0, 120, 20, 1);
+	color:rgba(0, 120, 20, 1);
+	background-color:rgba(245,255,250,1);
 }
 
 
 textarea
 {
-	margin:0;
+	display:inline-block;
+	margin-top:0;
+	margin-bottom:0;
 	padding-top:18px;
 	padding-bottom:18px;
 	line-height:18px;
 	width:auto;
+	color:rgba(0, 120, 20, 1);
+	background-color:rgba(245,255,250,1);
 }
 
 
-
-
-/* BluePrint.css plugins... */
-div.down-1, .down-1 {margin-top:1.5em;}
-div.down-2, .down-2 {margin-top:3em;}
-div.down-3, .down-3 {margin-top:4.5em;}
-div.down-4, .down-4 {margin-top:6em;}
-div.down-5, .down-5 {margin-top:7.5em;}
-div.down-6, .down-6 {margin-top:9em;}
-div.down-7, .down-7 {margin-top:10.5em;}
-div.down-8, .down-8 {margin-top:12em;}
-div.down-9, .down-9 {margin-top:13.5em;}
-div.down-10, .down-10 {margin-top:15em;}
-div.down-11, .down-11 {margin-top:16.5em;}
-div.down-12, .down-12 {margin-top:18em;}
-div.down-13, .down-13 {margin-top:19.5em;}
-div.down-14, .down-14 {margin-top:21em;}
-div.down-15, .down-15 {margin-top:22.5em;}
-div.down-16, .down-16 {margin-top:24em;}
-div.down-17, .down-17 {margin-top:25.5em;}
-div.down-18, .down-18 {margin-top:27em;}
-div.down-10, .down-19 {margin-top:28.5em;}
-div.down-20, .down-20 {margin-top:30em;}
-
-div.down--1, .down--1 {margin-top:-1.5em;}
-div.down--2, .down--2 {margin-top:-3em;}
-div.down--3, .down--3 {margin-top:-4.5em;}
-div.down--4, .down--4 {margin-top:-6em;}
-div.down--5, .down--5 {margin-top:-7.5em;}
-div.down--6, .down--6 {margin-top:-9em;}
-div.down--7, .down--7 {margin-top:-10.5em;}
-div.down--8, .down--8 {margin-top:-12em;}
-div.down--9, .down--9 {margin-top:-13.5em;}
-div.down--10, .down--10 {margin-top:-15em;}
-div.down--11, .down--11 {margin-top:-16.5em;}
-div.down--12, .down--12 {margin-top:-18em;}
-div.down--13, .down--13 {margin-top:-19.5em;}
-div.down--14, .down--14 {margin-top:-21em;}
-div.down--15, .down--15 {margin-top:-22.5em;}
-div.down--16, .down--16 {margin-top:-24em;}
-div.down--17, .down--17 {margin-top:-25.5em;}
-div.down--18, .down--18 {margin-top:-27em;}
-div.down--19, .down--19 {margin-top:-28.5em;}
-div.down--20, .down--20 {margin-top:-30em;}
-div.down--21, .down--21 {margin-top:-31.5em;}
-div.down--22, .down--22 {margin-top:-33em;}
-div.down--23, .down--23 {margin-top:-34.5em;}
-div.down--24, .down--24 {margin-top:-36em;}
-div.down--25, .down--25 {margin-top:-37.5em;}
-div.down--26, .down--26 {margin-top:-39em;}
-div.down--27, .down--27 {margin-top:-40.5em;}
-div.down--28, .down--28 {margin-top:-42em;}
-div.down--29, .down--29 {margin-top:-43.5em;}
-div.down--30, .down--30 {margin-top:-45em;}
-
-
-
-
 /* Magix UX common classes, potpoury */
+
+/* Main Viewport Container */
+.main
+{
+}
+
+/* Rounded corners ... */
 .mux-rounded
 {
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
 	border-radius:5px;
 
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:0.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:0.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:0.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:0.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:0.5s;
 }
 
 .mux-rounded:hover
 {
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
 }
 
+/* Shaded corners ... */
 .mux-shaded
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(250, 250, 250, 1)), to(rgba(210, 210, 210, 1)));
+	background-image: -moz-linear-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
+	background-image: -o-linear-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
+	background-image: -ms-linear-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
+	background-image: linear-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
 }
-
-.mux-paddings
-{
-	padding:18px 40px;
-	overflow:hidden;
-}
-
-
-
 
 /* Accordion CSS */
 .mux-accordion
@@ -217,63 +241,94 @@ div.down--30, .down--30 {margin-top:-45em;}
 
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
 	border-radius:5px;
 
-	-webkit-box-shadow: 2px 2px 5px #666;
-	-moz-box-shadow: 2px 2px 5px #666;
-	box-shadow: 2px 2px 5px #666;
+	-webkit-box-shadow: 2px 2px 3px rgba(0,0,0,.2);
+	-moz-box-shadow: 2px 2px 3px rgba(0,0,0,.2);
+	-o-box-shadow: 2px 2px 3px rgba(0,0,0,.2);
+	-ms-box-shadow: 2px 2px 3px rgba(0,0,0,.2);
+	box-shadow: 2px 2px 3px rgba(0,0,0,.2);
 
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 }
 
 .mux-accordion .mux-acc-view:hover
 {
-	-webkit-box-shadow: 2px 2px 15px #444;
-	-moz-box-shadow: 2px 2px 15px #444;
-	box-shadow: 2px 2px 15px #444;
+	-webkit-box-shadow: 2px 2px 3px rgba(0,0,0,.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0,0,0,.8);
+	-o-box-shadow: 2px 2px 3px rgba(0,0,0,.8);
+	-ms-box-shadow: 2px 2px 3px rgba(0,0,0,.8);
+	box-shadow: 2px 2px 3px rgba(0,0,0,.8);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
 }
 
 .mux-accordion .mux-acc-view-caption
 {
 	font-size:1.5em;
-	padding:7px 0 2px 1em;
 	display:block;
 	text-decoration:none;
 	outline:none;
-	color:#000;
+	color:rgba(0,100,180,1);
 
 	-moz-border-radius:5px 5px 0 0;
 	-webkit-border-radius:5px 5px 0 0;
+	-o-border-radius:5px 5px 0 0;
+	-ms-border-radius:5px 5px 0 0;
 	border-radius:5px 5px 0 0;
 
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
-
-	-moz-transition-property:color, text-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:color, text-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:color, text-shadow;
-	transition-duration:0.2s;
+	-moz-transition-property:color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color;
+	-ms-transition-duration:.5s;
+	transition-property:color;
+	transition-duration:.5s;
 
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+	background-image: -webkit-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: -o-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 }
 
 .mux-accordion .mux-acc-view-caption:hover
 {
-	color:#33b;
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.5);
+	color:rgba(0,180,230,1);
 }
 
 .mux-accordion .mux-acc-view-content
 {
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
+	background-image: -webkit-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
 	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+	background-image: -o-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+	background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
 }
 
 .mux-insert
@@ -287,6 +342,41 @@ div.down--30, .down--30 {margin-top:-45em;}
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* TODO: Fix menu ... */
 /* Menu */
 .mux-menu
 {
@@ -438,52 +528,101 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 
 
-/* MultiPanel, MultiButton and so on */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MultiPanels, et. al. */
 .mux-multi-panel-wrapper
 {
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
+	border-radius:5px;
 
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
 
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 }
 
 .mux-multi-panel-wrapper:hover
 {
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-}
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
 
-.mux-multi-button-selected
-{
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(180, 180, 180, 1)), to(rgba(230, 230, 230, 1))) !important;
-	background-image: -moz-linear-gradient(rgba(180, 180, 180, 1) 0%, rgba(230, 230, 230, 1) 80%) !important;
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
 }
 
 .mux-multi-button
 {
-	font-size:2em;
+	border:none 0;
+	height:2em;
+	font-size:1.5em;
 	display:block;
-	min-height:34px;
 	margin:0;
-	padding:0;
+	padding-left:0;
+	text-align:center;
 
 	-moz-border-radius:5px 5px 0 0;
 	-webkit-border-radius:5px 5px 0 0;
+	-o-border-radius:5px 5px 0 0;
+	-ms-border-radius:5px 5px 0 0;
 	border-radius:5px 5px 0 0;
 	
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, 1)), to(rgba(180, 180, 180, 1)));
+	background-image: -webkit-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
 	background-image: -moz-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: -o-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+	background-image: linear-gradient(rgba(230, 230, 230, 1) 0%, rgba(180, 180, 180, 1) 80%);
+}
+
+.mux-multi-button-selected
+{
 }
 
 .mux-multi-button:hover
@@ -492,109 +631,73 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 .mux-multi-button .mux-multi-button-view
 {
-	height:34px;
 	cursor:pointer;
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
 	display:block;
 	float:left;
-	color:#000;
 	position:relative;
+	height:2em;
+	line-height:2em;
+	vertical-align:bottom;
 
-	-moz-border-radius:5px 20px 20px 5px;
-	-webkit-border-radius:5px 20px 20px 5px;
-	border-radius:5px 20px 20px 5px;
+	-moz-border-radius:5px 20px 20px 0px;
+	-webkit-border-radius:5px 20px 20px 0px;
+	-o-border-radius:5px 20px 20px 0px;
+	-ms-border-radius:5px 20px 20px 0px;
+	border-radius:5px 20px 20px 0px;
 
-	-moz-transition-property:color, text-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:color, text-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:color, text-shadow;
-	transition-duration:0.2s;
+	-moz-transition-property:color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color;
+	-ms-transition-duration:.5s;
+	transition-property:color;
+	transition-duration:.5s;
 }
 
 .mux-multi-button .mux-multi-button-view:hover
 {
-	color:#33b;
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.5);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 50%, from(rgba(180, 180, 180, 0.5)), to(rgba(150, 150, 150, 0)));
-	background-image: -moz-linear-gradient(rgba(180, 180, 180, 0.5) 0%, rgba(150, 150, 150, 0) 50%);
 }
 
 .mux-multi-button .mux-multi-button-view-button
 {
-	height:36px;
-	padding:0 40px 0px 40px;
 	display:block;
-	text-shadow:2px 2px 5px rgba(0, 0, 0, 0.2);
 	text-decoration:none;
 	outline:none;
-	color:#000;
-	-moz-transition-property:color, text-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:color, text-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:color, text-shadow;
-	transition-duration:0.2s;
-}
-
-.mux-multi-button .mux-multi-button-view-button:hover
-{
-	text-shadow:2px 2px 3px rgba(0, 0, 0, 0.5);
-	color:#33b;
-}
-
-@-webkit-keyframes fire-qr-code {
- from {
-   color: rgba(60, 0, 0, 1);
- }
- to {
-   color: rgba(128, 0, 0, 1);
- }
-}
-
-@-moz-keyframes fire-qr-code {
- from {
-   color: rgba(60, 0, 0, 1);
- }
- to {
-   color: rgba(128, 0, 0, 1);
- }
 }
 
 .mux-multi-button-view
 {
-	background-color:rgba(0,0,0,0);
 }
 
 .mux-multi-button-view a
 {
-	color:rgba(90, 90, 90, .5) !important;
 }
 
 .mux-multi-view-button-selected
 {
-	background-color:rgba(0,0,0,.1);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(180, 180, 180, 1)), to(rgba(230, 230, 230, 1)));
+	background-image: -webkit-linear-gradient(rgba(180, 180, 180, 1) 0%, rgba(230, 230, 230, 1) 80%);
+	background-image: -moz-linear-gradient(rgba(180, 180, 180, 1) 0%, rgba(230, 230, 230, 1) 80%);
+	background-image: -o-linear-gradient(rgba(180, 180, 180, 1) 0%, rgba(230, 230, 230, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(180, 180, 180, 1) 0%, rgba(230, 230, 230, 1) 80%);
+	background-image: linear-gradient(rgba(180, 180, 180, 1) 0%, rgba(230, 230, 230, 1) 80%);
 }
 
 .mux-multi-view-button-selected a
 {
-	-webkit-animation-name: fire-qr-code;
-	-webkit-animation-duration: 3s;
-	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-direction: alternate;
-	-moz-animation-name: fire-qr-code;
-	-moz-animation-duration: 3s;
-	-moz-animation-iteration-count: infinite;
-	-moz-animation-direction: alternate;
 }
 
 .mux-multi-panel
 {
-	border-top:solid 1px #999;
-	margin-bottom:-1px;
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 255, 1)), to(rgba(210, 210, 210, 1)));
+	background-image: -webkit-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
 	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+	background-image: -o-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
+	background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
 	clear:both;
 	overflow:auto;
 }
@@ -611,8 +714,8 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-multi-panel-slide .mux-multi-panel-content
 {
 	width:9999px;
-	margin:0;
-	padding:0;
+	margin-left:0;
+	padding-left:0;
 	list-style-type:none;
 }
 
@@ -631,70 +734,49 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-sliding-menu
 {
 	font-size:1.5em;
-	line-height:1em;
+	line-height:2em;
 	overflow:hidden;
 	width:100%;
-	text-shadow:3px 3px 5px rgba(0, 0, 0, 0.3);
-
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
-
-	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-
-	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow;
-	transition-duration:0.2s;
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.8)), to(rgba(210, 210, 210, 0.8)));
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(210, 210, 210, 0.8) 100%);
-}
-
-.mux-sliding-menu:hover
-{
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .mux-sliding-menu a
 {
 	text-decoration:none;
 	display:block;
-	padding:6px 0 0 36px;
-	height:26px;
-	color:#000;
+	color:rgba(0,100,180,1);
+	background-color:rgba(0, 0, 0, .0);
 
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
-
-	-moz-transition-property:color, text-shadow, background-color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:color, text-shadow, background-color;
-	-webkit-transition-duration:0.2s;
-	transition-property:color, text-shadow, background-color;
-	transition-duration:0.2s;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-sliding-menu a:hover
 {
-	color:#33b;
-	background-color:rgba(0, 0, 0, 0.02);
-	text-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
-	-webkit-box-shadow: 2px 2px 2px rgba(50, 50, 50, 0.3);
-	-moz-box-shadow: 2px 2px 2px rgba(50, 50, 50, 0.3);
+	background-color:rgba(0, 0, 0, .05);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-sliding-menu .mux-sliding-menu-back
 {
-	height:30px;
+	padding-left:40px;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item-active
@@ -720,7 +802,6 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	width:100%;
 	list-style-type:none;
-	height:36px;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item a
@@ -737,25 +818,25 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	padding-right:20px;
 	width:40px;
 	display:block;
-	height:32px;
-	margin:2px 0 2px 0;
-	line-height:26px;
-	font-size:26px;
-	padding-top:3px;
-	vertical-align:middle;
 	z-index:1;
 	background-color:rgba(0, 0, 0, .05);
 
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
 	border-radius:5px;
 
 	-moz-transition-property:background-color;
-	-moz-transition-duration:0.8s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color;
-	-webkit-transition-duration:0.8s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
 	transition-property:background-color;
-	transition-duration:0.8s;
+	transition-duration:.5s;
 }
 
 .mux-sliding-menu .mux-sliding-menu-has-children .mux-sliding-menu-item-icon:hover
@@ -763,22 +844,15 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	background-color:rgba(0, 0, 0, .2);
 
 	-moz-transition-property:background-color;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:background-color;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item
 {
-	-moz-transition-property:color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:0.2s;
-	transition-property:color;
-	transition-duration:0.2s;
-	color:#000;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item:hover
@@ -789,7 +863,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	position:relative;
 	display:block;
-	padding:6px 0 4px 36px;
+	padding-left:40px;
 }
 
 .mux-sliding-menu .mux-sliding-menu-item-icon
@@ -820,40 +894,68 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	position:relative;
 	font-size:16px;
 	line-height:1em;
+	color:rgba(0,100,180,1);
 }
 
 .mux-tree-hover
 {
-	-webkit-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.0);
-	-moz-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.0);
+	-webkit-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0);
+	-moz-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0);
+	-o-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0);
+	-ms-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0);
+	box-shadow: 2px 2px 3px rgba(50, 50, 50, 0);
+
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 }
 
 .mux-tree-hover:hover
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.4)), to(rgba(210, 210, 210, 0.4)));
-	background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.4) 0%, rgba(210, 210, 210, 0.4) 100%);
-	-webkit-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.2);
-	-moz-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.2);
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(235, 235, 235, .4)), to(rgba(210, 210, 210, .4)));
+	background-image: -webkit-linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
+	background-image: -o-linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
+	background-image: -ms-linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
+	background-image: linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
+
+	-webkit-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	-o-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	-ms-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
 }
 
 .mux-tree-selected
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(225, 225, 255, 0.4)), to(rgba(180, 180, 210, 0.4)));
-	background-image: -moz-linear-gradient(rgba(225, 225, 255, 0.4) 0%, rgba(180, 180, 210, 0.4) 100%);
-	-webkit-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.2);
-	-moz-box-shadow: 2px 2px 3px rgba(50, 50, 50, 0.2);
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(245, 255, 245, .4)), to(rgba(210, 220, 210, .4)));
+	background-image: -webkit-linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
+	background-image: -o-linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
+	background-image: -ms-linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
+	background-image: linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
+
+	-webkit-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	-moz-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	-o-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	-ms-box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
+	box-shadow: 2px 2px 3px rgba(50, 50, 50, .2);
 }
 
 .mux-tree-floater
@@ -868,9 +970,11 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 .mux-tree-text
 {
-	text-shadow:2px 2px 3px rgba(80, 80, 80, 0.2);
 	vertical-align:top;
 	font-size:12px;
+	padding-top:1px;
+	height:17px;
+	display:inline-block;
 }
 
 .mux-tree-url
@@ -948,7 +1052,6 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 
 /* Window */
-
 .mux-window
 {
 	position:relative;
@@ -957,18 +1060,21 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-window-caption
 {
 	font-size:1.5em;
-	line-height:1;
-	margin-bottom:.25em;
-	padding-top:.5em;
-	padding-bottom:.25em;
-	margin-left:40px;
+	line-height:2;
 	display:block;
-	text-shadow:2px 2px 4px rgba(0, 0, 0, 0.2);
-	user-select: none; 
-	-khtml-user-select: none; 
-	-moz-user-select: none;
 	white-space:nowrap;
 	overflow:hidden;
+	cursor:move;
+	padding-left:40px;
+	
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(195, 255, 215, .1)), to(rgba(145, 235, 275, .1)));
+	background-image: -webkit-linear-gradient(rgba(195, 255, 215, .1) 0%, rgba(145, 235, 275, .1) 100%);
 }
 
 .mux-window-close
@@ -986,37 +1092,57 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 	-moz-border-radius:5px 0px 15px 0px;
 	-webkit-border-radius:5px 0px 15px 0px;
+	-o-border-radius:5px 0px 15px 0px;
+	-ms-border-radius:5px 0px 15px 0px;
 	border-radius:5px 0px 15px 0px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 0, 0, 0.2)), to(rgba(255, 180, 180, 0.2)));
-	background-image: -moz-linear-gradient(rgba(255, 0, 0, 0.2) 0%, rgba(255, 180, 180, 0.2) 100%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 0, 0, .2)), to(rgba(255, 180, 180, .2)));
+	background-image: -webkit-linear-gradient(rgba(255, 0, 0, .2) 0%, rgba(255, 180, 180, .2) 100%);
+	background-image: -moz-linear-gradient(rgba(255, 0, 0, .2) 0%, rgba(255, 180, 180, .2) 100%);
+	background-image: -o-linear-gradient(rgba(255, 0, 0, .2) 0%, rgba(255, 180, 180, .2) 100%);
+	background-image: -ms-linear-gradient(rgba(255, 0, 0, .2) 0%, rgba(255, 180, 180, .2) 100%);
+	background-image: linear-gradient(rgba(255, 0, 0, .2) 0%, rgba(255, 180, 180, .2) 100%);
 
 	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
 	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-o-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	-ms-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
 	box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
 
 	-moz-transition-property:background-color, -moz-box-shadow;
-	-moz-transition-duration:0.5s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color, -webkit-box-shadow;
-	-webkit-transition-duration:0.5s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color, -o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color, -ms-box-shadow;
+	-ms-transition-duration:.5s;
 	transition-property:background-color, box-shadow;
-	transition-duration:0.5s;
+	transition-duration:.5s;
 }
 
 .mux-window-close:hover
 {
 	color:rgba(0,0,0,0);
+
 	-webkit-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
 	-moz-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-o-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-ms-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
 	box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	
 	background-color:rgba(255, 0, 0, .5);
 
 	-moz-transition-property:background-color, -moz-box-shadow;
-	-moz-transition-duration:0.5s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color, -webkit-box-shadow;
-	-webkit-transition-duration:0.5s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color, -o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color, -ms-box-shadow;
+	-ms-transition-duration:.5s;
 	transition-property:background-color, box-shadow;
-	transition-duration:0.5s;
+	transition-duration:.5s;
 }
 
 .mux-window-content
@@ -1024,22 +1150,14 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 }
 
 
-
-
 /* Calendar */
-
-/* Removing stuff from BluePrint.Css */
-tbody tr:nth-child(2n) td, tbody tr.even td
-{
-	background-color:Transparent;
-}
-
 .mux-calendar
 {
 	position:relative;
 	cursor:default;
-	margin-right:10px;
-	padding:0 20px 36px 20px;
+	padding-left:20px;
+	padding-right:20px;
+	padding-bottom:20px;
 	width:190px;
 }
 
@@ -1053,45 +1171,100 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 	text-align:center;
 	font-size:1.5em;
 	line-height:1;
-	height:30px;
-	padding-top:6px;
 
 	-moz-transition-property:background-color;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:background-color;
-	transition-duration:0.2s;
-	cursor:default;
+	transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	
+	cursor:pointer;
 	text-decoration:none;
+	background-color:rgba(0, 0, 0, 0);
+	font-size:1.5em;
+	line-height:2;
+	height:2em;
 }
 
 .mux-calendar-previous
 {
 	-moz-border-radius:5px 0px 5px 0px;
 	-webkit-border-radius:5px 0px 5px 0px;
+	-o-border-radius:5px 0px 5px 0px;
+	-ms-border-radius:5px 0px 5px 0px;
 	border-radius:5px 0px 5px 0px;
-	background-color:rgba(0, 0, 0, 0);
+
 	margin-left:-20px;
+	
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-calendar-previous:hover
 {
-	background-color:rgba(0, 0, 0, 0.2);
+	background-color:rgba(0, 0, 0, .2);
+	
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-calendar-next
 {
 	-moz-border-radius:0px 5px 0px 5px;
 	-webkit-border-radius:0px 5px 0px 5px;
+	-o-border-radius:0px 5px 0px 5px;
+	-ms-border-radius:0px 5px 0px 5px;
 	border-radius:0px 5px 0px 5px;
-	background-color:rgba(0, 0, 0, 0);
+
 	margin-right:-20px;
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-calendar-next:hover
 {
-	background-color:rgba(0, 0, 0, 0.2);
+	background-color:rgba(0, 0, 0, .2);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-calendar-month-year
@@ -1100,43 +1273,59 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 	float:left;
 	border:none 0;
 	width:150px;
-	height:30px;
-	padding-top:6px;
 	background-color:rgba(0, 0, 0, 0);
 	font-size:1.5em;
-	line-height:1;
+	line-height:2;
+	height:2em;
 
 	-moz-border-radius:0px 0px 5px 5px;
 	-webkit-border-radius:0px 0px 5px 5px;
+	-o-border-radius:0px 0px 5px 5px;
+	-ms-border-radius:0px 0px 5px 5px;
 	border-radius:0px 0px 5px 5px;
 
 	-moz-transition-property:background-color;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
 	transition-property:background-color;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 }
 
 .mux-calendar-month-year:hover
 {
 	background-color:rgba(0, 0, 0, 0.2);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-calendar-month-year a
 {
-	cursor:default;
 	display:block;
 	width:100%;
 	height:100%;
 	text-align:center;
-	text-decoration:none;
 }
 
 .mux-calendar-month-year input[type=text]
 {
-	width:95%;
-	margin-top:0 !important;
+	margin-left:0;
+	font-size:1em;
+	width:100%;
+	margin-top:-1px;
 }
 
 .mux-calendar-table
@@ -1156,11 +1345,6 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 	border:none 0;
 }
 
-.mux-calendar tbody tr:nth-child(2n) td, tbody tr.even td
-{
-	background:transparent none;
-}
-
 .mux-calendar-weekday
 {
 	color:#999;
@@ -1176,11 +1360,14 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 
 .mux-calendar-current-month
 {
+	color:rgba(0,100,180,1);
+	cursor:pointer;
 }
 
 .mux-calendar-wrong-month
 {
-	color:#999;
+	color:rgba(0,180,230,.4);
+	cursor:pointer;
 }
 
 .mux-calendar-current-month,
@@ -1188,14 +1375,23 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 {
 	-moz-border-radius:2px;
 	-webkit-border-radius:2px;
+	-o-border-radius:2px;
+	-ms-border-radius:2px;
 	border-radius:2px;
+
 	background-color:rgba(0, 0, 0, 0);
+	
 	-moz-transition-property:background-color;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
 	transition-property:background-color;
-	transition-duration:0.2s;
+	transition-duration:.5s;
+	
 	text-align:right;
 	width:15px;
 }
@@ -1203,18 +1399,21 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 .mux-calendar-current-month:hover,
 .mux-calendar-wrong-month:hover
 {
-	background-color:rgba(0, 0, 0, 0.2) !important;
+	background-color:rgba(0, 0, 0, .2);
 }
 
 .mux-calendar-today
 {
-	color:#06d;
 }
 
 .mux-calendar-selected
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, 0.2)), to(rgba(128, 128, 128, 0.2))) !important;
-	background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(128, 128, 128, 0.2) 100%) !important;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, .1)), to(rgba(128, 128, 128, .1)));
+	background-image: -webkit-linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(128, 128, 128, .1) 100%);
+	background-image: -moz-linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(128, 128, 128, .1) 100%);
+	background-image: -o-linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(128, 128, 128, .1) 100%);
+	background-image: -ms-linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(128, 128, 128, .1) 100%);
+	background-image: linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(128, 128, 128, .1) 100%);
 }
 
 
@@ -1230,9 +1429,9 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 .mux-rating-star
 {
 	display:inline-block;
-	width:60px;
-	height:54px;
-	margin:0 2px 0 0;
+	width:70px;
+	height:72px;
+	margin-right:10px;
 	background-image:url(star.png);
 	background-color:Transparent;
 	background-repeat:no-repeat;
@@ -1241,7 +1440,7 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 
 .mux-rating-star-average
 {
-	background-position:0 -110px;
+	background-position:0 -144px;
 }
 
 .mux-rating-star-not-average
@@ -1250,12 +1449,12 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 
 .mux-rating-star-checked
 {
-	background-position:0 -1px;
+	background-position:0 0;
 }
 
 .mux-rating-star-unchecked
 {
-	background-position:0 -55px;
+	background-position:0 -72px;
 }
 
 .mux-rating-star-min
@@ -1284,35 +1483,20 @@ tbody tr:nth-child(2n) td, tbody tr.even td
 /* InPlaceEdit */
 .mux-in-place-edit
 {
-	background-image:url(pen.png);
-	background-repeat:no-repeat;
 }
 
 .mux-in-place-edit a
 {
-	padding-left:20px;
+	color:rgba(0,120,20,1);
 	display:inline-block;
-	height:18px;
 }
 
-.mux-in-place-edit input
-{
-	margin-left:20px;
-	width:148px;
-	display:inline-block;
-	border:solid 1px #aaf;
-	height:16px;
-}
-
+.mux-in-place-edit input[type=text],
 .mux-in-place-edit textarea
 {
-	margin-left:20px;
-	height:54px;
 	display:inline-block;
-	width:auto !important;
-	border:solid 1px #aaf;
+	width:100%;
 }
-
 
 
 

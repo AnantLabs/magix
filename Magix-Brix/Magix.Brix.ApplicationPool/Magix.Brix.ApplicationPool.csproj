@@ -219,15 +219,12 @@
     <Content Include="media\images\csproj.png" />
     <Content Include="media\images\csv.png" />
     <Content Include="media\images\default-pdf-cover.png" />
-    <Content Include="media\images\desktop-icons\architecture.png" />
     <Content Include="media\images\desktop-icons\blue-print-icon.png" />
     <Content Include="media\images\desktop-icons\briefcase.png" />
     <Content Include="media\images\desktop-icons\database.png" />
     <Content Include="media\images\desktop-icons\docs.png" />
     <Content Include="media\images\desktop-icons\facts.png" />
-    <Content Include="media\images\desktop-icons\file-cabinet.png" />
     <Content Include="media\images\desktop-icons\lightning-icon.png" />
-    <Content Include="media\images\desktop-icons\lightning.png" />
     <Content Include="media\images\desktop-icons\marvin-help.png" />
     <Content Include="media\images\desktop-icons\objects.png" />
     <Content Include="media\images\desktop-icons\oscilloscope.png" />
