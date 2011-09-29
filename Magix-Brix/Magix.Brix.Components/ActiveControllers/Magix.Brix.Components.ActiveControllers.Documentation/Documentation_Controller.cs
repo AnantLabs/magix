@@ -1073,9 +1073,10 @@ clicking a button, or something similar</p>
                     {
                         Node xx = new Node();
 
-                        xx["Message"].Value = err.Message +
-                            "File; " +
-                            idx.FullName + ", Stack Trace; " + err.StackTrace;
+                        xx["Message"].Value =
+                            "<p>File: " + idx.FullName + "</p>" + 
+                            "<p>Message: " + err.Message + "</p>" +
+                            "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
 
                         xx["IsError"].Value = true;
 

@@ -252,12 +252,12 @@ table.mux-grid-objects>tbody>tr>td>span
 
 table.mux-grid-objects>tbody>tr.mux-grid-selected
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 200, .3)), to(rgba(0, 180, 110, .3)));
-	background-image: -webkit-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
-	background-image: -moz-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
-	background-image: -o-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
-	background-image: -ms-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
-	background-image: linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 200, .2)), to(rgba(0, 180, 110, .2)));
+	background-image: -webkit-linear-gradient(rgba(0, 255, 200, .2) 0%, rgba(0, 180, 110, .2) 100%);
+	background-image: -moz-linear-gradient(rgba(0, 255, 200, .2) 0%, rgba(0, 180, 110, .2) 100%);
+	background-image: -o-linear-gradient(rgba(0, 255, 200, .2) 0%, rgba(0, 180, 110, .2) 100%);
+	background-image: -ms-linear-gradient(rgba(0, 255, 200, .2) 0%, rgba(0, 180, 110, .2) 100%);
+	background-image: linear-gradient(rgba(0, 255, 200, .2) 0%, rgba(0, 180, 110, .2) 100%);
 }
 
 table.mux-grid-single-edit>tbody>tr.mux-grid-header>td:hover

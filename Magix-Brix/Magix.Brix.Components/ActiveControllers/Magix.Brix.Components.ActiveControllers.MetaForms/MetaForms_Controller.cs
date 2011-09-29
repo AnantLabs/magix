@@ -2301,7 +2301,7 @@ focus, or clicking the widget with his mouse or touch screen";
             node["IsInlineEdit"].Value = false;
             node["Container"].Value = "child";
             node["Width"].Value = 16;
-            node["Top"].Value = 20;
+            node["Top"].Value = 25;
             node["FullTypeName"].Value = typeof(Action).FullName + "-META";
             node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
 
@@ -2335,7 +2335,7 @@ focus, or clicking the widget with his mouse or touch screen";
             node["IsInlineEdit"].Value = false;
             node["Container"].Value = "child";
             node["Width"].Value = 16;
-            node["Top"].Value = 20;
+            node["Top"].Value = 25;
             node["FullTypeName"].Value = typeof(Action).FullName + "-META";
             node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
 
@@ -2474,7 +2474,7 @@ focus, or clicking the widget with his mouse or touch screen";
             node["FullTypeName"].Value = typeof(Action).FullName;
             node["Container"].Value = "child";
             node["Width"].Value = 15;
-            node["Top"].Value = 20;
+            node["Top"].Value = 25;
             if (e.Params.Contains("MetaFormNodeID"))
                 node["ParentID"].Value = e.Params["MetaFormNodeID"].Value;
             else
@@ -2517,13 +2517,13 @@ focus, or clicking the widget with his mouse or touch screen";
         }
 
         /**
-         * Level2: Ads up Top=20 and nothing more before it forwards to
+         * Level2: Ads up Top=25 and nothing more before it forwards to
          * 'DBAdmin.Form.ConfigureFilterForColumn'
          */
         [ActiveEvent(Name = "Magix.MetaForms.ConfigureFilterForColumns")]
         protected void Magix_MetaForms_ConfigureFilterForColumns(object sender, ActiveEventArgs e)
         {
-            e.Params["Top"].Value = 20;
+            e.Params["Top"].Value = 25;
 
             RaiseEvent(
                 "DBAdmin.Form.ConfigureFilterForColumn",
