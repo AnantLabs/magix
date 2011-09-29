@@ -93,6 +93,14 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Galleries";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
+                node);
         }
 
         /**

@@ -764,12 +764,12 @@ Layout System in our WinePad product ...";
             }
             else
             {
-                Node node = new Node();
-                node["Caption"].Value = DataSource["Caption"].Get<string>();
+                //Node node = new Node();
+                //node["Caption"].Value = DataSource["Caption"].Get<string>();
 
-                RaiseSafeEvent(
-                    "Magix.Core.SetFormCaption",
-                    node);
+                //RaiseSafeEvent(
+                //    "Magix.Core.SetFormCaption",
+                //    node);
             }
         }
 

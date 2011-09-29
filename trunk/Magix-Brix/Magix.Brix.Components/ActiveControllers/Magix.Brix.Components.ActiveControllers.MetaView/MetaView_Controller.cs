@@ -164,9 +164,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyMetaViewTemplateColumn";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Views";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
 

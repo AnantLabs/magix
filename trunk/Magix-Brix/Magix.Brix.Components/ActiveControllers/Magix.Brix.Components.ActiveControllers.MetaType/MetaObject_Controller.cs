@@ -87,9 +87,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Objects";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
 
@@ -288,8 +295,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
 
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
             node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Reference"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Children"]["Header"].Value = "Children";
             node["Type"]["Properties"]["Children"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetMetaObjectChildrenTemplateColumn";
@@ -302,16 +311,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node["Object"]["Properties"][idx.Name].Value = idx.Value;
             }
 
-            node["Width"].Value = 16;
+            node["Width"].Value = 18;
             node["Last"].Value = true;
-            node["Padding"].Value = 8;
-            node["MarginBottom"].Value = 20;
+            node["Padding"].Value = 6;
+            node["MarginBottom"].Value = 10;
             if (e.Params != null && 
                 e.Params.Contains("Container") &&
                 e.Params["Container"].Get<string>() != "content4")
             {
                 node["Container"].Value = e.Params["Container"].Value;
-                node["PullTop"].Value = 18;
+                node["PullTop"].Value = 8;
             }
             else
             {
@@ -330,7 +339,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Text"].Value = "+";
             node["ToolTip"].Value = "Click to create a New Property for your Object ...";
-            node["ButtonCssClass"].Value = "span-2 clear-both";
+            node["ButtonCssClass"].Value = "span-1 clear-both";
             node["Append"].Value = true;
             node["Event"].Value = "Magix.MetaType.CreateNewMetaObject-Value-AndEdit";
             node["Event"]["ObjectID"].Value = m.ID;
@@ -393,9 +402,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             e.Params["Container"].Value = "content6";
             e.Params["ReUseNode"].Value = true;
-            e.Params["Padding"].Value = 8;
-            e.Params["Width"].Value = 16;
-            e.Params["PullTop"].Value = 18;
+            e.Params["Padding"].Value = 6;
+            e.Params["Width"].Value = 18;
+            e.Params["PullTop"].Value = 8;
             e.Params["Last"].Value = true;
             e.Params["SelectEvent"].Value = "Magix.MetaType.AppendChildMetaObjectToMetaObjectAndEditParent";
             e.Params["IdColumnNotClickable"].Value = true;
@@ -512,11 +521,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Container"].Value = "content5";
             node["Top"].Value = 1;
-            node["Width"].Value = 16;
-            node["Padding"].Value = 8;
+            node["Width"].Value = 18;
+            node["Padding"].Value = 6;
             node["Last"].Value = true;
-            node["PullTop"].Value = 18;
-            node["MarginBottom"].Value = 20;
+            node["PullTop"].Value = 8;
+            node["MarginBottom"].Value = 10;
 
             node["ID"].Value = id;
             node["PropertyName"].Value = "Children";

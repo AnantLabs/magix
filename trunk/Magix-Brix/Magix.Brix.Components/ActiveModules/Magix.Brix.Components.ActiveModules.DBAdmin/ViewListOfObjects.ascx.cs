@@ -144,12 +144,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
             else
             {
-                Node node = new Node();
-                node["Caption"].Value = caption;
+                //Node node = new Node();
+                //node["Caption"].Value = caption;
 
-                RaiseSafeEvent(
-                    "Magix.Core.SetFormCaption",
-                    node);
+                //RaiseSafeEvent(
+                //    "Magix.Core.SetFormCaption",
+                //    node);
             }
 
             if (DataSource["Start"].Get<int>() > 0)

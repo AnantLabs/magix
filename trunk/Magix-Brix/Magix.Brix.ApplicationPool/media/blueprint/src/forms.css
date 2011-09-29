@@ -46,7 +46,6 @@ select { background-color:#fff; border-width:1px; border-style:solid; }
 input[type=text], input[type=password],
 input.text, input.title,
 textarea, select {
-  margin:0.5em 0;
 }
 
 input.text,

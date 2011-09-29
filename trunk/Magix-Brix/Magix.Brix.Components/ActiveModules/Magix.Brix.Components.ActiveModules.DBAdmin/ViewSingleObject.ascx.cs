@@ -170,11 +170,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
             else
             {
-                Node node = new Node();
-                node["Caption"].Value = caption;
-                RaiseSafeEvent(
-                    "Magix.Core.SetFormCaption",
-                    node);
+                //Node node = new Node();
+
+                //node["Caption"].Value = caption;
+
+                //RaiseSafeEvent(
+                //    "Magix.Core.SetFormCaption",
+                //    node);
             }
         }
 
@@ -408,7 +410,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             if (DataSource.Contains("WhiteListProperties") &&
                                 DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                             {
-                                c1.CssClass += "span-" + 
+                                c1.CssClass += " span-" + 
                                     DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
                             }
                         }
@@ -457,7 +459,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             if (DataSource.Contains("WhiteListProperties") &&
                                 DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                             {
-                                c1.CssClass += "span-" +
+                                c1.CssClass += " span-" +
                                     DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
                             }
                             if (DataSource["Type"]["Properties"][node.Name].Contains("MaxLength"))

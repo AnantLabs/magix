@@ -30,6 +30,6 @@
     runat="server"
     id="append"
     Text="Append..."
-    CssClass="mux-paging-button mux-button-append span-1"
+    CssClass="mux-paging-button mux-button-append span-4"
     ToolTip="Click to Append either a New or an Existing Object to List of Objects ..."
     OnClick="append_Click" />

@@ -648,9 +648,11 @@ div.mux-has-no-action
 
 .mux-remove-property
 {
-	width:30px;
+	width:20px;
 	height:18px;
-	float:right;
+	position:absolute;
+	right:0;
+	z-index:2;
 	background:Transparent url(../images/delete.png) no-repeat top right;
 	opacity:.1;
 

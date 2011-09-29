@@ -63,9 +63,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["GetObjectsEvent"].Value = "Magix.Publishing.GetLogItems";
 
             // 'Passing through' ...
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "System Log";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
 
@@ -140,11 +147,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 int val = (int)HttpContext.Current.Session["LogCount"];
                 if (val % 2 != 0)
                 {
-                    e.Params["ChildCssClass"].Value = "mux-rounded mux-shaded span-10 prepend-top mux-paddings last";
+                    e.Params["ChildCssClass"].Value = "mux-rounded mux-shaded span-10 prepend-top mux-paddings last mux-log-item";
                 }
                 else
                 {
-                    e.Params["ChildCssClass"].Value = "mux-rounded mux-shaded span-10 prepend-top mux-paddings";
+                    e.Params["ChildCssClass"].Value = "mux-rounded mux-shaded span-10 prepend-top mux-paddings mux-log-item";
                 }
                 e.Params["Append"].Value = val % 2 != 0;
                 HttpContext.Current.Session["LogCount"] = (val + 1) % 2;
