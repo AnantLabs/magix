@@ -30,8 +30,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button append;
         protected Button previous;
         protected Button next;
-        protected Panel previousPnl;
-        protected Panel nextPnl;
 
         public override void InitialLoading(Node node)
         {
@@ -157,30 +155,30 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             if (DataSource["Start"].Get<int>() > 0)
             {
                 previous.Enabled = true;
-                previousPnl.Visible = true;
+                previous.Visible = true;
             }
             else
             {
                 previous.Enabled = false;
                 if (DataSource["SetCount"].Get<int>() <=
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
-                    previousPnl.Visible = false;
+                    previous.Visible = false;
                 else
-                    previousPnl.Visible = true;
+                    previous.Visible = true;
             }
             if (DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>())
             {
                 next.Enabled = true;
-                nextPnl.Visible = true;
+                next.Visible = true;
             }
             else
             {
                 next.Enabled = false;
                 if (DataSource["SetCount"].Get<int>() <=
                     Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
-                    nextPnl.Visible = false;
+                    next.Visible = false;
                 else
-                    nextPnl.Visible = true;
+                    next.Visible = true;
             }
         }
 

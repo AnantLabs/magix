@@ -33,8 +33,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel pnl;
         protected Button change;
         protected Button remove;
-        protected Panel changePnl;
-        protected Panel removePnl;
 
         public override void InitialLoading(Node node)
         {
@@ -93,7 +91,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 Label tb = new Label();
                 tb.Tag = "table";
-                tb.CssClass = "viewObjects mux-grid-single-edit";
+                tb.CssClass = "mux-grid-objects mux-grid-single-edit";
 
                 // Header rows
                 tb.Controls.Add(CreateHeaderRow());
@@ -117,8 +115,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected void DataBindDone()
         {
             // TODO: We REALLY need to get 'control over' our Header module somehow here ...
-            changePnl.Visible = DataSource["IsChange"].Get<bool>();
-            removePnl.Visible = 
+            change.Visible = DataSource["IsChange"].Get<bool>();
+            remove.Visible = 
                 DataSource["IsRemove"].Get<bool>() &&
                 DataSource.Contains("Object");
 
@@ -206,7 +204,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     if (bold)
                         c1.Style[Styles.fontWeight] = "bold";
                     c1.Tag = "td";
-                    c1.CssClass = "columnName";
+                    c1.CssClass = "mux-column-name";
 
                     LinkButton clicker = new LinkButton();
                     if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
@@ -278,7 +276,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         if (bold)
                             c1.Style[Styles.fontWeight] = "bold";
                         c1.Tag = "td";
-                        c1.CssClass = "columnName";
+                        c1.CssClass = "mux-column-name";
                         if (DataSource["Type"]["Properties"][node.Name].Contains("Header"))
                         {
                             c1.Text = DataSource["Type"]["Properties"][node.Name]["Header"].Get<string>();
@@ -420,7 +418,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             ed.Text = node.Value.ToString();
                             ed.Info = node.Name;
                             if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
-                                ed.CssClass = "belongsTo";
+                                ed.CssClass = "mux-grid-belongs-to";
                             ed.Click +=
                                 delegate(object sender, EventArgs e)
                                 {
@@ -430,12 +428,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                         {
                                             BaseWebControl ctrl = idxCtrl as BaseWebControl;
                                             if (ctrl != null)
-                                                return ctrl.CssClass == "grid-selected";
+                                                return ctrl.CssClass == "mux-grid-selected";
                                             return false;
                                         });
                                     if (ctrlOld != null)
                                         ctrlOld.CssClass = "";
-                                    (lb.Parent.Parent as Label).CssClass = "grid-selected";
+                                    (lb.Parent.Parent as Label).CssClass = "mux-grid-selected";
                                     int id = DataSource["Object"]["ID"].Get<int>();
                                     string column = lb.Info;
                                     Node n = new Node();
@@ -493,7 +491,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                                     TextAreaEdit ed = new TextAreaEdit();
                                                     ed.TextLength = 500;
                                                     ed.Text = node.Value as string;
-                                                    ed.CssClass += " larger";
+                                                    ed.CssClass += " mux-larger-edit";
                                                     ed.Info = node.Name;
                                                     ed.TextChanged +=
                                                         delegate(object sender, EventArgs e)
@@ -521,7 +519,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                                 {
                                                     InPlaceEdit ed = new InPlaceEdit();
                                                     ed.Text = node.Value as string;
-                                                    ed.CssClass += " larger";
+                                                    ed.CssClass += " mux-larger-edit";
                                                     ed.Info = node.Name;
                                                     ed.TextChanged +=
                                                         delegate(object sender, EventArgs e)
@@ -561,7 +559,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         private HtmlTableRow CreateHeaderRow()
         {
             HtmlTableRow row = new HtmlTableRow();
-            row.Attributes.Add("class", "header");
+            row.Attributes.Add("class", "mux-grid-header");
 
             if (!DataSource.Contains("WhiteListProperties") ||
                 (DataSource["WhiteListProperties"].Contains("Name") &&
