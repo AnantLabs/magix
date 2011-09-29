@@ -376,7 +376,7 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                                     "<p>Message from Server; </p>" +
                                     "<p>" + err.Message + "</p>" +
                                     "<p>Stack Trace; </p>" +
-                                    "<p>" + err.StackTrace + "</p>";
+                                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
 
                                 node["IsError"].Value = true;
 

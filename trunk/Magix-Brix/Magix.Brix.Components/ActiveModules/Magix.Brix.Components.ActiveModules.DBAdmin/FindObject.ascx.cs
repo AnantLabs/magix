@@ -26,10 +26,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button next;
         protected Button beginning;
         protected Button end;
-        protected Panel previousPnl;
-        protected Panel nextPnl;
-        protected Panel endPnl;
-        protected Panel beginningPnl;
         protected Panel root;
         protected TextBox query;
 
@@ -171,14 +167,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 //    node);
             }
 
-            previousPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-            nextPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+            previous.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+            next.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
 
             previous.Enabled = DataSource["Start"].Get<int>() > 0;
             next.Enabled = DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
 
-            beginningPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) * 2;
-            endPnl.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) * 2;
+            beginning.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) * 2;
+            end.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) * 2;
 
             beginning.Enabled = DataSource["Start"].Get<int>() > 0;
             end.Enabled = DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();

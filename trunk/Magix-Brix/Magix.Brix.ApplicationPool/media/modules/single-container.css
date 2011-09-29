@@ -528,3 +528,39 @@ input[type=number].clear-both
 	line-height:36px;
 	vertical-align:bottom;
 }
+
+.mux-err-stack-trace
+{
+	max-height:18px;
+	overflow:hidden;
+	color:rgba(128,128,128,.5);
+	font-style:italic;
+
+	-moz-transition-property:color, max-height;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color, max-height;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color, max-height;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color, max-height;
+	-ms-transition-duration:.5s;
+	transition-property:color, max-height;
+	transition-duration:.5s;
+}
+
+.mux-err-stack-trace:hover
+{
+	max-height:540px;
+	color:rgba(128,128,128,1);
+
+	-moz-transition-property:color, max-height;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color, max-height;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color, max-height;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color, max-height;
+	-ms-transition-duration:.5s;
+	transition-property:color, max-height;
+	transition-duration:.5s;
+}

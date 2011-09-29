@@ -275,7 +275,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["CssClass"].Value = cssClass;
 
-            node["FullTypeName"].Value = typeof(MetaObject).FullName;
+            node["FullTypeName"].Value = typeof(MetaObject).FullName; // No -META here ... 'Raw Mode' ...
             node["ID"].Value = m.ID;
 
             // First filtering OUT columns ...!
@@ -284,6 +284,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["WhiteListColumns"]["Created"].Value = true;
             node["WhiteListColumns"]["Children"].Value = true;
 
+            // Adding up the Properties of the Object
             foreach (var idx in m.Values)
             {
                 node["WhiteListColumns"][idx.Name].Value = true;
@@ -929,16 +930,34 @@ have relationships towards other instances in your database.</p>";
         [ActiveEvent(Name = "DBAdmin.DynamicType.GetObject")]
         protected void DBAdmin_DynamicType_GetObject(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() != typeof(MetaObject).FullName + "-META")
-                return;
-
-            MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
-
-            e.Params["Object"]["ID"].Value = t.ID;
-
-            foreach (MetaObject.Property idx in t.Values)
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
             {
-                e.Params["Object"]["Properties"][idx.Name].Value = idx.Value;
+                MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+                e.Params["Object"]["ID"].Value = t.ID;
+
+                foreach (MetaObject.Property idx in t.Values)
+                {
+                    e.Params["Object"]["Properties"][idx.Name].Value = idx.Value;
+                }
+            }
+        }
+
+        /**
+         * Level2: For flattening out our Meta Object so that properties shows as values
+         */
+        [ActiveEvent(Name = "DBAdmin.Data.GetObject")]
+        protected void DBAdmin_Data_GetObject(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName)
+            {
+                MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+                foreach (MetaObject.Property idx in t.Values)
+                {
+                    e.Params["Object"]["Properties"][idx.Name].Value = idx.Value;
+                }
+
+                // The rest is done by the default implementation ...
             }
         }
 

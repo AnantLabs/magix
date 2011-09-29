@@ -62,6 +62,9 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
              */
             public override void Save()
             {
+                if (string.IsNullOrEmpty(Name))
+                    Name = "Default";
+
                 // Making sure every single property is uniquely named ...
                 bool found = true;
                 while (found)

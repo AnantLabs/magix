@@ -69,7 +69,7 @@ namespace Magix.Brix.Loader
                     "<p>Message from Server; </p>" +
                     "<p>" + err.Message + "</p>" +
                     "<p>Stack Trace; </p>" +
-                    "<p>" + err.StackTrace + "</p>";
+                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
 
                 node["Header"].Value = err.GetType().FullName;
                 node["IsError"].Value = true;
