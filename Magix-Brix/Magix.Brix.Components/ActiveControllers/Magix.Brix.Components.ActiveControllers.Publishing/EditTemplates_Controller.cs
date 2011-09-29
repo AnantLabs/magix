@@ -61,6 +61,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["ReuseNode"].Value = true;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Containers"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Containers"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Containers"]["Header"].Value = "WebParts";

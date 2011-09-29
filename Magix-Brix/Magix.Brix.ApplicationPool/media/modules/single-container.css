@@ -6,7 +6,7 @@
 
 html, body
 {
-	/* We don't want 'jumping' to occur when scrollbars are becoming visible ... */
+	/* We don't want 'jumping' to occur when browser scrollbars are becoming visible ... */
     height:110%;
 }
 

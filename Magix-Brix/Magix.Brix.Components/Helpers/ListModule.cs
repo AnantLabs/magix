@@ -748,59 +748,102 @@ namespace Magix.Brix.Components
                     }
                     else
                     {
-                        TextAreaEdit edit = new TextAreaEdit();
-                        edit.ToolTip = idx.Get<string>();
+                        string ctrlType = typeof(TextAreaEdit).FullName;
 
-                        if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
+                        if (DataSource["Type"]["Properties"][idx.Name].Contains("ControlType"))
                         {
-                            int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();
-                            edit.TextLength = maxLength;
+                            ctrlType = DataSource["Type"]["Properties"][idx.Name]["ControlType"].Get<string>();
                         }
-                        else
-                            edit.TextLength = 20;
-
-                        edit.DisplayTextBox +=
-                            delegate(object sender, EventArgs e)
-                            {
-                                TextAreaEdit ed = sender as TextAreaEdit;
-                                string id = (ed.Parent.Parent as Label).Info;
-                                (ed.Parent.Parent as Label).CssClass = "mux-grid-selected";
-                                if (!SelectedID.Equals("-1"))
+                        switch (ctrlType)
+                        {
+                            case "Magix.Brix.Components.TextAreaEdit":
                                 {
-                                    if (!id.Equals(SelectedID))
+                                    TextAreaEdit edit = new TextAreaEdit();
+                                    edit.ToolTip = idx.Get<string>();
+
+                                    if (DataSource["Type"]["Properties"][idx.Name].Contains("MaxLength"))
                                     {
-                                        Label l2 = Selector.SelectFirst<Label>(this,
-                                            delegate(Control idxCtrl)
-                                            {
-                                                return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                            });
-                                        if (l2 != null)
-                                            l2.CssClass = "";
+                                        int maxLength = DataSource["Type"]["Properties"][idx.Name]["MaxLength"].Get<int>();
+                                        edit.TextLength = maxLength;
                                     }
-                                }
-                                SelectedID = id;
-                            };
-                        edit.TextChanged +=
-                            delegate(object sender, EventArgs e)
-                            {
-                                TextAreaEdit ed = sender as TextAreaEdit;
-                                string id = (ed.Parent.Parent as Label).Info;
-                                string column = (ed.Parent as Label).Info;
-                                Node n = new Node();
-                                n["ID"].Value = GetId(id);
-                                n["PropertyName"].Value = column;
-                                n["NewValue"].Value = ed.Text;
-                                n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                    else
+                                        edit.TextLength = 20;
 
-                                RaiseSafeEvent(
-                                    DataSource.Contains("ChangeSimplePropertyValue") ?
-                                        DataSource["ChangeSimplePropertyValue"].Get<string>() :
-                                        "DBAdmin.Data.ChangeSimplePropertyValue",
-                                    n);
+                                    edit.DisplayTextBox +=
+                                        delegate(object sender, EventArgs e)
+                                        {
+                                            TextAreaEdit ed = sender as TextAreaEdit;
+                                            string id = (ed.Parent.Parent as Label).Info;
+                                            (ed.Parent.Parent as Label).CssClass = "mux-grid-selected";
+                                            if (!SelectedID.Equals("-1"))
+                                            {
+                                                if (!id.Equals(SelectedID))
+                                                {
+                                                    Label l2 = Selector.SelectFirst<Label>(this,
+                                                        delegate(Control idxCtrl)
+                                                        {
+                                                            return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                                        });
+                                                    if (l2 != null)
+                                                        l2.CssClass = "";
+                                                }
+                                            }
+                                            SelectedID = id;
+                                        };
+                                    edit.TextChanged +=
+                                        delegate(object sender, EventArgs e)
+                                        {
+                                            TextAreaEdit ed = sender as TextAreaEdit;
+                                            string id = (ed.Parent.Parent as Label).Info;
+                                            string column = (ed.Parent as Label).Info;
 
-                            };
-                        edit.Text = idx.Get<string>();
-                        l.Controls.Add(edit);
+                                            Node n = new Node();
+
+                                            n["ID"].Value = GetId(id);
+                                            n["PropertyName"].Value = column;
+                                            n["NewValue"].Value = ed.Text;
+                                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
+                                            RaiseSafeEvent(
+                                                DataSource.Contains("ChangeSimplePropertyValue") ?
+                                                    DataSource["ChangeSimplePropertyValue"].Get<string>() :
+                                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                                n);
+
+                                        };
+                                    edit.Text = idx.Get<string>();
+                                    l.Controls.Add(edit);
+                                } break;
+                            case "Magix.UX.Widgets.InPlaceEdit":
+                                {
+                                    InPlaceEdit edit = new InPlaceEdit();
+                                    edit.ToolTip = idx.Get<string>();
+
+                                    edit.TextChanged +=
+                                        delegate(object sender, EventArgs e)
+                                        {
+                                            InPlaceEdit ed = sender as InPlaceEdit;
+                                            string id = (ed.Parent.Parent as Label).Info;
+                                            string column = (ed.Parent as Label).Info;
+
+                                            Node n = new Node();
+
+                                            n["ID"].Value = GetId(id);
+                                            n["PropertyName"].Value = column;
+                                            n["NewValue"].Value = ed.Text;
+                                            n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
+                                            RaiseSafeEvent(
+                                                DataSource.Contains("ChangeSimplePropertyValue") ?
+                                                    DataSource["ChangeSimplePropertyValue"].Get<string>() :
+                                                    "DBAdmin.Data.ChangeSimplePropertyValue",
+                                                n);
+
+                                        };
+                                    edit.Text = idx.Get<string>();
+                                    l.Controls.Add(edit);
+                                } break;
+                        }
                     }
                 }
                 row.Controls.Add(l);

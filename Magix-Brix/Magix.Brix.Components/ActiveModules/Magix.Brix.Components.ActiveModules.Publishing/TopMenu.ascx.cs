@@ -68,7 +68,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             item.ID = node.Name;
             if (node.Contains("Selected") &&
                 node["Selected"].Get<bool>())
-                item.CssClass += " selected";
+                item.CssClass += " mux-slider-selected";
 
             item.Text = caption;
             item.Info = eventName;

@@ -71,7 +71,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             item.ID = node.Name;
             if (node.Contains("Selected") &&
                 node["Selected"].Get<bool>())
-                item.CssClass += " selected";
+                item.CssClass += " mux-slider-selected";
 
             item.Text = caption;
             item.Info = eventName;
@@ -109,13 +109,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 delegate(Control idx)
                 {
                     return (idx is BaseWebControl) &&
-                        (idx as BaseWebControl).CssClass.Contains(" selected");
+                        (idx as BaseWebControl).CssClass.Contains(" mux-slider-selected");
                 });
 
             if (old != null)
-                old.CssClass = old.CssClass.Replace(" selected", "");
+                old.CssClass = old.CssClass.Replace(" mux-slider-selected", "");
 
-            item.CssClass += " selected";
+            item.CssClass += " mux-slider-selected";
         }
 
         protected void slid_BackClicked(object sender, EventArgs e)
@@ -140,13 +140,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 delegate(Control idx)
                 {
                     return (idx is BaseWebControl) &&
-                        (idx as BaseWebControl).CssClass.Contains(" selected");
+                        (idx as BaseWebControl).CssClass.Contains(" mux-slider-selected");
                 });
 
             if (old != null)
-                old.CssClass = old.CssClass.Replace(" selected", "");
+                old.CssClass = old.CssClass.Replace(" mux-slider-selected", "");
 
-            item.CssClass += " selected";
+            item.CssClass += " mux-slider-selected";
         }
 
         /**
