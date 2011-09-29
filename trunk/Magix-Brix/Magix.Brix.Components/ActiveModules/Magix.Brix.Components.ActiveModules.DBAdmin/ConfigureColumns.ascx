@@ -16,7 +16,7 @@
         runat="server"
         id="rep">
         <HeaderTemplate>
-            <table class="viewObjects mux-grid-single-edit noMargin">
+            <table class="mux-grid-objects mux-grid-single-edit mux-no-margin">
         </HeaderTemplate>
         <FooterTemplate>
             </table>
@@ -27,13 +27,13 @@
                     <mux:CheckBox
                         runat="server"
                         OnCheckedChanged="CheckedChange"
-                        CssClass="checkboxWithText"
+                        CssClass="mux-grid-check-box"
                         Info='<%#Eval("Name") %>'
                         Checked='<%#Eval("[Visible].Value") %>' />
                     <mux:Label 
                         runat="server"
                         Info='<%#Eval("Name") %>'
-                        CssClass="checkboxText"
+                        CssClass="mux-grid-check-box-text"
                         OnClick="CheckedChangeFromLabel"
                         Text='<%#Eval("Name") %>' />
                 </td>

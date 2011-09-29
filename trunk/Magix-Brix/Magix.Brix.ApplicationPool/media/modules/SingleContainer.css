@@ -289,6 +289,7 @@ input[type=number].clear-both
 
 .mux-web-part-overflow
 {
+	/* Sorry guys! Needed ... :( */
 	overflow-y:auto !important;
 	overflow-x:hidden !important;
 	height:auto !important;

@@ -157,8 +157,6 @@ textarea
 	display:inline-block;
 	margin-top:0;
 	margin-bottom:0;
-	padding-top:18px;
-	padding-bottom:18px;
 	line-height:18px;
 	width:auto;
 	color:rgba(0, 120, 20, 1);
@@ -1491,6 +1489,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	display:inline-block;
 	width:100%;
+	padding:0 !important; /* TODO: Figure out why ...*/
 }
 
 

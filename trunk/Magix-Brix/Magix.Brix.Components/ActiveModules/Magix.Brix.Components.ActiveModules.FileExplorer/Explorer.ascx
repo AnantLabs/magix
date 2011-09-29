@@ -75,13 +75,13 @@
     <mux:Button
         runat="server"
         id="previous"
-        CssClass="span-2 previous"
+        CssClass="span-2 mux-button-previous"
         OnClick="previous_Click"
         Text="&lt;" />
     <mux:Button
         runat="server"
         id="next"
-        CssClass="span-2 next"
+        CssClass="span-2 mux-button-next"
         OnClick="next_Click"
         Text="&gt;" />
     <mux:Button

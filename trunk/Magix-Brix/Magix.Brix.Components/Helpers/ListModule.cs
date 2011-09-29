@@ -102,7 +102,7 @@ namespace Magix.Brix.Components
         {
             Label table = new Label();
             table.Tag = "table";
-            table.CssClass = "viewObjects";
+            table.CssClass = "mux-grid-objects";
 
             table.Controls.Add(CreateHeaderForTable());
 
@@ -119,12 +119,12 @@ namespace Magix.Brix.Components
             {
                 if (HasFilteredColumns())
                 {
-                    rc.CssClass = "window-remove-columns";
+                    rc.CssClass = "mux-remove-columns";
                     rc.ToolTip = "Remove columns";
                 }
                 else
                 {
-                    rc.CssClass = "window-restore-columns";
+                    rc.CssClass = "mux-restore-columns";
                     rc.ToolTip = "Add removed columns, or remove more columns";
                 }
             }
@@ -132,12 +132,12 @@ namespace Magix.Brix.Components
             {
                 if (HasFilteredColumns())
                 {
-                    rc.CssClass = "no-window-remove-columns";
+                    rc.CssClass = "mux-no-remove-columns";
                     rc.ToolTip = "Remove columns";
                 }
                 else
                 {
-                    rc.CssClass = "no-window-restore-columns";
+                    rc.CssClass = "mux-no-restore-columns";
                     rc.ToolTip = "Add removed columns, or remove more columns";
                 }
             }
@@ -177,14 +177,14 @@ namespace Magix.Brix.Components
         {
             Label row = new Label();
             row.Tag = "tr";
-            row.CssClass = "header";
+            row.CssClass = "mux-grid-header";
 
             if (DataSource["IsSelect"].Get<bool>())
             {
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Select";
-                cS.CssClass = "wide-2 noFilter";
+                cS.CssClass = "wide-2 mux-no-filter";
                 row.Controls.Add(cS);
             }
             bool hasIdFilter = false;
@@ -206,7 +206,7 @@ namespace Magix.Brix.Components
                     {
                         li.Text = "ID";
                     }
-                    li.CssClass = "wide-2 noFilter";
+                    li.CssClass = "wide-2 mux-no-filter";
                 }
                 else
                 {
@@ -229,7 +229,7 @@ namespace Magix.Brix.Components
                         string.IsNullOrEmpty(
                             idFilterString) ?
                             "" :
-                            "filtered overridden";
+                            "mux-filtered overridden";
                     bool isFilterOnId = !string.IsNullOrEmpty(idFilterString);
                     b.Click += FilterMethod;
                     b.Info = "ID";
@@ -242,7 +242,7 @@ namespace Magix.Brix.Components
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Rem.";
-                cS.CssClass = "wide-2 noFilter";
+                cS.CssClass = "wide-2 mux-no-filter";
                 row.Controls.Add(cS);
             }
             if (DataSource["IsDelete"].Get<bool>())
@@ -253,7 +253,7 @@ namespace Magix.Brix.Components
                 if (DataSource.Contains("DeleteHeader"))
                     header = DataSource["DeleteHeader"].Get<string>();
                 cS.Text = header;
-                cS.CssClass = "wide-2 noFilter";
+                cS.CssClass = "wide-2 mux-no-filter";
                 row.Controls.Add(cS);
             }
 
@@ -300,7 +300,7 @@ namespace Magix.Brix.Components
                     (idx.Contains("NoFilter") && idx["NoFilter"].Get<bool>()))
                 {
                     l.Text = captionOfColumn;
-                    l.CssClass += " noFilter";
+                    l.CssClass += " mux-no-filter";
                     string toolTip = "";
                     if (idx["BelongsTo"].Get<bool>())
                         toolTip += "BelongsTo ";
@@ -335,7 +335,7 @@ namespace Magix.Brix.Components
                         string.IsNullOrEmpty(
                             filterString) ?
                             "" :
-                            (hasIdFilter ? "filteredOverridden" : "filtered");
+                            (hasIdFilter ? "mux-filtered-overridden" : "mux-filtered");
                     b.Click += FilterMethod;
                     b.Info = idx.Name;
                     l.Controls.Add(b);
@@ -424,7 +424,7 @@ namespace Magix.Brix.Components
                                 (idxCtrl as Label).Info == SelectedID.ToString();
                         });
                     if (l != null)
-                        l.CssClass = "grid-selected";
+                        l.CssClass = "mux-grid-selected";
                 }
             }
         }
@@ -434,7 +434,7 @@ namespace Magix.Brix.Components
             Label row = new Label();
             row.Tag = "tr";
             if (node["ID"].Value.Equals(SelectedID))
-                row.CssClass = "grid-selected";
+                row.CssClass = "mux-grid-selected";
 
             row.Info = node["ID"].Value.ToString();
 
@@ -509,7 +509,7 @@ namespace Magix.Brix.Components
                             LinkButton b = sender as LinkButton;
                             Node n = new Node();
                             string id = (b.Parent.Parent as Label).Info;
-                            (b.Parent.Parent as Label).CssClass = "grid-selected";
+                            (b.Parent.Parent as Label).CssClass = "mux-grid-selected";
                             if (!SelectedID.Equals("-1"))
                             {
                                 if (id != SelectedID)
@@ -553,7 +553,7 @@ namespace Magix.Brix.Components
                         LinkButton b2 = sender as LinkButton;
                         Node n = new Node();
                         string id = (b2.Parent.Parent as Label).Info;
-                        (b2.Parent.Parent as Label).CssClass = "grid-selected";
+                        (b2.Parent.Parent as Label).CssClass = "mux-grid-selected";
                         if (!SelectedID.Equals("-1"))
                         {
                             if (id != SelectedID)
@@ -599,7 +599,7 @@ namespace Magix.Brix.Components
                         LinkButton b = sender as LinkButton;
                         Node n = new Node();
                         string id = (b.Parent.Parent as Label).Info;
-                        (b.Parent.Parent as Label).CssClass = "grid-selected";
+                        (b.Parent.Parent as Label).CssClass = "mux-grid-selected";
                         if (!SelectedID.Equals("-1"))
                         {
                             if (id != SelectedID)
@@ -679,7 +679,7 @@ namespace Magix.Brix.Components
                         btn.Text = idx.Get<string>();
 
                         if (DataSource["Type"]["Properties"][idx.Name]["BelongsTo"].Get<bool>())
-                            btn.CssClass = "belongsTo";
+                            btn.CssClass = "mux-grid-belongs-to";
                         btn.Info
                             = DataSource["Type"]["Properties"][idx.Name]["IsList"].Get<bool>().ToString();
 
@@ -687,7 +687,7 @@ namespace Magix.Brix.Components
                             delegate(object sender, EventArgs e)
                             {
                                 LinkButton ed = sender as LinkButton;
-                                (ed.Parent.Parent as Label).CssClass = "grid-selected";
+                                (ed.Parent.Parent as Label).CssClass = "mux-grid-selected";
                                 string id = (ed.Parent.Parent as Label).Info;
                                 if (!SelectedID.Equals("-1"))
                                 {
@@ -764,7 +764,7 @@ namespace Magix.Brix.Components
                             {
                                 TextAreaEdit ed = sender as TextAreaEdit;
                                 string id = (ed.Parent.Parent as Label).Info;
-                                (ed.Parent.Parent as Label).CssClass = "grid-selected";
+                                (ed.Parent.Parent as Label).CssClass = "mux-grid-selected";
                                 if (!SelectedID.Equals("-1"))
                                 {
                                     if (!id.Equals(SelectedID))

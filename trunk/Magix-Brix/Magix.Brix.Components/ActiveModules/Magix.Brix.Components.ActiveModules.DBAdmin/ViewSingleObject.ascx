@@ -13,24 +13,16 @@
     CssClass="mux-grid-single-object"
     id="pnl" />
 
-<mux:Panel
+<mux:Button
     runat="server"
-    id="changePnl"
-    CssClass="pagingButton change">
-    <mux:Button
-        runat="server"
-        id="change"
-        OnClick="change_Click"
-        Text="Change..." />
-</mux:Panel>
+    id="change"
+    CssClass="mux-paging-button mux-button-change span-1"
+    OnClick="change_Click"
+    Text="Change..." />
 
-<mux:Panel
+<mux:Button
     runat="server"
-    id="removePnl"
-    CssClass="pagingButton remove">
-    <mux:Button
-        runat="server"
-        id="remove"
-        OnClick="remove_Click"
-        Text="Remove Reference" />
-</mux:Panel>
+    id="remove"
+    CssClass="mux-paging-button mux-button-remove span-1"
+    OnClick="remove_Click"
+    Text="Remove Reference" />

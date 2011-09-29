@@ -1,4 +1,10 @@
-﻿/* TreItems for Class "Explorer" ... */
+﻿/*
+ * Magix - A Web Application Framework for Humans
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
+ */
+
+/* TreItems for Class "Explorer" ... */
 li.mux-tree-item-namespace span.mux-tree-icon
 {
 	background:transparent url(../images/tree.png) no-repeat 0 0;
@@ -9,141 +15,136 @@ li.mux-tree-item-class span.mux-tree-icon
 	background:transparent url(../images/tree.png) no-repeat 0 -18px;
 }
 
-
-
-
-
-
 /* Table for viewing objects in DBAdmin */
 div.mux-grid-single-object
 {
-	float:left;
-	margin-right:10px;
 }
 
-
-
-.dbAdminTableWrapper
+.mux-class-contents
 {
 	position:relative;
 	height:auto;
 	overflow:visible;
 }
 
-table.viewObjects
-{
-	width:inherit;
-	clear:left;
-
-	-moz-border-radius:5px 5px 5px 5px;
-	-webkit-border-radius:5px 5px 5px 5px;
-	border-radius:5px 5px 5px 5px;
-}
-
-/* Preparing for some nice transitions on rows... */
-table.viewObjects>tbody>tr
-{
-	-moz-transition-property:background-color, -moz-border-radius, -moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:background-color, -webkit-border-radius, -webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:background-color, border-radius, box-shadow;
-	transition-duration:0.2s;
-}
-
-/* Transitions from above, on Hover ... */
-table.viewObjects>tbody>tr:hover
-{
-	background-color:rgba(128, 128, 128, 0.15) !important;
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	border-radius:2px;
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
-}
-
-/* Our Table Header ROW */
-table.viewObjects>tbody>tr.header
-{
-}
-
-/* Basically just "undoing" the transitions from normal cell rows on our Header row ... */
-table.viewObjects>tbody>tr.header:hover
-{
-	background-color:transparent !important;
-	-moz-border-radius:0;
-	-webkit-border-radius:0;
-	border-radius:0;
-	-webkit-box-shadow:0px 0px 0px transparent;
-	-moz-box-shadow:0px 0px 0px transparent;
-	box-shadow:0px 0px 0px transparent;
-}
-
-/* Commons for header cells... */
-/* Setting Font-Size and preparing our transition effects ... */
-table.viewObjects>tbody>tr.header>td
-{
-	font-size:2em;
-	-moz-transition-property:-moz-border-radius, -moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-border-radius, -webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:border-radius, box-shadow;
-	transition-duration:0.2s;
-}
-
-/* Making a "button" out of our Header Cell when hovered ... */
-table.viewObjects>tbody>tr.header>td:hover
+table.mux-grid-objects
 {
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
 	border-radius:5px;
-	-webkit-box-shadow:2px 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow:2px 2px 3px rgba(0, 0, 0, 0.5);
-	box-shadow:2px 2px 3px rgba(0, 0, 0, 0.5);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
 }
 
-table.viewObjects>tbody>tr.header>td.noFilter:hover
+/* Preparing for some nice transitions on rows... */
+table.mux-grid-objects>tbody>tr
+{
+}
+
+/* Transitions from above, on Hover ... */
+table.mux-grid-objects>tbody>tr:hover
+{
+}
+
+/* Our Table Header ROW */
+table.mux-grid-objects>tbody>tr.mux-grid-header
+{
+}
+
+table.mux-grid-objects>tbody>tr.mux-grid-header:hover
+{
+}
+
+/* Commons for header cells... */
+table.mux-grid-objects>tbody>tr.mux-grid-header>td
+{
+	font-size:1.5em;
+	line-height:2em;
+
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	-o-border-radius:2px;
+	-ms-border-radius:2px;
+	border-radius:2px;
+
+	-webkit-box-shadow:2px 2px 3px rgba(0, 0, 0, 0);
+	-moz-box-shadow:2px 2px 3px rgba(0, 0, 0, 0);
+	-o-box-shadow:2px 2px 3px rgba(0, 0, 0, 0);
+	-ms-box-shadow:2px 2px 3px rgba(0, 0, 0, 0);
+	box-shadow:2px 2px 3px rgba(0, 0, 0, 0);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
+}
+
+/* Making a "button" out of our Header Cell when hovered ... */
+table.mux-grid-objects>tbody>tr.mux-grid-header>td:hover
+{
+	-webkit-box-shadow:2px 2px 3px rgba(0, 0, 0, .8);
+	-moz-box-shadow:2px 2px 3px rgba(0, 0, 0, .8);
+	-o-box-shadow:2px 2px 3px rgba(0, 0, 0, .8);
+	-ms-box-shadow:2px 2px 3px rgba(0, 0, 0, .8);
+	box-shadow:2px 2px 3px rgba(0, 0, 0, .8);
+
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
+	background-image: -webkit-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	background-image: -o-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	background-image: -ms-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	background-image: linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+}
+
+/* Undoing the 'damage' ... */
+table.mux-grid-objects>tbody>tr.mux-grid-header>td.mux-no-filter:hover
 {
 	background-image:none;
-	-moz-border-radius:0;
-	-webkit-border-radius:0;
-	border-radius:0;
+	
 	-webkit-box-shadow:none;
 	-moz-box-shadow:none;
+	-o-box-shadow:none;
+	-ms-box-shadow:none;
 	box-shadow:none;
 }
 
 
 /* Links within Header Cells ... */
-table.viewObjects>tbody>tr.header>td>a
+table.mux-grid-objects>tbody>tr.mux-grid-header>td>a
 {
-	-moz-transition-property:color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:0.2s;
-	transition-property:color;
-	transition-duration:0.2s;
-	color:#333;
+	color:rgba(0,100,180,1);
 }
 
-table.viewObjects>tbody>tr.header>td>a:hover
+table.mux-grid-objects>tbody>tr.mux-grid-header>td>a:hover
 {
-	color:#06c;
 }
 
-table.viewObjects>tbody>tr.header>td>a.filtered,
-table.viewObjects>tbody>tr.header>td>a:hover.filtered
+table.mux-grid-objects>tbody>tr.mux-grid-header>td>a.mux-filtered,
+table.mux-grid-objects>tbody>tr.mux-grid-header>td>a:hover.mux-filtered
 {
 	background:transparent url(../images/filter.png) no-repeat 0 0;
 	padding-left:20px;
 }
 
-table.viewObjects>tbody>tr.header>td>a.filteredOverridden,
-table.viewObjects>tbody>tr.header>td>a:hover.filteredOverridden
+table.mux-grid-objects>tbody>tr.mux-grid-header>td>a.mux-filtered-overridden,
+table.mux-grid-objects>tbody>tr.mux-grid-header>td>a:hover.mux-filtered-overridden
 {
 	background:transparent url(../images/filter-overridden.png) no-repeat 0 0;
 	padding-left:20px;
@@ -151,138 +152,137 @@ table.viewObjects>tbody>tr.header>td>a:hover.filteredOverridden
 
 
 /* Commons for all Table Cells ... */
-table.viewObjects>tbody>tr>td
+table.mux-grid-objects>tbody>tr>td
 {
 	padding:0;
 }
 
-/* Commons for all [known types only!!] links within a Table Cell */
-table.viewObjects>tbody>tr>td>a,
-table.viewObjects>tbody>tr>td>div>a,
-table.viewObjects>tbody>tr>td>div.mux-in-place-edit>a
+table.mux-grid-objects>tbody>tr>td>a,
+table.mux-grid-objects>tbody>tr>td>div>a,
+table.mux-grid-objects>tbody>tr>td>div.mux-in-place-edit>a
 {
-	display:block;
-	text-decoration:none;
 	overflow:hidden;
+	display:block;
 
-	-moz-transition-property:-moz-border-radius, background-color, -moz-box-shadow;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-border-radius, background-color, -webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
-	transition-property:border-radius, background-color, box-shadow;
-	transition-duration:0.2s;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
+	border-radius:5px;
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 /* Hover commons for all [known types only!!] link types */
-table.viewObjects>tbody>tr>td>a:hover,
-table.viewObjects>tbody>tr>td>div>a:hover,
-table.viewObjects>tbody>tr>td>div.mux-in-place-edit>a:hover
+table.mux-grid-objects>tbody>tr>td>a:hover,
+table.mux-grid-objects>tbody>tr>td>div>a:hover,
+table.mux-grid-objects>tbody>tr>td>div.mux-in-place-edit>a:hover
 {
-	background-color:rgba(0, 0, 0, 0.05);
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	border-radius:2px;
-	-webkit-box-shadow:2px 2px 3px rgba(0, 0, 0, 0.2);
-	-moz-box-shadow:2px 2px 3px rgba(0, 0, 0, 0.2);
-	box-shadow:2px 2px 3px rgba(0, 0, 0, 0.2);
+	background-color:rgba(0, 100, 180, .2);
 }
 
 /* Every second row within the table, either through "even" class on row, 
    or through CSS selectors ... */
-table.viewObjects>tbody>tr:nth-child(2n)>td,
-table.viewObjects>tbody>tr.even>td
+table.mux-grid-objects>tbody>tr:nth-child(2n)>td,
+table.mux-grid-objects>tbody>tr.even>td
 {
-	background-color:rgba(0, 0, 0, 0.02);
+	background-color:rgba(0, 0, 0, 0.04);
 }
 
 /* Differentiater for cells that cannot be "changed" with other instances. 
    BelongsTo relationship ...! */
-table.viewObjects>tbody>tr>td>a.belongsTo
+table.mux-grid-objects>tbody>tr>td>a.mux-grid-belongs-to
 {
-	color:#CC6600;
+	background-color:rgba(128,0, 0, .1);
 }
 
-table.viewObjects>tbody>tr>td>div.mux-in-place-edit
+table.mux-grid-objects>tbody>tr>td>div.mux-in-place-edit
 {
 	position:relative;
 	height:18px;
 }
 
-table.viewObjects>tbody>tr>td>div.larger
+table.mux-grid-objects>tbody>tr>td>div.mux-larger-edit
 {
 	height:inherit;
 }
 
-table.viewObjects>tbody>tr>td>div.larger>a
+table.mux-grid-objects>tbody>tr>td>div.mux-larger-edit>a
 {
 	height:inherit;
 	width:auto;
 	overflow:hidden;
 }
 
-table.viewObjects>tbody>tr>td>div.larger>input[type=text]
+table.mux-grid-objects>tbody>tr>td>div.mux-larger-edit>input[type=text]
 {
 	width:100%;
 	margin-left:0;
 }
 
-table.viewObjects>tbody>tr>td>div.mux-in-place-edit>textarea
+table.mux-grid-objects>tbody>tr>td>div.mux-in-place-edit>textarea
 {
 	display:block;
 	position:absolute;
 	z-index:1; /* just needs a little bit of a push ... ;) */
 	top:0;
 	left:0;
-	margin:-1px 0 0 -1px;
-	padding:0;
+	margin:-1px 0 0 0;
 	width:100%;
-	height:72px;
+	height:90px;
 }
 
-table.viewObjects>tbody>tr>td>span
+table.mux-grid-objects>tbody>tr>td>span
 {
 	display:block;
-	overflow:hidden;
 }
 
-table.viewObjects>tbody>tr.grid-selected
+table.mux-grid-objects>tbody>tr.mux-grid-selected
 {
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(210, 230, 210, 0.5)), to(rgba(150, 180, 150, 0.5)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, 0.5) 0%, rgba(180, 180, 180, 0.5) 80%);
-
-	-webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	border-radius:2px;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 200, .3)), to(rgba(0, 180, 110, .3)));
+	background-image: -webkit-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
+	background-image: -moz-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
+	background-image: -o-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
+	background-image: -ms-linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
+	background-image: linear-gradient(rgba(0, 255, 200, .3) 0%, rgba(0, 180, 110, .3) 100%);
 }
 
-table.mux-grid-single-edit>tbody>tr.header>td:hover
+table.mux-grid-single-edit>tbody>tr.mux-grid-header>td:hover
 {
 	background-image:none;
 	background-color:Transparent;
 
 	-moz-border-radius:0;
 	-webkit-border-radius:0;
+	-o-border-radius:0;
+	-ms-border-radius:0;
 	border-radius:0;
+
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
+	-o-box-shadow: none;
+	-ms-box-shadow: none;
 	box-shadow: none;
 }
 
 table.mux-grid-single-edit>tbody>tr>td>div.mux-in-place-edit>textarea
 {
-	margin-top:-10px;
 }
 
-table.noMargin
+table.mux-no-margin
 {
-	margin:0;
 }
 
-table.noMargin .checkboxText
+table.mux-no-margin .mux-grid-check-box-text
 {
 	display:block;
 	width:inherit;
@@ -290,366 +290,104 @@ table.noMargin .checkboxText
 	width:150px;
 }
 
-table.noMargin .checkboxWithText
+table.mux-no-margin .mux-grid-check-box
 {
 	float:left;
 }
 
 
 /* A Paging button wrapper inside a list view form ... */
-.pagingButton
+.mux-paging-button
 {
-	padding:0;
-	float:left;
-	width:70px;
-	margin-right:10px;
+	margin-bottom:36px;
 }
 
 /* The actual Paging button itself inside a list view form ... */
-.pagingButton input[type=button]
+.mux-paging-button input[type=button]
 {
-	margin-bottom:0;
-	display:block;
-	width:100%;
-	-moz-transition-property:color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:color;
-	-webkit-transition-duration:0.2s;
-	transition-property:color;
-	transition-duration:0.2s;
 }
 
 /* Disabled state of the above Paging Button */
-.pagingButton input[type=button]:disabled
+.mux-paging-button input[type=button]:disabled
 {
 }
 
 /* Disabled HOVER state of the above Paging Button */
-.pagingButton input[type=button]:disabled:hover,
-.pagingButton input[type=button]:disabled:focus
+.mux-paging-button input[type=button]:disabled:hover,
+.mux-paging-button input[type=button]:disabled:focus
 {
-	color:#999;
 }
 
 /* The different [known!] paging buttons in our system ... */
-.dbAdminTableWrapper div.plus,
-.dbAdminTableWrapper div.next,
-.dbAdminTableWrapper div.previous
+.mux-class-contents div.mux-button-plus,
+.mux-class-contents div.mux-button-next,
+.mux-class-contents div.mux-button-previous
 {
-	width:70px;
-	min-width:70px;
-	height:36px;
-	margin-bottom:0;
 }
 
 /* Continuing ... */
-.dbAdminTableWrapper .beginning,
-.dbAdminTableWrapper .end
-{
-	width:70px;
-	min-width:70px;
-	margin:0 10px 0 0;
-}
-
-.plus
-{
-	margin:0 90px 0 0;
-}
-
-.dbAdminTableWrapper .beginning
+.mux-class-contents .mux-button-beginning,
+.mux-class-contents .mux-button-end
 {
 }
 
-.dbAdminTableWrapper .previous
-{
-	margin:0 10px 0 0;
-}
-
-.dbAdminTableWrapper .next
-{
-	margin:0 10px 0 0;
-}
-
-.dbAdminTableWrapper .end
+.mux-button-plus
 {
 }
 
-.append
+.mux-class-contents .mux-button-beginning
 {
-	width:150px;
-	min-width:150px;
-	margin:0 10px 0 0;
+}
+
+.mux-class-contents .mux-button-previous
+{
+}
+
+.mux-class-contents .mux-button-next
+{
+}
+
+.mux-class-contents .mux-button-end
+{
+}
+
+.mux-button-append
+{
 }
 
 
-.change
+.mux-button-change
 {
-	width:150px;
-	min-width:150px;
-	margin:0 10px 0 0;
 }
 
-.remove
+.mux-button-remove
 {
-	width:230px;
-	min-width:230px;
-	margin:0 10px 0 0;
 }
-
-
-
-
-/* Additional Window Buttons for our DB Manager ... */
-.window-restore-columns
-{
-	display:block;
-	position:absolute;
-	top:28px;
-	left:9px;
-	right:auto;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
-
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(120, 120, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
-	background-image: -moz-linear-gradient(rgba(120, 120, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
-
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:0.2s;
-}
-
-.window-restore-columns:hover
-{
-	color:rgba(0, 0, 0, 1);
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
-	background-image: -moz-linear-gradient(rgba(0, 0, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
-}
-
-.window-remove-columns
-{
-	display:block;
-	position:absolute;
-	top:30px;
-	left:9px;
-	right:auto;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
-
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 0.2)), to(rgba(180, 255, 180, 0.2)));
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 0.2) 0%, rgba(180, 255, 180, 0.2) 100%);
-
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:0.2s;
-}
-
-.window-remove-columns:hover
-{
-	color:rgba(0, 0, 0, 1);
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 1)), to(rgba(180, 255, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-}
-
-
-.no-window-restore-columns
-{
-	display:block;
-	position:absolute;
-	top:0;
-	right:0;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
-
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(120, 120, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
-	background-image: -moz-linear-gradient(rgba(120, 120, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
-
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:0.2s;
-}
-
-.no-window-restore-columns:hover
-{
-	color:rgba(0, 0, 0, 1);
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 255, 0.2)), to(rgba(255, 255, 255, 0.2)));
-	background-image: -moz-linear-gradient(rgba(0, 0, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
-}
-
-.no-window-remove-columns
-{
-	display:block;
-	position:absolute;
-	top:0;
-	right:0;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
-
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 0.2)), to(rgba(180, 255, 180, 0.2)));
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 0.2) 0%, rgba(180, 255, 180, 0.2) 100%);
-
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:0.2s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:0.2s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:0.2s;
-}
-
-.no-window-remove-columns:hover
-{
-	color:rgba(0, 0, 0, 1);
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 1)), to(rgba(180, 255, 180, 1)));
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-}
-
-
-
-
 
 /* Common Helper buttons ... */
-.windowActionButton
+.mux-window-action-button
 {
 	width:120px;
 	float:right;
 }
 
-.ok
+.mux-ok-button
 {
 	display:block;
 	width:110px;
 	margin-right:10px;
-	margin-bottom:0 !important;
+	margin-bottom:0;
 }
 
-.cancel
+.mux-cancel-button
 {
 	display:block;
 	width:110px;
 	margin-right:10px;
-	margin-bottom:0 !important;
+	margin-bottom:0;
 }
 
-.columnName
+.mux-column-name
 {
 	vertical-align:top;
 }
-
-.repLabel
-{
-	display:block;
-	font-weight:bold;
-	clear:both;
-}
-
-.repValue
-{
-	display:block;
-	text-decoration:none;
-}
-
-.repBody
-{
-	display:block;
-	text-decoration:none;
-	clear:both;
-}
-
-.repValue-selected,
-.repValue-selected:hover,
-.repValue-selected:focus
-{
-	font-weight:bold;
-	display:block;
-	text-decoration:none;
-	color:Black;
-}
-
-.db-table-cell-content
-{
-	display:block;
-	overflow:hidden;
-}
-
-
-
-
-
-
-

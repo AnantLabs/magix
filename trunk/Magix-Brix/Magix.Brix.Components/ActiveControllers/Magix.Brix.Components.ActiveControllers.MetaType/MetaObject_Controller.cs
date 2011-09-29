@@ -607,7 +607,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // Creating our Edit Value
             TextAreaEdit inplace = new TextAreaEdit();
             inplace.Text = value;
-            inplace.CssClass = "mux-in-place-edit larger mux-left-float";
+            inplace.CssClass = "mux-in-place-edit mux-larger-edit mux-left-float";
 
             // Supplying our Event Handler for the Changed Event ...
             inplace.TextChanged +=
@@ -688,7 +688,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // Creating our Edit Name of property editer ...
             InPlaceEdit ls = new InPlaceEdit();
             ls.Text = name;
-            ls.CssClass = "mux-in-place-edit larger";
+            ls.CssClass = "mux-in-place-edit mux-larger-edit";
 
             // Supplying our Event Handler for the Changed Event ...
             ls.TextChanged +=
