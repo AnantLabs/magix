@@ -433,7 +433,7 @@ namespace Magix.Brix.Components
         {
             Label row = new Label();
             row.Tag = "tr";
-            if (node["ID"].Value.Equals(SelectedID))
+            if (node["ID"].Value.ToString().Equals(SelectedID))
                 row.CssClass = "mux-grid-selected";
 
             row.Info = node["ID"].Value.ToString();

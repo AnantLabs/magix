@@ -233,7 +233,7 @@ input[type=checkbox].mux-grid-select
 .mux-debug-panel:hover
 {
 	opacity:1;
-	height:50em;
+	height:40em;
 	overflow-x:hidden;
 	overflow-y:auto;
 	width:630px;
@@ -505,4 +505,8 @@ input[type=number].clear-both
 	-moz-animation-direction: normal;
 	-moz-animation-iteration-count: 1;
 	-moz-animation-timing-function: ease-in-out;
+}
+
+.mux-webpart-template
+{
 }

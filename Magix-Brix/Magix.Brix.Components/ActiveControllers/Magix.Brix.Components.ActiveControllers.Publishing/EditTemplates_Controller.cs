@@ -495,7 +495,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     RaiseTryToChangeNumberOfWebParts(t, count);
                 };
 
-            for (int n = 1; n < 8; n++)
+            for (int n = 0; n < 8; n++)
             {
                 ListItem i = new ListItem(n.ToString() + " parts", n.ToString());
                 if (n == t.Containers.Count)

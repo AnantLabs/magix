@@ -701,6 +701,7 @@ Deleting it may break these parts.</p>";
                 node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 4;
 
                 node["Type"]["Properties"]["Name"]["ReadOnly"].Value = readOnly;
+                node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
                 node["Type"]["Properties"]["Value"]["ReadOnly"].Value = readOnly;
                 node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = readOnly;
                 node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn";
