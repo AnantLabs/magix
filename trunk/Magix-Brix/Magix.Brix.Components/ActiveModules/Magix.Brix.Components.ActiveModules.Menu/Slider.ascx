@@ -6,7 +6,7 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.Menu.Slider" %>
 
-<link href="media/modules/SlidingMenu.css" rel="stylesheet" type="text/css" />
+<link href="media/modules/sliding-menu.css" rel="stylesheet" type="text/css" />
 
 <mux:SlidingMenu 
     runat="server" 

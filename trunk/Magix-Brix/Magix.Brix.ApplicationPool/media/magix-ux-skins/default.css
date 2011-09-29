@@ -731,6 +731,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	line-height:2em;
 	overflow:hidden;
 	width:100%;
+	height:100%;
 }
 
 .mux-sliding-menu a
@@ -1061,6 +1062,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	cursor:move;
 	padding-left:40px;
 	width:auto;
+	margin-right:0;
 	
 	-moz-user-select: none;
 	-webkit-user-select: none;

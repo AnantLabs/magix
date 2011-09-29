@@ -156,8 +156,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["TypeName"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type Name";
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyMetaViewTemplateColumn";
@@ -913,11 +915,11 @@ Deleting it may break these parts.</p>";
             b.Text = text;
             if (!string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
             {
-                b.CssClass += "has-value";
+                b.CssClass += "mux-has-action";
             }
             else
             {
-                b.CssClass += "has-no-value";
+                b.CssClass += "mux-has-no-action";
             }
             b.Click +=
                 delegate

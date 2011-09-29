@@ -82,7 +82,6 @@
     <Content Include="media\blueprint\src\reset.css" />
     <Content Include="media\blueprint\src\typography.css" />
     <Content Include="media\Fonts\ReadMe.txt" />
-    <Content Include="media\images\actual-size.png" />
     <Content Include="media\images\ajax.gif" />
     <Content Include="media\images\aladdin.png" />
     <Content Include="media\images\avatars\marvin-headshot.png" />
@@ -106,10 +105,8 @@
     <Content Include="media\magix-ux-skins\star.png" />
     <Content Include="media\magix-ux-skins\tree-sprites.png" />
     <Content Include="media\front-end.css" />
-    <Content Include="media\modules\auto-sponder.css" />
-    <Content Include="media\modules\Calendar.css" />
     <Content Include="media\modules\MetaType-Editing.css" />
-    <Content Include="media\modules\DBAdmin.css" />
+    <Content Include="media\modules\grids.css" />
     <Content Include="media\modules\editor\assets\skins\sam\ajax-loader.gif" />
     <Content Include="media\modules\editor\assets\skins\sam\asc.gif" />
     <Content Include="media\modules\editor\assets\skins\sam\autocomplete.css" />
@@ -181,8 +178,8 @@
     <Content Include="media\modules\ReportFilter.css" />
     <Content Include="media\modules\RichEdit.css" />
     <Content Include="media\modules\signature.css" />
-    <Content Include="media\modules\SingleContainer.css" />
-    <Content Include="media\modules\SlidingMenu.css" />
+    <Content Include="media\modules\single-container.css" />
+    <Content Include="media\modules\sliding-menu.css" />
     <Content Include="media\modules\web-part-templates.css" />
     <Content Include="server-error.html" />
     <Content Include="Web.config" />
@@ -263,6 +260,7 @@
     <Content Include="media\images\Textures\snow.png" />
     <Content Include="media\images\txt.png" />
     <Content Include="media\images\wait-hourglass.png" />
+    <Content Include="media\images\wire-grid.png" />
     <Content Include="media\images\xml.png" />
     <Content Include="media\Js\link-text-boxes.js" />
     <Content Include="media\modules\animations.css" />

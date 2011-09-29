@@ -60,7 +60,7 @@ namespace Magix.Brix.Components.ActiveModules.Menu
             SlidingMenuItem item = new SlidingMenuItem();
             if (node.Contains("Selected") &&
                 node["Selected"].Get<bool>())
-                item.CssClass += " selected";
+                item.CssClass += " mux-slider-selected";
             item.Text = caption;
             item.Info = eventName;
             if (node.Contains("Items") && node["Items"].Count > 0)
@@ -89,11 +89,11 @@ namespace Magix.Brix.Components.ActiveModules.Menu
                 delegate(Control idx)
                 {
                     return (idx is BaseWebControl) &&
-                        (idx as BaseWebControl).CssClass.Contains(" selected");
+                        (idx as BaseWebControl).CssClass.Contains(" mux-slider-selected");
                 });
             if (old != null)
-                old.CssClass = old.CssClass.Replace(" selected", "");
-            item.CssClass += " selected";
+                old.CssClass = old.CssClass.Replace(" mux-slider-selected", "");
+            item.CssClass += " mux-slider-selected";
         }
     }
 }

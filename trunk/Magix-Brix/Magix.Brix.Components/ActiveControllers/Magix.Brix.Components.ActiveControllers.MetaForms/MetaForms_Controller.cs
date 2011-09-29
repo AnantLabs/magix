@@ -89,6 +89,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             node["ReuseNode"].Value = true;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Created"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;

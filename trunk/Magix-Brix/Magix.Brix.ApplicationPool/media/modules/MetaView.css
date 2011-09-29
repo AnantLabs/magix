@@ -223,6 +223,17 @@ input[type=button].action-button
 	margin-top:-90px;
 }
 
+.mux-has-action
+{
+	color:#99c;
+	font-style:italic;
+}
+
+.mux-has-no-action
+{
+	color:#33e;
+}
+
 
 
 

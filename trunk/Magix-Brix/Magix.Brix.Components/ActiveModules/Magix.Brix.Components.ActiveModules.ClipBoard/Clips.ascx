@@ -15,7 +15,7 @@
         <ItemTemplate>
             <mux:Panel
                 runat="server"
-                CssClass="span-3 height-4 clipboard-item">
+                CssClass="span-3 height-4 mux-clipboard-item">
                 <div 
                     class="span-3 last">
                     <label 
