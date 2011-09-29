@@ -137,7 +137,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         {
             if (string.IsNullOrEmpty(Name))
             {
-                Name = "default WebPartTemplate Name";
+                Name = "Default Name";
             }
             Width = Math.Max(Math.Min(Width, 24), 2);
             Height = Math.Max(Math.Min(Height, 30), 2);

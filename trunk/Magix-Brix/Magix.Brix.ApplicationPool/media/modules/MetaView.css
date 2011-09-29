@@ -37,15 +37,9 @@ input[type=text].meta-view-form-textbox
 {
 	width:100%;
 	min-width:100%;
-	margin-bottom:18px;
-	margin-top:0;
 
 	font-size:28px;
 	height:32px;
-	border-left:none 0;
-	border-right:none 0;
-	border-top:solid 1px #999;
-	border-bottom:solid 1px #999;
 	background-color:rgba(225, 225, 225, .5);
 
 	-moz-transition-property:background-color;

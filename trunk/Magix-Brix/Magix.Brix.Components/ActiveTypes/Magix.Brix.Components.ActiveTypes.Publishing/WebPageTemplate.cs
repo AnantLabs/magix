@@ -88,9 +88,37 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
         public override void Save()
         {
             if (ID == 0)
+            {
+                if (string.IsNullOrEmpty(Name))
+                    Name = "Default";
                 Created = DateTime.Now;
+                if (Containers.Count == 0)
+                {
+                    // Making sure it has one default container at least ...
+                    WebPartTemplate t = new WebPartTemplate();
+                    t.Name = "Default Name";
+                    t.CssClass = "mux-webpart-template";
+                    t.Width = 22;
+                    t.Overflow = true;
+                    t.MarginTop = 1;
+                    t.MarginLeft = 1;
+                    Containers.Add(t);
+                }
+            }
 
-            int idxNo = 1;
+            string name = Name;
+
+            int idxNo = 2;
+            while (CountWhere(
+                Criteria.Eq("Name", name),
+                Criteria.NotId(ID)) > 0)
+            {
+                name = Name + "-" + idxNo.ToString();
+                idxNo += 1;
+            }
+            Name = name;
+
+            idxNo = 1;
             foreach (WebPartTemplate idx in Containers)
             {
                 idx.ViewportContainer = "content" + idxNo;

@@ -155,8 +155,6 @@ select
 textarea
 {
 	display:inline-block;
-	margin-top:0;
-	margin-bottom:0;
 	line-height:18px;
 	width:auto;
 	color:rgba(0, 120, 20, 1);
@@ -1490,10 +1488,24 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-in-place-edit textarea
 {
 	display:inline-block;
+	position:absolute;
 	width:100%;
-	padding:0 !important; /* TODO: Figure out why ...*/
+	padding:0;
+	border-left:none 0;
+	border-right:none 0;
+	border-bottom:solid 1px rgba(0,0,0,.4);
+	border-top:solid 1px rgba(0,0,0,.4);
 }
 
+.mux-in-place-edit textarea
+{
+	margin-top:-10px;
+}
+
+.mux-in-place-edit input[type=text]
+{
+	margin-top:0;
+}
 
 /* Color Picker */
 .mux-color-picker
