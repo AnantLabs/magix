@@ -283,9 +283,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Last"].Value = true;
             node["Container"].Value = "content3";
             node["Header"].Value = "Database Objects";
+            node["IsFilterColumns"].Value = true;
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClasses",
                 node);
         }
