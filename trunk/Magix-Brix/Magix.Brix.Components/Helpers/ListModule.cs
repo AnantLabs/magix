@@ -69,7 +69,7 @@ namespace Magix.Brix.Components
             rc.Click += rc_Click;
             rc.ToolTip = "Configure visible columns...";
             rc.Text = "&nbsp;";
-            Root.Controls.Add(rc);
+            this.Controls.Add(rc);
         }
 
         protected virtual Control Root

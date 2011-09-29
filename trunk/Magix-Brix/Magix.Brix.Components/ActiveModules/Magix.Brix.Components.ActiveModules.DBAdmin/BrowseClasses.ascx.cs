@@ -33,10 +33,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
-                    DataSource = new Node(); // Discards input entirely ...
                     RaiseSafeEvent(
                         "DBAdmin.Data.GetClassHierarchy",
                         DataSource);
+
                     if (node.Contains("Header"))
                         header.Text = node["Header"].Get<string>();
                 };
@@ -45,6 +45,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             if (DataSource != null)
                 DataBindWholeTree();
         }
@@ -101,6 +102,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 // Showing the ViewClassContens Form
                 Node node = new Node();
                 node["FullTypeName"].Value = classFullName.Replace("Leaf:", "");
+                if (DataSource.Contains("IsFilterColumns"))
+                    node["IsFilterColumns"].Value = DataSource["IsFilterColumns"].Value;
 
                 RaiseSafeEvent(
                     "DBAdmin.Form.ViewClass",

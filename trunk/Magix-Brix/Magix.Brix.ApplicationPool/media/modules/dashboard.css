@@ -780,95 +780,24 @@ li.mux-tree-item-class span.mux-tree-icon
 	margin-bottom:0;
 }
 
-/* Additional Window Buttons for our DB Manager ... */
-.mux-restore-columns
-{
-	display:block;
-	position:absolute;
-	top:28px;
-	left:9px;
-	right:auto;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
-	color:rgba(0, 0, 0, 0);
-
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	-o-border-radius:6px;
-	-ms-border-radius:6px;
-	border-radius:6px;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(120, 120, 255, .2)), to(rgba(255, 255, 255, .2)));
-	background-image: -webkit-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -moz-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -o-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -ms-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-
-	-moz-transition-property:-moz-box-shadow, background-image, color;
-	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
-	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, background-image, color;
-	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, background-image, color;
-	-ms-transition-duration:.5s;
-	transition-property:box-shadow, background-image, color;
-	transition-duration:.5s;
-}
-
-.mux-restore-columns:hover
-{
-	color:rgba(0, 0, 0, 1);
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .8);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, 1.8);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, 1.8);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, 1.8);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, 1.8);
-
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 255, .2)), to(rgba(255, 255, 255, .2)));
-	background-image: -webkit-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -moz-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -o-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -ms-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-}
-
 .mux-remove-columns
 {
 	display:block;
 	position:absolute;
-	top:30px;
-	left:9px;
-	right:auto;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
+	top:0;
+	right:0;
+	width:30px;
+	height:36px;
+	padding:0;
+	margin:0;
 	color:rgba(0, 0, 0, 0);
+	background-color:rgba(0, 0, 0, 0);
 
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	-o-border-radius:6px;
-	-ms-border-radius:6px;
-	border-radius:6px;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, 0.1);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
+	-moz-border-radius:0px 5px 0px 15px;
+	-webkit-border-radius:0px 5px 0px 15px;
+	-o-border-radius:0px 5px 0px 15px;
+	-ms-border-radius:0px 5px 0px 15px;
+	border-radius:0px 5px 0px 15px;
 
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, .2)), to(rgba(180, 255, 180, .2)));
 	background-image: -webkit-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
@@ -877,36 +806,115 @@ li.mux-tree-item-class span.mux-tree-icon
 	background-image: -ms-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
 	background-image: linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
 
-	-moz-transition-property:-moz-box-shadow, background-image, color;
+	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-o-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	-ms-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+
+	-moz-transition-property:background-color, -moz-box-shadow;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, background-image, color;
+	-o-transition-property:background-color, -o-box-shadow;
 	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, background-image, color;
+	-ms-transition-property:background-color, -ms-box-shadow;
 	-ms-transition-duration:.5s;
-	transition-property:box-shadow, background-image, color;
+	transition-property:background-color, box-shadow;
 	transition-duration:.5s;
 }
 
 .mux-remove-columns:hover
 {
-	color:rgba(0, 0, 0, 1);
+	color:rgba(0,0,0,0);
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .8);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, .8);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
+	-webkit-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-moz-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-o-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-ms-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	
+	background-color:rgba(0, 255, 0, .5);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 1)), to(rgba(180, 255, 180, 1)));
-	background-image: -webkit-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: -o-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: -ms-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
+	-moz-transition-property:background-color, -moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color, -o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color, -ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:background-color, box-shadow;
+	transition-duration:.5s;
 }
 
+.mux-restore-columns
+{
+	display:block;
+	position:absolute;
+	top:0;
+	right:0;
+	width:30px;
+	height:36px;
+	padding:0;
+	margin:0;
+	color:rgba(0, 0, 0, 0);
+	background-color:rgba(0, 0, 0, 0);
+
+	-moz-border-radius:0px 5px 0px 15px;
+	-webkit-border-radius:0px 5px 0px 15px;
+	-o-border-radius:0px 5px 0px 15px;
+	-ms-border-radius:0px 5px 0px 15px;
+	border-radius:0px 5px 0px 15px;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 0, .2)), to(rgba(255, 255, 180, .2)));
+	background-image: -webkit-linear-gradient(rgba(255, 255, 0, .2) 0%, rgba(255, 255, 180, .2) 100%);
+	background-image: -moz-linear-gradient(rgba(255, 255, 0, .2) 0%, rgba(255, 255, 180, .2) 100%);
+	background-image: -o-linear-gradient(rgba(255, 255, 0, .2) 0%, rgba(255, 255, 180, .2) 100%);
+	background-image: -ms-linear-gradient(rgba(255, 255, 0, .2) 0%, rgba(255, 255, 180, .2) 100%);
+	background-image: linear-gradient(rgba(255, 255, 0, .2) 0%, rgba(255, 255, 180, .2) 100%);
+
+	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-o-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	-ms-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+
+	-moz-transition-property:background-color, -moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color, -o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color, -ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:background-color, box-shadow;
+	transition-duration:.5s;
+}
+
+.mux-restore-columns:hover
+{
+	color:rgba(0,0,0,0);
+
+	-webkit-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-moz-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-o-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-ms-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	
+	background-color:rgba(255, 255, 0, .5);
+
+	-moz-transition-property:background-color, -moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color, -o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color, -ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:background-color, box-shadow;
+	transition-duration:.5s;
+}
 
 .mux-no-restore-columns
 {
@@ -914,60 +922,66 @@ li.mux-tree-item-class span.mux-tree-icon
 	position:absolute;
 	top:0;
 	right:0;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
+	width:30px;
+	height:36px;
+	padding:0;
+	margin:0;
 	color:rgba(0, 0, 0, 0);
+	background-color:rgba(0, 0, 0, 0);
 
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	-o-border-radius:6px;
-	-ms-border-radius:6px;
-	border-radius:6px;
+	-moz-border-radius:0px 5px 0px 15px;
+	-webkit-border-radius:0px 5px 0px 15px;
+	-o-border-radius:0px 5px 0px 15px;
+	-ms-border-radius:0px 5px 0px 15px;
+	border-radius:0px 5px 0px 15px;
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, .2)), to(rgba(180, 255, 180, .2)));
+	background-image: -webkit-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
+	background-image: -moz-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
+	background-image: -o-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
+	background-image: -ms-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
+	background-image: linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(120, 120, 255, .2)), to(rgba(255, 255, 255, .2)));
-	background-image: -webkit-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -moz-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -o-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -ms-linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: linear-gradient(rgba(120, 120, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
+	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-o-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	-ms-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
 
-	-moz-transition-property:-moz-box-shadow, background-image, color;
+	-moz-transition-property:background-color, -moz-box-shadow;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, background-image, color;
+	-o-transition-property:background-color, -o-box-shadow;
 	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, background-image, color;
+	-ms-transition-property:background-color, -ms-box-shadow;
 	-ms-transition-duration:.5s;
-	transition-property:box-shadow, background-image, color;
+	transition-property:background-color, box-shadow;
 	transition-duration:.5s;
 }
 
 .mux-no-restore-columns:hover
 {
-	color:rgba(0, 0, 0, 1);
+	color:rgba(0,0,0,0);
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .8);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, .8);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
+	-webkit-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-moz-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-o-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-ms-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	
+	background-color:rgba(255, 0, 0, .5);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 255, .2)), to(rgba(255, 255, 255, .2)));
-	background-image: -webkit-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -moz-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -o-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: -ms-linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
-	background-image: linear-gradient(rgba(0, 0, 255, .2) 0%, rgba(255, 255, 255, .2) 100%);
+	-moz-transition-property:background-color, -moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color, -o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color, -ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:background-color, box-shadow;
+	transition-duration:.5s;
 }
 
 .mux-no-remove-columns
@@ -976,24 +990,18 @@ li.mux-tree-item-class span.mux-tree-icon
 	position:absolute;
 	top:0;
 	right:0;
-	width:9px;
-	height:8px;
-	padding-left:3px;
-	padding-bottom:4px;
-	font-size:10px;
+	width:30px;
+	height:36px;
+	padding:0;
+	margin:0;
 	color:rgba(0, 0, 0, 0);
+	background-color:rgba(0, 0, 0, 0);
 
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	-o-border-radius:6px;
-	-ms-border-radius:6px;
-	border-radius:6px;
-
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, .2);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, .2);
+	-moz-border-radius:0px 5px 0px 15px;
+	-webkit-border-radius:0px 5px 0px 15px;
+	-o-border-radius:0px 5px 0px 15px;
+	-ms-border-radius:0px 5px 0px 15px;
+	border-radius:0px 5px 0px 15px;
 
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, .2)), to(rgba(180, 255, 180, .2)));
 	background-image: -webkit-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
@@ -1002,33 +1010,45 @@ li.mux-tree-item-class span.mux-tree-icon
 	background-image: -ms-linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
 	background-image: linear-gradient(rgba(0, 255, 0, .2) 0%, rgba(180, 255, 180, .2) 100%);
 
-	-moz-transition-property:-moz-box-shadow, background-image, color;
+	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0);
+	-o-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	-ms-box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+	box-shadow: 2px 1px 2px rgba(0, 0, 0, 0);
+
+	-moz-transition-property:background-color, -moz-box-shadow;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, background-image, color;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, background-image, color;
+	-o-transition-property:background-color, -o-box-shadow;
 	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, background-image, color;
+	-ms-transition-property:background-color, -ms-box-shadow;
 	-ms-transition-duration:.5s;
-	transition-property:box-shadow, background-image, color;
+	transition-property:background-color, box-shadow;
 	transition-duration:.5s;
 }
 
 .mux-no-remove-columns:hover
 {
-	color:rgba(0, 0, 0, 1);
+	color:rgba(0,0,0,0);
 
-	-webkit-box-shadow: 1px 1px 2px rgba(30, 30, 30, .8);
-	-moz-box-shadow: 1px 1px 2px rgba(30, 30, 30, .8);
-	-o-box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
-	-ms-box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
-	box-shadow: 2px 1px 2px rgba(30, 30, 30, .8);
+	-webkit-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-moz-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-o-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	-ms-box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	box-shadow: 0px 0px 25px rgba(255, 225, 120, .8);
+	
+	background-color:rgba(255, 0, 0, .5);
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 255, 0, 1)), to(rgba(180, 255, 180, 1)));
-	background-image: -sebkit-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: -moz-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: -o-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: -ms-linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
-	background-image: linear-gradient(rgba(0, 255, 0, 1) 0%, rgba(180, 255, 180, 1) 100%);
+	-moz-transition-property:background-color, -moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color, -webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color, -o-box-shadow;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color, -ms-box-shadow;
+	-ms-transition-duration:.5s;
+	transition-property:background-color, box-shadow;
+	transition-duration:.5s;
 }
 
