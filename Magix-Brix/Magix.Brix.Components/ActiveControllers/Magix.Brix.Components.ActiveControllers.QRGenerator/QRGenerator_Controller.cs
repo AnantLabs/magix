@@ -35,7 +35,9 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
         }
 
         /**
-         * Level2: Will launch the Vanity QR Code Generator
+         * Level2: Will launch the Vanity QR Code Generator. The Vanity QR Code is a QR Code 
+         * [Quick Response] Code Generator which allows you to create QR Codes pointing to 
+         * your own URLs, or URLs integral to the system itself
          */
         [ActiveEvent(Name = "Magix.QCodes.LaunchGenerator")]
         protected void Magix_QCodes_LaunchGenerator(object sender, ActiveEventArgs e)
@@ -50,6 +52,14 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.QRGenerator.Generator",
                 "content3",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Vanity QR Code Generator";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
 

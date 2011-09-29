@@ -127,7 +127,8 @@ input[type=submit]:disabled:hover
 input[type=text],
 input[type=email],
 input[type=number],
-input[type=password]
+input[type=password],
+textarea
 {
 	display:inline-block;
 	border:none 0;
@@ -135,6 +136,7 @@ input[type=password]
 	border-bottom:solid 1px rgba(0, 120, 20, .2);
 	color:rgba(0, 120, 20, 1);
 	background-color:rgba(245,255,250,1);
+	margin-top:0;
 }
 
 input[type=radio],
@@ -144,9 +146,7 @@ input[type=checkbox]
 
 select
 {
-	margin-top:0;
-	margin-bottom:0;
-	border:solid 1px rgba(0, 120, 20, 1);
+	border:none 0;
 	color:rgba(0, 120, 20, 1);
 	background-color:rgba(245,255,250,1);
 }
@@ -1499,7 +1499,6 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 
 .mux-in-place-edit textarea
 {
-	margin-top:-10px;
 }
 
 .mux-in-place-edit input[type=text]

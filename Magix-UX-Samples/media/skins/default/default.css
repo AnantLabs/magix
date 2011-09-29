@@ -1084,6 +1084,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-in-place-edit
 {
 	color:rgba(185,225,255);
+	min-height:18px;
 }
 
 .mux-in-place-edit a

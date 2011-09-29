@@ -140,9 +140,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value = 
                 "Magix.Publishing.GetRoleTemplateColumn";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Users";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
 

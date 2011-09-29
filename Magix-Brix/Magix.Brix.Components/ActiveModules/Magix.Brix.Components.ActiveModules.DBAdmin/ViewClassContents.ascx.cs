@@ -132,21 +132,21 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             }
             else
             {
-                Node node = new Node();
+                //Node node = new Node();
 
-                node["Caption"].Value =
-                    DataSource.Contains("Header") ?
-                        DataSource["Header"].Get<string>() :
-                        string.Format(
-                        "{0} {1}-{2}/{3}",
-                        DataSource["TypeName"].Get<string>(),
-                        ((int)DataSource["Start"].Value) + 1,
-                        DataSource["End"].Get<int>(),
-                        DataSource["SetCount"].Get<int>());
+                //node["Caption"].Value =
+                //    DataSource.Contains("Header") ?
+                //        DataSource["Header"].Get<string>() :
+                //        string.Format(
+                //        "{0} {1}-{2}/{3}",
+                //        DataSource["TypeName"].Get<string>(),
+                //        ((int)DataSource["Start"].Value) + 1,
+                //        DataSource["End"].Get<int>(),
+                //        DataSource["SetCount"].Get<int>());
 
-                RaiseSafeEvent(
-                    "Magix.Core.SetFormCaption",
-                    node);
+                //RaiseSafeEvent(
+                //    "Magix.Core.SetFormCaption",
+                //    node);
             }
 
             previous.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);

@@ -67,7 +67,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         #endregion
 
         /**
-         * Level2: Will show all Meta Forms for admin
+         * Level2: Will show all Meta Forms within the system, and allow editing of them
          */
         [ActiveEvent(Name = "Magix.MetaForms.ViewForms")]
         protected void Magix_MetaForms_ViewForms(object sender, ActiveEventArgs e)
@@ -109,6 +109,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Forms";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
 
@@ -723,13 +731,13 @@ a key is pressed and typed on the widget";
                 e.Params["Controls"][typeName]["Events"]["EscKey"]["Description"].Value = @"Raised when 
 the ESC key is clicked and released on the widget";
 
-                e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Text"].Value = "Builder ...";
+                e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Text"].Value = "Builder";
                 e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["ToolTip"].Value = "Opens up the Style Builder such that you can create Animations and Styles for your Widget as you please. Add some Candy to your widgets by changing the way they Animate, Behave and Look like. Fonts, colors, etc, etc, etc. It is all done from here ... ;)";
                 e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["CssClass"].Value = "mux-shortcut-builder";
                 e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
             }
 
-            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Text"].Value = "Copy ...";
+            e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Text"].Value = "Copy";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["ToolTip"].Value = "Copies the widget onto your Clipboard such that you can paste in another copy of it somewhere you'd like";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["CssClass"].Value = "mux-shortcut-copy";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Event"].Value = "Magix.MetaForms.CopyWidget";
@@ -740,7 +748,7 @@ information which can be stored within your object, which is not visible for the
 ways, but still will follow your Widget around as a small piece of information storage";
 
             // Shortcut buttons ...
-            e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Text"].Value = "Delete!";
+            e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Text"].Value = "Delete";
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["ToolTip"].Value = "Deletes the currently selected widget. Be careful, this operation _cannot_ be undone ... !!";
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["CssClass"].Value = "mux-shortcut-delete";
             e.Params["Controls"][typeName]["ShortCuts"]["Delete"]["Event"].Value = "Magix.MetaForms.DeleteMetaFormWidgetFromForm";

@@ -89,9 +89,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetCopyActionTemplateColumn";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Actions";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
 

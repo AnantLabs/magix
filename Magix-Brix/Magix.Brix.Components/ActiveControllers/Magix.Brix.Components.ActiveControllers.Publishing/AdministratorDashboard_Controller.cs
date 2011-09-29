@@ -171,7 +171,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected void Magix_Publishing_LoadAdministratorMenu(object sender, ActiveEventArgs e)
         {
             if (!e.Params.Contains("Top"))
-                e.Params["Top"].Value = 4;
+                e.Params["Top"].Value = 6;
 
             if (!e.Params.Contains("Height"))
                 e.Params["Height"].Value = 17;
@@ -282,11 +282,20 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["Container"].Value = "content3";
-            node["Header"].Value = "Database Objects";
             node["IsFilterColumns"].Value = true;
+            node["Header"].Value = Adapter.Instance.GetConnectionString();
+            node["HeaderFontSize"].Value = 16;
 
             RaiseEvent(
                 "DBAdmin.Form.ViewClasses",
+                node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Database Objects";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
                 node);
         }
     }

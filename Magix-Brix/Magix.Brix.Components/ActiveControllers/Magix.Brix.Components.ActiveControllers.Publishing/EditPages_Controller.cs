@@ -165,6 +165,13 @@ differently than the next person out there! </p>
                 "content3",
                 node);
 
+            node = new Node();
+
+            node["Caption"].Value = "Web Pages";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
+                node);
         }
 
         /**

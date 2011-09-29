@@ -41,7 +41,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 Node node = new Node();
 
                 node["Width"].Value = 18;
-                node["Top"].Value = 1;
+                node["Top"].Value = 2;
+                node["MarginBottom"].Value = 1;
                 node["Last"].Value = true;
                 node["CssClass"].Value = "mux-header-module";
 
@@ -51,7 +52,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     node);
             }
 
-            e.Params["Lock"].Value = true;
             RaiseEvent(
                 "Magix.Core.SetFormCaption",
                 e.Params);

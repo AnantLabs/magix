@@ -396,7 +396,7 @@ input[type=number].clear-both
 .mux-left-float
 {
 	float:left;
-	width:370px;
+	width:100%;
 	position:relative;
 }
 
@@ -509,4 +509,22 @@ input[type=number].clear-both
 
 .mux-webpart-template
 {
+}
+
+.mux-paddings
+{
+	padding:18px 40px 18px 40px;
+}
+
+.mux-log-item td
+{
+	font-size:11px;
+	line-height:18px;
+}
+
+.mux-tree-header
+{
+	height:36px;
+	line-height:36px;
+	vertical-align:bottom;
 }

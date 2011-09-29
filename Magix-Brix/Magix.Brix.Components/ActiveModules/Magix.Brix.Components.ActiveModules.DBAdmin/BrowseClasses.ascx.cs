@@ -39,6 +39,15 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
                     if (node.Contains("Header"))
                         header.Text = node["Header"].Get<string>();
+
+                    if (node.Contains("HeaderFontSize"))
+                    {
+                        header.Style[Styles.fontSize] = node["HeaderFontSize"].Value.ToString() + "px";
+                    }
+                    else
+                    {
+                        header.Style[Styles.fontSize] = "";
+                    }
                 };
         }
 

@@ -74,6 +74,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
+
+            node = new Node();
+
+            node["Caption"].Value = "Page Templates";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
+                node);
         }
 
         /**
