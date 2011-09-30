@@ -151,7 +151,7 @@
                 runat="server"
                 id="eventHeader"
                 CssClass="span-6 last mux-section-header"
-                style="margin-bottom:0;cursor:pointer;"
+                style="margin-bottom:0;cursor:pointer;margin-top:18px;"
                 Visible="false"
                 ToolTip="Click me to toggle visibility of Actions for selected Widget"
                 Text="Actions"

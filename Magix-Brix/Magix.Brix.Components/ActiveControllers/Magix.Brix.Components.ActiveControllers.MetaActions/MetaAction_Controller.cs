@@ -338,7 +338,6 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["FullTypeName"].Value = typeof(Action).FullName;
 
             EditActionItemParams(a, node);
-            EditActionItem(a, node);
 
             CreateRunParamButton(a);
 
@@ -347,6 +346,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             if (!a.Name.StartsWith("Magix."))
                 CreateDeleteParamButton(a);
+
+            EditActionItem(a, node);
 
             ActiveEvents.Instance.RaiseClearControls("content6");
         }
@@ -358,10 +359,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             Node node = new Node();
 
-            node["CssClass"].Value = "clear-both";
             node["Width"].Value = 6;
-            node["MarginBottom"].Value = 10;
+            node["CssClass"].Value = "clear-both";
+            node["MarginBottom"].Value = 20;
             node["Top"].Value = 1;
+            node["TreeCssClass"].Value = "mux-parameters";
             node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             node["ActionItemID"].Value = a.ID;
 
@@ -371,7 +373,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParam";
 
             node["GetItemsEvent"].Value = "Magix.MetaAction.GetActionItemTree";
-            node["NoClose"].Value = true;
+            node["Header"].Value = "Params";
 
             RaiseEvent(
                 "Magix.MetaAction.GetActionItemTree",
@@ -416,6 +418,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node["Type"]["Properties"]["EventName"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
                 node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Description"]["MaxLength"].Value = 4000;
             }
 
             node["Type"]["Properties"]["EventName"]["Header"].Value = "Event Name";
@@ -423,10 +426,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Type"]["Properties"]["StripInput"]["Header"].Value = "Strip Input Node";
             node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.DataPlugins.GetTemplateColumns.CheckBox";
 
-            node["Width"].Value = 18;
-            node["Last"].Value = true;
+            node["Append"].Value = true;
             node["Container"].Value = "content5";
-            node["MarginBottom"].Value = 20;
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
@@ -440,9 +441,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             Node node = new Node();
 
+            node["Width"].Value = 18;
+            node["Top"].Value = 1;
+            node["Last"].Value = true;
+            node["MarginBottom"].Value = 10;
+
             node["Text"].Value = "Run!";
             node["ButtonCssClass"].Value = "span-4";
-            node["Append"].Value = true;
             node["Event"].Value = "Magix.MetaAction.RaiseAction";
             node["Event"]["ActionID"].Value = a.ID;
 
@@ -692,57 +697,82 @@ Deleting it may break these parts.</p>";
                 "DBAdmin.Form.CheckIfActiveTypeIsBeingSingleEdited",
                 ch);
 
-            if (!ch.Contains("Yes"))
+            // Assuming if the User clicks the same twice, he wants to start a 'new stack' ...
+            if (ch["Yes"].Get<bool>())
             {
-                // Editing it, since it's not being edited from before ...
-                Node node = new Node();
-
-                // First filtering OUT columns ...!
-                node["WhiteListColumns"]["Name"].Value = true;
-                node["WhiteListColumns"]["Value"].Value = true;
-                node["WhiteListColumns"]["TypeName"].Value = true;
-
-                node["WhiteListProperties"]["Name"].Value = true;
-                node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
-                node["WhiteListProperties"]["Value"].Value = true;
-                node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 4;
-
-                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = readOnly;
-                node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
-                node["Type"]["Properties"]["Value"]["ReadOnly"].Value = readOnly;
-                node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = readOnly;
-                node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn";
-
-                node["Width"].Value = 18;
-                node["Last"].Value = true;
-                node["Padding"].Value = 6;
-                node["Container"].Value = "content6";
-                node["IsList"].Value = false;
-                node["CssClass"].Value = "mux-small-editer";
-                node["PullTop"].Value = 18;
-                node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
-                node["ID"].Value = p.ID;
-
-                Node xx = new Node();
-                xx["Container"].Value = "content6";
-
-                RaiseEvent(
-                    "Magix.Core.GetNumberOfChildrenOfContainer",
-                    xx);
-
-                node["Append"].Value = xx["Count"].Get<int>() < 3;
-
-                RaiseEvent(
-                    "DBAdmin.Form.ViewComplexObject",
-                    node);
-
-                node = new Node();
-                node["Seed"].Value = "delete-button";
-                node["Enabled"].Value = true;
-                RaiseEvent(
-                    "Magix.Core.EnabledClickable",
-                    node);
+                ActiveEvents.Instance.RaiseClearControls("content6");
             }
+
+            Node xx = new Node();
+
+            xx["Container"].Value = "content6";
+
+            RaiseEvent(
+                "Magix.Core.GetNumberOfChildrenOfContainer",
+                xx);
+
+            // Because of our little CSS Animation Tricks, we always
+            // must have 3 div elements in our container ...
+            for (int idx = xx["Count"].Get<int>(); idx < 2; idx++)
+            {
+                Node tt = new Node();
+
+                if (xx["Count"].Get<int>() == idx)
+                {
+                    tt["Width"].Value = 18;
+                    tt["Last"].Value = true;
+                    tt["CssClass"].Value = "mux-small-editer";
+                    tt["PullTop"].Value = 10;
+                }
+                tt["Tag"].Value = "div";
+                tt["Append"].Value = true;
+                tt["Text"].Value = "&nbsp;";
+
+                LoadModule(
+                    "Magix.Brix.Components.ActiveModules.CommonModules.Text",
+                    "content6",
+                    tt);
+            }
+
+            // Editing it, since it's not being edited from before ...
+            Node node = new Node();
+
+            // First filtering OUT columns ...!
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Value"].Value = true;
+            node["WhiteListColumns"]["TypeName"].Value = true;
+
+            node["WhiteListProperties"]["Name"].Value = true;
+            node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
+            node["WhiteListProperties"]["Value"].Value = true;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 6;
+
+            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = readOnly;
+            node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
+            node["Type"]["Properties"]["Value"]["ReadOnly"].Value = readOnly;
+            node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = readOnly;
+            node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn";
+
+            node["Container"].Value = "content6";
+            node["IsList"].Value = false;
+            node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
+            node["ID"].Value = p.ID;
+
+            node["Append"].Value = true;
+            node["AppendMaxCount"].Value = 3;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewComplexObject",
+                node);
+
+            node = new Node();
+
+            node["Seed"].Value = "delete-button";
+            node["Enabled"].Value = true;
+
+            RaiseEvent(
+                "Magix.Core.EnabledClickable",
+                node);
 
             Node cc = new Node();
 

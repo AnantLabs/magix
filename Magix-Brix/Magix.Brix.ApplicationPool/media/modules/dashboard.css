@@ -15,10 +15,30 @@
 	position:relative;
 }
 
+@-webkit-keyframes mux-fade-in-del-param-2 {
+0% {
+	margin-left:0;
+}
+100% {
+	margin-left:360px;
+}
+}
+
+@-moz-keyframes mux-fade-in-del-param-2 {
+0% {
+	margin-left:0;
+}
+100% {
+	margin-left:360px;
+}
+}
+
 .mux-small-editer .mux-grid-single-object
 {
-	margin-top:126px;
-	width:270px;
+	margin-bottom:10px;
+	float:left;
+	margin-right:10px;
+	width:350px;
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	-o-border-radius:5px;
@@ -26,16 +46,153 @@
 	border-radius:5px;
 
 	background-color:rgba(128, 128, 255, .1);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
+
+	-webkit-animation-name: mux-fade-in-del-param-2;
+	-webkit-animation-duration: .5s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-fill-mode: forwards;
+
+	-moz-animation-name: mux-fade-in-del-param-2;
+	-moz-animation-duration: .5s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-timing-function: ease-out;
+	-moz-animation-fill-mode: forwards;
 }
 
-.mux-small-editer .mux-selected-action-param
+.mux-small-editer
 {
-	margin-top:0;
+	overflow:hidden;
+	height:540px;
+	position:relative;
+}
+
+@-webkit-keyframes mux-fade-in-del-param-1 {
+0% {
+	margin-left:-360px;
+}
+100% {
+	margin-left:0;
+}
+}
+
+@-moz-keyframes mux-fade-in-del-param-1 {
+0% {
+	margin-left:-360px;
+}
+100% {
+	margin-left:0;
+}
+}
+
+@-webkit-keyframes mux-fade-in-del-param-3 {
+0% {
+	opacity:1;
+	width:360px;
+}
+100% {
+	opacity:0;
+	width:0px;
+	display:none;
+}
+}
+
+@-moz-keyframes mux-fade-in-del-param-3 {
+0% {
+	opacity:1;
+	width:360px;
+}
+100% {
+	opacity:0;
+	width:0px;
+	display:none;
+}
+}
+
+.mux-small-editer>div:nth-child(1)
+{
 	position:absolute;
 	top:0;
-	left:240px;
+	right:0;
+	width:360px;
 
-	background-color:rgba(255, 255, 0, .06);
+	-webkit-animation-name: mux-fade-in-del-param-3;
+	-webkit-animation-duration: .5s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-fill-mode: forwards;
+
+	-moz-animation-name: mux-fade-in-del-param-3;
+	-moz-animation-duration: .5s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-timing-function: ease-out;
+	-moz-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes mux-fade-in-del-param {
+0% {
+	left:-350px;
+}
+100% {
+	left:0px;
+}
+}
+
+@-moz-keyframes mux-fade-in-del-param {
+0% {
+	left:-350px;
+}
+100% {
+	left:0px;
+}
+}
+
+.mux-small-editer div.mux-selected-action-param
+{
+	opacity:1;
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:inherit;
+	width:350px;
+
+	left:-350px;
+	top:0px;
+	background-color:rgba(100, 255, 200, .04);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
+
+	-webkit-animation-name: mux-fade-in-del-param;
+	-webkit-animation-duration: .5s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-fill-mode: forwards;
+
+	-moz-animation-name: mux-fade-in-del-param;
+	-moz-animation-duration: .5s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-timing-function: ease-out;
+	-moz-animation-fill-mode: forwards;
 }
 
 .mux-dashboard
@@ -628,22 +785,18 @@ div.mux-has-no-action
 
 .mux-edit-templates
 {
-	min-height:180px;
 }
 
 .mux-edit-actions
 {
-	min-height:180px;
 }
 
 .mux-edit-objects
 {
-	min-height:180px;
 }
 
 .edit-views
 {
-	min-height:180px;
 }
 
 .mux-remove-property
@@ -1099,3 +1252,12 @@ li.mux-tree-item-class span.mux-tree-icon
 	transition-duration:.5s;
 }
 
+.mux-parameters .mux-tree-icon
+{
+	background:transparent url(../images/tree-objects.png) no-repeat 0 0;
+}
+
+.mux-parameters
+{
+	min-height:720px;
+}

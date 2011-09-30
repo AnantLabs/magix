@@ -102,6 +102,7 @@ namespace Magix.UX.Widgets
         public string Key
         {
             get { return _key; }
+            internal set { _key = value; }
         }
 
         protected override void LoadControlState(object savedState)
@@ -262,6 +263,16 @@ namespace Magix.UX.Widgets
             LoadDynamicControl(true, extra);
             _key = newKey;
             ReRender();
+        }
+
+        /**
+         * Removes the first Control from the collection of controls, which usually 
+         * means the oldest control
+         */
+        public void RemoveFirst()
+        {
+            Key = Key.Substring(Key.IndexOf("|") + 1);
+            Controls.RemoveAt(0);
         }
 
         /**

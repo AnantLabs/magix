@@ -241,14 +241,19 @@ input[type=checkbox].mux-wysiwyg-selected,
 textarea.mux-wysiwyg-selected
 {
 	-moz-transition-property:-moz-box-shadow, opacity;
-	-moz-transition-duration:1.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow, opacity;
-	-webkit-transition-duration:1.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:box-shadow, opacity;
-	transition-duration:1.2s;
+	transition-duration:.5s;
+	
 	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+
+	-moz-transition-delay:0s;
+	-webkit-transition-delay:0s;
+	transition-delay:0s;
 }
 
 .mux-wysiwyg-selected .mux-wysiwyg-selected,
@@ -259,17 +264,19 @@ textarea.mux-wysiwyg-selected
 .mux-wysiwyg-selected textarea.mux-wysiwyg-selected
 {
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:1.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:1.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:1.2s;
+	transition-duration:.5s;
+	
 	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
-	-moz-transition-delay:1.2s;
-	-webkit-transition-delay:1.2s;
-	transition-delay:1.2s;
+	
+	-moz-transition-delay:.5s;
+	-webkit-transition-delay:.5s;
+	transition-delay:.5s;
 }
 
 .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected,
@@ -280,17 +287,19 @@ textarea.mux-wysiwyg-selected
 .mux-wysiwyg-selected .mux-wysiwyg-selected textarea.mux-wysiwyg-selected
 {
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:1.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:1.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:1.2s;
+	transition-duration:.5s;
+	
 	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
-	-moz-transition-delay:2.4s;
-	-webkit-transition-delay:2.4s;
-	transition-delay:2.4s;
+	
+	-moz-transition-delay:1s;
+	-webkit-transition-delay:1s;
+	transition-delay:1s;
 }
 
 .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected,
@@ -301,17 +310,59 @@ textarea.mux-wysiwyg-selected
 .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected textarea.mux-wysiwyg-selected
 {
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:1.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:1.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:1.2s;
+	transition-duration:.5s;
 	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
 	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
-	-moz-transition-delay:3.6s;
-	-webkit-transition-delay:3.6s;
-	transition-delay:3.6s;
+	-moz-transition-delay:1.5s;
+	-webkit-transition-delay:1.5s;
+	transition-delay:1.5s;
+}
+
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=button].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=text].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=email].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=checkbox].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected textarea.mux-wysiwyg-selected
+{
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-transition-delay:2s;
+	-webkit-transition-delay:2s;
+	transition-delay:2s;
+}
+
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=button].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=text].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=email].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected input[type=checkbox].mux-wysiwyg-selected,
+.mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected .mux-wysiwyg-selected textarea.mux-wysiwyg-selected
+{
+	-moz-transition-property:-moz-box-shadow;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-box-shadow;
+	-webkit-transition-duration:.5s;
+	transition-property:box-shadow;
+	transition-duration:.5s;
+	-webkit-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	box-shadow: 12px 12px 5px rgba(0, 0, 0, .5) !important;
+	-moz-transition-delay:2.5s;
+	-webkit-transition-delay:2.5s;
+	transition-delay:2.5s;
 }
 
 .mux-prop-label

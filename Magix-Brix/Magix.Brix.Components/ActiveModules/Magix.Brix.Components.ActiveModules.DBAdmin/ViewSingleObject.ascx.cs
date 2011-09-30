@@ -417,7 +417,18 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         else
                         {
                             LinkButton ed = new LinkButton();
-                            ed.Text = node.Value.ToString();
+                            string value = (node.Value ?? "").ToString();
+                            if (DataSource["Type"]["Properties"][node.Name].Contains("MaxLength"))
+                            {
+                                if (value.ToString().Length > DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>())
+                                {
+                                    c1.Text = value.ToString().Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
+                                }
+                                else
+                                    c1.Text = value.ToString();
+                            }
+                            else
+                                c1.Text = value.ToString();
                             ed.Info = node.Name;
                             if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
                                 ed.CssClass = "mux-grid-belongs-to";
@@ -492,7 +503,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                                 {
                                                     TextAreaEdit ed = new TextAreaEdit();
                                                     ed.TextLength = 500;
-                                                    ed.Text = node.Value as string;
+                                                    string value = (node.Value ?? "").ToString();
+                                                    if (DataSource["Type"]["Properties"][node.Name].Contains("MaxLength"))
+                                                    {
+                                                        ed.TextLength = DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>();
+                                                    }
+                                                    ed.Text = value.ToString();
                                                     ed.CssClass += " mux-larger-edit";
                                                     ed.Info = node.Name;
                                                     ed.TextChanged +=
@@ -520,7 +536,18 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                             case "Magix.UX.Widgets.InPlaceEdit":
                                                 {
                                                     InPlaceEdit ed = new InPlaceEdit();
-                                                    ed.Text = node.Value as string;
+                                                    string value = (node.Value ?? "").ToString();
+                                                    if (DataSource["Type"]["Properties"][node.Name].Contains("MaxLength"))
+                                                    {
+                                                        if (value.ToString().Length > DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>())
+                                                        {
+                                                            ed.Text = value.ToString().Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
+                                                        }
+                                                        else
+                                                            ed.Text = value.ToString();
+                                                    }
+                                                    else
+                                                        ed.Text = value.ToString();
                                                     ed.CssClass += " mux-larger-edit";
                                                     ed.Info = node.Name;
                                                     ed.TextChanged +=
