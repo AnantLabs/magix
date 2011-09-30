@@ -11,6 +11,7 @@ using Magix.UX.Effects;
 using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using System.Web;
+using Magix.UX;
 
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
@@ -28,6 +29,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             base.OnLoad(e);
             if (DataSource != null)
                 DataBindWebParts();
+
+            parts.Click +=
+                delegate(object sender, EventArgs e2)
+                {
+                    foreach (Window idxW in Selector.Select<Window>(parts))
+                    {
+                        idxW.CssClass = idxW.CssClass.Replace(" mux-edit-web-part", "");
+                    }
+                };
         }
 
         private void DataBindWebParts()
@@ -54,8 +64,18 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         // Creating Window ...
                         Window w = new Window();
-                        w.CssClass = ""; // Need full control ...
-                        w.CssClass += " mux-web-part";
+                        w.Click +=
+                            delegate(object sender, EventArgs e)
+                            {
+                                foreach (Window idxW in Selector.Select<Window>(parts))
+                                {
+                                    idxW.CssClass = idxW.CssClass.Replace(" mux-edit-web-part", "");
+                                    idxW.Style[Styles.zIndex] = "1";
+                                }
+                                (sender as Window).Style[Styles.zIndex] = "2";
+                                (sender as Window).CssClass += " mux-edit-web-part";
+                            };
+                        w.CssClass = " mux-web-part";
                         if (overflow)
                             w.CssClass += " mux-overflow-design";
 
@@ -73,9 +93,20 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                             w);
                         w.CssClass += " ";
 
+                        Label lbl3 = new Label();
+                        lbl3.Text = name;
+                        lbl3.CssClass = "mux-webpart-widget-info";
+                        w.Content.Controls.Add(lbl3);
+
                         CreateActionButtons(id, w);
 
                         CreateNameInPlaceEdit(name, id, w);
+
+                        Label lbl2 = new Label();
+                        lbl2.Text = "WebPart CSS Class";
+                        lbl2.Tag = "label";
+                        lbl2.CssClass = " span-5 down-1 mux-webpart-property-edit-widget";
+                        w.Content.Controls.Add(lbl2);
 
                         InPlaceEdit tx = CreateChangeCssClassInPlaceEdit(id, cssClass, w);
 
@@ -87,6 +118,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         CheckBox ch = new CheckBox();
                         ch.Checked = last;
                         ch.ID = "lch-" + id;
+                        ch.CssClass = "span-1";
                         ch.CheckedChanged +=
                             delegate(object sender, EventArgs e)
                             {
@@ -110,6 +142,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         Label lbl = new Label();
                         lbl.ID = "llbl-" + id;
                         lbl.Text = "Last";
+                        lbl.CssClass = "span-4 last";
                         lbl.Tag = "label";
                         lbl.Load
                             +=
@@ -120,10 +153,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         Panel pnl = new Panel();
                         ch.ID = "lpnl-" + id;
-                        pnl.CssClass = "span-2 down-1";
+                        pnl.CssClass = "span-5 down-1 mux-webpart-property-edit-widget";
                         pnl.Controls.Add(ch);
                         pnl.Controls.Add(lbl);
-                        pnl.ToolTip = "Whether or not this WebPart is to the very far right or not ... [Try experiementing if you experience unwanted 'jumping' while moving WebPart around or resizing it ...]";
 
                         w.Content.Controls.Add(pnl);
 
@@ -131,6 +163,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         CheckBox ch1 = new CheckBox();
                         ch1.Checked = overflow;
                         ch1.ID = "och-" + id;
+                        ch1.CssClass = "span-1";
                         ch1.CheckedChanged +=
                             delegate(object sender, EventArgs e)
                             {
@@ -153,6 +186,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         Label lbl1 = new Label();
                         lbl1.ID = "olbl-" + id;
                         lbl1.Text = "Overflow";
+                        lbl1.CssClass = "span-4 last";
                         lbl1.Load
                             +=
                             delegate
@@ -163,17 +197,16 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         Panel pnl1 = new Panel();
                         pnl1.ID = "opnl-" + id;
-                        pnl1.CssClass = "span-3 down-1";
+                        pnl1.CssClass = "span-5 down-1 mux-webpart-property-edit-widget";
                         pnl1.Controls.Add(ch1);
                         pnl1.Controls.Add(lbl1);
-                        pnl1.ToolTip = "Whether or not this will allow its content to overflow in the vertical direction";
 
                         w.Content.Controls.Add(pnl1);
 
                         // Delete 'this' button
                         LinkButton b = new LinkButton();
                         b.Text = "Delete";
-                        b.CssClass = "span-2 down-1";
+                        b.CssClass = "span-5 down-1 mux-webpart-property-edit-widget";
                         b.Style[Styles.display] = "block";
                         b.Click +=
                             delegate
@@ -207,10 +240,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             if (node.Contains("Classes"))
             {
+                Label lbl2 = new Label();
+                lbl2.Text = "Template";
+                lbl2.Tag = "label";
+                lbl2.CssClass = " span-5 down-1 mux-webpart-property-edit-widget";
+                w.Content.Controls.Add(lbl2);
+
                 SelectList ls = new SelectList();
                 ls.ID = "selTem-" + id;
-                ls.CssClass = "span-3 down-1";
-                ls.ToolTip = "Changes CSS class according to which templates the system have found in 'media/modules/web-part-templates.css' file ...";
+                ls.CssClass = "span-5 mux-webpart-property-edit-widget";
                 ls.SelectedIndexChanged +=
                     delegate
                     {
@@ -224,7 +262,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         tx.Text = ls.SelectedItem.Value;
                     };
-                ls.Items.Add(new ListItem("Choose Template ...", "-1"));
+                ls.Items.Add(new ListItem("Choose Template ...", ""));
 
                 foreach (Node idx in node["Classes"])
                 {
@@ -241,7 +279,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         {
             InPlaceEdit tx = new InPlaceEdit();
             tx.Text = cssClass;
-            tx.CssClass += " span-4 down-1 mux-in-place-edit-loose";
+            tx.CssClass += " span-5 mux-in-place-edit-loose mux-webpart-property-edit-widget";
             tx.Info = id.ToString();
             tx.TextChanged +=
                 delegate(object sender, EventArgs e)
@@ -258,7 +296,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         "Magix.Publishing.ChangeTemplateProperty",
                         node);
                 };
-            tx.ToolTip = "Css Class of WebPart [better changed with 'Template Change DropBox, unless you _know_ what you do ...!]";
             w.Content.Controls.Add(tx);
 
             return tx;
@@ -266,11 +303,16 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
         private void CreateNameInPlaceEdit(string name, int id, Window w)
         {
+            Label lbl = new Label();
+            lbl.Text = "WebPart Name";
+            lbl.Tag = "label";
+            lbl.CssClass = " span-5 down-1 mux-webpart-property-edit-widget";
+            w.Content.Controls.Add(lbl);
+
             InPlaceEdit nameI = new InPlaceEdit();
             nameI.Text = name;
             nameI.Info = id.ToString();
-            nameI.CssClass += " span-3 down-1 mux-in-place-edit-loose";
-            nameI.ToolTip = "Name of WebPart [also helps determine which CSS Templates to use ...]";
+            nameI.CssClass += " span-5 mux-in-place-edit-loose mux-webpart-property-edit-widget";
             nameI.TextChanged +=
                 delegate(object sender, EventArgs e)
                 {
@@ -505,23 +547,23 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
             if (node.Contains("NewPadding"))
                 p.CssClass = p.CssClass.Replace(
-                    " pushRight-" +
+                    " right-" +
                     node["OldPadding"].Get<int>(), "") +
-                    " pushRight-" +
+                    " right-" +
                     node["NewPadding"].Get<int>();
 
             if (node.Contains("NewPush"))
                 p.CssClass = p.CssClass.Replace(
-                    " pushLeft-" +
+                    " push-" +
                     node["OldPush"].Get<int>(), "") +
-                    " pushLeft-" +
+                    " push-" +
                     node["NewPush"].Get<int>();
 
             if (node.Contains("NewMarginBottom"))
                 p.CssClass = p.CssClass.Replace(
-                    " spcBottom-" +
+                    " bottom-" +
                     node["OldMarginBottom"].Get<int>(), "") +
-                    " spcBottom-" +
+                    " bottom-" +
                     node["NewMarginBottom"].Get<int>();
         }
 
@@ -605,7 +647,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
         private static void SetCommonWebPartProperties(int width, int height, bool last, string name, int id, int padding, int push, int top, int bottomMargin, string moduleName, Window w)
         {
-            w.ToolTip = string.Format("Module is of type '{0}'", moduleName);
             w.CssClass += " mux-shaded mux-rounded";
             if (width != 0)
                 w.CssClass += " span-" + width;
@@ -618,13 +659,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             w.Caption = name;
             w.Info = id.ToString();
             if (padding != 0)
-                w.CssClass += " pushRight-" + padding;
+                w.CssClass += " right-" + padding;
             if (push != 0)
-                w.CssClass += " pushLeft-" + push;
+                w.CssClass += " push-" + push;
             if (top != 0)
                 w.CssClass += " down-" + top;
             if (bottomMargin != 0)
-                w.CssClass += " spcBottom-" + bottomMargin;
+                w.CssClass += " bottom-" + bottomMargin;
             w.Draggable = false;
             w.Closable = false;
         }
@@ -633,10 +674,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         {
             if (DataSource.Contains("AllModules"))
             {
+                Label lbl2 = new Label();
+                lbl2.Text = "Module";
+                lbl2.Tag = "label";
+                lbl2.CssClass = " span-5 down-1 mux-webpart-property-edit-widget";
+                w.Content.Controls.Add(lbl2);
+
                 SelectList sel = new SelectList();
-                sel.CssClass = "span-3 down-1";
+                sel.CssClass = "span-5 mux-webpart-property-edit-widget";
                 sel.Info = id.ToString();
-                sel.ToolTip = "Module Type of WebPart";
                 sel.ID = "selMod-" + id;
                 sel.SelectedIndexChanged +=
                     delegate(object sender, EventArgs e)

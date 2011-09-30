@@ -184,7 +184,7 @@ namespace Magix.Brix.Components
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Select";
-                cS.CssClass = "wide-2 mux-no-filter";
+                cS.CssClass = "span-2 mux-no-filter";
                 row.Controls.Add(cS);
             }
             bool hasIdFilter = false;
@@ -193,7 +193,7 @@ namespace Magix.Brix.Components
             {
                 Label li = new Label();
                 li.Tag = "td";
-                li.CssClass = "wide-2";
+                li.CssClass = "span-2";
                 if (!DataSource["IsFilter"].Get<bool>() ||
                     (DataSource.Contains("FilterOnId") &&
                     !DataSource["FilterOnId"].Get<bool>()))
@@ -206,7 +206,7 @@ namespace Magix.Brix.Components
                     {
                         li.Text = "ID";
                     }
-                    li.CssClass = "wide-2 mux-no-filter";
+                    li.CssClass = "span-2 mux-no-filter";
                 }
                 else
                 {
@@ -242,7 +242,7 @@ namespace Magix.Brix.Components
                 Label cS = new Label();
                 cS.Tag = "td";
                 cS.Text = "Rem.";
-                cS.CssClass = "wide-2 mux-no-filter";
+                cS.CssClass = "span-2 mux-no-filter";
                 row.Controls.Add(cS);
             }
             if (DataSource["IsDelete"].Get<bool>())
@@ -253,7 +253,7 @@ namespace Magix.Brix.Components
                 if (DataSource.Contains("DeleteHeader"))
                     header = DataSource["DeleteHeader"].Get<string>();
                 cS.Text = header;
-                cS.CssClass = "wide-2 mux-no-filter";
+                cS.CssClass = "span-2 mux-no-filter";
                 row.Controls.Add(cS);
             }
 
@@ -268,7 +268,7 @@ namespace Magix.Brix.Components
                 if (DataSource.Contains("WhiteListColumns") &&
                     DataSource["WhiteListColumns"][idx.Name].Contains("ForcedWidth"))
                 {
-                    l.CssClass = "wide-" + 
+                    l.CssClass = "span-" + 
                         DataSource["WhiteListColumns"][idx.Name]["ForcedWidth"].Get<int>();
                 }
                 else
@@ -288,7 +288,7 @@ namespace Magix.Brix.Components
                             break;
                     }
                     wide = Math.Max((int)(((double)idx.Name.Length) / 2.5), wide);
-                    l.CssClass = "wide-" + wide;
+                    l.CssClass = "span-" + wide;
                 }
                 string captionOfColumn = idx.Name;
                 if (idx.Contains("Header") &&

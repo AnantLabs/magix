@@ -10,5 +10,5 @@
 
 <mux:Panel
     runat="server"
-    CssClass="span-24 last"
+    CssClass="span-24 last mux-editing-surface"
     id="parts" />
