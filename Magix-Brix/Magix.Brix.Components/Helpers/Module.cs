@@ -49,6 +49,8 @@ namespace Magix.Brix.Components
             }
         }
 
+        protected string _guid;
+
         /**
          * Level4: Checking to see if it may be us, and if so, re-databind
          */
@@ -57,6 +59,8 @@ namespace Magix.Brix.Components
         {
             if (CheckForTypeHit(e))
             {
+                if (e.Params.Contains("_guid") && e.Params["_guid"].Get<string>() == _guid)
+                    return; // 'This' was the source, and we don't need to update ...
                 ReDataBind();
             }
         }

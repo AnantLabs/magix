@@ -462,14 +462,9 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             int id = e.Params["ID"].Get<int>();
             string fullTypeName = e.Params["FullTypeName"].Get<string>();
             string typeName = fullTypeName.Substring(fullTypeName.LastIndexOf(".") + 1);
+
             Node node = e.Params;
-            if (node == null)
-            {
-                node = new Node();
-                node["ForcedSize"]["width"].Value = 550;
-                node["WindowCssClass"].Value =
-                    "mux-shaded mux-rounded push-5 down-2";
-            }
+
             node["Caption"].Value = @"
 Please confirm deletion of " + typeName + " with ID of " + id;
             node["Text"].Value = @"
@@ -480,7 +475,9 @@ deletion of several other objects</span>, since it may
 have relationships towards other instances in your database.</p>";
             node["OK"]["ID"].Value = id;
             node["OK"]["FullTypeName"].Value = fullTypeName;
-            node["OK"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedConfirmed";
+
+            if (!node["OK"].Contains("Event"))
+                node["OK"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedConfirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Cancel"]["FullTypeName"].Value = fullTypeName;
             node["Width"].Value = 15;

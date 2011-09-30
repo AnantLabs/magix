@@ -29,7 +29,8 @@
 <mux:Button
     runat="server"
     id="append"
-    Text="Append..."
-    CssClass="mux-paging-button mux-button-append span-4"
+    Text="Append ..."
+    CssClass="mux-paging-button mux-button-append span-3"
+    AccessKey="A"
     ToolTip="Click to Append either a New or an Existing Object to List of Objects ..."
     OnClick="append_Click" />

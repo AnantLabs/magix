@@ -155,7 +155,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 ActiveFieldAttribute[] attrs = 
                     prop.GetCustomAttributes(
                         typeof(ActiveFieldAttribute), true) as ActiveFieldAttribute[];
-                node["IsChange"].Value = !attrs[0].BelongsTo;
+                node["IsChange"].Value = !(attrs[0].BelongsTo || attrs[0].IsOwner);
                 object child = prop.GetGetMethod(true).Invoke(obj, null);
                 if (child != null)
                 {
@@ -695,8 +695,10 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             if (type == null)
             {
                 Node node = new Node();
+
                 node["ID"].Value = id;
                 node["FullTypeName"].Value = fullTypeName;
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.DeleteObject",

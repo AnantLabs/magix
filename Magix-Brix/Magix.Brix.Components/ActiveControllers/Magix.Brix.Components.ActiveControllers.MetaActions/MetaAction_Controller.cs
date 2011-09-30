@@ -428,6 +428,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Append"].Value = true;
             node["Container"].Value = "content5";
+            node["ChildCssClass"].Value = "clear-both";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
@@ -727,6 +728,7 @@ Deleting it may break these parts.</p>";
                 tt["Tag"].Value = "div";
                 tt["Append"].Value = true;
                 tt["Text"].Value = "&nbsp;";
+                tt["ModuleID"].Value = "filler" + idx;
 
                 LoadModule(
                     "Magix.Brix.Components.ActiveModules.CommonModules.Text",
@@ -757,6 +759,7 @@ Deleting it may break these parts.</p>";
             node["IsList"].Value = false;
             node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             node["ID"].Value = p.ID;
+            node["ModuleID"].Value = "am" + p.ID;
 
             node["Append"].Value = true;
             node["AppendMaxCount"].Value = 3;
