@@ -324,11 +324,11 @@ namespace Magix.Brix.Viewports
 
                     PutInSpan(e.Params, p, "Width", "span");
                     PutInSpan(e.Params, p, "Top", "down");
-                    PutInSpan(e.Params, p, "MarginBottom", "spcBottom");
-                    PutInSpan(e.Params, p, "PullTop", "pullTop");
+                    PutInSpan(e.Params, p, "MarginBottom", "bottom");
+                    PutInSpan(e.Params, p, "PullTop", "down-");
                     PutInSpan(e.Params, p, "Height", "height");
-                    PutInSpan(e.Params, p, "PushLeft", "pushLeft");
-                    PutInSpan(e.Params, p, "PushRight", "pushRight");
+                    PutInSpan(e.Params, p, "PushLeft", "push");
+                    PutInSpan(e.Params, p, "PushRight", "right");
                     PutInSpan(e.Params, p, "Padding", "prepend");
 
                     if (e.Params.Contains("Last") &&
@@ -366,11 +366,11 @@ namespace Magix.Brix.Viewports
                 {
                     ExtractSpan(e.Params, p, "Width", "span");
                     ExtractSpan(e.Params, p, "Top", "down");
-                    ExtractSpan(e.Params, p, "MarginBottom", "spcBottom");
-                    ExtractSpan(e.Params, p, "PullTop", "pullTop");
+                    ExtractSpan(e.Params, p, "MarginBottom", "bottom");
+                    ExtractSpan(e.Params, p, "PullTop", "down-");
                     ExtractSpan(e.Params, p, "Height", "height");
-                    ExtractSpan(e.Params, p, "PushLeft", "pushLeft");
-                    ExtractSpan(e.Params, p, "PushRight", "pushRight");
+                    ExtractSpan(e.Params, p, "PushLeft", "push");
+                    ExtractSpan(e.Params, p, "PushRight", "right");
                     ExtractSpan(e.Params, p, "Padding", "prepend");
                 }
             }
@@ -827,15 +827,15 @@ namespace Magix.Brix.Viewports
                         }
                         if (e.Params["Parameters"].Contains("PushRight"))
                         {
-                            cssClass += " pushRight-" + e.Params["Parameters"]["PushRight"].Get<int>();
+                            cssClass += " right-" + e.Params["Parameters"]["PushRight"].Get<int>();
                         }
                         if (e.Params["Parameters"].Contains("PushLeft"))
                         {
-                            cssClass += " pushLeft-" + e.Params["Parameters"]["PushLeft"].Get<int>();
+                            cssClass += " push-" + e.Params["Parameters"]["PushLeft"].Get<int>();
                         }
                         if (e.Params["Parameters"].Contains("SpcBottom"))
                         {
-                            cssClass += " spcBottom-" + e.Params["Parameters"]["SpcBottom"].Get<int>();
+                            cssClass += " bottom-" + e.Params["Parameters"]["SpcBottom"].Get<int>();
                         }
                         if (e.Params["Parameters"].Contains("Width"))
                         {
@@ -851,11 +851,11 @@ namespace Magix.Brix.Viewports
                         }
                         if (e.Params["Parameters"].Contains("MarginBottom"))
                         {
-                            cssClass += " spcBottom-" + e.Params["Parameters"]["MarginBottom"].Get<int>();
+                            cssClass += " bottom-" + e.Params["Parameters"]["MarginBottom"].Get<int>();
                         }
                         if (e.Params["Parameters"].Contains("PullTop"))
                         {
-                            cssClass += " pullTop-" + e.Params["Parameters"]["PullTop"].Get<int>();
+                            cssClass += " down--" + e.Params["Parameters"]["PullTop"].Get<int>();
                         }
                         if (e.Params["Parameters"].Contains("Pull"))
                         {
@@ -1019,7 +1019,7 @@ namespace Magix.Brix.Viewports
                     }
                     if (e.Params["Parameters"].Contains("Pull"))
                     {
-                        cssClass += " pull-" + e.Params["Parameters"]["Pull"].Get<int>();
+                        cssClass += " push--" + e.Params["Parameters"]["Pull"].Get<int>();
                     }
                     if (e.Params["Parameters"].Contains("Push"))
                     {

@@ -198,7 +198,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     if (DataSource.Contains("WhiteListProperties") &&
                         DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
                     {
-                        c1.CssClass += "wide-" +
+                        c1.CssClass += "span-" +
                             DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
                     }
                     bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
@@ -240,7 +240,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         if (DataSource.Contains("WhiteListProperties") &&
                             DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                         {
-                            c1.CssClass += "wide-" +
+                            c1.CssClass += "span-" +
                                 DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
                         }
 
@@ -270,7 +270,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         if (DataSource.Contains("WhiteListProperties") &&
                             DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
                         {
-                            c1.CssClass += "wide-" +
+                            c1.CssClass += "span-" +
                                 DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>();
                         }
                         bool bold = DataSource["Type"]["Properties"][node.Name].Contains("Bold") &&
@@ -302,7 +302,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 if (DataSource.Contains("WhiteListProperties") &&
                     DataSource["WhiteListProperties"]["Type"].Contains("ForcedWidth"))
                 {
-                    c1.CssClass += "wide-" +
+                    c1.CssClass += "span-" +
                         DataSource["WhiteListProperties"]["Type"]["ForcedWidth"].Get<int>();
                 }
                 c1.Text =
@@ -321,7 +321,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 if (DataSource.Contains("WhiteListProperties") &&
                     DataSource["WhiteListProperties"]["Attributes"].Contains("ForcedWidth"))
                 {
-                    c1.CssClass += "wide-" +
+                    c1.CssClass += "span-" +
                         DataSource["WhiteListProperties"]["Attributes"]["ForcedWidth"].Get<int>();
                 }
                 string text = "";
@@ -350,7 +350,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     if (DataSource.Contains("WhiteListProperties") &&
                         DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                     {
-                        c1.CssClass += "wide-" +
+                        c1.CssClass += "span-" +
                             DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
                     }
 
@@ -386,7 +386,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     if (DataSource.Contains("WhiteListProperties") &&
                         DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                     {
-                        c1.CssClass += "wide-" +
+                        c1.CssClass += "span-" +
                             DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>();
                     }
                     c1.Tag = "td";
@@ -583,10 +583,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["WhiteListProperties"]["Name"].Contains("ForcedWidth"))
                     c1.Attributes.Add(
                         "class",
-                        "wide-" +
+                        "span-" +
                         DataSource["WhiteListProperties"]["Name"]["ForcedWidth"].Get<int>());
                 else
-                    c1.Attributes.Add("class", "wide-4");
+                    c1.Attributes.Add("class", "span-4");
                 row.Cells.Add(c1);
             }
 
@@ -600,10 +600,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["WhiteListProperties"]["Type"].Contains("ForcedWidth"))
                     c1.Attributes.Add(
                         "class",
-                        "wide-" +
+                        "span-" +
                         DataSource["WhiteListProperties"]["Type"]["ForcedWidth"].Get<int>());
                 else
-                    c1.Attributes.Add("class", "wide-4");
+                    c1.Attributes.Add("class", "span-4");
                 row.Cells.Add(c1);
             }
 
@@ -617,10 +617,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["WhiteListProperties"]["Attributes"].Contains("ForcedWidth"))
                     c1.Attributes.Add(
                         "class",
-                        "wide-" +
+                        "span-" +
                         DataSource["WhiteListProperties"]["Attributes"]["ForcedWidth"].Get<int>());
                 else
-                    c1.Attributes.Add("class", "wide-5");
+                    c1.Attributes.Add("class", "span-5");
                 row.Cells.Add(c1);
             }
 
@@ -644,10 +644,10 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["WhiteListProperties"]["Value"].Contains("ForcedWidth"))
                     c1.Attributes.Add(
                         "class", 
-                        "wide-" + 
+                        "span-" + 
                         DataSource["WhiteListProperties"]["Value"]["ForcedWidth"].Get<int>());
                 else
-                    c1.Attributes.Add("class", "wide-7");
+                    c1.Attributes.Add("class", "span-7");
                 row.Cells.Add(c1);
             }
             return row;

@@ -167,13 +167,13 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         w.Caption = name;
                         w.Info = id.ToString();
                         if (padding != 0)
-                            w.CssClass += " pushRight-" + padding;
+                            w.CssClass += " right-" + padding;
                         if (push != 0)
-                            w.CssClass += " pushLeft-" + push;
+                            w.CssClass += " push-" + push;
                         if (top != 0)
                             w.CssClass += " down-" + top;
                         if (bottomMargin != 0)
-                            w.CssClass += " spcBottom-" + bottomMargin;
+                            w.CssClass += " bottom-" + bottomMargin;
 
                         // TODO: Should we allow dragging and dropping, 'override positioning' for pages ...?
                         w.Draggable = false;

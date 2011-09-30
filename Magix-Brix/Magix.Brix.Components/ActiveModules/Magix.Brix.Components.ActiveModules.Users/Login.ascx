@@ -17,7 +17,7 @@
     <Content>
         <table class="loginTable">
             <tr>
-                <td class="wide-2">
+                <td class="span-2">
                     Username
                 </td>
                 <td class="span-4 txt">

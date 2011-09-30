@@ -237,3 +237,102 @@ input[type=button].checked-expl
 	height:900px !important;
 }
 
+.mux-web-part
+{
+	z-index:200;
+	cursor:pointer;
+}
+
+.mux-edit-web-part
+{
+	height:360px !important;
+	width:270px !important;
+	z-index:1000;
+	padding:36px 40px 36px 40px;
+	overflow:hidden;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(200, 255, 200, 1)), to(rgba(180, 225, 150, 1)));
+	background-image: -webkit-linear-gradient(rgba(200, 255, 200, 1) 0%, rgba(180, 225, 150, 1) 100%);
+	background-image: -moz-linear-gradient(rgba(200, 255, 200, 1) 0%, rgba(180, 225, 150, 1) 100%);
+	background-image: -o-linear-gradient(rgba(200, 255, 200, 1) 0%, rgba(180, 225, 150, 1) 100%);
+	background-image: -ms-linear-gradient(rgba(200, 255, 200, 1) 0%, rgba(180, 225, 150, 1) 100%);
+	background-image: linear-gradient(rgba(200, 255, 200, 1) 0%, rgba(180, 225, 150, 1) 100%);
+}
+
+.mux-edit-web-part .mux-webpart-property-edit-widget,
+.mux-web-part .mux-webpart-property-edit-widget,
+.mux-web-part .mux-webpart-property-edit-widget a
+{
+	position:relative;
+
+	-moz-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -moz-box-shadow, -moz-border-radius, opacity, left, right, top, bottom !important;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -webkit-box-shadow, -webkit-border-radius, opacity, left, right, top, bottom !important;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -o-box-shadow, -o-border-radius, opacity, left, right, top, bottom !important;
+	-o-transition-duration:.5s;
+	-ms-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -ms-box-shadow, -ms-border-radius, opacity, left, right, top, bottom !important;
+	-ms-transition-duration:.5s;
+	transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, box-shadow, border-radius, opacity, left, right, top, bottom !important;
+	transition-duration:.5s;
+}
+
+.mux-webpart-property-edit-widget
+{
+	opacity:0;
+	visibility:hidden;
+}
+
+.mux-edit-web-part .mux-webpart-property-edit-widget
+{
+	opacity:1;
+	visibility:visible;
+}
+
+.mux-edit-web-part .mux-webpart-property-edit-widget a,
+.mux-edit-web-part a.mux-webpart-property-edit-widget,
+.mux-edit-web-part div.mux-webpart-property-edit-widget,
+.mux-edit-web-part .mux-webpart-property-edit-widget select
+{
+	cursor:pointer;
+}
+
+.mux-edit-web-part a.mux-webpart-property-edit-widget:hover,
+.mux-edit-web-part .mux-webpart-property-edit-widget a:hover,
+.mux-edit-web-part div.mux-webpart-property-edit-widget:hover,
+.mux-edit-web-part select.mux-webpart-property-edit-widget:hover
+{
+	background-color:rgba(35,128,70,.1);
+}
+
+.mux-edit-web-part .magix-publishing-increase-width,
+.mux-edit-web-part .magix-publishing-decrease-width,
+.mux-edit-web-part .magix-publishing-increase-height,
+.mux-edit-web-part .magix-publishing-decrease-height,
+.mux-edit-web-part .magix-publishing-increase-down,
+.mux-edit-web-part .magix-publishing-decrease-down,
+.mux-edit-web-part .magix-publishing-increase-bottom,
+.mux-edit-web-part .magix-publishing-decrease-bottom,
+.mux-edit-web-part .magix-publishing-increase-left,
+.mux-edit-web-part .magix-publishing-decrease-left,
+.mux-edit-web-part .magix-publishing-increase-padding,
+.mux-edit-web-part .magix-publishing-decrease-padding
+{
+	opacity:0;
+	left:-40px;
+	top:-40px;
+}
+
+.mux-webpart-widget-info
+{
+	position:absolute;
+	top:18px;
+	left:80px;
+	color:rgba(0,0,0,.1);
+	font-size:36px;
+}
+
+.mux-editing-surface
+{
+	cursor:pointer;
+}

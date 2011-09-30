@@ -142,6 +142,10 @@ textarea
 input[type=radio],
 input[type=checkbox]
 {
+	margin:0;
+	height:18px;
+	padding:0;
+	text-align:left;
 }
 
 select
@@ -1482,7 +1486,8 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 .mux-in-place-edit a
 {
 	color:rgba(0,120,20,1);
-	display:inline-block;
+	display:block;
+	width:100%;
 }
 
 .mux-in-place-edit input[type=text],

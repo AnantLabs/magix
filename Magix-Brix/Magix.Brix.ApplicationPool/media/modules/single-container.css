@@ -268,15 +268,15 @@ div.mux-web-part
 {
 	position:relative;
 
-	-moz-transition-property:margin, padding, width, height !important;
+	-moz-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -moz-box-shadow, -moz-border-radius, opacity, left, right, top, bottom !important;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:margin, padding, width, height !important;
+	-webkit-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -webkit-box-shadow, -webkit-border-radius, opacity, left, right, top, bottom !important;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:margin, padding, width, height !important;
+	-o-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -o-box-shadow, -o-border-radius, opacity, left, right, top, bottom !important;
 	-o-transition-duration:.5s;
-	-ms-transition-property:margin, padding, width, height !important;
+	-ms-transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, -ms-box-shadow, -ms-border-radius, opacity, left, right, top, bottom !important;
 	-ms-transition-duration:.5s;
-	transition-property:margin, padding, width, height !important;
+	transition-property:margin, padding, width, height, background-color, color, font-size, line-height, border-color, border-width, box-shadow, border-radius, opacity, left, right, top, bottom !important;
 	transition-duration:.5s;
 }
 

@@ -23,7 +23,7 @@
         </FooterTemplate>
         <ItemTemplate>
             <tr>
-                <td class="wide-5">
+                <td class="span-5">
                     <mux:CheckBox
                         runat="server"
                         OnCheckedChanged="CheckedChange"
