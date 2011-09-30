@@ -39,8 +39,10 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             {
                 if (node.Contains("TreeCssClass"))
                     tree.CssClass += " " + node["TreeCssClass"].Get<string>();
+
                 if (node.Contains("NoClose"))
                     tree.NoCollapseOfItems = node["NoClose"].Get<bool>();
+
                 if (node.Contains("Header"))
                 {
                     header.Visible = true;

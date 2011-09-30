@@ -137,9 +137,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 TipOfToday.Instance.CreateTip(@"
 <p>Add three properties to your form, name them</p>
 <ul>
-\t<li>Name</li>
-\t<li>Email</li>
-\t<li>Subscribe</li>
+    <li>Name</li>
+    <li>Email</li>
+    <li>Subscribe</li>
 </ul>
 <p>Change their description to something meaningful ...</p>
 <p>Make sure you change the 'Type Name' of your object to <em>'EmailSubscription'</em></p>

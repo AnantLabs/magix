@@ -913,11 +913,13 @@ namespace Magix.Brix.Viewports
                         e.Params["Name"].Value.ToString(), 
                         e.Params["Parameters"]);
 
-                    if (AjaxManager.Instance.IsCallback)
+                    if (e.Params["Parameters"].Contains("AppendMaxCount"))
                     {
-                        // We highlight our newly injected module's container here ...!
-                        new EffectHighlight(dyn, 500)
-                            .Render();
+                        int count = e.Params["Parameters"]["AppendMaxCount"].Get<int>();
+                        while (dyn.Controls.Count > count)
+                        {
+                            dyn.RemoveFirst();
+                        }
                     }
                 }
                 else
@@ -1124,6 +1126,15 @@ namespace Magix.Brix.Viewports
                     toAddInto.AppendControl(
                         e.Params["Name"].Value.ToString(),
                         e.Params["Parameters"]);
+
+                    if (e.Params["Parameters"].Contains("AppendMaxCount"))
+                    {
+                        int count = e.Params["Parameters"]["AppendMaxCount"].Get<int>();
+                        while (toAddInto.Controls.Count > count)
+                        {
+                            toAddInto.RemoveFirst();
+                        }
+                    }
                 }
                 else
                 {

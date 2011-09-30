@@ -174,7 +174,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 e.Params["Top"].Value = 6;
 
             if (!e.Params.Contains("Height"))
-                e.Params["Height"].Value = 17;
+                e.Params["Height"].Value = 15;
 
             if (!e.Params.Contains("Width"))
                 e.Params["Width"].Value = 6;
