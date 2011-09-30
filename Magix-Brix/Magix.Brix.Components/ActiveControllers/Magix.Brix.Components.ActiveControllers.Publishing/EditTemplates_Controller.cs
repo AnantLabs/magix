@@ -362,10 +362,21 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 if (e.Params["Action"].Get<string>() == "IncreaseWidth")
                 {
                     e.Params["OldWidth"].Value = t.Width;
-                    t.Width = Math.Min(24, (
-                        e.Params.Contains("NewValue") ? 
-                            e.Params["NewValue"].Get<int>() : 
-                            t.Width + 1));
+
+                    if (e.Params.Contains("NewValue") &&
+                        e.Params["NewValue"].Get<int>() == 100)
+                    {
+                        t.Width = 24 - t.MarginLeft;
+                        t.MarginRight = 0;
+                        t.Last = true;
+                    }
+                    else
+                    {
+                        t.Width = Math.Min(24, (
+                            e.Params.Contains("NewValue") ?
+                                e.Params["NewValue"].Get<int>() :
+                                t.Width + 1));
+                    }
                     e.Params["NewWidth"].Value = t.Width;
                 }
                 else if (e.Params["Action"].Get<string>() == "DecreaseWidth")

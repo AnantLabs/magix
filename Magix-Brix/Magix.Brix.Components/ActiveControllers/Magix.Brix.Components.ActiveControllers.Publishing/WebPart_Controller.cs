@@ -107,16 +107,24 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 Node node = new Node();
 
-                node["BottomMargin"].Value = page.Container.MarginBottom;
-                node["CssClass"].Value = page.Container.CssClass;
-                node["Height"].Value = page.Container.Height;
+                if (page.Container.MarginBottom != 0)
+                    node["BottomMargin"].Value = page.Container.MarginBottom;
+                if (!string.IsNullOrEmpty(page.Container.CssClass))
+                    node["CssClass"].Value = page.Container.CssClass;
+                if (page.Container.Height != 0)
+                    node["Height"].Value = page.Container.Height;
                 if (page.Container.Last)
                     node["Last"].Value = true;
-                node["PushRight"].Value = page.Container.MarginRight;
-                node["PushLeft"].Value = page.Container.MarginLeft;
-                node["SpcBottom"].Value = page.Container.MarginBottom;
-                node["Top"].Value = page.Container.MarginTop;
-                node["Width"].Value = page.Container.Width;
+                if (page.Container.MarginRight != 0)
+                    node["PushRight"].Value = page.Container.MarginRight;
+                if (page.Container.MarginLeft != 0)
+                    node["PushLeft"].Value = page.Container.MarginLeft;
+                if (page.Container.MarginBottom != 0)
+                    node["SpcBottom"].Value = page.Container.MarginBottom;
+                if (page.Container.MarginTop != 0)
+                    node["Top"].Value = page.Container.MarginTop;
+                if (page.Container.Width != 0)
+                    node["Width"].Value = page.Container.Width;
                 node["ID"].Value = page.ID;
                 node["ModuleInitializationEvent"].Value = "Magix.Publishing.InitializePublishingPlugin";
                 node["OriginalWebPartID"].Value = page.ID;
