@@ -54,9 +54,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         // Creating Window ...
                         Window w = new Window();
+                        w.CssClass = ""; // Need full control ...
                         w.CssClass += " mux-web-part";
                         if (overflow)
-                            w.CssClass += " overflow-design";
+                            w.CssClass += " mux-overflow-design";
 
                         SetCommonWebPartProperties(
                             width, 
@@ -76,7 +77,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         CreateNameInPlaceEdit(name, id, w);
 
-                        InPlaceTextAreaEdit tx = CreateChangeCssClassInPlaceEdit(id, cssClass, w);
+                        InPlaceEdit tx = CreateChangeCssClassInPlaceEdit(id, cssClass, w);
 
                         CreateChangeCssClassTemplate(id, name, w, cssClass, tx);
 
@@ -119,7 +120,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         Panel pnl = new Panel();
                         ch.ID = "lpnl-" + id;
-                        pnl.CssClass = "span-2";
+                        pnl.CssClass = "span-2 down-1";
                         pnl.Controls.Add(ch);
                         pnl.Controls.Add(lbl);
                         pnl.ToolTip = "Whether or not this WebPart is to the very far right or not ... [Try experiementing if you experience unwanted 'jumping' while moving WebPart around or resizing it ...]";
@@ -144,9 +145,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                     nx);
 
                                 if (ch1.Checked)
-                                    w.CssClass += " overflow-design";
+                                    w.CssClass += " mux-overflow-design";
                                 else
-                                    w.CssClass = w.CssClass.Replace(" overflow-design", "");
+                                    w.CssClass = w.CssClass.Replace(" mux-overflow-design", "");
                             };
 
                         Label lbl1 = new Label();
@@ -162,7 +163,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         Panel pnl1 = new Panel();
                         pnl1.ID = "opnl-" + id;
-                        pnl1.CssClass = "span-3";
+                        pnl1.CssClass = "span-3 down-1";
                         pnl1.Controls.Add(ch1);
                         pnl1.Controls.Add(lbl1);
                         pnl1.ToolTip = "Whether or not this will allow its content to overflow in the vertical direction";
@@ -172,7 +173,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         // Delete 'this' button
                         LinkButton b = new LinkButton();
                         b.Text = "Delete";
-                        b.CssClass = "span-2 last";
+                        b.CssClass = "span-2 down-1";
                         b.Style[Styles.display] = "block";
                         b.Click +=
                             delegate
@@ -194,7 +195,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
-        private void CreateChangeCssClassTemplate(int id, string name, Window w, string cssClass, InPlaceTextAreaEdit tx)
+        private void CreateChangeCssClassTemplate(int id, string name, Window w, string cssClass, InPlaceEdit tx)
         {
             Node node = new Node();
             node["ID"].Value = id;
@@ -208,7 +209,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             {
                 SelectList ls = new SelectList();
                 ls.ID = "selTem-" + id;
-                ls.CssClass = "span-3";
+                ls.CssClass = "span-3 down-1";
                 ls.ToolTip = "Changes CSS class according to which templates the system have found in 'media/modules/web-part-templates.css' file ...";
                 ls.SelectedIndexChanged +=
                     delegate
@@ -236,16 +237,16 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             }
         }
 
-        private InPlaceTextAreaEdit CreateChangeCssClassInPlaceEdit(int id, string cssClass, Window w)
+        private InPlaceEdit CreateChangeCssClassInPlaceEdit(int id, string cssClass, Window w)
         {
-            InPlaceTextAreaEdit tx = new InPlaceTextAreaEdit();
+            InPlaceEdit tx = new InPlaceEdit();
             tx.Text = cssClass;
-            tx.CssClass += " span-4 editer";
+            tx.CssClass += " span-4 down-1 mux-in-place-edit-loose";
             tx.Info = id.ToString();
             tx.TextChanged +=
                 delegate(object sender, EventArgs e)
                 {
-                    InPlaceTextAreaEdit t = sender as InPlaceTextAreaEdit;
+                    InPlaceEdit t = sender as InPlaceEdit;
 
                     Node node = new Node();
 
@@ -265,15 +266,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
         private void CreateNameInPlaceEdit(string name, int id, Window w)
         {
-            InPlaceTextAreaEdit nameI = new InPlaceTextAreaEdit();
+            InPlaceEdit nameI = new InPlaceEdit();
             nameI.Text = name;
             nameI.Info = id.ToString();
-            nameI.CssClass += " span-3 editer";
+            nameI.CssClass += " span-3 down-1 mux-in-place-edit-loose";
             nameI.ToolTip = "Name of WebPart [also helps determine which CSS Templates to use ...]";
             nameI.TextChanged +=
                 delegate(object sender, EventArgs e)
                 {
-                    InPlaceTextAreaEdit xed = sender as InPlaceTextAreaEdit;
+                    InPlaceEdit xed = sender as InPlaceEdit;
                     int idPart = int.Parse(xed.Info);
 
                     Node node = new Node();
@@ -606,18 +607,24 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         {
             w.ToolTip = string.Format("Module is of type '{0}'", moduleName);
             w.CssClass += " mux-shaded mux-rounded";
-            w.CssClass += " span-" + width;
-            w.CssClass += " height-" + height;
+            if (width != 0)
+                w.CssClass += " span-" + width;
+            if (height != 0)
+                w.CssClass += " height-" + height;
 
             if (last)
                 w.CssClass += " last";
 
             w.Caption = name;
             w.Info = id.ToString();
-            w.CssClass += " pushRight-" + padding;
-            w.CssClass += " pushLeft-" + push;
-            w.CssClass += " down-" + top;
-            w.CssClass += " spcBottom-" + bottomMargin;
+            if (padding != 0)
+                w.CssClass += " pushRight-" + padding;
+            if (push != 0)
+                w.CssClass += " pushLeft-" + push;
+            if (top != 0)
+                w.CssClass += " down-" + top;
+            if (bottomMargin != 0)
+                w.CssClass += " spcBottom-" + bottomMargin;
             w.Draggable = false;
             w.Closable = false;
         }
@@ -627,7 +634,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             if (DataSource.Contains("AllModules"))
             {
                 SelectList sel = new SelectList();
-                sel.CssClass = "span-3";
+                sel.CssClass = "span-3 down-1";
                 sel.Info = id.ToString();
                 sel.ToolTip = "Module Type of WebPart";
                 sel.ID = "selMod-" + id;

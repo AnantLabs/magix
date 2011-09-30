@@ -156,18 +156,26 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         Window w = new Window();
                         w.ToolTip = string.Format("Module is of type '{0}'", moduleName);
                         w.CssClass += " mux-shaded mux-rounded";
-                        w.CssClass += " span-" + width;
-                        w.CssClass += " height-" + height;
+                        if (width != 0)
+                            w.CssClass += " span-" + width;
+                        if (height != 0)
+                            w.CssClass += " height-" + height;
                         if (last)
                             w.CssClass += " last";
                         if (overflow)
-                            w.CssClass += " overflowized";
+                            w.CssClass += " mux-overflow-design";
                         w.Caption = name;
                         w.Info = id.ToString();
-                        w.CssClass += " pushRight-" + padding;
-                        w.CssClass += " pushLeft-" + push;
-                        w.CssClass += " down-" + top;
-                        w.CssClass += " spcBottom-" + bottomMargin;
+                        if (padding != 0)
+                            w.CssClass += " pushRight-" + padding;
+                        if (push != 0)
+                            w.CssClass += " pushLeft-" + push;
+                        if (top != 0)
+                            w.CssClass += " down-" + top;
+                        if (bottomMargin != 0)
+                            w.CssClass += " spcBottom-" + bottomMargin;
+
+                        // TODO: Should we allow dragging and dropping, 'override positioning' for pages ...?
                         w.Draggable = false;
                         w.Closable = false;
 

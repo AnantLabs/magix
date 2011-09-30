@@ -118,13 +118,6 @@ html, body
 	position:relative;
 }
 
-.overflowized
-{
-	overflow:auto;
-	height:auto !important;
-	max-height:auto !important;
-}
-
 .mux-message
 {
 	width:390px;
@@ -271,19 +264,19 @@ input[type=number].clear-both
 	padding:0;
 }
 
-.mux-web-part
+div.mux-web-part
 {
 	position:relative;
 
-	-moz-transition-property:margin, padding, width, height;
+	-moz-transition-property:margin, padding, width, height !important;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:margin, padding, width, height;
+	-webkit-transition-property:margin, padding, width, height !important;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:margin, padding, width, height;
+	-o-transition-property:margin, padding, width, height !important;
 	-o-transition-duration:.5s;
-	-ms-transition-property:margin, padding, width, height;
+	-ms-transition-property:margin, padding, width, height !important;
 	-ms-transition-duration:.5s;
-	transition-property:margin, padding, width, height;
+	transition-property:margin, padding, width, height !important;
 	transition-duration:.5s;
 }
 
@@ -564,3 +557,20 @@ input[type=number].clear-both
 	transition-property:color, max-height;
 	transition-duration:.5s;
 }
+
+.mux-in-place-edit-loose
+{
+	position:relative;
+	height:18px;
+}
+
+.mux-in-place-edit-loose textarea,
+.mux-in-place-edit-loose input[type=text]
+{
+	width:100%;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:1;
+}
+
