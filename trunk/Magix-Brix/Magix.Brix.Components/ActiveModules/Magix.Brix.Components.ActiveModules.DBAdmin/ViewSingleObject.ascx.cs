@@ -33,6 +33,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel pnl;
         protected Button change;
         protected Button remove;
+        protected Button delete;
+
+        public ViewSingleObject()
+        {
+            _guid = "single-object";
+        }
 
         public override void InitialLoading(Node node)
         {
@@ -84,6 +90,52 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             ActiveEvents.Instance.RaiseClearControls("child");
         }
 
+        /**
+         * Level2: Simply here to close window upon deletion of instance object
+         */
+        [ActiveEvent(Name = "DBAdmin.Data.DeleteObject-HelperClearer")]
+        protected void DBAdmin_Data_DeleteObject_HelperClearer(object sender, ActiveEventArgs e)
+        {
+            if (HelperForSeed == e.Params["Event"]["Seed"].Get<Guid>())
+            {
+                ActiveEvents.Instance.RaiseClearControls("child");
+
+                RaiseEvent(
+                    "DBAdmin.Common.ComplexInstanceDeletedConfirmed",
+                    e.Params);
+
+                Node n = new Node();
+
+                n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                n["ID"].Value = DataSource["Object"]["ID"].Value;
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    n);
+            }
+        }
+
+        private Guid HelperForSeed
+        {
+            get { return (Guid)ViewState["HelperForSeed"]; }
+            set { ViewState["HelperForSeed"] = value; }
+        }
+
+        protected void delete_Click(object sender, EventArgs e)
+        {
+            Node node = new Node();
+
+            node["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+            node["ID"].Value = DataSource["Object"]["ID"].Value;
+            node["OK"]["Event"].Value = "DBAdmin.Data.DeleteObject-HelperClearer";
+            HelperForSeed = Guid.NewGuid();
+            node["OK"]["Event"]["Seed"].Value = HelperForSeed;
+
+            RaiseSafeEvent(
+                "DBAdmin.Data.DeleteObject",
+                node);
+        }
+
         protected void DataBindObjects()
         {
             if (DataSource.Contains("Object") && 
@@ -116,9 +168,12 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             // TODO: We REALLY need to get 'control over' our Header module somehow here ...
             change.Visible = DataSource["IsChange"].Get<bool>();
-            remove.Visible = 
+            remove.Visible =
                 DataSource["IsRemove"].Get<bool>() &&
                 DataSource.Contains("Object");
+            delete.Visible = false;
+                //DataSource["IsDelete"].Get<bool>() &&
+                //DataSource.Contains("Object");
 
             string parentTypeName = 
                 !DataSource.Contains("ParentFullTypeName") ? 
@@ -256,8 +311,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         if (DataSource.Contains("Container"))
                             colNode["Container"].Value = DataSource["Container"].Value;
 
-                        ActiveEvents.Instance.RaiseActiveEvent(
-                            this,
+                        RaiseEvent(
                             eventName,
                             colNode);
 
@@ -422,13 +476,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                             {
                                 if (value.ToString().Length > DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>())
                                 {
-                                    c1.Text = value.ToString().Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
+                                    ed.Text = value.ToString().Substring(0, DataSource["Type"]["Properties"][node.Name]["MaxLength"].Get<int>()) + " ...";
                                 }
                                 else
-                                    c1.Text = value.ToString();
+                                    ed.Text = value.ToString();
                             }
                             else
-                                c1.Text = value.ToString();
+                                ed.Text = value.ToString();
                             ed.Info = node.Name;
                             if (DataSource["Type"]["Properties"][node.Name]["BelongsTo"].Get<bool>())
                                 ed.CssClass = "mux-grid-belongs-to";
@@ -449,11 +503,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                     (lb.Parent.Parent as Label).CssClass = "mux-grid-selected";
                                     int id = DataSource["Object"]["ID"].Get<int>();
                                     string column = lb.Info;
+
                                     Node n = new Node();
+
                                     n["ID"].Value = id;
                                     n["PropertyName"].Value = column;
                                     n["IsList"].Value = DataSource["Type"]["Properties"][column]["IsList"].Value;
                                     n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
                                     RaiseSafeEvent(
                                         "DBAdmin.Form.ViewListOrComplexPropertyValue",
                                         n);
@@ -525,6 +582,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                                             n["NewValue"].Value = edit.Text;
                                                             n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
 
+                                                            n["_guid"].Value = _guid;
+
                                                             RaiseSafeEvent(
                                                                 DataSource.Contains("ChangeSimplePropertyValue") ?
                                                                     DataSource["ChangeSimplePropertyValue"].Get<string>() :
@@ -563,6 +622,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                                                             n["PropertyName"].Value = column;
                                                             n["NewValue"].Value = edit.Text;
                                                             n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                                                            
+                                                            n["_guid"].Value = _guid;
 
                                                             RaiseSafeEvent(
                                                                 DataSource.Contains("ChangeSimplePropertyValue") ?

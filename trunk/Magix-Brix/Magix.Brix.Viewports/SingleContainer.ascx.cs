@@ -235,8 +235,6 @@ namespace Magix.Brix.Viewports
                 w.ID = "wd" + idxNo;
                 w.Closed += wnd_Closed;
                 w.Style[Styles.position] = "absolute";
-                w.Style[Styles.left] = (idxNo * 20).ToString() + "px";
-                w.Style[Styles.top] = (idxNo * 36).ToString() + "px";
                 wnd[idxNo] = w;
 
                 // Dynamic Panel
@@ -724,6 +722,21 @@ namespace Magix.Brix.Viewports
                 ActiveEvents.Instance.RemoveListener(idx);
             }
             dynamic.ClearControls();
+
+            List<string> keys = new List<string>();
+
+            foreach (string idx in new List<string>(ModuleIDs.Keys).FindAll(
+                delegate(string idx2)
+                {
+                    return idx2.IndexOf(dynamic.ID) == 0;
+                }))
+            {
+                keys.Add(idx);
+            }
+            foreach (string idx in keys)
+            {
+                ModuleIDs.Remove(idx);
+            }
         }
 
         /**
@@ -743,6 +756,16 @@ namespace Magix.Brix.Viewports
             }
         }
 
+        private Dictionary<string, string> ModuleIDs
+        {
+            get
+            {
+                if (ViewState["ModuleIDs"] == null)
+                    ViewState["ModuleIDs"] = new Dictionary<string, string>();
+                return ViewState["ModuleIDs"] as Dictionary<string, string>;
+            }
+        }
+
         // TODO: Refactor. WAY too big ...!
         /**
          * Level2: Handled to make it possible to load Active Modules into this Viewport's containers
@@ -750,6 +773,15 @@ namespace Magix.Brix.Viewports
         [ActiveEvent(Name = "Magix.Core.LoadActiveModule")]
         protected void Magix_Core_LoadActiveModule(object sender, ActiveEventArgs e)
         {
+            string moduleName = e.Params["Name"].Get<string>();
+
+            if (e.Params["Parameters"].Contains("ModuleID"))
+            {
+                string moduleID = e.Params["Parameters"]["ModuleID"].Get<string>();
+                ModuleIDs[moduleID] = e.Params["Name"].Get<string>();
+                moduleName = moduleID;
+            }
+
             string cssClass = null;
 
             // Since this is our default container, 
@@ -901,7 +933,7 @@ namespace Magix.Brix.Viewports
                     if (!AjaxManager.Instance.IsCallback)
                     {
                         dyn.Style[Styles.display] = "none";
-                        new EffectFadeIn(dyn, 750)
+                        new EffectFadeIn(dyn, 250)
                             .Render();
                     }
                 }
@@ -910,7 +942,7 @@ namespace Magix.Brix.Viewports
                     e.Params["Parameters"]["Append"].Get<bool>())
                 {
                     dyn.AppendControl(
-                        e.Params["Name"].Value.ToString(), 
+                        moduleName, 
                         e.Params["Parameters"]);
 
                     if (e.Params["Parameters"].Contains("AppendMaxCount"))
@@ -924,15 +956,15 @@ namespace Magix.Brix.Viewports
                 }
                 else
                 {
-                    dyn.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    dyn.LoadControl(moduleName, e.Params["Parameters"]);
                 }
             }
             else if (e.Params["Position"].Get<string>() == "fullScreen")
             {
                 ClearControls(fullScreen, true);
-                new EffectFadeIn(fullScreen, 500)
+                new EffectFadeIn(fullScreen, 250)
                     .Render();
-                fullScreen.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                fullScreen.LoadControl(moduleName, e.Params["Parameters"]);
             }
             else if (e.Params["Position"].Get<string>() == "child")
             {
@@ -1067,12 +1099,18 @@ namespace Magix.Brix.Viewports
                                 new EffectFadeIn(w, 250)
                                     .JoinThese(
                                         new EffectSize(width, height))
+                                    .ChainThese(
+                                        new EffectFocusAndSelect(
+                                            Selector.SelectFirst<LinkButton>(w)))
                                     .Render();
                             }
                             else
                             {
                                 w.Style[Styles.display] = "";
                                 new EffectSize(w, 250, width, height)
+                                    .ChainThese(
+                                        new EffectFocusAndSelect(
+                                            Selector.SelectFirst<LinkButton>(w)))
                                     .Render();
                             }
                         }
@@ -1083,8 +1121,9 @@ namespace Magix.Brix.Viewports
                             if (AjaxManager.Instance.IsCallback)
                             {
                                 new EffectFadeIn(w, 250)
-                                    .JoinThese(
-                                        new EffectRollDown())
+                                    .ChainThese(
+                                        new EffectFocusAndSelect(
+                                            Selector.SelectFirst<LinkButton>(w)))
                                     .Render();
                             }
                             else
@@ -1105,9 +1144,10 @@ namespace Magix.Brix.Viewports
                         }
                         if (AjaxManager.Instance.IsCallback)
                         {
-                            new EffectFadeIn(w, 750)
-                                .JoinThese(
-                                    new EffectRollDown())
+                            new EffectFadeIn(w, 250)
+                                    .ChainThese(
+                                        new EffectFocusAndSelect(
+                                            Selector.SelectFirst<LinkButton>(w)))
                                 .Render();
                         }
                         else
@@ -1124,7 +1164,7 @@ namespace Magix.Brix.Viewports
                     e.Params["Parameters"]["Append"].Get<bool>())
                 {
                     toAddInto.AppendControl(
-                        e.Params["Name"].Value.ToString(),
+                        moduleName,
                         e.Params["Parameters"]);
 
                     if (e.Params["Parameters"].Contains("AppendMaxCount"))
@@ -1139,14 +1179,14 @@ namespace Magix.Brix.Viewports
                 else
                 {
                     ClearControls(toAddInto, true);
-                    toAddInto.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                    toAddInto.LoadControl(moduleName, e.Params["Parameters"]);
                 }
             }
             else if (e.Params["Position"].Get<string>() == "floater")
             {
                 if (e.Params["Parameters"].Contains("CssClass"))
                     floater.CssClass = e.Params["Parameters"]["CssClass"].Get<string>();
-                floater.LoadControl(e.Params["Name"].Value.ToString(), e.Params["Parameters"]);
+                floater.LoadControl(moduleName, e.Params["Parameters"]);
             }
         }
 
@@ -1201,7 +1241,16 @@ namespace Magix.Brix.Viewports
         protected void dynamic_LoadControls(object sender, DynamicPanel.ReloadEventArgs e)
         {
             DynamicPanel dynamic = sender as DynamicPanel;
-            Control ctrl = PluginLoader.Instance.LoadActiveModule(e.Key);
+            string moduleName = e.Key;
+            string id = null;
+            if (ModuleIDs.ContainsKey(moduleName))
+            {
+                id = moduleName;
+                moduleName = ModuleIDs[moduleName];
+            }
+            Control ctrl = PluginLoader.Instance.LoadActiveModule(moduleName);
+            if (!string.IsNullOrEmpty(id))
+                ctrl.ID = id;
             if (e.FirstReload)
             {
                 Node nn = e.Extra as Node;

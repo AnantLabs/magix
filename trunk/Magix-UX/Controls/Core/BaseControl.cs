@@ -32,7 +32,8 @@ namespace Magix.UX.Widgets.Core
      * instead of this class. If your control is 'non-visual', such as the MUX Timer,
      * you will mostly inherit from this class.
      */
-	public abstract class BaseControl : Control
+    [ViewStateModeById]
+    public abstract class BaseControl : Control
 	{
         private bool _hasBeenRendered;
         private bool _forceReRender;

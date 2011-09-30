@@ -60,6 +60,9 @@ table.mux-grid-objects>tbody>tr.mux-grid-header>td
 {
 	font-size:1.5em;
 	line-height:2em;
+	padding:0;
+	margin:0;
+	border-collapse:collapse;
 
 	-moz-border-radius:2px;
 	-webkit-border-radius:2px;
@@ -83,6 +86,13 @@ table.mux-grid-objects>tbody>tr.mux-grid-header>td
 	-ms-transition-duration:.5s;
 	transition-property:box-shadow;
 	transition-duration:.5s;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .1)), to(rgba(180, 180, 180, .1)));
+	background-image: -webkit-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -o-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -ms-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
 }
 
 /* Making a "button" out of our Header Cell when hovered ... */
@@ -117,7 +127,7 @@ table.mux-grid-objects>tbody>tr.mux-grid-header>td:hover
 table.mux-grid-objects>tbody>tr.mux-grid-header>td.mux-no-filter:hover
 {
 	background-image:none;
-	
+
 	-webkit-box-shadow:none;
 	-moz-box-shadow:none;
 	-o-box-shadow:none;
@@ -372,6 +382,10 @@ table.mux-no-margin .mux-grid-check-box
 {
 }
 
+.mux-button-delete
+{
+}
+
 /* Common Helper buttons ... */
 .mux-window-action-button
 {
@@ -399,3 +413,14 @@ table.mux-no-margin .mux-grid-check-box
 {
 	vertical-align:top;
 }
+
+.child .mux-class-contents,
+.child .mux-class-contents>div
+.child .mux-class-contents>div table.mux-grid-objects
+{
+}
+
+.mux-class-contents-rows
+{
+}
+
