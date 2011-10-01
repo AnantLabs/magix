@@ -243,6 +243,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["ID"].Value = t.ID;
             node["Width"].Value = 24;
             node["Last"].Value = true;
+            node["Top"].Value = 1;
 
             // Adding some yellowish bg which reads 'full actual page size' [normally]
             node["CssClass"].Value = "mux-wysiwyg-surface";

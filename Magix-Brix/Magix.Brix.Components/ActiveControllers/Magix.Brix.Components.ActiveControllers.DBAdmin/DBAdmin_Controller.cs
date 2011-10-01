@@ -391,12 +391,12 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             if (propertyName == "ID")
             {
                 node["ForcedSize"]["width"].Value = 490;
-                node["ForcedSize"]["height"].Value = 234;
+                node["ForcedSize"]["height"].Value = 216;
             }
             else
             {
                 node["ForcedSize"]["width"].Value = 530;
-                node["ForcedSize"]["height"].Value = 234;
+                node["ForcedSize"]["height"].Value = 216;
             }
 
             if (e.Params.Contains("Top"))

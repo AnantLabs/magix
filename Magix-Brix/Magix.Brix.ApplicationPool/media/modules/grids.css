@@ -126,7 +126,12 @@ table.mux-grid-objects>tbody>tr.mux-grid-header>td:hover
 /* Undoing the 'damage' ... */
 table.mux-grid-objects>tbody>tr.mux-grid-header>td.mux-no-filter:hover
 {
-	background-image:none;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .1)), to(rgba(180, 180, 180, .1)));
+	background-image: -webkit-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -o-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -ms-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
 
 	-webkit-box-shadow:none;
 	-moz-box-shadow:none;
