@@ -29,15 +29,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             base.OnLoad(e);
             if (DataSource != null)
                 DataBindWebParts();
-
-            parts.Click +=
-                delegate(object sender, EventArgs e2)
-                {
-                    foreach (Window idxW in Selector.Select<Window>(parts))
-                    {
-                        idxW.CssClass = idxW.CssClass.Replace(" mux-edit-web-part", "");
-                    }
-                };
         }
 
         private void DataBindWebParts()
@@ -64,17 +55,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
 
                         // Creating Window ...
                         Window w = new Window();
-                        w.Click +=
-                            delegate(object sender, EventArgs e)
-                            {
-                                foreach (Window idxW in Selector.Select<Window>(parts))
-                                {
-                                    idxW.CssClass = idxW.CssClass.Replace(" mux-edit-web-part", "");
-                                    idxW.Style[Styles.zIndex] = "1";
-                                }
-                                (sender as Window).Style[Styles.zIndex] = "2";
-                                (sender as Window).CssClass += " mux-edit-web-part";
-                            };
                         w.CssClass = " mux-web-part";
                         if (overflow)
                             w.CssClass += " mux-overflow-design";
@@ -96,7 +76,26 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                         Label lbl3 = new Label();
                         lbl3.Text = name;
                         lbl3.CssClass = "mux-webpart-widget-info";
+                        lbl3.ToolTip = "Click for Settings ...";
                         w.Content.Controls.Add(lbl3);
+
+                        lbl3.Click +=
+                            delegate(object sender, EventArgs e)
+                            {
+                                bool remove =
+                                    (((Control)sender).Parent.Parent as Window).CssClass.Contains(" mux-edit-web-part");
+                                foreach (Window idxW in Selector.Select<Window>(parts))
+                                {
+                                    idxW.CssClass = idxW.CssClass.Replace(" mux-edit-web-part", "");
+                                    idxW.Style[Styles.zIndex] = "1";
+                                }
+                                (((Control)sender).Parent.Parent as Window).Style[Styles.zIndex] = "2";
+                                if (remove)
+                                    (((Control)sender).Parent.Parent as Window).CssClass =
+                                        (((Control)sender).Parent.Parent as Window).CssClass.Replace(" mux-edit-web-part", "");
+                                else
+                                    (((Control)sender).Parent.Parent as Window).CssClass += " mux-edit-web-part";
+                            };
 
                         CreateActionButtons(id, w);
 
@@ -325,9 +324,18 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                     node["Action"].Value = "ChangeName";
                     node["Action"]["Value"].Value = xed.Text;
 
-                    RaiseSafeEvent(
+                    if (RaiseSafeEvent(
                         "Magix.Publishing.ChangeTemplateProperty",
-                        node);
+                        node))
+                    {
+                        Selector.SelectFirst<Label>(
+                            xed.Parent,
+                            delegate(Control idx)
+                            {
+                                return (idx is Label) &&
+                                    (idx as Label).CssClass.Contains("mux-webpart-widget-info");
+                            }).Text = xed.Text;
+                    }
                 };
             w.Content.Controls.Add(nameI);
         }

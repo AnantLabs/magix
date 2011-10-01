@@ -240,7 +240,6 @@ input[type=button].checked-expl
 .mux-web-part
 {
 	z-index:200;
-	cursor:pointer;
 }
 
 .mux-edit-web-part
@@ -289,6 +288,11 @@ input[type=button].checked-expl
 	visibility:visible;
 }
 
+select.mux-webpart-property-edit-widget:hover
+{
+	background-color:rgba(225,235,225,1) !important;
+}
+
 .mux-edit-web-part .mux-webpart-property-edit-widget a,
 .mux-edit-web-part a.mux-webpart-property-edit-widget,
 .mux-edit-web-part div.mux-webpart-property-edit-widget,
@@ -327,12 +331,39 @@ input[type=button].checked-expl
 {
 	position:absolute;
 	top:18px;
-	left:80px;
-	color:rgba(0,0,0,.1);
+	left:40px;
+	color:rgba(0,100,180,1);
 	font-size:36px;
+	cursor:pointer;
+
+	-moz-transition-property:color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color;
+	-ms-transition-duration:.5s;
+	transition-property:color;
+	transition-duration:.5s;
+}
+
+.mux-webpart-widget-info:hover
+{
+	color:rgba(0,150,220,1);
+
+	-moz-transition-property:color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:color;
+	-ms-transition-duration:.5s;
+	transition-property:color;
+	transition-duration:.5s;
 }
 
 .mux-editing-surface
 {
-	cursor:pointer;
 }
