@@ -71,7 +71,8 @@
     if (!MUX._scripts[url]) {
       var xhr = MUX.newXHR();
       xhr.open('GET', url, false);
-      xhr.setRequestHeader('Accept', 'text/javascript');
+      xhr.setRequestHeader('Accept', 'application/javascript');
+      xhr.overrideMimeType('application/javascript');
       xhr.send('');
       if (xhr.status && xhr.status >= 200 && xhr.status < 300 && xhr.responseText) {
         eval(xhr.responseText);
@@ -141,8 +142,9 @@
       MUX.XHR._hasRequest = true;
       this.xhr = MUX.newXHR();
       this.xhr.open('POST', this.url, true);
-      this.xhr.setRequestHeader('Accept', 'text/javascript');
+      this.xhr.setRequestHeader('Accept', 'application/javascript');
       this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      this.xhr.overrideMimeType('application/javascript');
       var T = this;
       this.xhr.onreadystatechange = function() {
         if (T.xhr.readyState == 4) {

@@ -420,6 +420,8 @@ control, which you can use if you need the end user to pick a specific date";
 
             GetCommonEventsAndProperties(e, "Calendar", true);
 
+            e.Params["Controls"]["Calendar"]["Properties"]["CssClass"]["Default"].Value = "mux-calendar mux-rounded mux-shaded span-2";
+
             e.Params["Controls"]["Calendar"]["Properties"]["Value"].Value = typeof(string).FullName;
             e.Params["Controls"]["Calendar"]["Properties"]["Value"]["Description"].Value = @"The 
 DateTime selected date of the Calendar";
@@ -498,6 +500,7 @@ control, which you can assign Text to and TextChanged Event Handlers";
             GetCommonEventsAndProperties(e, "TextArea", true);
 
             e.Params["Controls"]["TextArea"]["Properties"]["PlaceHolder"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextArea"]["Properties"]["PlaceHolder"]["Default"].Value = "Shadow ...";
             e.Params["Controls"]["TextArea"]["Properties"]["PlaceHolder"]["Description"].Value = @"The 
 watermark text of your TextArea. Will show when TextArea is empty, as a cue to the end user for what to 
 type into it";
@@ -548,6 +551,7 @@ can have different Text values to differentiate them for the user";
             GetCommonEventsAndProperties(e, "LinkButton", true);
 
             e.Params["Controls"]["LinkButton"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["LinkButton"]["Properties"]["Text"]["Default"].Value = "Link Button";
             e.Params["Controls"]["LinkButton"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
 to the end user on top of the LinkButton";
 
@@ -585,13 +589,18 @@ control, which you can assign an Image URL to";
 
             GetCommonEventsAndProperties(e, "Image", true);
 
+            // REMOVING Default CSS Class value ...
+            e.Params["Controls"]["Image"]["Properties"]["CssClass"]["Default"].Value = "mux-horus-ra-image";
+
             e.Params["Controls"]["Image"]["Properties"]["AlternateText"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Image"]["Properties"]["AlternateText"]["Default"].Value = "Magix! Where Dreams come Through ...";
             e.Params["Controls"]["Image"]["Properties"]["AlternateText"]["Description"].Value = @"The 
 text shown if the image is broken. Also highly useful for conveying information about the image 
 to people who have challenged eye sight and such. _SET THIS PROPERTY_ to something intelligent, since 
 it is rude not to";
 
             e.Params["Controls"]["Image"]["Properties"]["ImageUrl"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Image"]["Properties"]["ImageUrl"]["Default"].Value = "media/images/magix-logo.png";
             e.Params["Controls"]["Image"]["Properties"]["ImageUrl"]["Description"].Value = @"The 
 actual URL to the Image used. Can be relative or absolute [starting with http://]";
 
@@ -615,10 +624,12 @@ control, which you can assign a URL to, which once clicked will bring the user t
             GetCommonEventsAndProperties(e, "HyperLink", true);
 
             e.Params["Controls"]["HyperLink"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["HyperLink"]["Properties"]["Text"]["Default"].Value = "Magix!";
             e.Params["Controls"]["HyperLink"]["Properties"]["Text"]["Description"].Value = @"The 
 visible text for the end user";
 
             e.Params["Controls"]["HyperLink"]["Properties"]["URL"].Value = typeof(string).FullName;
+            e.Params["Controls"]["HyperLink"]["Properties"]["URL"]["Default"].Value = "http://code.google.com/p/magix";
             e.Params["Controls"]["HyperLink"]["Properties"]["URL"]["Description"].Value = @"The 
 actual URL the user will be brought to when he clicks the hyperlink";
 
@@ -800,6 +811,7 @@ no absolute control over";
 length of text accepted within widget";
 
             e.Params["Controls"]["TextBox"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Default"].Value = "Shadow ...";
             e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Description"].Value = @"The 
 visible text for the end user and also the text fragment the user can change by editing the text box value";
 
@@ -892,6 +904,7 @@ Change which HTML tag it is being rendered with by setting its Tag property";
             GetCommonEventsAndProperties(e, "Label", true);
 
             e.Params["Controls"]["Label"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Label"]["Properties"]["Text"]["Default"].Value = "Label";
             e.Params["Controls"]["Label"]["Properties"]["Text"]["Description"].Value = @"The text visible to 
 the end user in his browser";
 
@@ -924,6 +937,7 @@ can have different Text values to differentiate them for the user";
             GetCommonEventsAndProperties(e, "Button", true);
 
             e.Params["Controls"]["Button"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["Button"]["Properties"]["Text"]["Default"].Value = "OK";
             e.Params["Controls"]["Button"]["Properties"]["Text"]["Description"].Value = @"The text displayed 
 to the end user on top of the button";
 
@@ -1315,14 +1329,14 @@ focus, or clicking the widget with his mouse or touch screen";
                 case "Magix.MetaForms.Plugins.Button":
                     {
                         Button btn = new Button();
-                        btn.Text = "[null]";
                         btn.CssClass = "span-2";
+                        btn.Text = "OK";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.Label":
                     {
                         Label btn = new Label();
-                        btn.Text = "[null]";
+                        btn.Text = "Label";
                         btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                     } break;
@@ -1336,6 +1350,7 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         TextBox btn = new TextBox();
                         btn.CssClass = "span-2";
+                        btn.PlaceHolder = "Shadow ...";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.HiddenField":
@@ -1346,28 +1361,31 @@ focus, or clicking the widget with his mouse or touch screen";
                 case "Magix.MetaForms.Plugins.Image":
                     {
                         Image btn = new Image();
-                        btn.AlternateText = "Anonymous Coward Image";
-                        btn.Style[Styles.floating] = "left";
+                        btn.ImageUrl = "media/images/magix-logo.png";
+                        btn.AlternateText = "Magix! Where Dreams come Through ...";
+                        btn.CssClass = "mux-horus-ra-image";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.HyperLink":
                     {
                         HyperLink btn = new HyperLink();
                         btn.CssClass = "span-2";
-                        btn.Text = "Anonymous Coward Anchor Text";
+                        btn.URL = "http://code.google.com/p/magix";
+                        btn.Text = "Magix!";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.LinkButton":
                     {
                         LinkButton btn = new LinkButton();
                         btn.CssClass = "span-2";
-                        btn.Text = "Anonymous Coward Anchor Text";
+                        btn.Text = "Link Button";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.TextArea":
                     {
                         TextArea btn = new TextArea();
                         btn.CssClass = "span-2";
+                        btn.PlaceHolder = "Shadow ...";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.RadioButton":
@@ -1382,7 +1400,7 @@ focus, or clicking the widget with his mouse or touch screen";
                             e.Params["Preview"].Get<bool>())
                         {
                             Label btn = new Label();
-                            btn.CssClass = "mux-calendar mux-rounded mux-shaded";
+                            btn.CssClass = "mux-calendar mux-rounded mux-shaded span-2";
                             btn.Tag = "div";
                             btn.Text = "Will render as a Calendar in front-web";
                             e.Params["Control"].Value = btn;
@@ -1390,28 +1408,28 @@ focus, or clicking the widget with his mouse or touch screen";
                         else
                         {
                             Calendar btn = new Calendar();
-                            btn.CssClass = "mux-calendar mux-rounded mux-shaded";
+                            btn.CssClass = "span-2";
                             e.Params["Control"].Value = btn;
                         }
                     } break;
                 case "Magix.MetaForms.Plugins.Panel":
                     {
                         Panel btn = new Panel();
-                        btn.CssClass = "span-2 height-2";
-
+                        btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                         e.Params["HasSurface"].Value = true;
                     } break;
                 case "Magix.MetaForms.Plugins.Ruler":
                     {
                         Label btn = new Label();
+                        btn.CssClass = "span-2";
                         btn.Tag = "hr";
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.Repeater":
                     {
                         Panel btn = new Panel();
-                        btn.CssClass = "span-2 height-2";
+                        btn.CssClass = "span-2";
 
                         if (e.Params.Contains("Preview") &&
                             e.Params["Preview"].Get<bool>())
@@ -1444,12 +1462,18 @@ focus, or clicking the widget with his mouse or touch screen";
                 case "Magix.MetaForms.Plugins.Stars":
                     {
                         RatingControl btn = new RatingControl();
+                        btn.CssClass = "span-2";
 
                         e.Params["Control"].Value = btn;
                     } break;
                 default:
                     // DO NOTHING. Others might handle ...
                     break;
+            }
+
+            if (!e.Params.Contains("Control"))
+            {
+                return;
             }
 
             SetProperties(e.Params);
@@ -2325,6 +2349,10 @@ focus, or clicking the widget with his mouse or touch screen";
                 node);
         }
 
+        /**
+         * Level2: Will show a Window with all the events for the Main Form of the given specific Meta Form 'ID'
+         * such that the user can add and remove items from the list
+         */
         [ActiveEvent(Name = "Magix.MetaForms.ShowAllActionsAssociatedWithMainFormEvent")]
         protected void Magix_MetaForms_ShowAllActionsAssociatedWithMainFormEvent(object sender, ActiveEventArgs e)
         {
@@ -2430,35 +2458,32 @@ focus, or clicking the widget with his mouse or touch screen";
         [ActiveEvent(Name = "Magix.MetaForms.RemoveActionFromActionList")]
         protected void Magix_MetaForms_RemoveActionFromActionList(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(Action).FullName + "-META")
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
-                using (Transaction tr = Adapter.Instance.BeginTransaction())
+                MetaForm.Node n = MetaForm.Node.SelectByID(int.Parse(e.Params["ID"].Get<string>().Split('|')[0]));
+                int idxNo = 0;
+                int toRemove = int.Parse(e.Params["ID"].Get<string>().Split('|')[1]);
+                string result = "";
+                foreach (string idx in n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    MetaForm.Node n = MetaForm.Node.SelectByID(int.Parse(e.Params["ID"].Get<string>().Split('|')[0]));
-                    int idxNo = 0;
-                    int toRemove = int.Parse(e.Params["ID"].Get<string>().Split('|')[1]);
-                    string result = "";
-                    foreach (string idx in n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        if (idxNo != toRemove)
-                            result += idx + "|";
-                        idxNo += 1;
-                    }
-                    result = result.Trim('|');
-                    n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value = result;
-                    n.Save();
-                    tr.Commit();
+                    if (idxNo != toRemove)
+                        result += idx + "|";
+                    idxNo += 1;
                 }
-
-                Node node = new Node();
-                node["FullTypeName"].Value = typeof(Action).FullName + "-META";
-
-                RaiseEvent(
-                    "Magix.Core.UpdateGrids",
-                    node);
+                result = result.Trim('|');
+                n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value = result;
+                n.Save();
+                tr.Commit();
             }
 
-            // Mking sure we refresh our properties in our UI ...
+            Node node = new Node();
+            node["FullTypeName"].Value = typeof(Action).FullName + "-META";
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
+
+            // Making sure we refresh our properties in our UI ...
             RaiseEvent("Magix.MetaForms.RefreshEditableMetaForm");
         }
 

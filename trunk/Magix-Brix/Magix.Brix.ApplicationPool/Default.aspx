@@ -8,8 +8,8 @@
 <!DOCTYPE html>
 <html xmlns:og="http://ogp.me/ns#">
     <head id="Head1" runat="server">
-        <title>Magix - Where Dreams Come Through ... !</title>
-        <link rel="stylesheet" href="media/blueprint/screen.css" type="text/css" media="screen, projection" />
+        <meta http-equiv="content-script-type" content="application/javascript" />
+        <title>Magix - Illuminate!</title>
     </head>
     <body>
         <form 

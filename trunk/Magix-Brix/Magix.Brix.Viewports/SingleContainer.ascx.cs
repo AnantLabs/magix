@@ -1208,17 +1208,20 @@ namespace Magix.Brix.Viewports
             Window w = sender as Window;
             if (!string.IsNullOrEmpty(w.Info))
             {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    w.Info);
+                RaiseSafeEvent(w.Info);
                 w.Info = "";
             }
+
             ClearControls(w.Content.Controls[0] as DynamicPanel, true);
+
             int closingWindowID = int.Parse(w.ID.Replace("wd", ""));
+
             if (closingWindowID == 0)
             {
                 Node node = new Node();
+
                 node["ClientID"].Value = "LastWindow";
+                node["ReFocus"].Value = true;
 
                 RaiseSafeEvent(
                     "Magix.Core.RefreshWindowContent",
@@ -1231,6 +1234,7 @@ namespace Magix.Brix.Viewports
                 Node node = new Node();
 
                 node["ClientID"].Value = w.ClientID.Replace(w.ID, "wd" + refreshWindowID);
+                node["ReFocus"].Value = true;
 
                 RaiseSafeEvent(
                     "Magix.Core.RefreshWindowContent",

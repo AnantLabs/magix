@@ -376,20 +376,6 @@ textarea.mux-wysiwyg-selected
 	color:#999;
 }
 
-.mux-no-actions
-{
-	text-decoration:none;
-	padding-left:16px;
-	background:transparent url(../images/code-icons-empty.png) no-repeat -32px -16px;
-}
-
-.mux-has-actions
-{
-	text-decoration:none;
-	padding-left:16px;
-	background:transparent url(../images/code-icons.png) no-repeat -32px -16px;
-}
-
 .mux-hide-props .mux-property-type-row
 {
 	-moz-transition-property:opacity;
@@ -526,6 +512,7 @@ textarea.mux-wysiwyg-selected
 	border:dashed 1px rgba(255, 200, 200, .5);
 	cursor:pointer;
 	padding:18px 20px 18px 20px;
+
 	-moz-transition-property:background-color, -moz-box-shadow, -moz-border-radius;
 	-moz-transition-duration:.5s;
 	-webkit-transition-property:background-color, -webkit-box-shadow, -webkit-border-radius;
@@ -545,12 +532,12 @@ textarea.mux-wysiwyg-selected
 	-webkit-transition-duration:.5s;
 	transition-property:background-color, box-shadow, border-radius;
 	transition-duration:.5s;
-	-webkit-box-shadow: 2px 2px 3px rgba(255, 0, 0, .8);
-	-moz-box-shadow: 2px 2px 3px rgba(255, 0, 0, .8);
-	box-shadow: 2px 2px 3px rgba(255, 0, 0, .8);
-	-moz-border-radius:25px;
-	-webkit-border-radius:25px;
-	border-radius:25px;
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 128, 0, .8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 128, 0, .8);
+	box-shadow: 2px 2px 3px rgba(0, 128, 0, .8);
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
 }
 
 input[type=button].mux-color-picker-image-picker
@@ -573,7 +560,7 @@ input[type=button].mux-color-picker-ok
 .mux-editable-part
 {
 	padding:18px 20px 18px 20px;
-	min-height:135px;
+	min-height:145px;
 	height:auto;
 	overflow-y:auto;
 	margin-bottom:18px;

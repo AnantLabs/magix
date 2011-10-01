@@ -28,14 +28,14 @@ using System.Web.UI;
  * JavaScript inclusion directives for embedded resources...
  */
 
-[assembly: WebResource("Magix.UX.Js.Magix.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Control.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Aspects.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Effects.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.AjaxWait.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Timer.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.ColorPicker.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Carousel.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Calendar.js", "text/javascript")]
-[assembly: WebResource("Magix.UX.Js.Uploader.js", "text/javascript")]
+[assembly: WebResource("Magix.UX.Js.Magix.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Control.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Aspects.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Effects.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.AjaxWait.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Timer.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.ColorPicker.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Carousel.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Calendar.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Uploader.js", "application/javascript")]
 

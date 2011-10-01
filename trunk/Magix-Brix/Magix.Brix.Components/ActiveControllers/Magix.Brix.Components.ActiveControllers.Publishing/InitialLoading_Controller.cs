@@ -133,6 +133,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
          */
         private void IncludeCssFiles()
         {
+            IncludeCssFile("media/blueprint/screen.css");
             IncludeCssFile("media/magix-ux-skins/default.css");
             IncludeCssFile("media/modules/single-container.css");
 

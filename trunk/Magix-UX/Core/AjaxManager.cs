@@ -400,22 +400,23 @@ namespace Magix.UX
                 
                 TextReader readerContent = new StreamReader(_memStream);
                 string allContent = readerContent.ReadToEnd();
-                TextWriter writer = new StreamWriter(next);
+                using (TextWriter writer = new StreamWriter(next))
+                {
+                    AddDynamicScriptIncludes(writer);
+                    writer.WriteLine(allContent);
 
-                AddDynamicScriptIncludes(writer);
-                writer.WriteLine(allContent);
+                    UpdateViewState(content, writer);
 
-                UpdateViewState(content, writer);
+                    WriterAtBack.Flush();
+                    _memStreamBack.Flush();
+                    _memStreamBack.Position = 0;
 
-                WriterAtBack.Flush();
-                _memStreamBack.Flush();
-                _memStreamBack.Position = 0;
-                
-                readerContent = new StreamReader(_memStreamBack);
-                string allContentAtBack = readerContent.ReadToEnd();
-                writer.WriteLine(allContentAtBack);
+                    readerContent = new StreamReader(_memStreamBack);
+                    string allContentAtBack = readerContent.ReadToEnd();
+                    writer.WriteLine(allContentAtBack);
 
-                writer.Flush();
+                    writer.Flush();
+                }
             }
         }
         
@@ -473,6 +474,7 @@ namespace Magix.UX
         {
             builder.Append("<script type=\"text/javascript\">");
             builder.Append(@"
+//<![CDATA[
 function MUXUnload() {
   MUX.Ajax._pageUnloads = true;
 }
@@ -514,7 +516,7 @@ if (window.addEventListener) {
                         script = script.Substring(1);
                     builder.AppendFormat("MUX._scripts['{0}']=true;\r\n", script.Replace("&", "&amp;")); 
                 });
-            builder.Append("</script>");
+            builder.Append("//]]>\r\n</script>");
             builder.Append("</body>");
         }
 

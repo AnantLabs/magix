@@ -11,6 +11,7 @@ using Magix.Brix.Types;
 using Magix.UX.Widgets;
 using Magix.UX.Effects;
 using System.Diagnostics;
+using Magix.UX;
 
 namespace Magix.Brix.Components
 {
@@ -85,6 +86,15 @@ namespace Magix.Brix.Components
                 if (e.Params["ClientID"].Get<string>() == this.Parent.Parent.Parent.ClientID)
                 {
                     ReDataBind();
+
+                    if (e.Params.Contains("ReFocus") &&
+                        e.Params["ReFocus"].Get<bool>())
+                    {
+                        new EffectTimeout(250)
+                            .ChainThese(
+                                new EffectFocusAndSelect(Selector.SelectFirst<LinkButton>(this.Parent.Parent.Parent)))
+                            .Render();
+                    }
                 }
             }
         }
