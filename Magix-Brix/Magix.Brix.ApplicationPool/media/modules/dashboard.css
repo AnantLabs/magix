@@ -770,16 +770,6 @@ div.mux-action-wrapper-hover .mux-grower
 	transition-duration:.5s;
 }
 
-div.mux-has-action
-{
-	background:rgba(128, 255, 128, .2) url(../images/code-icons.png) no-repeat -28px -16px;
-}
-
-div.mux-has-no-action
-{
-	background-color:rgba(255, 128, 128, .2);
-}
-
 .mux-delete-action
 {
 	display:block;
@@ -1266,3 +1256,18 @@ li.mux-tree-item-class span.mux-tree-icon
 {
 	min-height:720px;
 }
+
+.mux-no-actions
+{
+	text-decoration:none;
+	padding-left:16px;
+	background:transparent url(../images/code-icons-empty.png) no-repeat -32px -16px;
+}
+
+.mux-has-actions
+{
+	text-decoration:none;
+	padding-left:16px;
+	background:transparent url(../images/code-icons.png) no-repeat -32px -16px;
+}
+

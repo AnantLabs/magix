@@ -492,12 +492,20 @@ div.mux-web-part
 	-webkit-animation-direction: normal;
 	-webkit-animation-iteration-count: 1;
 	-webkit-animation-timing-function: ease-in-out;
+	-webkit-animation-delay: 1s;
 
 	-moz-animation-name: mux-rotate-ra;
 	-moz-animation-duration: 3s;
 	-moz-animation-direction: normal;
 	-moz-animation-iteration-count: 1;
 	-moz-animation-timing-function: ease-in-out;
+	-mox-animation-delay: 1s;
+
+	float:left;
+	width:200px;
+	margin-right:20px;
+	height:200px;
+	display:block;
 }
 
 .mux-webpart-template

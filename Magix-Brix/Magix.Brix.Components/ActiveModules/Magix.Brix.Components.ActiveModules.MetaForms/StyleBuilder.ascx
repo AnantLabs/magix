@@ -173,17 +173,7 @@
                             CssClass="span-2 last" />
                     </div>
                     <div class="span-4 mux-editable-part last">
-                        <h5 title="Size of Fonts and Surface of your Widget">Size</h5>
-                        <span 
-                            title="Size of your Font ..."
-                            class="span-2">Font Size: </span>
-                        <mux:TextBox
-                            runat="server"
-                            id="fontSize"
-                            PlaceHolder="Size ..."
-                            ToolTip="Font Size ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
+                        <h5 title="Size of your Widget">Size</h5>
                         <span 
                             title="Width of Widget. PS! The width comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px wide and has 15 pixels of left and right padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit width!"
                             class="span-2">Width: </span>
@@ -326,16 +316,24 @@
                             id="chkStrikethrough" />
                     </div>
                     <div class="span-4 mux-editable-part">
-                        <h5 title="Alignment of text within the element and other values, such as height of a line of text, etc">Alignment</h5>
+                        <h5 title="Alignment of text within the element and other values, such as height of a line of text, etc">Alignment & Size</h5>
+                        <span 
+                            title="Size of your Font ..."
+                            class="span-2">Font Size: </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="fontSize"
+                            PlaceHolder="Size ..."
+                            ToolTip="Font Size ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
                         <span 
                             title="Select an Alignment for your Text ..."
-                            style="margin-top:18px;"
-                            class="span-2">Alignment: </span>
+                            class="span-2">Horz.: </span>
                         <mux:SelectList
                             runat="server"
                             ToolTip="Select an Alignment for your Text ..."
                             CssClass="span-2 last"
-                            style="margin-top:18px;"
                             id="textAlign">
                             <mux:ListItem Text="" Value="" />
                             <mux:ListItem Text="Left" value="left" />
@@ -345,13 +343,11 @@
                         </mux:SelectList>
                         <span 
                             title="Select a Vertical Alignment for your Text ..."
-                            style="margin-top:18px;"
-                            class="span-2">Vertical: </span>
+                            class="span-2">Vert.: </span>
                         <mux:SelectList
                             runat="server"
                             ToolTip="Select a Vertical Alignment for your Text ..."
                             CssClass="span-2 last"
-                            style="margin-top:18px;"
                             id="textVerticalAlign">
                             <mux:ListItem Text="" Value="" />
                             <mux:ListItem Text="Baseline" Value="baseline" />
@@ -365,7 +361,18 @@
                         </mux:SelectList>
                     </div>
                     <div class="span-4 mux-editable-part">
-                        <h5 title="Display of Widget, type of box-model, floating layout, etc">Display</h5>
+                        <h5 title="Display of Widget, type of box-model, floating layout, etc">Display & Flow</h5>
+                        <mux:SelectList
+                            runat="server"
+                            ToolTip="Positioning within the flow layout of your form for your widget. Normally we strongly suggest using the BluePrint Css grid layout, in floating mode. Meaning, either relative or static positioning, with NO VALUES for left and right, and all positioning done through the CSS classes embedded within BluePrint. Though sometimes you might need absolute positioning, or something. Feel free to apply as much damage as you feel for ;) - PS! Fixed mostly does _not_ work on neither Tablets nor Smart Phones ..."
+                            CssClass="span-4 last"
+                            id="position">
+                            <mux:ListItem Text="" Value="" />
+                            <mux:ListItem Text="Static" Value="static" />
+                            <mux:ListItem Text="Relative" Value="relative" />
+                            <mux:ListItem Text="Absolute" Value="absolute" />
+                            <mux:ListItem Text="Fixed" Value="fixed" />
+                        </mux:SelectList>
                         <mux:CheckBox
                             runat="server"
                             style="width:20px;display:block;float:left;"
@@ -416,18 +423,7 @@
                             ToolTip="If true, the Widget will be rendered as an 'Inline Level Element', which is the opposite of Block Level Element, and intended for widgets that are supposed to just be fragments of other widgets" />
                     </div>
                     <div class="span-4 mux-editable-part">
-                        <h5 title="Miscelanous properties">Misc.</h5>
-                        <mux:SelectList
-                            runat="server"
-                            ToolTip="Positioning within the flow layout of your form for your widget. Normally we strongly suggest using the BluePrint Css grid layout, in floating mode. Meaning, either relative or static positioning, with NO VALUES for left and right, and all positioning done through the CSS classes embedded within BluePrint. Though sometimes you might need absolute positioning, or something. Feel free to apply as much damage as you feel for ;) - PS! Fixed mostly does _not_ work on neither Tablets nor Smart Phones ..."
-                            CssClass="span-4 last"
-                            id="position">
-                            <mux:ListItem Text="Select Positioning ..." Value="" />
-                            <mux:ListItem Text="Static" Value="static" />
-                            <mux:ListItem Text="Relative" Value="relative" />
-                            <mux:ListItem Text="Absolute" Value="absolute" />
-                            <mux:ListItem Text="Fixed" Value="fixed" />
-                        </mux:SelectList>
+                        <h5 title="Text Shadow for your Widgetg">Text Shadow</h5>
                         <span 
                             title="Horizontal Offset of Text Shadow. If it's a positive number, the shadow will be that many pixels to the right of the text. If the offset is negative, the shadow will be to the left of the text. Doing a 45 degrees shadow with e.g. 3x3x2 will mimick the way the sun sits on the sky psychologically for our retinas around 10AM, and make the result seem more fresh. According to some theories ... ;)"
                             class="span-2">Horz. Offset: </span>

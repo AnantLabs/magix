@@ -774,7 +774,10 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                         return false;
                     });
                 if (DataSource["Controls"][typeNode.Name]["Properties"][nodeName].Contains("Default"))
+                {
                     retVal = DataSource["Controls"][typeNode.Name]["Properties"][nodeName]["Default"].Value.ToString();
+                    tmp["Properties"][nodeName].Value = retVal;
+                }
             }
             return retVal;
         }
