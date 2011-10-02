@@ -1004,9 +1004,9 @@ namespace Magix.Brix.Viewports
                     w.CssClass = "mux-shaded mux-rounded mux-window child";
 
                     // Adding child CSS class(es)
-                    if (e.Params["Parameters"].Contains("WindowCssClass"))
+                    if (e.Params["Parameters"].Contains("CssClass"))
                     {
-                        w.CssClass = e.Params["Parameters"]["WindowCssClass"].Get<string>();
+                        w.CssClass += " " + e.Params["Parameters"]["CssClass"].Get<string>();
                     }
 
                     if (e.Params["Parameters"].Contains("CloseEvent"))
@@ -1033,14 +1033,12 @@ namespace Magix.Brix.Viewports
                     {
                         toAddInto.ToolTip = "";
                     }
+
+                    toAddInto.CssClass = "dynamic";
                     if (e.Params["Parameters"].Contains("DynCssClass"))
                     {
                         string cssClass2 = e.Params["Parameters"]["DynCssClass"].Get<string>();
                         toAddInto.CssClass += " " + cssClass2;
-                    }
-                    else
-                    {
-                        toAddInto.CssClass = "dynamic";
                     }
 
                     if (e.Params["Parameters"].Contains("Padding"))

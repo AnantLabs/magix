@@ -258,6 +258,7 @@
     <Content Include="media\images\Textures\sky-dark.png" />
     <Content Include="media\images\Textures\sky-light.png" />
     <Content Include="media\images\Textures\snow.png" />
+    <Content Include="media\images\tree-objects.png" />
     <Content Include="media\images\txt.png" />
     <Content Include="media\images\wait-hourglass.png" />
     <Content Include="media\images\wire-grid.png" />

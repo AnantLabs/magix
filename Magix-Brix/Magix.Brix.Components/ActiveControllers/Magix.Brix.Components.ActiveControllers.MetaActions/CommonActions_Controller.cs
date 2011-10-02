@@ -390,7 +390,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
         private void ValidateFullName(Node node)
         {
-            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -399,7 +399,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 {
                     throw new ArgumentException(
                         string.Format("Sorry, but the '{0}' field is mandatory ... ",
-                            node["PropertyName"].Get<string>()));
+                            node["PropertyValues"][node["PropertyName"].Get<string>()]["Name"].Get<string>()));
                 }
             }
 
@@ -473,7 +473,7 @@ of the first name(s)...");
 
         private void ValidateURL(Node node)
         {
-            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -516,7 +516,7 @@ of the first name(s)...");
 
         private void ValidateMandatory(Node node)
         {
-            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -529,7 +529,7 @@ and you didn't type anything in ...",
 
         private void ValidateNumber(Node node)
         {
-            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {
@@ -563,7 +563,7 @@ can only contain numerical characters to be legal",
             bool pastAt = false;
             bool hasValidUpperDomain = false;
             bool hasSeenDomainDot = false;
-            string valueToValidate = node[node["PropertyName"].Get<string>()].Get<string>().Trim();
+            string valueToValidate = node["PropertyValues"][node["PropertyName"].Get<string>()]["Value"].Get<string>().Trim();
 
             if (string.IsNullOrEmpty(valueToValidate))
             {

@@ -15,6 +15,7 @@ using System.IO;
 using Magix.UX.Widgets.Core;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaForms
 {
@@ -26,6 +27,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
     public class MetaForms_Controller : ActiveController
     {
         #region [ -- 'Global' plugin event sinks ... -- ]
+
+        /**
+         * Level2: Handled to create some default Meta Forms for the installation
+         */
+        [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
+        protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
+        {
+        }
+
         /**
          * Level2: Will return the menu items needed to fire up 'View Meta Forms' forms 
          * for Administrator
@@ -748,6 +758,11 @@ the ESC key is clicked and released on the widget";
                 e.Params["Controls"][typeName]["ShortCuts"]["Builder"]["Event"].Value = "Magix.MetaForms.OpenStyleBuilderForWidget";
             }
 
+            e.Params["Controls"][typeName]["ShortCuts"]["CSharp"]["Text"].Value = "C#";
+            e.Params["Controls"][typeName]["ShortCuts"]["CSharp"]["ToolTip"].Value = "Shows you the creation code for creating this Meta Form using C# code";
+            e.Params["Controls"][typeName]["ShortCuts"]["CSharp"]["CssClass"].Value = "mux-shortcut-csharp";
+            e.Params["Controls"][typeName]["ShortCuts"]["CSharp"]["Event"].Value = "Magix.MetaForms.ViewCSharpCode";
+
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["Text"].Value = "Copy";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["ToolTip"].Value = "Copies the widget onto your Clipboard such that you can paste in another copy of it somewhere you'd like";
             e.Params["Controls"][typeName]["ShortCuts"]["MoveBackward"]["CssClass"].Value = "mux-shortcut-copy";
@@ -784,6 +799,7 @@ either Normal [default], Password, Email, Number or Phone. Changes the input typ
 such that modern browsers can help the end user with getting the input correctly";
 
             e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"].Value = typeof(string).FullName;
+            e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"]["Default"].Value = "Shadow ...";
             e.Params["Controls"]["TextBox"]["Properties"]["PlaceHolder"]["Description"].Value = @"The 
 watermark text of your textbox. Will show when textbox is empty, as a cue to the end user for what to 
 type into it";
@@ -811,7 +827,6 @@ no absolute control over";
 length of text accepted within widget";
 
             e.Params["Controls"]["TextBox"]["Properties"]["Text"].Value = typeof(string).FullName;
-            e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Default"].Value = "Shadow ...";
             e.Params["Controls"]["TextBox"]["Properties"]["Text"]["Description"].Value = @"The 
 visible text for the end user and also the text fragment the user can change by editing the text box value";
 
@@ -2707,6 +2722,154 @@ focus, or clicking the widget with his mouse or touch screen";
 
             // Signalizing to caller that he needs to refresh his view ...
             e.Params["Refresh"].Value = true;
+        }
+
+        /**
+         * Level2: Will show the creation code for creating this Meta Form using C# code
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.ViewCSharpCode")]
+        protected void Magix_MetaForms_ViewCSharpCode(object sender, ActiveEventArgs e)
+        {
+            MetaForm.Node node = MetaForm.Node.SelectByID(e.Params["ID"].Get<int>());
+
+            StringBuilder builder = new StringBuilder();
+
+            string tmp = SerializeMetaFormNodeToCSharpCode(node, 0, true);
+
+            builder.AppendFormat(@"/*
+ * Magix - A Web Application Framework for Humans
+ * Copyright 2010 - 2011 - Ra-Software, Inc. - thomas.hansen@winergyinc.com
+ * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
+ */
+
+using System;
+using Magix.Brix.Data;
+using Magix.Brix.Types;
+using Magix.Brix.Loader;
+using Magix.Brix.Components.ActiveTypes.MetaForms;
+
+/*
+ * This code was Automatically created by Magix, and need references to Magix.Brix.Loader/Types/Data, 
+ * in addition to Magix.Brix.Components.ActiveTypes.MetaForms, obviously. It's purpose is to create a 
+ * MetaForm upon Startup of your Application, according to how it was 'exported' using the Meta Form 
+ * Designer, with all of its encapsulated Business Logic, and Actions, as C# 'Template Code' ...
+ * Toss this file into a CLR compilation process somehow. [Visual Studio or SDK or Mono C# Compiler?]
+ * Modify the Namespaces(s), compile and toss into bin folder, and voila! You've got yourself an 
+ * automagixally created startup app, which will upon startup of your application pool, create a 
+ * Meta Form which can be used as a template for you with all of its original bells and whistles ...
+ * PS!
+ * PLEASE change the Namespaces(s) to something meaningful if you intend to actually _use_ this code
+ * for anything. And, NO! You cannot compile code [currently] using Magix ... ;)
+ * Visual Studio SDK used to be free though ...
+ * Mono C# Compiler _IS_ free ...! [as in both 'Freedom' and 'Price' ...]
+ * Or send us the code in email, and we'll compile it into a DLL for you for a fixed cost somehow ... :)
+ */
+namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
+{{
+   /**
+    * Level2: Controller that will automatically create a Meta Form for you during Initial Startup
+    * of your Application
+    */
+   [ActiveController]
+   public class foo : ActiveController // Replace 'foo' with your own Class Name which tells something semantically about your Meta Form
+   {{
+      /*
+       * Below is an 'Active Event Handler', and the code is encapsulated within an Active Controller.
+       * Refer to the O2 Architecture to understand these concepts ...
+       */
+
+      /**
+       * Level2: Will upon startup create an automatically generated Meta Form for you according to
+       * how it once was exported from the WYSIWYG Meta Form Designer
+       */
+      [ActiveEvent(Name = ""Magix.Core.ApplicationStartup"")]
+      protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
+      {{
+         using (Transaction tr = Adapter.Instance.BeginTransaction())
+         {{
+            // Make sure you change the below Equals Criteria also to the same name as the 'f.Name' property below ...
+            if (MetaForm.CountWhere(Criteria.Eq(""Name"", ""Same_Namespace_As_Above.Default"")) > 0)
+               return; // Don't want duals here ...
+
+            MetaForm f = new MetaForm();
+            f.Name = ""Same_Namespace_As_Above.Default"";
+{0}
+
+            f.Form[""Surface""].Children.Add(n_0);
+
+            // This actually saves your Object
+            f.Save();
+
+            // Unless this line of code is executed, the whole Data Serialization Job is 'rolled back' and discarded ...
+            tr.Commit();
+         }}
+      }}
+   }}
+}}
+",
+            tmp);
+
+            Node nn = new Node();
+
+            nn["Width"].Value = 24;
+            nn["Caption"].Value = "C# Code for Widget ...";
+            nn["CssClass"].Value = "mux-text-editor";
+
+            nn["Text"].Value = builder.ToString();
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.FileExplorer.EditAsciiFile",
+                "child",
+                nn);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private string SerializeMetaFormNodeToCSharpCode(MetaForm.Node node, int level, bool isFirst)
+        {
+            if (node.Name == "_ID")
+                return "";
+
+            string retVal = "";
+
+            string bufSpace = "";
+            for (int idxNo = 0; idxNo < level; idxNo++)
+            {
+                bufSpace += "   ";
+            }
+
+            string nodeValue = "";
+            if (node.Value != null)
+                nodeValue = @"{5}         n_{2}.Value = ""{1}"";";
+
+            retVal += string.Format(@"
+{5}         {3}n_{2} = new MetaForm.Node();
+{5}         n_{2}.Name = ""{0}"";
+" + nodeValue + @"{4}
+",
+                node.Name,
+                node.Value,
+                level,
+                (isFirst ? "MetaForm.Node " : ""),
+                (level == 0 ? "" : "\r\n" + bufSpace + "         n_" + (level - 1) + ".Children.Add(n_" + level + ");"),
+                bufSpace);
+
+            if (node.Children.Count > 0)
+                retVal += string.Format(@"{0}         {{",
+                    bufSpace);
+            bool first = true;
+            foreach (MetaForm.Node idx in node.Children)
+            {
+                retVal += SerializeMetaFormNodeToCSharpCode(idx, level + 1, first);
+                first = false;
+            }
+
+            if (node.Children.Count > 0)
+                retVal += string.Format(@"{0}         }}",
+                    bufSpace);
+
+            return retVal;
         }
 
         /**

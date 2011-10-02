@@ -1271,3 +1271,16 @@ li.mux-tree-item-class span.mux-tree-icon
 	background:transparent url(../images/code-icons.png) no-repeat -32px -16px;
 }
 
+.mux-text-editor
+{
+	margin-top:414px;
+}
+
+.mux-text-editor textarea
+{
+	height:25em;
+	margin-bottom:36px;
+	margin-top:18px;
+	display:block;
+	font-family:Times New Roman;
+}

@@ -37,6 +37,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Magix.Forms.InitiallyCreated\CreateFlashingImageButtonForm_Controller.cs" />
+    <Compile Include="Magix.Forms.InitiallyCreated\CreateLoginForm_Controller.cs" />
     <Compile Include="MetaForms_Controller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

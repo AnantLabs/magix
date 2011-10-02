@@ -71,8 +71,6 @@
     if (!MUX._scripts[url]) {
       var xhr = MUX.newXHR();
       xhr.open('GET', url, false);
-      xhr.setRequestHeader('Accept', 'application/javascript');
-      xhr.overrideMimeType('application/javascript');
       xhr.send('');
       if (xhr.status && xhr.status >= 200 && xhr.status < 300 && xhr.responseText) {
         eval(xhr.responseText);

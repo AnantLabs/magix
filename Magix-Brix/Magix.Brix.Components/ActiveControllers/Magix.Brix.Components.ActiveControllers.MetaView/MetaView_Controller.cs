@@ -30,6 +30,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
     public class MetaView_Controller : ActiveController
     {
         /**
+         * Level2: Handled to override the DeleteObject method from DBAdmin ...
+         */
+        [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
+        protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.CreateEventMapping("DBAdmin.Data.DeleteObject", "DBAdmin.Data.DeleteObject-Override");
+            ActiveEvents.Instance.CreateEventMapping("DBAdmin.Data.DeleteObject-Passover", "DBAdmin.Data.DeleteObject");
+        }
+
+        /**
          * Level 2: Returns the Desktop Icon for launching Actions back to caller
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
@@ -350,7 +360,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             {
                 node = new Node();
                 node["ForcedSize"]["width"].Value = 550;
-                node["WindowCssClass"].Value =
+                node["CssClass"].Value =
                     "mux-shaded mux-rounded push-5 down-2";
             }
             node["Caption"].Value = @"
@@ -554,8 +564,7 @@ Deleting it may break these parts.</p>";
         }
 
         /**
-         * Level3: Will return a clickable and drop-down-able Panel that the end user can click
-         * to append and remove events that triggers the MetaView Property if clicked
+         * Level3: Will show all Actions for specific Meta View Property
          */
         [ActiveEvent(Name = "Magix.MetaView.GetMetaViewActionTemplateColumn")]
         protected void Magix_MetaView_GetMetaViewActionTemplateColumn(object sender, ActiveEventArgs e)
@@ -1050,11 +1059,11 @@ Deleting it may break these parts.</p>";
             b.Text = text;
             if (!string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
             {
-                b.CssClass += "mux-has-actions";
+                b.CssClass += "mux-no-content";
             }
             else
             {
-                b.CssClass += "mux-no-actions";
+                b.CssClass += "mux-has-content";
             }
             b.Click +=
                 delegate
@@ -1826,8 +1835,8 @@ Deleting it may break these parts.</p>";
             node["Width"].Value = 24;
             node["Last"].Value = true;
             node["Top"].Value = 2;
-            node["MarginBottom"].Value = 20;
-            node["PullTop"].Value = 28;
+            node["MarginBottom"].Value = 10;
+            node["PullTop"].Value = 9;
             node["CssClass"].Value = "mux-wysiwyg-surface";
             node["MetaViewTypeName"].Value = m.TypeName;
             node["MetaViewName"].Value = m.Name;
@@ -1946,6 +1955,20 @@ Deleting it may break these parts.</p>";
 
                 tr.Commit();
             }
+        }
+
+        /**
+         * Level2: Overridden to get positioning correct ...
+         */
+        [ActiveEvent(Name = "DBAdmin.Data.DeleteObject-Override")]
+        protected void DBAdmin_Data_DeleteObject_Override(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(MetaView.MetaViewProperty).FullName)
+            {
+                e.Params["Top"].Value = 25;
+            }
+
+            RaiseEvent("DBAdmin.Data.DeleteObject-Passover", e.Params);
         }
     }
 }

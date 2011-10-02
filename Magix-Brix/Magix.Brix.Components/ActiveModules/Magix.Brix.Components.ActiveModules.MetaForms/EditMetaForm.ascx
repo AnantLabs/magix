@@ -184,6 +184,8 @@
             </mux:Panel>
             <mux:Panel
                 runat="server"
+                style="margin-top:18px;"
+                CssClass="span-6 last"
                 id="shortCutWrp">
                 <asp:Repeater
                     runat="server"

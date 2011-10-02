@@ -148,7 +148,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p>Attach two Actions to your 'Save' property.</p>
 <ul>
 \t<li>Magix.DynamicEvent.SaveActiveForm</li>
-\t<li>Magix.DynamicEvent.EmptyActiveForm</li>
+\t<li>Magix.DynamicEvent.EmptyAndClearActiveForm</li>
 </ul>
 <p>The first Action will save your form, while the second one will empty it.</p>
 <p>Now try to <em>View your form in preview</em> mode, and test it out by typing in your email and name, and clicking Submit to save your Object ...</p>
