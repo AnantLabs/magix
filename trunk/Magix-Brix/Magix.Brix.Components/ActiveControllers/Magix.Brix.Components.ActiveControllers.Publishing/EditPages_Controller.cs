@@ -406,7 +406,7 @@ differently than the next person out there! </p>
             // this page ...
             Node node = new Node();
             node["ForcedSize"]["width"].Value = 550;
-            node["WindowCssClass"].Value =
+            node["CssClass"].Value =
                 "mux-shaded mux-rounded push-5 down-2";
 
             node["Caption"].Value = @"Are you CERTAIN ...?";

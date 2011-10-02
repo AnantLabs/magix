@@ -94,6 +94,19 @@ given 'Container' WebPart";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.LogInUser")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.LogInUser";
+                    a.EventName = "Magix.Core.LogInUser([Object])";
+                    a.Description = @"Will login the given 'Username'/'Password' user. 
+Either get these fields from your Form/View fields, or set them some other way";
+                    a.StripInput = false;
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.SaveNodeSerializedFromMetaForm")) == 0)
                 {
                     Action a = new Action();
@@ -595,10 +608,127 @@ parameter";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.DynamicEvent.ImportCSVFile")) == 0)
+                    Criteria.Eq("Name", "Magix.Demo.ViewCarsInPopup")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "Magix.DynamicEvent.ImportCSVFile";
+
+                    a.Name = "Magix.Demo.ViewCarsInPopup";
+                    a.EventName = "Magix.MetaView.ViewMetaViewMultiMode";
+                    a.Description = @"Will load up any Magix.Demo.Car objects 
+into a MultiView form, within a popup window, using the Magix.Demo.ImportCars MetaView. 
+If there are no items you can run the 'Magix.Demo.ImportCarsCSVFile' action, which 
+by default will point towards a CSV file which contains 'Cars' data";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "NoIdColumn";
+                    m.Value = "True";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "IsDelete";
+                    m.Value = "False";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "MetaViewName";
+                    m.Value = "Magix.Demo.ViewCars";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "IsInlineEdit";
+                    m.Value = "True";
+                    m.TypeName = typeof(bool).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Container";
+                    m.Value = "child";
+                    a.Params.Add(m);
+
+                    a.Save();
+
+                    MetaView v = new MetaView();
+                    v.Name = "Magix.Demo.ViewCars";
+                    v.TypeName = "Magix.Demo.Car";
+
+                    MetaView.MetaViewProperty p = new MetaView.MetaViewProperty();
+                    p.Name = "Car";
+                    p.ReadOnly = true;
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "MPG";
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Horsepower";
+                    p.ReadOnly = false;
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "Acceleration";
+                    p.ReadOnly = false;
+                    v.Properties.Add(p);
+
+                    p = new MetaView.MetaViewProperty();
+                    p.Name = "select:Eco.Green:Eco";
+                    v.Properties.Add(p);
+
+                    v.Save();
+
+                    MetaObject o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    MetaObject.Property q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "Nope!";
+                    o.Values.Add(q);
+
+                    o.Save();
+
+                    o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "OK'ish";
+                    o.Values.Add(q);
+
+                    o.Save();
+
+                    o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "Good";
+                    o.Values.Add(q);
+
+                    o.Save();
+
+                    o = new MetaObject();
+                    o.Reference = "Magix.Demo.Template";
+                    o.TypeName = "Eco";
+
+                    q = new MetaObject.Property();
+                    q.Name = "Green";
+                    q.Value = "SUPERB!";
+                    o.Values.Add(q);
+
+                    o.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Demo.ImportCarsCSVFile")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.Demo.ImportCarsCSVFile";
                     a.EventName = "Magix.Common.ImportCSVFile";
                     a.Description = @"Will import the given 'FileName' from the given 'Folder' 
 and transform to MetaObjects using the given 'MetaViewName'";
@@ -892,13 +1022,13 @@ PS! This Action can be seen in 'Action' in the 'Magix.Demo.SendEmail' MetaView";
                     q = new MetaView.MetaViewProperty();
                     q.Name = "Send";
                     q.Description = "Send yourself a Test Email from Marvin Magix ...";
-                    q.Action = "Magix.DynamicEvent.ValidateObjectPropertyFullName|Magix.DynamicEvent.ValidateObjectPropertyEmail|Magix.DynamicEvent.ValidateObjectPropertyNumber|Magix.DynamicEvent.SaveActiveForm|Magix.DynamicEvent.ShowDefaultMessage|Magix.DynamicEvent.SendEmailFromForm|Magix.DynamicEvent.EmptyActiveForm";
+                    q.Action = "Magix.DynamicEvent.ValidateObjectPropertyFullName|Magix.DynamicEvent.ValidateObjectPropertyEmail|Magix.DynamicEvent.ValidateObjectPropertyNumber|Magix.DynamicEvent.SaveActiveForm|Magix.DynamicEvent.ShowDefaultMessage|Magix.DynamicEvent.SendEmailFromForm|Magix.DynamicEvent.EmptyAndClearActiveForm";
                     v.Properties.Add(q);
 
                     q = new MetaView.MetaViewProperty();
                     q.Name = "Clear";
                     q.Description = "Clears the form ...";
-                    q.Action = "Magix.DynamicEvent.EmptyActiveForm";
+                    q.Action = "Magix.DynamicEvent.EmptyAndClearActiveForm";
                     v.Properties.Add(q);
 
                     v.Save();
@@ -1235,123 +1365,6 @@ control that initiated this Action somehow. PS! If you explicitly create a 'Meta
 and set its name to another MetaView, then that MetaView will be rendered instead";
 
                     a.Save();
-                }
-
-                if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.Demo.ViewCarsInPopup")) == 0)
-                {
-                    Action a = new Action();
-
-                    a.Name = "Magix.Demo.ViewCarsInPopup";
-                    a.EventName = "Magix.MetaView.ViewMetaViewMultiMode";
-                    a.Description = @"Will load up any Magix.Demo.Car objects 
-into a MultiView form, within a popup window, using the Magix.Demo.ImportCars MetaView. 
-If there are no items you can run the 'Magix.DynamicEvent.ImportCSVFile' action, which 
-by default will point towards a CSV file which contains 'Cars' data";
-                    a.StripInput = false;
-
-                    Action.ActionParams m = new Action.ActionParams();
-                    m.Name = "NoIdColumn";
-                    m.Value = "True";
-                    m.TypeName = typeof(bool).FullName;
-                    a.Params.Add(m);
-
-                    m = new Action.ActionParams();
-                    m.Name = "IsDelete";
-                    m.Value = "False";
-                    m.TypeName = typeof(bool).FullName;
-                    a.Params.Add(m);
-
-                    m = new Action.ActionParams();
-                    m.Name = "MetaViewName";
-                    m.Value = "Magix.Demo.ViewCars";
-                    a.Params.Add(m);
-
-                    m = new Action.ActionParams();
-                    m.Name = "IsInlineEdit";
-                    m.Value = "True";
-                    m.TypeName = typeof(bool).FullName;
-                    a.Params.Add(m);
-
-                    m = new Action.ActionParams();
-                    m.Name = "Container";
-                    m.Value = "child";
-                    a.Params.Add(m);
-
-                    a.Save();
-
-                    MetaView v = new MetaView();
-                    v.Name = "Magix.Demo.ViewCars";
-                    v.TypeName = "Magix.Demo.Car";
-
-                    MetaView.MetaViewProperty p = new MetaView.MetaViewProperty();
-                    p.Name = "Car";
-                    p.ReadOnly = true;
-                    v.Properties.Add(p);
-
-                    p = new MetaView.MetaViewProperty();
-                    p.Name = "MPG";
-                    v.Properties.Add(p);
-
-                    p = new MetaView.MetaViewProperty();
-                    p.Name = "Horsepower";
-                    p.ReadOnly = true;
-                    v.Properties.Add(p);
-
-                    p = new MetaView.MetaViewProperty();
-                    p.Name = "Acceleration";
-                    p.ReadOnly = true;
-                    v.Properties.Add(p);
-
-                    p = new MetaView.MetaViewProperty();
-                    p.Name = "select:Eco.Green:Eco";
-                    v.Properties.Add(p);
-
-                    v.Save();
-
-                    MetaObject o = new MetaObject();
-                    o.Reference = "Magix.Demo.Template";
-                    o.TypeName = "Eco";
-
-                    MetaObject.Property q = new MetaObject.Property();
-                    q.Name = "Green";
-                    q.Value = "Nope!";
-                    o.Values.Add(q);
-
-                    o.Save();
-
-                    o = new MetaObject();
-                    o.Reference = "Magix.Demo.Template";
-                    o.TypeName = "Eco";
-
-                    q = new MetaObject.Property();
-                    q.Name = "Green";
-                    q.Value = "OK'ish";
-                    o.Values.Add(q);
-
-                    o.Save();
-
-                    o = new MetaObject();
-                    o.Reference = "Magix.Demo.Template";
-                    o.TypeName = "Eco";
-
-                    q = new MetaObject.Property();
-                    q.Name = "Green";
-                    q.Value = "Good";
-                    o.Values.Add(q);
-
-                    o.Save();
-
-                    o = new MetaObject();
-                    o.Reference = "Magix.Demo.Template";
-                    o.TypeName = "Eco";
-
-                    q = new MetaObject.Property();
-                    q.Name = "Green";
-                    q.Value = "SUPERB!";
-                    o.Values.Add(q);
-
-                    o.Save();
                 }
 
                 tr.Commit();

@@ -582,3 +582,17 @@ div.mux-web-part
 	z-index:1;
 }
 
+.mux-has-content
+{
+	text-decoration:none;
+	padding-left:16px;
+	background:transparent url(../images/grid-action-button.png) no-repeat 0 0;
+}
+
+.mux-no-content
+{
+	text-decoration:none;
+	padding-left:16px;
+	background:transparent url(../images/grid-action-button.png) no-repeat 0 -20px;
+}
+

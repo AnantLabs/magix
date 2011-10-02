@@ -480,7 +480,7 @@ have relationships towards other instances in your database.</p>";
                 node["OK"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedConfirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Cancel"]["FullTypeName"].Value = fullTypeName;
-            node["Width"].Value = 15;
+            node["Width"].Value = 18;
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
@@ -665,7 +665,7 @@ collection you're removing it from.</p>";
             node["OK"]["Event"].Value = "DBAdmin.Form.RemoveObjectFromParentPropertyList-Confirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Data.DoNotRemoveObjectFromParentPropertyList";
             node["ForcedSize"]["width"].Value = 530;
-            node["WindowCssClass"].Value =
+            node["CssClass"].Value =
                 "mux-shaded mux-rounded";
 
             LoadModule(

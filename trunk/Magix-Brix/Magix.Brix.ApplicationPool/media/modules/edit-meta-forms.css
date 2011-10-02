@@ -437,7 +437,7 @@ textarea.mux-wysiwyg-selected
 	padding-left:10px;
 	margin-right:10px;
 	height:18px;
-	margin-top:18px;
+	margin-top:0;
 	margin-bottom:18px;
 	font-size:10px;
 	line-height:18px;
@@ -483,6 +483,9 @@ textarea.mux-wysiwyg-selected
 {
 }
 
+.mux-shortcut-csharp
+{
+}
 
 .mux-style-builder .mux-insert
 {

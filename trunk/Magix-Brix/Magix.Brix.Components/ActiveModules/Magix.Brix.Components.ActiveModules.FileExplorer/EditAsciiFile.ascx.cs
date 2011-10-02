@@ -17,12 +17,14 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
     // TODO: Implement Controller logic here for saving. Looks ugly, and not possible to override
     /**
      * Level2: Kind of like Magix' version of 'Notepad'. Allows for editing of textfiles or text fragments, 
-     * and allow for saving them
+     * and allow for saving them. Pass in either 'File' [pointing to an absolute file name] or 'Text' which
+     * should be textual fragments. If 'NoSave' is True, it won't allow for saving of the document
      */
     [ActiveModule]
     public class EditAsciiFile : ActiveModule
     {
         protected TextArea txt;
+        protected Button save;
 
         public override void InitialLoading(Node node)
         {
@@ -34,9 +36,17 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                     DataSource = node;
 
                     // Loading file ...
-                    using (TextReader reader = File.OpenText(DataSource["File"].Get<string>()))
+                    if (DataSource.Contains("File"))
                     {
-                        txt.Text = reader.ReadToEnd().Replace("\t", "   ");
+                        using (TextReader reader = File.OpenText(DataSource["File"].Get<string>()))
+                        {
+                            txt.Text = reader.ReadToEnd().Replace("\t", "   ").Replace("\r\n", "\n");
+                        }
+                    }
+                    else
+                    {
+                        txt.Text = DataSource["Text"].Get<string>().Replace("\t", "   ").Replace("\r\n", "\n");
+                        save.Visible = false;
                     }
 
                     // Focusing our textarea ...
@@ -56,10 +66,10 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
             // Feedback to user ...
             Node n = new Node();
+
             n["Message"].Value = "File was successfully saved ...";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseSafeEvent(
                 "Magix.Core.ShowMessage",
                 n);
         }
