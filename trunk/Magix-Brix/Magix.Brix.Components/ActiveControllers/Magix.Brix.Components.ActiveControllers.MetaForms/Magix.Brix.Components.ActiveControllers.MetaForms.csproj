@@ -37,6 +37,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Magix.Forms.InitiallyCreated\CreateRepeater101Form_Controller.cs" />
+    <Compile Include="Magix.Forms.InitiallyCreated\DataBinding101Form_Controller.cs" />
+    <Compile Include="Magix.Forms.InitiallyCreated\CreateRadioButtonForm_Controller.cs" />
     <Compile Include="Magix.Forms.InitiallyCreated\CreateFlashingImageButtonForm_Controller.cs" />
     <Compile Include="Magix.Forms.InitiallyCreated\CreateLoginForm_Controller.cs" />
     <Compile Include="MetaForms_Controller.cs" />

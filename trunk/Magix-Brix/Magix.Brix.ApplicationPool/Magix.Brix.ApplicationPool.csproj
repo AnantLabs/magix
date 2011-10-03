@@ -215,6 +215,7 @@
     <Content Include="media\images\cs.png" />
     <Content Include="media\images\csproj.png" />
     <Content Include="media\images\csv.png" />
+    <Content Include="media\images\debugged-node-list-action.png" />
     <Content Include="media\images\default-pdf-cover.png" />
     <Content Include="media\images\desktop-icons\blue-print-icon.png" />
     <Content Include="media\images\desktop-icons\briefcase.png" />
@@ -233,6 +234,7 @@
     <Content Include="media\images\desktop-icons\view.png" />
     <Content Include="media\images\doc.png" />
     <Content Include="media\images\docx.png" />
+    <Content Include="media\images\grid-action-button.png" />
     <Content Include="media\images\magix-logo.png" />
     <Content Include="media\images\marvin-headshot-tiny.png" />
     <Content Include="media\images\oga.png" />
