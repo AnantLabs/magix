@@ -14,6 +14,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Data;
 using Magix.UX;
 using System.Web;
+using System.Threading;
 
 namespace Magix.Brix.ApplicationPool
 {
@@ -34,16 +35,15 @@ namespace Magix.Brix.ApplicationPool
         {
             InitializeViewport();
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
-                "Brix.Core.Page_Init");
+            Node node = new Node();
+
+            RaiseSafeEvent("Brix.Core.Page_Init", node);
 
             if (!IsPostBack)
             {
-                Node node = new Node();
+                node = new Node();
 
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+                RaiseSafeEvent(
                     "Magix.Core.InitialLoading",
                     node);
             }
@@ -54,17 +54,15 @@ namespace Magix.Brix.ApplicationPool
         {
             if (!IsPostBack)
             {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Brix.Core.LoadComplete_InitialLoading");
+                RaiseSafeEvent("Brix.Core.LoadComplete_InitialLoading", new Node());
             }
             Form.Action = Request.Url.ToString();
 
             if (!AjaxManager.Instance.IsCallback)
             {
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
-                    "Magix.Core.PostBackOrLoad");
+                RaiseSafeEvent(
+                    "Magix.Core.PostBackOrLoad",
+                    new Node ());
             }
         }
 
@@ -74,10 +72,11 @@ namespace Magix.Brix.ApplicationPool
             if (string.IsNullOrEmpty(defaultControl))
             {
                 Node node = new Node();
-                ActiveEvents.Instance.RaiseActiveEvent(
-                    this,
+
+                RaiseSafeEvent(
                     "Magix.Core.GetViewPort",
                     node);
+
                 Form.Controls.Add(node["Control"].Get<Control>());
             }
             else
@@ -85,6 +84,47 @@ namespace Magix.Brix.ApplicationPool
                 Control ctrl = PluginLoader.Instance.LoadActiveModule(defaultControl);
                 Form.Controls.Add(ctrl);
             }
+        }
+
+        protected bool RaiseSafeEvent(string eventName, Node node)
+        {
+            try
+            {
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    eventName,
+                    node);
+                return true;
+            }
+            catch (ThreadAbortException)
+            {
+                ; // ASP.NET throws this exception upon 'Response.Redirect' calls
+                // Hence we just sliently let it pass, since it's highly likely a redirect
+                // and not something we'd need to display in a message box to the user ...
+                throw;
+            }
+            catch (Exception err)
+            {
+                Exception tmp = err;
+
+                while (tmp.InnerException != null)
+                    tmp = tmp.InnerException;
+
+                Node m = new Node();
+
+                m["Message"].Value =
+                    "<p>" + tmp.Message + "</p>" +
+                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
+
+                m["Milliseconds"].Value = 10000;
+                m["IsError"].Value = true;
+
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Core.ShowMessage",
+                    m);
+            }
+            return false;
         }
 
         private PageStatePersister _pageStatePersister;

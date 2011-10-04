@@ -197,6 +197,11 @@ table.mux-grid-objects>tbody>tr>td>div.mux-in-place-edit>a
 	transition-duration:.5s;
 }
 
+table.mux-grid-objects>tbody>tr>td>div.mux-in-place-edit>a
+{
+	height:18px;
+}
+
 /* Hover commons for all [known types only!!] link types */
 table.mux-grid-objects>tbody>tr>td>a:hover,
 table.mux-grid-objects>tbody>tr>td>div>a:hover,
@@ -277,8 +282,12 @@ table.mux-grid-objects>tbody>tr.mux-grid-selected
 
 table.mux-grid-single-edit>tbody>tr.mux-grid-header>td:hover
 {
-	background-image:none;
-	background-color:Transparent;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .1)), to(rgba(180, 180, 180, .1)));
+	background-image: -webkit-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -moz-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -o-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: -ms-linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
+	background-image: linear-gradient(rgba(230, 230, 230, .1) 0%, rgba(180, 180, 180, .1) 80%);
 
 	-moz-border-radius:0;
 	-webkit-border-radius:0;
@@ -422,6 +431,10 @@ table.mux-no-margin .mux-grid-check-box
 .child .mux-class-contents,
 .child .mux-class-contents>div
 .child .mux-class-contents>div table.mux-grid-objects
+{
+}
+
+table.mux-grid-objects
 {
 }
 
