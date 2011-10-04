@@ -747,12 +747,13 @@ Deleting it may break these parts.</p>";
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
             node["WhiteListProperties"]["Value"].Value = true;
-            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 6;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 7;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = readOnly;
             node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Value"]["ReadOnly"].Value = readOnly;
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = readOnly;
+            node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type Name";
             node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn";
 
             node["Container"].Value = "content6";

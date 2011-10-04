@@ -43,381 +43,77 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                     n_0.Children.Add(n_1);
 
                     n_1 = new MetaForm.Node();
+                    n_1.Name = "Properties";
+
+                    n_0.Children.Add(n_1);
+                    {
+                        MetaForm.Node n_2 = new MetaForm.Node();
+                        n_2.Name = "Style";
+
+                        n_1.Children.Add(n_2);
+                        {
+                            MetaForm.Node n_3 = new MetaForm.Node();
+                            n_3.Name = "padding-left";
+                            n_3.Value = "40px";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "padding-top";
+                            n_3.Value = "36px";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "padding-right";
+                            n_3.Value = "40px";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "padding-bottom";
+                            n_3.Value = "36px";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "float";
+                            n_3.Value = "left";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "display";
+                            n_3.Value = "block";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "box-shadow";
+                            n_3.Value = "5px 5px 2px #2F3E31";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "background-image";
+                            n_3.Value = "linear-gradient(#F7F9F7 0%, #ACBEA8 100%)";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "border-radius";
+                            n_3.Value = "0px 100px 0px 100px ";
+                            n_2.Children.Add(n_3);
+                        }
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "CssClass";
+                        n_2.Value = "";
+                        n_1.Children.Add(n_2);
+
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "DefaultWidget";
+                        n_2.Value = "submit";
+                        n_1.Children.Add(n_2);
+                    }
+                    n_1 = new MetaForm.Node();
                     n_1.Name = "Surface";
 
                     n_0.Children.Add(n_1);
                     {
                         MetaForm.Node n_2 = new MetaForm.Node();
                         n_2.Name = "c-0";
-
-                        n_1.Children.Add(n_2);
-                        {
-                            MetaForm.Node n_3 = new MetaForm.Node();
-                            n_3.Name = "TypeName";
-                            n_3.Value = "Magix.MetaForms.Plugins.Panel";
-                            n_2.Children.Add(n_3);
-
-                            n_3 = new MetaForm.Node();
-                            n_3.Name = "Properties";
-
-                            n_2.Children.Add(n_3);
-                            {
-                                MetaForm.Node n_4 = new MetaForm.Node();
-                                n_4.Name = "Style";
-
-                                n_3.Children.Add(n_4);
-                                {
-                                    MetaForm.Node n_5 = new MetaForm.Node();
-                                    n_5.Name = "padding-left";
-                                    n_5.Value = "40px";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "padding-top";
-                                    n_5.Value = "36px";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "padding-right";
-                                    n_5.Value = "40px";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "padding-bottom";
-                                    n_5.Value = "36px";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "float";
-                                    n_5.Value = "left";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "display";
-                                    n_5.Value = "block";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "box-shadow";
-                                    n_5.Value = "5px 5px 2px #2F3E31";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "background-image";
-                                    n_5.Value = "linear-gradient(#F7F9F7 0%, #ACBEA8 100%)";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "border-radius";
-                                    n_5.Value = "0px 100px 0px 100px ";
-                                    n_4.Children.Add(n_5);
-                                }
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "CssClass";
-                                n_4.Value = "";
-                                n_3.Children.Add(n_4);
-
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "DefaultWidget";
-                                n_4.Value = "submit";
-                                n_3.Children.Add(n_4);
-                            }
-                            n_3 = new MetaForm.Node();
-                            n_3.Name = "Surface";
-
-                            n_2.Children.Add(n_3);
-                            {
-                                MetaForm.Node n_4 = new MetaForm.Node();
-                                n_4.Name = "c-0";
-
-                                n_3.Children.Add(n_4);
-                                {
-                                    MetaForm.Node n_5 = new MetaForm.Node();
-                                    n_5.Name = "TypeName";
-                                    n_5.Value = "Magix.MetaForms.Plugins.Label";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "Properties";
-
-                                    n_4.Children.Add(n_5);
-                                    {
-                                        MetaForm.Node n_6 = new MetaForm.Node();
-                                        n_6.Name = "CssClass";
-                                        n_6.Value = "span-8 last";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Tag";
-                                        n_6.Value = "h2";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Text";
-                                        n_6.Value = "Please Login ...";
-                                        n_5.Children.Add(n_6);
-                                    }
-                                }
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "c-5";
-
-                                n_3.Children.Add(n_4);
-                                {
-                                    MetaForm.Node n_5 = new MetaForm.Node();
-                                    n_5.Name = "TypeName";
-                                    n_5.Value = "Magix.MetaForms.Plugins.Label";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "Properties";
-
-                                    n_4.Children.Add(n_5);
-                                    {
-                                        MetaForm.Node n_6 = new MetaForm.Node();
-                                        n_6.Name = "CssClass";
-                                        n_6.Value = "span-5 last clear-both";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Tag";
-                                        n_6.Value = "label";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Text";
-                                        n_6.Value = "Username";
-                                        n_5.Children.Add(n_6);
-                                    }
-                                }
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "c-1";
-
-                                n_3.Children.Add(n_4);
-                                {
-                                    MetaForm.Node n_5 = new MetaForm.Node();
-                                    n_5.Name = "TypeName";
-                                    n_5.Value = "Magix.MetaForms.Plugins.TextBox";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "Properties";
-
-                                    n_4.Children.Add(n_5);
-                                    {
-                                        MetaForm.Node n_6 = new MetaForm.Node();
-                                        n_6.Name = "CssClass";
-                                        n_6.Value = "span-8 last clear-both";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AutoCapitalize";
-                                        n_6.Value = "False";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AutoCorrect";
-                                        n_6.Value = "False";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AutoComplete";
-                                        n_6.Value = "False";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "MaxLength";
-                                        n_6.Value = "50";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "PlaceHolder";
-                                        n_6.Value = "Username ...";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AccessKey";
-                                        n_6.Value = "U";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Info";
-                                        n_6.Value = "Username";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Style";
-
-                                        n_5.Children.Add(n_6);
-                                        {
-                                            MetaForm.Node n_7 = new MetaForm.Node();
-                                            n_7.Name = "font-size";
-                                            n_7.Value = "24px";
-                                            n_6.Children.Add(n_7);
-
-                                            n_7 = new MetaForm.Node();
-                                            n_7.Name = "height";
-                                            n_7.Value = "34px";
-                                            n_6.Children.Add(n_7);
-                                        }
-                                    }
-                                }
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "c-2";
-
-                                n_3.Children.Add(n_4);
-                                {
-                                    MetaForm.Node n_5 = new MetaForm.Node();
-                                    n_5.Name = "TypeName";
-                                    n_5.Value = "Magix.MetaForms.Plugins.Label";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "Properties";
-
-                                    n_4.Children.Add(n_5);
-                                    {
-                                        MetaForm.Node n_6 = new MetaForm.Node();
-                                        n_6.Name = "Text";
-                                        n_6.Value = "Password";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "CssClass";
-                                        n_6.Value = "span-5 last clear-both prepend-top";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Tag";
-                                        n_6.Value = "label";
-                                        n_5.Children.Add(n_6);
-                                    }
-                                }
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "c-3";
-
-                                n_3.Children.Add(n_4);
-                                {
-                                    MetaForm.Node n_5 = new MetaForm.Node();
-                                    n_5.Name = "TypeName";
-                                    n_5.Value = "Magix.MetaForms.Plugins.TextBox";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "Properties";
-
-                                    n_4.Children.Add(n_5);
-                                    {
-                                        MetaForm.Node n_6 = new MetaForm.Node();
-                                        n_6.Name = "CssClass";
-                                        n_6.Value = "span-8 last clear-both";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AutoCapitalize";
-                                        n_6.Value = "False";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AutoCorrect";
-                                        n_6.Value = "False";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AutoComplete";
-                                        n_6.Value = "False";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "MaxLength";
-                                        n_6.Value = "50";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "TextMode";
-                                        n_6.Value = "Password";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AccessKey";
-                                        n_6.Value = "P";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Info";
-                                        n_6.Value = "Password";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Style";
-
-                                        n_5.Children.Add(n_6);
-                                        {
-                                            MetaForm.Node n_7 = new MetaForm.Node();
-                                            n_7.Name = "font-size";
-                                            n_7.Value = "24px";
-                                            n_6.Children.Add(n_7);
-
-                                            n_7 = new MetaForm.Node();
-                                            n_7.Name = "height";
-                                            n_7.Value = "34px";
-                                            n_6.Children.Add(n_7);
-                                        }
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "PlaceHolder";
-                                        n_6.Value = "Password ...";
-                                        n_5.Children.Add(n_6);
-                                    }
-                                }
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "c-4";
-
-                                n_3.Children.Add(n_4);
-                                {
-                                    MetaForm.Node n_5 = new MetaForm.Node();
-                                    n_5.Name = "TypeName";
-                                    n_5.Value = "Magix.MetaForms.Plugins.Button";
-                                    n_4.Children.Add(n_5);
-
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "Properties";
-
-                                    n_4.Children.Add(n_5);
-                                    {
-                                        MetaForm.Node n_6 = new MetaForm.Node();
-                                        n_6.Name = "CssClass";
-                                        n_6.Value = "span-4 last clear-both push-4 prepend-top";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "Text";
-                                        n_6.Value = "Login!";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "AccessKey";
-                                        n_6.Value = "L";
-                                        n_5.Children.Add(n_6);
-
-                                        n_6 = new MetaForm.Node();
-                                        n_6.Name = "ID";
-                                        n_6.Value = "submit";
-                                        n_5.Children.Add(n_6);
-                                    }
-                                    n_5 = new MetaForm.Node();
-                                    n_5.Name = "Actions";
-
-                                    n_4.Children.Add(n_5);
-                                    {
-                                        MetaForm.Node n_6 = new MetaForm.Node();
-                                        n_6.Name = "Click";
-                                        n_6.Value = "Magix.DynamicEvent.CreateNodeFromMetaForm|Magix.DynamicEvent.LogInUser";
-                                        n_5.Children.Add(n_6);
-                                    }
-                                }
-                            }
-                        }
-                        n_2 = new MetaForm.Node();
-                        n_2.Name = "c-1";
 
                         n_1.Children.Add(n_2);
                         {
@@ -433,24 +129,290 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                             {
                                 MetaForm.Node n_4 = new MetaForm.Node();
                                 n_4.Name = "CssClass";
-                                n_4.Value = "span-10 push-1";
+                                n_4.Value = "span-8 last";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Tag";
+                                n_4.Value = "h2";
                                 n_3.Children.Add(n_4);
 
                                 n_4 = new MetaForm.Node();
                                 n_4.Name = "Text";
-                                n_4.Value = "Basically a perfectly, finished working example of an entire Login Form, complete with Actions and everything needed to become a drop in login form in your own Meta Forms ...";
+                                n_4.Value = "Please Login ...";
+                                n_3.Children.Add(n_4);
+                            }
+                        }
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "c-5";
+
+                        n_1.Children.Add(n_2);
+                        {
+                            MetaForm.Node n_3 = new MetaForm.Node();
+                            n_3.Name = "TypeName";
+                            n_3.Value = "Magix.MetaForms.Plugins.Label";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Properties";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "CssClass";
+                                n_4.Value = "span-5 last clear-both";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Tag";
+                                n_4.Value = "label";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Text";
+                                n_4.Value = "Username";
+                                n_3.Children.Add(n_4);
+                            }
+                        }
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "c-1";
+
+                        n_1.Children.Add(n_2);
+                        {
+                            MetaForm.Node n_3 = new MetaForm.Node();
+                            n_3.Name = "TypeName";
+                            n_3.Value = "Magix.MetaForms.Plugins.TextBox";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Properties";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "CssClass";
+                                n_4.Value = "span-8 last clear-both";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AutoCapitalize";
+                                n_4.Value = "False";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AutoCorrect";
+                                n_4.Value = "False";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AutoComplete";
+                                n_4.Value = "False";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "MaxLength";
+                                n_4.Value = "50";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "PlaceHolder";
+                                n_4.Value = "Username ...";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AccessKey";
+                                n_4.Value = "U";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Info";
+                                n_4.Value = "Username";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Style";
+
+                                n_3.Children.Add(n_4);
+                                {
+                                    MetaForm.Node n_5 = new MetaForm.Node();
+                                    n_5.Name = "font-size";
+                                    n_5.Value = "24px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "height";
+                                    n_5.Value = "34px";
+                                    n_4.Children.Add(n_5);
+                                }
+                            }
+                        }
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "c-2";
+
+                        n_1.Children.Add(n_2);
+                        {
+                            MetaForm.Node n_3 = new MetaForm.Node();
+                            n_3.Name = "TypeName";
+                            n_3.Value = "Magix.MetaForms.Plugins.Label";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Properties";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "Text";
+                                n_4.Value = "Password";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "CssClass";
+                                n_4.Value = "span-5 last clear-both prepend-top";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Tag";
+                                n_4.Value = "label";
+                                n_3.Children.Add(n_4);
+                            }
+                        }
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "c-3";
+
+                        n_1.Children.Add(n_2);
+                        {
+                            MetaForm.Node n_3 = new MetaForm.Node();
+                            n_3.Name = "TypeName";
+                            n_3.Value = "Magix.MetaForms.Plugins.TextBox";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Properties";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "CssClass";
+                                n_4.Value = "span-8 last clear-both";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AutoCapitalize";
+                                n_4.Value = "False";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AutoCorrect";
+                                n_4.Value = "False";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AutoComplete";
+                                n_4.Value = "False";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "MaxLength";
+                                n_4.Value = "50";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "TextMode";
+                                n_4.Value = "Password";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AccessKey";
+                                n_4.Value = "P";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Info";
+                                n_4.Value = "Password";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Style";
+
+                                n_3.Children.Add(n_4);
+                                {
+                                    MetaForm.Node n_5 = new MetaForm.Node();
+                                    n_5.Name = "font-size";
+                                    n_5.Value = "24px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "height";
+                                    n_5.Value = "34px";
+                                    n_4.Children.Add(n_5);
+                                }
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "PlaceHolder";
+                                n_4.Value = "Password ...";
+                                n_3.Children.Add(n_4);
+                            }
+                        }
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "c-4";
+
+                        n_1.Children.Add(n_2);
+                        {
+                            MetaForm.Node n_3 = new MetaForm.Node();
+                            n_3.Name = "TypeName";
+                            n_3.Value = "Magix.MetaForms.Plugins.Button";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Properties";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "CssClass";
+                                n_4.Value = "span-4 last clear-both push-4 prepend-top";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Text";
+                                n_4.Value = "Login!";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "AccessKey";
+                                n_4.Value = "L";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "ID";
+                                n_4.Value = "submit";
+                                n_3.Children.Add(n_4);
+                            }
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Actions";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "Click";
+                                n_4.Value = "Magix.DynamicEvent.CreateNodeFromMetaForm|Magix.DynamicEvent.LogInUser";
                                 n_3.Children.Add(n_4);
                             }
                         }
                     }
                     n_1 = new MetaForm.Node();
-                    n_1.Name = "Properties";
+                    n_1.Name = "Actions";
 
                     n_0.Children.Add(n_1);
                     {
                         MetaForm.Node n_2 = new MetaForm.Node();
-                        n_2.Name = "CssClass";
-                        n_2.Value = "span-22";
+                        n_2.Name = "Load";
+                        n_2.Value = "";
+                        n_1.Children.Add(n_2);
+
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "InitiallyLoaded";
+                        n_2.Value = "Magix.DynamicEvent.SetFocusToFirstTextBox";
                         n_1.Children.Add(n_2);
                     }
                 }

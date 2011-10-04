@@ -720,13 +720,6 @@ the user hits TAB and the widget that has currently focus has 1 as TabIndex, and
 the widget is clicked. Most useful for buttons and such, since if used on other types of elements it will 
 partially destroy accessibility for your application";
 
-                e.Params["Controls"][typeName]["Events"]["Load"].Value = true;
-                e.Params["Controls"][typeName]["Events"]["Load"]["Description"].Value = @"Raised when 
-the widget is Loaded, basically meaning every single request. Be careful here, this one might be 
-very expensive for you, and produce funny results if utilized incorrectly. Best handled by someone 
-who knows what they are doing, and the side-effects of such said activity. Probably only useful for things 
-such as Logging Activity and such. You should probably rather use InitiallyLoaded in fact";
-
                 e.Params["Controls"][typeName]["Events"]["DblClick"].Value = true;
                 e.Params["Controls"][typeName]["Events"]["DblClick"]["Description"].Value = @"Raised when 
 the widget is double clicked. Most useful for buttons and such, since if used on other types of elements it will 
@@ -768,7 +761,8 @@ the ESC key is clicked and released on the widget";
             e.Params["Controls"][typeName]["Events"]["InitiallyLoaded"].Value = true;
             e.Params["Controls"][typeName]["Events"]["InitiallyLoaded"]["Description"].Value = @"Raised when 
 the widget is Initially Loaded, basically meaning first rendered, or whenever it is being re-rendered
-for any reasons";
+for any reasons. Warning! If the Widget is within a Repeater then the event will be raised every time 
+the Repeater is being Data Bound";
 
             e.Params["Controls"][typeName]["ShortCuts"]["CSharp"]["Text"].Value = "C#";
             e.Params["Controls"][typeName]["ShortCuts"]["CSharp"]["ToolTip"].Value = "Shows you the creation code for creating this Meta Form using C# code";

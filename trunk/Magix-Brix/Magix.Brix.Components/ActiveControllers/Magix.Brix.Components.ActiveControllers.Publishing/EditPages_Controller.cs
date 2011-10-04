@@ -42,7 +42,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     // Creating a default template ...
                     WebPageTemplate t1 = new WebPageTemplate();
                     t1.Name = "M+H+C";
-                    
+
                     WebPartTemplate c1 = new WebPartTemplate();
                     c1.Name = "Menu";
                     c1.CssClass = "menu mux-rounded mux-shaded";
@@ -78,13 +78,53 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     t1.Containers.Add(c3);
 
                     t1.Save();
+
+
+                    t1 = new WebPageTemplate();
+                    t1.Name = "M+H+MF";
+
+                    c1 = new WebPartTemplate();
+                    c1.Name = "Menu_MF";
+                    c1.CssClass = "menu mux-rounded mux-shaded";
+                    c1.ViewportContainer = "content1";
+                    c1.Width = 6;
+                    c1.Height = 18;
+                    c1.MarginTop = 9;
+                    c1.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.SliderMenu";
+                    t1.Containers.Add(c1);
+
+                    c2 = new WebPartTemplate();
+                    c2.Name = "Header_MF";
+                    c2.CssClass = "header";
+                    c2.ViewportContainer = "content2";
+                    c2.Width = 15;
+                    c2.MarginTop = 5;
+                    c2.MarginLeft = 3;
+                    c2.Height = 2;
+                    c2.Last = true;
+                    c2.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.Header";
+                    t1.Containers.Add(c2);
+
+                    c3 = new WebPartTemplate();
+                    c3.Name = "Form_MF";
+                    c3.CssClass = "content";
+                    c3.ViewportContainer = "content3";
+                    c3.Width = 18;
+                    c3.Overflow = true;
+                    c3.MarginLeft = 0;
+                    c3.MarginTop = 2;
+                    c3.Last = true;
+                    c3.ModuleName = "Magix.Brix.Components.ActiveModules.MetaForms.MetaView_Form";
+                    t1.Containers.Add(c3);
+
+                    t1.Save();
                 }
                 if (WebPage.Count == 0)
                 {
                     // Creating a default page ...
                     WebPage o = new WebPage();
                     o.Name = "Welcome to Magix!";
-                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "Menu Left"));
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+C"));
 
                     WebPart t1 = new WebPart();
                     t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu"));
@@ -127,6 +167,41 @@ differently than the next person out there! </p>
                     o.WebParts.Add(t3);
 
                     o.Save();
+
+                    WebPage root = o;
+
+
+                    // Creating a default page ...
+                    o = new WebPage();
+                    o.Name = "Hello World!";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
+
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu_MF"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header_MF"));
+
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "Hello World";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Form_MF"));
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.MetaForms.MetaView_FormMetaFormName";
+                    s2.Value = "Magix.Forms.HelloWorld";
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+                    o.Parent = root;
+
+                    root.Children.Add(o);
+
+                    root.Save();
+
                 }
                 tr.Commit();
             }

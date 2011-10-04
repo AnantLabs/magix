@@ -112,6 +112,12 @@ textarea
 	background-image: -moz-linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(210, 210, 210, 1) 80%);
 }
 
+.mux-shaded-orange
+{
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(255, 255, 225, 1)), to(rgba(210, 210, 120, 1)));
+	background-image: -moz-linear-gradient(rgba(255, 255, 225, 1) 0%, rgba(210, 210, 120, 1) 80%);
+}
+
 
 
 

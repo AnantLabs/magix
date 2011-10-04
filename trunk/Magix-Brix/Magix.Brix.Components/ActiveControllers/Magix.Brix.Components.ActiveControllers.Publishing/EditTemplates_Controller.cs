@@ -43,7 +43,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["CssClass"].Value = "large-bottom-margin mux-edit-templates";
 
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 7;
             node["WhiteListColumns"]["Containers"].Value = true;
             node["WhiteListColumns"]["Containers"]["ForcedWidth"].Value = 3;
             node["WhiteListColumns"]["Copy"].Value = true;

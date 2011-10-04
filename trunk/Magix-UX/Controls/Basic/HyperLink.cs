@@ -99,7 +99,7 @@ namespace Magix.UX.Widgets
         protected override void AddAttributes(Element el)
         {
             el.AddAttribute("href", URL);
-            if (!string.IsNullOrEmpty(AccessKey))
+            if (!string.IsNullOrEmpty(Target))
                 el.AddAttribute("target", Target);
             if (!string.IsNullOrEmpty(AccessKey))
                 el.AddAttribute("accesskey", AccessKey);
