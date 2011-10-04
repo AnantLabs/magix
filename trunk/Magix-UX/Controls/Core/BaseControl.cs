@@ -41,6 +41,14 @@ namespace Magix.UX.Widgets.Core
         protected bool _gainedFocusThisRequest;
 
         /**
+         * Event raised when the Widget is rendered for the firt time, meaning it will
+         * be triggered upon re-renderings and such, but not during normal postbacks. But
+         * obviously, if a parent Widget is being re-rendered, then also this Event will be
+         * raised again, even though the Widget hasn't changed any of its properties.
+         */
+        public event EventHandler InitiallyLoaded;
+
+        /**
          * Additional information you wish to attach to your widget somehow. Useful
          * for things such as Repeaters where you have the same event handler for
          * several buttons on your page, but need to know specifically which button
@@ -142,6 +150,19 @@ namespace Magix.UX.Widgets.Core
                 "' for the control with the ClientID of '" + 
                 this.ClientID + 
                 "'.");
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (!HasRendered)
+            {
+                if (InitiallyLoaded != null)
+                {
+                    InitiallyLoaded(this, new EventArgs());
+                }
+            }
         }
 
 		public override void RenderControl(HtmlTextWriter writer)
