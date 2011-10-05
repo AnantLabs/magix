@@ -95,7 +95,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
                                 n_4 = new MetaForm.Node();
                                 n_4.Name = "CssClass";
-                                n_4.Value = "prepend-top";
+                                n_4.Value = "prepend-top flashlight-3";
                                 n_3.Children.Add(n_4);
 
                                 n_4 = new MetaForm.Node();

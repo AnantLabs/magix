@@ -43,7 +43,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     {
                         // Defaulting ....
                         query.Text = "Query ...";
-                        new EffectTimeout(500)
+                        new EffectTimeout(250)
                             .ChainThese(
                                 new EffectFocusAndSelect(query))
                             .Render();

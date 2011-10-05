@@ -596,3 +596,8 @@ div.mux-web-part
 	background:transparent url(../images/grid-action-button.png) no-repeat 0 -20px;
 }
 
+.mux-info-paragraph
+{
+	color:rgba(128, 128, 128, 1);
+	font-style:italic !important;
+}

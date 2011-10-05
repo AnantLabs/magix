@@ -50,7 +50,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     rep.DataSource = data;
                     rep.DataBind();
                     CheckBox ch = Selector.SelectFirst<CheckBox>(rep);
-                    new EffectTimeout(500)
+                    new EffectTimeout(250)
                         .ChainThese(
                             new EffectFocusAndSelect(ch))
                         .Render();
