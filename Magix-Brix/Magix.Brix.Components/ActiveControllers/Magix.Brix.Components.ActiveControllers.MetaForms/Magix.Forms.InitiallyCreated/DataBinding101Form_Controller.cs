@@ -172,7 +172,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                             {
                                 MetaForm.Node n_4 = new MetaForm.Node();
                                 n_4.Name = "CssClass";
-                                n_4.Value = "span-10 push-2 prepend-top";
+                                n_4.Value = "span-10 push-2 down-3";
                                 n_3.Children.Add(n_4);
 
                                 n_4 = new MetaForm.Node();
@@ -256,6 +256,92 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                                 n_4 = new MetaForm.Node();
                                 n_4.Name = "Text";
                                 n_4.Value = "You can DataBind any property you wish, and you can databind your properties towards either 'Value' or 'Name' of your Nodes in your DataSource. There are also tons of 'fetcher Actions' in Magix, which you can use to 'populate your DataSource' one way or the other.";
+                                n_3.Children.Add(n_4);
+                            }
+                        }
+                        n_2 = new MetaForm.Node();
+                        n_2.Name = "c-6";
+
+                        n_1.Children.Add(n_2);
+                        {
+                            MetaForm.Node n_3 = new MetaForm.Node();
+                            n_3.Name = "TypeName";
+                            n_3.Value = "Magix.MetaForms.Plugins.Label";
+                            n_2.Children.Add(n_3);
+
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Properties";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "Style";
+
+                                n_3.Children.Add(n_4);
+                                {
+                                    MetaForm.Node n_5 = new MetaForm.Node();
+                                    n_5.Name = "padding-left";
+                                    n_5.Value = "5px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "padding-top";
+                                    n_5.Value = "5px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "padding-right";
+                                    n_5.Value = "5px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "padding-bottom";
+                                    n_5.Value = "5px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "font-family";
+                                    n_5.Value = "Helvetica";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "font-size";
+                                    n_5.Value = "9px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "left";
+                                    n_5.Value = "138px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "top";
+                                    n_5.Value = "38px";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "position";
+                                    n_5.Value = "absolute";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "background-image";
+                                    n_5.Value = "linear-gradient(#F7F9F6 0%, #E0DED6 100%)";
+                                    n_4.Children.Add(n_5);
+
+                                    n_5 = new MetaForm.Node();
+                                    n_5.Name = "border-radius";
+                                    n_5.Value = "5px 5px 5px 5px ";
+                                    n_4.Children.Add(n_5);
+                                }
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "CssClass";
+                                n_4.Value = "span-10";
+                                n_3.Children.Add(n_4);
+
+                                n_4 = new MetaForm.Node();
+                                n_4.Name = "Text";
+                                n_4.Value = "The above label is DataBound with the Expression; {DataSource[OriginalWebPartID].Value}";
                                 n_3.Children.Add(n_4);
                             }
                         }

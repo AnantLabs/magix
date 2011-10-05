@@ -307,6 +307,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                                     }
                                 }
                             }
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Actions";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "InitiallyLoaded";
+                                n_4.Value = "Magix.DynamicEvent.GetMetaObjects|Magix.DynamicEvent.DataBindForm";
+                                n_3.Children.Add(n_4);
+                            }
                         }
                         n_2 = new MetaForm.Node();
                         n_2.Name = "c-2";
@@ -340,7 +350,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                             {
                                 MetaForm.Node n_4 = new MetaForm.Node();
                                 n_4.Name = "Click";
-                                n_4.Value = "Magix.DynamicEvent.GetPreviousMetaObjects|Debug-Copy-Magix.MetaForms.DataBindForm";
+                                n_4.Value = "Magix.DynamicEvent.GetPreviousMetaObjects|Magix.DynamicEvent.DataBindForm";
                                 n_3.Children.Add(n_4);
                             }
                         }
@@ -376,7 +386,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                             {
                                 MetaForm.Node n_4 = new MetaForm.Node();
                                 n_4.Name = "Click";
-                                n_4.Value = "Magix.DynamicEvent.GetNextMetaObjects|Debug-Copy-Magix.MetaForms.DataBindForm";
+                                n_4.Value = "Magix.DynamicEvent.GetNextMetaObjects|Magix.DynamicEvent.DataBindForm";
                                 n_3.Children.Add(n_4);
                             }
                         }

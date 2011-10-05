@@ -56,11 +56,21 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         private void ExecuteInitActions()
         {
             // Doing init actions for Widgets ...
+            List<BaseControl> tmp = new List<BaseControl>();
             foreach (BaseControl idx in Selector.Select<BaseControl>(this))
             {
-                idx.RaiseInitiallyLoaded();
+                tmp.Add(idx);
+            }
+            foreach (BaseControl idx in tmp)
+            {
+                if (Selector.FindControlClientID<BaseControl>(this, idx.ClientID) != null)
+                {
+                    // Yup, still around ... ;)
+                    idx.RaiseInitiallyLoaded();
+                }
             }
 
+            // Form Init Actions ...
             if (!DataSource["root"].Contains("Actions") ||
                 !DataSource["root"]["Actions"].Contains("InitialLoading") ||
                 string.IsNullOrEmpty(DataSource["root"]["Actions"]["InitialLoading"].Get<string>()))
