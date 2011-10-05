@@ -445,6 +445,43 @@ only data or 'simple applications'. You can build as complex applications as you
 
 
 
+
+
+                    o = new WebPage();
+                    o.Name = "Data Collection";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
+
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu_MF"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header_MF"));
+
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "Data Collection";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Form_MF"));
+
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.MetaForms.MetaView_FormMetaFormName";
+                    s2.Value = "Magix.Forms.SaveMetaObject";
+
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+                    o.Parent = root2;
+
+                    root2.Children.Add(o);
+
+
+
+
+
+
                     root.Save();
                 }
                 tr.Commit();

@@ -124,7 +124,7 @@ down do a graph depending upon how the Object node looks like";
                     m = new Action.ActionParams();
                     m.Name = "CleanProperties";
                     m.Value = "True";
-                    m.TypeName = typeof(int).FullName;
+                    m.TypeName = typeof(bool).FullName;
                     a.Params.Add(m);
 
                     a.Save();

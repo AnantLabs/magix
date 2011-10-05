@@ -122,7 +122,7 @@
                         </mux:SelectList>
                         <mux:Button
                             runat="server"
-                            CssClass="span-4 height-1 texture-panel last"
+                            CssClass="span-4 texture-panel last"
                             OnClick="borderColorPnl_Click"
                             ToolTip="Click to Change Color for Borders"
                             style="padding-top:9px;padding-bottom:9px;"
@@ -456,7 +456,7 @@
                             CssClass="span-2 last" />
                         <mux:Button
                             runat="server"
-                            CssClass="span-4 height-1 texture-panel last"
+                            CssClass="span-4 texture-panel last"
                             Text="Text Shadow Color"
                             style="padding-top:9px;padding-bottom:9px;margin-bottom:0;"
                             OnClick="textShadowColor_Click"
@@ -484,7 +484,7 @@
                         <h5 title="The Colors for your Widget, both Foreground color [text-color] and background color or image. You can use an Image as an element's 'background' instead of a color">Colors</h5>
                         <mux:Button
                             runat="server"
-                            CssClass="span-4 height-1 texture-panel last"
+                            CssClass="span-4 texture-panel last"
                             style="padding-top:9px;padding-bottom:9px;"
                             Text="Text Color"
                             OnClick="fgText_Click"
@@ -492,7 +492,7 @@
                             id="fgText" />
                         <mux:Button
                             runat="server"
-                            CssClass="span-4 height-1 texture-panel last"
+                            CssClass="span-4 texture-panel last"
                             Text="BG Color / Image"
                             style="margin-top:18px;padding-top:9px;padding-bottom:9px;"
                             OnClick="bgText_Click"
@@ -533,7 +533,7 @@
                             CssClass="span-2 last" />
                         <mux:Button
                             runat="server"
-                            CssClass="span-4 height-1 texture-panel last"
+                            CssClass="span-4 texture-panel last"
                             Text="Shadow Color"
                             style="padding-top:9px;padding-bottom:9px;"
                             OnClick="shadowColor_Click"
@@ -544,7 +544,7 @@
                         <h5 title="Gradient Background color settings for your widget, which will come in addition to any images or colors you have previously defined. Meaning, the Gradient will be rendered 'first', and then any other colors and background images will be rendered 'on top of' the gradient, meaning unless your color or image has transparency within, or is completely lacking, then the Gradient won't show">Gradient Background</h5>
                         <mux:Button
                             runat="server"
-                            CssClass="span-4 height-1 texture-panel last"
+                            CssClass="span-4 texture-panel last"
                             Text="Start Color"
                             style="padding-top:9px;padding-bottom:9px;margin-bottom:18px;"
                             OnClick="gradientStart_Click"
@@ -552,7 +552,7 @@
                             id="gradientStart" />
                         <mux:Button
                             runat="server"
-                            CssClass="span-4 height-1 texture-panel last"
+                            CssClass="span-4 texture-panel last"
                             Text="End Color"
                             style="padding-top:9px;padding-bottom:9px;"
                             OnClick="gradientStop_Click"
