@@ -143,10 +143,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     WebPart.WebPartSetting s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
-<p class=""mux-info-paragraph"">Watch this video to get started creating your own Web Applications</p>
-<iframe width=""560"" height=""315"" src=""http://www.youtube.com/embed/2vSZa_HH9FY"" frameborder=""0"" allowfullscreen=""allowfullscreen""></iframe>
-<p style=""width315px;margin-top:9px;"">By default a user has been created with the username/password of admin/admin. 
-<br/> You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
+<p class='mux-info-paragraph'>Watch this video to get started creating your own Web Applications</p>
+<iframe width='560' height='315' src='http://www.youtube.com/embed/2vSZa_HH9FY' frameborder='0' allowfullscreen='allowfullscreen'></iframe>
+<p style='width315px;margin-top:9px;'>By default a user has been created with the username/password of admin/admin. 
+<br/> You can login with this user to the Back-Web Dashboard <a href='?dashboard=true'>here</a> ...</p>
 ";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
@@ -203,10 +203,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
-<p class=""mux-info-paragraph"">Watch this video to get started using Forms</p>
-<iframe width=""560"" height=""315"" src=""http://www.youtube.com/embed/IaHkJ5qyTcc"" frameborder=""0"" allowfullscreen=""allowfullscreen""></iframe>
-<p style=""width315px;margin-top:9px;"">By default a user has been created with the username/password of admin/admin. 
-<br/> You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
+<p class='mux-info-paragraph'>Watch this video to get started using Forms</p>
+<iframe width='560' height='315' src='http://www.youtube.com/embed/IaHkJ5qyTcc' frameborder='0' allowfullscreen='allowfullscreen'></iframe>
+<p style='width315px;margin-top:9px;'>By default a user has been created with the username/password of admin/admin. 
+<br/> You can login with this user to the Back-Web Dashboard <a href='?dashboard=true'>here</a> ...</p>
 ";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
@@ -235,10 +235,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
-<p class=""mux-info-paragraph"">Watch this video to understand Meta Actions</p>
-<iframe width=""560"" height=""315"" src=""http://www.youtube.com/embed/IaHkJ5qyTcc"" frameborder=""0"" allowfullscreen=""allowfullscreen""></iframe>
-<p style=""width315px;margin-top:9px;"">By default a user has been created with the username/password of admin/admin. 
-<br/> You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
+<p class='mux-info-paragraph'>Watch this video to understand Meta Actions</p>
+<iframe width='560' height='315' src='http://www.youtube.com/embed/w1L13y-qbIs' frameborder='0' allowfullscreen='allowfullscreen'></iframe>
+<p style='width315px;margin-top:9px;'>By default a user has been created with the username/password of admin/admin. 
+<br/> You can login with this user to the Back-Web Dashboard <a href='?dashboard=true'>here</a> ...</p>
 ";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
@@ -323,7 +323,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
-<p>To the left are some more Tutorials about how to get started using Magix.</p>
+<img src='media/images/magix-logo.png' class='mux-horus-ra-image' />
+<p>Inside the More Menu hierarchy you can find many more video tutorials and explanation about more advanced topics.</p>
+<p>Make especially sure to check out how Repeaters work, since they are fundamental for being able to treat lists of data.</p>
+<p class='clear-both'>Other things which are crucial to understand is the relationship between Pages and Templates. 
+Pages are kind of like conventional 'CMS WebSite Pages', except they are built upon Templates, which far surpasses any 
+existing CMS we're aware of in regards to 'design capabilities', and you can have as many as you wish of these</p>
+<p>In addition to that, your pages can contain complete applications, and doesn't necessarily need to be the vehicle of 
+only data or 'simple applications'. You can build as complex applications as you really wish using Pages as your 'serving vehicle'.</p>
+<p>Though, you can of course use Magix purely as a conventional CMS too if you wish ...</p>
 ";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
