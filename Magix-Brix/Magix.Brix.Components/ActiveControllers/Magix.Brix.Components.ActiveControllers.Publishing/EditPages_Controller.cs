@@ -49,16 +49,16 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     c1.ViewportContainer = "content1";
                     c1.Width = 6;
                     c1.Height = 20;
-                    c1.MarginTop = 13;
+                    c1.MarginTop = 10;
                     c1.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.SliderMenu";
                     t1.Containers.Add(c1);
 
                     WebPartTemplate c2 = new WebPartTemplate();
                     c2.Name = "Header";
-                    c2.CssClass = "header";
+                    c2.CssClass = "header Header-3D";
                     c2.ViewportContainer = "content2";
                     c2.Width = 18;
-                    c2.MarginTop = 6;
+                    c2.MarginTop = 3;
                     c2.Height = 5;
                     c2.Last = true;
                     c2.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.Header";
@@ -88,14 +88,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     c1.CssClass = "menu mux-rounded mux-shaded";
                     c1.ViewportContainer = "content1";
                     c1.Width = 6;
-                    c1.Height = 18;
-                    c1.MarginTop = 9;
+                    c1.Height = 20;
+                    c1.MarginTop = 10;
                     c1.ModuleName = "Magix.Brix.Components.ActiveModules.Publishing.SliderMenu";
                     t1.Containers.Add(c1);
 
                     c2 = new WebPartTemplate();
                     c2.Name = "Header_MF";
-                    c2.CssClass = "header";
+                    c2.CssClass = "header Header-3D";
                     c2.ViewportContainer = "content2";
                     c2.Width = 15;
                     c2.MarginTop = 5;
@@ -112,7 +112,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     c3.Width = 18;
                     c3.Overflow = true;
                     c3.MarginLeft = 0;
-                    c3.MarginTop = 2;
+                    c3.MarginTop = 3;
                     c3.Last = true;
                     c3.ModuleName = "Magix.Brix.Components.ActiveModules.MetaForms.MetaView_Form";
                     t1.Containers.Add(c3);
@@ -123,7 +123,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 {
                     // Creating a default page ...
                     WebPage o = new WebPage();
-                    o.Name = "Welcome to Magix!";
+                    o.Name = "Welcome to Magix";
                     o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+C"));
 
                     WebPart t1 = new WebPart();
@@ -143,37 +143,20 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     WebPart.WebPartSetting s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
-<img src=""media/images/magix-logo.png"" class=""mux-horus-ra-image"" style=""margin-left:20px;float:right;display:block;width:200px;"" alt=""Magix, where Dreams come Through ...""/>
-<p>By default a user has been created with the username/password of admin/admin</p>
-<p>You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
-<h3>What is Magix ...?</h3>
-<p>Magix is difficult to describe. Some will say it's a 'better CMS' or a 'Publishing System', 
-others might say that it's a System Development Platform, some might call it a Web Operating System, 
-others again might say it's a Social Media platform, for collaboration across Organizations. Some developers 
-will claim it's nothing but a RAD implementation of Lisp on top of ASP.NET and WebControls. And so on ...</p>
-<p>Regardless, they're probably all right! Every person who looks at Magix will probably categorize it 
-differently than the next person out there! </p>
-<p>That's because <strong>Magix is Everything</strong>! Regardless of what types of IT problems you've got, Magix is probably the best solution for you.</p>
-<p>With Magix you can create complex web applications, that runs on everything, within hours after you've started using it</p>
-<p>Need your own iTunes, create one within a couple of hours. Need a new CRM application? Spend 2-4 hours reading the docs for Magix, and you'd be surprised at how much you'd be able to implement, even with zero coding experience from before</p>
-<p>Oh yeah! Almost forgot the most important thing; <strong>Magis is Free Software!</strong> ...</p>
-<p>However, regardless of what you think about Magix, we consider it our gift, from us, to You, and the Rest of The World!</p>
-<p>To sum it all up, in a couple of meaningful words, which I think accurately describes Magix; </p>
-<p><strong>Yup!<br/>It's Game Over!<br/>Equilibrium to the Force, And YOU Won ... ! ;)</strong></p>
-<p>Have a nice life!</p>
-<p>.t</p>
+<p class=""mux-info-paragraph"">Watch this video to get started creating your own Web Applications</p>
+<iframe width=""560"" height=""315"" src=""http://www.youtube.com/embed/2vSZa_HH9FY"" frameborder=""0"" allowfullscreen=""allowfullscreen""></iframe>
+<p style=""width315px;margin-top:9px;"">By default a user has been created with the username/password of admin/admin. 
+<br/> You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
 ";
                     t3.Settings.Add(s2);
                     o.WebParts.Add(t3);
-
-                    o.Save();
 
                     WebPage root = o;
 
 
                     // Creating a default page ...
                     o = new WebPage();
-                    o.Name = "Hello World!";
+                    o.Name = "Hello World";
                     o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
 
                     t1 = new WebPart();
@@ -200,8 +183,71 @@ differently than the next person out there! </p>
 
                     root.Children.Add(o);
 
-                    root.Save();
+                    o = new WebPage();
+                    o.Name = "My First App";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+C"));
 
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header"));
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "My First App";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Content"));
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
+                    s2.Value = @"
+<p class=""mux-info-paragraph"">Watch this video to get started using Forms</p>
+<iframe width=""560"" height=""315"" src=""http://www.youtube.com/embed/IaHkJ5qyTcc"" frameborder=""0"" allowfullscreen=""allowfullscreen""></iframe>
+<p style=""width315px;margin-top:9px;"">By default a user has been created with the username/password of admin/admin. 
+<br/> You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
+";
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+                    o.Parent = root;
+
+                    root.Children.Add(o);
+
+                    o = new WebPage();
+                    o.Name = "Actions 101";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+C"));
+
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header"));
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "How Meta Actions work";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Content"));
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
+                    s2.Value = @"
+<p class=""mux-info-paragraph"">Watch this video to understand Meta Actions</p>
+<iframe width=""560"" height=""315"" src=""http://www.youtube.com/embed/IaHkJ5qyTcc"" frameborder=""0"" allowfullscreen=""allowfullscreen""></iframe>
+<p style=""width315px;margin-top:9px;"">By default a user has been created with the username/password of admin/admin. 
+<br/> You can login with this user to the Back-Web Dashboard <a href=""?dashboard=true"">here</a> ...</p>
+";
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+                    o.Parent = root;
+
+                    root.Children.Add(o);
+
+                    root.Save();
                 }
                 tr.Commit();
             }

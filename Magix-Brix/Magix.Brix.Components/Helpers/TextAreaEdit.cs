@@ -113,7 +113,7 @@ namespace Magix.Brix.Components
             _text.Visible = true;
             _text.Style[Styles.display] = "none";
             _link.Visible = false;
-            new EffectRollDown(_text, 200)
+            new EffectRollDown(_text, 250)
                 .ChainThese(
                     new EffectFocusAndSelect(_text))
                 .Render();

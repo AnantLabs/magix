@@ -930,12 +930,6 @@ namespace Magix.Brix.Viewports
                         }
                         dyn.CssClass = cssClass.Trim();
                     }
-                    if (!AjaxManager.Instance.IsCallback)
-                    {
-                        dyn.Style[Styles.display] = "none";
-                        new EffectFadeIn(dyn, 250)
-                            .Render();
-                    }
                 }
 
                 if (e.Params["Parameters"].Contains("Append") &&

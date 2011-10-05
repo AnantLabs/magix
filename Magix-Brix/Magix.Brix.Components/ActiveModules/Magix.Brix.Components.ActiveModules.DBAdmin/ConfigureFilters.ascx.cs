@@ -204,7 +204,7 @@ empty string removes any existing Criteria...";
                 if (string.IsNullOrEmpty(setting))
                     ls.SelectedIndex = 3;
 
-                new EffectTimeout(500)
+                new EffectTimeout(250)
                     .ChainThese(
                         new EffectFocusAndSelect(t))
                     .Render();

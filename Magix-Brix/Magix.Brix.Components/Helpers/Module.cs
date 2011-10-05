@@ -101,8 +101,6 @@ namespace Magix.Brix.Components
 
         protected void FlashPanel(Panel pnl)
         {
-            new EffectHighlight(pnl, 500)
-                .Render();
         }
     }
 }
