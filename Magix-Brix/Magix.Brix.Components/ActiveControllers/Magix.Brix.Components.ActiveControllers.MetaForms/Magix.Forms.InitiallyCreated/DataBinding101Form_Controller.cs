@@ -144,6 +144,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                                     n_4.Children.Add(n_5);
                                 }
                             }
+                            n_3 = new MetaForm.Node();
+                            n_3.Name = "Actions";
+
+                            n_2.Children.Add(n_3);
+                            {
+                                MetaForm.Node n_4 = new MetaForm.Node();
+                                n_4.Name = "InitiallyLoaded";
+                                n_4.Value = "Magix.DynamicEvent.DataBindForm";
+                                n_3.Children.Add(n_4);
+                            }
                         }
                         n_2 = new MetaForm.Node();
                         n_2.Name = "c-2";
@@ -193,7 +203,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
                                 n_4 = new MetaForm.Node();
                                 n_4.Name = "Text";
-                                n_4.Value = "Notice especially the Expression Parentheses ( These guys; {} ), which tells the Magix 'run time' that this is a Data Bound Expression. To DataBind a Property, the property needs to start with a '{' and end with a '}'. And that specific Node needs to exist in the DataSource somehow BEFORE you Raise your DataBind Action. If you turned ON Debugging for instance, while loading any WebPage which contains this Form, you'd be able to see exactly how the DataSource would look like when the 'LoadModule' AtiveEvent is handled, if you copy that event. Then you will see that the LoadModule Active Event contains a Node called 'OriginalWebPartID'. All of these nodes which are being sent into the 'LoadModule' basically 'becomes' the DataSource property. Meaning when you say; 'DataSource[OriginalWebPartID].Value', you're telling Magix that you'd like to display the 'Value' of the 'Node' that was passed into the 'LoadModule' method as its 'Text' Property, using an 'Expression' [these guys; {}]";
+                                n_4.Value = "Notice especially the Expression Parentheses ( These guys; {} ), which tells the Magix 'run time' that this is a Data Bound Expression. To DataBind a Property, the property needs to start with a '{' and end with a '}'. And that specific Node needs to exist in the DataSource somehow BEFORE you Raise your DataBind Action. If you turned ON Debugging for instance, while loading any WebPage which contains this Form, you'd be able to see exactly how the DataSource would look like when the 'LoadModule' Active Event is handled, if you copy that event. Then you will see that the LoadModule Active Event contains a Node called 'OriginalWebPartID'. All of these nodes which are being sent into the 'LoadModule' basically 'becomes' the DataSource property. Meaning when you say; 'DataSource[OriginalWebPartID].Value', you're telling Magix that you'd like to display the 'Value' of the 'Node' that was passed into the 'LoadModule' method as its 'Text' Property, using an 'Expression' [these guys; {}]";
                                 n_3.Children.Add(n_4);
                             }
                         }
@@ -219,7 +229,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
                                 n_4 = new MetaForm.Node();
                                 n_4.Name = "Text";
-                                n_4.Value = "You must Raise the Action; 'DataBindForm' on the Form you are using 'Data Binding Expressions', since otherwise the form won't be DataBinded, and it'll just show its default Text of 'Label'. This exact same technique is also use for DataBinding lists of items and such, but that's 'another' sample form ... ;)";
+                                n_4.Value = "You must Raise the Action; 'DataBindForm' on the Form you are using 'Data Binding Expressions', since otherwise the form won't be DataBinded, and it'll just show its default Text of 'Label'. This exact same technique is also use for DataBinding lists of items and such, but that's 'another' sample form ...";
                                 n_3.Children.Add(n_4);
                             }
                         }

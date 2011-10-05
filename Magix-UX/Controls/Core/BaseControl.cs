@@ -152,16 +152,11 @@ namespace Magix.UX.Widgets.Core
                 "'.");
         }
 
-        protected override void OnLoad(EventArgs e)
+        public void RaiseInitiallyLoaded()
         {
-            base.OnLoad(e);
-
-            if (!HasRendered)
+            if (InitiallyLoaded != null)
             {
-                if (InitiallyLoaded != null)
-                {
-                    InitiallyLoaded(this, new EventArgs());
-                }
+                InitiallyLoaded(this, new EventArgs());
             }
         }
 

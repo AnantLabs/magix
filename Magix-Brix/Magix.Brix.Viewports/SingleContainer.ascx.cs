@@ -16,6 +16,7 @@ using System.Web;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Viewports
 {
@@ -1268,8 +1269,8 @@ namespace Magix.Brix.Viewports
                             !string.IsNullOrEmpty(nn["ModuleInitializationEvent"].Get<string>()))
                         {
                             nn["_ctrl"].Value = ctrl;
-                            ActiveEvents.Instance.RaiseActiveEvent(
-                                this,
+
+                            RaiseSafeEvent(
                                 nn["ModuleInitializationEvent"].Get<string>(),
                                 nn);
                             nn["_ctrl"].UnTie();
