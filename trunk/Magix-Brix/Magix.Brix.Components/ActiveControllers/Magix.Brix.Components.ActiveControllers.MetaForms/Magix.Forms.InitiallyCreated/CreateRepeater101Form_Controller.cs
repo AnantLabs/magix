@@ -412,7 +412,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
                                 n_4 = new MetaForm.Node();
                                 n_4.Name = "Text";
-                                n_4.Value = "Above is a  Repeater [Grey] which is Data Bound towards all objects og type 'Eco' in your Meta Object Storage. The arrow buttons encapsulates how to page back and forward in your Repeaters.";
+                                n_4.Value = "Above is a  Repeater [Grey] which is Data Bound towards all objects of type 'Eco' in your Meta Object Storage. The arrow buttons encapsulates how to page back and forward in your Repeaters.";
                                 n_3.Children.Add(n_4);
 
                                 n_4 = new MetaForm.Node();
@@ -421,37 +421,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                                 n_3.Children.Add(n_4);
                             }
                         }
-                        n_2 = new MetaForm.Node();
-                        n_2.Name = "c-13";
 
-                        n_1.Children.Add(n_2);
-                        {
-                            MetaForm.Node n_3 = new MetaForm.Node();
-                            n_3.Name = "TypeName";
-                            n_3.Value = "Magix.MetaForms.Plugins.Label";
-                            n_2.Children.Add(n_3);
-
-                            n_3 = new MetaForm.Node();
-                            n_3.Name = "Properties";
-
-                            n_2.Children.Add(n_3);
-                            {
-                                MetaForm.Node n_4 = new MetaForm.Node();
-                                n_4.Name = "Tag";
-                                n_4.Value = "label";
-                                n_3.Children.Add(n_4);
-
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "Text";
-                                n_4.Value = "This specific Repeater is dependent upon that you run these Actions in consecutive order as 'Form Init Actions'; 'Magix.DynamicEvent.GetMetaObjects' and 'Magix.DynamicEvent.DataBindForm'";
-                                n_3.Children.Add(n_4);
-
-                                n_4 = new MetaForm.Node();
-                                n_4.Name = "CssClass";
-                                n_4.Value = "span-13 push-1";
-                                n_3.Children.Add(n_4);
-                            }
-                        }
                         n_2 = new MetaForm.Node();
                         n_2.Name = "c-5";
 
@@ -691,7 +661,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
                                 n_4 = new MetaForm.Node();
                                 n_4.Name = "Text";
-                                n_4.Value = "Now, of course, other Actions might produce different DataSource structures for you, which means you'll need to DataBind towards DIFFERENT 'structures' than what you're looking at here. But if you read the above text about three times, once partially loud for yourself, while you look at the image, check out the properties of the Repeater and its 'children Widgets', and look at how the Result looks like, if you attach this Form to a Web Page and look at it in the front-web, you just might actually 'get it' faster than what you might currently think ... - Because really, it's actually quite easy, once you just get it I guess ... Once you do get it, feel free to 'improve' on this text, such that the next guy or gal could 'get it faster' ... ;)";
+                                n_4.Value = "Now, of course, other Actions might produce different DataSource structures for you, which means you'll need to DataBind towards DIFFERENT 'structures' than what you're looking at here. But if you read the above text about three times, once partially loud for yourself, while you look at the image, check out the properties of the Repeater and its 'children Widgets', and look at how the Result looks like, you just might actually 'get it' faster than what you might currently think ... - Because really, it's actually quite easy, once you just get it I guess ... Once you do get it, feel free to 'improve' on this text, such that the next guy or gal could 'get it faster' ... ;)";
                                 n_3.Children.Add(n_4);
 
                                 n_4 = new MetaForm.Node();
