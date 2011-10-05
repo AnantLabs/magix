@@ -55,6 +55,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
         private void ExecuteInitActions()
         {
+            // Doing init actions for Widgets ...
+            foreach (BaseControl idx in Selector.Select<BaseControl>(this))
+            {
+                idx.RaiseInitiallyLoaded();
+            }
+
             if (!DataSource["root"].Contains("Actions") ||
                 !DataSource["root"]["Actions"].Contains("InitialLoading") ||
                 string.IsNullOrEmpty(DataSource["root"]["Actions"]["InitialLoading"].Get<string>()))

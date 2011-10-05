@@ -154,7 +154,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     WebPage root = o;
 
 
-                    // Creating a default page ...
                     o = new WebPage();
                     o.Name = "Hello World";
                     o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
@@ -246,6 +245,131 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     o.Parent = root;
 
                     root.Children.Add(o);
+
+
+
+
+
+                    o = new WebPage();
+                    o.Name = "DataBinding 101";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
+
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu_MF"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header_MF"));
+
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "DataBinding, the Basics";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Form_MF"));
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.MetaForms.MetaView_FormMetaFormName";
+                    s2.Value = "Magix.Forms.DataBinding101";
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+
+                    o.Parent = root;
+
+                    root.Children.Add(o);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    o = new WebPage();
+                    o.Name = "More";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+C"));
+
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header"));
+
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "More Concepts";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Content"));
+
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
+                    s2.Value = @"
+<p>To the left are some more Tutorials about how to get started using Magix.</p>
+";
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+
+                    o.Parent = root;
+
+                    root.Children.Add(o);
+
+
+
+
+
+
+
+
+                    WebPage root2 = o;
+
+                    o = new WebPage();
+                    o.Name = "Repeaters";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
+
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu_MF"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header_MF"));
+
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "More Concepts";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Form_MF"));
+
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.MetaForms.MetaView_FormMetaFormName";
+                    s2.Value = "Magix.Forms.Repeaters101";
+
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+                    o.Parent = root2;
+
+                    root2.Children.Add(o);
 
                     root.Save();
                 }
