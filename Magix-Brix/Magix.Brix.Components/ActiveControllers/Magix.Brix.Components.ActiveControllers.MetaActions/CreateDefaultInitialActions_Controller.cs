@@ -75,19 +75,19 @@ into the Node structure underneath the 'Object' node";
                 {
                     Action a = new Action();
                     a.Name = "Magix.DynamicEvent.LoadMetaForm";
-                    a.EventName = "Magix.MetaForms.LoadMetaForm";
+                    a.EventName = "Magix.MetaForms.LoadMetaForm([Expression])";
                     a.Description = @"Will load the given 'MetaFormName' into the 
 given 'Container' WebPart";
-                    a.StripInput = true;
+                    a.StripInput = false;
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "MetaFormName";
-                    m.Value = "-- SUPPLY_THE_NAME_OF_YOUR_OWN_META_FORM_HERE --";
+                    m.Value = "Magix.Forms.EditRating";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Container";
-                    m.Value = "content2";
+                    m.Value = "content3";
                     a.Params.Add(m);
 
                     a.Save();
@@ -576,7 +576,13 @@ source] and return as a new Node collection according to the expression(s) in th
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "Expression";
+                    m.Value = "";
                     a.Params.Add(m);
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "ID";
+                    m2.Value = "{[WidgetInfo].Value}";
+                    m.Children.Add(m2);
 
                     a.Save();
                 }
@@ -591,18 +597,6 @@ source] and return as a new Node collection according to the expression(s) in th
 the MetaObject given, with all its Children Meta Objects too within the 'Object' node of your 
 parameter";
                     a.StripInput = false;
-
-                    Action.ActionParams m = new Action.ActionParams();
-                    m.Name = "ID";
-                    m.TypeName = typeof(int).FullName;
-                    m.Value = "-1";
-
-                    if (MetaObject.Count > 0)
-                    {
-                        m.Value = MetaObject.SelectFirst().ID.ToString();
-                    }
-
-                    a.Params.Add(m);
 
                     a.Save();
                 }
@@ -1227,6 +1221,36 @@ change your data extraction";
                     m = new Action.ActionParams();
                     m.Name = "End";
                     m.Value = "2";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.Demo.GetRatingObjects")) == 0)
+                {
+                    Action a = new Action();
+
+                    a.Name = "Magix.Demo.GetRatingObjects";
+                    a.EventName = "Magix.MetaObjects.GetMetaObjects";
+                    a.Description = @"Will return the 5 newest Magix.Demo.Rating Meta Objects";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "MetaTypeName";
+                    m.Value = "Magix.Demo.Rating";
+                    a.Params.Add(m);// TODO: Implement Set Focus to Meta Forms ...
+
+                    m = new Action.ActionParams();
+                    m.Name = "Start";
+                    m.Value = "0";
+                    m.TypeName = typeof(int).FullName;
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "End";
+                    m.Value = "5";
                     m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);
 

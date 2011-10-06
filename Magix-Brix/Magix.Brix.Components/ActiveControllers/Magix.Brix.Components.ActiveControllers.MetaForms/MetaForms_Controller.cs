@@ -2156,7 +2156,7 @@ focus, or clicking the widget with his mouse or touch screen";
                         if (parent.Contains("TypeName"))
                         {
                             if (parent["TypeName"].Value == "Magix.MetaForms.Plugins.Panel" ||
-                                parent["TypeName"].Value != "Magix.MetaForms.Plugins.Repeater")
+                                parent["TypeName"].Value == "Magix.MetaForms.Plugins.Repeater")
                             {
                                 break;
                             }
