@@ -185,11 +185,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         {
             if (this.Parent.ID == e.Params["Container"].Get<string>())
             {
-                MetaFormName = e.Params["MetaFormName"].Get<string>();
-
-                DataSource["MetaFormName"].Value = MetaFormName;
-                DataSource["root"].UnTie();
-                DataSource["Controls"].UnTie();
+                DataSource = e.Params;
+                MetaFormName = DataSource["MetaFormName"].Get<string>();
 
                 RaiseSafeEvent(
                     "Magix.MetaForms.GetControlsForForm",
@@ -436,7 +433,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                                         case "System.Decimal":
                                             val = Decimal.Parse(val.ToString(), CultureInfo.InvariantCulture);
                                             break;
-                                        case "System.Int":
+                                        case "System.Int32":
                                             val = int.Parse(val.ToString(), CultureInfo.InvariantCulture);
                                             break;
                                     }
