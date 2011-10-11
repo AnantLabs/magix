@@ -552,6 +552,42 @@ only data or 'simple applications'. You can build as complex applications as you
 
 
 
+                    o = new WebPage();
+                    o.Name = "2-Way Explained";
+                    o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+C"));
+
+                    t1 = new WebPart();
+                    t1.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Menu"));
+                    o.WebParts.Add(t1);
+
+                    t2 = new WebPart();
+                    t2.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Header"));
+                    s1 = new WebPart.WebPartSetting();
+                    s1.Name = "Magix.Brix.Components.ActiveModules.Publishing.HeaderCaption";
+                    s1.Value = "2-Way DataBinding Explained";
+                    t2.Settings.Add(s1);
+                    o.WebParts.Add(t2);
+
+                    t3 = new WebPart();
+                    t3.Container = WebPartTemplate.SelectFirst(Criteria.Eq("Name", "Content"));
+                    s2 = new WebPart.WebPartSetting();
+                    s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
+                    s2.Value = @"
+<p class='mux-info-paragraph'>Watch this video to get started understanding how DataBinding '2-Ways' work</p>
+<iframe width='560' height='315' src='http://www.youtube.com/embed/f-Y9-SMW53A' frameborder='0' allowfullscreen='allowfullscreen'></iframe>
+<p style='width315px;margin-top:9px;'>By default a user has been created with the username/password of admin/admin. 
+<br/> You can login with this user to the Back-Web Dashboard <a href='?dashboard=true'>here</a> ...</p>
+";
+                    t3.Settings.Add(s2);
+                    o.WebParts.Add(t3);
+                    o.Parent = root2;
+
+                    root2.Children.Add(o);
+
+
+
+
+
 
 
                     root.Save();
