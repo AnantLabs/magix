@@ -802,17 +802,17 @@ the message box will be in error mode, meaning red probably, signifying a an err
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "Message";
-                    m.Value = "Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... Knock, Knock ... HEAD ACHE ...!!";
+                    m.Value = "Your operation was Successful";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Header";
-                    m.Value = "Who's there ...?";
+                    m.Value = "Sucess!";
                     a.Params.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Milliseconds";
-                    m.Value = "3500";
+                    m.Value = "1000";
                     m.TypeName = typeof(int).FullName;
                     a.Params.Add(m);
 
