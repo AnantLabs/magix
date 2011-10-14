@@ -1499,6 +1499,33 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	color:rgba(0,120,20,1);
 	display:block;
 	width:100%;
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
+}
+
+.mux-in-place-edit a:hover
+{
+	background-color:rgba(0,0,0,.04);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
 }
 
 .mux-in-place-edit input[type=text],

@@ -33,7 +33,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             Node node = new Node();
 
             node["FullTypeName"].Value = typeof(Role).FullName;
-            node["Width"].Value = 18;
+            node["Width"].Value = 6;
             node["Last"].Value = true;
             node["CssClass"].Value = "large-bottom-margin";
 
@@ -45,6 +45,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["ReuseNode"].Value = true;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
 
             node["Container"].Value = "content3";
 

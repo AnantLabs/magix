@@ -61,7 +61,7 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
 
             node["FullTypeName"].Value = typeof(Gallery).FullName;
             node["Container"].Value = "content3";
-            node["Width"].Value = 18;
+            node["Width"].Value = 16;
             node["Last"].Value = true;
             node["CssClass"].Value = "large-bottom-margin edit-gallery";
 
@@ -84,11 +84,11 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
             node["ReuseNode"].Value = true;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Folder"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Folder"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["User"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["User"]["TemplateColumnEvent"].Value = "Magix.Gallery.GetUserTemplateColumn";
-
-            node["Container"].Value = "content3";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",

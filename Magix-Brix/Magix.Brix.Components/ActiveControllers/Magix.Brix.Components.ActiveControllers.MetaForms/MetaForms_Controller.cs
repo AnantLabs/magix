@@ -296,6 +296,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         private void CreateRuler(ActiveEventArgs e)
         {
             e.Params["Controls"]["Ruler"]["Name"].Value = "Ruler";
+            e.Params["Controls"]["Ruler"]["CssClass"].Value = "mux-ruler";
             e.Params["Controls"]["Ruler"]["TypeName"].Value = "Magix.MetaForms.Plugins.Ruler";
             e.Params["Controls"]["Ruler"]["ToolTip"].Value = @"Creates a Horizontal Ruler that 
 might be useful for separating content horizontally from other content";
@@ -306,6 +307,7 @@ might be useful for separating content horizontally from other content";
         private void CreateStars(ActiveEventArgs e)
         {
             e.Params["Controls"]["Stars"]["Name"].Value = "Stars";
+            e.Params["Controls"]["Stars"]["CssClass"].Value = "mux-stars";
             e.Params["Controls"]["Stars"]["TypeName"].Value = "Magix.MetaForms.Plugins.Stars";
             e.Params["Controls"]["Stars"]["ToolTip"].Value = @"Creates a Stars type of 
 control, which you can use for collecting rating information from your end user";
@@ -343,6 +345,7 @@ the user chose to click one of your stars [rating images] to give it a new value
         private void CreateRepeater(ActiveEventArgs e)
         {
             e.Params["Controls"]["Repeater"]["Name"].Value = "Repeater";
+            e.Params["Controls"]["Repeater"]["CssClass"].Value = "mux-repeater";
             e.Params["Controls"]["Repeater"]["TypeName"].Value = "Magix.MetaForms.Plugins.Repeater";
             e.Params["Controls"]["Repeater"]["HasSurface"].Value = true;
             e.Params["Controls"]["Repeater"]["List"].Value = true;
@@ -392,6 +395,7 @@ towards. Just thinking out loud here ... ;)";
         private void CreatePanel(ActiveEventArgs e)
         {
             e.Params["Controls"]["Panel"]["Name"].Value = "Panel";
+            e.Params["Controls"]["Panel"]["CssClass"].Value = "mux-panel";
             e.Params["Controls"]["Panel"]["TypeName"].Value = "Magix.MetaForms.Plugins.Panel";
             e.Params["Controls"]["Panel"]["HasSurface"].Value = true;
             e.Params["Controls"]["Panel"]["ToolTip"].Value = @"Creates a Panel type of 
@@ -424,13 +428,14 @@ the user hits his Return key";
         private void CreateCalendar(ActiveEventArgs e)
         {
             e.Params["Controls"]["Calendar"]["Name"].Value = "Calendar";
+            e.Params["Controls"]["Calendar"]["CssClass"].Value = "mux-view-calendar";
             e.Params["Controls"]["Calendar"]["TypeName"].Value = "Magix.MetaForms.Plugins.Calendar";
             e.Params["Controls"]["Calendar"]["ToolTip"].Value = @"Creates a Calendar type of 
 control, which you can use if you need the end user to pick a specific date";
 
             GetCommonEventsAndProperties(e, "Calendar", true);
 
-            e.Params["Controls"]["Calendar"]["Properties"]["CssClass"]["Default"].Value = "mux-calendar mux-rounded mux-shaded span-2";
+            e.Params["Controls"]["Calendar"]["Properties"]["CssClass"]["Default"].Value = "mux-calendar mux-rounded mux-shaded span-5";
 
             e.Params["Controls"]["Calendar"]["Properties"]["Value"].Value = typeof(string).FullName;
             e.Params["Controls"]["Calendar"]["Properties"]["Value"]["Description"].Value = @"The 
@@ -452,6 +457,7 @@ the DateChanged event does";
         private void CreateRadioButton(ActiveEventArgs e)
         {
             e.Params["Controls"]["RadioButton"]["Name"].Value = "RadioButton";
+            e.Params["Controls"]["RadioButton"]["CssClass"].Value = "mux-radio-button";
             e.Params["Controls"]["RadioButton"]["TypeName"].Value = "Magix.MetaForms.Plugins.RadioButton";
             e.Params["Controls"]["RadioButton"]["ToolTip"].Value = @"Creates a RadioButton type of 
 control, which you can assign Text to and CheckedChanged Event Handlers. Useful for multiple 
@@ -503,6 +509,7 @@ the checked state has changed, either by clicking or through some other user int
         private void CreatTextArea(ActiveEventArgs e)
         {
             e.Params["Controls"]["TextArea"]["Name"].Value = "TextArea";
+            e.Params["Controls"]["TextArea"]["CssClass"].Value = "mux-text-area";
             e.Params["Controls"]["TextArea"]["TypeName"].Value = "Magix.MetaForms.Plugins.TextArea";
             e.Params["Controls"]["TextArea"]["ToolTip"].Value = @"Creates a TextArea type of 
 control, which you can assign Text to and TextChanged Event Handlers";
@@ -552,6 +559,7 @@ focus, or clicking the widget with his mouse or touch screen";
         private void CreateLinkButton(ActiveEventArgs e)
         {
             e.Params["Controls"]["LinkButton"]["Name"].Value = "LinkButton";
+            e.Params["Controls"]["LinkButton"]["CssClass"].Value = "mux-link-button";
             e.Params["Controls"]["LinkButton"]["TypeName"].Value = "Magix.MetaForms.Plugins.LinkButton";
             e.Params["Controls"]["LinkButton"]["ToolTip"].Value = @"Creates a LinkButton type of 
 control, which you can assign Click actions to, from which when the user clicks, will raise 
@@ -593,6 +601,7 @@ focus, or clicking the widget with his mouse or touch screen";
         private void CreateImage(ActiveEventArgs e)
         {
             e.Params["Controls"]["Image"]["Name"].Value = "Image";
+            e.Params["Controls"]["Image"]["CssClass"].Value = "mux-image";
             e.Params["Controls"]["Image"]["TypeName"].Value = "Magix.MetaForms.Plugins.Image";
             e.Params["Controls"]["Image"]["ToolTip"].Value = @"Creates an Image type of 
 control, which you can assign an Image URL to";
@@ -627,6 +636,7 @@ for instance";
         private void CreateHyperLink(ActiveEventArgs e)
         {
             e.Params["Controls"]["HyperLink"]["Name"].Value = "HyperLink";
+            e.Params["Controls"]["HyperLink"]["CssClass"].Value = "mux-hyper-link";
             e.Params["Controls"]["HyperLink"]["TypeName"].Value = "Magix.MetaForms.Plugins.HyperLink";
             e.Params["Controls"]["HyperLink"]["ToolTip"].Value = @"Creates a HyperLink type of 
 control, which you can assign a URL to, which once clicked will bring the user to that URL";
@@ -661,6 +671,7 @@ for instance";
         private void CreateHiddenField(ActiveEventArgs e)
         {
             e.Params["Controls"]["HiddenField"]["Name"].Value = "HiddenField";
+            e.Params["Controls"]["HiddenField"]["CssClass"].Value = "mux-hidden-field";
             e.Params["Controls"]["HiddenField"]["TypeName"].Value = "Magix.MetaForms.Plugins.HiddenField";
             e.Params["Controls"]["HiddenField"]["ToolTip"].Value = @"Creates a HiddenField type of 
 control, which you can assign Values to. A hidden field widget is not visible for the end user, 
@@ -792,6 +803,7 @@ ways, but still will follow your Widget around as a small piece of information s
         private void CreateTextBox(ActiveEventArgs e)
         {
             e.Params["Controls"]["TextBox"]["Name"].Value = "TextBox";
+            e.Params["Controls"]["TextBox"]["CssClass"].Value = "mux-text-box";
             e.Params["Controls"]["TextBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.TextBox";
             e.Params["Controls"]["TextBox"]["ToolTip"].Value = @"Creates a TextBox type of 
 control, which you can assign Text to and TextChanged Event Handlers. TextBoxes are the by far most 
@@ -873,6 +885,7 @@ focus, or clicking the widget with his mouse or touch screen";
         private static void CreateCheckBox(ActiveEventArgs e)
         {
             e.Params["Controls"]["CheckBox"]["Name"].Value = "CheckBox";
+            e.Params["Controls"]["CheckBox"]["CssClass"].Value = "mux-check-box";
             e.Params["Controls"]["CheckBox"]["TypeName"].Value = "Magix.MetaForms.Plugins.CheckBox";
             e.Params["Controls"]["CheckBox"]["ToolTip"].Value = @"Creates a CheckBox type of 
 control, which you can assign Text to and CheckedChanged Event Handlers. Useful for things that black and 
@@ -917,6 +930,7 @@ the checked state has changed, either by clicking or through some other user int
         private static void CreateLabel(ActiveEventArgs e)
         {
             e.Params["Controls"]["Label"]["Name"].Value = "Label";
+            e.Params["Controls"]["Label"]["CssClass"].Value = "mux-label";
             e.Params["Controls"]["Label"]["TypeName"].Value = "Magix.MetaForms.Plugins.Label";
             e.Params["Controls"]["Label"]["ToolTip"].Value = @"Creates a Label type of 
 control, which you can assign Text to. Basically serves as a read-only textual fragment on your page. 
@@ -949,6 +963,7 @@ in your browser unless you also set the Tag property to label";
         private static void CreateButton(ActiveEventArgs e)
         {
             e.Params["Controls"]["Button"]["Name"].Value = "Button";
+            e.Params["Controls"]["Button"]["CssClass"].Value = "mux-button";
             e.Params["Controls"]["Button"]["TypeName"].Value = "Magix.MetaForms.Plugins.Button";
             e.Params["Controls"]["Button"]["ToolTip"].Value = @"Creates a Button type of 
 control, which you can assign Click actions to, from which when the user clicks, will raise 
