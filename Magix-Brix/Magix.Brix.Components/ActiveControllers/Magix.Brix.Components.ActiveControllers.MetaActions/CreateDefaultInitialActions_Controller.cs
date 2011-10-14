@@ -48,6 +48,33 @@ from that Form into a new Meta Object with the TypeName from the View ...";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ReInitializeOverriddenActions")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ReInitializeOverriddenActions";
+                    a.EventName = "Magix.MetaAction.ReInitializeOverriddenActions";
+                    a.Description = @"Will Re-Initialize the Overridden Actions. Basically 
+destroy all existing overrides, that comes from Actions, and re-run the overriding 
+Initialization of whatever new values exists. By waiting with the remapping until you're done with 
+your entire change of logic, you can rewire as many Actions as you wish, create new, and such. And when 
+you're done, you can rewire all your Actions in one Swoop";
+                    a.StripInput = true;
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ClearOverriddenActions")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ClearOverriddenActions";
+                    a.EventName = "Magix.MetaAction.ClearOverriddenActions";
+                    a.Description = @"Will Clear all Overridden Actions. Basically 
+destroy all existing overrides, that comes from Actions";
+                    a.StripInput = true;
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.ScrollClientToTop")) == 0)
                 {
                     Action a = new Action();
