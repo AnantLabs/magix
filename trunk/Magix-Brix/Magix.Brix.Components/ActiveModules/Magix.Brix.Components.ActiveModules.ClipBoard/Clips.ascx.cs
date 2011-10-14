@@ -46,7 +46,9 @@ namespace Magix.Brix.Components.ActiveModules.ClipBoard
 
             node["ID"].Value = id;
 
-            RaiseSafeEvent("Magix.ClipBoard.PrepareToPasteNode");
+            RaiseSafeEvent(
+                "Magix.ClipBoard.PrepareToPasteNode",
+                node);
         }
 
         protected void DeleteClipboardItem(object sender, EventArgs e)
@@ -59,6 +61,11 @@ namespace Magix.Brix.Components.ActiveModules.ClipBoard
             node["ID"].Value = id;
 
             RaiseSafeEvent("Magix.ClipBoard.RemoveItemFromClipBoard");
+        }
+
+        protected void close_Click(object sender, EventArgs e)
+        {
+            RaiseSafeEvent("Magix.ClipBoard.CloseClipBoard");
         }
     }
 }

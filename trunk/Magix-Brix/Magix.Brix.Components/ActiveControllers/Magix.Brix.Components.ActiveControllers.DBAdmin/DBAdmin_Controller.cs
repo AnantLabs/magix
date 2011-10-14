@@ -103,8 +103,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             Data.Instance.GetObjectsNode(
                 fullTypeName,
                 node,
-                0,
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10),
+                node.Contains("Start") ? node["Start"].Get<int>() : 0,
+                node.Contains("End") ? node["End"].Get<int>() : Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + node["FullTypeName"].Get<string>(), 10),
                 pars.ToArray());
 
             if (!node.Contains("IsDelete"))
@@ -155,7 +155,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 fullTypeName,
                 e.Params,
                 e.Params["Start"].Get<int>(0),
-                e.Params["End"].Get<int>(Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10)),
+                e.Params["End"].Get<int>(Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + fullTypeName, 10)),
                 pars.ToArray());
 
             e.Params["End"].Value = e.Params["Start"].Get<int>(0) + e.Params["Objects"].Count;
@@ -220,7 +220,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     propertyName,
                     node,
                     0,
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + e.Params["FullTypeName"].Get<string>(), 10));
                 node["Start"].Value = 0;
                 node["End"].Value = node["Objects"].Count;
                 node["IsFilter"].Value = false;
@@ -264,7 +264,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     e.Params,
                     e.Params["Start"].Get<int>(),
                     e.Params["Start"].Get<int>() +
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + e.Params["FullTypeName"].Get<string>(), 10));
 
                 e.Params["Start"].Value = e.Params["Start"].Get<int>(0);
                 e.Params["End"].Value = e.Params["Start"].Get<int>() + e.Params["Objects"].Count;

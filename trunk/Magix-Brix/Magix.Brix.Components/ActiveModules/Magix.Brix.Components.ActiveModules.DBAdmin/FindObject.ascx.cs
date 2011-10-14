@@ -69,7 +69,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             DataSource["End"].Value =
                 DataSource["Start"].Get<int>(0) +
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10);
 
             ReDataBind(false);
 
@@ -81,7 +81,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             DataSource["Start"].Value = 0;
             DataSource["End"].Value =
-                Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10);
 
             ReDataBind(false);
         }
@@ -92,13 +92,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Math.Max(
                     0,
                     DataSource["Start"].Get<int>() -
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10));
 
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10));
 
             ReDataBind(false);
         }
@@ -115,7 +115,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10));
 
             ReDataBind(false);
         }
@@ -167,14 +167,14 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 //    node);
             }
 
-            previous.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
-            next.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+            previous.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10);
+            next.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10);
 
             previous.Enabled = DataSource["Start"].Get<int>() > 0;
             next.Enabled = DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
 
-            beginning.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) * 2;
-            end.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) * 2;
+            beginning.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10) * 2;
+            end.Visible = DataSource["SetCount"].Get<int>() > Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10) * 2;
 
             beginning.Enabled = DataSource["Start"].Get<int>() > 0;
             end.Enabled = DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
@@ -189,7 +189,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 DataSource["Start"].Value = 0;
                 DataSource["End"].Value =
                     DataSource["Start"].Get<int>(0) +
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10);
 
                 ReDataBind(false);
             }
@@ -200,7 +200,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     DataSource["Start"].Value = 0;
                     DataSource["End"].Value =
                         DataSource["Start"].Get<int>(0) +
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10);
 
                     ReDataBind(false);
                 }
@@ -221,18 +221,18 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             if (DataSource["SetCount"].Get<int>() >= DataSource["End"].Get<int>() &&
                 DataSource["End"].Get<int>() -
                 DataSource["Start"].Get<int>() <
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10))
             {
                 DataSource["End"].Value =
                     DataSource["Start"].Get<int>() +
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10);
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10);
             }
             if (setSelectedRow)
             {
                 // Now the logical thing to do, is to page to the end, since that's the likely
                 // place we'll find this object within our grid ...
                 if (DataSource["SetCount"].Get<int>() >=
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10))
                 {
                     // We have more items in our SetCount, than we have space for at
                     // the time being within our Grid component ...
@@ -241,7 +241,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
                     DataSource["Start"].Value =
                         DataSource["SetCount"].Get<int>() -
-                        (Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10) - 1);
+                        (Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10) - 1);
                 }
             }
             if (RaiseSafeEvent(

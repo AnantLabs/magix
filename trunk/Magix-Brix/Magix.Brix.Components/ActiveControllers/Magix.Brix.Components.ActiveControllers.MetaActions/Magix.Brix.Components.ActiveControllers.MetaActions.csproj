@@ -71,6 +71,10 @@
       <Project>{175455B9-43D0-4190-A2AE-8033BD3D62A1}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Publishing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Settings\Magix.Brix.Components.ActiveTypes.Settings.csproj">
+      <Project>{78EE9D9B-691B-4D5C-AD72-9023366BE44F}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ActiveTypes\Magix.Brix.Components.ActiveTypes.Users\Magix.Brix.Components.ActiveTypes.Users.csproj">
       <Project>{72BD8731-239E-463D-A66C-556ED55A4578}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Users</Name>

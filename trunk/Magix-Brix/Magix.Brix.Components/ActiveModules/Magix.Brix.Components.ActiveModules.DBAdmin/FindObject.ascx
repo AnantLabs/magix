@@ -16,7 +16,8 @@
     <mux:TextBox
         runat="server"
         id="query"
-        PlaceHolder="Filter..." />
+        AccessKey="S"
+        PlaceHolder="Search ..." />
 
     <mux:Button
         runat="server"

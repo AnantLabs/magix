@@ -11,7 +11,7 @@
 <div class="wysiwyg-meta-forms">
     <mux:Panel
         runat="server"
-        CssClass="mux-wysiwyg-surface mux-meta-form-wysiwyg-wrapper span-24 prepend-top last clear-both"
+        CssClass="mux-wysiwyg-surface mux-meta-form-wysiwyg-wrapper span-24 last clear-both"
         id="ctrls" />
 
     <mux:Window
