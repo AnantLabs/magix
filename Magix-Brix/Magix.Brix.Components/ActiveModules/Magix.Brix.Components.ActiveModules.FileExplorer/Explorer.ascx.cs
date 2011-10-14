@@ -167,9 +167,11 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                 DataSource["FolderToOpen"].Value = folderName;
                                 DataSource["Directories"].UnTie();
                                 DataSource["Files"].UnTie();
+
                                 RaiseSafeEvent(
                                     "Magix.FileExplorer.GetFilesFromFolder",
                                     DataSource);
+
                                 ReDataBind();
                             };
                         p.CssClass = "folderIcon";
@@ -178,7 +180,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                         if (DataSource.Contains("SelectedFile") &&
                             DataSource["SelectedFile"].Get<string>().ToLower() == name.ToLower())
                             p.CssClass += " selected";
-                        p.ToolTip = name.Substring(name.LastIndexOf("\\") + 1);
+                        p.ToolTip = name.Substring(name.LastIndexOf("\\") + 1) + " - Click to Open Folder ...";
                         p.Controls.Add(btn);
                         p.Controls.Add(icon);
                         pnl.Controls.Add(p);
@@ -242,7 +244,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                     prop.Style[Styles.display] = "none";
                                 };
                             p.Info = name;
-                            p.ToolTip = name + " - click for more options/info ...";
+                            p.ToolTip = name + " - Click for more options/info ...";
                             p.Controls.Add(btn);
                             pnl.Controls.Add(p);
                         }
@@ -298,7 +300,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
                                     prop.Style[Styles.display] = "none";
                                 };
                             p.Info = name;
-                            p.ToolTip = name + " - click for more options/info ...";
+                            p.ToolTip = name + " - Click for more options/info ...";
                             p.Controls.Add(btn);
                             pnl.Controls.Add(p);
                         }
@@ -320,8 +322,10 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             {
                 // Raising the "EditFile" event ...
                 Node node = new Node();
+
                 node["File"].Value =
                     DataSource["Folder"].Get<string>() + DataSource["File"]["FullName"].Get<string>();
+
                 RaiseSafeEvent(
                     "Magix.FileExplorer.EditAsciiFile",
                     node);
@@ -691,6 +695,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
         private void OpenFullPreviewOfImage(string file)
         {
             Node node = new Node();
+
             int width = DataSource["File"]["ImageWidth"].Get<int>() + 80;
             width += 40 - ((width + 10) % 40);
             node["ForcedSize"]["width"].Value = width;
@@ -698,8 +703,7 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
             height += 18 - (height % 18);
             node["ForcedSize"]["height"].Value = height + 2;
             node["ImageURL"].Value = file;
-            node["Push"].Value = 2;
-            node["Top"].Value = 4;
+            node["Top"].Value = 25;
             node["Last"].Value = true;
             node["SetFocus"].Value = true;
             node["ToolTip"].Value = 

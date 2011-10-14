@@ -2853,6 +2853,7 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
             Node nn = new Node();
 
             nn["Width"].Value = 24;
+            nn["Top"].Value = 21;
             nn["Caption"].Value = "C# Code for Widget ...";
             nn["CssClass"].Value = "mux-text-editor";
 
@@ -2964,7 +2965,7 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
 
             node["Caption"].Value = "Magix Style Builder for Widget ...";
             node["Width"].Value = 24;
-            node["Top"].Value = 20;
+            node["Top"].Value = 21;
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.MetaForms.StyleBuilder",

@@ -652,6 +652,7 @@ only data or 'simple applications'. You can build as complex applications as you
 
                 e.Params["Items"]["P" + idx.ID]["Name"].Value = idx.Name;
                 e.Params["Items"]["P" + idx.ID]["ID"].Value = idx.ID;
+                e.Params["Items"]["P" + idx.ID]["CssClass"].Value = "mux-page-edit";
 
                 if (idx.Children.Count > 0)
                     DoChildren(idx, e.Params["Items"]["P" + idx.ID]);
@@ -863,24 +864,26 @@ only data or 'simple applications'. You can build as complex applications as you
                 throw new ArgumentException("You cannot delete the top most Page, only edit it ...");
             }
 
-            int affectedPages = 1;
+            int affectedPages = 0;
             affectedPages += CountChildPages(o);
 
             // Showing message box to user asking him if he's really sure he wish to delete
             // this page ...
             Node node = new Node();
+
             node["ForcedSize"]["width"].Value = 550;
             node["CssClass"].Value =
-                "mux-shaded mux-rounded push-5 down-2";
+                "mux-shaded mux-rounded";
 
             node["Caption"].Value = @"Are you CERTAIN ...?";
             node["Text"].Value = string.Format(@"
 <p>Are you sure you wish to delete this Page? This operation is ireversible, and will affect {0} other pages</p>",
-                affectedPages);
+                (affectedPages == 0 ? "no" : affectedPages.ToString()));
             node["OK"]["ID"].Value = o.ID;
             node["OK"]["Event"].Value = "Magix.Publishing.DeletePageObject-Confirmed";
             node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
             node["Width"].Value = 15;
+            node["Top"].Value = 20;
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",

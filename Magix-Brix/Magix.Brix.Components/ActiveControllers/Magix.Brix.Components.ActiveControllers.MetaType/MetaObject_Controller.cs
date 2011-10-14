@@ -335,6 +335,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             else
             {
                 node["Container"].Value = "content4";
+                node["Top"].Value = 1;
                 ActiveEvents.Instance.RaiseClearControls("content5");
             }
 

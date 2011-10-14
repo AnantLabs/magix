@@ -1251,6 +1251,11 @@ li.mux-tree-item-class span.mux-tree-icon
 	background:transparent url(../images/tree-objects.png) no-repeat 0 0;
 }
 
+.mux-page-edit .mux-tree-icon
+{
+	background:transparent url(../images/pages-tree-icon.png) no-repeat 0 0;
+}
+
 .mux-parameters
 {
 	min-height:720px;

@@ -35,7 +35,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             node["Width"].Value = 22;
             node["Top"].Value = 2;
-            node["MarginBottom"].Value = 20;
+            node["MarginBottom"].Value = 10;
             node["Last"].Value = true;
             node["Container"].Value = "content4";
             node["Filter"].Value = "*.*";
@@ -51,6 +51,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             ActiveEvents.Instance.RaiseClearControls("content5");
             ActiveEvents.Instance.RaiseClearControls("content6");
+
+            node = new Node();
+
+            node["Caption"].Value = "File System";
+
+            RaiseEvent(
+                "Magix.Core.SetFormCaption",
+                node);
         }
     }
 }

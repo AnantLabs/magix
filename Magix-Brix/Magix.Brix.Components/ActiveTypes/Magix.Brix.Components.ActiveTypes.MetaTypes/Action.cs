@@ -145,10 +145,16 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         public string Description { get; set; }
 
         /**
-         * The Name of the ActiveEvent being raised by this action
+         * The Name of the Active Event being raised by this action
          */
         [ActiveField]
         public string EventName { get; set; }
+
+        /**
+         * The Name of the Active Event this Action will Override
+         */
+        [ActiveField]
+        public string Overrides { get; set; }
 
         /**
          * The parameters to the ActiveEvent. Will become serialized as Nodes being passed

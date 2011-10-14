@@ -39,7 +39,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
          * Level2: BAsically the content of the h1 element. Default value is
          * 'The Caption of your Header'
          */
-        [ModuleSetting(DefaultValue = "The Caption of your Header WebPart")]
+        [ModuleSetting(DefaultValue = "Caption WebPart")]
         public string Caption
         {
             get { return ViewState["Caption"] as string; }
