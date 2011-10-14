@@ -62,6 +62,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["CssClass"].Value = "mux-edit-actions";
             node["Width"].Value = 18;
             node["Last"].Value = true;
+            node["IsFind"].Value = true;
+            node["GetContentsEventName"].Value = "DBAdmin.Data.GetContentsOfClass-Filter-Override";
+            node["SetFocus"].Value = true;
 
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 9;
@@ -82,6 +85,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Name"]["NoFilter"].Value = false;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
@@ -142,13 +146,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
-            node["Type"]["Properties"]["Name"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Name"]["NoFilter"].Value = false;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
         }
@@ -177,7 +180,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         protected void DBAdmin_Data_GetContentsOfClass_Filter_Override(object sender, ActiveEventArgs e)
         {
             // First in Header ...
-            if (e.Params.Contains("Filter"))
+            if (e.Params.Contains("Filter") && 
+                !string.IsNullOrEmpty(e.Params["Filter"].Get<string>()))
             {
                 e.Params["Criteria"]["C3"]["Name"].Value = "Like";
                 e.Params["Criteria"]["C3"]["Value"].Value = "%" + e.Params["Filter"].Get<string>() + "%";
@@ -185,7 +189,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
             else if (e.Params.Contains("Criteria") &&
                 e.Params["Criteria"].Contains("C3"))
+            {
                 e.Params["Criteria"]["C3"].UnTie();
+            }
 
             RaiseEvent(
                 "DBAdmin.Data.GetContentsOfClass",

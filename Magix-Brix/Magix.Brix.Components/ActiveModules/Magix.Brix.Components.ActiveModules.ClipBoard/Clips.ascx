@@ -9,6 +9,13 @@
 <link href="media/modules/clipboard.css" rel="stylesheet" type="text/css" />
 
 <div class="mux-clipboard-wrapper">
+    <mux:LinkButton
+        runat="server"
+        id="close"
+        ToolTip="Closes the Clipboard"
+        OnClick="close_Click"
+        CssClass="mux-clipboard-close"
+        Text="Close" />
     <asp:Repeater
         runat="server"
         id="rep">

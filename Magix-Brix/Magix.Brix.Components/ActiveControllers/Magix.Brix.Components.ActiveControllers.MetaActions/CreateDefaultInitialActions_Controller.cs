@@ -11,6 +11,7 @@ using Magix.Brix.Data;
 using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using System.Globalization;
 using Magix.Brix.Components.ActiveTypes.MetaViews;
+using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -31,6 +32,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
+                Settings.Instance.Set("DBAdmin.MaxItemsToShow-" + typeof(Action).FullName, 8);
+
                 if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.SaveActiveForm")) == 0)
                 {

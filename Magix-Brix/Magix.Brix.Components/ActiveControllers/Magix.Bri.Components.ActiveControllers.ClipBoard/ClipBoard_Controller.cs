@@ -128,5 +128,15 @@ namespace Magix.Bri.Components.ActiveControllers.ClipBoard
                 "Magix.ClipBoard.PasteItem",
                 tmp);
         }
+
+        /**
+         * Level2: Closes the Clipboard Module, if it is up
+         */
+        [ActiveEvent(Name = "Magix.ClipBoard.CloseClipBoard")]
+        protected void Magix_ClipBoard_CloseClipBoard(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("floater");
+            ShowMessage("You can Open the Clipboard again using the Menu Item Admin/Clipboard ...");
+        }
     }
 }

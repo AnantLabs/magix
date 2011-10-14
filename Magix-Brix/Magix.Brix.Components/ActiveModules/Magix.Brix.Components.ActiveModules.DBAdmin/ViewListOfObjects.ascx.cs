@@ -89,13 +89,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Math.Max(
                     0,
                     DataSource["Start"].Get<int>() -
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10));
 
             DataSource["End"].Value =
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10));
 
             ReDataBind();
         }
@@ -112,7 +112,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 Math.Min(
                     DataSource["SetCount"].Get<int>(),
                     DataSource["Start"].Get<int>() +
-                        Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10));
+                        Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10));
 
             ReDataBind();
         }
@@ -161,7 +161,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 previous.Enabled = false;
                 if (DataSource["SetCount"].Get<int>() <=
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10))
                     previous.Visible = false;
                 else
                     previous.Visible = true;
@@ -175,7 +175,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             {
                 next.Enabled = false;
                 if (DataSource["SetCount"].Get<int>() <=
-                    Settings.Instance.Get("DBAdmin.MaxItemsToShow", 10))
+                    Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10))
                     next.Visible = false;
                 else
                     next.Visible = true;

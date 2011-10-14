@@ -2571,6 +2571,8 @@ focus, or clicking the widget with his mouse or touch screen";
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
+            node["Start"].Value = 0;
+            node["End"].Value = 8;
 
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",
