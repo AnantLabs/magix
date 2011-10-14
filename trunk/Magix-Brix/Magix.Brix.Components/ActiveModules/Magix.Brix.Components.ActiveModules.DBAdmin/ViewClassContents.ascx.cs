@@ -25,9 +25,9 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
     public class ViewClassContents : ListModule, IModule
     {
         protected Panel pnl;
+        protected Button create;
         protected Button previous;
         protected Button next;
-        protected Button create;
         protected Button end;
         protected Button beginning;
         protected Panel root;
@@ -107,7 +107,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                     "DBAdmin.Common.CreateObject",
                 DataSource);
 
-            ReDataBind(true);
+            ReDataBind(false);
         }
 
         protected override System.Web.UI.Control TableParent

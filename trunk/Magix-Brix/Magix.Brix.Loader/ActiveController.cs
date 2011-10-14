@@ -159,6 +159,25 @@ namespace Magix.Brix.Loader
         }
 
         /**
+         * Level3: Shows a Message to the user with the given body and header and Milliseconds
+         */
+        [DebuggerStepThrough]
+        protected void ShowMessage(string body, string header, int milliseconds)
+        {
+            Node n = new Node();
+
+            n["Message"].Value = body;
+            n["Milliseconds"].Value = milliseconds;
+
+            if (header != null)
+                n["Header"].Value = header;
+
+            RaiseEvent(
+                "Magix.Core.ShowMessage",
+                n);
+        }
+
+        /**
          * Level3: Shows an Error Message to the user with the given body and header
          */
         [DebuggerStepThrough]

@@ -63,6 +63,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["IsFind"].Value = true;
+            node["IsCreate"].Value = true;
             node["GetContentsEventName"].Value = "DBAdmin.Data.GetContentsOfClass-Filter-Override";
             node["SetFocus"].Value = true;
 
@@ -312,17 +313,24 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 "Magix.Meta.CreateAction",
                 e.Params);
 
-            Node node = new Node();
+            Node n = new Node();
 
-            node["Start"].Value = 0;
-            node["End"].Value = 10;
-            node["FullTypeName"].Value = typeof(Action).FullName;
+            n["FullTypeName"].Value = typeof(Action).FullName;
 
             RaiseEvent(
-                "Magix.Core.SetGridPageStart",
-                node);
+                "Magix.Core.UpdateGrids",
+                n);
 
-            Node n = new Node();
+            n = new Node();
+            n["FullTypeName"].Value = typeof(Action).FullName;
+            n["ID"].Value = e.Params["NewID"].Value;
+
+            RaiseEvent(
+                "DBAdmin.Grid.SetActiveRow",
+                n);
+
+            n = new Node();
+
             n["ID"].Value = e.Params["NewID"].Value;
 
             RaiseEvent(
@@ -349,6 +357,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             if (!a.Name.StartsWith("Magix."))
                 CreateCreateParamButton(a);
+
+            if (!a.Name.StartsWith("Magix."))
+                CreateCreateParamButton2(a);
 
             if (!a.Name.StartsWith("Magix."))
                 CreateDeleteParamButton(a);
@@ -471,11 +482,34 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             Node node = new Node();
 
-            node["Text"].Value = "New Param ...";
+            node["Text"].Value = "New Root Param ...";
             node["ButtonCssClass"].Value = "span-5";
             node["Append"].Value = true;
             node["Event"].Value = "Magix.Meta.CreateParameter";
             node["Event"]["ID"].Value = a.ID;
+            node["Event"]["IsRoot"].Value = true;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content5",
+                node);
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private void CreateCreateParamButton2(Action a)
+        {
+            Node node = new Node();
+
+            node["Seed"].Value = "create-child-button";
+            node["Text"].Value = "New Child Param ...";
+            node["ButtonCssClass"].Value = "span-5";
+            node["Append"].Value = true;
+            node["Enabled"].Value = false;
+            node["Event"].Value = "Magix.Meta.CreateParameter";
+            node["Event"]["ID"].Value = a.ID;
+            node["Event"]["IsRoot"].Value = false;
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
@@ -529,7 +563,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             ActiveEvents.Instance.RaiseClearControls("content6");
 
             Node node = new Node();
+
             node["Seed"].Value = "delete-button";
+            node["Enabled"].Value = false;
+
+            RaiseEvent(
+                "Magix.Core.EnabledClickable",
+                node);
+
+            node = new Node();
+
+            node["Seed"].Value = "create-child-button";
             node["Enabled"].Value = false;
 
             RaiseEvent(
@@ -574,7 +618,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 p.Value = "Default, please change ...";
                 p.Name = "Default Name";
 
-                if (!tmp.Contains("ID"))
+                if (e.Params.Contains("IsRoot") && e.Params["IsRoot"].Get<bool>() || !tmp.Contains("ID"))
                 {
                     a.Params.Add(p);
                     a.Save();
@@ -778,6 +822,15 @@ Deleting it may break these parts.</p>";
             node = new Node();
 
             node["Seed"].Value = "delete-button";
+            node["Enabled"].Value = true;
+
+            RaiseEvent(
+                "Magix.Core.EnabledClickable",
+                node);
+
+            node = new Node();
+
+            node["Seed"].Value = "create-child-button";
             node["Enabled"].Value = true;
 
             RaiseEvent(

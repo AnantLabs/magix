@@ -136,7 +136,10 @@ namespace Magix.Bri.Components.ActiveControllers.ClipBoard
         protected void Magix_ClipBoard_CloseClipBoard(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("floater");
-            ShowMessage("You can Open the Clipboard again using the Menu Item Admin/Clipboard ...");
+            ShowMessage(
+                "You can Open the Clipboard again using the Menu Item Admin/Clipboard ...", 
+                "Hint, hint ...", 
+                3500);
         }
     }
 }

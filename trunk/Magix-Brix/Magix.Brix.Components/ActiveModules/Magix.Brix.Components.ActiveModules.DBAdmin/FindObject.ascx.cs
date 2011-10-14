@@ -23,6 +23,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Panel pnlWrp;
         protected Panel pnl;
         protected Button previous;
+        protected Button create;
         protected Button next;
         protected Button beginning;
         protected Button end;
@@ -36,6 +37,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             Load +=
                 delegate
                 {
+                    create.Visible = node.Contains("IsCreate") &&
+                        node["IsCreate"].Get<bool>();
                     if (node.Contains("ChildCssClass"))
                         pnlWrp.CssClass = node["ChildCssClass"].Get<string>();
                     if (node.Contains("SetFocus") && 
@@ -107,7 +110,8 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             DataSource["Start"].Value =
                     Math.Min(
-                        DataSource["SetCount"].Get<int>() - 10,
+                        DataSource["SetCount"].Get<int>() -
+                            Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10),
                         DataSource["Start"].Get<int>() +
                             DataSource["Objects"].Count);
 
@@ -178,6 +182,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             beginning.Enabled = DataSource["Start"].Get<int>() > 0;
             end.Enabled = DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
+        }
+
+        protected void CreateItem(object sender, EventArgs e)
+        {
+            RaiseSafeEvent(
+                DataSource.Contains("CreateEventName") ?
+                    DataSource["CreateEventName"].Get<string>() :
+                    "DBAdmin.Common.CreateObject",
+                DataSource);
+
+            ReDataBind(false);
         }
 
         protected override void RefreshWindowContent(object sender, ActiveEventArgs e)

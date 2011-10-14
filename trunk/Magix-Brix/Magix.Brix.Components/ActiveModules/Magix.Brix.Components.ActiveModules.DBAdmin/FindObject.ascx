@@ -36,6 +36,15 @@
 
         <mux:Button
             runat="server"
+            OnClick="CreateItem"
+            ToolTip="Click to create a New Object ..."
+            Text="+"
+            AccessKey="C"
+            CssClass="mux-paging-button mux-button-plus span-1"
+            id="create" />
+
+        <mux:Button
+            runat="server"
             OnClick="FirstItems"
             Text="&lt;&lt;"
             CssClass="mux-paging-button mux-button-beginning span-1"
