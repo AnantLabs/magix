@@ -79,7 +79,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         {
             DataSource["Start"].Value =
                     Math.Min(
-                        DataSource["SetCount"].Get<int>() - 10,
+                        DataSource["SetCount"].Get<int>() - Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10),
                         DataSource["Start"].Get<int>() +
                             DataSource["Objects"].Count);
 
@@ -94,7 +94,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
         protected void EndItems(object sender, EventArgs e)
         {
-            DataSource["Start"].Value = Math.Max(0, DataSource["SetCount"].Get<int>() - 10);
+            DataSource["Start"].Value = Math.Max(0, DataSource["SetCount"].Get<int>() - Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10));
             DataSource["End"].Value = DataSource["SetCount"].Get<int>();
             ReDataBind(false);
         }

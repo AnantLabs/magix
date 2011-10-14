@@ -238,6 +238,52 @@ namespace Magix.Brix.Loader
             _eventMappers[from] = to;
         }
 
+        /**
+         * Level3: Will destroy the given [key] Active Event Mapping
+         */
+        public void RemoveMapping(string key)
+        {
+            _eventMappers.Remove(key);
+        }
+
+        /**
+         * Level2: Will return the given Value for the given Key Active Event Override
+         */
+        public string GetEventMappingValue(string key)
+        {
+            return _eventMappers[key];
+        }
+
+        /**
+         * Level3: Returns an Enumerable of all the Keys in the Event Mapping Collection. Basically
+         * which Active Events are overridden
+         */
+        public IEnumerable<string> EventMappingKeys
+        {
+            get
+            {
+                foreach (string idx in _eventMappers.Keys)
+                {
+                    yield return idx;
+                }
+            }
+        }
+
+        /**
+         * Level3: Returns an Enumerable of all the Values in the Event Mapping Collection. Basically
+         * where he Overridden Active Events are 'pointing'
+         */
+        public IEnumerable<string> EventMappingValues
+        {
+            get
+            {
+                foreach (string idx in _eventMappers.Values)
+                {
+                    yield return idx;
+                }
+            }
+        }
+
         [DebuggerStepThrough]
         private string GetEventName(string name)
         {

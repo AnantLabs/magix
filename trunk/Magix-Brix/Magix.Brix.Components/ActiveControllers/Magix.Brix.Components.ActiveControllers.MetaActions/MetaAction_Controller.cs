@@ -11,6 +11,7 @@ using Magix.Brix.Components.ActiveTypes.MetaTypes;
 using Magix.Brix.Data;
 using Magix.UX.Widgets;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -40,7 +41,43 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             foreach (Action idx in Action.Select(Criteria.Sort("Overrides", true)))
             {
                 ActiveEvents.Instance.CreateEventMapping(idx.Overrides, "Magix.MetaAction.RaiseOverriddenAction");
-                ActiveEvents.Instance.CreateEventMapping(idx.Overrides + "-Overridden", idx.Overrides);
+                ActiveEvents.Instance.CreateEventMapping(idx.Overrides + "-Action-Overridden", idx.Overrides);
+            }
+        }
+
+        /**
+         * Level2: Will Reinitialize all the Overridden Actions
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.ReInitializeOverriddenActions")]
+        protected void Magix_Meta_ReInitializeOverriddenActions(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent("Magix.MetaAction.ClearOverriddenActions");
+            CreateActionOverrides();
+        }
+
+        /**
+         * Level2: Will Clear all the Overridden Actions
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.ClearOverriddenActions")]
+        protected void Magix_Meta_ClearOverriddenActions(object sender, ActiveEventArgs e)
+        {
+            List<string> lst = new List<string>();
+
+            foreach (string idx in ActiveEvents.Instance.EventMappingKeys)
+            {
+                if (idx.EndsWith("-Action-Overridden"))
+                {
+                    lst.Add(idx);
+                }
+                else if (ActiveEvents.Instance.GetEventMappingValue(idx) == "Magix.MetaAction.RaiseOverriddenAction")
+                {
+                    lst.Add(idx);
+                }
+            }
+
+            foreach (string idx in lst)
+            {
+                ActiveEvents.Instance.RemoveMapping(idx);
             }
         }
 
