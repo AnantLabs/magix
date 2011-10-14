@@ -428,6 +428,9 @@
             return;
           }
         }
+        if(ctx.element && ctx.element.disabled == 'disabled') {
+          return;
+        }
         var prs = (pars || []);
         prs.push(wrEvt);
         var retVal = func.apply(ctx, prs);
