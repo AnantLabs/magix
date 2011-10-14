@@ -134,7 +134,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["CreateEventName"].Value = "Magix.Publishing.CreateUser";
 
             node["Type"]["Properties"]["Username"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Username"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Password"]["ReadOnly"].Value = false;
+            node["Type"]["Properties"]["Password"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Roles"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Roles"]["Header"].Value = "Role"; // Singular form ...
             node["Type"]["Properties"]["Roles"]["TemplateColumnEvent"].Value = 

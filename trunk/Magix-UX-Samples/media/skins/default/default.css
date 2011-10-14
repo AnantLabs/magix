@@ -1098,6 +1098,10 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 	display:inline-block;
 }
 
+.mux-in-place-edit a:hover
+{
+}
+
 .mux-in-place-edit input[type=text],
 .mux-in-place-edit textarea
 {

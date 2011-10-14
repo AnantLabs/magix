@@ -9,17 +9,6 @@
 <link href="media/modules/edit-meta-forms.css" rel="stylesheet" type="text/css" />
 
 <div class="wysiwyg-meta-forms">
-    <mux:CheckBox
-        runat="server"
-        OnCheckedChanged="chkAllowDragging_CheckedChanged"
-        style="display:block;float:left;width:18px;"
-        id="chkAllowDragging" />
-    <mux:Label
-        runat="server"
-        Tag="label"
-        For="chkAllowDragging"
-        ToolTip="If true, allows you to drag and drop Widgets around to absolutely position them. This feature is a emergency feature, and shouldn't be used unless you _really_ have to, since it destroys the flow-layout of the form, and makes your apps harder to get to work with devices and such ..."
-        Text="Allow Dragging and Dropping" />
     <mux:Panel
         runat="server"
         CssClass="mux-wysiwyg-surface mux-meta-form-wysiwyg-wrapper span-24 prepend-top last clear-both"
@@ -41,12 +30,21 @@
                 <ItemTemplate>
                     <mux:LinkButton
                         runat="server"
-                        CssClass="mux-toolbox-item"
+                        CssClass='<%#Eval("[CssClass].Value") + " mux-toolbox-item" %>'
                         ToolTip='<%#Eval("[ToolTip].Value") %>'
                         OnClick="AddControlToPage"
                         Info='<%#Eval("[TypeName].Value") %>'
                         Text='<%#Eval("[Name].Value") %>' />
                 </ItemTemplate>
+                <AlternatingItemTemplate>
+                    <mux:LinkButton
+                        runat="server"
+                        CssClass='<%#Eval("[CssClass].Value") + " mux-toolbox-item last" %>'
+                        ToolTip='<%#Eval("[ToolTip].Value") %>'
+                        OnClick="AddControlToPage"
+                        Info='<%#Eval("[TypeName].Value") %>'
+                        Text='<%#Eval("[Name].Value") %>' />
+                </AlternatingItemTemplate>
             </asp:Repeater>
         </Content>
     </mux:Window>
@@ -61,9 +59,20 @@
         Closable="false"
         Caption="Properties & Actions ...">
         <Content>
+            <mux:CheckBox
+                runat="server"
+                OnCheckedChanged="chkAllowDragging_CheckedChanged"
+                style="display:block;float:left;width:20px;"
+                id="chkAllowDragging" />
+            <mux:Label
+                runat="server"
+                Tag="label"
+                For="chkAllowDragging"
+                ToolTip="If true, allows you to drag and drop Widgets around to absolutely position them. This feature is a emergency feature, and shouldn't be used unless you _really_ have to, since it destroys the flow-layout of the form, and makes your apps harder to get to work with devices and such ..."
+                Text="Allow Drag and Drop" />
             <div 
                 title="These actions will be raised as your Form is being initially loaded. Meaning, only when a Meta Form is being initially loaded, these Actions will run"
-                class="span-6 last mux-init-actions-row">
+                class="span-6 last mux-init-actions-row down-1">
                 <div class="span-3">
                     <label>Form Init Actions:</label>
                 </div>

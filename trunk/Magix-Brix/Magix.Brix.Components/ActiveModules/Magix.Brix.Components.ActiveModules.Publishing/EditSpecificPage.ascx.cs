@@ -21,8 +21,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
     [ActiveModule]
     public class EditSpecificPage : ActiveModule
     {
-        protected InPlaceTextAreaEdit header;
-        protected InPlaceTextAreaEdit url;
+        protected InPlaceEdit header;
+        protected InPlaceEdit url;
         protected SelectList sel;
         protected Panel parts;
         protected Panel roles;
@@ -259,6 +259,9 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         private void CreateInPlaceEdit(int id, Window w, string propName, string value, int webPartId)
         {
             InPlaceEdit ed = new InPlaceEdit();
+            ed.CssClass = "span-5 mux-in-place-edit";
+            ed.Style[Styles.position] = "relative";
+            ed.Style[Styles.height] = "18px";
             ed.ToolTip = propName;
             ed.Text = value;
             ed.Info = id.ToString() + "|" + propName;

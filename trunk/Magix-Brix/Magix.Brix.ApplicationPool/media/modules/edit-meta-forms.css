@@ -37,11 +37,14 @@
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
+
 	display:block;
-	width:85px;
+	width:80px;
+	height:36px;
 	font-size:9px;
 	padding:9px 10px 9px 10px;
 	margin-right:10px;
@@ -49,26 +52,115 @@
 	float:left;
 	text-decoration:none;
 	background-color:rgba(0,0,0,.1);
+	color:rgba(0,0,0,0);
+
 	-moz-transition-property:-moz-box-shadow, color;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:0.5s;
 	-webkit-transition-property:-webkit-box-shadow, color;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:0.5s;
+	-o-transition-property:box-shadow, color;
+	-o-transition-duration:0.5s;
+	-ms-transition-property:box-shadow, color;
+	-ms-transition-duration:0.5s;
 	transition-property:box-shadow, color;
-	transition-duration:0.2s;
+	transition-duration:0.5s;
 }
 
 .mux-toolbox-item:hover
 {
 	-moz-transition-property:-moz-box-shadow, color;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:0.5s;
 	-webkit-transition-property:-webkit-box-shadow, color;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:0.5s;
+	-o-transition-property:box-shadow, color;
+	-o-transition-duration:0.5s;
+	-ms-transition-property:box-shadow, color;
+	-ms-transition-duration:0.5s;
 	transition-property:box-shadow, color;
-	transition-duration:0.2s;
+	transition-duration:0.5s;
+
 	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+
+	color:rgba(0,0,0,1);
 }
+
+.mux-button
+{
+	background:transparent url(../Images/Icons/button.png) no-repeat 0 0;
+}
+
+.mux-label
+{
+	background:transparent url(../Images/Icons/label.png) no-repeat 0 0;
+}
+
+.mux-check-box
+{
+	background:transparent url(../Images/Icons/checkbox.png) no-repeat 0 0;
+}
+
+.mux-text-box
+{
+	background:transparent url(../Images/Icons/textbox.png) no-repeat 0 0;
+}
+
+.mux-hidden-field
+{
+	background:transparent url(../Images/Icons/hiddenfield.png) no-repeat 0 0;
+}
+
+.mux-hyper-link
+{
+	background:transparent url(../Images/Icons/hyperlink.png) no-repeat 0 0;
+}
+
+.mux-image
+{
+	background:transparent url(../Images/Icons/image.png) no-repeat 0 0;
+}
+
+.mux-link-button
+{
+	background:transparent url(../Images/Icons/linkbutton.png) no-repeat 0 0;
+}
+
+.mux-text-area
+{
+	background:transparent url(../Images/Icons/textarea.png) no-repeat 0 0;
+}
+
+.mux-radio-button
+{
+	background:transparent url(../Images/Icons/radiobutton.png) no-repeat 0 0;
+}
+
+.mux-view-calendar
+{
+	background:transparent url(../Images/Icons/calendar.png) no-repeat 0 0;
+}
+
+.mux-panel
+{
+	background:transparent url(../Images/Icons/panel.png) no-repeat 0 0;
+}
+
+.mux-repeater
+{
+	background:transparent url(../Images/Icons/repeater.png) no-repeat 0 0;
+}
+
+.mux-stars
+{
+	background:transparent url(../Images/Icons/stars.png) no-repeat 0 0;
+}
+
+.mux-ruler
+{
+	background:transparent url(../Images/Icons/ruler.png) no-repeat 0 0;
+}
+
 
 .mux-meta-form-wysiwyg-wrapper
 {

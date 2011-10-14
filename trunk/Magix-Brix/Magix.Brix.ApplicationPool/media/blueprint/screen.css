@@ -86,7 +86,7 @@ fieldset, #IE8#HACK {padding-top:1.4em;}
 legend, #IE8#HACK {margin-top:0;margin-bottom:0;}
 input[type=text], input[type=password], input[type=number], input.text, input.title, textarea {}
 input[type=text]:focus, input[type=password]:focus, input[type=number]:focus, input.text:focus, input.title:focus, textarea:focus {}
-select {background-color:#fff;border-width:1px;border-style:solid;}
+select {background-color:#fff;border-width:1px;border-style:solid;margin-top:0;margin-bottom:0;}
 input.title {font-size:1.5em;}
 textarea {}
 form.inline {line-height:3;}
