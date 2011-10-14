@@ -106,9 +106,14 @@ namespace Magix.Brix.Components
 
             table.Controls.Add(CreateHeaderForTable());
 
+            string chars = "qwerasdzxc";
+
+            int idxNo = 0;
+
             foreach (Node idx in DataSource["Objects"])
             {
-                table.Controls.Add(CreateRow(idx));
+                table.Controls.Add(CreateRow(idx, chars[idxNo % chars.Length].ToString()));
+                idxNo += 1;
             }
 
             TableParent.Controls.Add(table);
@@ -160,9 +165,12 @@ namespace Magix.Brix.Components
         protected void FilterMethod(object sender, EventArgs e)
         {
             LinkButton btn = sender as LinkButton;
+
             Node node = new Node();
+
             node["PropertyName"].Value = btn.Info;
             node["FullTypeName"].Value = DataSource["FullTypeName"].Get<string>();
+
             if (DataSource.Contains("WhiteListColumns"))
                 node["WhiteListColumns"] = DataSource["WhiteListColumns"];
 
@@ -312,30 +320,40 @@ namespace Magix.Brix.Components
                 {
                     LinkButton b = new LinkButton();
                     b.Text = captionOfColumn;
+
                     Node fNode = new Node();
+
                     fNode["Key"].Value = 
                         "DBAdmin.Filter." +
                         DataSource["FullTypeName"].Get<string>() + ":" + 
                         idx.Name;
                     fNode["Default"].Value = "";
+
                     RaiseSafeEvent(
                         "DBAdmin.Data.GetFilter",
                         fNode);
+
                     string filterString = fNode["Filter"].Get<string>();
                     b.ToolTip = "Click to filter. ";
+
                     if (idx["BelongsTo"].Get<bool>())
                         b.ToolTip += "BelongsTo ";
+
                     if (!string.IsNullOrEmpty(idx["RelationName"].Get<string>()))
                         b.ToolTip += "'" + idx["RelationName"].Get<string>() + "' ";
+
                     if (!string.IsNullOrEmpty(filterString))
                         b.ToolTip += filterString.Replace("|", " on ");
+
                     if (hasIdFilter)
                         b.ToolTip += " - Filter overridden by filter on ID column ...";
+
                     b.CssClass =
                         string.IsNullOrEmpty(
                             filterString) ?
                             "" :
                             (hasIdFilter ? "mux-filtered-overridden" : "mux-filtered");
+
                     b.Click += FilterMethod;
                     b.Info = idx.Name;
                     l.Controls.Add(b);
@@ -400,7 +418,9 @@ namespace Magix.Brix.Components
                             l.CssClass = "";
                     }
                 }
+
                 SelectedID = e.Params["ID"].Value.ToString();
+
                 if (!SelectedID.Equals("-1"))
                 {
                     Label l = Selector.SelectFirst<Label>(this,
@@ -415,7 +435,7 @@ namespace Magix.Brix.Components
             }
         }
 
-        private Control CreateRow(Node node)
+        private Control CreateRow(Node node, string rowNo)
         {
             Label row = new Label();
             row.Tag = "tr";
@@ -430,6 +450,9 @@ namespace Magix.Brix.Components
                 cS.Tag = "td";
                 LinkButton lb2 = new LinkButton();
                 lb2.Text = "Select";
+                if (DataSource.Contains("NoIdColumn") &&
+                    !DataSource["NoIdColumn"].Get<bool>())
+                    lb2.AccessKey = rowNo.ToString();
                 lb2.Click +=
                     delegate(object sender, EventArgs e)
                     {
@@ -488,6 +511,8 @@ namespace Magix.Brix.Components
                     {
                         lb.Text = node["ID"].Value.ToString();
                     }
+
+                    lb.AccessKey = rowNo.ToString();
 
                     lb.Click +=
                         delegate(object sender, EventArgs e)

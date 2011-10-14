@@ -61,6 +61,8 @@ namespace Magix.Brix.Components.ActiveModules.Menu
             if (node.Contains("Selected") &&
                 node["Selected"].Get<bool>())
                 item.CssClass += " mux-slider-selected";
+            if (node.Contains("AccessKey"))
+                item.AccessKey = node["AccessKey"].Get<string>();
             item.Text = caption;
             item.Info = eventName;
             if (node.Contains("Items") && node["Items"].Count > 0)

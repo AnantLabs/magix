@@ -68,7 +68,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
             e.Params["Items"]["Forms"]["Image"].Value = "media/images/desktop-icons/rosetta.png";
-            e.Params["Items"]["Forms"]["Shortcut"].Value = "O";
+            e.Params["Items"]["Forms"]["Shortcut"].Value = "b";
             e.Params["Items"]["Forms"]["Text"].Value = "Click to launch Meta Forms [Key O]";
             e.Params["Items"]["Forms"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Forms"]["Event"].Value = "Magix.MetaForms.ViewForms";
