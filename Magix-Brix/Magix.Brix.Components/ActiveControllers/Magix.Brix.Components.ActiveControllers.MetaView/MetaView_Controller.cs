@@ -436,7 +436,24 @@ Deleting it may break these parts.</p>";
                 "Magix.MetaView.CreateMetaView",
                 e.Params);
 
+            Node n = new Node();
+
+            n["FullTypeName"].Value = typeof(MetaView).FullName;
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                n);
+
+            n = new Node();
+            n["FullTypeName"].Value = typeof(MetaView).FullName;
+            n["ID"].Value = e.Params["NewID"].Value;
+
+            RaiseEvent(
+                "DBAdmin.Grid.SetActiveRow",
+                n);
+
             Node node = new Node();
+
             node["ID"].Value = e.Params["NewID"].Value;
 
             RaiseEvent(

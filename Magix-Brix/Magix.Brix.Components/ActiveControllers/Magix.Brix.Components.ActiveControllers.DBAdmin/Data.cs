@@ -344,6 +344,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["End"].Value = endAt;
                 if (pars != null && pars.Length > 0)
                     node["Criteria"].Value = pars;
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.GetObjectsNode",

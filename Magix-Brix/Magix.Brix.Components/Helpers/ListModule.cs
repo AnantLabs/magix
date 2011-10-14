@@ -379,20 +379,6 @@ namespace Magix.Brix.Components
         }
 
         /**
-         * Level4: Will 'page' back to 'start' [whatever that is]
-         */
-        [ActiveEvent(Name = "Magix.Core.SetGridPageStart")]
-        public void Magix_Core_SetGridPageStart(object sender, ActiveEventArgs e)
-        {
-            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
-            {
-                DataSource["Start"].Value = e.Params["Start"].Get<int>();
-                DataSource["End"].Value = e.Params["End"].Get<int>();
-                ReDataBind();
-            }
-        }
-
-        /**
          * Level4: Will set the Active Row of the grid, if the 'FullTypeName' is correct
          */
         [ActiveEvent(Name = "DBAdmin.Grid.SetActiveRow")]

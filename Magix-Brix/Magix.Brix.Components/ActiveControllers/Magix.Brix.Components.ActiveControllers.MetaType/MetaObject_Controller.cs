@@ -205,20 +205,29 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         protected void Magix_MetaType_CreateMetaObjectAndEdit(object sender, ActiveEventArgs e)
         {
             Node x = new Node();
+
             RaiseEvent(
                 "Magix.MetaType.CreateMetaObject",
                 x);
- 
-            Node node = new Node();
-            node["Start"].Value = 0;
-            node["End"].Value = 10;
-            node["FullTypeName"].Value = typeof(MetaObject).FullName;
+
+            Node n = new Node();
+
+            n["FullTypeName"].Value = typeof(MetaObject).FullName;
 
             RaiseEvent(
-                "Magix.Core.SetGridPageStart",
-                node);
+                "Magix.Core.UpdateGrids",
+                n);
 
-            node = new Node();
+            n = new Node();
+            n["FullTypeName"].Value = typeof(MetaObject).FullName;
+            n["ID"].Value = x["NewID"].Value;
+
+            RaiseEvent(
+                "DBAdmin.Grid.SetActiveRow",
+                n);
+
+            Node node = new Node();
+
             node["ID"].Value = x["NewID"].Value;
 
             RaiseEvent(

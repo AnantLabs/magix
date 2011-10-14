@@ -231,12 +231,30 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
 
                 tr.Commit();
 
-                Node node = new Node();
-                node["ID"].Value = f.ID;
+                Node n = new Node();
+
+                n["FullTypeName"].Value = typeof(MetaForm).FullName;
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    n);
+
+                n = new Node();
+
+                n["FullTypeName"].Value = typeof(MetaForm).FullName;
+                n["ID"].Value = f.ID;
+
+                RaiseEvent(
+                    "DBAdmin.Grid.SetActiveRow",
+                    n);
+
+                n = new Node();
+
+                n["ID"].Value = f.ID;
 
                 RaiseEvent(
                     "Magix.MetaForms.EditForm",
-                    node);
+                    n);
             }
         }
 
