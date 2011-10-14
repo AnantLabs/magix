@@ -103,7 +103,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
             e.Params["Items"]["Actions"]["Image"].Value = "media/images/desktop-icons/lightning-icon.png";
-            e.Params["Items"]["Actions"]["Shortcut"].Value = "A";
+            e.Params["Items"]["Actions"]["Shortcut"].Value = "c";
             e.Params["Items"]["Actions"]["Text"].Value = "Click to launch Actions [Key A]";
             e.Params["Items"]["Actions"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Actions"]["Event"].Value = "Magix.MetaType.ViewActions";
@@ -270,6 +270,26 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             RaiseEvent(
                 "DBAdmin.Data.GetContentsOfClass",
                 e.Params);
+
+            if (e.Params.Contains("Objects") && 
+                e.Params["Objects"].Count == 1)
+            {
+                // Automatically editing bugger ...
+                Node n = new Node();
+                n["ID"].Value = e.Params["Objects"][0]["ID"].Value;
+
+                RaiseEvent(
+                    "Magix.Meta.EditAction",
+                    n);
+
+                n = new Node();
+                n["FullTypeName"].Value = typeof(Action).FullName;
+                n["ID"].Value = e.Params["Objects"][0]["ID"].Value;
+
+                RaiseEvent(
+                    "DBAdmin.Grid.SetActiveRow",
+                    n);
+            }
         }
 
         /**
@@ -541,6 +561,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["MarginBottom"].Value = 10;
 
             node["Text"].Value = "Run!";
+            node["AccessKey"].Value = "m";
             node["ButtonCssClass"].Value = "span-4";
             node["Event"].Value = "Magix.MetaAction.RaiseAction";
             node["Event"]["ActionID"].Value = a.ID;

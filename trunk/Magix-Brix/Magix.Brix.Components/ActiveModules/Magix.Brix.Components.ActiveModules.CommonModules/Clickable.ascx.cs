@@ -32,12 +32,18 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             Load += delegate
             {
                 btn.Text = node["Text"].Get<string>();
+
                 if (node.Contains("ButtonCssClass"))
                     btn.CssClass = node["ButtonCssClass"].Get<string>();
+
                 if (node.Contains("Enabled"))
                     btn.Enabled = node["Enabled"].Get<bool>();
+
                 if (node.Contains("ToolTip"))
                     btn.ToolTip = node["ToolTip"].Get<string>();
+
+                if (node.Contains("AccessKey"))
+                    btn.AccessKey = node["AccessKey"].Get<string>();
             };
         }
 

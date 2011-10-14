@@ -23,14 +23,14 @@
         OnClick="CreateItem"
         ToolTip="Click to create a New Object ..."
         Text="+"
-        AccessKey="C"
+        AccessKey="v"
         CssClass="mux-paging-button mux-button-plus span-1"
         id="create" />
 
     <mux:Button
         runat="server"
         OnClick="FirstItems"
-        AccessKey="F"
+        AccessKey="g"
         CssClass="mux-paging-button mux-button-beginning span-1"
         Text="&lt;&lt;"
         id="beginning" />
@@ -38,7 +38,7 @@
     <mux:Button
         runat="server"
         OnClick="PreviousItems"
-        AccessKey="P"
+        AccessKey="h"
         Text="&lt;"
         CssClass="mux-paging-button mux-button-previous span-1"
         id="previous" />
@@ -46,7 +46,7 @@
     <mux:Button
         runat="server"
         OnClick="NextItems"
-        AccessKey="N"
+        AccessKey="j"
         Text="&gt;"
         CssClass="mux-paging-button mux-button-next span-1"
         id="next" />
@@ -54,7 +54,7 @@
     <mux:Button
         runat="server"
         OnClick="EndItems"
-        AccessKey="L"
+        AccessKey="k"
         Text="&gt;&gt;"
         CssClass="mux-paging-button mux-button-end span-1"
         id="end" />

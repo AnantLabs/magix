@@ -42,7 +42,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
 
         protected void ImageClicked(object sender, EventArgs e)
         {
-            Image img = sender as Image;
+            ImageButton img = sender as ImageButton;
 
             // TODO: Parameters ...?
             RaiseSafeEvent(img.Info);

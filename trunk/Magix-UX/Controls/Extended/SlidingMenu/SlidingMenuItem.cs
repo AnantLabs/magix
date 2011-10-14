@@ -39,6 +39,15 @@ namespace Magix.UX.Widgets
         }
 
         /**
+         * The Keyboard Shortcut key for the Widget
+         */
+        public string AccessKey
+        {
+            get { return _text.AccessKey; }
+            set { _text.AccessKey = value; }
+        }
+
+        /**
          * If you give this property a value, the item will display as a hyperlink,
          * and the URL property will be what it links to. The Text property will become
          * the anchor text of the URL.

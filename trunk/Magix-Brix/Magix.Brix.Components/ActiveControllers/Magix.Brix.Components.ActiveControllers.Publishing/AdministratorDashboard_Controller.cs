@@ -45,6 +45,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 "Magix.Publishing.GetDashBoardDesktopPlugins",
                 node);
 
+            // Ordering keyboard shortcut keys ...
+            string shortcuts = "qwerasdfzxcv";
+            int idxNo = 0;
+            foreach (Node idx in node["Items"])
+            {
+                idx["Shortcut"].Value = shortcuts[idxNo % shortcuts.Length].ToString();
+                idxNo += 1;
+            }
+
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["CssClass"].Value = "mux-dashboard";
@@ -115,37 +124,37 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
         {
             e.Params["Items"]["DBManager"]["Image"].Value = "media/images/desktop-icons/database.png";
-            e.Params["Items"]["DBManager"]["Shortcut"].Value = "D";
+            e.Params["Items"]["DBManager"]["Shortcut"].Value = "q";
             e.Params["Items"]["DBManager"]["Text"].Value = "Click to launch Database Manager [Key D]";
             e.Params["Items"]["DBManager"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["DBManager"]["Event"].Value = "Magix.Publishing.ViewClasses";
 
             e.Params["Items"]["FileExplorer"]["Image"].Value = "media/images/desktop-icons/briefcase.png";
-            e.Params["Items"]["FileExplorer"]["Shortcut"].Value = "F";
+            e.Params["Items"]["FileExplorer"]["Shortcut"].Value = "w";
             e.Params["Items"]["FileExplorer"]["Text"].Value = "Click to launch File Explorer [Key F]";
             e.Params["Items"]["FileExplorer"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["FileExplorer"]["Event"].Value = "Magix.Publishing.ViewFileSystem";
 
             e.Params["Items"]["Log"]["Image"].Value = "media/images/desktop-icons/oscilloscope.png";
-            e.Params["Items"]["Log"]["Shortcut"].Value = "L";
+            e.Params["Items"]["Log"]["Shortcut"].Value = "e";
             e.Params["Items"]["Log"]["Text"].Value = "Click to view Log [Key L]";
             e.Params["Items"]["Log"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Log"]["Event"].Value = "Magix.Publishing.ViewLog";
 
             e.Params["Items"]["Dox"]["Image"].Value = "media/images/desktop-icons/docs.png";
-            e.Params["Items"]["Dox"]["Shortcut"].Value = "X";
+            e.Params["Items"]["Dox"]["Shortcut"].Value = "r";
             e.Params["Items"]["Dox"]["Text"].Value = "Click to Download Magix' Documentation in PDF Format [Key X]";
             e.Params["Items"]["Dox"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Dox"]["Event"].Value = "Magix.Publishing.DownloadHeavyDocumentation";
 
             e.Params["Items"]["Pages"]["Image"].Value = "media/images/desktop-icons/press-icon.png";
-            e.Params["Items"]["Pages"]["Shortcut"].Value = "P";
+            e.Params["Items"]["Pages"]["Shortcut"].Value = "a";
             e.Params["Items"]["Pages"]["Text"].Value = "Click to open Web Pages [Key P]";
             e.Params["Items"]["Pages"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Pages"]["Event"].Value = "Magix.Publishing.EditPages";
 
             e.Params["Items"]["Templates"]["Image"].Value = "media/images/desktop-icons/blue-print-icon.png";
-            e.Params["Items"]["Templates"]["Shortcut"].Value = "M";
+            e.Params["Items"]["Templates"]["Shortcut"].Value = "s";
             e.Params["Items"]["Templates"]["Text"].Value = "Click to open Templates [Key M]";
             e.Params["Items"]["Templates"]["CSS"].Value = "mux-desktop-icon";
             e.Params["Items"]["Templates"]["Event"].Value = "Magix.Publishing.EditTemplates";
@@ -187,6 +196,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             e.Params["Items"]["Home"]["Caption"].Value = "Dashboard ...";
             e.Params["Items"]["Home"]["Selected"].Value = true;
+            e.Params["Items"]["Home"]["AccessKey"].Value = "P";
             e.Params["Items"]["Home"]["Event"]["Name"].Value = "Magix.Publishing.LoadAdministratorDashboard";
             e.Params["Items"]["Publishing"]["Caption"].Value = "Publishing";
             e.Params["Items"]["Publishing"]["Items"]["Pages"]["Caption"].Value = "Pages ...";

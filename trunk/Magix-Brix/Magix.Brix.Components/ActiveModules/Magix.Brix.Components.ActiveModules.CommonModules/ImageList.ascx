@@ -13,7 +13,7 @@
         runat="server"
         id="rep">
         <ItemTemplate>
-            <mux:Image
+            <mux:ImageButton
                 runat="server"
                 CssClass='<%#Eval("[CSS].Value") %>' 
                 ImageURL='<%#Eval("[Image].Value") %>' 
