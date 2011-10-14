@@ -24,6 +24,42 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     public class MetaAction_Controller : ActiveController
     {
         /**
+         * Level2: Will initialize all the Actions which are Overriding existing Active Events
+         */
+        [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
+        protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
+        {
+            CreateActionOverrides();
+        }
+
+        /*
+         * Helper for above ...
+         */
+        private static void CreateActionOverrides()
+        {
+            foreach (Action idx in Action.Select(Criteria.Sort("Overrides", true)))
+            {
+                ActiveEvents.Instance.CreateEventMapping(idx.Overrides, "Magix.MetaAction.RaiseOverriddenAction");
+                ActiveEvents.Instance.CreateEventMapping(idx.Overrides + "-Overridden", idx.Overrides);
+            }
+        }
+
+        /**
+         * Level2: Helper to make sure our Overriding Actions are being raised
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.RaiseOverriddenAction")]
+        protected void Magix_Meta_RaiseOverriddenAction(object sender, ActiveEventArgs e)
+        {
+            Action action = Action.SelectFirst(Criteria.Eq("Overrides", e.Name));
+
+            e.Params["ActionID"].Value = action.ID;
+
+            RaiseEvent(
+                "Magix.MetaAction.RaiseAction",
+                e.Params);
+        }
+
+        /**
          * Level 2: Returns the Desktop Icon for launching Actions back to caller
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
@@ -410,6 +446,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             // First filtering OUT columns ...!
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["EventName"].Value = true;
+            node["WhiteListColumns"]["Overrides"].Value = true;
             node["WhiteListColumns"]["StripInput"].Value = true;
             node["WhiteListColumns"]["Description"].Value = true;
 
@@ -424,6 +461,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 // These are 'template actions', not intended for being edited at all
                 node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
                 node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["Overrides"]["ReadOnly"].Value = true;
                 node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = true;
                 node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
             }
@@ -433,6 +471,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
                 node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["EventName"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
+                node["Type"]["Properties"]["Overrides"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
                 node["Type"]["Properties"]["Description"]["MaxLength"].Value = 4000;

@@ -46,6 +46,7 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
                 if (string.IsNullOrEmpty(idxFilter) || 
                     idxFilter.Trim().Length == 0)
                     continue;
+
                 foreach (string idxFile in Directory.GetFiles(
                     webServerApp + webServerFolder, idxFilter))
                 {

@@ -135,6 +135,7 @@ Account 'Full Control' over the specific folder?");
 
             node["File"].Value = fullPath;
             node["Width"].Value = 24;
+            node["Top"].Value = 24;
             node["Caption"].Value = "Editing file: " + 
                 fullPath.Replace(HttpContext.Current.Server.MapPath("~"), "");
 

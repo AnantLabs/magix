@@ -29,11 +29,11 @@
 	overflow:hidden;
 
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 	cursor:pointer;
 
 	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
@@ -49,8 +49,6 @@
 	-webkit-box-shadow: 2px 2px 3px rgba(80, 80, 80, 1);
 	-moz-box-shadow: 2px 2px 3px rgba(80, 80, 80, 1);
 	box-shadow: 2px 2px 3px rgba(80, 80, 80, 1);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
 }
 
 .fileExplorer .imageIcon img
@@ -85,11 +83,11 @@
 	position:relative;
 
 	-moz-transition-property:-moz-box-shadow;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:-webkit-box-shadow;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:box-shadow;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 	cursor:pointer;
 
 	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
@@ -107,11 +105,10 @@
 
 .fileExplorer .folderIcon:hover
 {
-	-webkit-box-shadow: 2px 2px 3px  2px 2px 3px rgba(0, 0, 0, 0.8);
-	-moz-box-shadow: 2px 2px 3px  2px 2px 3px rgba(0, 0, 0, 0.8);
-	box-shadow: 2px 2px 3px  2px 2px 3px rgba(0, 0, 0, 0.8);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+
 	-moz-border-radius:5px 5px 5px 5px;
 	-webkit-border-radius:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
@@ -135,11 +132,11 @@
 	bottom:0;
 
 	-moz-transition-property:color;
-	-moz-transition-duration:0.2s;
+	-moz-transition-duration:.5s;
 	-webkit-transition-property:color;
-	-webkit-transition-duration:0.2s;
+	-webkit-transition-duration:.5s;
 	transition-property:color;
-	transition-duration:0.2s;
+	transition-duration:.5s;
 }
 
 .fileExplorer .folderIcon span.text:hover
@@ -175,11 +172,9 @@
 
 .fileExplorer .folderUpIcon:hover
 {
-	-webkit-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
-	-moz-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
-	box-shadow: 3px 3px 2px rgba(0, 0, 0, 0);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(230, 230, 230, .8)), to(rgba(180, 180, 180, .8)));
-	background-image: -moz-linear-gradient(rgba(230, 230, 230, .8) 0%, rgba(180, 180, 180, .8) 80%);
+	-webkit-box-shadow: 3px 3px 2px rgba(0, 0, 0, .5);
+	-moz-box-shadow: 3px 3px 2px rgba(0, 0, 0, .5);
+	box-shadow: 3px 3px 2px rgba(0, 0, 0, .5);
 }
 
 .fileExplorer .folderUpIcon span
