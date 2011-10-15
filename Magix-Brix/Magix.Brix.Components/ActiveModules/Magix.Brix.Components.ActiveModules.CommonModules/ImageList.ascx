@@ -21,7 +21,7 @@
                 AccessKey='<%#Eval("[Shortcut].Value") %>' 
                 OnClick="ImageClicked"
                 AlternateText='<%#Eval("[Text].Value") %>'
-                ToolTip='<%#GetTooltip(Eval("[Text].Value")) %>' />
+                ToolTip='<%#Eval("[ToolTip].Value") %>' />
         </ItemTemplate>
     </asp:Repeater>
 </mux:Panel>

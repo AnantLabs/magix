@@ -47,15 +47,5 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             // TODO: Parameters ...?
             RaiseSafeEvent(img.Info);
         }
-
-        protected string GetTooltip(object objTip)
-        {
-            if (DataSource.Contains("DisplayTooltips") &&
-                !DataSource["DisplayTooltips"].Get<bool>())
-                return "";
-
-            string toolTip = objTip as string;
-            return toolTip;
-        }
     }
 }
