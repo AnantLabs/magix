@@ -196,6 +196,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                         if (!string.IsNullOrEmpty(editorEvent))
                                         {
                                             Node node = new Node();
+
                                             node["WebPartID"].Value = webPartId;
                                             node["Value"].Value = value;
 
@@ -226,17 +227,15 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                                     tx["SaveEvent"].Value = "Magix.Publishing.ChangeWebPartSetting";
                                                     tx["SaveEvent"]["WebPartID"].Value = webPartId;
                                                     tx["Text"].Value = ed2.Text;
-                                                    tx["Width"].Value = 18;
+                                                    tx["Width"].Value = 24;
                                                     tx["Height"].Value = 30;
                                                     tx["Last"].Value = true;
-                                                    tx["Padding"].Value = 6;
-                                                    tx["Push"].Value = 0;
-                                                    tx["Top"].Value = 0;
-                                                    tx["BottomMargin"].Value = 15;
+                                                    tx["Top"].Value = 30;
+                                                    tx["BottomMargin"].Value = 10;
 
                                                     ActiveEvents.Instance.RaiseLoadControl(
                                                         ed2.Info.Split('|')[2],
-                                                        "content5",
+                                                        "child",
                                                         tx);
                                                 };
                                             w.Content.Controls.Add(ed);

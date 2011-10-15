@@ -51,6 +51,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             foreach (Node idx in node["Items"])
             {
                 idx["Shortcut"].Value = shortcuts[idxNo % shortcuts.Length].ToString();
+                idx["ToolTip"].Value = "Key: " + shortcuts[idxNo % shortcuts.Length].ToString();
                 idxNo += 1;
             }
 
