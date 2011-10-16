@@ -1039,14 +1039,32 @@ only data or 'simple applications'. You can build as complex applications as you
             foreach (WebPage idx in WebPage.Select(Criteria.Range(0, 100, "Created", false)))
             {
                 e.Params["Items"]["i-" + idx.ID]["Name"].Value = idx.Name;
-                e.Params["Items"]["i-" + idx.ID]["ID"].Value = 
-                    (string.IsNullOrEmpty(idx.URL) ? 
-                        GetApplicationBaseUrl().ToLowerInvariant() : 
+                e.Params["Items"]["i-" + idx.ID]["ID"].Value =
+                    (string.IsNullOrEmpty(idx.URL) ?
+                        GetApplicationBaseUrl().ToLowerInvariant() :
                         ("?page=" + Page.Server.UrlEncode(idx.URL.Trim('/'))));
             }
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Publishing.CreateLink",
+                "child",
+                e.Params);
+        }
+
+        /**
+         * Level2: Will open up the 'Create New Image' module, for the end user to choose,
+         * either a local URL or any other URL for the source of an img HTML element, or 
+         * something similar
+         */
+        [ActiveEvent(Name = "Magix.Core.GetImageURL")]
+        protected void Magix_Core_GetImageURL(object sender, ActiveEventArgs e)
+        {
+            e.Params["Top"].Value = 33;
+            e.Params["Width"].Value = 18;
+            e.Params["Caption"].Value = "Select Object to Link to";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.Publishing.CreateImage",
                 "child",
                 e.Params);
         }

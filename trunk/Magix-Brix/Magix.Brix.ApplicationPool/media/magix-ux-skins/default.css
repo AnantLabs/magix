@@ -254,6 +254,88 @@ textarea
     font-weight: bold;
 }
 
+.mux-float-left
+{
+	float:left;
+}
+
+.mux-float-right
+{
+	float:right;
+}
+
+.mux-news-3
+{
+	font-family:Times New Roman;
+	text-align:justify;
+	-moz-column-width:190px;
+	-moz-column-gap:1em;
+	-webkit-column-width:190px;
+	-webkit-column-gap:1em;
+	-o-column-width:190px;
+	-o-column-gap:1em;
+	-ms-column-width:190px;
+	-ms-column-gap:1em;
+	column-width:190px;
+	column-gap:1em;
+}
+
+p.mux-news-3:first-letter
+{
+	padding-left:20px;
+	font-size:24px;
+	line-height:18px;
+	color:#999;
+}
+
+.mux-news-4
+{
+	font-family:Times New Roman;
+	text-align:justify;
+	-moz-column-width:150px;
+	-moz-column-gap:1em;
+	-webkit-column-width:150px;
+	-webkit-column-gap:1em;
+	-o-column-width:150px;
+	-o-column-gap:1em;
+	-ms-column-width:150px;
+	-ms-column-gap:1em;
+	column-width:150px;
+	column-gap:1em;
+}
+
+p.mux-news-4:first-letter
+{
+	padding-left:20px;
+	font-size:24px;
+	line-height:18px;
+	color:#999;
+}
+
+.mux-news-5
+{
+	font-family:Times New Roman;
+	text-align:justify;
+	-moz-column-width:110px;
+	-moz-column-gap:1em;
+	-webkit-column-width:110px;
+	-webkit-column-gap:1em;
+	-o-column-width:110px;
+	-o-column-gap:1em;
+	-ms-column-width:110px;
+	-ms-column-gap:1em;
+	column-width:110px;
+	column-gap:1em;
+}
+
+p.mux-news-5:first-letter
+{
+	padding-left:20px;
+	font-size:24px;
+	line-height:18px;
+	color:#999;
+}
+
 /* Accordion CSS */
 .mux-accordion
 {

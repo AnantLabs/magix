@@ -71,7 +71,7 @@ namespace Magix.Brix.ApplicationPool
                 lit.Text = string.Format(@"<base href=""{0}"" />",
                     Request.Url.Scheme + "://" +
                     Request.Url.Authority +
-                    Request.ApplicationPath + "/");
+                    Request.ApplicationPath.ToLowerInvariant() + "/");
                 Header.Controls.Add(lit);
             }
         }

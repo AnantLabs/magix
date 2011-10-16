@@ -4,7 +4,7 @@
 <%@ Control 
     Language="C#" 
     AutoEventWireup="true" 
-    Inherits="Magix.Brix.Components.ActiveModules.Publishing.CreateLink" %>
+    Inherits="Magix.Brix.Components.ActiveModules.Publishing.CreateImage" %>
 
 <mux:Panel
     runat="server"
@@ -18,19 +18,10 @@
         OnClick="obj_Click"
         Text="Object ..."
         id="obj" />
-    <label class="span-5">Page</label>
     <label class="span-5">URL</label>
-    <mux:SelectList
-        runat="server"
-        CssClass="span-5"
-        AccessKey="p"
-        OnSelectedIndexChanged="lst_SelectedIndexChanged"
-        id="lst">
-        <mux:ListItem Text="Select Page ..." Value="-1" />
-    </mux:SelectList>
     <mux:TextBox
         runat="server"
-        CssClass="span-6 last"
+        CssClass="span-11 last"
         PlaceHolder="URL ..."
         id="txt" />
     <mux:Button

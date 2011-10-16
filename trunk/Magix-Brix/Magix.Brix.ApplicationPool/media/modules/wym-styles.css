@@ -18,21 +18,44 @@
 
 /* PARA: Shadow */
 p.mux-text-shaded  /* p[@class!="mux-hidden-note"] */ {
-	text-shadow:2px 2px 3px rgba(0, 0, 0, .5);
 	/* text-shadow:2px 2px 3px rgba(0, 0, 0, .5); */
 }
 
 /* PARA: Hidden Note */
 p.mux-hidden-note /* p[@class!="mux-important"] */ {
-     display: none;
     /* opacity:.3 */
 }
 
 /* PARA: Important */
 p.mux-important /* p[@class!="mux-hidden-note"] */ {
-    color: red; font-weight: bold;
     /* color: red; font-weight: bold; border: 2px solid red; */
 }
+
+/* PARA: Float Left */
+p.mux-float-left /* p[@class!="mux-float-right"] */ {
+    /* border-left:dashed 2px Blue; */
+}
+
+/* PARA: Float Right */
+p.mux-float-right /* p[@class!="mux-float-left"] */ {
+    /* border-right:dashed 2px Blue; */
+}
+
+/* PARA: News-3 */
+p.mux-news-3 /* p[@class!="mux-news-4" && @class!="mux-news-5"] */ {
+    /* background-color:rgba(245,245,245,1) */
+}
+
+/* PARA: News-4 */
+p.mux-news-4 /* p[@class!="mux-news-3" && @class!="mux-news-5"] */ {
+    /* background-color:rgba(225,225,225,1) */
+}
+
+/* PARA: News-5 */
+p.mux-news-5 /* p[@class!="mux-news-3" && @class!="mux-news-4"] */ {
+    /* background-color:rgba(245,225,225,1) */
+}
+
 
 /* LIST: Special */
 ul.mux-list-special,
