@@ -273,8 +273,79 @@
     <Content Include="media\images\wire-grid.png" />
     <Content Include="media\images\xml.png" />
     <Content Include="media\Js\link-text-boxes.js" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-blockquote.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-h1.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-h2.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-h3.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-h4.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-h5.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-h6.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-p.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\lbl-pre.png" />
+    <Content Include="media\Js\wymeditor\iframe\default\wymiframe.css" />
+    <Content Include="media\Js\wymeditor\iframe\default\wymiframe.html" />
+    <Content Include="media\Js\wymeditor\jquery.wymeditor.js" />
+    <Content Include="media\Js\wymeditor\jquery.wymeditor.min.js" />
+    <Content Include="media\Js\wymeditor\jquery.wymeditor.pack.js" />
+    <Content Include="media\Js\wymeditor\lang\bg.js" />
+    <Content Include="media\Js\wymeditor\lang\ca.js" />
+    <Content Include="media\Js\wymeditor\lang\cs.js" />
+    <Content Include="media\Js\wymeditor\lang\cy.js" />
+    <Content Include="media\Js\wymeditor\lang\de.js" />
+    <Content Include="media\Js\wymeditor\lang\en.js" />
+    <Content Include="media\Js\wymeditor\lang\es.js" />
+    <Content Include="media\Js\wymeditor\lang\fa.js" />
+    <Content Include="media\Js\wymeditor\lang\fi.js" />
+    <Content Include="media\Js\wymeditor\lang\fr.js" />
+    <Content Include="media\Js\wymeditor\lang\gl.js" />
+    <Content Include="media\Js\wymeditor\lang\he.js" />
+    <Content Include="media\Js\wymeditor\lang\hr.js" />
+    <Content Include="media\Js\wymeditor\lang\hu.js" />
+    <Content Include="media\Js\wymeditor\lang\it.js" />
+    <Content Include="media\Js\wymeditor\lang\nb.js" />
+    <Content Include="media\Js\wymeditor\lang\nl.js" />
+    <Content Include="media\Js\wymeditor\lang\nn.js" />
+    <Content Include="media\Js\wymeditor\lang\pl.js" />
+    <Content Include="media\Js\wymeditor\lang\pt-br.js" />
+    <Content Include="media\Js\wymeditor\lang\pt.js" />
+    <Content Include="media\Js\wymeditor\lang\ru.js" />
+    <Content Include="media\Js\wymeditor\lang\sv.js" />
+    <Content Include="media\Js\wymeditor\lang\tr.js" />
+    <Content Include="media\Js\wymeditor\lang\zh_cn.js" />
+    <Content Include="media\Js\wymeditor\plugins\embed\jquery.wymeditor.embed.js" />
+    <Content Include="media\Js\wymeditor\plugins\fullscreen\icon_fullscreen.gif" />
+    <Content Include="media\Js\wymeditor\plugins\fullscreen\jquery.wymeditor.fullscreen.js" />
+    <Content Include="media\Js\wymeditor\plugins\hovertools\jquery.wymeditor.hovertools.js" />
+    <Content Include="media\Js\wymeditor\plugins\resizable\jquery.wymeditor.resizable.js" />
+    <Content Include="media\Js\wymeditor\plugins\resizable\readme.txt" />
+    <Content Include="media\Js\wymeditor\plugins\tidy\jquery.wymeditor.tidy.js" />
+    <Content Include="media\Js\wymeditor\plugins\tidy\wand.png" />
+    <Content Include="media\Js\wymeditor\skins\compact\icons.png" />
+    <Content Include="media\Js\wymeditor\skins\compact\skin.css" />
+    <Content Include="media\Js\wymeditor\skins\compact\skin.js" />
+    <Content Include="media\Js\wymeditor\skins\default\icons.png" />
+    <Content Include="media\Js\wymeditor\skins\default\skin.css" />
+    <Content Include="media\Js\wymeditor\skins\default\skin.js" />
+    <Content Include="media\Js\wymeditor\skins\minimal\images\bg.header.gif" />
+    <Content Include="media\Js\wymeditor\skins\minimal\images\bg.selector.silver.gif" />
+    <Content Include="media\Js\wymeditor\skins\minimal\images\bg.wymeditor.png" />
+    <Content Include="media\Js\wymeditor\skins\minimal\images\icons.silver.gif" />
+    <Content Include="media\Js\wymeditor\skins\minimal\skin.css" />
+    <Content Include="media\Js\wymeditor\skins\minimal\skin.js" />
+    <Content Include="media\Js\wymeditor\skins\silver\images\bg.header.gif" />
+    <Content Include="media\Js\wymeditor\skins\silver\images\bg.selector.silver.gif" />
+    <Content Include="media\Js\wymeditor\skins\silver\images\bg.wymeditor.png" />
+    <Content Include="media\Js\wymeditor\skins\silver\images\icons.silver.gif" />
+    <Content Include="media\Js\wymeditor\skins\silver\skin.css" />
+    <Content Include="media\Js\wymeditor\skins\silver\skin.js" />
+    <Content Include="media\Js\wymeditor\skins\twopanels\icons.png" />
+    <Content Include="media\Js\wymeditor\skins\twopanels\skin.css" />
+    <Content Include="media\Js\wymeditor\skins\twopanels\skin.js" />
+    <Content Include="media\Js\wymeditor\skins\wymeditor_icon.png" />
     <Content Include="media\modules\animations.css" />
     <Content Include="media\modules\clipboard.css" />
+    <Content Include="media\modules\wym-styles.css" />
+    <Content Include="media\modules\WymEditor.css" />
     <Content Include="media\modules\dashboard.css" />
     <Content Include="media\modules\edit-meta-forms.css" />
     <Content Include="media\modules\qr-generator.css" />
@@ -283,6 +354,10 @@
     <Content Include="Tmp\test-qr-code.png" />
     <Content Include="media\Cool-Breeze.oga" />
     <Content Include="App_Browsers\browsers.browser" />
+    <None Include="media\Js\wymeditor\plugins\tidy\README" />
+    <None Include="media\Js\wymeditor\plugins\tidy\tidy.php" />
+    <None Include="media\Js\wymeditor\skins\silver\COPYING" />
+    <None Include="media\Js\wymeditor\skins\silver\README" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
     <Content Include="media\The-Last-Barfly.oga" />
     <None Include="Tmp\exchange-with-your-own-csv-file.csv" />
@@ -375,6 +450,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.UploaderPlugin\Magix.Brix.Components.ActiveControllers.UploaderPlugin.csproj">
       <Project>{4F76DD2A-0C10-4167-89A6-9353F4E3C89F}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.UploaderPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components%27ActiveModules.WymEditor\Magix.Brix.Components.ActiveModules.WymEditor.csproj">
+      <Project>{7891C33A-BAA7-4F0A-A60E-4E6B02EC46D8}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.WymEditor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Calendars\Magix.Brix.Components.ActiveModules.Calendars.csproj">
       <Project>{D14C445B-BE1E-43F5-9CD3-B60DC0C6FD94}</Project>

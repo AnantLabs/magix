@@ -64,6 +64,16 @@ namespace Magix.Brix.ApplicationPool
                     "Magix.Core.PostBackOrLoad",
                     new Node ());
             }
+
+            if (!AjaxManager.Instance.IsCallback)
+            {
+                LiteralControl lit = new LiteralControl();
+                lit.Text = string.Format(@"<base href=""{0}"" />",
+                    Request.Url.Scheme + "://" +
+                    Request.Url.Authority +
+                    Request.ApplicationPath + "/");
+                Header.Controls.Add(lit);
+            }
         }
 
         private void InitializeViewport()

@@ -221,6 +221,7 @@ textarea
 .mux-shaded
 {
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(250, 250, 250, 1)), to(rgba(210, 210, 210, 1)));
+	background-image: -moz-webkit-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
 	background-image: -moz-linear-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
 	background-image: -o-linear-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
 	background-image: -ms-linear-gradient(rgba(250, 250, 250, 1) 0%, rgba(210, 210, 210, 1) 100%);
@@ -235,6 +236,22 @@ textarea
 	background-image: -o-linear-gradient(rgba(255, 255, 225, 1) 0%, rgba(210, 210, 120, 1) 80%);
 	background-image: -ms-linear-gradient(rgba(255, 255, 225, 1) 0%, rgba(210, 210, 120, 1) 80%);
 	background-image: linear-gradient(rgba(255, 255, 225, 1) 0%, rgba(210, 210, 120, 1) 80%);
+}
+
+.mux-text-shaded
+{
+	text-shadow:2px 2px 4px rgba(0, 0, 0, .5);
+}
+
+.mux-hidden-note
+{
+     display: none;
+}
+
+.mux-important
+{
+    color: red;
+    font-weight: bold;
 }
 
 /* Accordion CSS */

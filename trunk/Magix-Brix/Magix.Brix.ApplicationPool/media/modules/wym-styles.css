@@ -1,0 +1,46 @@
+﻿/* EDITOR RELATED STYLES - CUSTOMIZE FOR YOUR NEEDS */
+/*
+    The classes panel, the visual feedback and the preview
+    will be affected by these values.
+    
+    - Commented styles inside style definitions are used for visual 
+      feedback when using the editor.
+    - Comments before opening the style are used as caption.
+    - Comments after the class name and before the style declaration ({)
+      define the jQuery expression that decides whether this 
+      style should be applied or not.
+      
+    Note: the WYMeditor and /WYMeditor comments below are required
+    for the CSS parser to work properly.
+*/
+
+/* WYMeditor */
+
+/* PARA: Shadow */
+p.mux-text-shaded  /* p[@class!="mux-hidden-note"] */ {
+	text-shadow:2px 2px 3px rgba(0, 0, 0, .5);
+	/* text-shadow:2px 2px 3px rgba(0, 0, 0, .5); */
+}
+
+/* PARA: Hidden Note */
+p.mux-hidden-note /* p[@class!="mux-important"] */ {
+     display: none;
+    /* opacity:.3 */
+}
+
+/* PARA: Important */
+p.mux-important /* p[@class!="mux-hidden-note"] */ {
+    color: red; font-weight: bold;
+    /* color: red; font-weight: bold; border: 2px solid red; */
+}
+
+/* LIST: Special */
+ul.mux-list-special,
+ol.mux-list-special {
+    color: rgba(128, 128, 128, 1);
+    /* color: rgba(128, 128, 128, 1); */
+}
+
+
+/* /WYMeditor */
+/* END EDITOR RELATED STYLES */

@@ -53,7 +53,6 @@ namespace Magix.UX.Widgets
 
         protected override void AddAttributes(Element el)
         {
-            el.AddAttribute("name", ClientID);
             if (!string.IsNullOrEmpty(PlaceHolder))
                 el.AddAttribute("placeholder", PlaceHolder);
             base.AddAttributes(el);
