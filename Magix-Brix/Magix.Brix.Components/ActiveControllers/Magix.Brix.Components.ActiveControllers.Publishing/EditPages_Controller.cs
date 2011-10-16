@@ -957,8 +957,7 @@ only data or 'simple applications'. You can build as complex applications as you
                 // dependent upon knowing ...
                 RaiseEvent("Magix.Publishing.PageWasUpdated");
 
-                // In case ...
-                ActiveEvents.Instance.RaiseClearControls("content5");
+                ShowMessage("Page was Saved ...");
             }
         }
 
@@ -1019,6 +1018,37 @@ only data or 'simple applications'. You can build as complex applications as you
 
                 tr.Commit();
             }
+        }
+
+        /**
+         * Level2: Will open up the 'Create New Hyperlink' module, for the end user to choose,
+         * either a local URL or any other URL.
+         */
+        [ActiveEvent(Name = "Magix.Core.GetHyperLinkURL")]
+        protected void Magix_Core_GetHyperLinkURL(object sender, ActiveEventArgs e)
+        {
+            e.Params["Top"].Value = 33;
+            e.Params["Width"].Value = 18;
+            e.Params["Caption"].Value = "Select Object to Link to";
+
+            if (WebPage.Count > 100)
+            {
+                ShowMessage("Only displaying the first 100 items in the DropDown list, sinceto conserve your bandwidth");
+            }
+
+            foreach (WebPage idx in WebPage.Select(Criteria.Range(0, 100, "Created", false)))
+            {
+                e.Params["Items"]["i-" + idx.ID]["Name"].Value = idx.Name;
+                e.Params["Items"]["i-" + idx.ID]["ID"].Value = 
+                    (string.IsNullOrEmpty(idx.URL) ? 
+                        GetApplicationBaseUrl() : 
+                        ("?page=" + Page.Server.UrlEncode(idx.URL)));
+            }
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.Publishing.CreateLink",
+                "child",
+                e.Params);
         }
     }
 }

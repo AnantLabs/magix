@@ -228,9 +228,10 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                                                     tx["SaveEvent"]["WebPartID"].Value = webPartId;
                                                     tx["Text"].Value = ed2.Text;
                                                     tx["Width"].Value = 24;
+                                                    tx["Caption"].Value = "Edit WebPart Value";
                                                     tx["Height"].Value = 30;
                                                     tx["Last"].Value = true;
-                                                    tx["Top"].Value = 30;
+                                                    tx["Top"].Value = 33;
                                                     tx["BottomMargin"].Value = 10;
 
                                                     ActiveEvents.Instance.RaiseLoadControl(
