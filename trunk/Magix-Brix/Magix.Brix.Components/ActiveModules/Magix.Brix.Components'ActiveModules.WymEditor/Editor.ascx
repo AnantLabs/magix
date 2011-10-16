@@ -10,7 +10,12 @@
 
 <script type="text/ecmascript">
 (function() {
-  $(document).ready();
+  if (WYMeditor.INSTANCES.length > 0) {
+    // Already initialized before, second or later loading ...
+    // Because of fuck ups in WYMEditor, we'll need to run through this garbage to be safe ...
+    WYMeditor.INSTANCES = [];
+  }
+
   jQuery('.wymeditor').wymeditor({
     logoHtml: '',
     basePath: 'media/Js/wymeditor/',
@@ -33,9 +38,10 @@
       {'name': 'Unlink', 'title': 'Unlink', 'css': 'wym_tools_unlink'},
       {'name': 'ToggleHtml', 'title': 'HTML', 'css': 'wym_tools_html'}
     ]
-
   });
-  WYMeditor.editor.prototype._exec2 = WYMeditor.editor.prototype.exec;
+  if(!WYMeditor.editor.prototype._exec2) {
+    WYMeditor.editor.prototype._exec2 = WYMeditor.editor.prototype.exec;
+  }
   WYMeditor.editor.prototype.exec = function(cmd) {
     switch(cmd) {
       case 'MuxAddLink':
@@ -78,6 +84,8 @@
       link.attr(WYMeditor.HREF, sUrl);
     }
     link.attr(WYMeditor.HREF, sUrl);
+    WYMeditor.INSTANCES[0]._iframe.contentWindow.focus();
+    WYMeditor.INSTANCES[0].update();
   }
 })();
 </script>

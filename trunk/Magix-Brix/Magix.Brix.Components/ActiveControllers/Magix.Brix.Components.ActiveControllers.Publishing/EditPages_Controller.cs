@@ -1033,7 +1033,7 @@ only data or 'simple applications'. You can build as complex applications as you
 
             if (WebPage.Count > 100)
             {
-                ShowMessage("Only displaying the first 100 items in the DropDown list, sinceto conserve your bandwidth");
+                ShowMessage("Only displaying the first 100 items in the DropDown list. There are " + WebPage.Count + " pages in total ...");
             }
 
             foreach (WebPage idx in WebPage.Select(Criteria.Range(0, 100, "Created", false)))
@@ -1041,8 +1041,8 @@ only data or 'simple applications'. You can build as complex applications as you
                 e.Params["Items"]["i-" + idx.ID]["Name"].Value = idx.Name;
                 e.Params["Items"]["i-" + idx.ID]["ID"].Value = 
                     (string.IsNullOrEmpty(idx.URL) ? 
-                        GetApplicationBaseUrl() : 
-                        ("?page=" + Page.Server.UrlEncode(idx.URL)));
+                        GetApplicationBaseUrl().ToLowerInvariant() : 
+                        ("?page=" + Page.Server.UrlEncode(idx.URL.Trim('/'))));
             }
 
             LoadModule(
