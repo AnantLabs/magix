@@ -75,11 +75,26 @@ namespace Magix.Brix.Components.ActiveModules.WymEditor
             e.Params["Text"].Value = txt.Text;
         }
 
+        /**
+         * Level2: Sink Callback for being able to know when a new URL was created or
+         * selected and tell our WYMIWYG editor about it
+         */
         [ActiveEvent(Name = "Magix.Core.UrlWasCreated")]
         protected void Magix_Core_UrlWasCreated(object sender, ActiveEventArgs e)
         {
             AjaxManager.Instance.WriterAtBack.Write(
                 "MUX.CustomerWYM.afterLink('{0}');", e.Params["URL"].Get<string>());
+        }
+
+        /**
+         * Level2: Sink Callback for being able to know when a new Image was 
+         * selected and tell our WYMIWYG editor about it
+         */
+        [ActiveEvent(Name = "Magix.Core.ImageWasSelected")]
+        protected void Magix_Core_ImageWasSelected(object sender, ActiveEventArgs e)
+        {
+            AjaxManager.Instance.WriterAtBack.Write(
+                "MUX.CustomerWYM.afterImage('{0}');", e.Params["URL"].Get<string>());
         }
 
         [WebMethod]
@@ -99,6 +114,12 @@ namespace Magix.Brix.Components.ActiveModules.WymEditor
         protected void CreateLink()
         {
             RaiseSafeEvent("Magix.Core.GetHyperLinkURL");
+        }
+
+        [WebMethod]
+        protected void CreateImage()
+        {
+            RaiseSafeEvent("Magix.Core.GetImageURL");
         }
     }
 }

@@ -30,12 +30,11 @@
       {'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'},
       {'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'},
       {'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'},
-      {'name': 'Indent', 'title': 'Indent', 'css': 'wym_tools_indent'},
-      {'name': 'Outdent', 'title': 'Outdent', 'css': 'wym_tools_outdent'},
       {'name': 'Undo', 'title': 'Undo', 'css': 'wym_tools_undo'},
       {'name': 'Redo', 'title': 'Redo', 'css': 'wym_tools_redo'},
       {'name': 'MuxAddLink', 'title': 'Link', 'css': 'wym_tools_link'},
       {'name': 'Unlink', 'title': 'Unlink', 'css': 'wym_tools_unlink'},
+      {'name': 'MuxAddImage', 'title': 'Image', 'css': 'wym_tools_image'},
       {'name': 'ToggleHtml', 'title': 'HTML', 'css': 'wym_tools_html'}
     ]
   });
@@ -46,6 +45,10 @@
     switch(cmd) {
       case 'MuxAddLink':
         MUX.CustomerWYM.createLink.apply(this);
+        break;
+      case 'MuxAddImage':
+        MUX.CustomerWYM.createImage.apply(this);
+        break;
       break;
       default:
         this._exec2(cmd);
@@ -73,6 +76,17 @@
       }, []);
     }
   }
+  MUX.CustomerWYM.createImage = function() {
+    var container = this.container();
+    if(container || this._selected_image) {
+      var val = WYMeditor.INSTANCES[0].xhtml();
+      MUX.$('<%=txt.ClientID%>').innerHTML = val;
+      MUX.Control.callServerMethod('<%=this.ClientID%>.CreateImage', {
+        onSuccess: function(retVal) {
+        }
+      }, []);
+    }
+  }
   MUX.CustomerWYM.afterLink = function(sUrl) {
     var selected = WYMeditor.INSTANCES[0].selected();
     var link;
@@ -85,6 +99,21 @@
       link.attr(WYMeditor.HREF, sUrl);
     }
     link.attr(WYMeditor.HREF, sUrl);
+    WYMeditor.INSTANCES[0]._iframe.contentWindow.focus();
+    WYMeditor.INSTANCES[0].update();
+  }
+  MUX.CustomerWYM.afterImage = function(sUrl) {
+    var selected = WYMeditor.INSTANCES[0].selected();
+    var link;
+    var sStamp = WYMeditor.INSTANCES[0].uniqueStamp();
+    if (selected[0] && selected[0].tagName.toLowerCase() == WYMeditor.IMG) {
+      link = selected;
+    } else {
+      WYMeditor.INSTANCES[0]._exec(WYMeditor.INSERT_IMAGE, sStamp);
+      link = jQuery("img[src=" + sStamp + "]", WYMeditor.INSTANCES[0]._doc.body);
+      link.attr(WYMeditor.SRC, sUrl);
+    }
+    link.attr(WYMeditor.SRC, sUrl);
     WYMeditor.INSTANCES[0]._iframe.contentWindow.focus();
     WYMeditor.INSTANCES[0].update();
   }

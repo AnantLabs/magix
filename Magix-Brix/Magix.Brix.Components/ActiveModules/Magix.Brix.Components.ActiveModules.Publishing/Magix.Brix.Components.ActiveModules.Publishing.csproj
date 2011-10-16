@@ -45,6 +45,10 @@
       <DependentUpon>ChildExcerpt.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="CreateImage.ascx.cs">
+      <DependentUpon>CreateImage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="CreateLink.ascx.cs">
       <DependentUpon>CreateLink.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -135,6 +139,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CreateLink.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CreateImage.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

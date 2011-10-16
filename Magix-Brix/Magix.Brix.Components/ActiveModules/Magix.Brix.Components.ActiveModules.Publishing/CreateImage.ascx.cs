@@ -17,12 +17,11 @@ using Magix.UX.Effects;
 namespace Magix.Brix.Components.ActiveModules.Publishing
 {
     /**
-     * Level2: Encapsulates a module for selecting object, image, etc to link to
+     * Level2: Encapsulates a module for selecting an image
      */
     [ActiveModule]
-    public class CreateLink : ActiveModule
+    public class CreateImage : ActiveModule
     {
-        protected SelectList lst;
         protected TextBox txt;
 
         public override void InitialLoading(Node node)
@@ -32,7 +31,6 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             Load +=
                 delegate
                 {
-                    InitializeListBoxItems();
                     new EffectTimeout(250)
                         .ChainThese(
                             new EffectFocusAndSelect(txt))
@@ -40,30 +38,14 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
                 };
         }
 
-        private void InitializeListBoxItems()
-        {
-            foreach (Node idx in DataSource["Items"])
-            {
-                ListItem li = new ListItem(idx["Name"].Get<string>(), idx["ID"].Value.ToString());
-                lst.Items.Add(li);
-            }
-        }
-
-        protected void lst_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            txt.Text = lst.SelectedItem.Value;
-            lst.SelectedIndex = 0;
-            txt.Select();
-            txt.Focus();
-        }
-
         protected void ok_Click(object sender, EventArgs e)
         {
             Node node = new Node();
+
             node["URL"].Value = txt.Text;
 
             RaiseSafeEvent(
-                "Magix.Core.UrlWasCreated",
+                "Magix.Core.ImageWasSelected",
                 node);
 
             ActiveEvents.Instance.RaiseClearControls("child");
@@ -77,8 +59,8 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             node["IsSelect"].Value = true;
             node["Width"].Value = 24;
             node["Folder"].Value = "/";
-            node["Filter"].Value = "*.*;";
-            node["SelectEvent"].Value = "Magix.Core.SelectImageForHyperLink";
+            node["Filter"].Value = "*.png;*.jpg;*.jpeg;";
+            node["SelectEvent"].Value = "Magix.Core.SelectImage";
 
             RaiseEvent(
                 "Magix.FileExplorer.LaunchExplorer",
@@ -89,14 +71,17 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
          * Level2: Sink fallback for allowing the user to 
          * select to link to any object within his filestructure
          */
-        [ActiveEvent(Name = "Magix.Core.SelectImageForHyperLink")]
+        [ActiveEvent(Name = "Magix.Core.SelectImage")]
         protected void Magix_Core_SelectImageForHyperLink(object sender, ActiveEventArgs e)
         {
             Node node = new Node();
-            node["URL"].Value = e.Params["Folder"].Get<string>() + e.Params["FileName"].Get<string>();
+            node["URL"].Value = 
+                GetApplicationBaseUrl() + 
+                e.Params["Folder"].Get<string>() + 
+                e.Params["FileName"].Get<string>();
 
             RaiseSafeEvent(
-                "Magix.Core.UrlWasCreated",
+                "Magix.Core.ImageWasSelected",
                 node);
 
             ActiveEvents.Instance.RaiseClearControls("child");
