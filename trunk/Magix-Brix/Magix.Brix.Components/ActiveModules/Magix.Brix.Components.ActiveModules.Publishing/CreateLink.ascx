@@ -6,7 +6,6 @@
     AutoEventWireup="true" 
     Inherits="Magix.Brix.Components.ActiveModules.Publishing.CreateLink" %>
 
-
 <mux:Panel
     runat="server"
     id="pnl"

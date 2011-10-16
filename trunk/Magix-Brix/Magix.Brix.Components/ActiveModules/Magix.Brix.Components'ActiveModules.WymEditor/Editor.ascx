@@ -54,6 +54,7 @@
   }
   MUX.CustomerWYM = {};
   MUX.CustomerWYM.save = function() {
+    WYMeditor.INSTANCES[0].update();
     var val = WYMeditor.INSTANCES[0].xhtml();
     MUX.$('<%=txt.ClientID%>').innerHTML = val;
     MUX.Control.callServerMethod('<%=this.ClientID%>.Save', {

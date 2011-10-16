@@ -1207,6 +1207,7 @@ WYMeditor.editor.prototype.dialog = function( dialogType, dialogFeatures, bodyHt
  */
 WYMeditor.editor.prototype.toggleHtml = function() {
   jQuery(this._box).find(this._options.htmlSelector).toggle();
+  jQuery(this._box).find('.wym_iframe').toggle();
 };
 
 WYMeditor.editor.prototype.uniqueStamp = function() {
