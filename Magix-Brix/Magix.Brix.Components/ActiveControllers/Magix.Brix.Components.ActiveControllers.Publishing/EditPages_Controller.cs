@@ -1061,7 +1061,7 @@ only data or 'simple applications'. You can build as complex applications as you
         {
             e.Params["Top"].Value = 33;
             e.Params["Width"].Value = 18;
-            e.Params["Caption"].Value = "Select Object to Link to";
+            e.Params["Caption"].Value = "Select Image to Insert";
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.Publishing.CreateImage",
