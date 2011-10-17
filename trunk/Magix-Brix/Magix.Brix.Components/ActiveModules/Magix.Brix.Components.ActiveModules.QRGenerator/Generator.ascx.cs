@@ -290,6 +290,7 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
                 DataSource["BGImage"].Value = "";
 
             DataSource["FileName"].Value = "Tmp/qr-" + FileNameGuid + ".png";
+            DataSource["Text"].Value = description.Text;
 
             RaiseSafeEvent(
                 "Magix.QRCodes.CreateQRCode",

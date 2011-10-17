@@ -138,7 +138,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             DateTime when = DateTime.Now;
             string logItemType = e.Params["LogItemType"].Get<string>("Generic-Type");
             string header = e.Params["Header"].Get<string>();
-            string msg = e.Params["Message"].Get<string>();
+            string msg = e.Params["Message"].Get<string>() ?? "";
 
             if (string.IsNullOrEmpty(header))
             {

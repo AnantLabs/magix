@@ -307,7 +307,7 @@ namespace Magix.Brix.Types
         }
 
         /**
-         * Level3: Will "disconnect" the node from its parent node. Ueful
+         * Level3: Will "disconnect" the node from its parent node. Useful
          * for removing nodes and trees out of Node structures
          */
         [DebuggerStepThrough]
