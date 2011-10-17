@@ -124,6 +124,58 @@ given 'Container' WebPart";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.TransmitEventToExternalServer")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.TransmitEventToExternalServer";
+                    a.EventName = "Magix.Core.TransmitEventToExternalServer";
+                    a.Description = @"Will raise an external event to the given 'UrlEndPoint', 
+raising the event with the 'EventName', with the parameters of 'Node'. The Remoting capacities of Magix, 
+will by default store Authentication Cookies internally, associated with every unique base URL end-point, 
+to keep your server Authenticated towards that specific server. 
+Magix will store these cookies internally, and later re-transmit these Authentication 
+cookies upon every future request, towards that same server. This means that you can for instance use 
+the same state as you'd normally use in the Graphical rendering of your system. This facilitates 
+for that you can do stuff such as first logging into the remote server raising LogIn or something, 
+then to expect at that point, as a server to be authenticated forever towards that server, unless 
+your Cookies are somehow destroyed, or your password somehow gets changed. Afterwards you can raise 
+events which for instance requires you to be logged in, and expect them to be successfully executed";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "UrlEndPoint";
+                    m.Value = "http://localhost/magix/";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "EventName";
+                    m.Value = "Magix.Core.Log";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Node";
+                    a.Params.Add(m);
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "LogItemType";
+                    m2.Value = "Magix.Core.TestRemoting";
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Header";
+                    m2.Value = "Remoting Test from Magix was Successful";
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Message";
+                    m2.Value = @"If you can find this in your log somewhere, your server is setup 
+correctly to handle remoting of events";
+                    m.Children.Add(m2);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.LogInUser")) == 0)
                 {
                     Action a = new Action();

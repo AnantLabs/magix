@@ -16,7 +16,7 @@
         CssClass="clear-both span-5"
         AccessKey="b"
         OnClick="obj_Click"
-        Text="Object ..."
+        Text="Files ..."
         id="obj" />
     <label class="span-5">URL</label>
     <mux:TextBox

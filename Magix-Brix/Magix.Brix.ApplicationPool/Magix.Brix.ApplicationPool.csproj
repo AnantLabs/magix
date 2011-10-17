@@ -236,12 +236,28 @@
     <Content Include="media\images\doc.png" />
     <Content Include="media\images\docx.png" />
     <Content Include="media\images\grid-action-button.png" />
+    <Content Include="media\images\Icons\button.png" />
+    <Content Include="media\images\Icons\calendar.png" />
+    <Content Include="media\images\Icons\checkbox.png" />
+    <Content Include="media\images\Icons\hiddenfield.png" />
+    <Content Include="media\images\Icons\hyperlink.png" />
+    <Content Include="media\images\Icons\image.png" />
+    <Content Include="media\images\Icons\label.png" />
+    <Content Include="media\images\Icons\linkbutton.png" />
+    <Content Include="media\images\Icons\panel.png" />
+    <Content Include="media\images\Icons\radiobutton.png" />
+    <Content Include="media\images\Icons\repeater.png" />
+    <Content Include="media\images\Icons\ruler.png" />
+    <Content Include="media\images\Icons\stars.png" />
+    <Content Include="media\images\Icons\textarea.png" />
+    <Content Include="media\images\Icons\textbox.png" />
     <Content Include="media\images\magix-logo.png" />
     <Content Include="media\images\marvin-headshot-tiny.png" />
     <Content Include="media\images\oga.png" />
     <Content Include="media\images\ogg.png" />
     <Content Include="media\images\openid_small.png" />
     <Content Include="media\images\openid_tiny.png" />
+    <Content Include="media\images\pages-tree-icon.png" />
     <Content Include="media\images\pdf.png" />
     <Content Include="media\images\RaLogo128x128.png" />
     <Content Include="media\images\RaLogo1600x1600.png" />
@@ -360,6 +376,7 @@
     <None Include="media\Js\wymeditor\skins\silver\README" />
     <None Include="media\modules\editor\assets\skins\sam\sprite.psd" />
     <Content Include="media\The-Last-Barfly.oga" />
+    <None Include="Tmp\exchange-file-name.csv" />
     <None Include="Tmp\exchange-with-your-own-csv-file.csv" />
     <Content Include="Tmp\Magix-For-Believers.pdf" />
     <Content Include="Tmp\Magix-For-Believing-CSharp-People.pdf" />
@@ -382,6 +399,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.DBAdmin\Magix.Brix.Components.ActiveControllers.DBAdmin.csproj">
       <Project>{124E0BB5-A992-4216-9FE3-C5CBED735888}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.DBAdmin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Distributor\Magix.Brix.Components.ActiveControllers.Distributor.csproj">
+      <Project>{5A7952E3-2815-401F-B423-D6FEE5281DD9}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Distributor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Documentation\Magix.Brix.Components.ActiveControllers.Documentation.csproj">
       <Project>{984DBB11-EF11-4947-AB06-63F3881DCD02}</Project>
@@ -522,6 +543,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Users\Magix.Brix.Components.ActiveModules.Users.csproj">
       <Project>{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Users</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Distributor\Magix.Brix.Components.ActiveTypes.Distributor.csproj">
+      <Project>{8E0A3B0B-D129-4C3F-AF2F-BB99E54618B6}</Project>
+      <Name>Magix.Brix.Components.ActiveTypes.Distributor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveTypes\Magix.Brix.Components.ActiveTypes.Gallery\Magix.Brix.Components.ActiveTypes.Gallery.csproj">
       <Project>{0FBF5BF8-34E2-46EF-AC3F-2DCF25378A3A}</Project>
