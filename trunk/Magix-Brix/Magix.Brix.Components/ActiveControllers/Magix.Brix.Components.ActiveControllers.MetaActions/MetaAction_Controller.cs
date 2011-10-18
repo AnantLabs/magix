@@ -40,8 +40,29 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             foreach (Action idx in Action.Select(Criteria.Sort("Overrides", true)))
             {
-                ActiveEvents.Instance.CreateEventMapping(idx.Overrides, "Magix.MetaAction.RaiseOverriddenAction");
-                ActiveEvents.Instance.CreateEventMapping(idx.Overrides + "-Action-Overridden", idx.Overrides);
+                if (idx.Overrides.EndsWith("!"))
+                {
+                    // If the Event Name ends with a '!', the original event handlers are 'punctured' ...
+                    string name = idx.Overrides.Trim('!').Trim('.');
+                    ActiveEvents.Instance.CreateEventMapping(name, "Magix.MetaAction.RaiseOverriddenAction");
+                    ActiveEvents.Instance.CreateEventMapping(name + "-Action-Overridden", name);
+                }
+                else if (idx.Overrides.IndexOf("...") == 0)
+                {
+                    // If the Event Name does NOT end with a '!', the original event handlers must also be 
+                    // invoked. FIRST if it starts with a '...'
+                    string name = idx.Overrides.Trim('.');
+                    ActiveEvents.Instance.CreateEventMapping(name, "Magix.MetaAction.RaiseOverriddenActionCallBaseFirst");
+                    ActiveEvents.Instance.CreateEventMapping(name + "-Action-Overridden", idx.Overrides);
+                }
+                else
+                {
+                    // If the Event Name does NOT end with a '!', the original event handlers must also be 
+                    // invoked LAST unless is starts with '...'
+                    string name = idx.Overrides;
+                    ActiveEvents.Instance.CreateEventMapping(name, "Magix.MetaAction.RaiseOverriddenActionCallBase");
+                    ActiveEvents.Instance.CreateEventMapping(name + "-Action-Overridden", idx.Overrides);
+                }
             }
         }
 
@@ -73,6 +94,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 {
                     lst.Add(idx);
                 }
+                else if (ActiveEvents.Instance.GetEventMappingValue(idx) == "Magix.MetaAction.RaiseOverriddenActionCallBase")
+                {
+                    lst.Add(idx);
+                }
+                else if (ActiveEvents.Instance.GetEventMappingValue(idx) == "Magix.MetaAction.RaiseOverriddenActionCallBaseFirst")
+                {
+                    lst.Add(idx);
+                }
             }
 
             foreach (string idx in lst)
@@ -87,7 +116,45 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.MetaAction.RaiseOverriddenAction")]
         protected void Magix_Meta_RaiseOverriddenAction(object sender, ActiveEventArgs e)
         {
+            Action action = Action.SelectFirst(Criteria.Eq("Overrides", e.Name.Trim('.') + "!"));
+
+            e.Params["ActionID"].Value = action.ID;
+
+            RaiseEvent(
+                "Magix.MetaAction.RaiseAction",
+                e.Params);
+        }
+
+        /**
+         * Level2: Helper to make sure our Overriding Actions are being raised
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.RaiseOverriddenActionCallBase")]
+        protected void Magix_Meta_RaiseOverriddenActionCallBase(object sender, ActiveEventArgs e)
+        {
             Action action = Action.SelectFirst(Criteria.Eq("Overrides", e.Name));
+
+            e.Params["ActionID"].Value = action.ID;
+
+            RaiseEvent(
+                "Magix.MetaAction.RaiseAction",
+                e.Params);
+
+            RaiseEvent(
+                action.Overrides + "-Action-Overridden",
+                e.Params);
+        }
+
+        /**
+         * Level2: Helper to make sure our Overriding Actions are being raised
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.RaiseOverriddenActionCallBaseFirst")]
+        protected void Magix_Meta_RaiseOverriddenActionCallBaseFirst(object sender, ActiveEventArgs e)
+        {
+            Action action = Action.SelectFirst(Criteria.Eq("Overrides", "..." + e.Name));
+
+            RaiseEvent(
+                action.Overrides.Trim('.').Trim('!') + "-Action-Overridden",
+                e.Params);
 
             e.Params["ActionID"].Value = action.ID;
 
