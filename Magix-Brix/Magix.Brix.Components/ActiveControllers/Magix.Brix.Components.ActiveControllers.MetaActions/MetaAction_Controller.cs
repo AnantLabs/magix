@@ -563,7 +563,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Text"].Value = "Run!";
             node["AccessKey"].Value = "m";
             node["ButtonCssClass"].Value = "span-4";
-            node["Event"].Value = "Magix.MetaAction.RaiseAction";
+            node["Event"].Value = "Magix.MetaAction.RaiseAction-FromActionScreen";
             node["Event"]["ActionID"].Value = a.ID;
 
             LoadModule(
@@ -633,6 +633,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
                 "content5",
                 node);
+        }
+
+        /**
+         * Level2: Will forward to RaiseAction, and show a Message to user ...
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.RaiseAction-FromActionScreen")]
+        protected void Magix_MetaAction_RaiseAction_FromActionScreen(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent("Magix.MetaAction.RaiseAction", e.Params);
+            ShowMessage("Action Successfully Executed ...");
         }
 
         /**

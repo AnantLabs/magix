@@ -72,48 +72,94 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
         [ActiveEvent(Name = "Magix.Core.TransmitEventToExternalServer")]
         protected void Magix_Core_TransmitEventToExternalServer(object sender, ActiveEventArgs e)
         {
-            string eventName = e.Params["EventName"].Get<string>();
-            string urlEndPoint = e.Params["UrlEndPoint"].Get<string>();
-
-            if (!urlEndPoint.StartsWith("http"))
-                urlEndPoint = "http://" + urlEndPoint;
-
-            Node node = null;
-            if (e.Params.Contains("Node"))
-                node = e.Params["Node"];
-
-            if (string.IsNullOrEmpty(eventName))
-                throw new ArgumentException(
-                    "You can't raise an event on another server without stating which event you'd like to raise");
-
-            HttpWebRequest req = WebRequest.Create(urlEndPoint) as HttpWebRequest;
-            req.Method = "POST";
-            req.ContentType = "application/x-www-form-urlencoded";
-            InitializeCookies(urlEndPoint, req);
-            using (StreamWriter writer = new StreamWriter(req.GetRequestStream()))
+            // There can be only one ... ;)
+            // We're updating cookies, which are globally used, by potentially multiple users remember ...
+            lock (typeof(Distributor_Controller))
             {
-                writer.Write("event=" + HttpUtility.UrlEncode(eventName));
-                if (node != null)
-                    writer.Write("&params=" + HttpUtility.UrlEncode(node.ToJSONString()));
-            }
-            using (StreamReader reader = new StreamReader(req.GetResponse().GetResponseStream()))
-            {
-                string val = reader.ReadToEnd();
-                if (!val.StartsWith("return:"))
-                    throw new HttpException("Something went wrong when connecting to " + urlEndPoint + " Server responded with: " + val);
+                string eventName = e.Params["EventName"].Get<string>();
+                string urlEndPoint = e.Params["UrlEndPoint"].Get<string>();
 
-                if (val.Length > 7)
-                    e.Params["RetVal"].Value = Node.FromJSONString(val.Substring(7));
+                if (string.IsNullOrEmpty(urlEndPoint))
+                    throw new ArgumentException("You must submit a URL to raise your remove event towards");
+
+                urlEndPoint = urlEndPoint.Trim().Trim('/') + "/";
+
+                if (!urlEndPoint.StartsWith("http"))
+                    urlEndPoint = "http://" + urlEndPoint;
+
+                Node node = null;
+                if (e.Params.Contains("Node"))
+                    node = e.Params["Node"];
+
+                if (string.IsNullOrEmpty(eventName))
+                    throw new ArgumentException(
+                        "You can't raise an event on another server without stating which event you'd like to raise");
+
+                System.Net.HttpWebRequest req = System.Net.WebRequest.Create(urlEndPoint) as System.Net.HttpWebRequest;
+                req.Method = "POST";
+                req.ContentType = "application/x-www-form-urlencoded";
+
+                InitializeCookies(urlEndPoint, req);
+
+                using (StreamWriter writer = new StreamWriter(req.GetRequestStream()))
+                {
+                    writer.Write("event=" + HttpUtility.UrlEncode(eventName));
+                    if (node != null)
+                        writer.Write("&params=" + HttpUtility.UrlEncode(node.ToJSONString()));
+                }
+                using (System.Net.HttpWebResponse resp = req.GetResponse() as System.Net.HttpWebResponse)
+                {
+                    using (StreamReader reader = new StreamReader(resp.GetResponseStream()))
+                    {
+                        if ((int)resp.StatusCode >= 200 && (int)resp.StatusCode < 300)
+                        {
+                            string val = reader.ReadToEnd();
+                            if (!val.StartsWith("return:"))
+                                throw new HttpException(
+                                    "Something went wrong when connecting to '" +
+                                    urlEndPoint +
+                                    "'. Server responded with: " + val);
+
+                            if (val.Length > 7)
+                                e.Params["RetVal"].Value = Node.FromJSONString(val.Substring(7));
+                        }
+
+                        using (Transaction tr = Adapter.Instance.BeginTransaction())
+                        {
+                            foreach (System.Net.Cookie idx in resp.Cookies)
+                            {
+                                foreach (Cookie idx2 in Cookie.Select(
+                                    Criteria.Eq("Domain", urlEndPoint),
+                                    Criteria.Eq("Name", idx.Name)))
+                                {
+                                    idx2.Delete();
+                                }
+
+                                Cookie c = new Cookie();
+                                c.Domain = urlEndPoint;
+                                c.Name = idx.Name;
+                                c.ActualDomain = idx.Domain;
+                                c.Value = idx.Value;
+                                c.Save();
+                            }
+
+                            tr.Commit();
+                        }
+                    }
+                }
             }
         }
 
-        private void InitializeCookies(string urlEndPoint, HttpWebRequest req)
+        private void InitializeCookies(string urlEndPoint, System.Net.HttpWebRequest req)
         {
-            if (urlEndPoint.Contains("/"))
-                urlEndPoint = urlEndPoint.Substring(0, urlEndPoint.IndexOf("/"));
+            if (req.CookieContainer == null)
+            {
+                req.CookieContainer = new System.Net.CookieContainer();
+            }
 
             foreach (Cookie idx in Cookie.Select(Criteria.Eq("Domain", urlEndPoint)))
             {
+                req.CookieContainer.Add(new System.Net.Cookie(idx.Name, idx.Value, "/", idx.ActualDomain));
             }
         }
     }
