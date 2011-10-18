@@ -78,7 +78,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.MetaView.ScrollClientToTop")]
         protected void Magix_MetaView_ScrollClientToTop(object sender, ActiveEventArgs e)
         {
-            new EffectScrollBrowser(500).Render();
+            new EffectScrollBrowser(500)
+                .Render();
         }
 
         /**

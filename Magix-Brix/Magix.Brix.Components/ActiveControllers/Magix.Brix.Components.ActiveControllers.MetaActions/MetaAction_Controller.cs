@@ -53,7 +53,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     // invoked. FIRST if it starts with a '...'
                     string name = idx.Overrides.Trim('.');
                     ActiveEvents.Instance.CreateEventMapping(name, "Magix.MetaAction.RaiseOverriddenActionCallBaseFirst");
-                    ActiveEvents.Instance.CreateEventMapping(name + "-Action-Overridden", idx.Overrides);
+                    ActiveEvents.Instance.CreateEventMapping(name + "-Action-Overridden", name);
                 }
                 else
                 {
@@ -61,7 +61,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     // invoked LAST unless is starts with '...'
                     string name = idx.Overrides;
                     ActiveEvents.Instance.CreateEventMapping(name, "Magix.MetaAction.RaiseOverriddenActionCallBase");
-                    ActiveEvents.Instance.CreateEventMapping(name + "-Action-Overridden", idx.Overrides);
+                    ActiveEvents.Instance.CreateEventMapping(name + "-Action-Overridden", name);
                 }
             }
         }

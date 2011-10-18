@@ -55,12 +55,6 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
                     ; // DO NOTHING ... ['by design' from MSFT ...]
                 }
             }
-            else
-            {
-                RaiseEvent(
-                    "Magix.Core.InitialLoading-Passover",
-                    e.Params);
-            }
         }
 
         /**
@@ -150,6 +144,7 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
                                 else
                                     c.Domain = idx.Domain;
                                 c.Name = idx.Name;
+                                c.Expires = idx.Expires;
                                 c.ActualDomain = idx.Domain;
                                 c.Value = idx.Value;
                                 c.Save();
@@ -171,7 +166,10 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
 
             foreach (Cookie idx in Cookie.Select(Criteria.Eq("Domain", urlEndPoint)))
             {
-                req.CookieContainer.Add(new System.Net.Cookie(idx.Name, idx.Value, "/", idx.ActualDomain));
+                if (idx.Expires >= DateTime.Now)
+                    idx.Delete();
+                else
+                    req.CookieContainer.Add(new System.Net.Cookie(idx.Name, idx.Value, "/", idx.ActualDomain));
             }
         }
     }

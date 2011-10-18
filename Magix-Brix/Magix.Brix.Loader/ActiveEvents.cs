@@ -33,6 +33,8 @@ namespace Magix.Brix.Loader
 
         private static Dictionary<string, string> _eventMappers = new Dictionary<string, string>();
 
+        private static Dictionary<string, string> _moduleMappers = new Dictionary<string, string>();
+
         private delegate void AsyncDelegate(object sender, ActiveEventArgs e);
 
         private ActiveEvents()
@@ -239,6 +241,14 @@ namespace Magix.Brix.Loader
         }
 
         /**
+         * Level3: Will create a mapping from the 'from' module to the 'to' module
+         */
+        public void CreateModuleMapping(string from, string to)
+        {
+            _moduleMappers[from] = to;
+        }
+
+        /**
          * Level3: Will destroy the given [key] Active Event Mapping
          */
         public void RemoveMapping(string key)
@@ -247,11 +257,29 @@ namespace Magix.Brix.Loader
         }
 
         /**
+         * Level3: Will destroy the given [key] Active Module Mapping
+         */
+        public void RemoveModuleMapping(string key)
+        {
+            _moduleMappers.Remove(key);
+        }
+
+        /**
          * Level2: Will return the given Value for the given Key Active Event Override
          */
         public string GetEventMappingValue(string key)
         {
             return _eventMappers[key];
+        }
+
+        /**
+         * Level2: Will return the given Value for the given Key Active Module Override
+         */
+        public string GetModuleMappingValue(string key)
+        {
+            if (_moduleMappers.ContainsKey(key))
+                return _moduleMappers[key];
+            return key;
         }
 
         /**

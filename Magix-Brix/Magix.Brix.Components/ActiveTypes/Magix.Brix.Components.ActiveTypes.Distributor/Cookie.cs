@@ -62,6 +62,13 @@ namespace Magix.Brix.Components.ActiveTypes.Distributor
         public string ActualDomain { get; set; }
 
         /**
+         * Level2: When the cookie expires. After this date, it will no longer 
+         * be attached, but deleted
+         */
+        [ActiveField]
+        public DateTime Expires { get; set; }
+
+        /**
          * Level2: When the cookie was created
          */
         [ActiveField]
@@ -74,6 +81,9 @@ namespace Magix.Brix.Components.ActiveTypes.Distributor
                 Created = DateTime.Now;
 
                 Node node = new Node();
+
+                if (Expires <= DateTime.Now.AddHours(1))
+                    Expires = DateTime.Now.AddHours(1);
 
                 node["LogItemType"].Value = "Magix.Core.RemotingCookieSaved";
                 node["Header"].Value = "Cookie Saved for Domain [Application Actually]: " + Domain;
