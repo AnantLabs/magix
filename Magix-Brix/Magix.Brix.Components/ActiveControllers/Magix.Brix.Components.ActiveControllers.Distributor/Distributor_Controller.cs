@@ -12,6 +12,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Data;
 using Magix.Brix.Components.ActiveTypes.Distributor;
+using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.Distributor
 {
@@ -84,6 +85,14 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
 
                 urlEndPoint = urlEndPoint.Trim().Trim('/') + "/";
 
+                string cookieDomain = urlEndPoint;
+
+                if (Settings.Instance.Get("Magix.Core.MultiplAppsPerDomain", true))
+                {
+                    cookieDomain = cookieDomain.Split(':')[1].Trim('/');
+                    cookieDomain = cookieDomain.Substring(0, cookieDomain.IndexOf("/"));
+                }
+
                 if (!urlEndPoint.StartsWith("http"))
                     urlEndPoint = "http://" + urlEndPoint;
 
@@ -99,7 +108,7 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
                 req.Method = "POST";
                 req.ContentType = "application/x-www-form-urlencoded";
 
-                InitializeCookies(urlEndPoint, req);
+                InitializeCookies(cookieDomain, req);
 
                 using (StreamWriter writer = new StreamWriter(req.GetRequestStream()))
                 {
@@ -136,7 +145,10 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
                                 }
 
                                 Cookie c = new Cookie();
-                                c.Domain = urlEndPoint;
+                                if (Settings.Instance.Get("MultiplAppsPerDomain", true))
+                                    c.Domain = urlEndPoint;
+                                else
+                                    c.Domain = idx.Domain;
                                 c.Name = idx.Name;
                                 c.ActualDomain = idx.Domain;
                                 c.Value = idx.Value;

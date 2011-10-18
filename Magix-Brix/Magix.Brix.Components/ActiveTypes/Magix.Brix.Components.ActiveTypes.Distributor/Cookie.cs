@@ -22,7 +22,20 @@ namespace Magix.Brix.Components.ActiveTypes.Distributor
     {
         /**
          * Level2: The Application Path the Cookie was created for, e.g. http://magixilluminate.com/
-         * Must end with a /
+         * Must end with a /. Magix gives you additional granularity using this class, than the 
+         * HTTP Cookie parts of the standard gives you by making you capable of separating 
+         * different cookies according to different paths with a server. This is ofc ourse easy to 
+         * override, and set back to its original logic. However, especially since Magix are for 
+         * all practical concerns a single page web app framework [more or less]. This makes sense 
+         * for Magix as a default behavior. Notice that there are no changes to the standard or 
+         * Magix' usage of this standard, only the granularity of how Magix internally saves and
+         * retrieves cookies for specific applications within the same domain. Change the Setting called
+         * 'Magix.Core.MultiplAppsPerDomain' to reset this such that Magix will send its 
+         * cookies according to how 'it's supposed to do it' according to the HTTP standard. Notice how
+         * this makes sense for Magix, since by using Magix you can basically 100% transparently
+         * have hundreds of hundreds of virtually overridden events, penetrating the network at all times, 
+         * going back and forth between hundreds of applications, which again might call back into 
+         * the original server, though to a different app path
          */
         [ActiveField]
         public string Domain { get; set; }
