@@ -87,7 +87,7 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
 
                 string cookieDomain = urlEndPoint;
 
-                if (Settings.Instance.Get("Magix.Core.MultiplAppsPerDomain", true))
+                if (!Settings.Instance.Get("Magix.Core.MultiplAppsPerDomain", true))
                 {
                     cookieDomain = cookieDomain.Split(':')[1].Trim('/');
                     cookieDomain = cookieDomain.Substring(0, cookieDomain.IndexOf("/"));
@@ -145,7 +145,7 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
                                 }
 
                                 Cookie c = new Cookie();
-                                if (Settings.Instance.Get("MultiplAppsPerDomain", true))
+                                if (Settings.Instance.Get("Magix.Core.MultiplAppsPerDomain", true))
                                     c.Domain = urlEndPoint;
                                 else
                                     c.Domain = idx.Domain;
