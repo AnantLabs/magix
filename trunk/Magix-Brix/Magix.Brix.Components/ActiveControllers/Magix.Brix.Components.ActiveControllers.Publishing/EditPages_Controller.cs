@@ -37,6 +37,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
+                // Making sure we doe the WYM thing instead of WYS thing ...
+                ActiveEvents.Instance.CreateModuleMapping(
+                    "Magix.Brix.Components.ActiveModules.Editor.RichEdit",
+                    "Magix.Brix.Components.ActiveModules.WymEditor.Editor");
+
                 if (WebPageTemplate.Count == 0)
                 {
                     // Creating a default template ...

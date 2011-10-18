@@ -162,6 +162,8 @@ namespace Magix.Brix.Loader
             if (!string.IsNullOrEmpty(mapping))
                 fullTypeName = mapping;
 
+            fullTypeName = ActiveEvents.Instance.GetModuleMappingValue(fullTypeName);
+
             if (!_loadedPlugins.ContainsKey(fullTypeName))
             {
                 throw new ArgumentException(
