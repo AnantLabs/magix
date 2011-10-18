@@ -125,6 +125,9 @@ namespace Magix.Brix.Types
                     case "\"Value\"":
                         node.Value = tokens[idxToken + 1].Replace("\\\"", "\"").Trim('"');
                         break;
+                    case "\"TypeName\"":
+                        node.Value = Convert(node.Get<string>(), tokens[idxToken + 1]);
+                        break;
                     case "\"Children\"":
                         idxToken += 1;
                         while (tokens[idxToken] != "]")
@@ -136,6 +139,27 @@ namespace Magix.Brix.Types
             }
             idxToken += 1;
             return;
+        }
+
+        private static object Convert(string value, string type)
+        {
+            object retVal = value;
+            switch (type.Trim('\\').Trim('"'))
+            {
+                case "System.DateTime":
+                    retVal = DateTime.ParseExact(value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    break;
+                case "System.Boolean":
+                    retVal = bool.Parse(value);
+                    break;
+                case "System.Int32":
+                    retVal = int.Parse(value);
+                    break;
+                case "System.Decimal":
+                    retVal = decimal.Parse(value, CultureInfo.InvariantCulture);
+                    break;
+            }
+            return retVal;
         }
 
         [DebuggerStepThrough]
@@ -545,7 +569,6 @@ namespace Magix.Brix.Types
             return retVal;
         }
 
-        // TODO: Preserve type information
         /**
          * Level3: Will translate the Node structure to a JSON string. Useful
          * for passing stuff around to other systems, and integrating with client-side
@@ -570,6 +593,8 @@ namespace Magix.Brix.Types
                 if (hasChild)
                     builder.Append(",");
                 string value = "";
+
+                // ORDER COUNTS !!
                 switch(Value.GetType().FullName)
                 {
                     case "System.String":
@@ -580,12 +605,23 @@ namespace Magix.Brix.Types
                         value = ((DateTime)Value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
                         break;
 
+                    case "System.Decimal":
+                        value = ((Decimal)Value).ToString(CultureInfo.InvariantCulture);
+                        break;
+
                     default:
                         value = Value.ToString();
                         break;
                 }
                 builder.AppendFormat(@"""Value"":""{0}""", value);
                 hasChild = true;
+
+                string typeName = Value.GetType().FullName;
+                if (typeName != typeof(string).FullName)
+                {
+                    builder.Append(",");
+                    builder.AppendFormat(@"""TypeName"":""{0}""", typeName);
+                }
             }
             if(_children.Count > 0)
             {

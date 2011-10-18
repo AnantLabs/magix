@@ -50,7 +50,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 e.Params["Success"].Value = true;
                 User.Current = u;
 
-                RaiseEvent("Magix.Core.UserLoggedIn");
+                Node node = new Node();
+                if (e.Params.Contains("NoRedirect") && e.Params["NoRedirect"].Get<bool>())
+                    node["NoRedirect"].Value = true;
+
+                RaiseEvent("Magix.Core.UserLoggedIn", node);
             }
         }
 
@@ -61,6 +65,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
         protected void Magix_Core_UserLoggedIn(object sender, ActiveEventArgs e)
         {
+            if (e.Params.Contains("NoRedirect") &&
+                e.Params["NoRedirect"].Get<bool>())
+                return;
+
             // Getting relative URL ...
             string baseUrl = GetApplicationBaseUrl();
             string relUrl = Page.Request.Url.ToString().Replace("default.aspx", "").Replace(baseUrl, "");
