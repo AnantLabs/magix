@@ -25,7 +25,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
     public class Action : ActiveType<Action>
     {
         /**
-         * Used to encapsulate one Action 'parameter' in Magix. Every Action can send
+         * Level2: Used to encapsulate one Action 'parameter' in Magix. Every Action can send
          * a tree structure of 'parameters' when it's being executed to its caller. These
          * parameters can contain anything you wish, and can also be typed. This class encapsulates
          * this logic
@@ -39,26 +39,26 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             }
 
             /**
-             * Name of parameter. Becomes the Node's name
+             * Level2: Name of parameter. Becomes the Node's name
              */
             [ActiveField]
             public string Name { get; set; }
 
             /**
-             * Value of parameter. Becomes the Node's Value
+             * Level2: Value of parameter. Becomes the Node's Value
              */
             [ActiveField]
             public string Value { get; set; }
 
             /**
-             * TypeName of parameter. Decides what type the Value is, and if it should
+             * Level2: TypeName of parameter. Decides what type the Value is, and if it should
              * be converted before Action is raised
              */
             [ActiveField]
             public string TypeName { get; set; }
 
             /**
-             * Children of this parameter
+             * Level2: Children of this parameter
              */
             [ActiveField]
             public LazyList<ActionParams> Children { get; set; }
@@ -94,7 +94,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             }
 
             /**
-             * Performs a deep copy of the Parameter and all its children and returns back to caller
+             * Level2: Performs a deep copy of the Parameter and all its children and returns back to caller
              */
             public ActionParams Clone()
             {
@@ -130,7 +130,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         }
 
         /**
-         * Must be unique. Used to de-reference the action in other places. Normal
+         * Level2: Must be unique. Used to de-reference the action in other places. Normal
          * coding convention should be to add at least your company name as the action's
          * prefix or something, to avoid name clashings
          */
@@ -138,20 +138,24 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
         public string Name { get; set; }
 
         /**
-         * Friendly description, shown to user, which should explain the action in 'human readable text'
+         * Level2: Friendly description, shown to user, which should explain the action in 'human readable text'
          * for the end user
          */
         [ActiveField]
         public string Description { get; set; }
 
         /**
-         * The Name of the Active Event being raised by this action
+         * Level2: The Name of the Active Event being raised by this action
          */
         [ActiveField]
         public string EventName { get; set; }
 
         /**
-         * The Name of the Active Event this Action will Override
+         * Level2: The Name of the Active Event this Action will Override. If this value ends with a '!' then
+         * that means that the action will override the existing event handlers, such that the original handlers 
+         * cannot be called, unless you explicitly somehow makes sure that Overrides + '-Action-Overridden' somehow
+         * is raised. If it does not contain a '!' at the end, it will not leave these existing event handlers in 
+         * oblivion, but also make sure these are called, though after the EventName has been raised
          */
         [ActiveField]
         public string Overrides { get; set; }
