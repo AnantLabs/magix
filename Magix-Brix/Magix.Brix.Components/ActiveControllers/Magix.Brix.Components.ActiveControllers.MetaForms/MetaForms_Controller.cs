@@ -89,21 +89,21 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             node["Last"].Value = true;
             node["CssClass"].Value = "large-bottom-margin";
 
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 6;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 7;
             node["WhiteListColumns"]["Created"].Value = true;
             node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 4;
-            node["WhiteListColumns"]["Copy"].Value = true;
-            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 3;
 
             node["ReuseNode"].Value = true;
 
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaForms.GetCopyMetaFormTemplateColumn";
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Created"]["NoFilter"].Value = true;
-            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
-            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaForms.GetCopyMetaFormTemplateColumn";
 
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";

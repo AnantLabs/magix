@@ -42,12 +42,12 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["Last"].Value = true;
             node["CssClass"].Value = "large-bottom-margin mux-edit-templates";
 
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 7;
             node["WhiteListColumns"]["Containers"].Value = true;
-            node["WhiteListColumns"]["Containers"]["ForcedWidth"].Value = 3;
-            node["WhiteListColumns"]["Copy"].Value = true;
-            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 4;
+            node["WhiteListColumns"]["Containers"]["ForcedWidth"].Value = 5;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
@@ -60,14 +60,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             node["ReuseNode"].Value = true;
 
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetCopyTemplateColumn";
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Containers"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Containers"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Containers"]["Header"].Value = "WebParts";
             node["Type"]["Properties"]["Containers"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetNoContainersTemplateColumn";
-            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Publisher.GetCopyTemplateColumn";
-            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
 
             node["Container"].Value = "content3";
 

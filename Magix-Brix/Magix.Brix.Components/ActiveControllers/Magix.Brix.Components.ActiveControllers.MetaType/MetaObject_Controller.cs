@@ -60,14 +60,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Last"].Value = true;
             node["CssClass"].Value = "mux-edit-objects";
 
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             node["WhiteListColumns"]["TypeName"].Value = true;
-            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 3;
+            node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 4;
             node["WhiteListColumns"]["Reference"].Value = true;
             node["WhiteListColumns"]["Reference"]["ForcedWidth"].Value = 5;
             node["WhiteListColumns"]["Created"].Value = true;
             node["WhiteListColumns"]["Created"]["ForcedWidth"].Value = 3;
-            node["WhiteListColumns"]["Copy"].Value = true;
-            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             node["FilterOnId"].Value = true;
             node["IDColumnName"].Value = "Edit";
             node["IDColumnEvent"].Value = "Magix.MetaType.EditONEMetaObject_UnFiltered";
@@ -76,12 +76,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["ReuseNode"].Value = true;
             node["CreateEventName"].Value = "Magix.MetaType.CreateMetaObjectAndEdit";
 
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetCopyMetaObjectTemplateColumn";
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type";
             node["Type"]["Properties"]["Reference"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Created"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
-            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaType.GetCopyMetaObjectTemplateColumn";
 
             node["Criteria"]["C1"]["Name"].Value = "Sort";
             node["Criteria"]["C1"]["Value"].Value = "Created";
