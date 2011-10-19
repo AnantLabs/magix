@@ -146,13 +146,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["Last"].Value = true;
             node["CssClass"].Value = "mux-edit-views";
 
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 6;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 7;
             node["WhiteListColumns"]["TypeName"].Value = true;
             node["WhiteListColumns"]["TypeName"]["ForcedWidth"].Value = 5;
             node["WhiteListColumns"]["TypeName"]["MaxLength"].Value = 50;
-            node["WhiteListColumns"]["Copy"].Value = true;
-            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 3;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
@@ -165,14 +165,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyMetaViewTemplateColumn";
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["TypeName"]["ReadOnly"].Value = false;
             node["Type"]["Properties"]["TypeName"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type Name";
-            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
-            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.Meta.GetCopyMetaViewTemplateColumn";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",

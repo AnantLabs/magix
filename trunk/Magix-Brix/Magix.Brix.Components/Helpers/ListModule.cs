@@ -245,26 +245,6 @@ namespace Magix.Brix.Components
                 }
                 row.Controls.Add(li);
             }
-            if (DataSource["IsRemove"].Get<bool>())
-            {
-                Label cS = new Label();
-                cS.Tag = "td";
-                cS.Text = "Rem.";
-                cS.CssClass = "span-2 mux-no-filter";
-                row.Controls.Add(cS);
-            }
-            if (DataSource["IsDelete"].Get<bool>())
-            {
-                Label cS = new Label();
-                cS.Tag = "td";
-                string header = "Delete";
-                if (DataSource.Contains("DeleteHeader"))
-                    header = DataSource["DeleteHeader"].Get<string>();
-                cS.Text = header;
-                cS.CssClass = "span-2 mux-no-filter";
-                row.Controls.Add(cS);
-            }
-
             foreach (Node idx in DataSource["Type"]["Properties"])
             {
                 bool columnVisible = GetColumnVisibility(idx.Name);
@@ -276,7 +256,7 @@ namespace Magix.Brix.Components
                 if (DataSource.Contains("WhiteListColumns") &&
                     DataSource["WhiteListColumns"][idx.Name].Contains("ForcedWidth"))
                 {
-                    l.CssClass = "span-" + 
+                    l.CssClass = "span-" +
                         DataSource["WhiteListColumns"][idx.Name]["ForcedWidth"].Get<int>();
                 }
                 else
@@ -304,7 +284,7 @@ namespace Magix.Brix.Components
                 {
                     captionOfColumn = idx["Header"].Get<string>();
                 }
-                if (!DataSource["IsFilter"].Get<bool>() || 
+                if (!DataSource["IsFilter"].Get<bool>() ||
                     (idx.Contains("NoFilter") && idx["NoFilter"].Get<bool>()))
                 {
                     l.Text = captionOfColumn;
@@ -323,9 +303,9 @@ namespace Magix.Brix.Components
 
                     Node fNode = new Node();
 
-                    fNode["Key"].Value = 
+                    fNode["Key"].Value =
                         "DBAdmin.Filter." +
-                        DataSource["FullTypeName"].Get<string>() + ":" + 
+                        DataSource["FullTypeName"].Get<string>() + ":" +
                         idx.Name;
                     fNode["Default"].Value = "";
 
@@ -360,6 +340,26 @@ namespace Magix.Brix.Components
                 }
                 row.Controls.Add(l);
             }
+            if (DataSource["IsRemove"].Get<bool>())
+            {
+                Label cS = new Label();
+                cS.Tag = "td";
+                cS.Text = "Rem.";
+                cS.CssClass = "span-2 mux-no-filter";
+                row.Controls.Add(cS);
+            }
+            if (DataSource["IsDelete"].Get<bool>())
+            {
+                Label cS = new Label();
+                cS.Tag = "td";
+                string header = "Delete";
+                if (DataSource.Contains("DeleteHeader"))
+                    header = DataSource["DeleteHeader"].Get<string>();
+                cS.Text = header;
+                cS.CssClass = "span-2 mux-no-filter";
+                row.Controls.Add(cS);
+            }
+
             return row;
         }
 
@@ -571,95 +571,6 @@ namespace Magix.Brix.Components
                     li.Controls.Add(lb);
                 }
                 row.Controls.Add(li);
-            }
-            if (DataSource["IsRemove"].Get<bool>())
-            {
-                Label cS = new Label();
-                cS.Tag = "td";
-                LinkButton lb2 = new LinkButton();
-                lb2.Text = "Remove";
-                lb2.Click +=
-                    delegate(object sender, EventArgs e)
-                    {
-                        LinkButton b2 = sender as LinkButton;
-                        Node n = new Node();
-                        string id = (b2.Parent.Parent as Label).Info;
-                        (b2.Parent.Parent as Label).CssClass = "mux-grid-selected";
-                        if (!SelectedID.Equals("-1"))
-                        {
-                            if (id != SelectedID)
-                            {
-                                Label l = Selector.SelectFirst<Label>(this,
-                                    delegate(Control idxCtrl)
-                                    {
-                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
-                                    });
-                                if (l != null)
-                                    l.CssClass = "";
-                            }
-                        }
-                        SelectedID = id;
-
-                        n["ID"].Value = GetId((b2.Parent.Parent as Label).Info);
-                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-                        n["ParentID"].Value = DataSource["ParentID"].Value;
-                        n["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
-                        n["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
-
-                        RaiseSafeEvent(
-                            DataSource.Contains("RemoveEvent") ? 
-                                DataSource["RemoveEvent"].Get<string>() :
-                                "DBAdmin.Form.RemoveObjectFromParentPropertyList", 
-                            n);
-                    };
-                cS.Controls.Add(lb2);
-                row.Controls.Add(cS);
-            }
-            if (DataSource["IsDelete"].Get<bool>())
-            {
-                Label cS = new Label();
-                cS.Tag = "td";
-                LinkButton lb2 = new LinkButton();
-                string lblTxt = "Delete";
-                if (DataSource.Contains("DeleteText"))
-                    lblTxt = DataSource["DeleteText"].Get<string>();
-                lb2.Text = lblTxt;
-                lb2.Click +=
-                    delegate(object sender, EventArgs e)
-                    {
-                        LinkButton b = sender as LinkButton;
-                        Node n = new Node();
-                        string id = (b.Parent.Parent as Label).Info;
-                        (b.Parent.Parent as Label).CssClass = "mux-grid-selected";
-                        if (!SelectedID.Equals("-1"))
-                        {
-                            if (id != SelectedID)
-                            {
-                                Label l = Selector.SelectFirst<Label>(this,
-                                    delegate(Control idxCtrl)
-                                    {
-                                        return idxCtrl is Label && 
-                                            (idxCtrl as Label).Info == 
-                                            SelectedID.ToString();
-                                    });
-                                if (l != null)
-                                    l.CssClass = "";
-                            }
-                        }
-                        SelectedID = id;
-
-                        n["ID"].Value = GetId((b.Parent.Parent as Label).Info);
-                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
-
-                        if (RaiseSafeEvent(
-                            DataSource.Contains("DeleteColumnEvent") ? 
-                                DataSource["DeleteColumnEvent"].Get<string>() : 
-                                "DBAdmin.Data.DeleteObject", 
-                            n))
-                            ReDataBind();
-                    };
-                cS.Controls.Add(lb2);
-                row.Controls.Add(cS);
             }
 
             foreach (Node idxType in DataSource["Type"]["Properties"])
@@ -879,6 +790,98 @@ namespace Magix.Brix.Components
                 }
                 row.Controls.Add(l);
             }
+
+            if (DataSource["IsRemove"].Get<bool>())
+            {
+                Label cS = new Label();
+                cS.Tag = "td";
+                LinkButton lb2 = new LinkButton();
+                lb2.Text = "Remove";
+                lb2.Click +=
+                    delegate(object sender, EventArgs e)
+                    {
+                        LinkButton b2 = sender as LinkButton;
+                        Node n = new Node();
+                        string id = (b2.Parent.Parent as Label).Info;
+                        (b2.Parent.Parent as Label).CssClass = "mux-grid-selected";
+                        if (!SelectedID.Equals("-1"))
+                        {
+                            if (id != SelectedID)
+                            {
+                                Label l = Selector.SelectFirst<Label>(this,
+                                    delegate(Control idxCtrl)
+                                    {
+                                        return idxCtrl is Label && (idxCtrl as Label).Info == SelectedID.ToString();
+                                    });
+                                if (l != null)
+                                    l.CssClass = "";
+                            }
+                        }
+                        SelectedID = id;
+
+                        n["ID"].Value = GetId((b2.Parent.Parent as Label).Info);
+                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+                        n["ParentID"].Value = DataSource["ParentID"].Value;
+                        n["ParentPropertyName"].Value = DataSource["ParentPropertyName"].Value;
+                        n["ParentFullTypeName"].Value = DataSource["ParentFullTypeName"].Value;
+
+                        RaiseSafeEvent(
+                            DataSource.Contains("RemoveEvent") ?
+                                DataSource["RemoveEvent"].Get<string>() :
+                                "DBAdmin.Form.RemoveObjectFromParentPropertyList",
+                            n);
+                    };
+                cS.Controls.Add(lb2);
+                row.Controls.Add(cS);
+            }
+
+            if (DataSource["IsDelete"].Get<bool>())
+            {
+                Label cS = new Label();
+                cS.Tag = "td";
+                LinkButton lb2 = new LinkButton();
+                string lblTxt = "Delete";
+                if (DataSource.Contains("DeleteText"))
+                    lblTxt = DataSource["DeleteText"].Get<string>();
+                lb2.Text = lblTxt;
+                lb2.Click +=
+                    delegate(object sender, EventArgs e)
+                    {
+                        LinkButton b = sender as LinkButton;
+                        Node n = new Node();
+                        string id = (b.Parent.Parent as Label).Info;
+                        (b.Parent.Parent as Label).CssClass = "mux-grid-selected";
+                        if (!SelectedID.Equals("-1"))
+                        {
+                            if (id != SelectedID)
+                            {
+                                Label l = Selector.SelectFirst<Label>(this,
+                                    delegate(Control idxCtrl)
+                                    {
+                                        return idxCtrl is Label &&
+                                            (idxCtrl as Label).Info ==
+                                            SelectedID.ToString();
+                                    });
+                                if (l != null)
+                                    l.CssClass = "";
+                            }
+                        }
+                        SelectedID = id;
+
+                        n["ID"].Value = GetId((b.Parent.Parent as Label).Info);
+                        n["FullTypeName"].Value = DataSource["FullTypeName"].Value;
+
+                        if (RaiseSafeEvent(
+                            DataSource.Contains("DeleteColumnEvent") ?
+                                DataSource["DeleteColumnEvent"].Get<string>() :
+                                "DBAdmin.Data.DeleteObject",
+                            n))
+                            ReDataBind();
+                    };
+                cS.Controls.Add(lb2);
+                row.Controls.Add(cS);
+            }
+
             return row;
         }
 

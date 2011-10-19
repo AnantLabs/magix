@@ -207,12 +207,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["GetContentsEventName"].Value = "DBAdmin.Data.GetContentsOfClass-Filter-Override";
             node["SetFocus"].Value = true;
 
+            node["WhiteListColumns"]["Copy"].Value = true;
+            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 9;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 10;
             node["WhiteListColumns"]["Params"].Value = true;
             node["WhiteListColumns"]["Params"]["ForcedWidth"].Value = 2;
-            node["WhiteListColumns"]["Copy"].Value = true;
-            node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 3;
 
             node["FilterOnId"].Value = false;
             node["IDColumnName"].Value = "Edit";
@@ -225,14 +225,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
+            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetCopyActionTemplateColumn";
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Name"]["NoFilter"].Value = false;
             node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
             node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
-            node["Type"]["Properties"]["Copy"]["NoFilter"].Value = true;
-            node["Type"]["Properties"]["Copy"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetCopyActionTemplateColumn";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",
