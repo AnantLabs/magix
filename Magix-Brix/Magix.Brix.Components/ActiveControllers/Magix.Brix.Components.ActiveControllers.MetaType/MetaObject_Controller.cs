@@ -21,6 +21,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     [ActiveController]
     public class MetaObject_Controller : ActiveController
     {
+        [ActiveEvent(Name = "Magix.Core.ApplicationStartup")]
+        protected static void Magix_Core_ApplicationStartup(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.CreateEventMapping(
+                "DBAdmin.Grid.DeleteAllObjectsConfirmed",
+                "DBAdmin.Grid.DeleteAllObjectsConfirmed-Override");
+            ActiveEvents.Instance.CreateEventMapping(
+                "DBAdmin.Grid.DeleteAllObjectsConfirmed-Passover",
+                "DBAdmin.Grid.DeleteAllObjectsConfirmed");
+        }
+
         /**
          * Level 2: Returns the Desktop Icon for launching Actions back to caller
          */
@@ -142,6 +153,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
                 tr.Commit();
             }
+        }
+
+        /**
+         * Level2: Makes sure we're emptying our Container for any 'remnants' ...
+         */
+        [ActiveEvent(Name = "DBAdmin.Grid.DeleteAllObjectsConfirmed-Override")]
+        protected void DBAdmin_Grid_DeleteAllObjectsConfirmed(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("content4");
+
+            RaiseEvent("DBAdmin.Grid.DeleteAllObjectsConfirmed-Passover", e.Params);
         }
 
         /**
