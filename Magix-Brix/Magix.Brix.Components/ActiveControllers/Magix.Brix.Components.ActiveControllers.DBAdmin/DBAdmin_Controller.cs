@@ -763,5 +763,88 @@ collection you're removing it from.</p>";
             string value = e.Params["Value"].Get<string>();
             Settings.Instance.Set(key,value);
         }
+
+        /**
+         * Level2: Will delete all objects within the range of the given 'Criteria'
+         * collection. But only after the user has been warned, and asked to confirm
+         */
+        [ActiveEvent(Name = "DBAdmin.Grid.DeleteAllObjects")]
+        protected void DBAdmin_Grid_DeleteAllObjects(object sender, ActiveEventArgs e)
+        {
+            Node node = e.Params;
+
+            node["Caption"].Value = @"Please confirm deletion of Multiple Objects";
+            node["Text"].Value = @"
+<p>Are you sure you wish to delete these objects? 
+Deletion is permanent, and cannot be undone! 
+Deletion of these objects <span style=""color:Red;font-weight:bold;"">might also trigger 
+deletion of several other objects</span>, since it may 
+have relationships towards other instances in your database.</p>";
+
+            int idxNo = 1;
+            foreach (Node idx in e.Params["Criteria"])
+            {
+                foreach (Node idx2 in idx)
+                {
+                    node["OK"]["Criteria"]["C" + idxNo][idx2.Name].Value = idx2.Value;
+                }
+                idxNo += 1;
+            }
+
+            node["OK"]["FullTypeName"].Value = e.Params["FullTypeName"].Get<string>();
+            node["OK"]["Event"].Value = "DBAdmin.Grid.DeleteAllObjectsConfirmed";
+            node["Cancel"]["Event"].Value = "DBAdmin.Grid.DeleteAllObjectsNotConfirmed";
+            node["Cancel"]["FullTypeName"].Value = e.Params["FullTypeName"].Get<string>();
+            node["Width"].Value = 18;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        /**
+         * Level2: Just closes our Dialog Box ...
+         */
+        [ActiveEvent(Name = "DBAdmin.Grid.DeleteAllObjectsNotConfirmed")]
+        protected void DBAdmin_Grid_DeleteAllObjectsNotConfirmed(object sender, ActiveEventArgs e)
+        {
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        /**
+         * Level2: Will delete all objects within the range of the given 'Criteria'
+         * collection
+         */
+        [ActiveEvent(Name = "DBAdmin.Grid.DeleteAllObjectsConfirmed")]
+        protected void DBAdmin_Grid_DeleteAllObjectsConfirmed(object sender, ActiveEventArgs e)
+        {
+            List<Criteria> crits = Data.Instance.GetCriteria(
+                e.Params["FullTypeName"].Get<string>(),
+                e.Params);
+
+            Data.Instance.DeleteObjects(e.Params["FullTypeName"].Get<string>(), crits);
+
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

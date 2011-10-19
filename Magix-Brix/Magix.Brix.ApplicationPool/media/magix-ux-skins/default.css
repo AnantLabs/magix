@@ -217,6 +217,11 @@ textarea
 	transition-duration:.5s;
 }
 
+.mux-float-right
+{
+	float:right;
+}
+
 /* Shaded corners ... */
 .mux-shaded
 {

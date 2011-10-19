@@ -98,6 +98,50 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             RaiseEvent(
                 "Magix.Core.SetFormCaption",
                 node);
+
+            // Adding up 'Delete All in Extraction' button ...
+            CreateDeleteAllButton();
+        }
+
+        private void CreateDeleteAllButton()
+        {
+            Node node = new Node();
+
+            node["Width"].Value = 5;
+            node["Text"].Value = "Delete All";
+            node["Append"].Value = true;
+            node["ButtonCssClass"].Value = "span-3 mux-float-right";
+            node["Event"].Value = "Magix.MetaType.DeleteAll";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Clickable",
+                "content3",
+                node);
+        }
+
+        /**
+         * Level2: Will delete all actions with the given Criteria and refresh any 
+         * grids
+         */
+        [ActiveEvent(Name = "Magix.MetaType.DeleteAll")]
+        protected void Magix_MetaType_DeleteAll(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                Node node = new Node();
+
+                node["FullTypeName"].Value = typeof(MetaObject).FullName;
+
+                RaiseEvent(
+                    "DBAdmin.Grid.GetActiveFilters",
+                    node);
+
+                RaiseEvent(
+                    "DBAdmin.Grid.DeleteAllObjects",
+                    node);
+
+                tr.Commit();
+            }
         }
 
         /**

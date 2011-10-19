@@ -397,7 +397,27 @@ namespace Magix.Brix.Components
         }
 
         /**
-         * Level4: Will set the Active Row of the grid, if the 'FullTypeName' is correct
+         * Level2: Will return the filter criteria for the grid ...
+         */
+        [ActiveEvent(Name = "DBAdmin.Grid.GetActiveFilters")]
+        public void DBAdmin_Grid_GetActiveFilters(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
+            {
+                int idxNo = 1;
+                foreach (Node idx in DataSource["Criteria"])
+                {
+                    foreach (Node idx2 in idx)
+                    {
+                        e.Params["Criteria"]["C" + idxNo][idx2.Name].Value = idx2.Value;
+                    }
+                    idxNo += 1;
+                }
+            }
+        }
+
+        /**
+         * Level2: Will set the Active Row of the grid, if the 'FullTypeName' is correct
          */
         [ActiveEvent(Name = "DBAdmin.Grid.SetActiveRow")]
         public void DBAdmin_Grid_SetActiveRow(object sender, ActiveEventArgs e)
