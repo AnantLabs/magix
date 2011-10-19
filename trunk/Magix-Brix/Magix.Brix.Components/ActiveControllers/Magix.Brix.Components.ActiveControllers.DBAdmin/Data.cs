@@ -569,6 +569,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
             }
 
             Node fNode = new Node();
+
             fNode["Key"].Value = "DBAdmin.Filter." + fullTypeName + ":ID";
             fNode["Default"].Value = "";
 
@@ -713,6 +714,43 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     BindingFlags.Public |
                     BindingFlags.Instance)
                     .Invoke(obj, null);
+            }
+        }
+
+        public void DeleteObjects(string fullTypeName, List<Criteria> crits)
+        {
+            Type type = GetType(fullTypeName);
+            if (type == null)
+            {
+                Node node = new Node();
+
+                node["FullTypeName"].Value = fullTypeName;
+                node["Criteria"].Value = crits;
+
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "DBAdmin.DynamicType.DeleteObjects",
+                    node);
+            }
+            else
+            {
+                MethodInfo ret = type.GetMethod(
+                    "Select",
+                    BindingFlags.Static |
+                    BindingFlags.FlattenHierarchy |
+                    BindingFlags.Public);
+                IEnumerable enumer =
+                    ret.Invoke(null, new object[] { crits.ToArray() }) as IEnumerable;
+                foreach (object idx in enumer)
+                {
+                    int id = GetID(idx, type);
+                    object obj = GetObject(id, fullTypeName, null);
+                    type.GetMethod(
+                        "Delete",
+                        BindingFlags.Public |
+                        BindingFlags.Instance)
+                        .Invoke(obj, null);
+                }
             }
         }
 

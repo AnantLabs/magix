@@ -59,8 +59,7 @@ namespace Magix.Brix.Loader
             }
             catch (Exception err)
             {
-                while (err.InnerException != null)
-                    err = err.InnerException;
+                err = err.GetBaseException(); // TODO: Implement this all over the place ...
 
                 Node node = new Node();
 
