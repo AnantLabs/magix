@@ -40,14 +40,24 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
 
                 eventName = HttpUtility.UrlDecode(eventName);
 
-                RaiseEvent(
-                    eventName,
-                    node);
+                string returnValue = "";
 
                 try
                 {
+                    RaiseEvent(
+                        eventName,
+                        node);
+
+                    returnValue = "return:" + node.ToJSONString();
+                }
+                catch (Exception err)
+                {
+                    returnValue = "error:" + err.GetBaseException().Message;
+                }
+                try
+                {
                     Page.Response.Clear();
-                    Page.Response.Write("return:");
+                    Page.Response.Write(returnValue);
                     Page.Response.End(); // throws ...
                 }
                 catch (ThreadAbortException)
@@ -166,7 +176,7 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
 
             foreach (Cookie idx in Cookie.Select(Criteria.Eq("Domain", urlEndPoint)))
             {
-                if (idx.Expires >= DateTime.Now)
+                if (idx.Expires <= DateTime.Now)
                     idx.Delete();
                 else
                     req.CookieContainer.Add(new System.Net.Cookie(idx.Name, idx.Value, "/", idx.ActualDomain));

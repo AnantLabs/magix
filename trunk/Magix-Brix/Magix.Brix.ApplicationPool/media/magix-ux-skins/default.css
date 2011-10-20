@@ -1034,6 +1034,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(235, 235, 235, .4)), to(rgba(210, 210, 210, .4)));
 	background-image: -webkit-linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
+	background-image: -moz-linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
 	background-image: -o-linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
 	background-image: -ms-linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
 	background-image: linear-gradient(rgba(235, 235, 235, .4) 0%, rgba(210, 210, 210, .4) 100%);
@@ -1060,6 +1061,7 @@ ul.mux-menu ul.mux-menu-submenu .mux-menu-item:last-child
 {
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(245, 255, 245, .4)), to(rgba(210, 220, 210, .4)));
 	background-image: -webkit-linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
+	background-image: -moz-linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
 	background-image: -o-linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
 	background-image: -ms-linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
 	background-image: linear-gradient(rgba(245, 255, 245, .4) 0%, rgba(210, 220, 210, .4) 100%);
