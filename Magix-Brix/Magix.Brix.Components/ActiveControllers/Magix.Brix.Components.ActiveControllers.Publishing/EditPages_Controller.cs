@@ -360,10 +360,10 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     s2 = new WebPart.WebPartSetting();
                     s2.Name = "Magix.Brix.Components.ActiveModules.Publishing.ContentText";
                     s2.Value = @"
-<img src='media/images/magix-logo.png' class='mux-horus-ra-image' />
+<p class='mux-float-right'><img src='media/images/magix-logo.png' class='mux-horus-ra-image' /></p>
 <p>Inside the More Menu hierarchy you can find many more video tutorials and explanation about more advanced topics.</p>
 <p>Make especially sure to check out how Repeaters work, since they are fundamental for being able to treat lists of data.</p>
-<p class='clear-both'>Other things which are crucial to understand is the relationship between Pages and Templates. 
+<p>Other things which are crucial to understand is the relationship between Pages and Templates. 
 Pages are kind of like conventional 'CMS WebSite Pages', except they are built upon Templates, which far surpasses any 
 existing CMS we're aware of in regards to 'design capabilities', and you can have as many as you wish of these</p>
 <p>In addition to that, your pages can contain complete applications, and doesn't necessarily need to be the vehicle of 
