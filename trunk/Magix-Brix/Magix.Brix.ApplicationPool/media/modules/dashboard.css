@@ -204,8 +204,8 @@
 	background:Transparent url(../images/desktop-icons/desktop-background.png) no-repeat 0 0;
 	width:710px;
 	min-height:828px;
-	margin-left:-240px;
-	padding-left:240px;
+	margin-left:-210px;
+	padding-left:210px;
 	margin-top:-108px;
 	padding-top:108px;
 	z-index:1;
@@ -221,8 +221,35 @@
 {
 	float:left;
 	width:190px;
+	padding:18px 40px 18px 40px;
+	margin-left:410px;
+	margin-top:-60px;
 	opacity:.3;
 	
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-o-border-radius:5px;
+	-ms-border-radius:5px;
+	border-radius:5px;
+
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(254, 255, 254, 1)), to(rgba(210, 225, 210, 1)));
+	background-image: -webkit-linear-gradient(rgba(254, 255, 254, 1) 0%, rgba(210, 225, 210, 1) 80%);
+	background-image: -moz-linear-gradient(rgba(254, 255, 254, 1) 0%, rgba(210, 225, 210, 1) 80%);
+	background-image: -o-linear-gradient(rgba(254, 255, 254, 1) 0%, rgba(210, 225, 210, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(254, 255, 254, 1) 0%, rgba(210, 225, 210, 1) 80%);
+	background-image: linear-gradient(rgba(254, 255, 254, 1) 0%, rgba(210, 225, 210, 1) 80%);
+
+	-webkit-transform: perspective(200px) rotateY(-20deg) translate(50px, 50px);
+	-webkit-transform-origin:bottom center;
+	-moz-transform: rotate(-7deg) translate(120px, 0px);
+	-moz-transform-origin:bottom center;
+	-o-transform: perspective(150px) rotateY(-20deg);
+	-o-transform-origin:bottom center;
+	-ms-transform: perspective(150px) rotateY(-20deg);
+	-ms-transform-origin:bottom center;
+	transform: perspective(150px) rotateY(-20deg);
+	transform-origin:bottom center;
+
 	-moz-transition-property:opacity;
 	-moz-transition-duration:.5s;
 	-webkit-transition-property:opacity;
@@ -440,6 +467,7 @@
 {
 	position:relative;
 	z-index:2;
+
 }
 
 .mux-desktop-icon
@@ -488,11 +516,11 @@
    -ms-transform: scale(1) rotate(360deg);
    transform: scale(1) rotate(360deg);
 
-	-webkit-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
-	-moz-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
-	-o-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
-	-ms-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
-	box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
+	-webkit-box-shadow: 0px 0px 55px rgba(255, 255, 0, 1);
+	-moz-box-shadow: 0px 0px 55px rgba(255, 255, 0, 1);
+	-o-box-shadow: 0px 0px 35px rgba(255, 255, 0, 1);
+	-ms-box-shadow: 0px 0px 55px rgba(255, 255, 0, 1);
+	box-shadow: 0px 0px 55px rgba(255, 255, 0, 1);
 
 	-moz-transition-property:-moz-box-shadow, -moz-transform;
 	-moz-transition-duration:.5s;
@@ -509,7 +537,7 @@
 .mux-database
 {
 	left:207px;
-	top:310px;
+	top:321px;
 }
 
 .mux-filesystem
@@ -550,7 +578,7 @@
 
 .mux-views
 {
-	left:193px;
+	left:187px;
 	top:220px;
 }
 
