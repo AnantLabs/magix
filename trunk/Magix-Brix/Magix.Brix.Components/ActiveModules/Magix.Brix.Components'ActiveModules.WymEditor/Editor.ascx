@@ -19,9 +19,9 @@
   jQuery('.wymeditor').wymeditor({
     logoHtml: '',
     basePath: 'media/Js/wymeditor/',
-    skinPath: 'media/Js/wymeditor/skins/default/',
+    skinPath: '<%=GetBasePate() + "media/Js/wymeditor/skins/default/" %>',
     wymPath: 'media/Js/wymeditor/',
-    iframeBasePath: 'media/Js/wymeditor/iframe/default/',
+    iframeBasePath: '<%=GetBasePate() %>',
     stylesheet: 'media/modules/wym-styles.css',
     toolsItems: [
       {'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}, 

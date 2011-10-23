@@ -464,7 +464,7 @@ namespace Magix.UX.Widgets.Core
                     builder.AppendFormat("\"{0}\":\"{1}\"",
                         key,
                         // TODO: Create some sort of "EscapeMethod" in StringHelper or something...
-                        value.ToString().Replace("\"", "&quot;").Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r"));
+                        value.ToString().Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r"));
                     break;
                 case "System.Drawing.Color":
                     if (builder.Length > 0)

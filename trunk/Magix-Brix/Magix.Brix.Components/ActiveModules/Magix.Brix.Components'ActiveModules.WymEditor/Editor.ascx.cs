@@ -64,6 +64,11 @@ namespace Magix.Brix.Components.ActiveModules.WymEditor
             set { ViewState["SaveEvent"] = value; }
         }
 
+        protected string GetBasePate()
+        {
+            return GetApplicationBaseUrl();
+        }
+
         // TODO: Implement support for multiple editors ...
         /**
          * Level2: Will flat out return the Value of the Editor. Does NOT support multiple

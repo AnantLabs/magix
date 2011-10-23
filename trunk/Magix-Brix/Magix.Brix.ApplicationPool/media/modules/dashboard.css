@@ -203,12 +203,10 @@
  from 
  {
    opacity:0;
-   -webkit-transform: scale(0) rotate(0deg);
  }
  to 
  {
  	opacity:1;
- 	-webkit-transform: scale(1) rotate(0deg);
  }
 }
 
@@ -216,12 +214,10 @@
  from 
  {
    opacity:0;
-   -moz-transform: scale(0) rotate(0deg);
  }
  to 
  {
  	opacity:1;
- 	-moz-transform: scale(1) rotate(0deg);
  }
 }
 
@@ -229,12 +225,10 @@
  from 
  {
    opacity:0;
-   -o-transform: scale(0) rotate(0deg);
  }
  to 
  {
  	opacity:1;
- 	-o-transform: scale(1) rotate(0deg);
  }
 }
 
@@ -242,12 +236,10 @@
  from 
  {
    opacity:0;
-   -ms-transform: scale(0) rotate(0deg);
  }
  to 
  {
  	opacity:1;
- 	-ms-transform: scale(1) rotate(0deg);
  }
 }
 
@@ -255,12 +247,10 @@
  from 
  {
    opacity:0;
-   transform: scale(0) rotate(0deg);
  }
  to 
  {
  	opacity:1;
- 	transform: scale(1) rotate(0deg);
  }
 }
 
@@ -337,31 +327,44 @@
 	transform: rotate(-7deg) translate(120px, 0px);
 	transform-origin:bottom center;
 
-	-moz-transition-property:opacity;
+	-moz-transition-property:opacity, -moz-transform;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity;
+	-webkit-transition-property:opacity, -webkit-transform;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:opacity;
+	-o-transition-property:opacity, -o-transform;
 	-o-transition-duration:.5s;
-	-ms-transition-property:opacity;
+	-ms-transition-property:opacity, -ms-transform;
 	-ms-transition-duration:.5s;
-	transition-property:opacity;
+	transition-property:opacity, transform;
 	transition-duration:.5s;
 }
 
 .mux-desktop-dashboard-items-grid:hover
 {
 	opacity:1;
+	z-index:101;
+	position:absolute;
 
-	-moz-transition-property:opacity;
+	-webkit-transform: perspective(300px) rotateY(0deg) translate(0px, 150px) scale(1.5);
+	-webkit-transform-origin:bottom center;
+	-moz-transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	-moz-transform-origin:bottom center;
+	-o-transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	-o-transform-origin:bottom center;
+	-ms-transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	-ms-transform-origin:bottom center;
+	transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	transform-origin:bottom center;
+
+	-moz-transition-property:opacity, -moz-transform;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity;
+	-webkit-transition-property:opacity, -webkit-transform;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:opacity;
+	-o-transition-property:opacity, -o-transform;
 	-o-transition-duration:.5s;
-	-ms-transition-property:opacity;
+	-ms-transition-property:opacity, -ms-transform;
 	-ms-transition-duration:.5s;
-	transition-property:opacity;
+	transition-property:opacity, transform;
 	transition-duration:.5s;
 }
 
