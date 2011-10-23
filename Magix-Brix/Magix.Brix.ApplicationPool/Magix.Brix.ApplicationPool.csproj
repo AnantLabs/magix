@@ -221,6 +221,7 @@
     <Content Include="media\images\desktop-icons\blue-print-icon.png" />
     <Content Include="media\images\desktop-icons\briefcase.png" />
     <Content Include="media\images\desktop-icons\database.png" />
+    <Content Include="media\images\desktop-icons\desktop-background.png" />
     <Content Include="media\images\desktop-icons\docs.png" />
     <Content Include="media\images\desktop-icons\facts.png" />
     <Content Include="media\images\desktop-icons\lightning-icon.png" />

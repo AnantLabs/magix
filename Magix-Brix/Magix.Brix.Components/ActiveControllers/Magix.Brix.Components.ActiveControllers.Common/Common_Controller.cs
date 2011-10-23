@@ -26,6 +26,7 @@ namespace Magix.Brix.Components.ActiveControllers.Common
         {
             e.Params["ForcedSize"]["width"].Value = 430;
             e.Params["ForcedSize"]["height"].Value = 350;
+
             if (!e.Params.Contains("Caption"))
                 e.Params["Caption"].Value = "Pick Color or Texture";
 

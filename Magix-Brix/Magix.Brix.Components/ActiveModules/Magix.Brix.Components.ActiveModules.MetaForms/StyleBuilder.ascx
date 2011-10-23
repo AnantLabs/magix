@@ -130,49 +130,6 @@
                             id="borderColorPnl" />
                     </div>
                     <div class="span-4 mux-editable-part">
-                        <h5 title="Padding is spacing between inside of the element before children or textual fragments are rendered. Useful for creating distance between the borders of a Widget and where child fragments and text properties are being rendered">Padding</h5>
-                        <span class="span-2">
-                            Left: 
-                        </span>
-                        <mux:TextBox
-                            runat="server"
-                            id="paddingLeft"
-                            PlaceHolder="Left ..."
-                            ToolTip="Left Padding ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
-                        <span class="span-2">
-                            Top: 
-                        </span>
-                        <mux:TextBox
-                            runat="server"
-                            id="paddingTop"
-                            PlaceHolder="Top ..."
-                            ToolTip="Top Padding ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
-                        <span class="span-2">
-                            Right: 
-                        </span>
-                        <mux:TextBox
-                            runat="server"
-                            id="paddingRight"
-                            PlaceHolder="Right ..."
-                            ToolTip="Right Padding ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
-                        <span class="span-2">
-                            Bottom: 
-                        </span>
-                        <mux:TextBox
-                            runat="server"
-                            id="paddingBottom"
-                            PlaceHolder="Bottom ..."
-                            ToolTip="Bottom Padding ..."
-                            TextMode="Number"
-                            CssClass="span-2 last" />
-                    </div>
-                    <div class="span-4 mux-editable-part last">
                         <h5 title="Size of your Widget">Size</h5>
                         <span 
                             title="Width of Widget. PS! The width comes in _addition_ to the widget's Padding and Border, but not Margin. Meaning if your widget is 70px wide and has 15 pixels of left and right padding and 1 pixels of borders, your widget is actually 302 pixels wide, even though you want it to be 70px, and it feels intuitively that it should be 70. Please also notice that only Block Level Elements can have an explicit width!"
@@ -212,6 +169,49 @@
                             id="top"
                             PlaceHolder="Left ..."
                             ToolTip="Top position of Widget ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                    </div>
+                    <div class="span-4 mux-editable-part last">
+                        <h5 title="Padding is spacing between inside of the element before children or textual fragments are rendered. Useful for creating distance between the borders of a Widget and where child fragments and text properties are being rendered">Padding</h5>
+                        <span class="span-2">
+                            Left: 
+                        </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="paddingLeft"
+                            PlaceHolder="Left ..."
+                            ToolTip="Left Padding ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span class="span-2">
+                            Top: 
+                        </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="paddingTop"
+                            PlaceHolder="Top ..."
+                            ToolTip="Top Padding ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span class="span-2">
+                            Right: 
+                        </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="paddingRight"
+                            PlaceHolder="Right ..."
+                            ToolTip="Right Padding ..."
+                            TextMode="Number"
+                            CssClass="span-2 last" />
+                        <span class="span-2">
+                            Bottom: 
+                        </span>
+                        <mux:TextBox
+                            runat="server"
+                            id="paddingBottom"
+                            PlaceHolder="Bottom ..."
+                            ToolTip="Bottom Padding ..."
                             TextMode="Number"
                             CssClass="span-2 last" />
                     </div>
@@ -358,6 +358,31 @@
                             <mux:ListItem Text="Text Bottom" Value="text-bottom" />
                             <mux:ListItem Text="Text Top" Value="text-top" />
                             <mux:ListItem Text="Top" Value="top" />
+                        </mux:SelectList>
+                        <span 
+                            title="Select a Cursor for your Widget ..."
+                            class="span-2">Cursor: </span>
+                        <mux:SelectList
+                            runat="server"
+                            ToolTip="Select a Cursor for your Widget ..."
+                            CssClass="span-2 last"
+                            id="ddlCursor">
+                            <mux:ListItem Text="" Value="inherit" />
+                            <mux:ListItem Text="Crosshair" Value="crosshair" />
+                            <mux:ListItem Text="Help" Value="help" />
+                            <mux:ListItem Text="Move" Value="move" />
+                            <mux:ListItem Text="Pointer" Value="pointer" />
+                            <mux:ListItem Text="Progress" Value="progress" />
+                            <mux:ListItem Text="Text" Value="text" />
+                            <mux:ListItem Text="Wait" Value="wait" />
+                            <mux:ListItem Text="North Resize" Value="n-resize" />
+                            <mux:ListItem Text="North East Resize" Value="ne-resize" />
+                            <mux:ListItem Text="East Resize" Value="e-resize" />
+                            <mux:ListItem Text="South East Resize" Value="se-resize" />
+                            <mux:ListItem Text="South Resize" Value="s-resize" />
+                            <mux:ListItem Text="South West Resize" Value="sw-resize" />
+                            <mux:ListItem Text="West Resize" Value="w-resize" />
+                            <mux:ListItem Text="North West Resize" Value="nw-resize" />
                         </mux:SelectList>
                     </div>
                     <div class="span-4 mux-editable-part">

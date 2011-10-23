@@ -48,7 +48,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaViews
             e.Params["Items"]["MetaView"]["Image"].Value = "media/images/desktop-icons/view-icon.png";
             e.Params["Items"]["MetaView"]["Shortcut"].Value = "z";
             e.Params["Items"]["MetaView"]["Text"].Value = "Click to view Meta Views [Key V]";
-            e.Params["Items"]["MetaView"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["MetaView"]["CSS"].Value = "mux-desktop-icon mux-views";
             e.Params["Items"]["MetaView"]["Event"].Value = "Magix.MetaView.ViewMetaViews";
         }
 

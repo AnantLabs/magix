@@ -36,7 +36,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             e.Params["Items"]["Help"]["Image"].Value = "media/images/desktop-icons/marvin-help.png";
             e.Params["Items"]["Help"]["Shortcut"].Value = "x";
             e.Params["Items"]["Help"]["Text"].Value = "Click to have Marvin Magix Rescue you ... [Key H]";
-            e.Params["Items"]["Help"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Help"]["CSS"].Value = "mux-desktop-icon mux-help";
             e.Params["Items"]["Help"]["Event"].Value = "Magix.Documentation.LaunchMarvin";
         }
 

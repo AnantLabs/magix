@@ -201,6 +201,15 @@
 
 .mux-dashboard
 {
+	background:Transparent url(../images/desktop-icons/desktop-background.png) no-repeat 0 0;
+	width:710px;
+	min-height:828px;
+	margin-left:-240px;
+	padding-left:240px;
+	margin-top:-108px;
+	padding-top:108px;
+	z-index:1;
+	position:relative;
 }
 
 .mux-dashboard .mux-grid-single-object
@@ -427,10 +436,23 @@
 	-moz-animation-delay: 23.1s;
 }
 
+.mux-sliding-menu
+{
+	position:relative;
+	z-index:2;
+}
+
 .mux-desktop-icon
 {
-	opacity:.3;
+	position:absolute;
+	z-index:100;
 	
+   -webkit-transform: scale(.5) rotate(0deg);
+   -moz-transform: scale(.5) rotate(0deg);
+   -o-transform: scale(.5) rotate(0deg);
+   -ms-transform: scale(.5) rotate(0deg);
+   transform: scale(.5) rotate(0deg);
+
 	-moz-border-radius:60px;
 	-webkit-border-radius:60px;
 	-o-border-radius:60px;
@@ -443,15 +465,15 @@
 	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
 	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0);
 
-	-moz-transition-property:-moz-box-shadow, opacity;
+	-moz-transition-property:-moz-box-shadow, -moz-transform;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, opacity;
+	-webkit-transition-property:-webkit-box-shadow, -webkit-transform;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, opacity;
+	-o-transition-property:-o-box-shadow, -o-transform;
 	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, opacity;
+	-ms-transition-property:-ms-box-shadow, -ms-transform;
 	-ms-transition-duration:.5s;
-	transition-property:box-shadow, opacity;
+	transition-property:box-shadow, transform;
 	transition-duration:.5s;
 
 	cursor:pointer;
@@ -460,24 +482,100 @@
 
 .mux-desktop-icon:hover
 {
-	opacity:1;
+   -webkit-transform: scale(1) rotate(360deg);
+   -moz-transform: scale(1) rotate(360deg);
+   -o-transform: scale(1) rotate(360deg);
+   -ms-transform: scale(1) rotate(360deg);
+   transform: scale(1) rotate(360deg);
 
-	-webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	-moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	-o-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	-ms-box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
-	box-shadow: 2px 2px 3px rgba(0, 0, 0, .8);
+	-webkit-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
+	-moz-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
+	-o-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
+	-ms-box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
+	box-shadow: 10px 10px 5px rgba(0, 0, 0, .8);
 
-	-moz-transition-property:-moz-box-shadow, opacity;
+	-moz-transition-property:-moz-box-shadow, -moz-transform;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:-webkit-box-shadow, opacity;
+	-webkit-transition-property:-webkit-box-shadow, -webkit-transform;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:-o-box-shadow, opacity;
+	-o-transition-property:-o-box-shadow, -o-transform;
 	-o-transition-duration:.5s;
-	-ms-transition-property:-ms-box-shadow, opacity;
+	-ms-transition-property:-ms-box-shadow, -ms-transform;
 	-ms-transition-duration:.5s;
-	transition-property:box-shadow, opacity;
+	transition-property:box-shadow, transform;
 	transition-duration:.5s;
+}
+
+.mux-database
+{
+	left:207px;
+	top:310px;
+}
+
+.mux-filesystem
+{
+	left:283px;
+	top:390px;
+}
+
+.mux-log
+{
+	left:217px;
+	top:130px;
+}
+
+.mux-dox
+{
+	left:293px;
+	top:67px;
+}
+
+.mux-pages
+{
+	left:520px;
+	top:65px;
+}
+
+.mux-templates
+{
+	left:627px;
+	top:210px;
+}
+
+.mux-objects
+{
+	left:530px;
+	top:385px;
+}
+
+.mux-views
+{
+	left:193px;
+	top:220px;
+}
+
+.mux-help
+{
+	left:410px;
+	top:45px;
+}
+
+.mux-actions
+{
+	left:597px;
+	top:125px;
+}
+
+.mux-qr-codes
+{
+	left:410px;
+	top:415px;
+}
+
+.mux-forms
+{
+	left:610px;
+	top:305px;
 }
 
 .mux-tooltip-module

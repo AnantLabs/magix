@@ -254,7 +254,44 @@ namespace Magix.Brix.Types
         [DebuggerStepThrough]
         public T Get<T>()
         {
-            return _value == null ? default(T) : (T)_value;
+            if (_value == null)
+                return default(T);
+
+            if (typeof(T) != _value.GetType())
+            {
+                switch (typeof(T).FullName)
+                {
+                    case "System.Int32":
+                        return (T)(object)int.Parse(_value.ToString(), CultureInfo.InvariantCulture);
+                    case "System.Boolean":
+                        return (T)(object)bool.Parse(_value.ToString());
+                    case "System.Decimal":
+                        return (T)(object)decimal.Parse(_value.ToString(), CultureInfo.InvariantCulture);
+                    case "System.DateTime":
+                        return (T)(object)DateTime.ParseExact(_value.ToString(), "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    case "System.String":
+                        return (T)GetString(_value);
+                }
+            }
+
+            return (T)_value;
+        }
+
+        private object GetString(object _value)
+        {
+            switch (_value.GetType().FullName)
+            {
+                case "System.Int32":
+                    return _value.ToString();
+                case "System.Boolean":
+                    return _value.ToString();
+                case "System.Decimal":
+                    return ((decimal)_value).ToString(CultureInfo.InvariantCulture);
+                case "System.DateTime":
+                    return ((DateTime)_value).ToString("yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                default:
+                    return _value.ToString();
+            }
         }
 
         /**

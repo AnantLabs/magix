@@ -16,6 +16,9 @@ using System.Drawing;
 namespace Magix.UX.Widgets
 {
     /**
+     * ColorPicker widget for allowing the End User to select a Color from a Color Wheel kind of
+     * control. Use the ColorWheelImage to override which colors the user is allowed to pick from,
+     * if you'd like to restrict him to some sort of palette
      */
     public class ColorPicker : BaseWebControl
     {
@@ -24,6 +27,11 @@ namespace Magix.UX.Widgets
             CssClass = "mux-color-picker";
         }
 
+        /**
+         * Sets which Image to use s the foundation for selecting a Color. By
+         * chaing this value, you can for instance [kind of] restrict the user 
+         * in regards to which colors he is allowed to pick from
+         */
         public string ColorWheelImage
         {
             get { return ViewState["ColorWheelImage"] == null ? 
@@ -37,10 +45,16 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * The selected value of the control
+         */
         public Color Value
         {
             get
             {
+                if (!HasValue())
+                    return Color.Empty;
+
                 string clr = Page.Request.Params[ClientID + "__value"];
                 return Color.FromArgb(
                     255, 
@@ -54,6 +68,9 @@ namespace Magix.UX.Widgets
             }
         }
 
+        /**
+         * True if the Widget has any value
+         */
         public bool HasValue()
         {
             return !string.IsNullOrEmpty(Page.Request.Params[ClientID + "__value"]);

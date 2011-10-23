@@ -874,10 +874,10 @@ and transform to MetaObjects using the given 'MetaViewName'";
                 }
 
                 if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.DynamicEvent.ShowDefaultMessage")) == 0)
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ShowMessage")) == 0)
                 {
                     Action a = new Action();
-                    a.Name = "Magix.DynamicEvent.ShowDefaultMessage";
+                    a.Name = "Magix.DynamicEvent.ShowMessage";
                     a.EventName = "Magix.Core.ShowMessage";
                     a.Description = @"Will show a 'Message Box' to the User. If you add 'IsError' to true, 
 the message box will be in error mode, meaning red probably, signifying a an error";
@@ -1098,7 +1098,7 @@ PS! This Action can be seen in 'Action' in the 'Magix.Demo.SendEmail' MetaView";
                     q = new MetaView.MetaViewProperty();
                     q.Name = "Send";
                     q.Description = "Send yourself a Test Email from Marvin Magix ...";
-                    q.Action = "Magix.DynamicEvent.ValidateObjectPropertyFullName|Magix.DynamicEvent.ValidateObjectPropertyEmail|Magix.DynamicEvent.ValidateObjectPropertyNumber|Magix.DynamicEvent.SaveActiveForm|Magix.DynamicEvent.ShowDefaultMessage|Magix.DynamicEvent.SendEmailFromForm|Magix.DynamicEvent.EmptyAndClearActiveForm";
+                    q.Action = "Magix.DynamicEvent.ValidateObjectPropertyFullName|Magix.DynamicEvent.ValidateObjectPropertyEmail|Magix.DynamicEvent.ValidateObjectPropertyNumber|Magix.DynamicEvent.SaveActiveForm|Magix.DynamicEvent.ShowMessage|Magix.DynamicEvent.SendEmailFromForm|Magix.DynamicEvent.EmptyAndClearActiveForm";
                     v.Properties.Add(q);
 
                     q = new MetaView.MetaViewProperty();
@@ -1167,7 +1167,7 @@ Root node will become VERY large after subsequent actions. Be warned ...";
 
                     Action.ActionParams m2 = new Action.ActionParams();
                     m2.Name = "ActionName";
-                    m2.Value = "Magix.DynamicEvent.ShowDefaultMessage";
+                    m2.Value = "Magix.DynamicEvent.ShowMessage";
                     m2.TypeName = typeof(string).FullName;
                     ar.Children.Add(m2);
 

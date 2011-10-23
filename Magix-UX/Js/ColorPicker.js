@@ -40,35 +40,43 @@
     },
 
     valueHexChange: function(e) {
-      var red = Math.max(0, Math.min(255, parseInt(this.valueHex.value.substring(1,3), 16)));
-      var green = Math.max(0, Math.min(255, parseInt(this.valueHex.value.substring(3,5), 16)));
-      var blue = Math.max(0, Math.min(255, parseInt(this.valueHex.value.substring(5,7), 16)));
-      this.selected.setStyle('backgroundColor', 'rgba('+red+','+green+','+blue+', 1)');
-      this.selected.innerHTML = 'R: ' + red + '<br/>G: ' + green + '<br/>B: ' + blue;
-      this.value.value = 'rgb('+red+', '+green+', '+blue+')';
-      this.valueHex.value = '#'+
-        (red < 16 ? '0' : '')+
-        red.toString(16)+
-        (green < 16 ? '0' : '')+
-        green.toString(16)+
-        (blue < 16 ? '0' : '')+
-        blue.toString(16);
+      if(this.valueHex.value.length == 0) {
+        this.value.value = '';
+      } else {
+        var red = Math.max(0, Math.min(255, parseInt(this.valueHex.value.substring(1,3), 16)));
+        var green = Math.max(0, Math.min(255, parseInt(this.valueHex.value.substring(3,5), 16)));
+        var blue = Math.max(0, Math.min(255, parseInt(this.valueHex.value.substring(5,7), 16)));
+        this.selected.setStyle('backgroundColor', 'rgba('+red+','+green+','+blue+', 1)');
+        this.selected.innerHTML = 'R: ' + red + '<br/>G: ' + green + '<br/>B: ' + blue;
+        this.value.value = 'rgb('+red+', '+green+', '+blue+')';
+        this.valueHex.value = '#'+
+          (red < 16 ? '0' : '')+
+          red.toString(16)+
+          (green < 16 ? '0' : '')+
+          green.toString(16)+
+          (blue < 16 ? '0' : '')+
+          blue.toString(16);
+      }
     },
 
     valueChange: function(e) {
-      var red = Math.max(0, Math.min(255, parseInt(this.value.value.split(',')[0].split('(')[1], 10)));
-      var green = Math.max(0, Math.min(255, parseInt(this.value.value.split(',')[1], 10)));
-      var blue = Math.max(0, Math.min(255, parseInt(this.value.value.split(',')[2].split(')')[0], 10)));
-      this.selected.setStyle('backgroundColor', 'rgba('+red+','+green+','+blue+', 1)');
-      this.selected.innerHTML = 'R: ' + red + '<br/>G: ' + green + '<br/>B: ' + blue;
-      this.valueHex.value = '#'+
-        (red < 16 ? '0' : '')+
-        red.toString(16)+
-        (green < 16 ? '0' : '')+
-        green.toString(16)+
-        (blue < 16 ? '0' : '')+
-        blue.toString(16);
-      this.value.value = 'rgb('+red+', '+green+', '+blue+')';
+      if(this.value.value.length == 0) {
+        this.valueHex.value = '';
+      } else {
+        var red = Math.max(0, Math.min(255, parseInt(this.value.value.split(',')[0].split('(')[1], 10)));
+        var green = Math.max(0, Math.min(255, parseInt(this.value.value.split(',')[1], 10)));
+        var blue = Math.max(0, Math.min(255, parseInt(this.value.value.split(',')[2].split(')')[0], 10)));
+        this.selected.setStyle('backgroundColor', 'rgba('+red+','+green+','+blue+', 1)');
+        this.selected.innerHTML = 'R: ' + red + '<br/>G: ' + green + '<br/>B: ' + blue;
+        this.valueHex.value = '#'+
+          (red < 16 ? '0' : '')+
+          red.toString(16)+
+          (green < 16 ? '0' : '')+
+          green.toString(16)+
+          (blue < 16 ? '0' : '')+
+          blue.toString(16);
+        this.value.value = 'rgb('+red+', '+green+', '+blue+')';
+      }
     },
 
     clicked: function(e) {

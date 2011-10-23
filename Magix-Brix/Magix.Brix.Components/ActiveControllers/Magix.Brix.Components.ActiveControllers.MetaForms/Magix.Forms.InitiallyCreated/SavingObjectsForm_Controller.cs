@@ -472,7 +472,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
                             {
                                 MetaForm.Node n_4 = new MetaForm.Node();
                                 n_4.Name = "Click";
-                                n_4.Value = "Magix.DynamicEvent.CreateNodeFromMetaForm|Magix.DynamicEvent.SaveNodeSerializedFromMetaForm|Magix.DynamicEvent.EmptyAndClearActiveForm|Magix.DynamicEvent.ShowDefaultMessage|Magix.DynamicEvent.SetFocusToFirstTextBox";
+                                n_4.Value = "Magix.DynamicEvent.CreateNodeFromMetaForm|Magix.DynamicEvent.SaveNodeSerializedFromMetaForm|Magix.DynamicEvent.EmptyAndClearActiveForm|Magix.DynamicEvent.ShowMessage|Magix.DynamicEvent.SetFocusToFirstTextBox";
                                 n_3.Children.Add(n_4);
                             }
                         }

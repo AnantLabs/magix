@@ -30,7 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.QRGenerator
             e.Params["Items"]["QRCode"]["Image"].Value = "media/images/desktop-icons/qr-code.png";
             e.Params["Items"]["QRCode"]["Shortcut"].Value = "v";
             e.Params["Items"]["QRCode"]["Text"].Value = "Click to launch Vanity QR Code Generator [Key Q]";
-            e.Params["Items"]["QRCode"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["QRCode"]["CSS"].Value = "mux-desktop-icon mux-qr-codes";
             e.Params["Items"]["QRCode"]["Event"].Value = "Magix.QCodes.LaunchGenerator";
         }
 

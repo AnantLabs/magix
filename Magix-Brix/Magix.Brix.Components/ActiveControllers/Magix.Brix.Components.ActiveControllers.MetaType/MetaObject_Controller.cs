@@ -41,7 +41,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Items"]["Objects"]["Image"].Value = "media/images/desktop-icons/objects.png";
             e.Params["Items"]["Objects"]["Shortcut"].Value = "d";
             e.Params["Items"]["Objects"]["Text"].Value = "Click to view Meta Objects [Key B]";
-            e.Params["Items"]["Objects"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Objects"]["CSS"].Value = "mux-desktop-icon mux-objects";
             e.Params["Items"]["Objects"]["Event"].Value = "Magix.MetaType.EditMetaObjects_UnFiltered";
         }
 
@@ -967,8 +967,8 @@ have relationships towards other instances in your database.</p>";
          * Level2: Handled to make sure we can traverse our MetaObjects in META mode [front-web, showing grids and views 
          * of Meta Objects]
          */
-        [ActiveEvent(Name = "DBAdmin.Data.ChangeSimplePropertyValue")]
-        protected void DBAdmin_Data_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "DBAdmin.DynamicType.ChangeValue")]
+        protected void DBAdmin_DynamicType_ChangeValue(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() == typeof(MetaObject).FullName + "-META")
             {

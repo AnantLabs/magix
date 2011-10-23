@@ -45,7 +45,6 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         node["SetFocus"].Get<bool>())
                     {
                         // Defaulting ....
-                        query.Text = "Query ...";
                         new EffectTimeout(250)
                             .ChainThese(
                                 new EffectFocusAndSelect(query))
