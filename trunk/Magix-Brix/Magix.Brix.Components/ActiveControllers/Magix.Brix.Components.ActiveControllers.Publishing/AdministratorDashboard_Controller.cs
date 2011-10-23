@@ -51,7 +51,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             foreach (Node idx in node["Items"])
             {
                 idx["Shortcut"].Value = shortcuts[idxNo % shortcuts.Length].ToString();
-                idx["ToolTip"].Value = "Key: " + shortcuts[idxNo % shortcuts.Length].ToString();
+                idx["ToolTip"].Value = ""; // "Key: " + shortcuts[idxNo % shortcuts.Length].ToString();
                 idxNo += 1;
             }
 
@@ -127,37 +127,37 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             e.Params["Items"]["DBManager"]["Image"].Value = "media/images/desktop-icons/database.png";
             e.Params["Items"]["DBManager"]["Shortcut"].Value = "q";
             e.Params["Items"]["DBManager"]["Text"].Value = "Click to launch Database Manager [Key D]";
-            e.Params["Items"]["DBManager"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["DBManager"]["CSS"].Value = "mux-desktop-icon mux-database";
             e.Params["Items"]["DBManager"]["Event"].Value = "Magix.Publishing.ViewClasses";
 
             e.Params["Items"]["FileExplorer"]["Image"].Value = "media/images/desktop-icons/briefcase.png";
             e.Params["Items"]["FileExplorer"]["Shortcut"].Value = "w";
             e.Params["Items"]["FileExplorer"]["Text"].Value = "Click to launch File Explorer [Key F]";
-            e.Params["Items"]["FileExplorer"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["FileExplorer"]["CSS"].Value = "mux-desktop-icon mux-filesystem";
             e.Params["Items"]["FileExplorer"]["Event"].Value = "Magix.Publishing.ViewFileSystem";
 
             e.Params["Items"]["Log"]["Image"].Value = "media/images/desktop-icons/oscilloscope.png";
             e.Params["Items"]["Log"]["Shortcut"].Value = "e";
             e.Params["Items"]["Log"]["Text"].Value = "Click to view Log [Key L]";
-            e.Params["Items"]["Log"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Log"]["CSS"].Value = "mux-desktop-icon mux-log";
             e.Params["Items"]["Log"]["Event"].Value = "Magix.Publishing.ViewLog";
 
             e.Params["Items"]["Dox"]["Image"].Value = "media/images/desktop-icons/docs.png";
             e.Params["Items"]["Dox"]["Shortcut"].Value = "r";
             e.Params["Items"]["Dox"]["Text"].Value = "Click to Download Magix' Documentation in PDF Format [Key X]";
-            e.Params["Items"]["Dox"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Dox"]["CSS"].Value = "mux-desktop-icon mux-dox";
             e.Params["Items"]["Dox"]["Event"].Value = "Magix.Publishing.DownloadHeavyDocumentation";
 
             e.Params["Items"]["Pages"]["Image"].Value = "media/images/desktop-icons/press-icon.png";
             e.Params["Items"]["Pages"]["Shortcut"].Value = "a";
             e.Params["Items"]["Pages"]["Text"].Value = "Click to open Web Pages [Key P]";
-            e.Params["Items"]["Pages"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Pages"]["CSS"].Value = "mux-desktop-icon mux-pages";
             e.Params["Items"]["Pages"]["Event"].Value = "Magix.Publishing.EditPages";
 
             e.Params["Items"]["Templates"]["Image"].Value = "media/images/desktop-icons/blue-print-icon.png";
             e.Params["Items"]["Templates"]["Shortcut"].Value = "s";
             e.Params["Items"]["Templates"]["Text"].Value = "Click to open Templates [Key M]";
-            e.Params["Items"]["Templates"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Templates"]["CSS"].Value = "mux-desktop-icon mux-templates";
             e.Params["Items"]["Templates"]["Event"].Value = "Magix.Publishing.EditTemplates";
         }
 

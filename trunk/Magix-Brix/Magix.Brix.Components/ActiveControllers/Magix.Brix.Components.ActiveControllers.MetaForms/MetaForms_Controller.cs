@@ -70,7 +70,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             e.Params["Items"]["Forms"]["Image"].Value = "media/images/desktop-icons/rosetta.png";
             e.Params["Items"]["Forms"]["Shortcut"].Value = "b";
             e.Params["Items"]["Forms"]["Text"].Value = "Click to launch Meta Forms [Key O]";
-            e.Params["Items"]["Forms"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Forms"]["CSS"].Value = "mux-desktop-icon mux-forms";
             e.Params["Items"]["Forms"]["Event"].Value = "Magix.MetaForms.ViewForms";
         }
 
@@ -1113,7 +1113,8 @@ focus, or clicking the widget with his mouse or touch screen";
 
         /**
          * Level2: Will create MetaObject(s) from the given 'Object' node, with 
-         * the given 'TypeName' and save the Meta Objects to your data storage. If the 'Object'
+         * the given 'TypeName' if given, and save the Meta Objects to your data storage. 
+         * If the 'Object'
          * node contains an 'ID' child node, then the system will assume this is the ID
          * for an existing Meta Object, fetch that Object and instead of creating a new object, 
          * update the values for the existing on. If it's updating an existing object, it will 
@@ -1137,10 +1138,11 @@ focus, or clicking the widget with his mouse or touch screen";
                     if (clean)
                         o.Values.Clear(); // TODO: Implement cleaning for child objects ...
                 }
-
-                o.TypeName = node["TypeName"].Get<string>();
-
-                o.Reference = "MetaForm";
+                else
+                {
+                    o.Reference = "MetaForm";
+                    o.TypeName = node["TypeName"].Get<string>();
+                }
 
                 foreach (Node idx in node["Object"])
                 {

@@ -79,9 +79,19 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                     DataSource["SelectEvent"].Get<string>(),
                     node);
             }
+            else if (DataSource.Contains("DeselectEvent") &&
+                DataSource["DeselectEvent"].Value != null)
+            {
+                Node node = new Node();
+
+                RaiseSafeEvent(
+                    DataSource["DeselectEvent"].Get<string>(),
+                    node);
+            }
             else
             {
                 Node node = new Node();
+
                 node["Message"].Value = "You need to pick a value, either a color, or a texture ...";
 
                 RaiseEvent(

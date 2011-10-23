@@ -145,6 +145,70 @@ namespace Magix.Brix.Loader
         }
 
         /**
+         * Level3: Shows a Message to the user with the given body
+         */
+        [DebuggerStepThrough]
+        protected void ShowMessage(string body)
+        {
+            ShowMessage(body, null);
+        }
+
+        /**
+         * Level3: Shows a Message to the user with the given body and header
+         */
+        [DebuggerStepThrough]
+        protected void ShowMessage(string body, string header)
+        {
+            Node n = new Node();
+            n["Message"].Value = body;
+
+            if (header != null)
+                n["Header"].Value = header;
+
+            RaiseEvent(
+                "Magix.Core.ShowMessage",
+                n);
+        }
+
+        /**
+         * Level3: Shows a Message to the user with the given body and header and Milliseconds
+         */
+        [DebuggerStepThrough]
+        protected void ShowMessage(string body, string header, int milliseconds)
+        {
+            Node n = new Node();
+
+            n["Message"].Value = body;
+            n["Milliseconds"].Value = milliseconds;
+
+            if (header != null)
+                n["Header"].Value = header;
+
+            RaiseEvent(
+                "Magix.Core.ShowMessage",
+                n);
+        }
+
+        /**
+         * Level3: Shows an Error Message to the user with the given body and header
+         */
+        [DebuggerStepThrough]
+        protected void ShowError(string body, string header)
+        {
+            Node n = new Node();
+            n["Message"].Value = body;
+
+            if (header != null)
+                n["Header"].Value = header;
+
+            n["IsError"].Value = true;
+
+            RaiseEvent(
+                "Magix.Core.ShowMessage",
+                n);
+        }
+
+        /**
          * Level3: Will include the given CSS file onto the page. Useful for injecting your
          * own CSS files onto the page
          */

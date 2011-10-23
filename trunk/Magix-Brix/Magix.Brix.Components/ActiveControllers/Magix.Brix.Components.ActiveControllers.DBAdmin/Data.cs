@@ -469,6 +469,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 node["FullTypeName"].Value = fullTypeName;
                 node["PropertyName"].Value = propertyName;
                 node["NewValue"].Value = newValue;
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
                     "DBAdmin.DynamicType.ChangeValue",

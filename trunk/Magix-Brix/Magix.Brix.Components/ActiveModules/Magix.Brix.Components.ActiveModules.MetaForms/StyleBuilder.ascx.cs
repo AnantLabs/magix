@@ -56,6 +56,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
         protected CheckBox chkStrikethrough;
         protected SelectList textAlign;
         protected SelectList textVerticalAlign;
+        protected SelectList ddlCursor;
         protected TextBox fontSize;
         protected TextBox width;
         protected TextBox height;
@@ -279,6 +280,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                             case "vertical-align":
                                 textVerticalAlign.SetSelectedItemAccordingToValue(val);
                                 break;
+                            case "cursor":
+                                ddlCursor.SetSelectedItemAccordingToValue(val);
+                                break;
                             case "font-size":
                                 fontSize.Text = val.Replace("px", "");
                                 break;
@@ -487,6 +491,11 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             else
                 _ctrl.Style[Styles.verticalAlign] = "";
 
+            if (ddlCursor.SelectedIndex != 0)
+                _ctrl.Style[Styles.cursor] = ddlCursor.SelectedItem.Value;
+            else
+                _ctrl.Style[Styles.cursor] = "";
+
             if (!string.IsNullOrEmpty(fgText.Style[Styles.backgroundColor]))
                 _ctrl.Style[Styles.color] = fgText.Style[Styles.backgroundColor];
             else
@@ -511,7 +520,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 _ctrl.Style[Styles.backgroundColor] = "";
             }
 
-            if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
+            if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]) &&
+                !string.IsNullOrEmpty(gradientStop.Style[Styles.backgroundColor]))
             {
                 string gradient = string.Format("linear-gradient({0} 0%, {1} 100%)",
                     gradientStart.Style[Styles.backgroundColor],
@@ -676,6 +686,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["Top"].Value = 20;
 
             node["SelectEvent"].Value = "Magix.MetaForms.FGColorColorWasPickedForBorder";
+            node["DeselectEvent"].Value = "Magix.MetaForms.FGColorColorWasPickedForBorderDeselect";
             node["Caption"].Value = "Pick Foreground Color for Border";
             node["NoImage"].Value = true;
 
@@ -797,6 +808,9 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             if (textVerticalAlign.SelectedIndex != 0)
                 node["Style"]["vertical-align"].Value = textVerticalAlign.SelectedItem.Value;
 
+            if (ddlCursor.SelectedIndex != 0)
+                node["Style"]["cursor"].Value = ddlCursor.SelectedItem.Value;
+
             if (!string.IsNullOrEmpty(fgText.Style[Styles.backgroundColor]))
                 node["Style"]["color"].Value = fgText.Style[Styles.backgroundColor];
 
@@ -833,7 +847,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
 
                 node["Style"]["text-shadow"].Value = stl;
             }
-            if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
+            if (!string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]) &&
+                !string.IsNullOrEmpty(gradientStop.Style[Styles.backgroundColor]))
             {
                 string gradient = string.Format("linear-gradient({0} 0%, {1} 100%)",
                     gradientStart.Style[Styles.backgroundColor],
@@ -887,6 +902,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["Top"].Value = 20;
 
             node["SelectEvent"].Value = "Magix.MetaForms.FGColorColorWasPicked";
+            node["DeselectEvent"].Value = "Magix.MetaForms.FGColorColorWasPickedDeselect";
             node["Caption"].Value = "Pick Foreground Color for Widget";
             node["NoImage"].Value = true;
 
@@ -907,6 +923,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["Top"].Value = 20;
 
             node["SelectEvent"].Value = "Magix.MetaForms.BGColorColorWasPicked";
+            node["DeselectEvent"].Value = "Magix.MetaForms.BGColorColorWasPickedDeselect";
             node["Caption"].Value = "Pick Background Color for Widget";
 
             if (DataSource["Style"].Contains("color"))
@@ -927,6 +944,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["NoImage"].Value = true;
 
             node["SelectEvent"].Value = "Magix.MetaForms.BGGradientStartColorWasPicked";
+            node["DeselectEvent"].Value = "Magix.MetaForms.BGGradientStartColorWasPickedDeselect";
             node["Caption"].Value = "Pick Start Color for Gradient";
 
             if (DataSource.Contains("Gradient") &&
@@ -949,6 +967,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["NoImage"].Value = true;
 
             node["SelectEvent"].Value = "Magix.MetaForms.BGGradientStopColorWasPicked";
+            node["DeselectEvent"].Value = "Magix.MetaForms.BGGradientStopColorWasPickedDeselect";
             node["Caption"].Value = "Pick End Color for Gradient";
 
             if (DataSource.Contains("Gradient") &&
@@ -972,6 +991,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["NoImage"].Value = true;
 
             node["SelectEvent"].Value = "Magix.MetaForms.TextShadowColorWasPicked";
+            node["DeselectEvent"].Value = "Magix.MetaForms.TextShadowColorWasPickedDeselect";
             node["Caption"].Value = "Pick Color for Shadow";
 
             if (DataSource["Style"].Contains("text-shadow"))
@@ -992,6 +1012,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             node["NoImage"].Value = true;
 
             node["SelectEvent"].Value = "Magix.MetaForms.ShadowColorWasPicked";
+            node["DeselectEvent"].Value = "Magix.MetaForms.ShadowColorWasPickedDeselect";
             node["Caption"].Value = "Pick Color for Shadow";
 
             if (DataSource["Style"].Contains("box-shadow"))
@@ -1008,11 +1029,21 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
          * Level2: Sets the border-color property of the Widget
          */
         [ActiveEvent(Name = "Magix.MetaForms.FGColorColorWasPickedForBorder")]
+        [ActiveEvent(Name = "Magix.MetaForms.FGColorColorWasPickedForBorderDeselect")]
         protected void Magix_MetaForms_FGColorColorWasPickedForBorders(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
-            string color = e.Params["Color"].Get<string>();
-            borderColorPnl.Style[Styles.backgroundColor] = color;
+
+            if (e.Name == "Magix.MetaForms.FGColorColorWasPickedForBorder")
+            {
+                string color = e.Params["Color"].Get<string>();
+                borderColorPnl.Style[Styles.backgroundColor] = color;
+            }
+            else
+            {
+                // No color ...
+                borderColorPnl.Style[Styles.backgroundColor] = "";
+            }
         }
 
         /**
@@ -1020,11 +1051,20 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
          * 'Color' parameter
          */
         [ActiveEvent(Name = "Magix.MetaForms.FGColorColorWasPicked")]
+        [ActiveEvent(Name = "Magix.MetaForms.FGColorColorWasPickedDeselect")]
         protected void Magix_MetaForms_FGColorColorWasPicked(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
-            string color = e.Params["Color"].Get<string>();
-            fgText.Style[Styles.backgroundColor] = color;
+
+            if (e.Name == "Magix.MetaForms.FGColorColorWasPicked")
+            {
+                string color = e.Params["Color"].Get<string>();
+                fgText.Style[Styles.backgroundColor] = color;
+            }
+            else
+            {
+                fgText.Style[Styles.backgroundColor] = "";
+            }
         }
 
         /**
@@ -1032,11 +1072,25 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
          * parameter value
          */
         [ActiveEvent(Name = "Magix.MetaForms.BGGradientStartColorWasPicked")]
+        [ActiveEvent(Name = "Magix.MetaForms.BGGradientStartColorWasPickedDeselect")]
         protected void Magix_MetaForms_BGGradientStartColorWasPicked(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
-            string color = e.Params["Color"].Get<string>();
-            gradientStart.Style[Styles.backgroundColor] = color;
+
+            if (e.Name == "Magix.MetaForms.BGGradientStartColorWasPicked")
+            {
+                string color = e.Params["Color"].Get<string>();
+                gradientStart.Style[Styles.backgroundColor] = color;
+
+                if (string.IsNullOrEmpty(gradientStop.Style[Styles.backgroundColor]))
+                {
+                    ShowMessage("You must also set the End Color to have the Gradient take Effect", "Remember!", 2500);
+                }
+            }
+            else
+            {
+                gradientStart.Style[Styles.backgroundColor] = "";
+            }
         }
 
         /**
@@ -1044,33 +1098,65 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
          * parameter value
          */
         [ActiveEvent(Name = "Magix.MetaForms.BGGradientStopColorWasPicked")]
+        [ActiveEvent(Name = "Magix.MetaForms.BGGradientStopColorWasPickedDeselect")]
         protected void Magix_MetaForms_BGGradientStopColorWasPicked(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
-            string color = e.Params["Color"].Get<string>();
-            gradientStop.Style[Styles.backgroundColor] = color;
+
+            if (e.Name == "Magix.MetaForms.BGGradientStopColorWasPicked")
+            {
+                string color = e.Params["Color"].Get<string>();
+                gradientStop.Style[Styles.backgroundColor] = color;
+
+                if (string.IsNullOrEmpty(gradientStart.Style[Styles.backgroundColor]))
+                {
+                    ShowMessage("You must also set the Start Color to have the Gradient take Effect", "Remember!", 2500);
+                }
+            }
+            else
+            {
+                gradientStop.Style[Styles.backgroundColor] = "";
+            }
         }
 
         /**
          * Level2: Will set the Text Shadow Color for the widget to the 'Color' value given
          */
         [ActiveEvent(Name = "Magix.MetaForms.TextShadowColorWasPicked")]
+        [ActiveEvent(Name = "Magix.MetaForms.TextShadowColorWasPickedDeselect")]
         protected void Magix_MetaForms_TextShadowColorWasPicked(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
-            string color = e.Params["Color"].Get<string>();
-            textShadowColor.Style[Styles.backgroundColor] = color;
+
+            if (e.Name == "Magix.MetaForms.TextShadowColorWasPicked")
+            {
+                string color = e.Params["Color"].Get<string>();
+                textShadowColor.Style[Styles.backgroundColor] = color;
+            }
+            else
+            {
+                textShadowColor.Style[Styles.backgroundColor] = "";
+            }
         }
 
         /**
          * Level2: Will set the Shadow Color for the widget to the 'Color' value given
          */
         [ActiveEvent(Name = "Magix.MetaForms.ShadowColorWasPicked")]
+        [ActiveEvent(Name = "Magix.MetaForms.ShadowColorWasPickedDeselect")]
         protected void Magix_MetaForms_ShadowColorWasPicked(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
-            string color = e.Params["Color"].Get<string>();
-            shadowColor.Style[Styles.backgroundColor] = color;
+
+            if (e.Name == "Magix.MetaForms.ShadowColorWasPicked")
+            {
+                string color = e.Params["Color"].Get<string>();
+                shadowColor.Style[Styles.backgroundColor] = color;
+            }
+            else
+            {
+                shadowColor.Style[Styles.backgroundColor] = "";
+            }
         }
 
         /**
@@ -1078,30 +1164,39 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
          * 'Color' parameter
          */
         [ActiveEvent(Name = "Magix.MetaForms.BGColorColorWasPicked")]
+        [ActiveEvent(Name = "Magix.MetaForms.BGColorColorWasPickedDeselect")]
         protected void Magix_MetaForms_BGColorColorWasPicked(object sender, ActiveEventArgs e)
         {
             ActiveEvents.Instance.RaiseClearControls("child");
 
-            if (e.Params.Contains("Color"))
+            if (e.Name == "Magix.MetaForms.BGColorColorWasPicked")
             {
-                string color = e.Params["Color"].Get<string>();
-                bgText.Style[Styles.backgroundColor] = color;
+                if (e.Params.Contains("Color"))
+                {
+                    string color = e.Params["Color"].Get<string>();
+                    bgText.Style[Styles.backgroundColor] = color;
 
-                bgText.Style[Styles.backgroundImage] = "";
+                    bgText.Style[Styles.backgroundImage] = "";
+                }
+                else
+                {
+                    string img = e.Params["FileName"].Get<string>();
+
+                    bgText.Style[Styles.backgroundImage] = "url(" + img + ")";
+                    bgText.Style[Styles.backgroundAttachment] = "scroll";
+                    bgText.Style[Styles.backgroundPosition] = "0 0";
+                    bgText.Style[Styles.backgroundRepeat] = "repeat";
+
+                    bgText.Style[Styles.backgroundColor] = "";
+
+                    // There are TWO popups here now ...
+                    ActiveEvents.Instance.RaiseClearControls("child");
+                }
             }
             else
             {
-                string img = e.Params["FileName"].Get<string>();
-
-                bgText.Style[Styles.backgroundImage] = "url(" + img + ")";
-                bgText.Style[Styles.backgroundAttachment] = "scroll";
-                bgText.Style[Styles.backgroundPosition] = "0 0";
-                bgText.Style[Styles.backgroundRepeat] = "repeat";
-
                 bgText.Style[Styles.backgroundColor] = "";
-
-                // There are TWO popups here now ...
-                ActiveEvents.Instance.RaiseClearControls("child");
+                bgText.Style[Styles.backgroundImage] = "";
             }
         }
 

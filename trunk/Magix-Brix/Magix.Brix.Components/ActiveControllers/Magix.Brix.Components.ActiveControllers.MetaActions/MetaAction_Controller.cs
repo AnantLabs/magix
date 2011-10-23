@@ -172,7 +172,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             e.Params["Items"]["Actions"]["Image"].Value = "media/images/desktop-icons/lightning-icon.png";
             e.Params["Items"]["Actions"]["Shortcut"].Value = "c";
             e.Params["Items"]["Actions"]["Text"].Value = "Click to launch Actions [Key A]";
-            e.Params["Items"]["Actions"]["CSS"].Value = "mux-desktop-icon";
+            e.Params["Items"]["Actions"]["CSS"].Value = "mux-desktop-icon mux-actions";
             e.Params["Items"]["Actions"]["Event"].Value = "Magix.MetaType.ViewActions";
         }
 
@@ -341,21 +341,23 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (e.Params.Contains("Objects") && 
                 e.Params["Objects"].Count == 1)
             {
+                // TODO: Doesn't work, since it fucks up while searching for actions 'all over the places'. Fix ...
                 // Automatically editing bugger ...
-                Node n = new Node();
-                n["ID"].Value = e.Params["Objects"][0]["ID"].Value;
+                //Node n = new Node();
 
-                RaiseEvent(
-                    "Magix.Meta.EditAction",
-                    n);
+                //n["ID"].Value = e.Params["Objects"][0]["ID"].Value;
 
-                n = new Node();
-                n["FullTypeName"].Value = typeof(Action).FullName;
-                n["ID"].Value = e.Params["Objects"][0]["ID"].Value;
+                //RaiseEvent(
+                //    "Magix.Meta.EditAction",
+                //    n);
 
-                RaiseEvent(
-                    "DBAdmin.Grid.SetActiveRow",
-                    n);
+                //n = new Node();
+                //n["FullTypeName"].Value = typeof(Action).FullName;
+                //n["ID"].Value = e.Params["Objects"][0]["ID"].Value;
+
+                //RaiseEvent(
+                //    "DBAdmin.Grid.SetActiveRow",
+                //    n);
             }
         }
 
