@@ -46,7 +46,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
 
             // Ordering keyboard shortcut keys ...
-            //string shortcuts = "qeasxzfcvwrd";
             string shortcuts = "vwrazfdxcqes";
             int idxNo = 0;
             foreach (Node idx in node["Items"])
@@ -65,6 +64,15 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.CommonModules.ImageList",
+                "content3",
+                node);
+
+            node = new Node();
+            node["Append"].Value = true;
+            node["ChildCssClass"].Value = "mux-analog-clock";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.AnalogClock",
                 "content3",
                 node);
         }

@@ -1600,4 +1600,11 @@ li.mux-tree-item-class span.mux-tree-icon
 {
 }
 
-
+.mux-analog-clock
+{
+	position:absolute;
+	top:130px;
+	left:280px;
+	width:370px;
+	height:300px;
+}
