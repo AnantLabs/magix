@@ -101,6 +101,7 @@
         type="button" 
         OnClick='MUX.$("<%=file.ClientID %>").click();'
         class="span-4"
+        title="You can also drag and drop files from your desktop and onto your browser area while this Module is running"
         value="Upload ..." />
 
     <script type="text/ecmascript">

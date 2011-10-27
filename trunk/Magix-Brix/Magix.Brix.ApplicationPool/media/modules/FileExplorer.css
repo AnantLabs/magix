@@ -4,7 +4,11 @@
 .fileEx input[type=button]
 {
 	padding:0 10px 0 10px;
-	margin-bottom:0;
+}
+
+.fileEx input[type=button]
+{
+	margin-bottom:18px;
 }
 
 .fileEx input[type=submit]:disabled:hover,
