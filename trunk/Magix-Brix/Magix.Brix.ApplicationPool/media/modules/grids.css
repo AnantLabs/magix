@@ -327,6 +327,10 @@ table.mux-no-margin .mux-grid-check-box
 /* A Paging button wrapper inside a list view form ... */
 .mux-paging-button
 {
+	font-size:12px !important;
+	height:36px;
+	min-height:36px;
+	display:block;
 }
 
 .child .mux-paging-button
