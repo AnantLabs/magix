@@ -6,7 +6,7 @@
 @font-face
 {
     font-family: 'Lexograph';
-    src: local("Lexographer"), url('../Fonts/lexograph.ttf');
+    src: url('../Fonts/lexograph.ttf');
 }
 
 @font-face
@@ -37,6 +37,18 @@
 {
     font-family: 'Magix Junction';
     src: url('../Fonts/Junction 02.ttf');
+}
+
+@font-face
+{
+    font-family: 'Magix Allerta Medium';
+    src: url('../Fonts/allerta_medium.ttf');
+}
+
+@font-face
+{
+    font-family: 'Magix Allerta Stencil';
+    src: url('../Fonts/allerta_stencil.ttf');
 }
 
 @font-face

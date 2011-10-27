@@ -30,7 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         [ActiveEvent(Name = "Magix.Publishing.LoadAdministratorDashboard")]
         protected void Magix_Publishing_LoadAdministratorDashboard(object sender, ActiveEventArgs e)
         {
-            RaiseEvent("Magix.Publishing.LoadHeader");
+            RaiseEvent("Magix.Publishing.LoadAdministratorHeader");
             RaiseEvent("Magix.Publishing.LoadAdministratorMenu");
 
             LoadDesktopIcons();

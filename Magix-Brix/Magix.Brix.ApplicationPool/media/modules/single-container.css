@@ -160,14 +160,6 @@ input[type=checkbox].mux-grid-select
 	border:none 0;
 }
 
-.mux-header-module h1
-{
-	overflow:visible;
-	white-space:nowrap;
-	position:relative;
-	z-index:5;
-}
-
 /* It's tempting to put into dashboard, but no ...! ;) */
 .mux-debug-panel
 {

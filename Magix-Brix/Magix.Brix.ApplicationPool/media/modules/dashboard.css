@@ -4,9 +4,34 @@
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
-*
+html,body,*
 {
-	font-family:'Magix Chunk' !important;
+	font-family:'Magix Allerta Medium';
+}
+
+form
+{
+}
+
+.main
+{
+	font-family:'Magix Allerta Medium';
+}
+
+.mux-tree-text
+{
+	padding-top:0;
+}
+
+.mux-sliding-menu,
+h2,
+input[type=button],
+input[type=submit]
+{
+}
+
+h1
+{
 }
 
 .mux-wysiwyg-surface
@@ -261,7 +286,7 @@
 
 .mux-dashboard
 {
-	background:Transparent url(../images/desktop-icons/desktop-background.png) no-repeat 0 0;
+	background:Transparent url(../images/desktop-icons/desktop-background.jpg) no-repeat 0 0;
 	width:710px;
 	min-height:828px;
 	margin-left:-210px;
@@ -296,55 +321,55 @@
 @-webkit-keyframes flyin {
  from 
  {
-	-webkit-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+	-webkit-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
  }
  to 
  {
-	-webkit-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+	-webkit-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
  }
 }
 
 @-moz-keyframes flyin {
  from 
  {
-	-moz-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+	-moz-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
  }
  to 
  {
-	-moz-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+	-moz-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
  }
 }
 
 @-o-keyframes flyin {
  from 
  {
-	-o-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+	-o-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
  }
  to 
  {
-	-o-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+	-o-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
  }
 }
 
 @-ms-keyframes flyin {
  from 
  {
-	-ms-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+	-ms-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
  }
  to 
  {
-	-ms-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+	-ms-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
  }
 }
 
 @keyframes flyin {
  from 
  {
-	transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+	transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
  }
  to 
  {
-	transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+	transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
  }
 }
 
@@ -363,12 +388,12 @@
 	-ms-border-radius:5px;
 	border-radius:5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(254, 254, 255, 1)), to(rgba(160, 160, 200, 1)));
-	background-image: -webkit-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(160, 160, 200, 1) 80%);
-	background-image: -moz-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(160, 160, 200, 1) 80%);
-	background-image: -o-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(160, 160, 200, 1) 80%);
-	background-image: -ms-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(160, 160, 200, 1) 80%);
-	background-image: linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(160, 160, 200, 1) 80%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(254, 254, 255, 1)), to(rgba(120, 150, 200, 1)));
+	background-image: -webkit-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
+	background-image: -moz-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
+	background-image: -o-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
+	background-image: linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
 
 	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.8);
 	-moz-box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.8);
@@ -376,15 +401,15 @@
 	-ms-box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.8);
 	box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.8);
 
-	-webkit-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+	-webkit-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
 	-webkit-transform-origin:bottom center;
-	-moz-transform: rotate(-7deg) translate(120px, 0px);
+	-moz-transform: rotate(-7deg) translate(120px, 50px) scale(.8);
 	-moz-transform-origin:bottom center;
-	-o-transform: rotate(-7deg) translate(120px, 0px);
+	-o-transform: rotate(-7deg) translate(120px, 50px) scale(.8);
 	-o-transform-origin:bottom center;
-	-ms-transform: rotate(-7deg) translate(120px, 0px);
+	-ms-transform: rotate(-7deg) translate(120px, 50px) scale(.8);
 	-ms-transform-origin:bottom center;
-	transform: rotate(-7deg) translate(120px, 0px);
+	transform: rotate(-7deg) translate(120px, 50px) scale(.8);
 	transform-origin:bottom center;
 
 	-moz-transition-property:opacity, -moz-transform;
@@ -409,15 +434,15 @@
 	z-index:101;
 	position:absolute;
 
-	-webkit-transform: perspective(300px) rotateY(0deg) translate(0px, 150px) scale(1.5);
+	-webkit-transform: perspective(300px) rotateY(0deg) translate(0px, 50px) scale(1.0);
 	-webkit-transform-origin:bottom center;
-	-moz-transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	-moz-transform: rotate(0deg) translate(0px, 50px) scale(1.0);
 	-moz-transform-origin:bottom center;
-	-o-transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	-o-transform: rotate(0deg) translate(0px, 50px) scale(1.0);
 	-o-transform-origin:bottom center;
-	-ms-transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	-ms-transform: rotate(0deg) translate(0px, 50px) scale(1.0);
 	-ms-transform-origin:bottom center;
-	transform: rotate(0deg) translate(0px, 150px) scale(1.5);
+	transform: rotate(0deg) translate(0px, 50px) scale(1.0);
 	transform-origin:bottom center;
 
 	-moz-transition-property:opacity, -moz-transform;
@@ -663,11 +688,11 @@
 
 .mux-desktop-icon:hover
 {
-   -webkit-transform: scale(1) rotate(360deg);
-   -moz-transform: scale(1) rotate(360deg);
-   -o-transform: scale(1) rotate(360deg);
-   -ms-transform: scale(1) rotate(360deg);
-   transform: scale(1) rotate(360deg);
+   -webkit-transform: scale(1) rotate(15deg);
+   -moz-transform: scale(1) rotate(15deg);
+   -o-transform: scale(1) rotate(15deg);
+   -ms-transform: scale(1) rotate(15deg);
+   transform: scale(1) rotate(15deg);
 
 	-webkit-box-shadow: 0px 0px 105px rgba(255, 255, 0, 1);
 	-moz-box-shadow: 0px 0px 105px rgba(255, 255, 0, 1);
@@ -689,74 +714,74 @@
 
 .mux-database
 {
-	left:207px;
-	top:321px;
+	left:225px;
+	top:322px;
 }
 
 .mux-filesystem
 {
-	left:283px;
-	top:390px;
+	left:304px;
+	top:385px;
 }
 
 .mux-log
 {
-	left:217px;
-	top:130px;
+	left:228px;
+	top:132px;
 }
 
 .mux-dox
 {
-	left:293px;
-	top:67px;
+	left:304px;
+	top:75px;
 }
 
 .mux-pages
 {
-	left:520px;
-	top:65px;
+	left:516px;
+	top:75px;
 }
 
 .mux-templates
 {
-	left:627px;
-	top:210px;
+	left:624px;
+	top:220px;
 }
 
 .mux-objects
 {
-	left:530px;
+	left:515px;
 	top:385px;
 }
 
 .mux-views
 {
-	left:187px;
+	left:196px;
 	top:220px;
 }
 
 .mux-help
 {
 	left:410px;
-	top:45px;
+	top:52px;
 }
 
 .mux-actions
 {
-	left:597px;
-	top:125px;
+	left:592px;
+	top:132px;
 }
 
 .mux-qr-codes
 {
 	left:410px;
-	top:415px;
+	top:403px;
 }
 
 .mux-forms
 {
-	left:610px;
-	top:305px;
+	left:596px;
+	top:315px;
 }
 
 .mux-tooltip-module
@@ -1565,37 +1590,14 @@ li.mux-tree-item-class span.mux-tree-icon
 	margin-bottom:36px;
 	margin-top:18px;
 	display:block;
-	font-family:Times New Roman;
 }
 
 .mux-header-module
 {
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	-o-border-radius:5px;
-	-ms-border-radius:5px;
-	border-radius:5px;
 }
 
 .mux-header-module h1
 {
-	line-height:36px;
-	font-size:36px;
-	text-shadow: 0 1px 0 #ccc, 
-               0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 0 #a9a9a9,
-               0 7px 0 #999,
-               0 8px 0 #999999,
-               0 9px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 15px 15px rgba(0,0,0,.15);
-	color:#fcfcfc;
-	font-family:Arial Black;
 }
+
+

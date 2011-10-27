@@ -26,11 +26,11 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
          * Level2: Basically just ensures the Header Menu is loaded, and locked with 
          * 'Administrator Dashboard' as its value.
          */
-        [ActiveEvent(Name = "Magix.Publishing.LoadHeader")]
-        protected void Magix_Publishing_LoadHeader(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Publishing.LoadAdministratorHeader")]
+        protected void Magix_Publishing_LoadAdministratorHeader(object sender, ActiveEventArgs e)
         {
             if (!e.Params.Contains("Caption"))
-                e.Params["Caption"].Value = "Administrator Dashboard";
+                e.Params["Caption"].Value = "Magix Illuminate";
 
             // Checking to see if Header module is loaded, and if not, loading it ...
             DynamicPanel header = Selector.FindControl<DynamicPanel>(Page, "content2");
