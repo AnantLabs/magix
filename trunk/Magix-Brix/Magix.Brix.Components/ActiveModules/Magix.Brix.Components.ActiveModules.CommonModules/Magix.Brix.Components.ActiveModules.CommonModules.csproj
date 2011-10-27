@@ -43,6 +43,10 @@
       <DependentUpon>Clickable.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="AnalogClock.ascx.cs">
+      <DependentUpon>AnalogClock.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Text.ascx.cs">
       <DependentUpon>Text.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -151,6 +155,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Text.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AnalogClock.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
