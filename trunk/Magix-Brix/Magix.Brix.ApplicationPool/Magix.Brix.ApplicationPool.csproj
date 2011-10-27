@@ -198,6 +198,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <Content Include="lbl-blockquote.png" />
+    <Content Include="lbl-h1.png" />
+    <Content Include="lbl-h2.png" />
+    <Content Include="lbl-h3.png" />
+    <Content Include="lbl-h4.png" />
+    <Content Include="lbl-h5.png" />
+    <Content Include="lbl-h6.png" />
+    <Content Include="lbl-p.png" />
+    <Content Include="lbl-pre.png" />
     <Content Include="media\Fonts\Bleeding Cowboys.ttf" />
     <Content Include="media\Fonts\CHOPS___.TTF" />
     <Content Include="media\Fonts\Hawaii_Killer.ttf" />
@@ -361,6 +370,7 @@
     <Content Include="media\Js\wymeditor\skins\wymeditor_icon.png" />
     <Content Include="media\modules\animations.css" />
     <Content Include="media\modules\clipboard.css" />
+    <Content Include="media\modules\fonts.css" />
     <Content Include="media\modules\wym-styles.css" />
     <Content Include="media\modules\WymEditor.css" />
     <Content Include="media\modules\dashboard.css" />
@@ -383,6 +393,8 @@
     <Content Include="Tmp\Magix-For-Believing-CSharp-People.pdf" />
     <Content Include="Tmp\Magix-For-CSharp-People.pdf" />
     <Content Include="Tmp\Magix-For-Noobs.pdf" />
+    <Content Include="wymiframe.css" />
+    <Content Include="wymiframe.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Magix-UX\Magix.UX.csproj">
