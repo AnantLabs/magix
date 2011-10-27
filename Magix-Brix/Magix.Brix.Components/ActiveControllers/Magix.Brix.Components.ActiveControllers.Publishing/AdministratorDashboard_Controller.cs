@@ -46,12 +46,13 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 node);
 
             // Ordering keyboard shortcut keys ...
-            string shortcuts = "qwerasdfzxcv";
+            //string shortcuts = "qeasxzfcvwrd";
+            string shortcuts = "vwrazfdxcqes";
             int idxNo = 0;
             foreach (Node idx in node["Items"])
             {
                 idx["Shortcut"].Value = shortcuts[idxNo % shortcuts.Length].ToString();
-                idx["ToolTip"].Value = ""; // "Key: " + shortcuts[idxNo % shortcuts.Length].ToString();
+                idx["ToolTip"].Value = "Key: " + shortcuts[idxNo % shortcuts.Length].ToString();
                 idxNo += 1;
             }
 

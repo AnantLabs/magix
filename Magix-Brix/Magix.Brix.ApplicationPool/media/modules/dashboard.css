@@ -4,6 +4,11 @@
  * Magix is licensed as GPLv3, or Commercially for Proprietary Projects through Ra-Software.
  */
 
+*
+{
+	font-family:'Magix Chunk' !important;
+}
+
 .mux-wysiwyg-surface
 {
 	background:Transparent url(../images/wire-grid.png) repeat 0 0;
@@ -288,6 +293,61 @@
 	margin-right:0;
 }
 
+@-webkit-keyframes flyin {
+ from 
+ {
+	-webkit-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+ }
+ to 
+ {
+	-webkit-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+ }
+}
+
+@-moz-keyframes flyin {
+ from 
+ {
+	-moz-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+ }
+ to 
+ {
+	-moz-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+ }
+}
+
+@-o-keyframes flyin {
+ from 
+ {
+	-o-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+ }
+ to 
+ {
+	-o-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+ }
+}
+
+@-ms-keyframes flyin {
+ from 
+ {
+	-ms-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+ }
+ to 
+ {
+	-ms-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+ }
+}
+
+@keyframes flyin {
+ from 
+ {
+	transform: perspective(300px) rotateY(-20deg) translate(500px, 50px);
+ }
+ to 
+ {
+	transform: perspective(300px) rotateY(-20deg) translate(100px, 50px);
+ }
+}
+
 .mux-desktop-dashboard-items-grid
 {
 	float:left;
@@ -337,6 +397,10 @@
 	-ms-transition-duration:.5s;
 	transition-property:opacity, transform;
 	transition-duration:.5s;
+
+	-webkit-animation-name: flyin;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: 1;
 }
 
 .mux-desktop-dashboard-items-grid:hover

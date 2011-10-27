@@ -136,6 +136,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             IncludeCssFile("media/blueprint/screen.css");
             IncludeCssFile("media/magix-ux-skins/default.css");
             IncludeCssFile("media/modules/single-container.css");
+            IncludeCssFile("media/modules/fonts.css");
 
             if (Page.Request.Params["dashboard"] == "true")
             {
