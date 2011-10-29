@@ -31,6 +31,7 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
         protected Button end;
         protected Button beginning;
         protected Panel root;
+        protected Label lblCount;
 
         public override void InitialLoading(Node node)
         {
@@ -160,6 +161,11 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
 
             beginning.Enabled = DataSource["Start"].Get<int>() > 0;
             end.Enabled = DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
+
+            if (DataSource.Contains("SetCount"))
+                lblCount.Text = "#" + DataSource["SetCount"].Value.ToString();
+            else
+                lblCount.Text = "?";
         }
 
         protected override void RefreshWindowContent(object sender, ActiveEventArgs e)
