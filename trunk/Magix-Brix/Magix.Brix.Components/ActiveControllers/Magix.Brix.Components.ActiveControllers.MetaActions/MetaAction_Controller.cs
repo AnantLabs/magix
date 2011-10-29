@@ -541,7 +541,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             node["Width"].Value = 6;
             node["CssClass"].Value = "clear-both";
-            node["MarginBottom"].Value = 20;
+            node["MarginBottom"].Value = 10;
             node["Top"].Value = 1;
             node["TreeCssClass"].Value = "mux-parameters";
             node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
@@ -922,7 +922,9 @@ Deleting it may break these parts.</p>";
             if (e.Params.Contains("ReUseNode") &&
                 e.Params["ReUseNode"].Get<bool>() &&
                 e.Params.Contains("Container"))
+            {
                 content = e.Params["Container"].Get<string>();
+            }
 
             Node ch = new Node();
 
@@ -935,16 +937,12 @@ Deleting it may break these parts.</p>";
 
             if (ch["Yes"].Get<bool>())
             {
-                if (!e.Params.Contains("ReUseNode") ||
-                    !e.Params["ReUseNode"].Get<bool>())
+                // Assuming, by default, if the User clicks the same twice, he wants to start a 'new stack' ...
+                ActiveEvents.Instance.RaiseClearControls(content);
+
+                if (e.Params.Contains("ChildCssClass"))
                 {
-                    // Assuming, by default, if the User clicks the same twice, he wants to start a 'new stack' ...
-                    ActiveEvents.Instance.RaiseClearControls("content6");
-                }
-                else
-                {
-                    ShowMessage("Item already being edited");
-                    return;
+                    e.Params["ChildCssClass"].Value = e.Params["ChildCssClass"].Get<string>().Replace(" last", "");
                 }
             }
 
@@ -969,8 +967,7 @@ Deleting it may break these parts.</p>";
                     {
                         tt["Width"].Value = 18;
                         tt["Last"].Value = true;
-                        tt["CssClass"].Value = "mux-small-editer";
-                        tt["Down"].Value = -10;
+                        tt["CssClass"].Value = "mux-small-editer down--10";
                     }
                     tt["Tag"].Value = "div";
                     tt["Append"].Value = true;
@@ -989,7 +986,9 @@ Deleting it may break these parts.</p>";
 
             if (e.Params.Contains("ReUseNode") &&
                     e.Params["ReUseNode"].Get<bool>())
+            {
                 node = e.Params;
+            }
 
             // First filtering OUT columns ...!
             node["WhiteListColumns"]["Name"].Value = true;
@@ -1035,7 +1034,6 @@ Deleting it may break these parts.</p>";
                 Node cc = new Node();
 
                 cc["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
-                cc["CssClass"].Value = "";
                 cc["Replace"].Value = " mux-selected-action-param";
 
                 RaiseEvent(
