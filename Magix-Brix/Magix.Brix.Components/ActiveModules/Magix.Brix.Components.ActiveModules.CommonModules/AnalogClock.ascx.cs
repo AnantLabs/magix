@@ -43,32 +43,37 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
             if (FirstLoad || !AjaxManager.Instance.IsCallback)
             {
                 AjaxManager.Instance.WriterAtBack.Write(@"
-    MUX.clearRect = function(context) {
+    MUX.serverDate = new Date({0},{1},{2},{3},{4},{5},{6});
+    MUX.clientDate = new Date();
+
+    MUX.clearRect = function(context) {{
         context.clearRect(0,0,370,300);
         MUX.reDraw(context);
-    }
+    }}
 
-    MUX.reDraw = function(context) {
+    MUX.reDraw = function(context) {{
         var now = new Date();
+        var offset = now.getTime() - MUX.clientDate.getTime();
+        now = new Date(MUX.serverDate.getTime() + offset);
         var hours = now.getHours();
         var minutes = now.getMinutes();
         var seconds = now.getMilliseconds() + (now.getSeconds() * 1000);
         MUX.calculateHandPositions(context,185,150,hours,minutes,seconds);
-    }
+    }}
 
-    MUX.calculateHandPositions = function(context,posX,posY,h,m,s) {
+    MUX.calculateHandPositions = function(context,posX,posY,h,m,s) {{
         var secondHandLength = 135;
         var secondHandAngle = 2 * Math.PI * s / 60000;
         MUX.drawHand(context,posX + 3,posY + 3,secondHandLength,secondHandAngle,'rgba(0,0,0,.2)',2);
         MUX.drawHand(context,posX,posY,secondHandLength,secondHandAngle,'rgba(0,0,0,1)',2);
 
         var minuteHandLength = 110;
-        var minuteHandAngle = 2 * Math.PI * m / 60;
+        var minuteHandAngle = (2 * Math.PI * m / 60) + ((2 * Math.PI * (s / 60000)) / 60);
         MUX.drawHand(context,posX + 3,posY + 3,minuteHandLength,minuteHandAngle,'rgba(0,0,0,.2)',5);
         MUX.drawHand(context,posX,posY,minuteHandLength,minuteHandAngle,'rgba(0,0,0,1)',5);
 
         var hourHandLength = 90;
-        var hourHandAngle = ( 2 * Math.PI * h / 12) + (( 2 * Math.PI * m) / (12 * 60));
+        var hourHandAngle = (2 * Math.PI * h / 12) + ((2 * Math.PI * m) / (12 * 60));
         MUX.drawHand(context,posX + 1,posY + 1,hourHandLength,hourHandAngle,'rgba(0,0,0,.2)',8);
         MUX.drawHand(context,posX,posY,hourHandLength,hourHandAngle,'rgba(0,0,0,1)',8);
 
@@ -83,9 +88,9 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         context.arc(185, 150, 10, 0, Math.PI * 2, true); 
         context.closePath();
         context.fill();
-    }
+    }}
 
-    MUX.drawHand = function(context,posX,posY,handLength,handAngle,color,width) {
+    MUX.drawHand = function(context,posX,posY,handLength,handAngle,color,width) {{
         context.beginPath();
         context.moveTo(posX,posY);
         var x = posX + (handLength * Math.sin(handAngle));
@@ -101,17 +106,24 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
         context.fillStyle = color;
         context.closePath();
         context.fill();
-}
+    }}
 
     var drawingCanvas = MUX.$('" + myDrawing.ClientID + @"');
 
-    if(drawingCanvas.getContext) {
+    if(drawingCanvas.getContext) {{
         MUX.context = drawingCanvas.getContext('2d');
-        setInterval(function() {
+        setInterval(function() {{
           MUX.clearRect(MUX.context);
-        }, 100);
-    }
-");
+        }}, 100);
+    }}
+",
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day,
+                DateTime.Now.Hour,
+                DateTime.Now.Minute,
+                DateTime.Now.Second,
+                DateTime.Now.Millisecond);
             }
         }
     }

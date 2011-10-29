@@ -74,6 +74,11 @@
             Text="&gt;&gt;"
             CssClass="mux-paging-button mux-button-end span-1"
             id="end" />
+
+        <mux:Label
+            runat="server"
+            CssClass="mux-paging-count"
+            id="lblCount" />
     </mux:Panel>
 
 </mux:Panel>

@@ -316,11 +316,13 @@ h1
 @-webkit-keyframes flyin {
  from 
  {
-	-webkit-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
+	-webkit-transform: perspective(300px) rotateY(-20deg) translate(350px, 50px) scale(.8);
+	opacity:0;
  }
  to 
  {
 	-webkit-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
+	opacity:1;
  }
 }
 
@@ -376,7 +378,7 @@ h1
 	transition-duration:.5s;
 
 	-webkit-animation-name: flyin;
-	-webkit-animation-duration: 2.5s;
+	-webkit-animation-duration: 1.5s;
 	-webkit-animation-iteration-count: 1;
 }
 

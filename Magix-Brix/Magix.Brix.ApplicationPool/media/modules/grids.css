@@ -333,6 +333,15 @@ table.mux-no-margin .mux-grid-check-box
 	display:block;
 }
 
+.mux-paging-count
+{
+	float:right;
+	margin-right:0px;
+	width:70px;
+	font-style:italic;
+	color:#999;
+}
+
 .child .mux-paging-button
 {
 	margin-bottom:36px;
