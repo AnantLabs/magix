@@ -2638,6 +2638,11 @@ focus, or clicking the widget with his mouse or touch screen";
 
                 string newVal = "";
 
+                if (Action.CountWhere(Criteria.Eq("Name", e.Params["NewValue"].Get<string>())) == 0)
+                {
+                    ShowMessage("That action doesn't exist ...");
+                }
+
                 for (int idx = 0; idx < oldVal.Split('|').Length; idx++)
                 {
                     if (idx == int.Parse(id.Split('|')[1]))
