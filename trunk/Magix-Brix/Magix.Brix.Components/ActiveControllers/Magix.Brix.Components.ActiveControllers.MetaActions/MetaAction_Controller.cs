@@ -845,8 +845,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 node = new Node();
                 node["ForcedSize"]["width"].Value = 550;
-                node["CssClass"].Value =
-                    "mux-shaded mux-rounded push-5 down-2";
+                node["CssClass"].Value = "mux-shaded mux-rounded push-5 down-2";
             }
             node["Caption"].Value = @"
 Please confirm deletion of " + typeName + " with ID of " + id;
