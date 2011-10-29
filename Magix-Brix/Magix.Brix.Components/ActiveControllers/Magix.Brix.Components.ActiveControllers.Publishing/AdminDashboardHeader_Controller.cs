@@ -30,7 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         protected void Magix_Publishing_LoadAdministratorHeader(object sender, ActiveEventArgs e)
         {
             if (!e.Params.Contains("Caption"))
-                e.Params["Caption"].Value = "Magix Illuminate";
+                e.Params["Caption"].Value = "&nbsp;"; // Do not need header on main dashboard, only on supporting screens ...
 
             // Checking to see if Header module is loaded, and if not, loading it ...
             DynamicPanel header = Selector.FindControl<DynamicPanel>(Page, "content2");

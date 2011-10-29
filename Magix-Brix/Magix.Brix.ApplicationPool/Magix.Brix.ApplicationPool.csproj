@@ -198,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <Content Include="install-magix.html" />
     <Content Include="lbl-blockquote.png" />
     <Content Include="lbl-h1.png" />
     <Content Include="lbl-h2.png" />
@@ -231,6 +232,7 @@
     <Content Include="media\images\desktop-icons\blue-print-icon.png" />
     <Content Include="media\images\desktop-icons\briefcase.png" />
     <Content Include="media\images\desktop-icons\database.png" />
+    <Content Include="media\images\desktop-icons\desktop-background.jpg" />
     <Content Include="media\images\desktop-icons\desktop-background.png" />
     <Content Include="media\images\desktop-icons\docs.png" />
     <Content Include="media\images\desktop-icons\facts.png" />
@@ -372,6 +374,7 @@
     <Content Include="media\modules\animations.css" />
     <Content Include="media\modules\clipboard.css" />
     <Content Include="media\modules\fonts.css" />
+    <Content Include="media\modules\tetris.css" />
     <Content Include="media\modules\wym-styles.css" />
     <Content Include="media\modules\WymEditor.css" />
     <Content Include="media\modules\dashboard.css" />
@@ -451,6 +454,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.GalleryPlugin\Magix.Brix.Components.ActiveControllers.GalleryPlugin.csproj">
       <Project>{88E60EC3-628C-44AA-945F-5FC46337D664}</Project>
       <Name>Magix.Brix.Components.ActiveControllers.GalleryPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Games\Magix.Brix.Components.ActiveControllers.Games.csproj">
+      <Project>{A26DEBF3-FD60-4D41-802F-63B913A80582}</Project>
+      <Name>Magix.Brix.Components.ActiveControllers.Games</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Logger\Magix.Brix.Components.ActiveControllers.Logger.csproj">
       <Project>{4FF5FFF4-4B4E-4E7E-8978-07A94C9C494B}</Project>
@@ -535,6 +542,10 @@
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.FileExplorer\Magix.Brix.Components.ActiveModules.FileExplorer.csproj">
       <Project>{2B149F44-D59A-4D1F-B91B-E97A99D92A38}</Project>
       <Name>Magix.Brix.Components.ActiveModules.FileExplorer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Games\Magix.Brix.Components.ActiveModules.Games.csproj">
+      <Project>{0CB67104-30EE-403A-B051-5C153FDEB17F}</Project>
+      <Name>Magix.Brix.Components.ActiveModules.Games</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Menu\Magix.Brix.Components.ActiveModules.Menu.csproj">
       <Project>{654A39FC-51E7-492D-BE57-39DC99CB8686}</Project>

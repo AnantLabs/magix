@@ -510,6 +510,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             Action a = Action.SelectByID(e.Params["ID"].Get<int>());
             
             Node node = new Node();
+
             node["ID"].Value = e.Params["ID"].Value;
             node["FullTypeName"].Value = typeof(Action).FullName;
 

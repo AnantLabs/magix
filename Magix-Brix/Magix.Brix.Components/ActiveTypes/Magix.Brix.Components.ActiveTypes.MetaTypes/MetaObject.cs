@@ -227,5 +227,21 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
             ret.Save();
             return ret;
         }
+
+        public void SetValue(string name, string value)
+        {
+            foreach (Property idx in this.Values)
+            {
+                if (idx.Name == name)
+                {
+                    idx.Value = value;
+                    return;
+                }
+            }
+            Property v = new Property();
+            v.Name = name;
+            v.Value = value;
+            Values.Add(v);
+        }
     }
 }

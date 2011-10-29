@@ -124,6 +124,71 @@ given 'Container' WebPart";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ChangeAllPropertyValues")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ChangeAllPropertyValues";
+                    a.EventName = "Magix.Meta.ChangeAllPropertyValues";
+                    a.Description = @"Will change the 'PropertyName' 
+of every MetaObject of 'TypeName' to 'NewValue'";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "TypeName";
+                    m.Value = "YourMetaObjectNamespace.YourMetaObjectTypeName";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "PropertyName";
+                    m.Value = "Age";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "NewValue";
+                    m.Value = "29";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.CreateNewMetaObject")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.CreateNewMetaObject";
+                    a.EventName = "Magix.Meta.CreateNewMetaObject";
+                    a.Description = @"Will create a new Meta Object 
+with the 'Properties' properties and TypeName of 'TypeName' and parent Meta Object 
+of ParentID";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "TypeName";
+                    m.Value = "Magix.Demo.MagixIs";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Properties";
+                    a.Params.Add(m);
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "Coolness";
+                    m2.Value = "Supercool!";
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Usefulness";
+                    m2.Value = "Ultrauseful!";
+                    m.Children.Add(m2);
+
+                    m = new Action.ActionParams();
+                    m.Name = "ParentID";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.TransmitEventToExternalServer")) == 0)
                 {
                     Action a = new Action();

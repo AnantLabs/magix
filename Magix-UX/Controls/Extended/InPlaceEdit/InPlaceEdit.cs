@@ -9,6 +9,10 @@ using Magix.UX.Effects;
 
 namespace Magix.UX.Widgets
 {
+    // TODO: Document...!
+    /**
+     * 
+     */
     public class InPlaceEdit : Panel
     {
         private readonly LinkButton _link = new LinkButton();
@@ -25,6 +29,12 @@ namespace Magix.UX.Widgets
         {
             get { return _text.Text; }
             set { _link.Text = EscapeHTML(value); _text.Text = value; }
+        }
+
+        public string AccessKey
+        {
+            get { return _text.AccessKey; }
+            set { _link.AccessKey = value; }
         }
 
         private string EscapeHTML(string value)

@@ -16,7 +16,7 @@
     Delay="500"
     MaxOpacity="0.8"
     id="waiter">
-    <p>Please wait while Marvin is thinking ...</p>
+    <p>Please wait while Heka is thinking ...</p>
     <mux:Image
         runat="server"
         id="ajaxWait"
