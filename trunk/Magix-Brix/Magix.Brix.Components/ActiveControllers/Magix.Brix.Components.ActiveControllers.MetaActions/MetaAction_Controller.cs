@@ -897,7 +897,7 @@ Deleting it may break these parts.</p>";
          * which point it'll be 'brought to front'
          */
         [ActiveEvent(Name = "Magix.MetaAction.EditParam")]
-        private void Magix_Meta_EditParam(object sender, ActiveEventArgs e)
+        private void Magix_MetaAction_EditParam(object sender, ActiveEventArgs e)
         {
             ViewParameter(e, false);
         }
@@ -907,7 +907,7 @@ Deleting it may break these parts.</p>";
          * which point it'll be 'brought to front'
          */
         [ActiveEvent(Name = "Magix.MetaAction.EditParamReadOnly")]
-        private void Magix_Meta_EditParamReadOnly(object sender, ActiveEventArgs e)
+        private void Magix_MetaAction_EditParamReadOnly(object sender, ActiveEventArgs e)
         {
             ViewParameter(e, true);
         }
@@ -916,6 +916,13 @@ Deleting it may break these parts.</p>";
         {
             Action.ActionParams p =
                 Action.ActionParams.SelectByID(int.Parse(e.Params["SelectedItemID"].Value.ToString()));
+
+            string content = "content6";
+
+            if (e.Params.Contains("ReUseNode") &&
+                e.Params["ReUseNode"].Get<bool>() &&
+                e.Params.Contains("Container"))
+                content = e.Params["Container"].Get<string>();
 
             Node ch = new Node();
 
@@ -926,56 +933,76 @@ Deleting it may break these parts.</p>";
                 "DBAdmin.Form.CheckIfActiveTypeIsBeingSingleEdited",
                 ch);
 
-            // Assuming if the User clicks the same twice, he wants to start a 'new stack' ...
             if (ch["Yes"].Get<bool>())
             {
-                ActiveEvents.Instance.RaiseClearControls("content6");
+                if (!e.Params.Contains("ReUseNode") ||
+                    !e.Params["ReUseNode"].Get<bool>())
+                {
+                    // Assuming, by default, if the User clicks the same twice, he wants to start a 'new stack' ...
+                    ActiveEvents.Instance.RaiseClearControls("content6");
+                }
+                else
+                {
+                    ShowMessage("Item already being edited");
+                    return;
+                }
             }
 
-            Node xx = new Node();
-
-            xx["Container"].Value = "content6";
-
-            RaiseEvent(
-                "Magix.Core.GetNumberOfChildrenOfContainer",
-                xx);
-
-            // Because of our little CSS Animation Tricks, we always
-            // must have 3 div elements in our container ...
-            for (int idx = xx["Count"].Get<int>(); idx < 2; idx++)
+            if (!e.Params.Contains("ReUseNode") ||
+                !e.Params["ReUseNode"].Get<bool>())
             {
-                Node tt = new Node();
+                Node xx = new Node();
 
-                if (xx["Count"].Get<int>() == idx)
+                xx["Container"].Value = content;
+
+                RaiseEvent(
+                    "Magix.Core.GetNumberOfChildrenOfContainer",
+                    xx);
+
+                // Because of our little CSS Animation Tricks, we always
+                // must have 3 div elements in our container ...
+                for (int idx = xx["Count"].Get<int>(); idx < 2; idx++)
                 {
-                    tt["Width"].Value = 18;
-                    tt["Last"].Value = true;
-                    tt["CssClass"].Value = "mux-small-editer";
-                    tt["PullTop"].Value = 10;
-                }
-                tt["Tag"].Value = "div";
-                tt["Append"].Value = true;
-                tt["Text"].Value = "&nbsp;";
-                tt["ModuleID"].Value = "filler" + idx;
+                    Node tt = new Node();
 
-                LoadModule(
-                    "Magix.Brix.Components.ActiveModules.CommonModules.Text",
-                    "content6",
-                    tt);
+                    if (xx["Count"].Get<int>() == idx)
+                    {
+                        tt["Width"].Value = 18;
+                        tt["Last"].Value = true;
+                        tt["CssClass"].Value = "mux-small-editer";
+                        tt["Down"].Value = -10;
+                    }
+                    tt["Tag"].Value = "div";
+                    tt["Append"].Value = true;
+                    tt["Text"].Value = "&nbsp;";
+                    tt["ModuleID"].Value = "filler" + idx;
+
+                    LoadModule(
+                        "Magix.Brix.Components.ActiveModules.CommonModules.Text",
+                        content,
+                        tt);
+                }
             }
 
             // Editing it, since it's not being edited from before ...
             Node node = new Node();
+
+            if (e.Params.Contains("ReUseNode") &&
+                    e.Params["ReUseNode"].Get<bool>())
+                node = e.Params;
 
             // First filtering OUT columns ...!
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Value"].Value = true;
             node["WhiteListColumns"]["TypeName"].Value = true;
 
-            node["WhiteListProperties"]["Name"].Value = true;
-            node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
-            node["WhiteListProperties"]["Value"].Value = true;
-            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 7;
+            if (!node.Contains("WhiteListProperties"))
+            {
+                node["WhiteListProperties"]["Name"].Value = true;
+                node["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
+                node["WhiteListProperties"]["Value"].Value = true;
+                node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 7;
+            }
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = readOnly;
             node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
@@ -984,56 +1011,47 @@ Deleting it may break these parts.</p>";
             node["Type"]["Properties"]["TypeName"]["Header"].Value = "Type Name";
             node["Type"]["Properties"]["TypeName"]["TemplateColumnEvent"].Value = "Magix.MetaAction.GetMetaActionParameterTypeNameTemplateColumn";
 
-            node["Container"].Value = "content6";
+            if (!node.Contains("Container"))
+                node["Container"].Value = "content6";
             node["IsList"].Value = false;
             node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             node["ID"].Value = p.ID;
             node["ModuleID"].Value = "am" + p.ID;
 
-            node["Append"].Value = true;
-            node["AppendMaxCount"].Value = 3;
+            if (!e.Params.Contains("ReUseNode") ||
+                !e.Params["ReUseNode"].Get<bool>())
+            {
+                node["Append"].Value = true;
+                node["AppendMaxCount"].Value = 3;
+            }
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
 
-            node = new Node();
+            if (!e.Params.Contains("ReUseNode") ||
+                !e.Params["ReUseNode"].Get<bool>())
+            {
+                Node cc = new Node();
 
-            node["Seed"].Value = "delete-button";
-            node["Enabled"].Value = true;
+                cc["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
+                cc["CssClass"].Value = "";
+                cc["Replace"].Value = " mux-selected-action-param";
 
-            RaiseEvent(
-                "Magix.Core.EnabledClickable",
-                node);
+                RaiseEvent(
+                    "DBAdmin.Form.ChangeCssClassOfModule",
+                    cc);
 
-            node = new Node();
+                cc = new Node();
 
-            node["Seed"].Value = "create-child-button";
-            node["Enabled"].Value = true;
+                cc["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
+                cc["ID"].Value = p.ID;
+                cc["CssClass"].Value = " mux-selected-action-param";
 
-            RaiseEvent(
-                "Magix.Core.EnabledClickable",
-                node);
-
-            Node cc = new Node();
-
-            cc["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
-            cc["CssClass"].Value = "";
-            cc["Replace"].Value = " mux-selected-action-param";
-
-            RaiseEvent(
-                "DBAdmin.Form.ChangeCssClassOfModule",
-                cc);
-
-            cc = new Node();
-
-            cc["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
-            cc["ID"].Value = p.ID;
-            cc["CssClass"].Value = " mux-selected-action-param";
-
-            RaiseEvent(
-                "DBAdmin.Form.ChangeCssClassOfModule",
-                cc);
+                RaiseEvent(
+                    "DBAdmin.Form.ChangeCssClassOfModule",
+                    cc);
+            }
         }
 
         /**

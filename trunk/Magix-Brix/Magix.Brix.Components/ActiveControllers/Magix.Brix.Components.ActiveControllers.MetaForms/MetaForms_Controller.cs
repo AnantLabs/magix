@@ -2689,25 +2689,35 @@ focus, or clicking the widget with his mouse or touch screen";
             node["ID"].Value = e.Params["ID"].Value;
             node["FullTypeName"].Value = typeof(Action).FullName;
 
-            EditActionItem(a, node);
             EditActionItemParams(a, node);
+            EditActionItem(a, node);
+
+            node = new Node();
+            node["Container"].Value = "child-child";
+            node["ChildCssClass"].Value = "span-14 last";
+            node["Append"].Value = true;
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.ViewPortContainer",
+                "child",
+                node);
         }
 
         private void EditActionItemParams(Action a, Node e)
         {
             Node node = new Node();
 
-            node["Width"].Value = 20;
+            node["Width"].Value = 24;
             node["Top"].Value = 25;
-            node["TreeCssClass"].Value = "mux-parameters span-6";
             node["HeaderCssClass"].Value = "span-6";
+            node["TreeCssClass"].Value = "mux-parameters mux-parameters2 span-6 clear-both";
             node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
             node["ActionItemID"].Value = a.ID;
 
             if (a.Name.StartsWith("Magix."))
-                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParamReadOnly";
+                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParamReadOnly-O";
             else
-                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParam";
+                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParam-O";
 
             node["GetItemsEvent"].Value = "Magix.MetaAction.GetActionItemTree";
             node["Header"].Value = "Params";
@@ -2735,7 +2745,7 @@ focus, or clicking the widget with his mouse or touch screen";
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Value"].Value = true;
-            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 12;
 
             // Making sure all Magix Actions are READ-ONLY for the user, so he doesn't start
             // changing their names and screwing up things ...
@@ -2767,11 +2777,79 @@ focus, or clicking the widget with his mouse or touch screen";
             node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.DataPlugins.GetTemplateColumns.CheckBox";
 
             node["Container"].Value = "child";
-            node["ChildCssClass"].Value = "span-12 down--2 last";
+            node["ChildCssClass"].Value = "span-14 down--2 last bottom-2";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
                 node);
+        }
+
+        /**
+         * Level2: Will initiate editing of Parameter for Action unless it's already being edited, at
+         * which point it'll be 'brought to front'
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.EditParam-O")]
+        private void Magix_MetaAction_EditParam(object sender, ActiveEventArgs e)
+        {
+            e.Params["Container"].Value = "child-child";
+            e.Params["ReUseNode"].Value = true;
+            e.Params["Append"].Value = true;
+            e.Params["AppendMaxCount"].Value = 50;
+            e.Params["WhiteListProperties"]["Name"].Value = true;
+            e.Params["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
+            e.Params["WhiteListProperties"]["Value"].Value = true;
+            e.Params["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 5;
+
+            Node xx = new Node();
+
+            xx["Container"].Value = "child-child";
+
+            RaiseEvent(
+                "Magix.Core.GetNumberOfChildrenOfContainer",
+                xx);
+
+            if (xx["Count"].Get<int>() % 2 == 0)
+                e.Params["ChildCssClass"].Value = "span-7";
+            else
+                e.Params["ChildCssClass"].Value = "span-7 last";
+
+            RaiseEvent(
+                "Magix.MetaAction.EditParam",
+                e.Params);
+        }
+
+        /**
+         * Level2: Will initiate viewing of Parameter for Action unless it's already being viewed, at
+         * which point it'll be 'brought to front'
+         */
+        [ActiveEvent(Name = "Magix.MetaAction.EditParamReadOnly-O")]
+        private void Magix_MetaAction_EditParamReadOnly(object sender, ActiveEventArgs e)
+        {
+            e.Params["Container"].Value = "child-child";
+            e.Params["ReUseNode"].Value = true;
+            e.Params["Append"].Value = true;
+            e.Params["AppendMaxCount"].Value = 50;
+            e.Params["WhiteListProperties"]["Name"].Value = true;
+            e.Params["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
+            e.Params["WhiteListProperties"]["Value"].Value = true;
+            e.Params["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 5;
+
+            Node xx = new Node();
+
+            xx["Container"].Value = "child-child";
+
+            RaiseEvent(
+                "Magix.Core.GetNumberOfChildrenOfContainer",
+                xx);
+
+            if(xx["Count"].Get<int>() % 2 == 0)
+                e.Params["ChildCssClass"].Value = "span-7";
+            else
+                e.Params["ChildCssClass"].Value = "span-7 last";
+
+            RaiseEvent(
+                "Magix.MetaAction.EditParamReadOnly",
+                e.Params);
         }
 
         /**

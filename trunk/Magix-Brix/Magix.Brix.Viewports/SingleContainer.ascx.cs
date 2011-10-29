@@ -700,8 +700,10 @@ namespace Magix.Brix.Viewports
                         toEmpty = idxChild;
                 }
 
-                (toEmpty.Parent.Parent as Window).CloseWindow();
-
+                if (toEmpty.Parent.Parent.Visible)
+                {
+                    (toEmpty.Parent.Parent as Window).CloseWindow();
+                }
                 ClearControls(toEmpty, true);
             }
             else if (e.Params["Position"].Get<string>() == "fullScreen")
@@ -717,6 +719,13 @@ namespace Magix.Brix.Viewports
         {
             if (clearCss)
                 dynamic.CssClass = "";
+
+            Node node = new Node();
+            node["Container"].Value = dynamic.ID;
+
+            RaiseEvent(
+                "Magix.Core.ContainerAboutToBeCleared",
+                node);
 
             foreach (Control idx in dynamic.Controls)
             {
@@ -1205,7 +1214,8 @@ namespace Magix.Brix.Viewports
                 w.Info = "";
             }
 
-            ClearControls(w.Content.Controls[0] as DynamicPanel, true);
+            if (w.Content.Controls[0].Controls.Count != 0)
+                ActiveEvents.Instance.RaiseClearControls("child");
 
             int closingWindowID = int.Parse(w.ID.Replace("wd", ""));
 

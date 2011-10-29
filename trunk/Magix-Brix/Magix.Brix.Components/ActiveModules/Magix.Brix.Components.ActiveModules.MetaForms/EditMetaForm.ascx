@@ -115,7 +115,7 @@
                 Tag="h5" />
             <mux:Panel
                 runat="server"
-                CssClass="span-6 last spcBottom-1"
+                CssClass="span-6 last bottom-1"
                 id="propWrp">
                 <asp:Repeater
                     runat="server"
