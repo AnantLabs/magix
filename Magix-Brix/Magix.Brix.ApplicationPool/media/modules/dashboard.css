@@ -6,7 +6,6 @@
 
 html,body,*
 {
-	font-family:'Magix Allerta Medium';
 }
 
 form
@@ -15,23 +14,16 @@ form
 
 .main
 {
-	font-family:'Magix Allerta Medium';
 }
 
 .mux-tree-text
 {
-	padding-top:0;
 }
 
 .mux-sliding-menu,
-h2,
-input[type=button],
-input[type=submit]
-{
-}
-
 h1
 {
+	font-family:'Magix Orbitron Medium';
 }
 
 .mux-wysiwyg-surface
@@ -52,9 +44,11 @@ h1
 @-webkit-keyframes mux-fade-in-del-param-2 {
 0% {
 	margin-left:0;
+	opacity:0;
 }
 100% {
 	margin-left:360px;
+	opacity:1;
 }
 }
 
@@ -200,6 +194,7 @@ h1
 	left:0px;
 	right:inherit;
 	width:350px;
+	z-index:100;
 
 	left:-350px;
 	top:0px;
@@ -331,6 +326,7 @@ h1
 
 .mux-desktop-dashboard-items-grid
 {
+	font-family:'Magix Orbitron Medium';
 	float:left;
 	width:190px;
 	padding:18px 40px 18px 40px;
@@ -344,12 +340,12 @@ h1
 	-ms-border-radius:5px;
 	border-radius:5px;
 
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(254, 254, 255, 1)), to(rgba(120, 150, 200, 1)));
-	background-image: -webkit-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
-	background-image: -moz-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
-	background-image: -o-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
-	background-image: -ms-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
-	background-image: linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(120, 150, 200, 1) 80%);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 80%, from(rgba(254, 254, 255, 1)), to(rgba(180, 210, 250, 1)));
+	background-image: -webkit-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(180, 210, 250, 1) 80%);
+	background-image: -moz-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(180, 210, 250, 1) 80%);
+	background-image: -o-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(180, 210, 250, 1) 80%);
+	background-image: -ms-linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(180, 210, 250, 1) 80%);
+	background-image: linear-gradient(rgba(254, 254, 255, 1) 0%, rgba(180, 210, 250, 1) 80%);
 
 	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.8);
 	-moz-box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.8);

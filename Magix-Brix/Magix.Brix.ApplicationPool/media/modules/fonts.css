@@ -71,12 +71,6 @@
 
 @font-face
 {
-    font-family: 'Magix Sorts Mill Goudy';
-    src: url('../Fonts/OFLGoudyStMTT.ttf');
-}
-
-@font-face
-{
     font-family: 'Magix Sorts Mill Goudy Italic';
     src: url('../Fonts/OFLGoudyStMTT-Italic.ttf');
 }

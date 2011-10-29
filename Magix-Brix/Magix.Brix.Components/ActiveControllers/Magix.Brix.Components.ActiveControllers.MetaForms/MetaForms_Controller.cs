@@ -2694,7 +2694,7 @@ focus, or clicking the widget with his mouse or touch screen";
 
             node = new Node();
             node["Container"].Value = "child-child";
-            node["ChildCssClass"].Value = "span-14 last";
+            node["ChildCssClass"].Value = "span-14 last down--2";
             node["Append"].Value = true;
 
             LoadModule(
@@ -2745,7 +2745,7 @@ focus, or clicking the widget with his mouse or touch screen";
 
             node["WhiteListProperties"]["Name"].Value = true;
             node["WhiteListProperties"]["Value"].Value = true;
-            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 12;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 16;
 
             // Making sure all Magix Actions are READ-ONLY for the user, so he doesn't start
             // changing their names and screwing up things ...
@@ -2777,7 +2777,7 @@ focus, or clicking the widget with his mouse or touch screen";
             node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.DataPlugins.GetTemplateColumns.CheckBox";
 
             node["Container"].Value = "child";
-            node["ChildCssClass"].Value = "span-14 down--2 last bottom-2";
+            node["ChildCssClass"].Value = "span-16 down--2 last bottom-2";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewComplexObject",
@@ -2799,6 +2799,7 @@ focus, or clicking the widget with his mouse or touch screen";
             e.Params["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
             e.Params["WhiteListProperties"]["Value"].Value = true;
             e.Params["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 5;
+            e.Params["Top"].Value = 1;
 
             Node xx = new Node();
 
@@ -2833,6 +2834,7 @@ focus, or clicking the widget with his mouse or touch screen";
             e.Params["WhiteListProperties"]["Name"]["ForcedWidth"].Value = 2;
             e.Params["WhiteListProperties"]["Value"].Value = true;
             e.Params["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 5;
+            e.Params["Top"].Value = 1;
 
             Node xx = new Node();
 
