@@ -47,6 +47,9 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                 {
                     header.Visible = true;
                     header.Text = node["Header"].Get<string>();
+
+                    if (node.Contains("HeaderCssClass"))
+                        header.CssClass += " " + node["HeaderCssClass"].Get<string>();
                 }
                 else
                 {

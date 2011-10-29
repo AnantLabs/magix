@@ -1069,6 +1069,70 @@ have relationships towards other instances in your database.</p>";
         }
 
         /**
+         * Level2: Will change the value of every single property 'PropertyName' object of 
+         * the given 'TypeName' to the given 'NewValue'
+         */
+        [ActiveEvent(Name = "Magix.Meta.ChangeAllPropertyValues")]
+        protected void Magix_Meta_ChangeAllPropertyValues(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                foreach (MetaObject idx in
+                    MetaObject.Select(Criteria.Eq("TypeName", e.Params["TypeName"].Get<string>())))
+                {
+                    idx.SetValue(e.Params["PropertyName"].Get<string>(), e.Params["NewValue"].Get<string>());
+                    idx.Save();
+                }
+                tr.Commit();
+            }
+        }
+
+        /**
+         * Level2: Will take the given 'Properties' and save as properties for a new Meta Object
+         * with the typename of 'TypeName' and Parent Meta object being 'ParentID', if not null
+         */
+        [ActiveEvent(Name = "Magix.Meta.CreateNewMetaObject")]
+        protected void Magix_Meta_CreateNewMetaObject(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject o = new MetaObject();
+
+                o.TypeName = e.Params["TypeName"].Get<string>();
+
+                if (e.Params.Contains("ParentID") &&
+                    e.Params["ParentID"].Value != null)
+                {
+                    o.ParentMetaObject = MetaObject.SelectByID(e.Params["ParentID"].Get<int>());
+                    o.ParentMetaObject.Children.Add(o);
+                }
+
+                if (e.Params.Contains("Properties"))
+                {
+                    foreach (Node idx in e.Params["Properties"])
+                    {
+                        MetaObject.Property p = new MetaObject.Property();
+                        p.Name = idx.Name;
+                        p.Value = idx.Get<string>();
+                        o.Values.Add(p);
+                    }
+                }
+
+                if (o.ParentMetaObject == null)
+                {
+                    o.Save();
+                }
+                else
+                {
+                    o.Save();
+                    o.ParentMetaObject.Save();
+                }
+
+                tr.Commit();
+            }
+        }
+
+        /**
          * Level2: Handled to make sure "META mode" MetaObjects can be deleted 'front-web'
          */
         [ActiveEvent(Name = "Magix.Meta.DeleteMetaObject")]

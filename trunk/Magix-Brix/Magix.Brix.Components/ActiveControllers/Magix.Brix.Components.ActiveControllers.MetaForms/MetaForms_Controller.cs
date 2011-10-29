@@ -296,19 +296,44 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
         {
             CreateButton(e);
             CreateLabel(e);
-            CreateCheckBox(e);
             CreateTextBox(e);
-            CreateHiddenField(e);
-            CreateHyperLink(e);
-            CreateImage(e);
-            CreateLinkButton(e);
             CreatTextArea(e);
+            CreateCheckBox(e);
             CreateRadioButton(e);
             CreateCalendar(e);
+            CreateHiddenField(e);
+            CreateHyperLink(e);
+            CreateLinkButton(e);
+            CreateImage(e);
+            CreateRuler(e);
             CreatePanel(e);
             CreateRepeater(e);
             CreateStars(e);
-            CreateRuler(e);
+            CreateInPlaceEdit(e);
+        }
+
+        private void CreateInPlaceEdit(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["InPlaceEdit"]["Name"].Value = "InPlaceEdit";
+            e.Params["Controls"]["InPlaceEdit"]["CssClass"].Value = "mux-in-place-box";
+            e.Params["Controls"]["InPlaceEdit"]["TypeName"].Value = "Magix.MetaForms.Plugins.InPlaceEdit";
+            e.Params["Controls"]["InPlaceEdit"]["ToolTip"].Value = @"Creates an InPlaceEdit type of 
+control, which you can assign Text to and allow the user to edit the text inline by clicking the text";
+
+            GetCommonEventsAndProperties(e, "InPlaceEdit", true);
+
+            e.Params["Controls"]["InPlaceEdit"]["Properties"]["AccessKey"].Value = typeof(string).FullName;
+            e.Params["Controls"]["InPlaceEdit"]["Properties"]["AccessKey"]["Description"].Value = @"The keyboard 
+shortcut key, often combined with e.g. ALT+SHIFT+x where x is any single key which can legally serve 
+as a shortcut, which depends upon your platform of choice. ALT+SHIFT+X is for Windows and FireFox for instance";
+
+            e.Params["Controls"]["InPlaceEdit"]["Properties"]["Text"].Value = typeof(string).FullName;
+            e.Params["Controls"]["InPlaceEdit"]["Properties"]["Text"]["Description"].Value = @"The 
+text value of the control";
+
+            e.Params["Controls"]["InPlaceEdit"]["Events"]["TextChanged"].Value = true;
+            e.Params["Controls"]["InPlaceEdit"]["Events"]["TextChanged"]["Description"].Value = @"Raised when 
+the text state has been updated by the user";
         }
 
         private void CreateRuler(ActiveEventArgs e)
@@ -1064,6 +1089,14 @@ focus, or clicking the widget with his mouse or touch screen";
                             val = bool.Parse(typeNode["Properties"]["Checked"].Value.ToString());
                         (ctrl as CheckBox).Checked = val;
                     } break;
+                case "Magix.MetaForms.Plugins.InPlaceEdit":
+                    {
+                        string val = "";
+                        if (typeNode.Contains("Properties") &&
+                            typeNode["Properties"].Contains("Text"))
+                            val = typeNode["Properties"]["Text"].Value.ToString();
+                        (ctrl as InPlaceEdit).Text = val;
+                    } break;
                 case "Magix.MetaForms.Plugins.TextBox":
                     {
                         string val = "";
@@ -1256,6 +1289,7 @@ focus, or clicking the widget with his mouse or touch screen";
             switch (typeName)
             {
                 case "Magix.MetaForms.Plugins.CheckBox":
+                case "Magix.MetaForms.Plugins.InPlaceEdit":
                 case "Magix.MetaForms.Plugins.TextBox":
                 case "Magix.MetaForms.Plugins.TextArea":
                 case "Magix.MetaForms.Plugins.RadioButton":
@@ -1349,6 +1383,8 @@ focus, or clicking the widget with his mouse or touch screen";
             {
                 case "Magix.MetaForms.Plugins.CheckBox":
                     return (ctrl as CheckBox).Checked.ToString();
+                case "Magix.MetaForms.Plugins.InPlaceEdit":
+                    return (ctrl as InPlaceEdit).Text;
                 case "Magix.MetaForms.Plugins.TextBox":
                     return (ctrl as TextBox).Text;
                 case "Magix.MetaForms.Plugins.HiddenField":
@@ -1396,11 +1432,22 @@ focus, or clicking the widget with his mouse or touch screen";
                         btn.CssClass = "span-2";
                         e.Params["Control"].Value = btn;
                     } break;
-                case "Magix.MetaForms.Plugins.CheckBox":
+                case "Magix.MetaForms.Plugins.InPlaceEdit":
                     {
-                        CheckBox btn = new CheckBox();
-                        btn.CssClass = "span-2";
-                        e.Params["Control"].Value = btn;
+                        if (e.Params.Contains("Preview") &&
+                            e.Params["Preview"].Get<bool>())
+                        {
+                            LinkButton btn = new LinkButton();
+                            btn.CssClass = "span-2";
+                            btn.Text = "[nothing]";
+                            e.Params["Control"].Value = btn;
+                        }
+                        else
+                        {
+                            InPlaceEdit btn = new InPlaceEdit();
+                            btn.CssClass = "span-2";
+                            e.Params["Control"].Value = btn;
+                        }
                     } break;
                 case "Magix.MetaForms.Plugins.TextBox":
                     {
@@ -2585,8 +2632,7 @@ focus, or clicking the widget with his mouse or touch screen";
             node["Criteria"]["C1"]["Value"].Value = "Created";
             node["Criteria"]["C1"]["Ascending"].Value = false;
 
-            node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
-            node["Type"]["Properties"]["Name"]["MaxLength"].Value = 50;
+            node["Type"]["Properties"]["Name"]["TemplateColumnEvent"].Value = "Magix.Forms.GetActionSelectActionTemplateColumn";
             node["Type"]["Properties"]["Name"]["NoFilter"].Value = false;
             node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
@@ -2596,6 +2642,135 @@ focus, or clicking the widget with his mouse or touch screen";
 
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        /**
+         * Level2: Returns the View Action Details Column control
+         */
+        [ActiveEvent(Name = "Magix.Forms.GetActionSelectActionTemplateColumn")]
+        protected void Magix_Forms_GetActionSelectActionTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            // Extracting necessary variables ...
+            int id = e.Params["ID"].Get<int>();
+            string value = e.Params["Value"].Get<string>();
+
+            if (value.Length > 50)
+                value = "..." + value.Substring(value.Length - 50, 50);
+
+            LinkButton btn = new LinkButton();
+            btn.Click +=
+                delegate
+                {
+                    Node node = new Node();
+
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.MetaForms.ShowActionDetails",
+                        node);
+                };
+            btn.Text = value;
+            btn.CssClass = "span-9";
+            e.Params["Control"].Value = btn;
+        }
+
+        /**
+         * Level2: Will open a Popup Window with the details about the Action, and the 
+         * possibility of editing those details
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.ShowActionDetails")]
+        protected void Magix_MetaForms_ShowActionDetails(object sender, ActiveEventArgs e)
+        {
+            Action a = Action.SelectByID(e.Params["ID"].Get<int>());
+
+            Node node = new Node();
+
+            node["ID"].Value = e.Params["ID"].Value;
+            node["FullTypeName"].Value = typeof(Action).FullName;
+
+            EditActionItem(a, node);
+            EditActionItemParams(a, node);
+        }
+
+        private void EditActionItemParams(Action a, Node e)
+        {
+            Node node = new Node();
+
+            node["Width"].Value = 20;
+            node["Top"].Value = 25;
+            node["TreeCssClass"].Value = "mux-parameters span-6";
+            node["HeaderCssClass"].Value = "span-6";
+            node["FullTypeName"].Value = typeof(Action.ActionParams).FullName;
+            node["ActionItemID"].Value = a.ID;
+
+            if (a.Name.StartsWith("Magix."))
+                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParamReadOnly";
+            else
+                node["ItemSelectedEvent"].Value = "Magix.MetaAction.EditParam";
+
+            node["GetItemsEvent"].Value = "Magix.MetaAction.GetActionItemTree";
+            node["Header"].Value = "Params";
+
+            RaiseEvent(
+                "Magix.MetaAction.GetActionItemTree",
+                node);
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.Tree",
+                "child",
+                node);
+        }
+
+        private void EditActionItem(Action a, Node node)
+        {
+            node["Append"].Value = true;
+
+            // First filtering OUT columns ...!
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["EventName"].Value = true;
+            node["WhiteListColumns"]["Overrides"].Value = true;
+            node["WhiteListColumns"]["StripInput"].Value = true;
+            node["WhiteListColumns"]["Description"].Value = true;
+
+            node["WhiteListProperties"]["Name"].Value = true;
+            node["WhiteListProperties"]["Value"].Value = true;
+            node["WhiteListProperties"]["Value"]["ForcedWidth"].Value = 10;
+
+            // Making sure all Magix Actions are READ-ONLY for the user, so he doesn't start
+            // changing their names and screwing up things ...
+            if (a.Name.StartsWith("Magix."))
+            {
+                // These are 'template actions', not intended for being edited at all
+                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["Overrides"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = true;
+                node["Type"]["Properties"]["Description"]["ReadOnly"].Value = true;
+            }
+            else
+            {
+                node["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
+                node["Type"]["Properties"]["EventName"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["EventName"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
+                node["Type"]["Properties"]["Overrides"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Overrides"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
+                node["Type"]["Properties"]["StripInput"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Description"]["ReadOnly"].Value = false;
+                node["Type"]["Properties"]["Description"]["MaxLength"].Value = 4000;
+            }
+
+            node["Type"]["Properties"]["EventName"]["Header"].Value = "Event Name";
+            node["Type"]["Properties"]["EventName"]["Bold"].Value = true;
+            node["Type"]["Properties"]["StripInput"]["Header"].Value = "Strip Input Node";
+            node["Type"]["Properties"]["StripInput"]["TemplateColumnEvent"].Value = "Magix.DataPlugins.GetTemplateColumns.CheckBox";
+
+            node["Container"].Value = "child";
+            node["ChildCssClass"].Value = "span-12 down--2 last";
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewComplexObject",
                 node);
         }
 

@@ -329,50 +329,6 @@ h1
  }
 }
 
-@-moz-keyframes flyin {
- from 
- {
-	-moz-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
- }
- to 
- {
-	-moz-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
- }
-}
-
-@-o-keyframes flyin {
- from 
- {
-	-o-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
- }
- to 
- {
-	-o-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
- }
-}
-
-@-ms-keyframes flyin {
- from 
- {
-	-ms-transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
- }
- to 
- {
-	-ms-transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
- }
-}
-
-@keyframes flyin {
- from 
- {
-	transform: perspective(300px) rotateY(-20deg) translate(500px, 50px) scale(.8);
- }
- to 
- {
-	transform: perspective(300px) rotateY(-20deg) translate(100px, 50px) scale(.8);
- }
-}
-
 .mux-desktop-dashboard-items-grid
 {
 	float:left;
@@ -424,7 +380,7 @@ h1
 	transition-duration:.5s;
 
 	-webkit-animation-name: flyin;
-	-webkit-animation-duration: 1.5s;
+	-webkit-animation-duration: 2.5s;
 	-webkit-animation-iteration-count: 1;
 }
 
@@ -434,26 +390,91 @@ h1
 	z-index:101;
 	position:absolute;
 
-	-webkit-transform: perspective(300px) rotateY(0deg) translate(0px, 50px) scale(1.0);
+	-webkit-transform: perspective(300px) rotateY(0deg) translate(100px, 50px) scale(1.0);
 	-webkit-transform-origin:bottom center;
-	-moz-transform: rotate(0deg) translate(0px, 50px) scale(1.0);
+	-moz-transform: rotate(0deg) translate(120px, 50px) scale(1.0);
 	-moz-transform-origin:bottom center;
-	-o-transform: rotate(0deg) translate(0px, 50px) scale(1.0);
+	-o-transform: rotate(0deg) translate(120px, 50px) scale(1.0);
 	-o-transform-origin:bottom center;
-	-ms-transform: rotate(0deg) translate(0px, 50px) scale(1.0);
+	-ms-transform: rotate(0deg) translate(120px, 50px) scale(1.0);
 	-ms-transform-origin:bottom center;
-	transform: rotate(0deg) translate(0px, 50px) scale(1.0);
+	transform: rotate(0deg) translate(120px, 50px) scale(1.0);
 	transform-origin:bottom center;
 
-	-moz-transition-property:opacity, -moz-transform;
+	-moz-transition-property:-moz-transform;
 	-moz-transition-duration:.5s;
-	-webkit-transition-property:opacity, -webkit-transform;
+	-webkit-transition-property:-webkit-transform;
 	-webkit-transition-duration:.5s;
-	-o-transition-property:opacity, -o-transform;
+	-o-transition-property:-o-transform;
 	-o-transition-duration:.5s;
-	-ms-transition-property:opacity, -ms-transform;
+	-ms-transition-property:-ms-transform;
 	-ms-transition-duration:.5s;
-	transition-property:opacity, transform;
+	transition-property:transform;
+	transition-duration:.5s;
+}
+
+@-webkit-keyframes flyin-menu {
+ from 
+ {
+	-webkit-transform: perspective(300px) rotateY(7deg) translate(-500px, 0px);
+ }
+ to 
+ {
+	-webkit-transform: perspective(300px) rotateY(7deg) translate(0px, 0px);
+ }
+}
+
+.mux-sliding-menu
+{
+	-webkit-transform: perspective(300px) rotateY(7deg);
+	-webkit-transform-origin:bottom center;
+	-moz-transform: perspective(300px) rotateY(7deg);
+	-moz-transform-origin:bottom center;
+	-o-transform: perspective(300px) rotateY(7deg);
+	-o-transform-origin:bottom center;
+	-ms-transform: perspective(300px) rotateY(7deg);
+	-ms-transform-origin:bottom center;
+	transform: perspective(300px) rotateY(7deg);
+	transform-origin:bottom center;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-transform;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-transform;
+	-ms-transition-duration:.5s;
+	transition-property:transform;
+	transition-duration:.5s;
+
+	-webkit-animation-name: flyin-menu;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: 1;
+}
+
+.mux-sliding-menu:hover
+{
+	-webkit-transform: perspective(300px) rotateY(0deg);
+	-webkit-transform-origin:bottom center;
+	-moz-transform: perspective(300px) rotateY(0deg);
+	-moz-transform-origin:bottom center;
+	-o-transform: perspective(300px) rotateY(0deg);
+	-o-transform-origin:bottom center;
+	-ms-transform: perspective(300px) rotateY(0deg);
+	-ms-transform-origin:bottom center;
+	transform: perspective(300px) rotateY(0deg);
+	transform-origin:bottom center;
+
+	-moz-transition-property:-moz-transform;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:-o-transform;
+	-o-transition-duration:.5s;
+	-ms-transition-property:-ms-transform;
+	-ms-transition-duration:.5s;
+	transition-property:transform;
 	transition-duration:.5s;
 }
 
@@ -653,11 +674,11 @@ h1
 	position:absolute;
 	z-index:100;
 	
-   -webkit-transform: scale(.5) rotate(0deg);
-   -moz-transform: scale(.5) rotate(0deg);
-   -o-transform: scale(.5) rotate(0deg);
-   -ms-transform: scale(.5) rotate(0deg);
-   transform: scale(.5) rotate(0deg);
+   -webkit-transform: scale(.75) rotate(0deg);
+   -moz-transform: scale(.75) rotate(0deg);
+   -o-transform: scale(.75) rotate(0deg);
+   -ms-transform: scale(.75) rotate(0deg);
+   transform: scale(.75) rotate(0deg);
 
 	-moz-border-radius:60px;
 	-webkit-border-radius:60px;
@@ -732,20 +753,20 @@ h1
 
 .mux-dox
 {
-	left:304px;
-	top:75px;
+	left:309px;
+	top:70px;
 }
 
 .mux-pages
 {
-	left:516px;
-	top:75px;
+	left:511px;
+	top:70px;
 }
 
 .mux-templates
 {
 	left:624px;
-	top:220px;
+	top:223px;
 }
 
 .mux-objects
@@ -757,7 +778,7 @@ h1
 .mux-views
 {
 	left:196px;
-	top:220px;
+	top:223px;
 }
 
 .mux-help
@@ -1607,4 +1628,38 @@ li.mux-tree-item-class span.mux-tree-icon
 	left:280px;
 	width:370px;
 	height:300px;
+	opacity:.1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:opacity;
+	-o-transition-duration:.5s;
+	-ms-transition-property:opacity;
+	-ms-transition-duration:.5s;
+	transition-property:opacity;
+	transition-duration:.5s;
 }
+
+.mux-analog-clock:hover
+{
+	position:absolute;
+	top:130px;
+	left:280px;
+	width:370px;
+	height:300px;
+	opacity:1;
+
+	-moz-transition-property:opacity;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:opacity;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:opacity;
+	-o-transition-duration:.5s;
+	-ms-transition-property:opacity;
+	-ms-transition-duration:.5s;
+	transition-property:opacity;
+	transition-duration:.5s;
+}
+

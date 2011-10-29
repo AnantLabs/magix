@@ -10,7 +10,7 @@
     runat="server"
     OnUploaded="uploader_Uploaded"
     id="uploader">
-    <p>Please wait while Marvin is pushing your files through ...</p>
+    <p>Please wait while Heka is pushing your files through ...</p>
     <mux:Image
         runat="server"
         id="ajaxWait2"
