@@ -2426,7 +2426,7 @@ focus, or clicking the widget with his mouse or touch screen";
             node["IsDelete"].Value = true;
             node["IsCreate"].Value = true;
             node["Container"].Value = "child";
-            node["Width"].Value = 16;
+            node["Width"].Value = 20;
             node["Top"].Value = 25;
             node["FullTypeName"].Value = typeof(Action).FullName + "-META";
             node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
@@ -2439,8 +2439,12 @@ focus, or clicking the widget with his mouse or touch screen";
             node["EventName"].Value = e.Params["EventName"].Value;
             node["CreateEventName"].Value = "Magix.MetaForms.OpenAppendNewActionDialogue";
 
+            node["WhiteListColumns"]["Up"].Value = true;
+            node["WhiteListColumns"]["Up"]["ForcedWidth"].Value = 1;
+            node["WhiteListColumns"]["Down"].Value = true;
+            node["WhiteListColumns"]["Down"]["ForcedWidth"].Value = 1;
             node["WhiteListColumns"]["Name"].Value = true;
-            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 12;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 14;
 
             node["NoIdColumn"].Value = true;
             node["DeleteColumnEvent"].Value = "Magix.MetaForms.RemoveActionFromActionList";
@@ -2499,10 +2503,124 @@ focus, or clicking the widget with his mouse or touch screen";
         {
             if (e.Params["FullTypeName"].Get<string>() == typeof(Action).FullName + "-META")
             {
+                e.Params["Type"]["Properties"]["Up"]["NoFilter"].Value = true;
+                e.Params["Type"]["Properties"]["Up"]["Header"].Value = "Up";
+                e.Params["Type"]["Properties"]["Up"]["TemplateColumnEvent"].Value = "Magix.MetaForms.GetPushActionUpTemplateColumn";
+                e.Params["Type"]["Properties"]["Down"]["NoFilter"].Value = true;
+                e.Params["Type"]["Properties"]["Down"]["Header"].Value = "Dwn";
+                e.Params["Type"]["Properties"]["Down"]["TemplateColumnEvent"].Value = "Magix.MetaForms.GetPushActionDownTemplateColumn";
                 e.Params["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
-                e.Params["Type"]["Properties"]["Name"]["MaxLength"].Value = 150;
+                e.Params["Type"]["Properties"]["Name"]["MaxLength"].Value = 100;
                 e.Params["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
                 e.Params["Type"]["Properties"]["Name"]["NoFilter"].Value = true;
+            }
+        }
+
+        /**
+         * Level2: Returns the Up column for the Action list
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.GetPushActionUpTemplateColumn")]
+        protected void Magix_MetaForms_GetPushActionUpTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            string id = e.Params["ID"].Value.ToString();
+
+            LinkButton b = new LinkButton();
+            b.Text = "&uArr;";
+            b.CssClass = "span-1 last";
+
+            b.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.MetaForms.PushActionUp",
+                        node);
+                };
+
+            e.Params["Control"].Value = b;
+        }
+
+        /**
+         * Level2: Returns the Down column for the Action list
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.GetPushActionDownTemplateColumn")]
+        protected void Magix_MetaForms_GetPushActionDownTemplateColumn(object sender, ActiveEventArgs e)
+        {
+            string id = e.Params["ID"].Value.ToString();
+
+            LinkButton b = new LinkButton();
+            b.Text = "&dArr;";
+            b.CssClass = "span-1 last";
+
+            b.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.MetaForms.PushActionDown",
+                        node);
+                };
+
+            e.Params["Control"].Value = b;
+        }
+
+        /**
+         * Level2: Moves an Action up or down depending upon the event name
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.PushActionUp")]
+        [ActiveEvent(Name = "Magix.MetaForms.PushActionDown")]
+        protected void Magix_MetaForms_PushActionUp_Down(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaForm.Node n = MetaForm.Node.SelectByID(int.Parse(e.Params["ID"].Get<string>().Split('|')[0]));
+                string oldValue = n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value;
+
+                List<string> tmp = new List<string>(oldValue.Split('|'));
+                int pos = int.Parse(e.Params["ID"].Get<string>().Split('|')[1]);
+                string act = tmp[pos];
+
+                if (e.Name == "Magix.MetaForms.PushActionUp")
+                {
+                    if(pos == 0)
+                    {
+                        ShowMessage("You can't move that action further up");
+                        return;
+                    }
+                    tmp.RemoveAt(pos);
+                    tmp.Insert(pos - 1, act);
+                }
+                else
+                {
+                    if(pos == tmp.Count - 1)
+                    {
+                        ShowMessage("You can't move that action further down");
+                        return;
+                    }
+                    tmp.RemoveAt(pos);
+                    tmp.Insert(pos + 1, act);
+                }
+
+                string nVal = "";
+                foreach(string idx in tmp)
+                {
+                    nVal += idx + "|";
+                }
+                n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Value = nVal.Trim('|').Replace("||", "|");
+                n["Actions"][e.Params["ID"].Get<string>().Split('|')[2]].Save();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["FullTypeName"].Value = typeof(Action).FullName + "-META";
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    node);
             }
         }
 
@@ -2597,6 +2715,29 @@ focus, or clicking the widget with his mouse or touch screen";
         [ActiveEvent(Name = "Magix.MetaForms.RemoveActionFromActionList")]
         protected void Magix_MetaForms_RemoveActionFromActionList(object sender, ActiveEventArgs e)
         {
+            string id = e.Params["ID"].Get<string>();
+
+            Node node = new Node();
+            node["CssClass"].Value = "mux-shaded mux-rounded down-25 span-10";
+            node["Caption"].Value = @"Please confirm removing of Action";
+            node["Text"].Value = @"
+<p>Are you sure you wish to remove this Action Reference?</p>";
+            node["OK"]["ID"].Value = id;
+            node["OK"]["Event"].Value = "Magix.MetaForms.RemoveActionFromActionList-Confirmed";
+            node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        /**
+         * Level2: Will actually remove the Action from the Action list
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.RemoveActionFromActionList-Confirmed")]
+        protected void Magix_MetaForms_RemoveActionFromActionList_Confirmed(object sender, ActiveEventArgs e)
+        {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
                 MetaForm.Node n = MetaForm.Node.SelectByID(int.Parse(e.Params["ID"].Get<string>().Split('|')[0]));
@@ -2624,6 +2765,8 @@ focus, or clicking the widget with his mouse or touch screen";
 
             // Making sure we refresh our properties in our UI ...
             RaiseEvent("Magix.MetaForms.RefreshEditableMetaForm");
+
+            ActiveEvents.Instance.RaiseClearControls("child");
         }
 
         /**
