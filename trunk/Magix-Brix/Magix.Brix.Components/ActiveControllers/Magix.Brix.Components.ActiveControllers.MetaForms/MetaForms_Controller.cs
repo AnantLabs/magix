@@ -2425,12 +2425,12 @@ focus, or clicking the widget with his mouse or touch screen";
 
             node["IsDelete"].Value = true;
             node["IsCreate"].Value = true;
-            node["IsInlineEdit"].Value = false;
             node["Container"].Value = "child";
             node["Width"].Value = 16;
             node["Top"].Value = 25;
             node["FullTypeName"].Value = typeof(Action).FullName + "-META";
             node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
+            node["ChangeSimplePropertyValue"].Value = "Magix.MetaForms.ChangeSimplePropertyValue";
 
             node["MetaFormNodeID"].Value = e.Params["ID"].Value;
             node["Header"].Value = string.Format(@"Actions for '{0}'",
@@ -2499,8 +2499,44 @@ focus, or clicking the widget with his mouse or touch screen";
         {
             if (e.Params["FullTypeName"].Get<string>() == typeof(Action).FullName + "-META")
             {
-                e.Params["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
+                e.Params["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+                e.Params["Type"]["Properties"]["Name"]["MaxLength"].Value = 150;
+                e.Params["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
                 e.Params["Type"]["Properties"]["Name"]["NoFilter"].Value = true;
+            }
+        }
+
+        /**
+         * Level2: Allows user to change name of Action Reference in MetaForms
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.ChangeSimplePropertyValue")]
+        protected void Magix_MetaForms_ChangeSimplePropertyValue(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                string id = e.Params["ID"].Value.ToString();
+                MetaForm.Node n = MetaForm.Node.SelectByID(int.Parse(id.Split('|')[0]));
+                string oldVal = n["Actions"][id.Split('|')[2]].Value;
+
+                string newVal = "";
+
+                for (int idx = 0; idx < oldVal.Split('|').Length; idx++)
+                {
+                    if (idx == int.Parse(id.Split('|')[1]))
+                    {
+                        newVal += e.Params["NewValue"].Get<string>() + "|";
+                    }
+                    else
+                    {
+                        newVal += oldVal.Split('|')[idx] + "|";
+                    }
+                }
+
+                n["Actions"][id.Split('|')[2]].Value = newVal.Trim('|').Replace("||", "|");
+
+                n["Actions"][id.Split('|')[2]].Save();
+
+                tr.Commit();
             }
         }
 

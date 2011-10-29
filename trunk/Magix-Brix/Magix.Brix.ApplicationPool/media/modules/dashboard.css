@@ -1584,7 +1584,8 @@ li.mux-tree-item-class span.mux-tree-icon
 
 .mux-parameters2
 {
-	min-height:630px;
+	min-height:360px;
+	margin-bottom:18px;
 }
 
 .mux-no-actions
