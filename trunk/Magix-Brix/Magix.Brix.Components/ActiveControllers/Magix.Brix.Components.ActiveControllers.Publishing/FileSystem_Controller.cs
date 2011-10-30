@@ -33,8 +33,9 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             Node node = new Node();
 
-            node["Width"].Value = 22;
-            node["Top"].Value = 2;
+            node["Width"].Value = 20;
+            node["Push"].Value = 2;
+            node["Top"].Value = -23;
             node["MarginBottom"].Value = 10;
             node["Last"].Value = true;
             node["Container"].Value = "content4";
@@ -43,7 +44,7 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             node["CanCreateNewCssFile"].Value = true;
             node["RootAccessFolder"].Value = "/";
             node["Folder"].Value = "/";
-            node["CssClass"].Value = "mux-rounded mux-shaded mux-padded";
+            node["CssClass"].Value = "mux-rounded mux-shaded mux-padded mux-file-browser";
 
             RaiseEvent(
                 "Magix.FileExplorer.LaunchExplorer",

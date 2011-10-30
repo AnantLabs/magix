@@ -124,7 +124,7 @@ namespace Magix.Brix.Components.ActiveModules.PublisherUploader
          * will make sure no Actions are being raised. If you wish you can separate multiple 
          * actions with the pipe symbol (|) to have multiple Actions raised
          */
-        [ModuleSetting(DefaultValue = "NO-ACTION")]
+        [ModuleSetting(DefaultValue = "", ModuleEditorEventName = "Magix.Publishing.GetSelectActionForModuleControl")]
         public string ActionName
         {
             get { return ViewState["ActionName"] as string; }

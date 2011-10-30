@@ -12,6 +12,7 @@ using Magix.Brix.Data;
 using Magix.UX.Widgets;
 using System.Globalization;
 using System.Collections.Generic;
+using Magix.Brix.Components.ActiveTypes.Publishing;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -1383,6 +1384,397 @@ referring to the exact ID of an action, and needing to be an integer ...");
             {
                 GetActionParameters(node[a.Name], idx);
             }
+        }
+
+        /**
+         * Level2: Sink for selecting Actions for Modules
+         */
+        [ActiveEvent(Name = "Magix.Publishing.GetSelectActionForModuleControl")]
+        private void Magix_Publishing_GetSelectActionForModuleControl(object sender, ActiveEventArgs e)
+        {
+            LinkButton b = new LinkButton();
+            b.Text = "Actions ...";
+
+            string id = e.Params["WebPartID"].Value.ToString();
+            string actions = e.Params["Value"].Value.ToString();
+
+            b.CssClass = "clear-both mux-darken";
+            b.Style[Styles.width] = "294px";
+            b.Style[Styles.floating] = "left";
+
+            if (!string.IsNullOrEmpty(actions))
+                b.CssClass += " mux-has-actions";
+            else
+                b.CssClass += " mux-no-actions";
+
+            b.Click +=
+                delegate
+                {
+                    Node node = new Node();
+
+                    node["IsDelete"].Value = true;
+                    node["IsCreate"].Value = true;
+                    node["Container"].Value = "child";
+                    node["Width"].Value = 20;
+                    node["Top"].Value = 33;
+                    node["FullTypeName"].Value = typeof(Action).FullName + "-META3";
+                    node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode";
+                    node["ChangeSimplePropertyValue"].Value = "Magix.MetaActions.ChangeSimplePropertyValue3";
+
+                    node["WebPartID"].Value = id;
+                    node["Header"].Value = "Actions for Module";
+
+                    node["EventName"].Value = e.Params["EventName"].Value;
+                    node["CreateEventName"].Value = "Magix.MetaForms.OpenAppendNewActionDialogue3";
+
+                    node["WhiteListColumns"]["Up"].Value = true;
+                    node["WhiteListColumns"]["Up"]["ForcedWidth"].Value = 1;
+                    node["WhiteListColumns"]["Down"].Value = true;
+                    node["WhiteListColumns"]["Down"]["ForcedWidth"].Value = 1;
+                    node["WhiteListColumns"]["Name"].Value = true;
+                    node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 14;
+
+                    node["NoIdColumn"].Value = true;
+                    node["DeleteColumnEvent"].Value = "Magix.MetaForms.RemoveActionFromActionList3";
+
+                    node["ReuseNode"].Value = true;
+
+                    RaiseEvent(
+                        "DBAdmin.Form.ViewClass",
+                        node);
+                };
+
+            e.Params["Control"].Value = b;
+        }
+
+        /**
+         * Level2: Sink for deleting Meta Form Action from Event
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.RemoveActionFromActionList3")]
+        protected void Magix_MetaForms_RemoveActionFromActionList3(object sender, ActiveEventArgs e)
+        {
+            string id = e.Params["ID"].Get<string>();
+
+            Node node = new Node();
+
+            node["CssClass"].Value = "mux-shaded mux-rounded down-33 span-10";
+            node["Caption"].Value = @"Please confirm removing of Action";
+            node["Text"].Value = @"
+<p>Are you sure you wish to remove this Action Reference?</p>";
+            node["OK"]["ID"].Value = id;
+            node["OK"]["Event"].Value = "Magix.MetaForms.RemoveActionFromActionList3-Confirmed";
+            node["Cancel"]["Event"].Value = "DBAdmin.Common.ComplexInstanceDeletedNotConfirmed";
+
+            LoadModule(
+                "Magix.Brix.Components.ActiveModules.CommonModules.MessageBox",
+                "child",
+                node);
+        }
+
+        /**
+         * Level2: Will actually remove the Action from the Action list
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.RemoveActionFromActionList3-Confirmed")]
+        protected void Magix_MetaForms_RemoveActionFromActionList3_Confirmed(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                WebPart.WebPartSetting n = WebPart.WebPartSetting.SelectByID(int.Parse(e.Params["ID"].Get<string>().Split('|')[0]));
+                int idxNo = 0;
+                int toRemove = int.Parse(e.Params["ID"].Get<string>().Split('|')[1]);
+                string result = "";
+                foreach (string idx in n.Value.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (idxNo != toRemove)
+                        result += idx + "|";
+                    idxNo += 1;
+                }
+                result = result.Trim('|');
+                n.Value = result;
+                n.Save();
+
+                tr.Commit();
+            }
+
+            Node node = new Node();
+            node["FullTypeName"].Value = typeof(Action).FullName + "-META3";
+
+            RaiseEvent(
+                "Magix.Core.UpdateGrids",
+                node);
+
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        /**
+         * Level2: Will show the 'List of Actions form' for appending and editing and deleting
+         * actions associated with the specific Action on the specific Widget
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.OpenAppendNewActionDialogue3")]
+        protected void Magix_MetaForms_OpenAppendNewActionDialogue3(object sender, ActiveEventArgs e)
+        {
+            Node node = new Node();
+
+            node["FullTypeName"].Value = typeof(Action).FullName;
+            node["Container"].Value = "child";
+            node["Width"].Value = 15;
+            node["Top"].Value = 33;
+
+            WebPart.WebPartSetting f = WebPart.WebPartSetting.SelectByID(e.Params["WebPartID"].Get<int>());
+
+            node["ParentID"].Value = f.ID;
+
+            node["WhiteListColumns"]["Name"].Value = true;
+            node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 9;
+            node["WhiteListColumns"]["Params"].Value = true;
+            node["WhiteListColumns"]["Params"]["ForcedWidth"].Value = 2;
+
+            node["NoIdColumn"].Value = true;
+            node["IsCreate"].Value = false;
+            node["IsDelete"].Value = false;
+            node["IsFind"].Value = true;
+            node["IsSelect"].Value = true;
+            node["GetContentsEventName"].Value = "DBAdmin.Data.GetContentsOfClass-Filter-Override";
+            node["SetFocus"].Value = true;
+            node["SelectEvent"].Value = "Magix.MetaForms.ActionWasSelected3";
+            node["SelectEvent"]["NodeID"].Value = f.ID;
+            node["ConfigureFiltersEvent"].Value = "Magix.MetaForms.ConfigureFilterForColumns";
+
+            node["Criteria"]["C1"]["Name"].Value = "Sort";
+            node["Criteria"]["C1"]["Value"].Value = "Created";
+            node["Criteria"]["C1"]["Ascending"].Value = false;
+
+            node["Type"]["Properties"]["Name"]["TemplateColumnEvent"].Value = "Magix.Forms.GetActionSelectActionTemplateColumn";
+            node["Type"]["Properties"]["Name"]["NoFilter"].Value = false;
+            node["Type"]["Properties"]["Params"]["ReadOnly"].Value = true;
+            node["Type"]["Properties"]["Params"]["NoFilter"].Value = true;
+            node["Type"]["Properties"]["Params"]["Header"].Value = "Pars.";
+            node["Start"].Value = 0;
+            node["End"].Value = 8;
+
+            RaiseEvent(
+                "DBAdmin.Form.ViewClass",
+                node);
+        }
+
+        /**
+         * Level2: Will append the given 'ID' Action into the given 'ParentPropertyName' Event name
+         * and save the MetaForm.Node
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.ActionWasSelected3")]
+        protected void Magix_MetaForms_ActionWasSelected3(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                WebPart.WebPartSetting n = WebPart.WebPartSetting.SelectByID(e.Params["ParentID"].Get<int>());
+                n.Value += "|" +
+                    Action.SelectByID(e.Params["ID"].Get<int>()).Name;
+                n.Save();
+
+                tr.Commit();
+            }
+
+            ActiveEvents.Instance.RaiseClearControls("child");
+        }
+
+        /**
+         * Level2: Allows user to change name of Action Reference in WebParts
+         */
+        [ActiveEvent(Name = "Magix.MetaActions.ChangeSimplePropertyValue3")]
+        protected void Magix_MetaActions_ChangeSimplePropertyValue3(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                string id = e.Params["ID"].Value.ToString();
+                WebPart.WebPartSetting n = WebPart.WebPartSetting.SelectByID(int.Parse(id.Split('|')[0]));
+                string oldVal = n.Value;
+
+                string newVal = "";
+
+                if (Action.CountWhere(Criteria.Eq("Name", e.Params["NewValue"].Get<string>())) == 0)
+                {
+                    ShowMessage("That action doesn't exist ...");
+                }
+
+                for (int idx = 0; idx < oldVal.Split('|').Length; idx++)
+                {
+                    if (idx == int.Parse(id.Split('|')[1]))
+                    {
+                        newVal += e.Params["NewValue"].Get<string>() + "|";
+                    }
+                    else
+                    {
+                        newVal += oldVal.Split('|')[idx] + "|";
+                    }
+                }
+
+                n.Value = newVal.Trim('|').Replace("||", "|");
+
+                n.Save();
+
+                tr.Commit();
+            }
+        }
+
+        /**
+         * Level2: Sink for getting the type information for editing Actions for form element on
+         * grid system
+         */
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectTypeNode")]
+        protected void DBAdmin_DynamicType_GetObjectTypeNode(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() == typeof(Action).FullName + "-META3")
+            {
+                e.Params["Type"]["Properties"]["Up"]["NoFilter"].Value = true;
+                e.Params["Type"]["Properties"]["Up"]["Header"].Value = "Up";
+                e.Params["Type"]["Properties"]["Up"]["TemplateColumnEvent"].Value = "Magix.MetaForms.GetPushActionUpTemplateColumn3";
+                e.Params["Type"]["Properties"]["Down"]["NoFilter"].Value = true;
+                e.Params["Type"]["Properties"]["Down"]["Header"].Value = "Dwn";
+                e.Params["Type"]["Properties"]["Down"]["TemplateColumnEvent"].Value = "Magix.MetaForms.GetPushActionDownTemplateColumn3";
+                e.Params["Type"]["Properties"]["Name"]["ReadOnly"].Value = false;
+                e.Params["Type"]["Properties"]["Name"]["MaxLength"].Value = 100;
+                e.Params["Type"]["Properties"]["Name"]["ControlType"].Value = typeof(InPlaceEdit).FullName;
+                e.Params["Type"]["Properties"]["Name"]["NoFilter"].Value = true;
+            }
+        }
+
+        /**
+         * Level2: Returns the Up column for the Action list
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.GetPushActionUpTemplateColumn3")]
+        protected void Magix_MetaForms_GetPushActionUpTemplateColumn3(object sender, ActiveEventArgs e)
+        {
+            string id = e.Params["ID"].Value.ToString();
+
+            LinkButton b = new LinkButton();
+            b.Text = "&uArr;";
+            b.CssClass = "span-1 last";
+
+            b.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.MetaForms.PushActionUp3",
+                        node);
+                };
+
+            e.Params["Control"].Value = b;
+        }
+
+        /**
+         * Level2: Returns the Down column for the Action list
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.GetPushActionDownTemplateColumn3")]
+        protected void Magix_MetaForms_GetPushActionDownTemplateColumn3(object sender, ActiveEventArgs e)
+        {
+            string id = e.Params["ID"].Value.ToString();
+
+            LinkButton b = new LinkButton();
+            b.Text = "&dArr;";
+            b.CssClass = "span-1 last";
+
+            b.Click +=
+                delegate
+                {
+                    Node node = new Node();
+                    node["ID"].Value = id;
+
+                    RaiseEvent(
+                        "Magix.MetaForms.PushActionDown3",
+                        node);
+                };
+
+            e.Params["Control"].Value = b;
+        }
+
+        /**
+         * Level2: Moves an Action up or down depending upon the event name
+         */
+        [ActiveEvent(Name = "Magix.MetaForms.PushActionUp3")]
+        [ActiveEvent(Name = "Magix.MetaForms.PushActionDown3")]
+        protected void Magix_MetaForms_PushActionUp3_Down3(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                WebPart.WebPartSetting n = WebPart.WebPartSetting.SelectByID(int.Parse(e.Params["ID"].Get<string>().Split('|')[0]));
+                string oldValue = n.Value;
+
+                List<string> tmp = new List<string>(oldValue.Split('|'));
+                int pos = int.Parse(e.Params["ID"].Get<string>().Split('|')[1]);
+                string act = tmp[pos];
+
+                if (e.Name == "Magix.MetaForms.PushActionUp3")
+                {
+                    if (pos == 0)
+                    {
+                        ShowMessage("You can't move that action further up");
+                        return;
+                    }
+                    tmp.RemoveAt(pos);
+                    tmp.Insert(pos - 1, act);
+                }
+                else
+                {
+                    if (pos == tmp.Count - 1)
+                    {
+                        ShowMessage("You can't move that action further down");
+                        return;
+                    }
+                    tmp.RemoveAt(pos);
+                    tmp.Insert(pos + 1, act);
+                }
+
+                string nVal = "";
+                foreach (string idx in tmp)
+                {
+                    nVal += idx + "|";
+                }
+                n.Value = nVal.Trim('|').Replace("||", "|");
+                n.Save();
+
+                tr.Commit();
+
+                Node node = new Node();
+                node["FullTypeName"].Value = typeof(Action).FullName + "-META3";
+
+                RaiseEvent(
+                    "Magix.Core.UpdateGrids",
+                    node);
+            }
+        }
+
+        /**
+         * Level2: Sink for getting the list data for editing Actions for WebPart element
+         */
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
+        protected void DBAdmin_DynamicType_GetObjectsNode(object sender, ActiveEventArgs e)
+        {
+            if (e.Params["FullTypeName"].Get<string>() != typeof(Action).FullName + "-META3")
+                return;
+
+            string actionString = "";
+            WebPart.WebPartSetting p = WebPart.WebPartSetting.SelectByID(e.Params["WebPartID"].Get<int>());
+
+            actionString = p.Value;
+
+            int idxNo = 0;
+            foreach (string idx in actionString.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (idxNo >= e.Params["Start"].Get<int>() &&
+                    idxNo < e.Params["End"].Get<int>())
+                {
+                    e.Params["Objects"]["o-" + idxNo]["ID"].Value = p.ID +
+                        "|" +
+                        idxNo;
+                    e.Params["Objects"]["o-" + idxNo]["Properties"]["Name"].Value = idx;
+                }
+                idxNo += 1;
+            }
+            e.Params["SetCount"].Value = idxNo;
+            e.Params["LockSetCount"].Value = true;
         }
     }
 }

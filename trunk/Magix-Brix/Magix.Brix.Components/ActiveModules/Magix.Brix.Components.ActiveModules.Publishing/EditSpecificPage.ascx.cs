@@ -259,7 +259,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
         private void CreateInPlaceEdit(int id, Window w, string propName, string value, int webPartId)
         {
             InPlaceEdit ed = new InPlaceEdit();
-            ed.CssClass = "span-5 mux-in-place-edit";
+            ed.CssClass = "span-8 mux-in-place-edit clear-both";
             ed.Style[Styles.position] = "relative";
             ed.Style[Styles.height] = "18px";
             ed.ToolTip = propName;

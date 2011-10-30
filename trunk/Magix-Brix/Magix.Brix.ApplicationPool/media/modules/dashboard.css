@@ -814,7 +814,7 @@ h1
 	height:auto;
 	background:transparent url(../images/desktop-icons/facts.png) no-repeat top right;
 	background-color:rgba(220, 255, 220, 0);
-	z-index:700;
+	z-index:10000;
 	border:none 0;
 }
 
@@ -850,8 +850,8 @@ h1
 
 .mux-tool-tip:hover
 {
-	height:504px;
-	width:390px;
+	height:540px;
+	width:590px;
 	padding:18px 40px 18px 0px;
 
 	-moz-transition-property:-moz-box-shadow, background-color, height, width;
@@ -1100,20 +1100,91 @@ div.mux-action-wrapper-hover .mux-grower
 	width:10px;
 }
 
+.edit-pages-tree-view
+{
+	min-height:234px;
+	background:Transparent url(../Images/Backgrounds/pages.png) no-repeat 0 0;
+
+	-webkit-animation-name: background-fly-in;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: 1;
+}
+
 .mux-edit-templates
 {
+	min-height:234px;
+	background:Transparent url(../Images/Backgrounds/templates.png) no-repeat 0 0;
+
+	-webkit-animation-name: background-fly-in;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: 1;
 }
 
 .mux-edit-actions
 {
+	min-height:234px;
+	background:Transparent url(../Images/Backgrounds/actions.png) no-repeat 0 0;
+
+	-webkit-animation-name: background-fly-in;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: 1;
+}
+
+.mux-edit-forms
+{
+	min-height:234px;
+	background:Transparent url(../Images/Backgrounds/forms.png) no-repeat 0 0;
+
+	-webkit-animation-name: background-fly-in;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: 1;
 }
 
 .mux-edit-objects
 {
+	min-height:234px;
+	background:Transparent url(../Images/Backgrounds/objects.png) no-repeat 0 0;
+
+	-webkit-animation-name: background-fly-in;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: 1;
 }
 
 .edit-views
 {
+}
+
+.mux-file-browser
+{
+	position:relative;
+	z-index:200;
+
+	-moz-transition-property:margin-top;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:margin-top;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:margin-top;
+	-o-transition-duration:.5s;
+	-ms-transition-property:margin-top;
+	-ms-transition-duration:.5s;
+	transition-property:margin-top;
+	transition-duration:.5s;
+}
+
+.mux-file-browser:hover
+{
+	margin-top:-720px;
+
+	-moz-transition-property:margin-top;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:margin-top;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:margin-top;
+	-o-transition-duration:.5s;
+	-ms-transition-property:margin-top;
+	-ms-transition-duration:.5s;
+	transition-property:margin-top;
+	transition-duration:.5s;
 }
 
 .mux-remove-property
@@ -1655,15 +1726,24 @@ li.mux-tree-item-class span.mux-tree-icon
 	height:300px;
 	opacity:1;
 
-	-moz-transition-property:opacity;
-	-moz-transition-duration:.5s;
 	-webkit-transition-property:opacity;
 	-webkit-transition-duration:.5s;
+	-moz-transition-property:opacity;
+	-moz-transition-duration:.5s;
 	-o-transition-property:opacity;
 	-o-transition-duration:.5s;
 	-ms-transition-property:opacity;
 	-ms-transition-duration:.5s;
 	transition-property:opacity;
 	transition-duration:.5s;
+}
+
+@-webkit-keyframes background-fly-in {
+ from {
+   background-position:-710px 0;
+ }
+ to {
+   background-position:0 0;
+ }
 }
 

@@ -33,77 +33,113 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             if (TipOfToday.Instance.Count == 0)
             {
                 TipOfToday.Instance.CreateTip(@"
-<h1>Welcome to Magix!</h1>
-<p>Truly a Strange and Wonderful World ...</p>
-<p>A place where you can become literate in regards to computers. A place where you can express yourself, creating what you want out of your computer. A place where you are in charge, a place which is fun!</p>
-<p>This is your First tip of the day. <em>Leave These Tips On</em> to make sure you get Useful Tips and Tricks as you proceed deeper and deeper into the Rabbit Hole ...</p>
+<h1>Welcome to Magix</h1>
+<p>Magix is a platform for Creating Web Applications, either by using C#, VB.NET or other .Net languages, or through using one of the <em>No-Code-Required Application Creators</em>, which actually are far more flexible than you can imagine.</p>
+<p>I am Heka, and I am the Soul of Magix Illuminate. By using me as your guide through Magix, you can start Conquering Magix Faster.</p>
 <p>In fact, your first Tip is to use the Arrow Keys in the Top/Right corner of this window to navigate forward and fast read the next upcoming 5-10 tips. They are all crucial for getting started with Magix ...</p>
 <p>If you need to re-read a previous tip, you can click the previous button ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<h2>4 sec Intro</h2>
+<h2>Magix is ...</h2>
+<p>Magix Illuminate has so many features, trying to list them all, would demand several books. Though already
+before you need to create anything yourself, Magix Illuminate is already extremely useful. You can for instance use Magix ...</p>
+<ul>
+<li>As your own personal DropBox server - By using the File Manager</li>
+<li>To Syncronize your files between work and home</li>
+<li>File Sharing with Friends and Colleagues</li>
+<li>Cloud-Backup of your Important Files, such as Images</li>
+<li>MP3 player, which will let you play your music from every device you wish</li>
+<li>Gallery for friends and family</li>
+<li>Vanity QR Code Generator</li>
+<li>CMS or Publishing System</li>
+<li>Micro Website CMS</li>
+<li>Excel File Manipulator</li>
+</ul>
+<p>All these things comes in addition to the virtually endless possibilities you have for creating your own Applications.</p>
+");
+                TipOfToday.Instance.CreateTip(@"
+<h2>Creating Stuff</h2>
 <p>Magix consists of two majorly important pre-installed modules; The <em>'Publishing'</em> System and the <em>'MetaType'</em> System.</p>
-<p>Publishing is where you go to create your WebSite, and MetaTypes is where you go to create Applications. Though, really the difference is more blurry than you think. For instance; It is difficult to show any Applications to your end users, if you do not have any Pages to 'host' your Application ... </p>
-<p>So Pages can be thought of as Views in your Applications if you want to, or your entire hierarchy of Pages can be viewed as a gigantic plugin Application, which it actually in fact is ... ;)</p>
-<p>It is actually quite useful to <em>stop separating</em> between 'Old-Time Constructs' such as 'code', 'data', 'input' and 'output'. </p>
-<p>Old World thinking, trying to categorize things into different types, are much less useful in Magix than what you think. In Magix, everything is kind of 'mushy'. Or <em>'everything is everything'</em> I guess you can say. This is what makes it possible for you to Stay in Control and deliver Secure and Stable Systems, regardless of the Complexity of your Domain Problem ...</p>
-<p>We recommend people to <em>Start with Learning Publishing</em> and how the WebPages work. Then later, only when a firm grasp of Pages and Templates are understood, we recommend moving onto Applications ...</p>");
+<p>Publishing is where you go to create your WebSite, and MetaTypes is where you go to create Applications, though, really the difference is more blurry than you think. For instance; It is difficult to show any Applications to your end users, if you do not have any Pages to 'host' your Application ... </p>
+<p>So Pages can be thought of as Views in your Applications if you want to, or your entire hierarchy of Pages can be viewed as a gigantic plugin Application, which it actually in fact is. Everything is a little bit more 'mushy' in Magix than what you're used to form other systems. Which brings us on to ...</p>
+<p>It is actually quite useful to <em>stop separating</em> between 'Old-Time Constructs' such as 'code', 'data', 'input' and 'output' when using Magix. Old World thinking, trying to categorize things into different types, are much less useful in Magix than what you think. In Magix, everything is kind of 'mushy'. Or <em>'everything is everything'</em> I guess you can say. As weird and counter intuitive as this may sound, this is actually the <em>key facilitator</em> for you to Stay in Control and deliver Secure and Stable Systems, regardless of the Complexity of your Domain Problem. This was one of the key discoveries in the O2 Architecture, which is the core Architectural Idea behind Magix Illuminate. Or 'the invention' so to speak.</p>
+<p>We recommend people to <em>Start with Learning Publishing</em> and how the WebPages work. Then later, only when a firm grasp of Pages and Templates are understood, we recommend moving onto Applications. Although, if you have had much experience with Publishing Systems before, you might want to rush this part. The basic understanding of Pages should be easily acquired for a Savvy iPhone user in less than a couple of hours though.</p>");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Basics ...</h2>
 <p>But before we can do anything else, we need to learn the <em>Basics</em> ...</p>
 <p>Most of Magix is made up of 'Basic Components', which are tied together to create a whole.</p>
-<p>For instance, a button will mostly look the same everywhere. By default a button will be Gray and use Bold, Black and Big Fonts ...</p>
+<p>For instance, a button will mostly look the same everywhere. By default a button will be Gray and use Blue, Big Fonts ...</p>
 <p>A good example of a Button is the Top/Right corner of this tooltip, which has two Buttons. One Paging forward, and another paging Backwards in the Hierarchy of Tips and Tricks ...</p>
 <p>A 'Grid' is when you see a list of items. A good example of a Grid would be MetaTypes/Meta Actions ...</p>
 <p>There are many types of 'Basic Components' like these in Magix. Over the next couple of pages, we'll be walking through some of them which you'll need to understand to be able to get the <em>most out of Magix</em> ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Grids</h2>
-<p>Most Grids in Magix have tons of features. These features includes; Paging, In Place Editing of Values, Filtering, and so on ...</p>
-<p>To Filter according to a Column, all you've got to do is to click the header of your Grid, choose which type of Filter you want to apply, type in its value, and click OK ...</p>
+<p>Most Grids in Magix have tons of features. These features includes; Paging, In Place Editing of Values, Filtering, and so on. Open up <em>Actions</em> by clicking the icon at 2 O'Clock on your Dashboard.</p>
+<p>To Filter according to a Column, all you've got to do is to click the header of your Grid, choose which type of Filter you want to apply, type in its value, and click OK. Try to filter your Actions according to 'debug' by clicking the Name Header. This should give you two actions, turn on and turn off debugging. Though some screens, such as the Action screen, also have a 'Fast Filter' textbox. Make sure you remove your filter before you leave this screen again, by clicking the Name column and remove the text and click OK.</p>
 <p>The arrow buttons, normally at the bottom of your grids makes it possible to traverse forward and backwards in your list of items. The double arrows takes you <em>'all the way'</em> in its direction ...</p>
-<p><em>Open up Meta Types/Meta Actions</em> and play around with that grid by filtering, creating a couple of new items and so on.</p>
-<p>Make sure you <em>don't change any</em> of the existing items, since some things are dependent upon 'System Actions' which must be defined for your system to properly work ...!</p>
-<p>To see Paging you'll normally need to have more than 10 items in your grid. To see 'all the way paging', you'll normally need more than 20 items ...</p>
-<p>Make sure you also click the 'Edit' column. Sometimes this column will say 'Edit' while sometimes it'll show a number like in the Action view. However, clicking the Edit Column, will always somehow bring you to a View where that object can be edited in 'full version' ...</p>
+<p><em>Open up Meta Objects/Meta Actions</em> and play around with that grid by filtering, creating a couple of new items and so on.</p>
+<p>Paging normally turns on automagixally according to when it's needed. To see the Paging buttons, you'll normally need to have more than 10 items in your grid. If you don't see them in your Action screen, make sure all Filters and filter queries are turned OFF. To see 'all the way paging', you'll normally need more than 20 items ...</p>
+<p>Make sure you also click the 'Edit' column. Sometimes this column will say 'Edit' while sometimes it'll show a number. However, clicking the Edit Column, will always somehow bring you to a View where that object can be edited in 'full version' ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <p>Some things should be very similar for mostly all grids like this in Magix. For instance ...</p>
 <p>Clicking the '+' button will almost always create a new object of that type ...</p>
-<p>If the Text of a Grid Cell is Blue, this means that you can edit the value directly by <em>clicking the Blue Text</em>, which will exchange it with a 'textbox', from where you can edit its value ...</p>
+<p>If the Text of a Grid Cell is Green, this means that you can edit the value directly by <em>clicking the Blue Text</em>, which will exchange it with a 'textbox', from where you can edit its value, and save the updated value by either clicking Carriage Return or somehow moving focus away from the textbox/textarea itself. For textarea (multiple lines textboxes) hitting the TAB key to update is usually the most efficient ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Publishing ...</h2>
 <p>A Website consists of Pages. Every Page is the equivalent of one 'URL'. Although URLs doesn't really exist in Magix, it helps to think of a page as such. Beside, creating a URL based Navigation Plugin would be piece of cake anyway, due to the Architectural Principles Magix is built on ...</p>
 <p>Anyway ...</p>
 <p>You create your pages according to 'Templates', which can be seen as <em>'Recipes'</em> for your pages. You have to have at least <em>One Template</em> in your system before you can start creating Pages. Every Page is based upon a Template, and no page can exist without its Template ...</p>
-<p>Click <em>'Publishing-&gt;Templates ...'</em> now!</p>
-<p>If you click 'Dashboard' at the root of your menu you will return back here. To access the root of your menu, click the left arrow at the top of your Sliding Menu ...</p>
+<p>Click <em>Templates</em> at 3 O'Clock on your Dashboard now.</p>
 <p>PS!<br />Click the Edit links to view any specific templates ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<p>Every Template contains a bunch of WebPart Templates. These WebPart Templates can be positioned exactly as you wish on your page. When editing a Template, use the <em>Arrow Buttons</em> to position your WebParts ...</p>
-<p>Go check out <em>'Publishing-&gt;Templates ...'</em> one more time, and see how you can move stuff around on your 'surface' by clicking the Arrow Buttons ... </p>
+<p>Every Template contains a list of WebPart Templates. These WebPart Templates can be positioned exactly as you wish on your page. When editing a Template, use the <em>Arrow Buttons</em> to position your WebParts ...</p>
+<p>If you click the Blue Name of the WebPart, you can further edit more properties of your WebParts. The most important property here is the <em>Module</em> property, which basically is the type of Publishing Plugin Module this specific WebPart is based upon.</p>
+<p>Some of the more important types of Modules are</p>
+<ul>
+<li><em>MetaView_Form</em> - A Publishing Plugin-Host for your Meta Forms. What allows you to inject Meta Forms into your Pages</li>
+<li><em>Content</em> - A Rich Text content plugin</li>
+<li><em>Header</em> - Basically just encapsulates an H1 element</li>
+<li><em>SliderMenu</em> - The Sliding Menu, which can be seen by default in both the back-web and the front-web of Magix</li>
+<li><em>TopMenu</em> - And Alternative and more conventional Menu for creating Menu Hierarchies. 100% compatible with the Sliding Menu's Data Foundation</li>
+</ul>
+<p>But exactly which modules you've got in your installation, may vary according to what modules you've installed, and how you've modified it yourself after you installed Magix Illuminate.</p>
+<p>Another important property is the <em>WebPart CSS Class</em>, which also can be manipulated using the <em>CSS Template</em> SelectList. The <em>Last</em> property should only be set for WebParts which are supposed to expand all the way to the right of your Viewport. While the <em>Overflow</em> is for dynamic heights, where you don't know the final height of your module's content</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <p>When positioning your WebPart Templates, realize that you're not really 'positioning' them, but rather you are changing their <em>width, height and margins</em>. In the beginning this might feel a little bit cumbersome, though after some time you'll hopefully appreciate this 'floating layout' and become used to it ...</p>
-<p>Realize also that especially the bottom and right margins might create funny looking WebParts since they're not really visible while editing. If you're having weird results, make sure your right and bottom margins are 0 by <em>double clicking</em> them, which should set them back to zero ... ;)</p>
+<p>Realize also that especially the bottom and right margins might create funny looking WebParts since they're not really visible while editing. If you're having weird results, make sure your right and bottom margins are 0 by <em>double clicking</em> them, which should set them back to zero ...</p>
 <p>Double clicking any of the arrows will either maximize or minimize their associated property ...</p>
+<p>As previously said, realize that you're not really positioning your WebParts when you click the Arrow Keys. What you're doing, is that you are setting the <em>Margins</em> and the <em>Width</em> and <em>Height</em> of your WebPart. Though both the left margins and the top margins can have <em>negative values</em>, which basically is the facilitator to become virtually completely 100% enabled to set your exact positioning, without residing to absolute positioning.</p>
+<p>A little bit more cumbersome, but definitely worth it.</p>
+");
+                TipOfToday.Instance.CreateTip(@"
+<h2>The Grid Layout System</h2>
+<p>When you move things around, either by using CSS or some other helper methods, such as the Arrow Buttons in the Template Editor, then you are basically conforming to a Grid system which Magix has inherited from Bluegrid.Css, which it uses at its core.</p>
+<p>This system basically is 950 pixels wide, which happens to be 'the perfect' resolution for all monitors and devices, including phones and tablets.</p>
+<p>These 950 pixels is divided into 24 columns, where every column is 30 pixels wide, and have a margin of 10 pixels. Meaning if you're covering one column, your WebPart is 30 pixel wide. If it's covering 2 columns it's 70 pixels, 3 columns 110 pixels, and so on. Pluss 40, all the way to 24 and 950 pixels.</p>
+<p>Every row is 18 pixels tall. Some things such as Buttons, by default, will cover two rows, meaning 18x2, which becomes 36 pixels.</p>
+<p>When you move your WebParts, what you are really doing, is that you're adding and removing left and top margins of 40 and 18 pixels for every 'movement' you create. This allows for the perfect reading layout that Magix Illuminate comes with out of the box. Also for your own apps and pages.</p>
+<p>If you wish to override this, you can do so either using CSS on the WebPart and WebPage level, or you can change the absolute positioning by allowing Absolute Positioning in the Meta Form designer for instance. Though this is generally not 'encouraged', since it destroys your future Agility.</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <p>A WebPage Template must contain  at least one WebPart Template. A WebPart Template is also a 'Type Definition' for your WebParts. WebPart Templates have names such as 'Content' and 'Header', which are publishing modules for showing large letters and rich text fragments. Every WebPart Template is based upon one plugin type. </p>
 <p>Meaning if you have one page, based upon a WebPage Template, with 5 WebPart Templates, you'll have a WebPage with 5 WebParts where each WebPart can be different '<em>Applications'</em>. This might be any combination of Applications, such as Text Fragments, Headers, CRUD Forms and such ...</p>
 <p>However, we'll stick to 'Publishing' as we promised in the beginning, and focus on the Publishing Modules ...</p>
-<p>If you edit the default Template created by the system for you, you can see how it has Menu, Header and Content as <em>'Module Names'</em></p>
-<p>Go check it out while I hang around here ...</p>
+<p>If you edit the default Template created by the system for you, you can see how it has Menu, Header and Content as <em>'Module Names'</em>. You can also create as many new Templates as you wish.</p>
+<p>If you open your Dashboard now, and click 'Pages' at 1 O'Clock, you'll come to your WebPages Editing Screen. Click the top one and see how it's built upon the Template called 'M+H+C', which means Menu + Header + Content btw.</p>
+<p>Every time you create a new WebPage, which is a single adressable URL in your system, you'll have to decide which Template to base your Page upon. Which again defines your design, type of applications this specific WebPage can show, etc.</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <p>The Menu is similar to the Sliding Menu to the left which you're using yourself, while the Header will show an H1 HTML element [Header Element] and the Content module will show Rich Editable Content.</p>
 <p>If you have more types of Modules in your installation of Magix, these might also show up as selections in the DropDownBoxes visible while editing your Templates ...</p>
-<p>No go to Templates and change the Name of Template 'M+H+C'. Change it to 'Testing'. This can be done by clicking directly on the text where it says 'M+H+C'. Then open up 'Pages ...' and click your root page.</p>
-<p>Do you see how the name of the module in the DropDown box, roughly at the middle of the screen has changed now to 'Testing'. This is because that DropDown box is being used to select a Template for your WebPage.</p>
-<p>Then try to change the Name of your Templates by clicking e.g. Header while editing your Template, and type in 'Header2'. Now edit your Page and see how this change reflects from the Template and to the Page.</p>
-<p>Go take a look, while I chill ...</p>
+<p>Now go to Templates and change the Name of Template 'M+H+C'. Change it to 'Testing'. This can be done by clicking directly on the text where it says 'M+H+C'. Then open up 'Pages ...' and click your root page.</p>
+<p>In your Pages view now, can you see how the name of the module in the DropDown box, roughly at the middle of the screen has changed now to 'Testing'. This is because that DropDown box is being used to select a Template for your WebPage.</p>
+<p>Now try to change the Name of your Templates by clicking e.g. Header while editing your Template, and type in 'Header2'. Now edit your Page and see how this change reflects from the Template and to the Page.</p>
+<p>So to conclude, one WebPage is based upon a Template, which again contains several WebParts, where every WebPart is based upon a Module Type. The Page defines your content, and the Template your design, and 'type' of WebPage.</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <p><em>Important:</em> If you change the number of WebParts in your Template, or you change the type of Module of your WebPart Template, then <em>all pages</em> built upon that Template will have to be resaved, and you'll probably loose data. </p>
@@ -117,14 +153,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 <p>If you now access the root of your website, and try to browse around by clicking different buttons, you can see how the WebPart Containers are 'jumping around' on the screen ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<h2>Init. of WebParts</h2>
+<h2>Initialization of WebParts</h2>
 <p>WebParts initializes differently depending upon where you're coming from, and from which Template type you're coming from dependent upon to which Template type you're entering. And also according to which type of WebParts, or Modules they are ... </p>
 <p>For instance the sliding menu will not reload as long as the container it is within on one page template, is the same container it is within on the next page template ...</p>
 <p>Too confusing ...?</p>
 <p>Just remember; <em>always have a Menu</em> positioned in the same container [first one for instance?] on all of your templates, unless you really know what you're doing ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<p><em>Play around</em> with the system by creating some new Templates, copying them, change their weparts type between Header, Content and SliderMenu. Then when you come back, we'll start diving into Applications ... ;)</p>
+<p><em>Play around</em> with the system by creating some new Templates, copying them, change their weparts type between Header, Content and SliderMenu. Then when you come back, we'll start diving into Applications ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Applications ...</h2>
@@ -147,8 +183,8 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                 TipOfToday.Instance.CreateTip(@"
 <p>Attach two Actions to your 'Save' property.</p>
 <ul>
-\t<li>Magix.DynamicEvent.SaveActiveForm</li>
-\t<li>Magix.DynamicEvent.EmptyAndClearActiveForm</li>
+    <li>Magix.DynamicEvent.SaveActiveForm</li>
+    <li>Magix.DynamicEvent.EmptyAndClearActiveForm</li>
 </ul>
 <p>The first Action will save your form, while the second one will empty it.</p>
 <p>Now try to <em>View your form in preview</em> mode, and test it out by typing in your email and name, and clicking Submit to save your Object ...</p>
@@ -163,6 +199,14 @@ Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in
 <p>Take some care when naming your Types!</p>
 <p>It's probably a good practice to some how make sure they've got unique names, also across your organization if you want to use plugins made by others.</p>
 <p>We encourage people to use type names such as; ""CompanyName.Department.Customer"", and never 'Customer' directly. In fact, your <em>homework</em> for this lesson is to go and rename your 'Customer' TypeName, and rename the Type Name to; 'CompanyName.Department.Customer'. Where Company Name and Department are <em>your</em> company name and your department ...</p>
+");
+                TipOfToday.Instance.CreateTip(@"
+<h2>Drag and Drop Files</h2>
+<p>There are many places in Magix where you can Drag and Drop files. One such example would be the File Manager. If you open up the File Manager, you can find the folder you wish to upload your file(s) to, then find the files on your Desktop System, and actually drag and drop the files you wish to upload to this folder on your server. Magix will take care of the rest.</p>
+<p>If you want to use these features in your own apps, they are possible for you to use by for instance adding a WebPart to your Template and set its type to <em>Uploader</em>.</p>
+<p></p>
+<p></p>
+<p></p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>OpenID</h2>

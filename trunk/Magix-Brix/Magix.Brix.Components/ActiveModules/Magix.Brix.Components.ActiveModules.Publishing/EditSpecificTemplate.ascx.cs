@@ -240,7 +240,7 @@ namespace Magix.Brix.Components.ActiveModules.Publishing
             if (node.Contains("Classes"))
             {
                 Label lbl2 = new Label();
-                lbl2.Text = "Template";
+                lbl2.Text = "CSS Template";
                 lbl2.Tag = "label";
                 lbl2.CssClass = " span-5 down-1 mux-webpart-property-edit-widget";
                 w.Content.Controls.Add(lbl2);

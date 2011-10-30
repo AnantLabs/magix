@@ -341,6 +341,38 @@ p.mux-news-5:first-letter
 	color:#999;
 }
 
+.mux-darken
+{
+	background-color:rgba(0,0,0,0);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
+}
+
+.mux-darken:hover
+{
+	background-color:rgba(0,0,0,.05);
+
+	-moz-transition-property:background-color;
+	-moz-transition-duration:.5s;
+	-webkit-transition-property:background-color;
+	-webkit-transition-duration:.5s;
+	-o-transition-property:background-color;
+	-o-transition-duration:.5s;
+	-ms-transition-property:background-color;
+	-ms-transition-duration:.5s;
+	transition-property:background-color;
+	transition-duration:.5s;
+}
+
 /* Accordion CSS */
 .mux-accordion
 {
