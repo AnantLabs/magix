@@ -87,7 +87,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             node["FullTypeName"].Value = typeof(MetaForm).FullName;
             node["Width"].Value = 18;
             node["Last"].Value = true;
-            node["CssClass"].Value = "large-bottom-margin";
+            node["CssClass"].Value = "large-bottom-margin mux-edit-forms";
 
             node["WhiteListColumns"]["Copy"].Value = true;
             node["WhiteListColumns"]["Copy"]["ForcedWidth"].Value = 2;
