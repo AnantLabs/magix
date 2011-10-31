@@ -144,7 +144,10 @@ input[type=radio],
 input[type=checkbox]
 {
 	margin:0;
-	height:18px;
+	height:auto;
+	width:auto;
+	margin-right:4px;
+	margin-top:2px;
 	padding:0;
 	text-align:left;
 }

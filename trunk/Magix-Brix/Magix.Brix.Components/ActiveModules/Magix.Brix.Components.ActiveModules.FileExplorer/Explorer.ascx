@@ -75,32 +75,32 @@
     <mux:Button
         runat="server"
         id="previous"
-        CssClass="span-2 mux-button-previous"
+        CssClass="span-2 mux-button-previous mux-file-button"
         OnClick="previous_Click"
         Text="&lt;" />
     <mux:Button
         runat="server"
         id="next"
-        CssClass="span-2 mux-button-next"
+        CssClass="span-2 mux-button-next mux-file-button"
         OnClick="next_Click"
         Text="&gt;" />
     <mux:Button
         runat="server"
         id="delete"
-        CssClass="span-4 delete"
+        CssClass="span-4 delete mux-file-button"
         OnClick="delete_Click"
         Text="Delete" />
     <input
         type="file"
         runat="server"
         multiple="multiple"
-        class="file-control"
+        class="file-control mux-file-button"
         OnChange="MUX.uploadFile();"
         id="file" />
     <input 
         type="button" 
         OnClick='MUX.$("<%=file.ClientID %>").click();'
-        class="span-4"
+        class="span-4 mux-file-button"
         title="You can also drag and drop files from your desktop and onto your browser area while this Module is running"
         value="Upload ..." />
 
@@ -134,8 +134,8 @@ MUX.uploadFile = function() {
     <mux:Button
         runat="server"
         id="select"
-        style="display:block;margin-right:10px !iomportant;"
-        CssClass="span-4 select"
+        style="display:block;margin-right:10px;"
+        CssClass="span-4 select mux-file-button"
         ToolTip="Click to select active file"
         OnClick="select_Click"
         Text="Select" />
@@ -144,7 +144,7 @@ MUX.uploadFile = function() {
         id="newCss"
         style="display:block;"
         ToolTip="Click to create a new empty CSS file"
-        CssClass="span-1 last"
+        CssClass="span-1 last mux-file-button"
         OnClick="newCss_Click"
         Text="+" />
 </div>

@@ -162,8 +162,17 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
             beginning.Enabled = DataSource["Start"].Get<int>() > 0;
             end.Enabled = DataSource["End"].Get<int>() < DataSource["SetCount"].Get<int>();
 
+            UpdateCounter();
+        }
+
+        private void UpdateCounter()
+        {
             if (DataSource.Contains("SetCount"))
-                lblCount.Text = "#" + DataSource["SetCount"].Value.ToString();
+                lblCount.Text = (DataSource["Start"].Get<int>() + 1).ToString() +
+                    " / " +
+                    DataSource["End"].Get<int>().ToString() +
+                    " - " +
+                    DataSource["SetCount"].Value.ToString();
             else
                 lblCount.Text = "?";
         }

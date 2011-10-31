@@ -1747,3 +1747,7 @@ li.mux-tree-item-class span.mux-tree-icon
  }
 }
 
+.mux-web-part .mux-window-content
+{
+	margin:18px 0;
+}

@@ -197,8 +197,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 }
                 else
                 {
-                    tools.Style[Styles.zIndex] = "501";
-                    props.Style[Styles.zIndex] = "500";
+                    tools.Style[Styles.zIndex] = "500";
+                    props.Style[Styles.zIndex] = "501";
                 }
             }
         }
