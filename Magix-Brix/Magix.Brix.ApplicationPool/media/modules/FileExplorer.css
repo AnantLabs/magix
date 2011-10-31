@@ -375,8 +375,18 @@
 
 .save-btn
 {
-	margin-bottom:0px;
+	margin-bottom:18px;
 	margin-top:18px;
+}
+
+.mux-file-button
+{
+	margin-bottom:0px !important;
+}
+
+.child .mux-file-button
+{
+	margin-bottom:18px !important;
 }
 
 

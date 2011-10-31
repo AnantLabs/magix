@@ -187,6 +187,20 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                 lblCount.Text = "#" + DataSource["SetCount"].Value.ToString();
             else
                 lblCount.Text = "?";
+
+            UpdateCounter();
+        }
+
+        private void UpdateCounter()
+        {
+            if (DataSource.Contains("SetCount"))
+                lblCount.Text = (DataSource["Start"].Get<int>() + 1).ToString() +
+                    " / " +
+                    DataSource["End"].Get<int>().ToString() +
+                    " - " +
+                    DataSource["SetCount"].Value.ToString();
+            else
+                lblCount.Text = "?";
         }
 
         protected void CreateItem(object sender, EventArgs e)
