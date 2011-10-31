@@ -130,9 +130,12 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
          * being passed into it. Minimum requirement is Header. If you append an 
          * Exclamation mark as the last character of the LogItemType, the incident will be 
          * considered _serious_, and some sort of reaching out to the admin of the site 
-         * might occur as a consequence, depending upon other states of the system
+         * might occur as a consequence, depending upon other states of the system. The
+         * Log action might often be overridden, if you need to force into this specific method
+         * for some reasons, you can add '-HARDLINK' to the action as you raise it
          */
         [ActiveEvent(Name = "Magix.Core.Log")]
+        [ActiveEvent(Name = "Magix.Core.Log-HARDLINK")]
         protected void Magix_Core_Log(object sender, ActiveEventArgs e)
         {
             DateTime when = DateTime.Now;
