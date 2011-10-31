@@ -284,21 +284,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
 
                     root.Children.Add(o);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     o = new WebPage();
                     o.Name = "DataBind Basics";
                     o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+C"));
@@ -330,12 +315,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
                     o.Parent = root;
 
                     root.Children.Add(o);
-
-
-
-
-
-
 
                     o = new WebPage();
                     o.Name = "More";
@@ -376,13 +355,6 @@ only data or 'simple applications'. You can build as complex applications as you
                     o.Parent = root;
 
                     root.Children.Add(o);
-
-
-
-
-
-
-
 
                     WebPage root2 = o;
 
@@ -448,10 +420,6 @@ only data or 'simple applications'. You can build as complex applications as you
 
                     root2.Children.Add(o);
 
-
-
-
-
                     o = new WebPage();
                     o.Name = "Data Collection";
                     o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
@@ -481,9 +449,6 @@ only data or 'simple applications'. You can build as complex applications as you
                     o.Parent = root2;
 
                     root2.Children.Add(o);
-
-
-
 
                     o = new WebPage();
                     o.Name = "Data Coll. Expl.";
@@ -517,14 +482,6 @@ only data or 'simple applications'. You can build as complex applications as you
 
                     root2.Children.Add(o);
 
-
-
-
-
-
-
-
-
                     o = new WebPage();
                     o.Name = "2-Way DataBinding";
                     o.Template = WebPageTemplate.SelectFirst(Criteria.Eq("Name", "M+H+MF"));
@@ -554,8 +511,6 @@ only data or 'simple applications'. You can build as complex applications as you
                     o.Parent = root2;
 
                     root2.Children.Add(o);
-
-
 
                     o = new WebPage();
                     o.Name = "2-Way Explained";
@@ -588,12 +543,6 @@ only data or 'simple applications'. You can build as complex applications as you
                     o.Parent = root2;
 
                     root2.Children.Add(o);
-
-
-
-
-
-
 
                     root.Save();
                 }
