@@ -1157,12 +1157,12 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 "Magix.MetaForms.PasteWidgetNodeIntoMetaForm",
                 ac);
 
-            //OldSelected =
-            //    Selector.FindControl<BaseControl>(
-            //    this,
-            //    "ID" + ac["ParentControl"].Value.ToString()).ClientID +
-            //    "_" +
-            //    "ID" + ac["NewControlID"].Get<string>();
+            OldSelected =
+                Selector.FindControl<Control>(
+                this,
+                "ID" + ac["ParentControl"].Value.ToString()).ClientID +
+                "_" +
+                "ID" + ac["NewControlID"].Get<string>();
 
              // Refreshing form ...
             RaiseSafeEvent(

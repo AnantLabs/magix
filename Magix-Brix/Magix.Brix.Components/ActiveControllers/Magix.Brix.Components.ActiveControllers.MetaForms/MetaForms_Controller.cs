@@ -3546,6 +3546,8 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
             {
                 Node paste = e.Params["PasteNode"].Value as Node;
 
+                MetaForm.Node nNode = null;
+
                 MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
 
                 int id = -1;
@@ -3607,14 +3609,13 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                             count = int.Parse(idx.Name.Substring(2)) + 1;
                     }
 
-                    MetaForm.Node nNode = MetaForm.Node.FromNode(paste);
+                    nNode = MetaForm.Node.FromNode(paste);
                     nNode.Name = "c-" + count;
 
                     parent["Surface"].Children.Add(nNode);
+                    nNode.ParentNode = parent["Surface"];
 
                     parent.Save();
-
-                    e.Params["NewControlID"].Value = nNode.ID;
                 }
                 else
                 {
@@ -3638,10 +3639,11 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                         }
                     }
 
-                    MetaForm.Node nNode = MetaForm.Node.FromNode(paste);
+                    nNode = MetaForm.Node.FromNode(paste);
                     nNode.Name = "c-" + count;
 
                     parent["Surface"].Children.Insert(x + 1, nNode);
+                    nNode.ParentNode = parent["Surface"];
 
                     // Looks funny, but keeps all of our Widget 'in memory' while they're deleted and re-created
                     // in database ...
@@ -3650,9 +3652,10 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                     ResetTree(parent["Surface"]);
 
                     parent.Save();
-
-                    e.Params["NewControlID"].Value = nNode.ID;
                 }
+
+                e.Params["NewControlID"].Value = nNode.ID;
+                e.Params["ParentControl"].Value = nNode.ParentNode.ParentNode.ID;
 
                 parent.Save();
 
