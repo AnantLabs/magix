@@ -1157,7 +1157,14 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                 "Magix.MetaForms.PasteWidgetNodeIntoMetaForm",
                 ac);
 
-            // Refreshing form ...
+            //OldSelected =
+            //    Selector.FindControl<BaseControl>(
+            //    this,
+            //    "ID" + ac["ParentControl"].Value.ToString()).ClientID +
+            //    "_" +
+            //    "ID" + ac["NewControlID"].Get<string>();
+
+             // Refreshing form ...
             RaiseSafeEvent(
                 "Magix.MetaForms.GetControlsForForm",
                 DataSource);
@@ -1165,6 +1172,7 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
             ctrls.Controls.Clear();
             CreateFormControls();
             ctrls.ReRender();
+
             CreateSelectWidgetSelectList();
         }
     }

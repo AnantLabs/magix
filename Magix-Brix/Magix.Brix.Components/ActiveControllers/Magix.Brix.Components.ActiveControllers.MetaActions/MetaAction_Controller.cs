@@ -1050,6 +1050,24 @@ Deleting it may break these parts.</p>";
                     "DBAdmin.Form.ChangeCssClassOfModule",
                     cc);
             }
+
+            node = new Node();
+
+            node["Seed"].Value = "delete-button";
+            node["Enabled"].Value = true;
+
+            RaiseEvent(
+                "Magix.Core.EnabledClickable",
+                node);
+
+            node = new Node();
+
+            node["Seed"].Value = "create-child-button";
+            node["Enabled"].Value = true;
+
+            RaiseEvent(
+                "Magix.Core.EnabledClickable",
+                node);
         }
 
         /**
