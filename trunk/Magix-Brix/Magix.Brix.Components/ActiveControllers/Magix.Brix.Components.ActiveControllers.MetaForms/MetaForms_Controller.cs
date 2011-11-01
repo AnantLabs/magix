@@ -3546,10 +3546,6 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
             {
                 Node paste = e.Params["PasteNode"].Value as Node;
 
-
-
-
-
                 MetaForm f = MetaForm.SelectByID(e.Params["ID"].Get<int>());
 
                 int id = -1;
@@ -3557,6 +3553,7 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                 bool hasSurface = true;
 
                 Magix.Brix.Components.ActiveTypes.MetaForms.MetaForm.Node parent = null;
+
                 if (e.Params.Contains("ParentControl") &&
                     e.Params["ParentControl"].Value != null)
                 {
@@ -3577,7 +3574,7 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                     parent["TypeName"].Value != "Magix.MetaForms.Plugins.Panel" &&
                     parent["TypeName"].Value != "Magix.MetaForms.Plugins.Repeater")
                 {
-                    // Need to inject the Widget to the 'left' of the currently selected widget ...
+                    // Need to inject the Widget to the 'right' of the currently selected widget ...
 
                     hasSurface = false;
 
@@ -3588,7 +3585,7 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                         if (parent.Contains("TypeName"))
                         {
                             if (parent["TypeName"].Value == "Magix.MetaForms.Plugins.Panel" ||
-                                parent["TypeName"].Value != "Magix.MetaForms.Plugins.Repeater")
+                                parent["TypeName"].Value == "Magix.MetaForms.Plugins.Repeater")
                             {
                                 break;
                             }
@@ -3613,11 +3610,11 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                     MetaForm.Node nNode = MetaForm.Node.FromNode(paste);
                     nNode.Name = "c-" + count;
 
-                    parent["Surface"].Children.Add( nNode);
+                    parent["Surface"].Children.Add(nNode);
 
                     parent.Save();
 
-                    e.Params["NewControlID"].Value = parent["Surface"]["c-" + count].ID;
+                    e.Params["NewControlID"].Value = nNode.ID;
                 }
                 else
                 {

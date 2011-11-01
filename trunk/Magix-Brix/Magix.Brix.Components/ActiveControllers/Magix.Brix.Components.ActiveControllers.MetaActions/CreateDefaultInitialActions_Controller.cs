@@ -152,6 +152,43 @@ of every MetaObject of 'TypeName' to 'NewValue'";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.RollThroughEnumValuesForProperty")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.RollThroughEnumValuesForProperty";
+                    a.EventName = "Magix.MetaTypes.RollThroughEnumValuesForProperty";
+                    a.Description = @"Will rool through 
+the 'Enums' values and change the value of the 'PropertyName' of the given 'ID' object";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "FullTypeName";
+                    m.Value = typeof(MetaObject).FullName + "-META";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "PropertyName";
+                    m.Value = "SomeProperty";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Enums";
+                    a.Params.Add(m);
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "One";
+                    m2.Value = "one...";
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Two";
+                    m2.Value = "two...";
+                    m.Children.Add(m2);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.CreateNewMetaObject")) == 0)
                 {
                     Action a = new Action();

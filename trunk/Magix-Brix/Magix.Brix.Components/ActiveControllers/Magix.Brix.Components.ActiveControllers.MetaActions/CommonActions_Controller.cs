@@ -58,6 +58,57 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level2: Will roll a property value through the different values within 'Enums' node
+         */
+        [ActiveEvent(Name = "Magix.MetaTypes.RollThroughEnumValuesForProperty")]
+        protected void Magix_MetaTypes_RollThroughEnumValuesForProperty(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                MetaObject t = MetaObject.SelectByID(e.Params["ID"].Get<int>());
+
+                MetaObject.Property v = t.Values.Find(
+                    delegate(MetaObject.Property idx)
+                    {
+                        return idx.Name == e.Params["PropertyName"].Get<string>();
+                    });
+                if (v == null)
+                {
+                    v = new MetaObject.Property();
+                    v.Name = e.Params["PropertyName"].Get<string>();
+                    v.Value = e.Params["Enums"][0].Get<string>();
+                    t.Values.Add(v);
+                }
+                else
+                {
+                    string nValue = "";
+
+                    int idxNo = 0;
+                    foreach (Node idx in e.Params["Enums"])
+                    {
+                        idxNo += 1;
+                        if (v.Value == idx.Get<string>())
+                            break;
+                    }
+                    if (idxNo < e.Params["Enums"].Count)
+                    {
+                        nValue = e.Params["Enums"][idxNo].Get<string>();
+                    }
+                    else
+                    {
+                        nValue = e.Params["Enums"][0].Get<string>();
+                    }
+                    v.Value = nValue;
+
+                }
+
+                t.Save();
+
+                tr.Commit();
+            }
+        }
+
+        /**
          * Level2: Will return objects of given 'TypeName' back to caller as 'Objects' with
          * every instance within 'Objects' will contain one 'ID' node, and another node
          * called 'Properties' which will contain values for every Property within that
