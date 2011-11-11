@@ -80,7 +80,7 @@ namespace Magix.Brix.Components.ActiveModules.QRGenerator
                     }
                     if (DataSource.Contains("BGImage"))
                     {
-                        fgText.Style[Styles.background] =
+                        bgText.Style[Styles.background] =
                             "Transparent url(" +
                             DataSource["BGImage"].Get<string>() +
                             ") no-repeat 0 0";

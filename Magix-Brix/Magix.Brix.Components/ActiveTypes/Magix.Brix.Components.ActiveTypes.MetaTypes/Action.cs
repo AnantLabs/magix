@@ -9,6 +9,9 @@ using Magix.Brix.Data;
 using Magix.Brix.Types;
 using System.Reflection;
 using Magix.Brix.Loader;
+using System.Web.Caching;
+using System.Web.UI;
+using System.Web;
 
 namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 {
@@ -179,6 +182,37 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
          */
         [ActiveField]
         public DateTime Created { get; set; }
+
+        /**
+         * Returns the first action from your data storage which are true
+         * for the given criterias. Pass nothing () if no criterias are needed.
+         */
+        public static new Action SelectFirst(params Criteria[] args)
+        {
+            string key = "";
+            foreach (Criteria idx in args)
+            {
+                key += idx.PropertyName;
+                if (idx.Value != null)
+                    key += idx.Value.GetHashCode().ToString();
+            }
+            Page page = HttpContext.Current.CurrentHandler as Page;
+            Action retVal;
+            if (page != null)
+            {
+                retVal = page.Cache.Get(key) as Action;
+                if (retVal != null)
+                    return retVal;
+
+                retVal = ActiveType<Action>.SelectFirst(args);
+                page.Cache.Insert(key, retVal);
+                return retVal;
+            }
+            else
+            {
+                return ActiveType<Action>.SelectFirst(args);
+            }
+        }
 
         /**
          * Overridden to make sure name is unique, among other things

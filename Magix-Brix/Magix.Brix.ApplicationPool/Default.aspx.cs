@@ -64,7 +64,9 @@ namespace Magix.Brix.ApplicationPool
                     "Magix.Core.PostBackOrLoad",
                     new Node ());
             }
-            if (!AjaxManager.Instance.IsCallback && Request.HttpMethod == "POST")
+            if (!AjaxManager.Instance.IsCallback && 
+                Request.HttpMethod == "POST" &&
+                !string.IsNullOrEmpty(Page.Request["event"]))
             {
                 RaiseSafeEvent(
                     "Magix.Core.PostHTTPRequest",

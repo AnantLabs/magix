@@ -3655,7 +3655,10 @@ namespace SomeNiceAndUniqueWord_COMPANY_Name_ForInstance
                 }
 
                 e.Params["NewControlID"].Value = nNode.ID;
-                e.Params["ParentControl"].Value = nNode.ParentNode.ParentNode.ID;
+
+                // TODO: Fix ...!!
+                if (nNode.ParentNode != null && nNode.ParentNode.ParentNode != null)
+                    e.Params["ParentControl"].Value = nNode.ParentNode.ParentNode.ID;
 
                 parent.Save();
 

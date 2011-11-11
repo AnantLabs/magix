@@ -51,9 +51,10 @@ namespace Magix.Brix.Components.ActiveControllers.Common
                 node["Top"].Value = 2;
 
             node["IsSelect"].Value = true;
+            node["IsDelete"].Value = false;
             node["ForcedSize"]["width"].Value = 910;
             node["ForcedSize"]["height"].Value = 432;
-            node["Folder"].Value = "/";
+            node["Folder"].Value = "/media/images/";
             node["Filter"].Value = "*.png;*.gif;*.jpg;*.jpeg;";
             node["SelectEvent"].Value = "Magix.Core.ColorPicker.FileSelected";
 

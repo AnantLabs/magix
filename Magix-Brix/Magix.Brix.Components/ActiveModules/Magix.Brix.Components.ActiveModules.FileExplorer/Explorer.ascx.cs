@@ -572,7 +572,9 @@ namespace Magix.Brix.Components.ActiveModules.FileExplorer
 
         private void UpdateSelectedFile()
         {
-            delete.Enabled = true;
+            if (!DataSource.Contains("IsDelete") ||
+                DataSource["IsDelete"].Get<bool>())
+                delete.Enabled = true;
             select.Enabled = true;
             header.Text = "Name: " + DataSource["File"]["Name"].Get<string>();
             extension.Text = "Extension: " + DataSource["File"]["Extension"].Get<string>();

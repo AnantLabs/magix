@@ -124,6 +124,38 @@ given 'Container' WebPart";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ToggleCSSClassOfWidgetOrControl")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ToggleCSSClassOfWidgetOrControl";
+                    a.EventName = "Magix.Common.ToggleCSSClassOfWidgetOrControl";
+                    a.Description = @"Will change the CSS class of the given Widget of 
+Control referenced through its 'ID' parameter";
+                    a.StripInput = true;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "ID";
+                    m.Value = "IdOfYourControlOrWidget";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Values";
+                    a.Params.Add(m);
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "Class1";
+                    m2.Value = "css-class-1";
+                    m.Children.Add(m2);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "Class2";
+                    m2.Value = "css-class-2";
+                    m.Children.Add(m2);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.ChangeAllPropertyValues")) == 0)
                 {
                     Action a = new Action();
@@ -220,6 +252,34 @@ of ParentID";
 
                     m = new Action.ActionParams();
                     m.Name = "ParentID";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.CreateLogEntry")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.CreateLogEntry";
+                    a.EventName = "Magix.Core.Log";
+                    a.Description = @"Will create a new Log 
+entry in your Log. Copy and paste this Action to create your Own log objects";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "LogItemType";
+                    m.Value = "Magix.Demo.LogWasHere";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Header";
+                    m.Value = "Yo man!";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Message";
+                    m.Value = "Magix Illuminate was here ...";
                     a.Params.Add(m);
 
                     a.Save();
