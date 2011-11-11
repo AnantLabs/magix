@@ -218,7 +218,11 @@
     <Content Include="media\images\action-meta-form-hello-world.png" />
     <Content Include="media\images\asax.png" />
     <Content Include="media\images\aspx.png" />
+    <Content Include="media\images\Backgrounds\actions.png" />
+    <Content Include="media\images\Backgrounds\forms.png" />
+    <Content Include="media\images\Backgrounds\objects.png" />
     <Content Include="media\images\Backgrounds\pages.png" />
+    <Content Include="media\images\Backgrounds\templates.png" />
     <Content Include="media\images\book-front-page-believer.png" />
     <Content Include="media\images\book-front-page-CSharp-Believers.png" />
     <Content Include="media\images\book-front-page-CSharp.png" />

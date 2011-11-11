@@ -17,6 +17,7 @@ using Magix.Brix.Components.ActiveTypes.MetaViews;
 using System.IO;
 using Magix.UX;
 using Magix.UX.Effects;
+using Magix.UX.Widgets.Core;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -55,6 +56,48 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             User.Current.SetSetting<string>(
                 e.Params["Name"].Get<string>(),
                 e.Params["Value"].Get<string>());
+        }
+
+        /**
+         * Level2: Changes the CSS class of the Widget or Server Side Control with the givn 'ID'.
+         * The Control must be of type BaseWebControl. The CSS class will be
+         * rolled according to all values in 'Values' parameter
+         */
+        [ActiveEvent(Name = "Magix.Common.ToggleCSSClassOfWidgetOrControl")]
+        protected void Magix_Common_ToggleCSSClassOfWidgetOrControl(object sender, ActiveEventArgs e)
+        {
+            BaseWebControl c = Selector.FindControl<BaseWebControl>(Page, e.Params["ID"].Get<string>());
+
+            if (c == null)
+                throw new ArgumentException("Control or Widget doesn't exist, make sure you give your Widgets a unique ID. And that you give a correct 'ID' parameter");
+
+            if (!e.Params.Contains("Values"))
+                throw new ArgumentException("No Values parameter to roll by ...?");
+
+            int idxNo = 0;
+
+            foreach (Node idx in e.Params["Values"])
+            {
+                string cn = idx.Get<string>().Trim();
+                if (c.CssClass.Contains(cn))
+                {
+                    break;
+                }
+                idxNo += 1;
+            }
+
+            if (idxNo >= e.Params["Values"].Count)
+            {
+                c.CssClass += " " + e.Params["Values"][0].Get<string>();
+            }
+            else
+            {
+                string old = " " + e.Params["Values"][idxNo].Get<string>();
+                string ne = " " + (e.Params["Values"].Count > idxNo + 1 ?
+                    e.Params["Values"][idxNo + 1].Get<string>() :
+                    e.Params["Values"][0].Get<string>());
+                c.CssClass = c.CssClass.Replace(old, ne);
+            }
         }
 
         /**

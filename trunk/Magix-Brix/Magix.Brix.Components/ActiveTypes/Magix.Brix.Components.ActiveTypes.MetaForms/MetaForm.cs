@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using Magix.Brix.Data;
 using Magix.Brix.Types;
 using System.Globalization;
+using System.Web.UI;
+using System.Web;
 
 namespace Magix.Brix.Components.ActiveTypes.MetaForms
 {
@@ -292,6 +294,37 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
             Name = name;
 
             base.Save();
+        }
+
+        /**
+         * Returns the first action from your data storage which are true
+         * for the given criterias. Pass nothing () if no criterias are needed.
+         */
+        public static new MetaForm SelectFirst(params Criteria[] args)
+        {
+            string key = "";
+            foreach (Criteria idx in args)
+            {
+                key += idx.PropertyName;
+                if (idx.Value != null)
+                    key += idx.Value.GetHashCode().ToString();
+            }
+            Page page = HttpContext.Current.CurrentHandler as Page;
+            MetaForm retVal;
+            if (page != null)
+            {
+                retVal = page.Cache.Get(key) as MetaForm;
+                if (retVal != null)
+                    return retVal;
+
+                retVal = ActiveType<MetaForm>.SelectFirst(args);
+                page.Cache.Insert(key, retVal);
+                return retVal;
+            }
+            else
+            {
+                return ActiveType<MetaForm>.SelectFirst(args);
+            }
         }
 
         /**
