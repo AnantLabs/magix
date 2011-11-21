@@ -2061,7 +2061,8 @@ focus, or clicking the widget with his mouse or touch screen";
                                         idx3, 
                                         ct, 
                                         (dataSource == null || dataSource.Count <= idxNo ? null : dataSource[idxNo]), 
-                                        oldSelected);
+                                        oldSelected,
+                                        root);
                                 }
                             }
                         }
@@ -2075,13 +2076,15 @@ focus, or clicking the widget with his mouse or touch screen";
             Node node, 
             System.Web.UI.Control parent, 
             Node dataSource, 
-            string oldSelected)
+            string oldSelected,
+            Node root)
         {
             Node nn = new Node();
 
             nn["TypeName"].Value = node["TypeName"].Get<string>();
             nn["ControlNode"].Value = node;
             nn["_ID"].Value = node["_ID"].Value;
+            nn["DataSourceRootNode"].Value = root;
             if (dataSource != null)
             {
                 nn["DataSource"].Value = dataSource;
@@ -2160,7 +2163,7 @@ focus, or clicking the widget with his mouse or touch screen";
                             if (idx.Name == "_ID")
                                 continue;
 
-                            CreateSingleControl(preview, idx, ctrl, dataSource, oldSelected);
+                            CreateSingleControl(preview, idx, ctrl, dataSource, oldSelected, root);
                         }
                     }
                 }
