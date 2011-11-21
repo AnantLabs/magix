@@ -232,7 +232,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         /**
          * Level2: Will return from 'Start' to 'End', sorted according to newest first 
          * Meta Objects of type 'MetaTypeName' in the 'Objects' parameter. If you set 
-         * 'Ascending' to true, it will sort according to oldest first
+         * 'Ascending' to true, it will sort according to oldest first. If you give
+         * no 'End' parameter, then it will fetch the 10 items starting from start,
+         * if you give no 'Start' parameter, you'll fetch from the top
          */
         [ActiveEvent(Name = "Magix.MetaObjects.GetMetaObjects")]
         protected void Magix_MetaObjects_GetMetaObjects(object sender, ActiveEventArgs e)
@@ -241,11 +243,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (string.IsNullOrEmpty(typeName))
                 throw new ArgumentException("You need to specify a 'MetaTypeName' parameter");
 
-            int start = e.Params["Start"].Get<int>(-1);
+            int start = e.Params["Start"].Get<int>(0);
             int end = e.Params["End"].Get<int>(-1);
 
             if (end == -1)
-                throw new ArgumentException("You need to specify an 'End' parameter");
+                end = start + 10;
 
             bool ascending = false;
 
