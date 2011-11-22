@@ -23,24 +23,8 @@ namespace Magix.UX.Widgets
      * or water'. Add up your choices by adding up ListItems inside of your SelectList.
      */
     [ParseChildren(true, "Items")]
-    public class SelectList : BaseWebControlFormElement
+    public class SelectList : BaseWebControlListFormElement
     {
-        private ListItemCollection _listItems;
-        private string _selectedItemValue;
-
-        /**
-         * Raised whenever the selected value of your select list is changed.
-         * You can also set the selected value in code through using for instance
-         * the SelectedIndex property. Whenever a user changes the actively selected
-         * item of your select list, this event will be raised.
-         */
-        public event EventHandler SelectedIndexChanged;
-
-        public SelectList()
-        {
-            _listItems = new ListItemCollection(this);
-        }
-
         /**
          * If this property is anything higher than 1, which is the default value,
          * the select list will no longer be a 'drop down' type of multiple
@@ -59,150 +43,6 @@ namespace Magix.UX.Widgets
                     SetJsonGeneric("size", value.ToString());
                 ViewState["Size"] = value;
             }
-        }
-
-        /**
-         * A collection of all the items you have inside of your select list.
-         * This will be automatically parse through your .ASPX syntax if you
-         * declare items inside of the .ASPX file, or you can also programmatically 
-         * add items in your codebehind file.
-         */
-        [PersistenceMode(PersistenceMode.InnerDefaultProperty)]
-        public ListItemCollection Items
-        {
-            get
-            {
-                return _listItems;
-            }
-        }
-
-        /**
-         * Will return the currently selected item or set the currently selected item.
-         * There are multiple duplicates of this property, like for instance the 
-         * SelectedIndex property. The default SelectedItem will always be the
-         * first (zero'th) element, regardless of which property you're using to
-         * retrieve it.
-         */
-        public ListItem SelectedItem
-        {
-            get
-            {
-                if (_selectedItemValue == null)
-                {
-                    if (Items.Count == 0)
-                        return null;
-                    return Items[0];
-                }
-                return Items.Find(
-                    delegate(ListItem idx)
-                    {
-                        return idx.Value == _selectedItemValue;
-                    });
-            }
-            set
-            {
-                _selectedItemValue = value.Value;
-                if (IsTrackingViewState)
-                {
-                    this.SetJsonValue("Value", value.Value);
-                }
-                SelectedIndex = Items.IndexOf(value);
-            }
-        }
-
-        /**
-         * Will return the index of the currently selected item or set the currently 
-         * selected item based on its index.
-         * There are multiple duplicates of this property, like for instance the 
-         * SelectedItem property. The default SelectedItem will always be the
-         * first (zero'th) element, regardless of which property you're using to
-         * retrieve it. Meaning that the default value of this property will always
-         * be '0'.
-         */
-        public int SelectedIndex
-        {
-            get
-            {
-                if (Items == null || Items.Count == 0)
-                    return -1;
-                for (int i = 0; i < Items.Count; i++)
-                {
-                    if (Items[i].Selected)
-                        return i;
-                }
-                return 0;
-            }
-            set
-            {
-                if (value == SelectedIndex)
-                    return;
-                for (int i = 0; i < Items.Count; i++)
-                {
-                    if (i == value)
-                        _selectedItemValue = Items[i].Value;
-                }
-                if (IsTrackingViewState)
-                {
-                    SetJsonGeneric("value", _selectedItemValue);
-                }
-            }
-        }
-
-        protected override void TrackViewState()
-        {
-            Items.TrackViewState();
-            base.TrackViewState();
-        }
-
-        protected override object SaveViewState()
-        {
-            object[] retVal = new object[2];
-            retVal[0] = Items.SaveViewState();
-            ViewState["_selectedItemValue"] = _selectedItemValue;
-            retVal[1] = base.SaveViewState();
-            return retVal;
-        }
-
-        protected override void LoadViewState(object savedState)
-        {
-            object[] content = savedState as object[];
-            Items.LoadViewState(content[0]);
-            base.LoadViewState(content[1]);
-            if (_selectedItemValue == null)
-                _selectedItemValue = (string)ViewState["_selectedItemValue"];
-        }
-
-        protected override void SetValue()
-        {
-            string newVal = Page.Request.Params[ClientID];
-            if (newVal != null)
-                _selectedItemValue = newVal;
-        }
-
-        public override void RaiseEvent(string name)
-        {
-            switch (name)
-            {
-                case "change":
-                    if (SelectedIndexChanged != null)
-                        SelectedIndexChanged(this, new EventArgs());
-                    break;
-                default:
-                    base.RaiseEvent(name);
-                    break;
-            }
-        }
-
-        protected override string GetEventsRegisterScript()
-        {
-            string evts = base.GetEventsRegisterScript();
-            if (SelectedIndexChanged != null)
-            {
-                if (evts.Length != 0)
-                    evts += ",";
-                evts += "['change']";
-            }
-			return evts;
         }
 
         protected override void RenderMuxControl(HtmlBuilder builder)
@@ -231,18 +71,6 @@ namespace Magix.UX.Widgets
             if (Size != -1)
                 el.AddAttribute("size", Size.ToString());
             base.AddAttributes(el);
-        }
-
-        public void SetSelectedItemAccordingToValue(string val)
-        {
-            foreach (ListItem idx in Items)
-            {
-                if (idx.Value == val)
-                {
-                    idx.Selected = true;
-                    break;
-                }
-            }
         }
     }
 }

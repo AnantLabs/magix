@@ -38,4 +38,5 @@ using System.Web.UI;
 [assembly: WebResource("Magix.UX.Js.Carousel.js", "application/javascript")]
 [assembly: WebResource("Magix.UX.Js.Calendar.js", "application/javascript")]
 [assembly: WebResource("Magix.UX.Js.Uploader.js", "application/javascript")]
+[assembly: WebResource("Magix.UX.Js.Wheel.js", "application/javascript")]
 

@@ -310,6 +310,22 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             CreateRepeater(e);
             CreateStars(e);
             CreateInPlaceEdit(e);
+            CreateWheel(e);
+        }
+
+        private void CreateWheel(ActiveEventArgs e)
+        {
+            e.Params["Controls"]["Wheel"]["Name"].Value = "Wheel";
+            e.Params["Controls"]["Wheel"]["CssClass"].Value = "mux-wheel";
+            e.Params["Controls"]["Wheel"]["TypeName"].Value = "Magix.MetaForms.Plugins.Wheel";
+            e.Params["Controls"]["Wheel"]["ToolTip"].Value = @"Creates an Wheel type of 
+control, which you can use as a fancy Select List";
+
+            GetCommonEventsAndProperties(e, "Wheel", true);
+
+            e.Params["Controls"]["Wheel"]["Events"]["Changed"].Value = true;
+            e.Params["Controls"]["Wheel"]["Events"]["Changed"]["Description"].Value = @"Raised when 
+the selected value has been updated by the user";
         }
 
         private void CreateInPlaceEdit(ActiveEventArgs e)
@@ -1136,8 +1152,19 @@ focus, or clicking the widget with his mouse or touch screen";
                             int val = 0;
                             if (typeNode.Contains("Properties") &&
                                 typeNode["Properties"].Contains("Value"))
-                                val = int.Parse(typeNode["Properties"]["Checked"].Value.ToString());;
+                                val = int.Parse(typeNode["Properties"]["Checked"].Value.ToString()); ;
                             (ctrl as RatingControl).Value = val;
+                        }
+                    } break;
+                case "Magix.MetaForms.Plugins.Wheel":
+                    {
+                        if (ctrl is Wheel)
+                        {
+                            int val = 0;
+                            if (typeNode.Contains("Properties") &&
+                                typeNode["Properties"].Contains("Value"))
+                                val = int.Parse(typeNode["Properties"]["Checked"].Value.ToString()); ;
+                            //(ctrl as Wheel).Value = val;
                         }
                     } break;
             }
@@ -1296,6 +1323,7 @@ focus, or clicking the widget with his mouse or touch screen";
                 case "Magix.MetaForms.Plugins.HiddenField":
                 case "Magix.MetaForms.Plugins.Calendar":
                 case "Magix.MetaForms.Plugins.Stars":
+                case "Magix.MetaForms.Plugins.Wheel":
                     {
                         BaseControl ctrl = e.Params["Control"].Value as BaseControl;
                         SerializeControlIntoNode(
@@ -1403,6 +1431,14 @@ focus, or clicking the widget with his mouse or touch screen";
                         return null;
 
                     return (ctrl as RatingControl).Value.ToString();
+                case "Magix.MetaForms.Plugins.Wheel":
+                    if (!(ctrl is Wheel))
+                        return null;
+
+                    //if ((ctrl as Wheel).Value == 0)
+                        return null;
+
+                    //return (ctrl as Wheel).Value.ToString();
                 default:
                     return null;
             }
@@ -1430,6 +1466,11 @@ focus, or clicking the widget with his mouse or touch screen";
                         Label btn = new Label();
                         btn.Text = "Label";
                         btn.CssClass = "span-2";
+                        e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.CheckBox":
+                    {
+                        CheckBox btn = new CheckBox();
                         e.Params["Control"].Value = btn;
                     } break;
                 case "Magix.MetaForms.Plugins.InPlaceEdit":
@@ -1566,6 +1607,12 @@ focus, or clicking the widget with his mouse or touch screen";
                     {
                         RatingControl btn = new RatingControl();
                         btn.CssClass = "span-2";
+
+                        e.Params["Control"].Value = btn;
+                    } break;
+                case "Magix.MetaForms.Plugins.Wheel":
+                    {
+                        Wheel btn = new Wheel();
 
                         e.Params["Control"].Value = btn;
                     } break;
