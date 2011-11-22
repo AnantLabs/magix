@@ -8,16 +8,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Web.UI;
+using Magix.UX.Widgets.Core;
 
 namespace Magix.UX.Widgets
 {
     public class ListItemCollection : ICollection, IList<ListItem>, IStateManager
     {
         private readonly List<ListItem> _list = new List<ListItem>();
-        private readonly SelectList _control;
+        private readonly BaseWebControlListFormElement _control;
         private bool _trackingViewState;
 
-        public ListItemCollection(SelectList control)
+        public ListItemCollection(BaseWebControlListFormElement control)
         {
             _control = control;
         }

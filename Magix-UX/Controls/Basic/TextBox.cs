@@ -42,27 +42,75 @@ namespace Magix.UX.Widgets
             Normal,
 
             /**
-             * Password mode TextBox, will not show the characters as they're written.
+             * Telephone mode TextBox, will validate accordingly to HTML5 tel type of 
+             * input element.
              */
-            Password,
+            Phone,
 
             /**
-             * Email mode TextBox, will validate accordingly to HTML5 email type of 
-             * input element.
+             * Search
+             */
+            Search,
+
+            /**
+             * Uniform Resource Locator, URL
+             */
+            Url,
+
+            /**
+             * Email
              */
             Email,
 
             /**
-             * Number mode TextBox, will validate accordingly to HTML5 number type of 
-             * input element.
+             * Date and Time
+             */
+            DateTime,
+
+            /**
+             * Date
+             */
+            Date,
+
+            /**
+             * Month
+             */
+            Month,
+
+            /**
+             * Week
+             */
+            Week,
+
+            /**
+             * Time
+             */
+            Time,
+
+            /**
+             * Local Date and Time
+             */
+            DateTimeLocal,
+
+            /**
+             * Decimal number
              */
             Number,
 
             /**
-             * Telephone mode TextBox, will validate accordingly to HTML5 tel type of 
-             * input element.
+             * Range, inbetween two values
              */
-            Phone
+            Range,
+
+            /**
+             * Color type of input
+             */
+            Color,
+
+            /**
+             * Password mode TextBox, will not show the characters as they're written.
+             */
+            Password
         };
 
         /**

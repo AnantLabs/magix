@@ -8,6 +8,7 @@ using System;
 using System.ComponentModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Magix.UX.Widgets.Core;
 
 namespace Magix.UX.Widgets
 {
@@ -16,7 +17,7 @@ namespace Magix.UX.Widgets
         private string _value;
         private string _text;
         private bool _enabled = true;
-        private SelectList _selectList;
+        private BaseWebControlListFormElement _selectList;
         private bool _hasSetSelectedTrue;
 
         public ListItem()
@@ -50,7 +51,7 @@ namespace Magix.UX.Widgets
             }
         }
 
-        internal SelectList SelectList
+        internal BaseWebControlListFormElement SelectList
         {
             get { return _selectList; }
             set
