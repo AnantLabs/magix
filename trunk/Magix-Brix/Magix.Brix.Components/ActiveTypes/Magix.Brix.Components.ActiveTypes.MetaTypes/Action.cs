@@ -189,29 +189,14 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
          */
         public static new Action SelectFirst(params Criteria[] args)
         {
-            string key = "";
+            string key = "action_";
             foreach (Criteria idx in args)
             {
                 key += idx.PropertyName;
                 if (idx.Value != null)
                     key += idx.Value.GetHashCode().ToString();
             }
-            Page page = HttpContext.Current.CurrentHandler as Page;
-            Action retVal;
-            if (page != null)
-            {
-                retVal = page.Cache.Get(key) as Action;
-                if (retVal != null)
-                    return retVal;
-
-                retVal = ActiveType<Action>.SelectFirst(args);
-                page.Cache.Insert(key, retVal);
-                return retVal;
-            }
-            else
-            {
-                return ActiveType<Action>.SelectFirst(args);
-            }
+            return ActiveType<Action>.SelectFirst(args);
         }
 
         /**

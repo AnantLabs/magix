@@ -193,7 +193,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 switch (idx.Name)
                 {
                     case "if":
-                        if (CheckStatement(e.Params["if"].Get<string>(), e.Params))
+                        if (CheckStatement(idx.Get<string>(), e.Params))
                         {
                             hasFound = true;
                             RaiseEvent(
@@ -209,7 +209,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             if (keyWords[keyWords.Count - 2] == "if" ||
                                 keyWords[keyWords.Count - 2] == "else if")
                             {
-                                if (CheckStatement(e.Params["else if"].Get<string>(), e.Params))
+                                if (CheckStatement(idx.Get<string>(), e.Params))
                                 {
                                     hasFound = true;
                                     RaiseEvent(
@@ -230,7 +230,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                                 keyWords[keyWords.Count - 2] == "else if")
                             {
                                 RaiseEvent(
-                                    "Magix.System.else if",
+                                    "Magix.System.else",
                                     idx);
                             }
                             else
@@ -343,9 +343,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         case "<":
                             return components[0].CompareTo(components[2]) == 1;
                         case ">=":
-                            return components[0].CompareTo(components[2]) != 1;
-                        case "<=":
                             return components[0].CompareTo(components[2]) != -1;
+                        case "<=":
+                            return components[0].CompareTo(components[2]) != 1;
                         default:
                             throw new ArgumentException("Sorry, unknown operator; '" + components[1] + "' ...");
                     }
