@@ -713,7 +713,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         [ActiveEvent(Name = "Magix.MetaAction.RaiseAction-FromActionScreen")]
         protected void Magix_MetaAction_RaiseAction_FromActionScreen(object sender, ActiveEventArgs e)
         {
-            RaiseEvent("Magix.MetaAction.RaiseAction", e.Params);
+            Node node = new Node();
+
+            if (e.Params.Contains("ActionName"))
+                node["ActionName"].Value = e.Params["ActionName"].Get<string>();
+
+            if (e.Params.Contains("ActionID"))
+                node["ActionID"].Value = e.Params["ActionID"].Get<string>();
+
+            RaiseEvent("Magix.MetaAction.RaiseAction", node);
             ShowMessage("Action Successfully Executed ...");
         }
 
@@ -1377,30 +1385,31 @@ referring to the exact ID of an action, and needing to be an integer ...");
          */
         private static void GetActionParameters(Node node, Action.ActionParams a)
         {
+            node.AddForceNew(new Node(a.Name));
             switch (a.TypeName)
             {
                 case "System.String":
-                    node[a.Name].Value = a.Value;
+                    node[node.Count - 1].Value = a.Value;
                     break;
                 case "System.Int32":
-                    node[a.Name].Value = int.Parse(a.Value, CultureInfo.InvariantCulture);
+                    node[node.Count - 1].Value = int.Parse(a.Value, CultureInfo.InvariantCulture);
                     break;
                 case "System.Decimal":
-                    node[a.Name].Value = decimal.Parse(a.Value, CultureInfo.InvariantCulture);
+                    node[node.Count - 1].Value = decimal.Parse(a.Value, CultureInfo.InvariantCulture);
                     break;
                 case "System.DateTime":
-                    node[a.Name].Value = DateTime.ParseExact(a.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    node[node.Count - 1].Value = DateTime.ParseExact(a.Value, "yyyy.MM.dd HH:mm:ss", CultureInfo.InvariantCulture);
                     break;
                 case "System.Boolean":
-                    node[a.Name].Value = bool.Parse(a.Value);
+                    node[node.Count - 1].Value = bool.Parse(a.Value);
                     break;
                 default:
-                    node[a.Name].Value = a.Value;
+                    node[node.Count - 1].Value = a.Value;
                     break;
             }
             foreach (Action.ActionParams idx in a.Children)
             {
-                GetActionParameters(node[a.Name], idx);
+                GetActionParameters(node[node.Count - 1], idx);
             }
         }
 

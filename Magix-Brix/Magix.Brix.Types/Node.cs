@@ -488,6 +488,17 @@ namespace Magix.Brix.Types
         }
 
         /**
+         * Level3: Adds a new node to the collection
+         */
+        [DebuggerStepThrough]
+        public void AddForceNew(Node item)
+        {
+            string itemName = item.Name;
+            _children.Add(item);
+            item._parent = this;
+        }
+
+        /**
          * Level3: Adds a range of nodes to collection
          */
         [DebuggerStepThrough]

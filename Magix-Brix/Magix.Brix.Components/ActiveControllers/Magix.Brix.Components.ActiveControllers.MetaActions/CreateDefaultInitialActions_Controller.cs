@@ -142,9 +142,9 @@ the given 'Value' into the Caching.Cache Page object with the given 'Key'";
                     a.Name = "Magix.DynamicEvent.execute";
                     a.EventName = "Magix.System.execute";
                     a.Description = @"Will play 
-'Cool-Breeze.oga' if Node structure contains '{[Test].Value}' which is more than or 
-equal to the name 'Thomas Hansen', otherwise play 'The-Last-Barfly.oga'. 
-Legal operators are ==, !=, >=, <=, >, <";
+'Cool-Breeze.oga' if Node structure contains '{[Time].Value} >= 0200', 
+otherwise play 'The-Last-Barfly.oga'. Legal operators are ==, !=, >=, <=, >, <. All 
+comparison is made by string comparison, alphabetically before, means less";
                     a.StripInput = false;
 
                     Action.ActionParams m = new Action.ActionParams();
