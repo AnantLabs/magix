@@ -318,13 +318,17 @@ namespace Magix.Brix.Components.ActiveControllers.MetaForms
             e.Params["Controls"]["Wheel"]["Name"].Value = "Wheel";
             e.Params["Controls"]["Wheel"]["CssClass"].Value = "mux-wheel";
             e.Params["Controls"]["Wheel"]["TypeName"].Value = "Magix.MetaForms.Plugins.Wheel";
-            e.Params["Controls"]["Wheel"]["ToolTip"].Value = @"Creates an Wheel type of 
+            e.Params["Controls"]["Wheel"]["ToolTip"].Value = @"Creates a Wheel type of 
 control, which you can use as a fancy Select List";
 
             GetCommonEventsAndProperties(e, "Wheel", true);
 
-            e.Params["Controls"]["Wheel"]["Events"]["Changed"].Value = true;
-            e.Params["Controls"]["Wheel"]["Events"]["Changed"]["Description"].Value = @"Raised when 
+            e.Params["Controls"]["Wheel"]["Properties"]["Items"].Value = typeof(string[]).FullName;
+            e.Params["Controls"]["Wheel"]["Properties"]["Items"]["Description"].Value = @"The 
+different Values of the Wheel";
+
+            e.Params["Controls"]["Wheel"]["Events"]["SelectedIndexChanged"].Value = true;
+            e.Params["Controls"]["Wheel"]["Events"]["SelectedIndexChanged"]["Description"].Value = @"Raised when 
 the selected value has been updated by the user";
         }
 
@@ -1797,29 +1801,36 @@ focus, or clicking the widget with his mouse or touch screen";
                         {
                             try
                             {
-                                switch (info.GetGetMethod(true).ReturnType.FullName)
+                                if (info.GetGetMethod(true).ReturnType.FullName.StartsWith("Magix.UX.Widgets.ListItemCollection"))
                                 {
-                                    case "System.String":
-                                        tmp = tmp.ToString();
-                                        break;
-                                    case "System.Boolean":
-                                        tmp = bool.Parse(tmp.ToString());
-                                        break;
-                                    case "System.DateTime":
-                                        tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Int32":
-                                        tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    case "System.Decimal":
-                                        tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                        break;
-                                    default:
-                                        if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
-                                            tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
-                                        else
-                                            throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
-                                        break;
+                                    tmp = GetCollection(ctrl as BaseWebControlListFormElement, tmp);
+                                }
+                                else
+                                {
+                                    switch (info.GetGetMethod(true).ReturnType.FullName)
+                                    {
+                                        case "System.String":
+                                            tmp = tmp.ToString();
+                                            break;
+                                        case "System.Boolean":
+                                            tmp = bool.Parse(tmp.ToString());
+                                            break;
+                                        case "System.DateTime":
+                                            tmp = DateTime.ParseExact(tmp.ToString(), "yyyy.MM.dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                            break;
+                                        case "System.Int32":
+                                            tmp = int.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                            break;
+                                        case "System.Decimal":
+                                            tmp = decimal.Parse(tmp.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                            break;
+                                        default:
+                                            if (info.GetGetMethod(true).ReturnType.BaseType == typeof(Enum))
+                                                tmp = Enum.Parse(info.GetGetMethod(true).ReturnType, tmp.ToString());
+                                            else
+                                                throw new ApplicationException("Unsupported type for serializing to Widget, type was: " + info.GetGetMethod(true).ReturnType.FullName);
+                                            break;
+                                    }
                                 }
                                 info.GetSetMethod(true).Invoke(ctrl, new object[] { tmp });
                             }
@@ -1842,6 +1853,25 @@ focus, or clicking the widget with his mouse or touch screen";
             // Only setting ID if it's undefined in properties ...
             if (string.IsNullOrEmpty(ctrl.ID))
                 ctrl.ID = "ID" + node["_ID"].Value.ToString();
+        }
+
+        private ListItemCollection GetCollection(BaseWebControlListFormElement ctrl, object tmp)
+        {
+            string strs = tmp as string;
+            ListItemCollection r = new ListItemCollection(ctrl);
+            if (!string.IsNullOrEmpty(strs))
+            {
+                foreach (string idx in strs.Split(
+                    new string[] { "||" }, 
+                    StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!idx.Contains("|"))
+                        throw new ArgumentException("You need to defined your collection as; 'thomas|123456||john|234567', with || between items and | between value and text ...");
+                    ListItem l = new ListItem(idx.Split('|')[0], idx.Split('|')[1]);
+                    r.Add(l);
+                }
+            }
+            return r;
         }
 
         private string GetExpression(string expr, Node dataSource)

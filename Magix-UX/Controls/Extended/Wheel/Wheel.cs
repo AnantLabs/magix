@@ -19,6 +19,11 @@ namespace Magix.UX.Widgets
     [ParseChildren(true, "Items")]
     public class Wheel : BaseWebControlListFormElement
     {
+        public Wheel()
+        {
+            CssClass = "mux-wheel";
+        }
+
         protected override void RenderMuxControl(HtmlBuilder builder)
         {
             using (Element el = builder.CreateElement("div"))
@@ -26,13 +31,9 @@ namespace Magix.UX.Widgets
                 AddAttributes(el);
                 foreach (ListItem idx in Items)
                 {
-                    using (Element l = builder.CreateElement("option"))
+                    using (Element l = builder.CreateElement("div"))
                     {
-                        l.AddAttribute("value", idx.Value);
-                        if (!idx.Enabled)
-                            l.AddAttribute("disabled", "disabled");
-                        if (idx.Selected)
-                            l.AddAttribute("selected", "selected");
+                        l.AddAttribute("class", "mux-item");
                         l.Write(idx.Text);
                     }
                 }

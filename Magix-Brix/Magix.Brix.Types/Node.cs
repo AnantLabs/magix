@@ -688,5 +688,16 @@ namespace Magix.Brix.Types
         {
             _children.Sort(del);
         }
+
+        /**
+         * Level3 Returns the outer most parent node, the top node of the hierarchy
+         */
+        public Node RootNode()
+        {
+            Node tmp = this;
+            while (tmp.Parent != null)
+                tmp = tmp.Parent;
+            return tmp;
+        }
     }
 }

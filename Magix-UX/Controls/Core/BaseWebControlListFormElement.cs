@@ -47,6 +47,10 @@ namespace Magix.UX.Widgets.Core
             {
                 return _listItems;
             }
+            internal set
+            {
+                _listItems = value;
+            }
         }
 
         /**

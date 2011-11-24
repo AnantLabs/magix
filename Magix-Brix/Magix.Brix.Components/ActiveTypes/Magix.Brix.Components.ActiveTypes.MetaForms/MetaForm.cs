@@ -95,18 +95,6 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
                 return null;
             }
 
-            public override void Save()
-            {
-                if (string.IsNullOrEmpty(Name))
-                {
-                    Name = "Default - Please Change";
-                    Value = "default!";
-                    TypeName = typeof(string).FullName;
-                }
-                this.ValidateUniqueChildren();
-                base.Save();
-            }
-
             private void ValidateUniqueChildren()
             {
                 if (Children.ListRetrieved)
@@ -302,29 +290,14 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
          */
         public static new MetaForm SelectFirst(params Criteria[] args)
         {
-            string key = "";
+            string key = "form_";
             foreach (Criteria idx in args)
             {
                 key += idx.PropertyName;
                 if (idx.Value != null)
                     key += idx.Value.GetHashCode().ToString();
             }
-            Page page = HttpContext.Current.CurrentHandler as Page;
-            MetaForm retVal;
-            if (page != null)
-            {
-                retVal = page.Cache.Get(key) as MetaForm;
-                if (retVal != null)
-                    return retVal;
-
-                retVal = ActiveType<MetaForm>.SelectFirst(args);
-                page.Cache.Insert(key, retVal);
-                return retVal;
-            }
-            else
-            {
-                return ActiveType<MetaForm>.SelectFirst(args);
-            }
+            return ActiveType<MetaForm>.SelectFirst(args);
         }
 
         /**

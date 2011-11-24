@@ -134,7 +134,7 @@
                                     TextLength="30"
                                     Info='<%#Eval("Name") %>'
                                     CssClass="span-4 last mux-in-place-edit mux-left-float prop-editor"
-                                    Visible='<%#Eval("Value").Equals("System.String") %>'
+                                    Visible='<%#Eval("Value").Equals("System.String") || Eval("Value").Equals("System.String[]") %>'
                                     Text='<%#GetPropertyValue(Eval("Name")) %>' />
                                 <mux:InPlaceEdit
                                     runat="server"

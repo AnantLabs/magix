@@ -63,6 +63,168 @@ you're done, you can rewire all your Actions in one Swoop";
                 }
 
                 if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.GetFromCache")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.GetFromCache";
+                    a.EventName = "Magix.Common.GetFromCache";
+                    a.Description = @"Will append 
+the given 'Key' Caching.Cache Page object into 'Value' if existing. If no 'Key' is given, 
+but 'Contains' is given, it will return first element that contains 'Contains' string as 'Key'";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Key";
+                    m.Value = "Magix.Demo.CachingObject";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.ClearCache")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.ClearCache";
+                    a.EventName = "Magix.Common.ClearCache";
+                    a.Description = @"Will clear the Caching.Cache object 
+associated with the Page object. Warning! Entire Cache will be emptied";
+                    a.StripInput = true;
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.RemoveFromCache")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.RemoveFromCache";
+                    a.EventName = "Magix.Common.RemoveFromCache";
+                    a.Description = @"Will remove 
+the given 'Key' Caching.Cache Page object. If no 'Key' is given, but 'Contains' is given, 
+it will sequentially remove everything that has 'Contains' as a part of its 'Key'";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Key";
+                    m.Value = "Magix.Demo.CachingObject";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.AddToCache")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.AddToCache";
+                    a.EventName = "Magix.Common.AddToCache";
+                    a.Description = @"Will append 
+the given 'Value' into the Caching.Cache Page object with the given 'Key'";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "Key";
+                    m.Value = "Magix.Demo.CachingObject";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Value";
+                    m.Value = "Magix Illuminate I";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
+                    Criteria.Eq("Name", "Magix.DynamicEvent.execute")) == 0)
+                {
+                    Action a = new Action();
+                    a.Name = "Magix.DynamicEvent.execute";
+                    a.EventName = "Magix.System.execute";
+                    a.Description = @"Will play 
+'Cool-Breeze.oga' if Node structure contains '{[Test].Value}' which is more than or 
+equal to the name 'Thomas Hansen', otherwise play 'The-Last-Barfly.oga'. 
+Legal operators are ==, !=, >=, <=, >, <";
+                    a.StripInput = false;
+
+                    Action.ActionParams m = new Action.ActionParams();
+                    m.Name = "if";
+                    m.Value = "{[Name].Value} == Thomas Hansen";
+                    a.Params.Add(m);
+
+                    Action.ActionParams m2 = new Action.ActionParams();
+                    m2.Name = "raise";
+                    m2.Value = "Magix.Core.ShowMessage";
+                    m.Children.Add(m2);
+
+                    Action.ActionParams m3 = new Action.ActionParams();
+                    m3.Name = "Message";
+                    m3.Value = "Jo Creator!";
+                    m2.Children.Add(m3);
+
+                    m = new Action.ActionParams();
+                    m.Name = "if";
+                    m.Value = "{[Time].Value} >= 0200";
+                    a.Params.Add(m);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "raise";
+                    m2.Value = "Magix.Core.PlaySound";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "File";
+                    m3.Value = "media/The-Last-Barfly.oga";
+                    m2.Children.Add(m3);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "raise";
+                    m2.Value = "Magix.Core.ShowMessage";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "Message";
+                    m3.Value = "Good Night ... :)";
+                    m2.Children.Add(m3);
+
+                    m = new Action.ActionParams();
+                    m.Name = "else";
+                    a.Params.Add(m);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "raise";
+                    m2.Value = "Magix.Core.PlaySound";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "File";
+                    m3.Value = "media/Cool-Breeze.oga";
+                    m2.Children.Add(m3);
+
+                    m2 = new Action.ActionParams();
+                    m2.Name = "raise";
+                    m2.Value = "Magix.Core.ShowMessage";
+                    m.Children.Add(m2);
+
+                    m3 = new Action.ActionParams();
+                    m3.Name = "Message";
+                    m3.Value = "Let's Party :)";
+                    m2.Children.Add(m3);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Name";
+                    m.Value = "Thomas Hansen";
+                    a.Params.Add(m);
+
+                    m = new Action.ActionParams();
+                    m.Name = "Time";
+                    m.Value = "0400";
+                    a.Params.Add(m);
+
+                    a.Save();
+                }
+
+                if (Action.CountWhere(
                     Criteria.Eq("Name", "Magix.DynamicEvent.ClearOverriddenActions")) == 0)
                 {
                     Action a = new Action();
@@ -715,7 +877,7 @@ radius of rounded corners, and it will be 'AntiPixelated', and have the descript
                     a.Description = @"Will play the given 'File' sound. If the sample 
 sound file doesn't work, you've probably got something wrong with the setup 
 of your Web Server. Make sure the file extension .oga is associated with the 
-MIME type of audio/ogg. PS! For the record; Cool-Breeze.oga and The-Last-Barfly.ogg 
+MIME type of audio/ogg. PS! For the record; Cool-Breeze.oga and The-Last-Barfly.oga 
 are both songs composed by our CTO Thomas Hansen. They are both performed by Thomas Hansen and 
 his wife Inger Hoeoeg, and are to be considered licensed to you under the terms of 
 Creative Commons Attribution-ShareAlike 3.0";
