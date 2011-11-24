@@ -18,6 +18,7 @@ using System.IO;
 using Magix.UX;
 using Magix.UX.Effects;
 using Magix.UX.Widgets.Core;
+using System.Collections;
 
 namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 {
@@ -56,6 +57,306 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             User.Current.SetSetting<string>(
                 e.Params["Name"].Get<string>(),
                 e.Params["Value"].Get<string>());
+        }
+
+        /**
+         * Level2: Will add the given 'Value' with the given 'Key' to the Caching.Cache Page object
+         */
+        [ActiveEvent(Name = "Magix.Common.AddToCache")]
+        protected void Magix_Common_AddToCache(object sender, ActiveEventArgs e)
+        {
+            if (!e.Params.Contains("Key") && !e.Params.Contains("Value"))
+                throw new ArgumentException("You need to specify what 'Key' and 'Value' you wish to add ...");
+
+            Page.Cache[e.Params["Key"].Get<string>()] = Node.FromJSONString(e.Params["Value"].ToJSONString());
+        }
+
+        /**
+         * Level2: Will return either the 'Key' which must be exact match, or the first item of 'Contains'
+         * that contains the given string as its key
+         */
+        [ActiveEvent(Name = "Magix.Common.GetFromCache")]
+        protected void Magix_Common_GetFromCache(object sender, ActiveEventArgs e)
+        {
+            if (!e.Params.Contains("Key") && !e.Params.Contains("Contains"))
+                throw new ArgumentException("You need to specify what 'Key' you wish to remove ...");
+
+            e.Params["Value"].UnTie();
+
+            if (e.Params.Contains("Key"))
+            {
+                object tmp = Page.Cache.Get(e.Params["Key"].Get<string>());
+                if (tmp != null)
+                    e.Params["Value"].Value = tmp;
+            }
+            else
+            {
+                IDictionaryEnumerator enume = Page.Cache.GetEnumerator();
+                while (enume.MoveNext())
+                {
+                    if (enume.Key.ToString().Contains(e.Params["Contains"].Get<string>()))
+                    {
+                        e.Params["Value"].Value = enume.Value;
+                        return;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Level2: Will remove the given 'Key' item from your Caching. Cache object 
+         * associated with the Page object. Or 'Contains' to remove all with the given key.
+         */
+        [ActiveEvent(Name = "Magix.Common.RemoveFromCache")]
+        protected void Magix_Common_RemoveFromCache(object sender, ActiveEventArgs e)
+        {
+            if (!e.Params.Contains("Key") && !e.Params.Contains("Contains"))
+                throw new ArgumentException("You need to specify what 'Key' you wish to remove ...");
+
+            if (e.Params.Contains("Key"))
+            {
+                if (Page.Cache.Get(e.Params["Key"].Get<string>()) != null)
+                    Page.Cache.Remove(e.Params["Key"].Get<string>());
+            }
+            else
+            {
+                List<string> keys = new List<string>();
+                IDictionaryEnumerator enume = Page.Cache.GetEnumerator();
+                while (enume.MoveNext())
+                {
+                    if (enume.Key.ToString().Contains(e.Params["Key"].Get<string>()))
+                        keys.Add(enume.Key.ToString());
+                }
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    Page.Cache.Remove(keys[i]);
+                }
+            }
+        }
+
+        /**
+         * Level2: Clears the Caching.Cache associated with the Page object
+         */
+        [ActiveEvent(Name = "Magix.Common.ClearCache")]
+        protected void Magix_Common_ClearCache(object sender, ActiveEventArgs e)
+        {
+            List<string> keys = new List<string>();
+            IDictionaryEnumerator enume = Page.Cache.GetEnumerator();
+            while (enume.MoveNext())
+            {
+                keys.Add(enume.Key.ToString());
+            }
+            for (int i = 0; i < keys.Count; i++)
+            {
+                Page.Cache.Remove(keys[i]);
+            }
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'if' Value node
+         */
+        [ActiveEvent(Name = "Magix.System.if")]
+        protected void Magix_System_if(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'if' Value node
+         */
+        [ActiveEvent(Name = "Magix.System.else if")]
+        protected void Magix_System_else_if(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'if' or 'else if' Value node of previous node
+         */
+        [ActiveEvent(Name = "Magix.System.else")]
+        protected void Magix_System_else(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
+         * Level2: Executes the given node, recursively. Known keywords are; 'if'/'else'[optional], '', '', ''
+         */
+        [ActiveEvent(Name = "Magix.System.execute")]
+        protected void Magix_System_execute(object sender, ActiveEventArgs e)
+        {
+            List<string> keyWords = new List<string>();
+            bool hasFound = false;
+            foreach (Node idx in e.Params)
+            {
+                keyWords.Add(idx.Name);
+                switch (idx.Name)
+                {
+                    case "if":
+                        if (CheckStatement(e.Params["if"].Get<string>(), e.Params))
+                        {
+                            hasFound = true;
+                            RaiseEvent(
+                                "Magix.System.if",
+                                idx);
+                        }
+                        else
+                            hasFound = false;
+                        break;
+                    case "else if":
+                        if (!hasFound)
+                        {
+                            if (keyWords[keyWords.Count - 2] == "if" ||
+                                keyWords[keyWords.Count - 2] == "else if")
+                            {
+                                if (CheckStatement(e.Params["else if"].Get<string>(), e.Params))
+                                {
+                                    hasFound = true;
+                                    RaiseEvent(
+                                        "Magix.System.else if",
+                                        idx);
+                                }
+                            }
+                            else
+                            {
+                                throw new ArgumentException("You can't have an 'else if' without an 'if' or an 'else if' in front of it");
+                            }
+                        }
+                        break;
+                    case "else":
+                        if (!hasFound)
+                        {
+                            if (keyWords[keyWords.Count - 2] == "if" ||
+                                keyWords[keyWords.Count - 2] == "else if")
+                            {
+                                RaiseEvent(
+                                    "Magix.System.else if",
+                                    idx);
+                            }
+                            else
+                            {
+                                throw new ArgumentException("You can't have an 'else' without an 'if' or an 'else if' in front of it");
+                            }
+                        }
+                        break;
+                    case "raise":
+                        RaiseEvent(
+                            idx.Get<string>(),
+                            idx);
+                        break;
+                }
+            }
+        }
+
+        private void ExecuteNode(Node node)
+        {
+            RaiseEvent(
+                "Magix.System.execute",
+                node);
+        }
+
+        private class Expression
+        {
+            public Expression(string expr, Node node)
+            {
+                RawExpression = expr;
+                Node = node;
+            }
+
+            public readonly string RawExpression;
+
+            public readonly Node Node;
+
+            public bool Compute()
+            {
+                List<string> components = new List<string>(GetComponents());
+                return Compute(components);
+            }
+
+            private IEnumerable<string> GetComponents()
+            {
+                List<string> r = new List<string>();
+                string tmp = RawExpression;
+                tmp.Trim();
+
+                string expr1 = null;
+                string expr2 = null;
+                string expr3 = null;
+                string buffer = "";
+
+                foreach (char idx in tmp)
+                {
+                    buffer += idx;
+                    if (idx == '}')
+                    {
+                        if (expr1 == null)
+                        {
+                            expr1 = buffer;
+                            buffer = "";
+                        }
+                        else if (expr2 == null)
+                        {
+                            expr2 = buffer;
+                            buffer = "";
+                        }
+                    }
+                    else if (idx == ' ' && buffer.Trim().Length > 0)
+                    {
+                        if (expr1 != null && expr2 == null)
+                        {
+                            expr2 = buffer.Trim();
+                            buffer = "";
+                            expr3 = "";
+                        }
+                    }
+                }
+
+                if (buffer != null)
+                    expr3 = buffer;
+
+                if (expr1 != null)
+                    r.Add(CommonActions_Controller.GetExpressionValue(expr1, Node).ToString());
+                if (expr2 != null)
+                    r.Add(CommonActions_Controller.GetExpressionValue(expr2, Node).ToString());
+                if (expr3 != null)
+                    r.Add(CommonActions_Controller.GetExpressionValue(expr3, Node).ToString());
+
+                return r;
+            }
+
+            private bool Compute(List<string> components)
+            {
+                if (components.Count == 0)
+                    return false;
+                if (components.Count == 1)
+                    return components.Equals("True");
+                if (components.Count == 3)
+                {
+                    switch (components[1])
+                    {
+                        case "==":
+                            return components[0] == components[2];
+                        case "!=":
+                            return components[0] != components[2];
+                        case ">":
+                            return components[0].CompareTo(components[2]) == -1;
+                        case "<":
+                            return components[0].CompareTo(components[2]) == 1;
+                        case ">=":
+                            return components[0].CompareTo(components[2]) != 1;
+                        case "<=":
+                            return components[0].CompareTo(components[2]) != -1;
+                        default:
+                            throw new ArgumentException("Sorry, unknown operator; '" + components[1] + "' ...");
+                    }
+                }
+                throw new ArgumentException("Sorry, but your Expression; '" + RawExpression + "' just doesn't compute. Too many/few components in it ...");
+            }
+        }
+
+        private bool CheckStatement(string expr, Node node)
+        {
+            return new Expression(expr, node).Compute();
         }
 
         /**
@@ -823,9 +1124,11 @@ can only contain numerical characters to be legal",
          * {[Objects][0][Email].Value} will return whatever happens to be at the Value property of 
          * the 'Email' node, which is in the 'first child' of the 'Objects' node within your DataSource, if 
          * you're in a Form of some sort for instance. While; {[0].Name} will return the name of the 
-         * first node, and {[Objects]} will return all nodes in the 'Objects' node
+         * first node, and {[Objects]} will return all nodes in the 'Objects' node. If the expression starts 
+         * with '{root[', it will traverse and starts its traversion process at the outer most parent Node,
+         * the first Node within its Hierarchy
          */
-        private object GetExpressionValue(string expression, Node source)
+        public static object GetExpressionValue(string expression, Node source)
         {
             if (expression == null)
                 return null;
@@ -837,9 +1140,12 @@ can only contain numerical characters to be legal",
                 return expression;
             }
 
-            string expr = expression.Split('{')[1].Split('}')[0];
+            string expr = expression.Split('{')[1].Split('}')[0].Trim();
 
             Node x = source;
+
+            if (expr.StartsWith("root["))
+                x = source.RootNode();
 
             bool isInside = false;
             string bufferNodeName = null;
