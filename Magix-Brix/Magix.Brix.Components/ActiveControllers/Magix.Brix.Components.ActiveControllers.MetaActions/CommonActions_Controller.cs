@@ -162,6 +162,26 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level2: Raises the given node
+         */
+        [ActiveEvent(Name = "Magix.System.raise")]
+        protected void Magix_System_raise(object sender, ActiveEventArgs e)
+        {
+            RaiseEvent(
+                e.Params.Get<string>(),
+                e.Params);
+        }
+
+        /**
+         * Level2: Raises an Exception
+         */
+        [ActiveEvent(Name = "Magix.System.throw")]
+        protected void Magix_System_throw(object sender, ActiveEventArgs e)
+        {
+            throw new ApplicationException(e.Params.Get<string>());
+        }
+
+        /**
          * Level2: Branching according to statement contained within 'if' Value node
          */
         [ActiveEvent(Name = "Magix.System.else if")]
@@ -180,7 +200,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Executes the given node, recursively. Known keywords are; 'if'/'else'[optional], '', '', ''
+         * Level2: Executes the given node recursively. Known keywords are; 'if'/'else'/'else if', 'raise', 
+         * 'throw', 'execute', 'foreach'.
+         * 'if' will evaluate a one or three component statement, and if true execute the block within, else it 
+         * will continue until it finds and 'else if' that matches or an else, or the next statement. 'raise' will 
+         * raise the given Active Event, and 'throw' will throw an exception. 'execute' is useful to group logical 
+         * blocks of code, and then use the Value of your 'execute' node as its comment
          */
         [ActiveEvent(Name = "Magix.System.execute")]
         protected void Magix_System_execute(object sender, ActiveEventArgs e)
@@ -192,6 +217,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 keyWords.Add(idx.Name);
                 switch (idx.Name)
                 {
+                    case "execute":
+                        RaiseEvent(
+                            "Magix.System.execute",
+                            idx);
+                        break;
                     case "if":
                         if (CheckStatement(idx.Get<string>(), e.Params))
                         {
@@ -241,7 +271,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         break;
                     case "raise":
                         RaiseEvent(
-                            idx.Get<string>(),
+                            "Magix.System.raise",
+                            idx);
+                        break;
+                    case "throw":
+                        RaiseEvent(
+                            "Magix.System.throw",
                             idx);
                         break;
                 }
@@ -1125,7 +1160,7 @@ can only contain numerical characters to be legal",
          * the 'Email' node, which is in the 'first child' of the 'Objects' node within your DataSource, if 
          * you're in a Form of some sort for instance. While; {[0].Name} will return the name of the 
          * first node, and {[Objects]} will return all nodes in the 'Objects' node. If the expression starts 
-         * with '{root[', it will traverse and starts its traversion process at the outer most parent Node,
+         * with '{DataSource[', it will traverse and starts its traversion process at the outer most parent Node,
          * the first Node within its Hierarchy
          */
         public static object GetExpressionValue(string expression, Node source)
@@ -1144,7 +1179,7 @@ can only contain numerical characters to be legal",
 
             Node x = source;
 
-            if (expr.StartsWith("root["))
+            if (expr.StartsWith("DataSource["))
                 x = source.RootNode();
 
             bool isInside = false;
@@ -1168,28 +1203,37 @@ can only contain numerical characters to be legal",
                             throw new ArgumentException("Opps, empty node name/index ...");
 
                         bool allNumber = true;
-                        foreach (char idxC in bufferNodeName)
+                        if (bufferNodeName == "../")
                         {
-                            if (("0123456789").IndexOf(idxC) == -1)
-                            {
-                                allNumber = false;
-                                break;
-                            }
-                        }
-                        if (allNumber)
-                        {
-                            int intIdx = int.Parse(bufferNodeName);
-                            if (x.Count >= intIdx)
-                                x = x[intIdx];
-                            return null;
+                            if (x.Parent == null)
+                                throw new NullReferenceException("Attempted at trying to traverse up to a level which doesn't exist. Parent Root Node reached, and found '../' still ...");
+                            x = x.Parent;
                         }
                         else
                         {
-                            x = x[bufferNodeName];
+                            foreach (char idxC in bufferNodeName)
+                            {
+                                if (("0123456789").IndexOf(idxC) == -1)
+                                {
+                                    allNumber = false;
+                                    break;
+                                }
+                            }
+                            if (allNumber)
+                            {
+                                int intIdx = int.Parse(bufferNodeName);
+                                if (x.Count >= intIdx)
+                                    x = x[intIdx];
+                                return null;
+                            }
+                            else
+                            {
+                                x = x[bufferNodeName];
+                            }
+                            bufferNodeName = "";
+                            isInside = false;
+                            continue;
                         }
-                        bufferNodeName = "";
-                        isInside = false;
-                        continue;
                     }
                     bufferNodeName += tmp;
                 }

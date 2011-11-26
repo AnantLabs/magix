@@ -142,15 +142,24 @@ the given 'Value' into the Caching.Cache Page object with the given 'Key'";
                     a.Name = "Magix.DynamicEvent.execute";
                     a.EventName = "Magix.System.execute";
                     a.Description = @"Will play 
-'Cool-Breeze.oga' if Node structure contains '{[Time].Value} >= 0200', 
-otherwise play 'The-Last-Barfly.oga'. Legal operators are ==, !=, >=, <=, >, <. All 
-comparison is made by string comparison, alphabetically before, means less";
+'The-Last-Barfly.oga' if Node structure contains '{[Time].Value} >= 0200', 
+otherwise play 'Cool-Breeze.oga'. Legal operators are ==, !=, >=, <=, >, <. All 
+comparison is made by string comparison, alphabetically before, means less. The 
+first if will show 'Hello Creator' if the 'Name' node contains 'Thomas Hansen' as its Value. 
+The Expressions works such that you dereference your nodes, either by number, or name. Use 
+'root' to start traversing at root level, outer most parent. Use '../' to go upwards one 
+level";
                     a.StripInput = false;
+
+                    Action.ActionParams ro = new Action.ActionParams();
+                    ro.Name = "execute";
+                    ro.Value = "Will play the Last Barfly, after 2AM, or Cool Breeeze, before 2AM. And show one or two message boxes, depending upon the stuff in the 'Data' Node. Set 'Name' to 'Thomas Hansen' to initiate a special message box ...";
+                    a.Params.Add(ro);
 
                     Action.ActionParams m = new Action.ActionParams();
                     m.Name = "if";
-                    m.Value = "{[Name].Value} == Thomas Hansen";
-                    a.Params.Add(m);
+                    m.Value = "{DataSource[Data][Name].Value} == Thomas Hansen";
+                    ro.Children.Add(m);
 
                     Action.ActionParams m2 = new Action.ActionParams();
                     m2.Name = "raise";
@@ -164,8 +173,8 @@ comparison is made by string comparison, alphabetically before, means less";
 
                     m = new Action.ActionParams();
                     m.Name = "if";
-                    m.Value = "{[Time].Value} >= 0200";
-                    a.Params.Add(m);
+                    m.Value = "{DataSource[Data][Time].Value} >= 0200";
+                    ro.Children.Add(m);
 
                     m2 = new Action.ActionParams();
                     m2.Name = "raise";
@@ -189,7 +198,7 @@ comparison is made by string comparison, alphabetically before, means less";
 
                     m = new Action.ActionParams();
                     m.Name = "else";
-                    a.Params.Add(m);
+                    ro.Children.Add(m);
 
                     m2 = new Action.ActionParams();
                     m2.Name = "raise";
@@ -211,15 +220,19 @@ comparison is made by string comparison, alphabetically before, means less";
                     m3.Value = "Let's Party :)";
                     m2.Children.Add(m3);
 
+                    ro = new Action.ActionParams();
+                    ro.Name = "Data";
+                    a.Params.Add(ro);
+
                     m = new Action.ActionParams();
                     m.Name = "Name";
                     m.Value = "Thomas Hansen";
-                    a.Params.Add(m);
+                    ro.Children.Add(m);
 
                     m = new Action.ActionParams();
                     m.Name = "Time";
                     m.Value = "0400";
-                    a.Params.Add(m);
+                    ro.Children.Add(m);
 
                     a.Save();
                 }

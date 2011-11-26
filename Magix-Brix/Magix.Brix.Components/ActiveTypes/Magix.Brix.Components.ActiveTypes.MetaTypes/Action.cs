@@ -80,19 +80,6 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
                 if (string.IsNullOrEmpty(TypeName))
                     TypeName = "System.String";
 
-                if (ParentParam != null || 
-                    ParentAction != null)
-                {
-                    if ((ParentParam == null ? ParentAction.Params : ParentParam.Children).Exists(
-                        delegate(ActionParams idx)
-                        {
-                            return idx.Name == this.Name && idx.ID != this.ID && idx.ID != 0;
-                        }))
-                    {
-                        throw new ArgumentException("Sorry buddy, but that name is already taken on this level ...");
-                    }
-                }
-
                 base.Save();
             }
 

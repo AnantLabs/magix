@@ -2010,7 +2010,8 @@ focus, or clicking the widget with his mouse or touch screen";
                     e.Params["Controls"].Value as Node,
                     e.Params["Control"].Value as System.Web.UI.Control,
                     null,
-                    e.Params.Contains("DataSource") ? e.Params["DataSource"].Value as Node : null,
+                    e.Params.Contains("DataSource") ? 
+                        e.Params["DataSource"].Value as Node : null,
                     e.Params["DataSourceRootNode"].Value as Node);
             }
         }
