@@ -162,6 +162,24 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level2: Branching according to statement contained within 'if' Value node
+         */
+        [ActiveEvent(Name = "Magix.System.else if")]
+        protected void Magix_System_else_if(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'if' or 'else if' Value node of previous node
+         */
+        [ActiveEvent(Name = "Magix.System.else")]
+        protected void Magix_System_else(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
          * Level2: Raises the given node
          */
         [ActiveEvent(Name = "Magix.System.raise")]
@@ -182,30 +200,40 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Branching according to statement contained within 'if' Value node
+         * Level2: Loops through all nodes in expression and raises 'execute' with every one as a 'this' instance
          */
-        [ActiveEvent(Name = "Magix.System.else if")]
-        protected void Magix_System_else_if(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.System.foreach")]
+        protected void Magix_System_foreach(object sender, ActiveEventArgs e)
         {
-            ExecuteNode(e.Params);
-        }
+            Node node = CommonActions_Controller.GetExpressionValue(e.Params.Get<string>(), e.Params) as Node;
 
-        /**
-         * Level2: Branching according to statement contained within 'if' or 'else if' Value node of previous node
-         */
-        [ActiveEvent(Name = "Magix.System.else")]
-        protected void Magix_System_else(object sender, ActiveEventArgs e)
-        {
-            ExecuteNode(e.Params);
+            foreach (Node idx in node)
+            {
+                e.Params["idx"].Value = idx;
+                RaiseEvent(
+                    "Magix.System.execute",
+                    e.Params);
+            }
         }
 
         /**
          * Level2: Executes the given node recursively. Known keywords are; 'if'/'else'/'else if', 'raise', 
-         * 'throw', 'execute', 'foreach'.
-         * 'if' will evaluate a one or three component statement, and if true execute the block within, else it 
-         * will continue until it finds and 'else if' that matches or an else, or the next statement. 'raise' will 
-         * raise the given Active Event, and 'throw' will throw an exception. 'execute' is useful to group logical 
-         * blocks of code, and then use the Value of your 'execute' node as its comment
+         * 'throw', 'execute', 'foreach'. 'execute' will create a scope of execution, where you can comment as
+         * a part of the value of the 'execute' node.
+         * 'if' will evaluate a one, or three-compunds, statement, and if true execute the block within, else it 
+         * will continue until it finds and 'else if' that matches or an 'else' if none of the previous 'if' and 
+         * 'else if' matched. Both 'if',
+         * 'else if' and 'else' works as 'execute' blocks if their statement evaluates to true. 'raise' will 
+         * raise the given Active Event, and 'throw' will throw an exception, with the value of the 'throw' node, as 
+         * the error message. All other nodes, if they only contains lower case alphabetical characters, in addition
+         * to space(s), and they start with '@', will be raise as 'Magix.Dynamic.Evaluate.@keyword' with the '@keyword' 
+         * being thename of the node, and the 'this' node as its parameter. This way you can create what would probably 
+         * be best described as something similar to Lisp Macros. 'foreach' will act as a scope, passing in 'idx'
+         * as the iterative value of the Node expression within the Value of the 'foreach' node. Meaning you can 
+         * have something such as foreach {DataSource[Objects]}, and within a node that says 
+         * 'if' {idx[Name].Value == John Doe}, and this code will be called once for every single node as the 'idx'
+         * node within the returned Node expression from the original for each expression, which must return a Node
+         * expression. Meaning ending with ']'
          */
         [ActiveEvent(Name = "Magix.System.execute")]
         protected void Magix_System_execute(object sender, ActiveEventArgs e)
@@ -279,6 +307,31 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             "Magix.System.throw",
                             idx);
                         break;
+                    case "foreach":
+                        RaiseEvent(
+                            "Magix.System.foreach",
+                            idx);
+                        break;
+                    default:
+                        if (idx.Name.StartsWith("@"))
+                        {
+                            bool found = false;
+                            foreach (char idxC in idx.Name)
+                            {
+                                if (("abcdefghijklmnopqrstuvwxyz ").IndexOf(idxC) == -1)
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found)
+                            {
+                                RaiseEvent(
+                                    "Magix.Dynamic.Evaluate." + idx.Name,
+                                    idx);
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -350,11 +403,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     expr3 = buffer;
 
                 if (expr1 != null)
-                    r.Add(CommonActions_Controller.GetExpressionValue(expr1, Node).ToString());
+                    r.Add(CommonActions_Controller.GetExpressionValue(expr1, Node) as string);
                 if (expr2 != null)
-                    r.Add(CommonActions_Controller.GetExpressionValue(expr2, Node).ToString());
+                    r.Add(CommonActions_Controller.GetExpressionValue(expr2, Node) as string);
                 if (expr3 != null)
-                    r.Add(CommonActions_Controller.GetExpressionValue(expr3, Node).ToString());
+                    r.Add(CommonActions_Controller.GetExpressionValue(expr3, Node) as string);
 
                 return r;
             }
@@ -1181,6 +1234,11 @@ can only contain numerical characters to be legal",
 
             if (expr.StartsWith("DataSource["))
                 x = source.RootNode();
+            else if (!expr.StartsWith("["))
+            {
+                x = source[expr.Split('.')[0]].Value as Node;
+                expr = expr.Substring(expr.Split('.')[0].Length);
+            }
 
             bool isInside = false;
             string bufferNodeName = null;
