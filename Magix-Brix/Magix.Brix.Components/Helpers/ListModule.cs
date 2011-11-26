@@ -400,7 +400,7 @@ namespace Magix.Brix.Components
          * Level2: Will return the filter criteria for the grid ...
          */
         [ActiveEvent(Name = "DBAdmin.Grid.GetActiveFilters")]
-        public void DBAdmin_Grid_GetActiveFilters(object sender, ActiveEventArgs e)
+        private void DBAdmin_Grid_GetActiveFilters(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
             {
@@ -420,7 +420,7 @@ namespace Magix.Brix.Components
          * Level2: Will set the Active Row of the grid, if the 'FullTypeName' is correct
          */
         [ActiveEvent(Name = "DBAdmin.Grid.SetActiveRow")]
-        public void DBAdmin_Grid_SetActiveRow(object sender, ActiveEventArgs e)
+        private void DBAdmin_Grid_SetActiveRow(object sender, ActiveEventArgs e)
         {
             if (e.Params["FullTypeName"].Get<string>() == DataSource["FullTypeName"].Get<string>())
             {

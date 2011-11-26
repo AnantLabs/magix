@@ -259,7 +259,8 @@ namespace Doxygen.NET
             if (!forceReload && t.Members.Count > 0)
                 return;
 
-            FileInfo typeXmlFile = XmlFiles.Find(delegate(FileInfo file) 
+            FileInfo typeXmlFile = XmlFiles.Find(
+                delegate(FileInfo file) 
                 { 
                     return file.Name.Remove(file.Name.LastIndexOf(file.Extension)) == t.ID; 
                 });

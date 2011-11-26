@@ -36,6 +36,11 @@ namespace Doxygen.NET
         public string Name { get; protected internal set; }
 
         /**
+         * Level3: The Active Event Handler of the method, if any
+         */
+        public string ActiveEvent { get; protected internal set; }
+
+        /**
          * Level3: Protected, private, public or internal
          */
         public virtual string AccessModifier { get; protected internal set; }

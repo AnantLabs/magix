@@ -427,13 +427,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         case "!=":
                             return components[0] != components[2];
                         case ">":
-                            return components[0].CompareTo(components[2]) == -1;
+                            return (components[0] ?? "").CompareTo(components[2]) == -1;
                         case "<":
-                            return components[0].CompareTo(components[2]) == 1;
+                            return (components[0] ?? "").CompareTo(components[2]) == 1;
                         case ">=":
-                            return components[0].CompareTo(components[2]) != -1;
+                            return (components[0] ?? "").CompareTo(components[2]) != -1;
                         case "<=":
-                            return components[0].CompareTo(components[2]) != 1;
+                            return (components[0] ?? "").CompareTo(components[2]) != 1;
                         default:
                             throw new ArgumentException("Sorry, unknown operator; '" + components[1] + "' ...");
                     }
