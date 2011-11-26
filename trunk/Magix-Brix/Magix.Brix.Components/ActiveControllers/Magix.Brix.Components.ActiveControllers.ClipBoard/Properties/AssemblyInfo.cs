@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Magix.Bri.Components.ActiveControllers.ClipBoard")]
+[assembly: AssemblyTitle("Magix.Brix.Components.ActiveControllers.ClipBoard")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Magix.Bri.Components.ActiveControllers.ClipBoard")]
+[assembly: AssemblyProduct("Magix.Brix.Components.ActiveControllers.ClipBoard")]
 [assembly: AssemblyCopyright("Copyright ©  2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

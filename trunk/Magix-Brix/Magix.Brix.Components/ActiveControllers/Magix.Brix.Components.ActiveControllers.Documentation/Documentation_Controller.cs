@@ -103,9 +103,15 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                     {
                         if (idxM.Name.StartsWith(n))
                         {
-                            e.Params["Result"].Value = e.Params["Result"].Get<string>("") + idxM.Description + "\n";
+                            e.Params["Result"].Value = 
+                                e.Params["Result"].Get<string>("") + 
+                                idx.Namespace.FullName + "." + idx.Name + "." + idxM.Name + ":" +
+                                idxM.Description + 
+                                "\n\n";
                         }
                     }
+                    if (e.Params.Contains("Result"))
+                        e.Params["Result"].Value = e.Params["Result"].Get<string>().Trim();
                 }
             }
         }

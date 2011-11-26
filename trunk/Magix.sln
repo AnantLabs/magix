@@ -158,8 +158,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.Activ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.MetaForms", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.MetaForms\Magix.Brix.Components.ActiveModules.MetaForms.csproj", "{CE5684F6-9048-4BD0-841A-DCC8564497D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Bri.Components.ActiveControllers.ClipBoard", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Bri.Components.ActiveControllers.ClipBoard\Magix.Bri.Components.ActiveControllers.ClipBoard.csproj", "{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.ClipBoard", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.ClipBoard\Magix.Brix.Components.ActiveModules.ClipBoard.csproj", "{7C5ADCAB-7AA8-42D5-98BB-803DC64F05CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.WymEditor", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components'ActiveModules.WymEditor\Magix.Brix.Components.ActiveModules.WymEditor.csproj", "{7891C33A-BAA7-4F0A-A60E-4E6B02EC46D8}"
@@ -171,6 +169,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.Games", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Games\Magix.Brix.Components.ActiveControllers.Games.csproj", "{A26DEBF3-FD60-4D41-802F-63B913A80582}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveModules.Games", "Magix-Brix\Magix.Brix.Components\ActiveModules\Magix.Brix.Components.ActiveModules.Games\Magix.Brix.Components.ActiveModules.Games.csproj", "{0CB67104-30EE-403A-B051-5C153FDEB17F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magix.Brix.Components.ActiveControllers.ClipBoard", "Magix-Brix\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.ClipBoard\Magix.Brix.Components.ActiveControllers.ClipBoard.csproj", "{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -481,12 +481,6 @@ Global
 		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Debug-MUX|Any CPU.Build.0 = Debug|Any CPU
 		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE5684F6-9048-4BD0-841A-DCC8564497D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug-MUX|Any CPU.ActiveCfg = Debug|Any CPU
-		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug-MUX|Any CPU.Build.0 = Debug|Any CPU
-		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C5ADCAB-7AA8-42D5-98BB-803DC64F05CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7C5ADCAB-7AA8-42D5-98BB-803DC64F05CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C5ADCAB-7AA8-42D5-98BB-803DC64F05CD}.Debug-MUX|Any CPU.ActiveCfg = Debug|Any CPU
@@ -523,6 +517,12 @@ Global
 		{0CB67104-30EE-403A-B051-5C153FDEB17F}.Debug-MUX|Any CPU.Build.0 = Debug|Any CPU
 		{0CB67104-30EE-403A-B051-5C153FDEB17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CB67104-30EE-403A-B051-5C153FDEB17F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug-MUX|Any CPU.ActiveCfg = Debug|Any CPU
+		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Debug-MUX|Any CPU.Build.0 = Debug|Any CPU
+		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -581,9 +581,9 @@ Global
 		{D4D65F4C-A198-4509-8B10-DA18922F0B24} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{A444E0DB-317F-428D-A692-27C00A14C03F} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{AC323830-1341-411F-B86B-E1CEE976B690} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
-		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{5A7952E3-2815-401F-B423-D6FEE5281DD9} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{A26DEBF3-FD60-4D41-802F-63B913A80582} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
+		{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB} = {A28922C8-A4CB-420D-BA01-583AA4389D75}
 		{78EE9D9B-691B-4D5C-AD72-9023366BE44F} = {279C3A57-B61C-4F90-B809-A56C2E0E3402}
 		{FFBD473D-063D-45D8-AE96-1AFCDFB05D3B} = {279C3A57-B61C-4F90-B809-A56C2E0E3402}
 		{1239EAE2-0A90-4E26-9A23-3442EBBCC366} = {279C3A57-B61C-4F90-B809-A56C2E0E3402}

@@ -8,8 +8,8 @@
     <ProjectGuid>{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Magix.Bri.Components.ActiveControllers.ClipBoard</RootNamespace>
-    <AssemblyName>Magix.Bri.Components.ActiveControllers.ClipBoard</AssemblyName>
+    <RootNamespace>Magix.Brix.Components.ActiveControllers.ClipBoard</RootNamespace>
+    <AssemblyName>Magix.Brix.Components.ActiveControllers.ClipBoard</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
