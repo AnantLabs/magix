@@ -87,6 +87,30 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         }
 
         /**
+         * Level2: Sink for returning documentation for Active Event. Pass in 'ActiveEventName' 
+         * and 'Result' will contain the documentation, concatenated from all its Event Handlers
+         */
+        [ActiveEvent(Name = "Magix.Core.GetDocumentationForActiveEvent")]
+        protected void Magix_Core_GetDocumentationForActiveEvent(object sender, ActiveEventArgs e)
+        {
+            string n = e.Params["ActiveEventName"].Get<string>();
+            if (!string.IsNullOrEmpty(n))
+            {
+                n = n.Replace(".", "_");
+                foreach (Class idx in Docs.GetAllClasses())
+                {
+                    foreach (Method idxM in idx.GetMethods(2))
+                    {
+                        if (idxM.Name.StartsWith(n))
+                        {
+                            e.Params["Result"].Value = e.Params["Result"].Get<string>("") + idxM.Description + "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
          * Level2: Gets every namespace and class into a tree hierarchy and loads up the Tree module
          * to display it
          */
