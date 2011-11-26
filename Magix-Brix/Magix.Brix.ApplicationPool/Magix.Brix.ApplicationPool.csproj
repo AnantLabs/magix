@@ -430,9 +430,9 @@
       <Project>{13A3391A-39FC-40BD-8EA0-0353090675C7}</Project>
       <Name>Magix.UX</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Bri.Components.ActiveControllers.ClipBoard\Magix.Bri.Components.ActiveControllers.ClipBoard.csproj">
+    <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.ClipBoard\Magix.Brix.Components.ActiveControllers.ClipBoard.csproj">
       <Project>{9714F9E8-ADB7-4E77-A0FB-1628B5C841BB}</Project>
-      <Name>Magix.Bri.Components.ActiveControllers.ClipBoard</Name>
+      <Name>Magix.Brix.Components.ActiveControllers.ClipBoard</Name>
     </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components\ActiveControllers\Magix.Brix.Components.ActiveControllers.Common\Magix.Brix.Components.ActiveControllers.Common.csproj">
       <Project>{A444E0DB-317F-428D-A692-27C00A14C03F}</Project>

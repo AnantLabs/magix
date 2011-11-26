@@ -9,7 +9,7 @@ using Magix.Brix.Loader;
 using Magix.Brix.Types;
 using System.Collections.Generic;
 
-namespace Magix.Bri.Components.ActiveControllers.ClipBoard
+namespace Magix.Brix.Components.ActiveControllers.ClipBoard
 {
     /**
      * Level2: Encapsulates the logic needed for manipulating the clipboard, add items to it, and 

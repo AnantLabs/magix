@@ -659,6 +659,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["Top"].Value = 23;
             node["Last"].Value = true;
             node["IsFind"].Value = true;
+            node["ReUseNode"].Value = true;
             node["IsDelete"].Value = false;
             node["SetFocus"].Value = true;
 
@@ -669,6 +670,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["IDColumnName"].Value = "Select";
             node["IDColumnValue"].Value = "Select";
             node["IDColumnEvent"].Value = "Magix.Meta.SelectActiveEvent";
+            node["IDColumnEvent"]["ActionID"].Value = e.Params["ActionID"].Value;
 
             node["Type"]["Properties"]["Name"]["ReadOnly"].Value = true;
             node["Type"]["Properties"]["Name"]["NoFilter"].Value = false;
@@ -676,6 +678,36 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
+        }
+
+        /**
+         * Level2: Sink for selecting an Active Event to encapsulate within an Action
+         */
+        [ActiveEvent(Name = "Magix.Meta.SelectActiveEvent")]
+        protected void Magix_Meta_SelectActiveEvent(object sender, ActiveEventArgs e)
+        {
+            using (Transaction tr = Adapter.Instance.BeginTransaction())
+            {
+                int id = e.Params["Parameters"]["IDColumnEvent"]["ActionID"].Get<int>();
+                Action a = Action.SelectByID(id);
+                a.EventName = _activeEvents[e.Params["ID"].Get<int>()].Left;
+
+                if (string.IsNullOrEmpty(a.Description))
+                {
+                    a.Description = _activeEvents[e.Params["ID"].Get<int>()].Right;
+                    ShowMessage("Description was fetched from all Event Handlers handling this Active Event within your Application Pool ...", "Info", 5000);
+                }
+                else
+                {
+                    ShowMessage("No description was copied since your Action had a description from before. To allow for pasting of the default description, make sure your Action has no description before you select an Active Event to wrap ...", "Info", 7000);
+                }
+
+                a.Save();
+
+                tr.Commit();
+
+                ActiveEvents.Instance.RaiseClearControls("child");
+            }
         }
 
         private static List<Tuple<string, string>> _activeEvents = new List<Tuple<string, string>>();
@@ -760,10 +792,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         private string GetDocumentation(string actEvtName)
         {
             Node node = new Node();
+
             node["ActiveEventName"].Value = actEvtName;
+
             RaiseEvent(
                 "Magix.Core.GetDocumentationForActiveEvent",
                 node);
+
             return node["Result"].Get<string>("");
         }
 
