@@ -34,14 +34,14 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
             {
                 TipOfToday.Instance.CreateTip(@"
 <h1>Welcome to Magix</h1>
-<p>Magix is a platform for Creating Web Applications, either by using C#, VB.NET or other .Net languages, or through using one of the <em>No-Code-Required Application Creators</em>, which actually are far more flexible than you can imagine.</p>
-<p>I am Heka, and I am the Soul of Magix Illuminate. By using me as your guide through Magix, you can start Conquering Magix Faster.</p>
-<p>In fact, your first Tip is to use the Arrow Keys in the Top/Right corner of this window to navigate forward and fast read the next upcoming 5-10 tips. They are all crucial for getting started with Magix ...</p>
+<p>Magix is a platform for Creating Web Applications, either by using C#, VB.NET or other .Net languages, or through using one of the <em>No-Code-Required Application Creators</em>, which you can use to create Web Applications without coding.</p>
+<p>I am Heka, the Anthropomorphized Soul of Magix Illuminate I. By using me as your guide through Magix, you can become friend with Magix faster.</p>
+<p>In fact, your first Tip, is to use the Arrow Keys in the Top/Right corner of this window, to navigate forward and fast read the next upcoming 5-10 tips. They are important for getting started with Magix ...</p>
 <p>If you need to re-read a previous tip, you can click the previous button ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Magix is ...</h2>
-<p>Magix Illuminate has so many features, trying to list them all, would demand several books. Though already
+<p>Magix Illuminate has many features, abd trying to list them all, would demand many books. Though already
 before you need to create anything yourself, Magix Illuminate is already extremely useful. You can for instance use Magix ...</p>
 <ul>
 <li>As your own personal DropBox server - By using the File Manager</li>
@@ -53,33 +53,29 @@ before you need to create anything yourself, Magix Illuminate is already extreme
 <li>Vanity QR Code Generator</li>
 <li>CMS or Publishing System</li>
 <li>Micro Website CMS</li>
-<li>Excel File Manipulator</li>
+<li>Excel CSV File Manipulator</li>
 </ul>
-<p>All these things comes in addition to the virtually endless possibilities you have for creating your own Applications.</p>
+<p>All these things comes in addition to the endless possibilities you have for creating your own Applications, either without code, or by using any .Net CLR language.</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Creating Stuff</h2>
-<p>Magix consists of two majorly important pre-installed modules; The <em>'Publishing'</em> System and the <em>'MetaType'</em> System.</p>
-<p>Publishing is where you go to create your WebSite, and MetaTypes is where you go to create Applications, though, really the difference is more blurry than you think. For instance; It is difficult to show any Applications to your end users, if you do not have any Pages to 'host' your Application ... </p>
-<p>So Pages can be thought of as Views in your Applications if you want to, or your entire hierarchy of Pages can be viewed as a gigantic plugin Application, which it actually in fact is. Everything is a little bit more 'mushy' in Magix than what you're used to form other systems. Which brings us on to ...</p>
-<p>It is actually quite useful to <em>stop separating</em> between 'Old-Time Constructs' such as 'code', 'data', 'input' and 'output' when using Magix. Old World thinking, trying to categorize things into different types, are much less useful in Magix than what you think. In Magix, everything is kind of 'mushy'. Or <em>'everything is everything'</em> I guess you can say. As weird and counter intuitive as this may sound, this is actually the <em>key facilitator</em> for you to Stay in Control and deliver Secure and Stable Systems, regardless of the Complexity of your Domain Problem. This was one of the key discoveries in the O2 Architecture, which is the core Architectural Idea behind Magix Illuminate. Or 'the invention' so to speak.</p>
-<p>We recommend people to <em>Start with Learning Publishing</em> and how the WebPages work. Then later, only when a firm grasp of Pages and Templates are understood, we recommend moving onto Applications. Although, if you have had much experience with Publishing Systems before, you might want to rush this part. The basic understanding of Pages should be easily acquired for a Savvy iPhone user in less than a couple of hours though.</p>");
+<p>Magix consists of two important pre-installed modules; The <em>'Publishing'</em> System and the <em>'MetaType'</em> System.</p>
+<p>Publishing is where you go to create WebSites or to publish text, images and videos. MetaTypes is where you go to create Applications.</p>
+<p>We recommend you to <em>start with learning the Publishing concepts first</em>. Then later, only when a firm grasp of Pages and Templates are understood, moving onto Applications. Although, if you have had much experience with Publishing Systems before, you might want to rush this part. The basic understanding of Pages should be easily acquired for a Savvy website owner relatively fast.</p>");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Basics ...</h2>
-<p>But before we can do anything else, we need to learn the <em>Basics</em> ...</p>
-<p>Most of Magix is made up of 'Basic Components', which are tied together to create a whole.</p>
-<p>For instance, a button will mostly look the same everywhere. By default a button will be Gray and use Blue, Big Fonts ...</p>
-<p>A good example of a Button is the Top/Right corner of this tooltip, which has two Buttons. One Paging forward, and another paging Backwards in the Hierarchy of Tips and Tricks ...</p>
-<p>A 'Grid' is when you see a list of items. A good example of a Grid would be MetaTypes/Meta Actions ...</p>
-<p>There are many types of 'Basic Components' like these in Magix. Over the next couple of pages, we'll be walking through some of them which you'll need to understand to be able to get the <em>most out of Magix</em> ...</p>
+<p>Before we can do anything, we need to learn the <em>Basics</em> ...</p>
+<p>Most of Magix is made up of 'Basic Components', which are tied together to create a whole. For instance, a button will mostly look the same everywhere. By default a button will be Gray and use Blue, Big Fonts. A good example of a Button is the Top/Right corner of this tooltip, which has two Buttons. One Paging forward, and another paging Backwards in the Hierarchy of Tips and Tricks ...</p>
+<p>A 'Grid' is when you see a list of items. A good example of a Grid would be Actions or Views. Grids are useful for displaying lists of information.</p>
+<p>There are many types of basic components like these in Magix. Over the next couple of pages, we'll be walking through some of them which you'll need to understand to be able to get the <em>most out of Magix</em> ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Grids</h2>
-<p>Most Grids in Magix have tons of features. These features includes; Paging, In Place Editing of Values, Filtering, and so on. Open up <em>Actions</em> by clicking the icon at 2 O'Clock on your Dashboard.</p>
-<p>To Filter according to a Column, all you've got to do is to click the header of your Grid, choose which type of Filter you want to apply, type in its value, and click OK. Try to filter your Actions according to 'debug' by clicking the Name Header. This should give you two actions, turn on and turn off debugging. Though some screens, such as the Action screen, also have a 'Fast Filter' textbox. Make sure you remove your filter before you leave this screen again, by clicking the Name column and remove the text and click OK.</p>
-<p>The arrow buttons, normally at the bottom of your grids makes it possible to traverse forward and backwards in your list of items. The double arrows takes you <em>'all the way'</em> in its direction ...</p>
-<p><em>Open up Meta Objects/Meta Actions</em> and play around with that grid by filtering, creating a couple of new items and so on.</p>
-<p>Paging normally turns on automagixally according to when it's needed. To see the Paging buttons, you'll normally need to have more than 10 items in your grid. If you don't see them in your Action screen, make sure all Filters and filter queries are turned OFF. To see 'all the way paging', you'll normally need more than 20 items ...</p>
+<p>Most Grids in Magix have many features. These features includes paging, in place editing, filtering, etc. Open up <em>Actions</em> by clicking the icon at 2 O'Clock on your Dashboard.</p>
+<p>To Filter according to a column, all you've got to do is to click the header of your Grid, choose which type of filter you want to apply, type in its value, and click OK. Try to filter your actions according to 'debug' by clicking the name header column. This should give you two actions, turn on and turn off debugging. Though some screens, such as the action screen, also have a 'fast filter' textbox. Make sure you remove your filter before you leave this screen again, by clicking the name column and remove the text and click OK.</p>
+<p>The arrow buttons, normally at the bottom of your grids makes it possible to traverse forward and backwards in your list of items. The double arrows takes you <em>'all the way'</em> in its direction</p>
+<p><em>Open up Objects/Actions</em> and play around with that grid by filtering, creating a couple of new items and so on.</p>
+<p>Paging normally turns on automagixally according to when it's needed. To see the paging buttons, you'll normally need to have more than 10 items in your grid. If you don't see them in your Action screen, make sure all Filters and filter queries are turned OFF. To see 'all the way paging', you'll normally need more than 20 items ...</p>
 <p>Make sure you also click the 'Edit' column. Sometimes this column will say 'Edit' while sometimes it'll show a number. However, clicking the Edit Column, will always somehow bring you to a View where that object can be edited in 'full version' ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
@@ -192,13 +188,20 @@ before you need to create anything yourself, Magix Illuminate is already extreme
 Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in case you wondered ... ;)</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
-<h2>TypeNames ...</h2>
+<h2>Type Names</h2>
 <p>If you take a look at your <em>Meta Objects</em> now you will see a new object with the Type Name of 'EmailSubscription'. The <em>'Type Name'</em> property from your MetaView decides the Type Name of your Objects ...</p>
 <p>These 'Type Names' are important to distinguish from different types of Objects.</p>
 <p>One Object might be of type 'Customer', while another object might be of type 'Email', and so on. What names you give your Types is <em>crucial</em>! Name clashes here might create very hard to track down bugs and such ...</p>
 <p>Take some care when naming your Types!</p>
 <p>It's probably a good practice to some how make sure they've got unique names, also across your organization if you want to use plugins made by others.</p>
 <p>We encourage people to use type names such as; ""CompanyName.Department.Customer"", and never 'Customer' directly. In fact, your <em>homework</em> for this lesson is to go and rename your 'Customer' TypeName, and rename the Type Name to; 'CompanyName.Department.Customer'. Where Company Name and Department are <em>your</em> company name and your department ...</p>
+");
+                TipOfToday.Instance.CreateTip(@"
+<h2>Expressions</h2>
+<p>There are several places where you will need to understand Expressions. And expression starts out with '{' and ends with '}'.</p>
+<p>The purpose of an Expression is to de-reference something within your existing Node structure. Every Module and Action has a Node associated with it, which can either be statically, or dynamically built. This Node can be seen as the action/module data source.</p>
+<p>This statement; 'root[Customer][Name].Value' means you will de-references the Value of whatever is inside the Root node of either your action or your module, within its Name node, which should be within the Customer node on root level. If this value, or these nodes doesn't exist somehow, a null value will be returned.</p>
+<p>If you start your expressions with 'root', it will traverse all the way upwards until it finds the top outer most node. Otherwise it will always expect to find its node relatively according to where it is while traversing</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Drag and Drop Files</h2>

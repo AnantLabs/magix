@@ -400,7 +400,8 @@ namespace Magix.Brix.Components.ActiveModules.MetaForms
                     if (idx.Parent.Name == "Properties" &&
                         idx.Name != "_ID" &&
                         idx.Value != null &&
-                        idx.Value.ToString().StartsWith("{DataSource"))
+                        (idx.Value.ToString().StartsWith("{DataSource") ||
+                        idx.Value.ToString().StartsWith("{DataSource")))
                     {
                         // Only 'non-relative' data bindings ... [relative ones starts with a '[' ... ]
                         int id = (int)idx.Parent.Parent["_ID"].Value;
