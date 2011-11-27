@@ -14,6 +14,7 @@ using Magix.Brix.Types;
 using Magix.Brix.Loader;
 using Magix.Brix.Components.ActiveTypes.Users;
 using Magix.Brix.Components.ActiveTypes.Logging;
+using Magix.Brix.Components.ActiveTypes;
 
 namespace Magix.Brix.Components.ActiveControllers.Logger
 {
@@ -57,7 +58,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Level2: Handled here since it's one of the more 'common operations' and probably interesting
+         * Level2: Handled here since it's one of the more common operations and probably interesting
          * to see in retrospect in case something goes wrong
          */
         [ActiveEvent(Name = "Magix.Core.UserLoggedIn")]
@@ -77,8 +78,10 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Level2: Handled here since it's one of the more 'common operations' and probably interesting
-         * to see in retrospect in case something goes wrong
+         * Level2: Handled here since it's one of the more common operations and probably interesting
+         * to see in retrospect in case something goes wrong. Only messages where 'IsError' equals 
+         * true are being logged. Normal messages are ignored by default, unless setting 
+         * 'Magix.Brix.Components.Logger.LogAllMessages' equals true
          */
         [ActiveEvent(Name = "Magix.Core.ShowMessage")]
         protected void Magix_Core_ShowMessage(object sender, ActiveEventArgs e)
@@ -86,10 +89,15 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             // Only logging ERRORS ... !
             if (!e.Params.Contains("IsError") ||
                 !e.Params["IsError"].Get<bool>())
-                return;
+            {
+                if (!Settings.Instance.Get("Magix.Brix.Components.Logger.LogAllMessages", false))
+                    return;
+            }
 
             Node node = new Node();
+
             node["LogItemType"].Value = "Magix.Core.ShowMessage";
+
             if (e.Params.Contains("Username"))
             {
                 UserBase u =
@@ -125,11 +133,11 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
 
         // TODO: Implement 'warning email to admin' if LogItemType ends with '!' ...
         /**
-         * Level2: Will create one LogItem with the given LogItemType, Header, Message, 
-         * ObjectID, ParentID, StackTrace and so on, depending upon which data is actually 
-         * being passed into it. Minimum requirement is Header. If you append an 
-         * Exclamation mark as the last character of the LogItemType, the incident will be 
-         * considered _serious_, and some sort of reaching out to the admin of the site 
+         * Level2: Will create one LogItem with the given 'LogItemType', 'Header', 'Message', 
+         * 'ObjectID', 'ParentID', 'StackTrace' and so on, depending upon which data is actually 
+         * being passed into it. Minimum requirement is 'Header'. If you append an 
+         * Exclamation mark [!] as the last character of the LogItemType, the incident will be 
+         * considered serious, and some sort of reaching out to the admin of the site 
          * might occur as a consequence, depending upon other states of the system. The
          * Log action might often be overridden, if you need to force into this specific method
          * for some reasons, you can add '-HARDLINK' to the action as you raise it
@@ -401,7 +409,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Level2: Logs the creation of every QR Code [and change to them]
+         * Level2: Logs the creation of every QR Code [and changes to them]
          */
         [ActiveEvent(Name = "Magix.QRCodes.CreateQRCode")]
         protected void Magix_QRCodes_CreateQRCode(object sender, ActiveEventArgs e)
@@ -424,7 +432,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Level2: Handled to log everytime somebody creates a WebPage
+         * Level2: Handled to log every time somebody creates a WebPage
          */
         [ActiveEvent(Name = "Magix.Publishing.CreateChildWebPage")]
         protected void Magix_Publishing_CreateChildWebPage(object sender, ActiveEventArgs e)
@@ -532,7 +540,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
         }
 
         /**
-         * Level2: Every time a user is being warned, he will be shown a Message Box. We log _ALL_ those 
+         * Level2: Every time a user is being warned, he will be shown a Message Box. We log all those 
          * message box warnings here, to document what the user has seen of warnings. We might
          * also log other types of modules in this event handler
          */

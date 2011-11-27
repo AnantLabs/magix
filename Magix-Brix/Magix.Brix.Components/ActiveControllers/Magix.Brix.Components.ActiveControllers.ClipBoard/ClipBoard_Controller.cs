@@ -13,13 +13,15 @@ namespace Magix.Brix.Components.ActiveControllers.ClipBoard
 {
     /**
      * Level2: Encapsulates the logic needed for manipulating the clipboard, add items to it, and 
-     * paste items
+     * paste items to the Clipboard. Notice that by overriding some of these events, and 
+     * have them go to other servers, you can copy and paste any clipboard items from one server
+     * to the other
      */
     [ActiveController]
     public class ClipBoard_Controller : ActiveController
     {
         /**
-         * Level2: Will return the menu items needed to fire up 'View Clopboard'
+         * Level2: Will return the menu items needed to fire up 'View Clipboard'
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)

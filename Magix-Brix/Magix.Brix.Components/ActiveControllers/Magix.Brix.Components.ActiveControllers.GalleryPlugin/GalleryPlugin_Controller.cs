@@ -18,7 +18,7 @@ using System.Globalization;
 namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
 {
     /**
-     * Level2: Gallery plugin for the Gallery modules. Also serves as a perfect vantage point for
+     * Level2: Gallery plugin for the Gallery modules. Also serves as a nice vantage point for
      * creating your own plugins to Magix and the publishing system
      */
     [ActiveController]
@@ -104,7 +104,7 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
         }
 
         /**
-         * Creates a Label with the username of the Gallery and returns back to caller
+         * Level2: Creates a Label with the username of the Gallery and returns back to caller
          */
         [ActiveEvent(Name = "Magix.Gallery.GetUserTemplateColumn")]
         protected void Magix_Gallery_GetUserTemplateColumn(object sender, ActiveEventArgs e)
@@ -167,6 +167,9 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
                 n);
         }
 
+        /**
+         * Level2: Sink for getting all Galleries
+         */
         [ActiveEvent(Name = "Magix.Publishing.Gallery.GetAllGalleries")]
         protected void Magix_Publishing_Gallery_GetAllGalleries(object sender, ActiveEventArgs e)
         {
@@ -192,6 +195,10 @@ namespace Magix.Brix.Components.ActiveControllers.GalleryPlugin
             }
         }
 
+        /**
+         * Level2: Will open up the given 'ID' Gallery in the container from within the WebPart which the 
+         * Active Event was rased from within
+         */
         [ActiveEvent(Name = "Magix.Publishing.Gallery.OpenGalleryInCurrentContainer")]
         protected void Magix_Publishing_Gallery_OpenGalleryInCurrentContainer(object sender, ActiveEventArgs e)
         {
@@ -272,6 +279,9 @@ Image was uploaded as '{0}' and attached to Gallery '{1}'",
             }
         }
 
+        /**
+         * Level2: Append Image button was clicked for specific gallery
+         */
         [ActiveEvent(Name = "Magix.Gallery.AppendButtonClicked")]
         protected void Magix_Gallery_AppendButtonClicked(object sender, ActiveEventArgs e)
         {
@@ -296,6 +306,10 @@ Image was uploaded as '{0}' and attached to Gallery '{1}'",
                 node);
         }
 
+        /**
+         * Level2: New Image file was added to Gallery. 'Folder', 'FileName' and 'Params/GalleryID' 
+         * needs to be specified
+         */
         [ActiveEvent(Name = "Magix.Publishing.AppendImageToGallery")]
         protected void Magix_Publishing_AppendImageToGallery(object sender, ActiveEventArgs e)
         {

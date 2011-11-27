@@ -703,12 +703,35 @@ namespace Magix.Brix.Types
         /**
          * Level3 Returns the outer most parent node, the top node of the hierarchy
          */
+        [DebuggerStepThrough]
         public Node RootNode()
         {
             Node tmp = this;
             while (tmp.Parent != null)
                 tmp = tmp.Parent;
             return tmp;
+        }
+
+        /**
+         * Level3: Clones the given node. Deep copy of all nodes
+         */
+        [DebuggerStepThrough]
+        public Node Clone()
+        {
+            return Clone(this);
+        }
+
+        [DebuggerStepThrough]
+        private Node Clone(Node node)
+        {
+            Node r = new Node();
+            r.Name = node.Name;
+            r.Value = node.Value;
+            foreach (Node idx in node)
+            {
+                r.Add(Clone(idx));
+            }
+            return r;
         }
     }
 }

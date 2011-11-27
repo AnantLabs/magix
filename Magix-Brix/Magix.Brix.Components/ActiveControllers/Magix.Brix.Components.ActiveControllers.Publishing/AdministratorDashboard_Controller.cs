@@ -298,7 +298,6 @@ namespace Magix.Brix.Components.ActiveControllers.Publishing
         {
             Node node = new Node();
 
-            node["Container"].Value = "child";
             node["Width"].Value = 18;
             node["Last"].Value = true;
             node["Container"].Value = "content3";

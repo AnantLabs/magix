@@ -28,7 +28,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
     public class Documentation_Controller : ActiveController
     {
         /**
-         * Level2: Will populate the Desktop with the 'Help from Marvin' icon
+         * Level2: Will populate the Desktop
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDashBoardDesktopPlugins")]
         protected void Magix_Publishing_GetDashBoardDesktopPlugins(object sender, ActiveEventArgs e)
@@ -37,14 +37,14 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             e.Params["Items"]["Help"]["Shortcut"].Value = "x";
             e.Params["Items"]["Help"]["Text"].Value = "Click to have Marvin Magix Rescue you ... [Key H]";
             e.Params["Items"]["Help"]["CSS"].Value = "mux-desktop-icon mux-help";
-            e.Params["Items"]["Help"]["Event"].Value = "Magix.Documentation.LaunchMarvin";
+            e.Params["Items"]["Help"]["Event"].Value = "Magix.Documentation.LaunchHeka";
         }
 
         /**
          * Level2: Will return the menu items needed to start the class browser
          */
-        [ActiveEvent(Name = "Magix.Documentation.LaunchMarvin")]
-        protected void Magix_Documentation_LaunchMarvin(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "Magix.Documentation.LaunchHeka")]
+        protected void Magix_Documentation_LaunchHeka(object sender, ActiveEventArgs e)
         {
             LoadTipOfToday();
         }
@@ -107,7 +107,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                                 e.Params["Result"].Get<string>("") + 
                                 idx.Namespace.FullName + "." + idx.Name + "." + idxM.Name + ":" +
                                 idxM.Description + 
-                                "\n\n";
+                                "|";
                         }
                     }
                     if (e.Params.Contains("Result"))
@@ -220,18 +220,104 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
         {
             string allActionsHtml = "<h1>Meta Actions</h1>";
             allActionsHtml += @"
+<p>Actions is one of the more important concepts in Magix. Actions wraps Active Events, which again wraps verbs, and hence becomes all your Business Logic. Combined with the Meta Form Designer, Actions are the by far most important concepts you'll need to understand before you can achieve productivity in Magix.</p>
+<img src=""media/images/screenshots/actions-screen.png"" />
+<em>While logged in as an Administrator in your Dashboard, click either 'Actions' or use the menu to open up your Action list.</em>
 <p>Meta Actions, or 'Actions' for short, are dynamically created actions within the system, 
-either created by the system itself during installation or something, or Actions created
-by users, such as you.</p>
-<p>These Actions can then later be invoked by some sort of event, for instance a user 
-clicking a button, or something similar</p>
-<p>Basically, if it can be described as a 'verb', it's probably an Action ... ;)</p>
+either created by the system itself during installation, or Actions created 
+by other software packages, or by users, such as you.</p>
+<p>System actions cannot be changed or modified through the Action screen. To change a system action, copy it and change the copy and consume the copy, or use the Data Explorer, which will allow you to edit your System Actions - NOT RECOMMENDED!</p>
+<p>Actions can be invoked by some sort of event, for instance a user 
+clicking a button, or something similar, in for instance a Meta Form or a Meta View. Basically, if it can be described as a verb, it's an Action.</p>
+<p>Actions are wrappers around Active Events, which again are sinks within your code, which you can reach from the outer 
+most environment as you wish, depending upon what you wish to allow for, as an admin of your server. The Action System is the soul of Magix, since it's the wrapper around the most important concept in the O2 Process; Active Events.</p>
+<p>Actions can override Active Events, and polymorphistically transfer execution to another server of your choice, 
+and such create perfect scaling out capabilities, 100% transparently. To use this feature search for the 'transmit' action in your Actions list. The Transmit Action shows how you can transfer polymorphistically an action from one server to another using HTTP POST and serializing the Active Event Name and Node structure down to JSON and HTTP POST parameters such that the event is 100% transparently transfered to another server of your choice, and invoked at your endpoint, if permissions are granted, and then returning the result back to the invoker of the Action.</p>
+<p>By combining Transmit with Execute actions, you can create logical entities such as 'Customer Server)s)' or 'Logging Server(s)' etc, simply by polymorphistically raise your Active Events on another end point of your choice.</p>
+<p>Actions can override one Active Event with another and such exchange one piece of logic with another piece of logic. To use this feature make sure the 'Override' property of your Action points to the Action you wish to override, then run the ReInitializeOverridden system Action. No changes are being done by Overrides before ReInitialize is executed. This is such that you can make changes in your system, then later when you're done, you reinitialize your actions overrides, and your system updates with the new logic.</p>
+<p>Actions can execute dynamically created Executions trees to create Turing Complete systems. Search for 'execute' to see an example of this. Execute allows you to create a Node structure with control mechanisms such as 'if', 'else if', 'raise', 'throw', 'foreach' etc. The intent of the Magix Turing Executor is to allow for the system to become 100% Turing Complete without needing to resort to code, while still keeping enough structure to be capable of completely abstracting it away through visual WYSIWYG type 
+of constructs. This combined with the serialization support of Magix for parameters and function 
+invocations and results and such, combined with Magix' extreme meta support, makes it relatively easy to create really interesting stuff such as Virtual Reality construction of executable code, which is 'recorded' as the individual opens and closes doors which represents your legal execution logic flow, etc, etc, etc.</p>
+<p>All Actions you create will have their Description become an integral part of the documentation.</p>
+<p>To summarize, such that you can more easily remember and understand Actions conceptually, Actions are partially serialized function invocations, which can be invoked again and again and again. Parts of their Node structure will automatically be transfered by the invoker, and carry over stuff such as the DataSource of the Active Module etc, while other parts are statically defined through the static Node parameters of your Actions. Any amount of runtime polymorphism can later at any point be added, either by an automatic process, or by the administrator of the server during configuration.</p>
+<p>This extremely flexible late binding polymorphism mechanisms of Magix is really what makes Magix Magic.</p>
+<p>Extremely easy to understand conceptually, after some initial 'aha' time. And insanely flexible, after the first wave of 'ahas' have passed. Realize though that yours truly is still doing 'ahas' in regards to Actions. Actions will, and should, largely replace your functions and methods. Actions basically replaces every single OOP mechanism you have used in conventional OO languages. You can still use OOP constructs as you wish in Magix, but Actions and Active Events will most of the time become your preferred weapon of choice. Simply because of their superiority to old-style functions and methods.</p>
+<p>Yes, they're also extremely fast.</p>
+<h4>The different properties of your actions are</h4>
+<ul>
+<li>Name - Serves as a unique reference for later being able to invoke the Action. The Action's function name, if you wish</li>
+<li>Event Name - The Active Event the Action will raise upon invocation</li>
+<li>Overrides - If not empty, will become the polymorphistic overridden implementation for the given Active Event, with the same name as the Overrides property</li>
+<li>Strip Input Node - If true, will strip the incoming input node from the place which raised the Action</li>
+</ul>
+<p>If you're not editing a System Action, then you can use the Search button to search for Active Events which you want to wrap your Actions around.</p>
+<hr />
+<h2>Creating and Invoking Active Events from C#</h2>
+<p>When you create an Active Event, you associate it with a name, which is a string literal, which later becomes its 'address'.</p>
+<pre>// This code should either be in an Active
+// Controller somwehere, or in an Active Module
+// If the code is in an Active Controller then 
+// it will handle the Active Event every single 
+// time it is invoked. If it is in an Active 
+// Module it will only be handled in that Active
+// Module if the module is loaded, unless you make
+// the method which handles your Active Event
+// static
+
+[ActiveEvent(Name = ""YourNamespace.PatPitty"")]
+protected void YourNamespace_PatPitty(object sender, ActiveEventArgs e)
+{
+   /* do stuff here. e.Params will contain 
+   * all the static Nodes you've got in 
+   * your Action in your visual interface, 
+   * in addition to that if Strip Input 
+   * Node is false, the entire
+   * Node structure from the caller, normally 
+   * the DataSource or previous Action
+   * will be passed on into here too, 
+   * with the static parameters overwriting the 
+   * dynamic ones if needed.
+   */
+   PetAKitten(e.Params[""Kitten""].Get&lt;string&gt;());
+   e.Params[""Result""].Value = ""Moaw!"";
+}
+
+protected void PetAKitten(string kittenName)
+{
+   /* Kitty, kitty, kitty ... :) */
+}
+
+
+[ ... some other file somewhere, which doesn't 
+need to know anything about the component 
+implementing the Active Event handler ... ]
+
+
+// From some Controller somewhere, inheriting from ActiveControll base class ...
+// Or any other place referencing Magix.Core, if you'd like to type out the 
+// ActiveEvents.Instance.RaiseActiveEvent instead of the shorthands ...
+protected void PittyPatty()
+{
+   Node n = new Node();
+   n[""Kitten""].Value = ""My Kitten"";
+   RaiseEvent(
+      ""YourNamespace.PatPitty"",
+      n);
+   ShowMessage(e.Params[""Result""].Get&lt;string&gt;());
+}
+
+</pre>
+<p>The above code is an example of how to create an Active Event, in C#, which again can be serialized to an Action which wraps it.</p>
+<p>Simply by realizing that Active Event address units are nothing but strings, you realize you can pass references to methods around, almost like you'd do with a dynamic programming language with lambda support. Except with Magix, you don't need to pass around your Lambda objects, but you can cross-interfere and override at any level, without needing to do changes to code. The entirety of the polymorphism mechanisms are completely runtime configurable, basically ...</p>
+<p>By decoupling our polymorphism mechanisms away from our types and objects this way, we achieve exponential productivity growth after some initial learning. Because everything becomes reusable. Just for God's sake, do NOT pass complex types around. If it's not in the .Net System namespace, it probably doesn't belong in the Node structure!</p>
+<p>It is considered smart to namespace your Active Event such that they're unique for your company/department/project etc - To avoid namespace clashing.</p>
+<hr />
 ";
             foreach (Action idx in Action.Select())
             {
                 string name = idx.Name;
                 string evt = idx.EventName;
-                string description = idx.Description;
+                string description = idx.Description.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "").Replace("\n", "");
                 string shortName = name;
                 if (shortName.IndexOf('.') != -1)
                 {
@@ -462,7 +548,6 @@ clicking a button, or something similar</p>
                 if (string.IsNullOrEmpty(idx.Description))
                     continue;
 
-                allHtml += "<code>";
                 System.Type eh = Adapter.ActiveModules.Find(
                     delegate(System.Type idx2)
                     {
@@ -480,6 +565,20 @@ clicking a button, or something similar</p>
                     {
                         return idx2.FullName == cls.FullName;
                     });
+                if (eh == null)
+                {
+                    foreach (Assembly idxA in Loader.PluginLoader.PluginAssemblies)
+                    {
+                        foreach (System.Type idxT in idxA.GetTypes())
+                        {
+                            if (idxT.FullName == cls.FullName)
+                            {
+                                eh = idxT;
+                                break;
+                            }
+                        }
+                    }
+                }
                 if (eh != null)
                 {
                     try
@@ -488,7 +587,8 @@ clicking a button, or something similar</p>
                                 idx.Name,
                                 BindingFlags.Instance |
                                 BindingFlags.Public |
-                                BindingFlags.NonPublic);
+                                BindingFlags.NonPublic | 
+                                BindingFlags.Static);
                         if (prop != null)
                         {
                             ActiveEventAttribute[] at2 =
@@ -496,12 +596,12 @@ clicking a button, or something similar</p>
                                 ActiveEventAttribute[];
                             if (at2 != null && at2.Length > 0)
                             {
-                                allHtml += "[ActiveEvent(";
+                                allHtml += "<codenomargsbold>[ActiveEvent(";
                                 if (at2[0].Async)
                                 {
-                                    allHtml += "Async=true, ";
+                                    allHtml += "Async = true, ";
                                 }
-                                allHtml += "Name=\"" + at2[0].Name + "\")]";
+                                allHtml += "Name = \"" + at2[0].Name + "\")]</codenomargsbold>";
                             }
                         }
                     }
@@ -511,8 +611,6 @@ clicking a button, or something similar</p>
                         // at which point they're NOT Event Handlers. That's for sure ... ;)
                     }
                 }
-                allHtml += "</code>";
-
                 allHtml += "<codenomargs>";
                 allHtml +=
                     idx.AccessModifier + " " +
@@ -531,7 +629,7 @@ clicking a button, or something similar</p>
                 }
                 allHtml += ")";
                 allHtml += "</codenomargs><br/>";
-                allHtml += "<p>" + idx.Description + "</p>";
+                allHtml += "<p>" + idx.Description + "</p><br /><br />";
             }
             if (!string.IsNullOrEmpty(allHtml))
                 allHtml = "<sec>Methods</sec>" + allHtml;
@@ -933,8 +1031,7 @@ clicking a button, or something similar</p>
 
             node["Namespace"].Value = nSpc.FullName;
 
-            ActiveEvents.Instance.RaiseActiveEvent(
-                this,
+            RaiseEvent(
                 "DBAdmin.Form.ViewClass",
                 node);
 
@@ -1126,10 +1223,10 @@ clicking a button, or something similar</p>
             }
         }
 
-        /**
+        /*
          * Will cache our Doxygen.NET objects, such that they're faster available
          */
-        public Docs Docs
+        private Docs Docs
         {
             get
             {

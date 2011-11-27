@@ -38,6 +38,7 @@ namespace Magix.Brix.Components.ActiveModules.CommonModules
                         DataSource["NoImage"].Get<bool>())
                     {
                         getImage.Visible = false;
+
                         new EffectTimeout(500)
                             .ChainThese(
                                 new EffectFocusAndSelect(ok))

@@ -24,8 +24,9 @@ namespace Magix.Brix.Components.ActiveControllers.Email
     public class Email_Controller : ActiveController
     {
         /**
-         * Level2: Will send an Email, using the SMPT settings from web.config, with the given Header and Body
-         * to the list in the EmailAddresses parameter from the AdminEmail and AdminEmailFrom parameters
+         * Level2: Will send an Email, using the SMPT settings from web.config, with the given 'Header' 
+         * and 'Body' to the list in the 'EmailAddresses' parameter from the 'AdminEmail '
+         * and 'AdminEmailFrom' parameters
          */
         [ActiveEvent(Name = "Magix.Core.SendEmail", Async = true)]
         protected void Magix_Core_SendEmail(object sender, ActiveEventArgs e)

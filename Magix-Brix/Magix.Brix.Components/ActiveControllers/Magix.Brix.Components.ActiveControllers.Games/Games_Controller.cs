@@ -22,6 +22,7 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
     public class Games_Controller : ActiveController
     {
         /**
+         * Level2: Sink for allowing the System Games to become Menu Items in the Administrator Menu
          */
         [ActiveEvent(Name = "Magix.Publishing.GetPluginMenuItems")]
         protected void Magix_Publishing_GetPluginMenuItems(object sender, ActiveEventArgs e)
@@ -32,6 +33,9 @@ namespace Magix.Brix.Components.ActiveControllers.Logger
             e.Params["Items"]["Other"]["Items"]["Games"]["Items"]["Tetris"]["Event"]["Name"].Value = "Magix.Games.OpenTetris";
         }
 
+        /**
+         * Level2: Will open up Tetris and let the end user allow to play Tetris
+         */
         [ActiveEvent(Name = "Magix.Games.OpenTetris")]
         protected void Magix_Games_OpenTetris(object sender, ActiveEventArgs e)
         {

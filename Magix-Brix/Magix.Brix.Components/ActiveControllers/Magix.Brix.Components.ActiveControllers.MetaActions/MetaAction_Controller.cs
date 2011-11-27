@@ -1390,23 +1390,32 @@ Deleting it may break these parts.</p>";
 
                 tr.Commit();
 
-                
-                Node node = new Node();
-                node["ID"].Value = a.ID;
+                if (Page.Request.Params["dashboard"] == "true")
+                {
+                    Node node = new Node();
+                    node["ID"].Value = a.ID;
 
-                RaiseEvent("Magix.MetaType.ViewActions");
+                    RaiseEvent("Magix.MetaType.ViewActions");
 
-                RaiseEvent(
-                    "Magix.Meta.EditAction",
-                    node);
+                    RaiseEvent(
+                        "Magix.Meta.EditAction",
+                        node);
 
-                node = new Node();
-                node["ID"].Value = a.ID;
-                node["FullTypeName"].Value = typeof(Action).FullName;
+                    node = new Node();
+                    node["FullTypeName"].Value = typeof(Action).FullName;
 
-                RaiseEvent(
-                    "DBAdmin.Grid.SetActiveRow",
-                    node);
+                    RaiseEvent(
+                        "Magix.Core.UpdateGrids",
+                        node);
+
+                    node = new Node();
+                    node["ID"].Value = a.ID;
+                    node["FullTypeName"].Value = typeof(Action).FullName;
+
+                    RaiseEvent(
+                        "DBAdmin.Grid.SetActiveRow",
+                        node);
+                }
             }
         }
 

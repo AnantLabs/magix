@@ -25,9 +25,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
     /**
      * Level2: Contains common end user useful actions which doesn't really belong 
      * any particular place, but which can still be immensily useful for
-     * 'scripting purposes'. Perceive these as 'plugins' ... ;) - [Or extra 
-     * candy if you wish]. Often they're 'simplifications' of other more
-     * 'hard core' Active Events
+     * scripting purposes. Perceive these as pugins, or extra 
+     * candy if you wish. Often they're simplifications of other more
+     * hard core Active Events. This is one of the most interesting classes for you 
+     * to look at in order to figure out what events to start using
      */
     [ActiveController]
     public class CommonActions_Controller : ActiveController
@@ -153,7 +154,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Branching according to statement contained within 'if' Value node
+         * Level2: Branching according to statement contained within 'if' Value node. @executor
          */
         [ActiveEvent(Name = "Magix.System.if")]
         protected void Magix_System_if(object sender, ActiveEventArgs e)
@@ -162,7 +163,21 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Branching according to statement contained within 'if' Value node
+         * Level2: Expects two values, the first parameter must must be an expression, the 
+         * second parameter might either be an expression or a fixed static value. The two 
+         * parameters are separated by '=' and expected to be found in the Value of the current
+         * 'set' node. Warning, this will create the left hand parameter node path if not 
+         * existing, and it will also set the value of that path to null of no right hand side
+         * value is found
+         */
+        [ActiveEvent(Name = "Magix.System.set")]
+        protected void Magix_System_set(object sender, ActiveEventArgs e)
+        {
+            CheckStatement(e.Params.Get<string>(), e.Params);
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'if' Value node. @executor
          */
         [ActiveEvent(Name = "Magix.System.else if")]
         protected void Magix_System_else_if(object sender, ActiveEventArgs e)
@@ -171,7 +186,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Branching according to statement contained within 'if' or 'else if' Value node of previous node
+         * Level2: Branching according to statement contained within 'if' or 'else if' 
+         * Value node of previous node. @executor
          */
         [ActiveEvent(Name = "Magix.System.else")]
         protected void Magix_System_else(object sender, ActiveEventArgs e)
@@ -180,18 +196,29 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Raises the given node
+         * Level2: Raises the Active Event defined in the Value of the node. @executor
          */
         [ActiveEvent(Name = "Magix.System.raise")]
         protected void Magix_System_raise(object sender, ActiveEventArgs e)
         {
+            string evtName = e.Params.Get<string>();
+            Node node = e.Params;
+            if (evtName.Contains("("))
+            {
+                string exp = evtName.Split('(')[1].Split(')')[0];
+                evtName = evtName.Substring(0, evtName.IndexOf('(')).Trim();
+                node = CommonActions_Controller.GetExpressionValue(exp, node) as Node;
+                if (node == null)
+                    throw new ArgumentException("Sorry, but your Node expression didn't evaluate to a valid Node: " + exp);
+            }
             RaiseEvent(
-                e.Params.Get<string>(),
-                e.Params);
+                evtName,
+                node);
         }
 
         /**
-         * Level2: Raises an Exception
+         * Level2: Raises an ApplicationException with the error message of the exception being 
+         * the Value of the node. @executor
          */
         [ActiveEvent(Name = "Magix.System.throw")]
         protected void Magix_System_throw(object sender, ActiveEventArgs e)
@@ -200,7 +227,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Loops through all nodes in expression and raises 'execute' with every one as a 'this' instance
+         * Level2: Loops through all nodes in expression and raises 'execute' with every one as 
+         * a 'this' instance. @executor
          */
         [ActiveEvent(Name = "Magix.System.foreach")]
         protected void Magix_System_foreach(object sender, ActiveEventArgs e)
@@ -209,45 +237,55 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
             foreach (Node idx in node)
             {
+                object tmp = null;
+                if (e.Params.Contains("idx"))
+                    tmp = e.Params["idx"].Value;
                 e.Params["idx"].Value = idx;
-                RaiseEvent(
-                    "Magix.System.execute",
-                    e.Params);
+                try
+                {
+                    RaiseEvent(
+                        "Magix.System.execute",
+                        e.Params);
+                }
+                finally
+                {
+                    if (tmp != null)
+                        e.Params["idx"].Value = tmp;
+                    else
+                        e.Params["idx"].UnTie();
+                }
             }
         }
 
         /**
-         * Level2: Executes the given node recursively. Known keywords are; 'if'/'else'/'else if', 'raise', 
-         * 'throw', 'execute', 'foreach'. 'execute' will create a scope of execution, where you can comment as
-         * a part of the value of the 'execute' node.
-         * 'if' will evaluate a one, or three-compunds, statement, and if true execute the block within, else it 
-         * will continue until it finds and 'else if' that matches or an 'else' if none of the previous 'if' and 
-         * 'else if' matched. Both 'if',
-         * 'else if' and 'else' works as 'execute' blocks if their statement evaluates to true. 'raise' will 
-         * raise the given Active Event, and 'throw' will throw an exception, with the value of the 'throw' node, as 
-         * the error message. All other nodes, if they only contains lower case alphabetical characters, in addition
-         * to space(s), and they start with '@', will be raise as 'Magix.Dynamic.Evaluate.@keyword' with the '@keyword' 
-         * being thename of the node, and the 'this' node as its parameter. This way you can create what would probably 
-         * be best described as something similar to Lisp Macros. 'foreach' will act as a scope, passing in 'idx'
-         * as the iterative value of the Node expression within the Value of the 'foreach' node. Meaning you can 
-         * have something such as foreach {DataSource[Objects]}, and within a node that says 
-         * 'if' {idx[Name].Value == John Doe}, and this code will be called once for every single node as the 'idx'
-         * node within the returned Node expression from the original for each expression, which must return a Node
-         * expression. Meaning ending with ']'
+         * Level2: Executes the given node recursively. This is the Magix Turing Executor which 
+         * allows dfor logic to be implemented without having to code. @executor
          */
         [ActiveEvent(Name = "Magix.System.execute")]
         protected void Magix_System_execute(object sender, ActiveEventArgs e)
         {
             List<string> keyWords = new List<string>();
+            List<string> buffer = new List<string>();
             bool hasFound = false;
-            foreach (Node idx in e.Params)
+            for (int idxNo = 0; idxNo < e.Params.Count; idxNo ++)
             {
+                Node idx = e.Params[idxNo];
                 keyWords.Add(idx.Name);
                 switch (idx.Name)
                 {
                     case "execute":
                         RaiseEvent(
                             "Magix.System.execute",
+                            idx);
+                        break;
+                    case "set":
+                        RaiseEvent(
+                            "Magix.System.set",
+                            idx);
+                        break;
+                    case "untie":
+                        RaiseEvent(
+                            "Magix.System.untie",
                             idx);
                         break;
                     case "if":
@@ -403,7 +441,15 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     expr3 = buffer;
 
                 if (expr1 != null)
-                    r.Add(CommonActions_Controller.GetExpressionValue(expr1, Node) as string);
+                {
+                    if (expr2 != null)
+                    {
+                        if (expr2 == "=") // Defer evaluation to Compute ...
+                            r.Add(expr1);
+                        else
+                            r.Add(CommonActions_Controller.GetExpressionValue(expr1, Node) as string);
+                    }
+                }
                 if (expr2 != null)
                     r.Add(CommonActions_Controller.GetExpressionValue(expr2, Node) as string);
                 if (expr3 != null)
@@ -434,11 +480,19 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             return (components[0] ?? "").CompareTo(components[2]) != -1;
                         case "<=":
                             return (components[0] ?? "").CompareTo(components[2]) != 1;
+                        case "=":
+                            return SetExpressionValue(components[0], components[2]);
                         default:
                             throw new ArgumentException("Sorry, unknown operator; '" + components[1] + "' ...");
                     }
                 }
                 throw new ArgumentException("Sorry, but your Expression; '" + RawExpression + "' just doesn't compute. Too many/few components in it ...");
+            }
+
+            private bool SetExpressionValue(string expr, string value)
+            {
+                CommonActions_Controller.SetExpressionValue(expr, value, Node);
+                return true;
             }
         }
 
@@ -604,9 +658,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Will return an entire Graph of an object [all its child objects too] 
-         * to caller in the 'Object' return parameter. Expects to find the ID 
-         * of the MetaObject to fetch in the 'ID' parameter
+         * Level2: Will return an entire Graph of an object as 'Object', meaning all its child objects too.
+         * Expects to find the ID of the MetaObject to fetch in the 'ID' parameter
          */
         [ActiveEvent(Name = "Magix.Common.GetMetaObjectGraph")]
         protected void Magix_Common_GetMetaObjectGraph(object sender, ActiveEventArgs e)
@@ -623,7 +676,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
          * Meta Objects of type 'MetaTypeName' in the 'Objects' parameter. If you set 
          * 'Ascending' to true, it will sort according to oldest first. If you give
          * no 'End' parameter, then it will fetch the 10 items starting from start,
-         * if you give no 'Start' parameter, you'll fetch from the top
+         * if you give no 'Start' parameter, it'll fetch from the beginning
          */
         [ActiveEvent(Name = "Magix.MetaObjects.GetMetaObjects")]
         protected void Magix_MetaObjects_GetMetaObjects(object sender, ActiveEventArgs e)
@@ -1155,11 +1208,15 @@ can only contain numerical characters to be legal",
         }
 
         /**
-         * Level2: Will transform the input node [immutably] according to the 
-         * expressions within its 'Expression' parameter node and its children. 
-         * Will not change the source node [given parameters] in any ways, but 
-         * is 100% Immutable and will entirely change the Parameters and return and 
-         * entirely new Node parameters tree collection
+         * Level2: Will transform the input node according to the 
+         * expressions within its 'Expression' parameter node and its children. Will return the 
+         * transformed Node as its 'Expression' return value, which will become a completely 
+         * new node, depending upon the expressios transforming it. Every node containing
+         * an expression as either its Name or Value, will become transformed into the result of its 
+         * expression. All other nodes will be considered static values and left untouched.
+         * Only nodes within the 'Expression' parameter will be transformed. If there are no 'Expression'
+         * node, then the entire hierarchy will be treated as an Expression. Regardless, the result
+         * will be returned in the 'Expression' node, which will become the result. @expression
          */
         [ActiveEvent(Name = "Magix.Common.Transform")]
         protected void Magix_Common_TransformNode(object sender, ActiveEventArgs e)
@@ -1169,7 +1226,10 @@ can only contain numerical characters to be legal",
 
             Node retVal = new Node();
 
-            Node expr = e.Params["Expression"];
+            Node expr = e.Params;
+
+            if (e.Params.Contains("Expression"))
+                expr = e.Params["Expression"];
 
             Transform(expr, e.Params, retVal);
 
@@ -1232,7 +1292,7 @@ can only contain numerical characters to be legal",
 
             Node x = source;
 
-            if (expr.StartsWith("DataSource["))
+            if (expr.StartsWith("DataSource[") || expr.StartsWith("root["))
                 x = source.RootNode();
             else if (!expr.StartsWith("["))
             {
@@ -1251,14 +1311,10 @@ can only contain numerical characters to be legal",
                 {
                     if (tmp == ']')
                     {
-                        lastEntity = "";
-                        if (!x.Contains(bufferNodeName))
-                        {
-                            return null;
-                        }
-
                         if (string.IsNullOrEmpty(bufferNodeName))
                             throw new ArgumentException("Opps, empty node name/index ...");
+
+                        lastEntity = "";
 
                         bool allNumber = true;
                         if (bufferNodeName == "../")
@@ -1266,6 +1322,9 @@ can only contain numerical characters to be legal",
                             if (x.Parent == null)
                                 throw new NullReferenceException("Attempted at trying to traverse up to a level which doesn't exist. Parent Root Node reached, and found '../' still ...");
                             x = x.Parent;
+                            bufferNodeName = "";
+                            isInside = false;
+                            continue;
                         }
                         else
                         {
@@ -1286,6 +1345,8 @@ can only contain numerical characters to be legal",
                             }
                             else
                             {
+                                if (!x.Contains(bufferNodeName))
+                                    return null;
                                 x = x[bufferNodeName];
                             }
                             bufferNodeName = "";
@@ -1314,6 +1375,103 @@ can only contain numerical characters to be legal",
                 return x;
 
             return null;
+        }
+
+        private static void SetExpressionValue(string expression, string value, Node source)
+        {
+            if (string.IsNullOrEmpty(expression) || !expression.StartsWith("{"))
+            {
+                throw new ArgumentException("Assignments must have Expressions as left hand sides ... ");
+            }
+
+            string expr = expression.Split('{')[1].Split('}')[0].Trim();
+
+            Node x = source;
+
+            if (expr.StartsWith("DataSource[") || expr.StartsWith("root["))
+                x = source.RootNode();
+            else if (!expr.StartsWith("["))
+            {
+                x = source[expr.Split('.')[0]].Value as Node;
+                expr = expr.Substring(expr.Split('.')[0].Length);
+            }
+
+            bool isInside = false;
+            string bufferNodeName = null;
+            string lastEntity = null;
+
+            for (int idx = 0; idx < expr.Length; idx++)
+            {
+                char tmp = expr[idx];
+                if (isInside)
+                {
+                    if (tmp == ']')
+                    {
+                        if (string.IsNullOrEmpty(bufferNodeName))
+                            throw new ArgumentException("Opps, empty node name/index ...");
+
+                        lastEntity = "";
+                        isInside = false;
+
+                        bool allNumber = true;
+                        if (bufferNodeName == "../")
+                        {
+                            if (x.Parent == null)
+                                throw new NullReferenceException("Attempted at trying to traverse up to a level which doesn't exist. Parent Root Node reached, and found '../' still ...");
+                            x = x.Parent;
+                            continue;
+                        }
+                        else
+                        {
+                            foreach (char idxC in bufferNodeName)
+                            {
+                                if (("0123456789").IndexOf(idxC) == -1)
+                                {
+                                    allNumber = false;
+                                    break;
+                                }
+                            }
+                            if (allNumber)
+                            {
+                                int intIdx = int.Parse(bufferNodeName);
+                                if (x.Count >= intIdx)
+                                    x = x[intIdx];
+                                else
+                                    throw new ArgumentException("Oops, tried to de-reference non existing nodes: " + intIdx + ", in: " + expression);
+                            }
+                            else
+                            {
+                                x = x[bufferNodeName];
+                            }
+                            bufferNodeName = "";
+                            continue;
+                        }
+                    }
+                    bufferNodeName += tmp;
+                }
+                else
+                {
+                    if (tmp == '[')
+                    {
+                        bufferNodeName = "";
+                        isInside = true;
+                        continue;
+                    }
+                    lastEntity += tmp;
+                }
+            }
+            if (lastEntity == ".Value")
+            {
+                x.Value = GetExpressionValue(value, source) as string;
+            }
+            else if (lastEntity == ".Name")
+            {
+                x.Name = GetExpressionValue(value, source) as string;
+            }
+            else if (lastEntity == "")
+            {
+                throw new ArgumentException("Only .Value and .Name is supported currently in Expression Engine ... ");
+            }
         }
 
         /**

@@ -125,6 +125,8 @@ namespace Magix.Brix.Loader
         [DebuggerStepThrough]
         protected void RaiseEvent(string eventName, Node node)
         {
+            if (node.Contains("Handled"))
+                node["Handled"].UnTie();
             ActiveEvents.Instance.RaiseActiveEvent(
                 this,
                 eventName,
