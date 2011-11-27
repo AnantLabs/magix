@@ -134,5 +134,22 @@ namespace Magix.Brix.Components
                 "Magix.Common.RemoveFromCache",
                 n);
         }
+
+        public override void Delete()
+        {
+            base.Delete();
+
+            Node n = new Node();
+            n["Key"].Value = typeof(T).FullName;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                typeof(T),
+                "Magix.Common.RemoveFromCache",
+                n);
+            n["Key"].Value = typeof(T[]).FullName;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                typeof(T),
+                "Magix.Common.RemoveFromCache",
+                n);
+        }
     }
 }

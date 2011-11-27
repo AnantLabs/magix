@@ -145,11 +145,12 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
             else
             {
+                string key = e.Params["Key"].Get<string>();
                 List<string> keys = new List<string>();
                 IDictionaryEnumerator enume = Page.Cache.GetEnumerator();
                 while (enume.MoveNext())
                 {
-                    if (enume.Key.ToString().Contains(e.Params["Key"].Get<string>()))
+                    if (enume.Key.ToString().Contains(key))
                         keys.Add(enume.Key.ToString());
                 }
                 for (int i = 0; i < keys.Count; i++)
@@ -1250,9 +1251,6 @@ can only contain numerical characters to be legal",
         [ActiveEvent(Name = "Magix.Common.Transform")]
         protected void Magix_Common_TransformNode(object sender, ActiveEventArgs e)
         {
-            if (!e.Params.Contains("Expression"))
-                throw new ArgumentException("TransformNode needs an 'Expression' node to understand how to transform your source node into the requested result");
-
             Node retVal = new Node();
 
             Node expr = e.Params;
@@ -1267,7 +1265,7 @@ can only contain numerical characters to be legal",
 
         private void Transform(Node expr, Node source, Node destination)
         {
-            destination.Name = (GetExpressionValue(expr.Name, source) ?? "").ToString();
+            destination.Name = GetExpressionValue(expr.Name, source) as string;
             destination.Value = GetExpressionValue(expr.Value as string, source);
 
             if (expr.Value != null &&
@@ -1499,7 +1497,15 @@ can only contain numerical characters to be legal",
             }
             else if (lastEntity == "")
             {
-                throw new ArgumentException("Only .Value and .Name is supported currently in Expression Engine ... ");
+                x.Clear();
+                Node tmp = GetExpressionValue(value, source) as Node;
+                if (tmp != null)
+                {
+                    foreach (Node idx2 in tmp)
+                    {
+                        x.Add(idx2.Clone());
+                    }
+                }
             }
         }
 

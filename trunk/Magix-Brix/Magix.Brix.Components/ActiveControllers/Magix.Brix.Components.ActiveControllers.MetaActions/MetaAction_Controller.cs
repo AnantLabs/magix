@@ -653,7 +653,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             Node node = new Node();
 
-            node["FullTypeName"].Value = typeof(ActiveEvents).FullName;
+            node["FullTypeName"].Value = typeof(ActiveEventAttribute).FullName + "-META";
             node["Container"].Value = "child";
             node["Width"].Value = 24;
             node["Top"].Value = 23;
@@ -662,6 +662,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             node["ReUseNode"].Value = true;
             node["IsDelete"].Value = false;
             node["SetFocus"].Value = true;
+            node["GetObjectsEvent"].Value = "DBAdmin.DynamicType.GetObjectsNode-AT";
 
             node["WhiteListColumns"]["Name"].Value = true;
             node["WhiteListColumns"]["Name"]["ForcedWidth"].Value = 22;
@@ -688,6 +689,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             using (Transaction tr = Adapter.Instance.BeginTransaction())
             {
+                List<Tuple<string, string>> _activeEvents = new List<Tuple<string, string>>();
+                Node n = new Node();
+                n["Key"].Value = "ActiveTypes Event Handlers";
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    typeof(ActiveEventAttribute),
+                    "Magix.Common.GetFromCache",
+                    n);
+                if (n.Contains("Value"))
+                    _activeEvents = n["Value"].Value as List<Tuple<string, string>>;
+
                 int id = e.Params["Parameters"]["IDColumnEvent"]["ActionID"].Get<int>();
                 Action a = Action.SelectByID(id);
                 a.EventName = _activeEvents[e.Params["ID"].Get<int>()].Left;
@@ -710,26 +721,33 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             }
         }
 
-        private static List<Tuple<string, string>> _activeEvents = new List<Tuple<string, string>>();
-
         /**
          * Level2: Sink for finding all Active Events within the system Application Pool
          */
-        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode")]
-        protected void DBAdmin_DynamicType_GetObjectsNode_3(object sender, ActiveEventArgs e)
+        [ActiveEvent(Name = "DBAdmin.DynamicType.GetObjectsNode-AT")]
+        protected void DBAdmin_DynamicType_GetObjectsNode_AT(object sender, ActiveEventArgs e)
         {
-            if (e.Params["FullTypeName"].Get<string>() == typeof(ActiveEvents).FullName)
+            List<Tuple<string, string>> _activeEvents = new List<Tuple<string, string>>();
+            Node n = new Node();
+            n["Key"].Value = "ActiveTypes Event Handlers";
+            ActiveEvents.Instance.RaiseActiveEvent(
+                typeof(ActiveEventAttribute),
+                "Magix.Common.GetFromCache",
+                n);
+            if (n.Contains("Value"))
+                _activeEvents = n["Value"].Value as List<Tuple<string, string>>;
+            if (_activeEvents.Count == 0)
             {
-                if (_activeEvents.Count == 0)
+                foreach (Assembly idxA in Loader.PluginLoader.PluginAssemblies)
                 {
-                    foreach (Assembly idxA in Loader.PluginLoader.PluginAssemblies)
+                    try
                     {
                         foreach (Type idxT in idxA.GetTypes())
                         {
                             foreach (MethodInfo idxM in idxT.GetMethods(
-                                BindingFlags.Public | 
-                                BindingFlags.NonPublic | 
-                                BindingFlags.Static | 
+                                BindingFlags.Public |
+                                BindingFlags.NonPublic |
+                                BindingFlags.Static |
                                 BindingFlags.Instance))
                             {
                                 ActiveEventAttribute[] atrs =
@@ -748,45 +766,54 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                                         continue;
 
                                     _activeEvents.Add(new Tuple<string, string>(
-                                        atrs[0].Name, 
+                                        atrs[0].Name,
                                         GetDocumentation(atrs[0].Name)));
                                 }
                             }
                         }
                     }
-                }
-
-                int start = e.Params["Start"].Get<int>();
-                int end = e.Params["End"].Get<int>();
-                string filter = e.Params.Contains("Filter") ?
-                    e.Params["Filter"].Get<string>() :
-                    "";
-                string[] filters = filter.ToLower().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                int idxNo = 0;
-                int idxIDNo = 0;
-                foreach (Tuple<string, string> idxKey in _activeEvents)
-                {
-                    int found = 0;
-                    foreach (string idxF in filters)
+                    catch
                     {
-                        if (idxKey.Left.ToLower().Contains(idxF))
-                            found += 1;
+                        ; // Some will throw ...
                     }
-                    if (found == filters.Length)
-                    {
-                        if (idxNo >= start && idxNo < end)
-                        {
-                            e.Params["Objects"]["o-" + idxNo]["ID"].Value = idxIDNo;
-                            e.Params["Objects"]["o-" + idxNo]["Properties"]["Name"].Value = idxKey.Left;
-                            e.Params["Objects"]["o-" + idxNo]["Properties"]["Name"]["ToolTip"].Value = idxKey.Right;
-                        }
-                        idxNo += 1;
-                    }
-                    idxIDNo += 1;
                 }
-                e.Params["SetCount"].Value = idxNo;
-                e.Params["LockSetCount"].Value = true;
+                n["Value"].Value = _activeEvents;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    typeof(ActiveEventAttribute),
+                    "Magix.Common.AddToCache",
+                    n);
             }
+
+            int start = e.Params["Start"].Get<int>();
+            int end = e.Params["End"].Get<int>();
+            string filter = e.Params.Contains("Filter") ?
+                e.Params["Filter"].Get<string>() :
+                "";
+            string[] filters = filter.ToLower().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            int idxNo = 0;
+            int idxIDNo = 0;
+            foreach (Tuple<string, string> idxKey in _activeEvents)
+            {
+                int found = 0;
+                foreach (string idxF in filters)
+                {
+                    if (idxKey.Left.ToLower().Contains(idxF))
+                        found += 1;
+                }
+                if (found == filters.Length)
+                {
+                    if (idxNo >= start && idxNo < end)
+                    {
+                        e.Params["Objects"]["o-" + idxNo]["ID"].Value = idxIDNo;
+                        e.Params["Objects"]["o-" + idxNo]["Properties"]["Name"].Value = idxKey.Left;
+                        e.Params["Objects"]["o-" + idxNo]["Properties"]["Name"]["ToolTip"].Value = idxKey.Right;
+                    }
+                    idxNo += 1;
+                }
+                idxIDNo += 1;
+            }
+            e.Params["SetCount"].Value = idxNo;
+            e.Params["LockSetCount"].Value = true;
         }
 
         private string GetDocumentation(string actEvtName)

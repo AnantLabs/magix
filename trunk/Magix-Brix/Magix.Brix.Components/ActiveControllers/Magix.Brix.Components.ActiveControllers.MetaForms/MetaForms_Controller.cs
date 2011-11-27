@@ -1655,6 +1655,12 @@ focus, or clicking the widget with his mouse or touch screen";
             {
                 DataSource["ActionsToExecute"].Value = Actions;
 
+                if (sender is BaseWebControl)
+                {
+                    if (!string.IsNullOrEmpty((sender as BaseWebControl).Info))
+                        DataSource["WidgetInfo"].Value = (sender as BaseWebControl).Info;
+                }
+
                 ActiveEvents.Instance.RaiseActiveEvent(
                     sender,
                     "Magix.MetaForms.RaiseActionsFromActionString",
@@ -3215,12 +3221,7 @@ focus, or clicking the widget with his mouse or touch screen";
                 infoValue = ctrl.Info;
                 if (!string.IsNullOrEmpty(infoValue))
                 {
-                    int tmpInt = 0;
-
-                    if (int.TryParse(infoValue, out tmpInt))
-                        e.Params["WidgetInfo"].Value = tmpInt;
-                    else
-                        e.Params["WidgetInfo"].Value = infoValue;
+                    e.Params["WidgetInfo"].Value = infoValue;
                 }
             }
 

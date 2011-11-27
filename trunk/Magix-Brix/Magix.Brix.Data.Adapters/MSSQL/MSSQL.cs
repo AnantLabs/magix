@@ -485,6 +485,8 @@ select Name, Value from {0} where FK_Document={1}",
                             _cacheOfTypes = new Dictionary<string, Type>();
                             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                             {
+                                if (assembly.GlobalAssemblyCache)
+                                    continue;
                                 foreach (Type idxType in assembly.GetTypes())
                                 {
                                     _cacheOfTypes[idxType.FullName] = idxType;
@@ -498,7 +500,6 @@ select Name, Value from {0} where FK_Document={1}",
                             retValIDs.Add(new Tuple<int, Type>(reader.GetInt32(0), type));
                         }
                     }
-                    
                 }
             }
             foreach (Tuple<int, Type> idxRetValID in retValIDs)

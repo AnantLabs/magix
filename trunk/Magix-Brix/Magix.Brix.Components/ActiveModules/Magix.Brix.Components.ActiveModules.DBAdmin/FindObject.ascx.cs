@@ -278,9 +278,13 @@ namespace Magix.Brix.Components.ActiveModules.DBAdmin
                         (Settings.Instance.Get("DBAdmin.MaxItemsToShow-" + DataSource["FullTypeName"].Get<string>(), 10) - 1);
                 }
             }
+            string evtName = "DBAdmin.Data.GetContentsOfClass";
+            if (DataSource.Contains("GetContentsEventName"))
+                evtName = DataSource["GetContentsEventName"].Get<string>();
+            else if (DataSource.Contains("GetObjectsEvent"))
+                evtName = DataSource["GetObjectsEvent"].Get<string>();
             if (RaiseSafeEvent(
-                (DataSource["GetContentsEventName"].Get<string>() 
-                ?? "DBAdmin.Data.GetContentsOfClass"),
+                evtName,
                 DataSource))
             {
                 if (setSelectedRow)
