@@ -25,7 +25,7 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
     public class Distributor_Controller : ActiveController
     {
         /**
-         * Level2: Sink for Dashboard Plugin
+         * Level2: Sink for Dashboard Plugins
          */
         [ActiveEvent(Name = "Magix.Publishing.GetDataForAdministratorDashboard")]
         protected void Magix_Publishing_GetDataForAdministratorDashboard(object sender, ActiveEventArgs e)
@@ -96,7 +96,12 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
 
         /**
          * Level2: Will check to see if this is a WebService call, if not, it 
-         * will forward the event to the default impl.
+         * will forward the event to the default implementation. When Magix fires an external
+         * event, the external event will transfer execution to the receiving party as an HTTP 
+         * request. This event would normally be raised when such an event occurs. This event 
+         * will expect an 'event', which will be the Active Event raised, and 'params' will become 
+         * the parameters passed into the Active Event. Both 'event' and 'params' are fetched 
+         * from the HTTP Request Parameters collection
          */
         [ActiveEvent(Name = "Magix.Core.PostHTTPRequest")]
         protected void Magix_Core_PostHTTPRequest(object sender, ActiveEventArgs e)
@@ -254,11 +259,17 @@ namespace Magix.Brix.Components.ActiveControllers.Distributor
         }
 
         /**
-         * Level2: Will raise an event at the externally given 'UrlEndPoint', which 
-         * should be an at the very least an HTTP end point which can take as the 
-         * input the WSDL in the WebService in this same project, one way or the other.
-         * 'EventName' is the name of the event to raise externally, 'Node' will be
-         * transmitted as its parameters
+         * Level2: Will raise an event to the externally given 'UrlEndPoint', which 
+         * should be an HTTP end point which can take 
+         * 'event' and 'params' as HTTP POST parameters. 'EventName' is the name of the 'event' to raise 
+         * externally, 'Node' will be
+         * transmitted as its 'params'. An HTTP POST request will be created with 
+         * 'event' [string] will be made from 'EventName', and 'params' [JSON] will be made 
+         * from 'Node'. The endpoint URL is expected to be found in 'UrlEndPoint'. Please
+         * notice that most servers would by default have to explicitly grant you access to 
+         * raise external events, meaning if you raise an event to another server, the admin 
+         * of that server needs to allow you to explicitly raise that specific event within 
+         * his server
          */
         [ActiveEvent(Name = "Magix.Core.TransmitEventToExternalServer")]
         protected void Magix_Core_TransmitEventToExternalServer(object sender, ActiveEventArgs e)

@@ -75,7 +75,7 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
 
             foreach (XmlNode idx in doc.DocumentElement.ChildNodes)
             {
-                string value = idx.InnerText.Replace("\r\n", "").Replace("\n", "");
+                string value = idx.InnerText;
                 if (idxNo != -1)
                 {
                     value = idxNo.ToString() + ". " + value;
@@ -89,64 +89,95 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
                         } break;
                     case "codenomargs":
                         {
-                            section.AddParagraph(value, "Code2");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Code2");
+                        } break;
+                    case "codenomargsbold":
+                        {
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Code3");
                         } break;
                     case "big":
                         {
-                            section.AddParagraph(value, "Big");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Big");
                         } break;
                     case "h1":
                         {
                             section.AddPageBreak();
-                            section.AddParagraph(value, "Heading1");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Heading1");
+                        } break;
+                    case "hr":
+                        {
+                            section.AddPageBreak();
                         } break;
                     case "h2":
                         {
-                            section.AddParagraph(value, "Heading2");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Heading2");
                         } break;
                     case "h3":
                         {
-                            section.AddParagraph(value, "Heading3");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Heading3");
                         } break;
                     case "h4":
                         {
-                            section.AddParagraph(value, "Heading4");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Heading4");
                         } break;
                     case "strong":
                         {
-                            section.AddParagraph(value, "Strong");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Strong");
                         } break;
                     case "em":
                         {
-                            section.AddParagraph(value, "Italic");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Italic");
                         } break;
                     case "p2":
                         {
-                            section.AddParagraph(value, "P2");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "P2");
                         } break;
                     case "sec":
                         {
-                            section.AddParagraph(value, "SubSection");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "SubSection");
                         } break;
                     case "code":
                         {
-                            section.AddParagraph(value, "Code");
+                            section.AddParagraph(value.Replace("\r\n", "").Replace("\n", ""), "Code");
                         } break;
                     case "codebig":
                         {
                             Paragraph p = section.AddParagraph();
                             p.Style = "Codebig";
-                            p.AddText(value);
+                            p.AddText(value.Replace("\r\n", "").Replace("\n", ""));
+                        } break;
+                    case "img":
+                        {
+                            Image p = section.AddImage(Page.Server.MapPath("~/" + idx.Attributes["src"].Value.Trim('/')));
+                            p.LockAspectRatio = true;
+                            p.Height = new Unit(250);
+                        } break;
+                    case "ul":
+                        {
+                            foreach (XmlNode idxInner in idx.ChildNodes)
+                            {
+                                Paragraph p = section.AddParagraph();
+                                p.Style = "ListofElements";
+                                p.AddText(idxInner.InnerText.Replace("\r\n", "").Replace("\n", ""));
+                            }
                         } break;
                     case "codesmall":
                         {
                             Paragraph p = section.AddParagraph();
                             p.Style = "Codesmall";
-                            p.AddText(value);
+                            p.AddText(value.Replace("\r\n", "").Replace("\n", ""));
+                        } break;
+                    case "pre":
+                        {
+                            Paragraph p = section.AddParagraph();
+                            p.Style = "PreFormatted";
+                            p.AddFormattedText(value.Replace("   ", "\t"));
                         } break;
                     default: // Defaulting to paragraph ...
                         {
-                            section.AddParagraph(value, "Normal");
+                            Paragraph p = section.AddParagraph();
+                            p.Style = "Normal";
+                            p.AddText(value);
                         } break;
                 }
             }
@@ -183,17 +214,23 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
 
         private void SetOtherStyles(Node node, Document doc)
         {
+            Style normal = doc.Styles["Normal"] as Style;
+            normal.ParagraphFormat.Alignment = ParagraphAlignment.Justify;
+
             Style strong = doc.Styles.AddStyle("Strong", "Normal");
+            strong.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             strong.Font.Bold = true;
             strong.Font.Color = new Color(255, 0, 0, 0);
             strong.ParagraphFormat.KeepWithNext = true;
 
             Style em = doc.Styles.AddStyle("Italic", "Normal");
+            em.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             em.Font.Italic = true;
             em.ParagraphFormat.KeepWithNext = true;
 
             Style code = doc.Styles.AddStyle("Code", "Normal");
             code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.KeepTogether = true;
             code.ParagraphFormat.SpaceBefore = 40;
@@ -202,14 +239,27 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
 
             code = doc.Styles.AddStyle("Code2", "Normal");
             code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             code.ParagraphFormat.KeepWithNext = true;
-            code.ParagraphFormat.SpaceAfter = 10;
+            code.ParagraphFormat.SpaceAfter = 0;
             code.ParagraphFormat.SpaceBefore = 0;
             code.ParagraphFormat.KeepTogether = true;
             code.Font = new Font("Courier", 10);
 
+            code = doc.Styles.AddStyle("Code3", "Normal");
+            code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
+            code.ParagraphFormat.KeepWithNext = true;
+            code.ParagraphFormat.SpaceAfter = 0;
+            code.ParagraphFormat.SpaceBefore = 0;
+            code.ParagraphFormat.KeepTogether = true;
+            code.Font = new Font("Courier", 10);
+            code.Font.Color = new Color(235, 45, 45, 45);
+            code.Font.Bold = true;
+
             code = doc.Styles.AddStyle("NormalNoMargs", "Normal");
             code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.SpaceAfter = 0;
             code.ParagraphFormat.SpaceBefore = 0;
@@ -218,6 +268,7 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
 
             code = doc.Styles.AddStyle("Codebig", "Normal");
             code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.KeepTogether = true;
             code.ParagraphFormat.SpaceBefore = 10;
@@ -225,21 +276,41 @@ PDF which doesn't exist in its Pages hierarchy. The name of the missing index wa
             code.Font = new Font("Courier", 12);
             code.Font.Color = new Color(255, 0, 0, 0);
 
-            code = doc.Styles.AddStyle("Codesmall", "Normal");
+            code = doc.Styles.AddStyle("ListofElements", "Normal");
             code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
+            code.ParagraphFormat.KeepTogether = true;
+            code.ParagraphFormat.KeepWithNext = true;
+            code.ParagraphFormat.SpaceBefore = 10;
+            code.ParagraphFormat.LeftIndent = 45;
+            code.ParagraphFormat.RightIndent = 65;
+            code.ParagraphFormat.ListInfo.ListType = ListType.BulletList1;
+            code.ParagraphFormat.ListInfo.NumberPosition = new Unit(25);
+            code.ParagraphFormat.AddTabStop(new Unit(45), TabAlignment.Left);
+            code.Font = new Font("Courier", 10);
+            code.Font.Color = new Color(255, 0, 0, 0);
+
+            code = doc.Styles.AddStyle("Codesmall", "Normal");
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.KeepTogether = true;
             code.Font = new Font("Courier", 10);
 
+            code = doc.Styles.AddStyle("PreFormatted", "Normal");
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
+            code.ParagraphFormat.KeepTogether = true;
+            code.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
+            code.Font = new Font("Courier", 10);
+
             code = doc.Styles.AddStyle("SubSection", "Normal");
-            code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.KeepTogether = true;
             code.ParagraphFormat.SpaceBefore = 50;
             code.Font.Color = new Color(255, 0, 0, 0);
 
             code = doc.Styles.AddStyle("P2", "Normal");
-            code.ParagraphFormat = new ParagraphFormat();
+            code.ParagraphFormat.Alignment = ParagraphAlignment.Left;
             code.ParagraphFormat.KeepWithNext = true;
             code.ParagraphFormat.KeepTogether = true;
             code.ParagraphFormat.SpaceAfter = 0;

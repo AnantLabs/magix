@@ -82,6 +82,7 @@ namespace Magix.Brix.Viewports
                     b.Text = idx.Left;
                     b.ID = "bb-" + idxNo;
                     b.CssClass = "clear-both span-6";
+                    b.ToolTip = idx.Right == null ? "" : idx.Right.ToJSONString();
                     Tuple<string, Node> tmp = idx;
 
                     b.Click += delegate(object sender, EventArgs e)
@@ -127,7 +128,29 @@ namespace Magix.Brix.Viewports
         {
             if (IsDebug())
             {
-                DebuggingEvents.Add(new Tuple<string, Node>(e.Name, e.Params));
+                Node before = e.Params.Clone();
+                e.Params["Handled"].Value = true;
+
+                // Maybe looks funny, but needed since otherwise Active Events won't show up in the order they're raised ...
+                DebuggingEvents.Add(new Tuple<string, Node>(e.Name, before /*Defaults to pre Node, in case of exception*/));
+                int length = DebuggingEvents.Count;
+                RaiseEvent(
+                    e.Name,
+                    e.Params);
+                e.Params["Handled"].UnTie();
+                Node after = e.Params.Clone();
+
+                // If Active event is successful, and doen't choke on us, we save the Node in the post active event mode ...
+                DebuggingEvents.RemoveAt(length - 1);
+                DebuggingEvents.Insert(length - 1, new Tuple<string, Node>(e.Name, after));
+            }
+            else
+            {
+                e.Params["Handled"].Value = true;
+                RaiseEvent(
+                    e.Name,
+                    e.Params);
+                e.Params["Handled"].UnTie();
             }
         }
 

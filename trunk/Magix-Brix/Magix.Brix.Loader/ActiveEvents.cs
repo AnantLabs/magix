@@ -197,8 +197,17 @@ namespace Magix.Brix.Loader
             ActiveEventArgs e = new ActiveEventArgs(actualName, pars);
             if (name != "")
             {
-                RaiseEventImplementation(sender, "", pars, actualName);
+                if (pars != null &&
+                    (!pars.Contains("Handled") ||
+                    !pars["Handled"].Get<bool>()))
+                {
+                    RaiseEventImplementation(sender, "", pars, actualName);
+                    return name;
+                }
             }
+            if (pars != null && pars.Contains("Handled"))
+                pars["Handled"].UnTie();
+
             if (_methods.ContainsKey(name) || InstanceMethod.ContainsKey(name))
             {
                 // We must run this in two operations since events clear controls out

@@ -15,10 +15,10 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
 {
     /**
      * Level2: Contains Logic for file explorer. The file explorer is a component where you can browse
-     * the file folder system on your web server, remotely, and do many operations. Such as
+     * the file folder system on your web server. Such as
      * editing CSS files, uploading images and such. PS! To use this Module it is IMPERATIVE
      * that you've given the 'NETWORK SERVICE' account 'Full Access' to at the very least
-     * the 'media/' folder, or whatever folder you plan to use the explorer on on your
+     * the 'media/' folder, or whatever folder you plan to use the explorer at on your
      * web server
      */
     [ActiveController]
@@ -30,7 +30,7 @@ namespace Magix.Brix.Components.ActiveControllers.FileExplorer
          * "Filter" parameter. If you add up CSS, and set "CanCreateNewCssFile" to true, then
          * CSS files can both be edited and created on the fly. If you set "IsSelect", then
          * the end user can "select" files, which upon selection is done will raise the
-         * 'SelectEvent'
+         * 'SelectEvent'. @modulepositioning
          */
         [ActiveEvent(Name = "Magix.FileExplorer.LaunchExplorer")]
         protected void Magix_FileExplorer_LaunchExplorer(object sender, ActiveEventArgs e)
@@ -123,8 +123,9 @@ Account 'Full Control' over the specific folder?");
         }
 
         /**
-         * Level2: Will open up EitAsciiFile 'Notepad'ish' Editor with the given 'File' for editing.
-         * Intended to allow editing of CSS files and other types of ASCII files
+         * Level2: Will open up EitAsciiFile Notepad-Type Editor with the given 'File' for editing.
+         * Intended to allow editing of CSS files and other types of ASCII files. 'File' should 
+         * be the relative path of a file from the root of your application
          */
         [ActiveEvent(Name = "Magix.FileExplorer.EditAsciiFile")]
         protected void Magix_FileExplorer_EditAsciiFile(object sender, ActiveEventArgs e)
@@ -139,7 +140,7 @@ Account 'Full Control' over the specific folder?");
             node["Caption"].Value = "Editing file: " + 
                 fullPath.Replace(HttpContext.Current.Server.MapPath("~"), "");
 
-            ActiveEvents.Instance.RaiseLoadControl(
+            LoadModule(
                 "Magix.Brix.Components.ActiveModules.FileExplorer.EditAsciiFile",
                 "child",
                 node);
@@ -164,7 +165,8 @@ Account 'Full Control' over the specific folder?");
         }
 
         /**
-         * Level2: Changes the name of the file with 'OldName' to 'NewName' within the given 'Folder'
+         * Level2: Changes the name of the file with 'OldName' to 'NewName' within the given 'Folder'. 
+         * The file ending cannot be changed
          */
         [ActiveEvent(Name = "Magix.FileExplorer.ChangeFileName")]
         protected void Magix_FileExplorer_ChangeFileName(object sender, ActiveEventArgs e)

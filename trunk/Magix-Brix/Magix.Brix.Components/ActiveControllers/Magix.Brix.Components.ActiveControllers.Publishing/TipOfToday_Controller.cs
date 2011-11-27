@@ -89,7 +89,7 @@ before you need to create anything yourself, Magix Illuminate is already extreme
 <p>Anyway ...</p>
 <p>You create your pages according to 'Templates', which can be seen as <em>'Recipes'</em> for your pages. You have to have at least <em>One Template</em> in your system before you can start creating Pages. Every Page is based upon a Template, and no page can exist without its Template ...</p>
 <p>Click <em>Templates</em> at 3 O'Clock on your Dashboard now.</p>
-<p>PS!<br />Click the Edit links to view any specific templates ...</p>
+<p>BTW, Click the Edit links to view any specific templates ...</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <p>Every Template contains a list of WebPart Templates. These WebPart Templates can be positioned exactly as you wish on your page. When editing a Template, use the <em>Arrow Buttons</em> to position your WebParts ...</p>
@@ -169,9 +169,9 @@ before you need to create anything yourself, Magix Illuminate is already extreme
                 TipOfToday.Instance.CreateTip(@"
 <p>Add three properties to your form, name them</p>
 <ul>
-    <li>Name</li>
-    <li>Email</li>
-    <li>Subscribe</li>
+<li>Name</li>
+<li>Email</li>
+<li>Subscribe</li>
 </ul>
 <p>Change their description to something meaningful ...</p>
 <p>Make sure you change the 'Type Name' of your object to <em>'EmailSubscription'</em></p>
@@ -179,13 +179,12 @@ before you need to create anything yourself, Magix Illuminate is already extreme
                 TipOfToday.Instance.CreateTip(@"
 <p>Attach two Actions to your 'Save' property.</p>
 <ul>
-    <li>Magix.DynamicEvent.SaveActiveForm</li>
-    <li>Magix.DynamicEvent.EmptyAndClearActiveForm</li>
+<li>Magix.DynamicEvent.SaveActiveForm</li>
+<li>Magix.DynamicEvent.EmptyAndClearActiveForm</li>
 </ul>
 <p>The first Action will save your form, while the second one will empty it.</p>
 <p>Now try to <em>View your form in preview</em> mode, and test it out by typing in your email and name, and clicking Submit to save your Object ...</p>
-<p>PS!<br/>
-Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in case you wondered ... ;)</p>
+<p>BTW, Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in case you wondered ... ;)</p>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Type Names</h2>
@@ -198,10 +197,32 @@ Obviously it's crucial that the 'Save' action runs before the 'Empty' action, in
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Expressions</h2>
-<p>There are several places where you will need to understand Expressions. And expression starts out with '{' and ends with '}'.</p>
+<p>There are several places where you will need to understand <em>Expressions</em>. Expression starts out with '{' and ends with '}'.</p>
 <p>The purpose of an Expression is to de-reference something within your existing Node structure. Every Module and Action has a Node associated with it, which can either be statically, or dynamically built. This Node can be seen as the action/module data source.</p>
+<p>If you run TurnOnDebugging in your Actions, you can see how this Node structure is being passed back and forth by copying the Active Events with all their Parameters, serialized with the correct state, accordingly to how they looked like when they were being executed.</p>
 <p>This statement; 'root[Customer][Name].Value' means you will de-references the Value of whatever is inside the Root node of either your action or your module, within its Name node, which should be within the Customer node on root level. If this value, or these nodes doesn't exist somehow, a null value will be returned.</p>
-<p>If you start your expressions with 'root', it will traverse all the way upwards until it finds the top outer most node. Otherwise it will always expect to find its node relatively according to where it is while traversing</p>
+");
+                TipOfToday.Instance.CreateTip(@"
+<p>If you start your expressions with 'root', it will traverse all the way upwards until it finds the top outer most node. Otherwise it will always expect to find its node relatively according to where it is while traversing.</p>
+<p>You can go up one level by using [../]. What you end your expressions with defines what will be returned. There are three basic ways you can end your expressions, '.Value' to return the Value of the Node attempted to reach, '.Name' for its name, and nothing ']' to return a list of nodes. Not all operations can legally accept all different versions of expressions, just because they accept expressions. This id however individually for Active Event.</p>
+");
+                TipOfToday.Instance.CreateTip(@"
+<h2>Magix Turing Executor</h2>
+<p>The <em>Magix Turing Executor</em> is probably among some of the more complex, but also powerful concepts in Magix.</p>
+<p>It is basically the equivalent of programming, expcet instead of having to go by 'code', you create your execution tree directly as a tree structure, and you can intermingle Data and Code as you wish, and have code that creates code and such as much as you want to.</p>
+<p>Which btw, for the record, also opens up a whole range of security problems if you allow for code to be executed this way from external sources. Be careful!</p>
+");
+                TipOfToday.Instance.CreateTip(@"
+<p>As everything else in Magix, also the Turing Executor is started with an Active Event. Search through your Actions for execute to find a template action, which you can copy to create your own Turing Executable actions, which can contain Business Logic and all types of branching logic.</p>
+<p>The Magix Turing Executor has these keywords</p>
+<ul>
+<li>if - Checks a 1 or 3 compound expression and executes the given tree node as if it was an execute block if the expression evaluates to true. 'if' has these legal operators '==', '!=', '>', '<', '>=', '<='. All comparisons are currently being done by string comparison, meaning alphabetically, meaning you cannot compare numbers unless they're somehow formatted to match up in regards to digits alphabetically. E.g. filled.</li>
+<li>else if - Same as above, but will only be evaluated if the previous 'if' statement did not evaluate to true. 'else if' obeys by the same rules as the 'if' statements otherwise. An 'else if' statement must follow either an 'if' statement or another 'else if' statement, otherwise an execution error will occur.</li>
+<li>else - Same as above, but has no expression, and will be evaluated if none of the previous 'if' or 'else if' evaluated to true. Default execution path.</li>
+<li>execute - Creates a new block of execution. Use Value as comment if you wish.</li>
+<li>set - Expects an expression as a left hand, a '=' operator, and either an expression or a static value as its right hand expression.</li>
+<li>raise - Will raise the Active Event defined in its Value, with the given context node as its paramaters, unless the Active Event contains an expression at its end, inside of parantheses(), in which case it will pass on the Node expected to be found at its expression.</li>
+</ul>
 ");
                 TipOfToday.Instance.CreateTip(@"
 <h2>Drag and Drop Files</h2>

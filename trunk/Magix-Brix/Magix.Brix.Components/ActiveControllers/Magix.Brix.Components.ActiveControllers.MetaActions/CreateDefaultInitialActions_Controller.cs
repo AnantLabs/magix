@@ -148,7 +148,8 @@ comparison is made by string comparison, alphabetically before, means less. The
 first if will show 'Hello Creator' if the 'Name' node contains 'Thomas Hansen' as its Value. 
 The Expressions works such that you dereference your nodes, either by number, or name. Use 
 'root' to start traversing at root level, outer most parent. Use '../' to go upwards one 
-level";
+level. Read more about Expressions and the Magix Turing Executor to understand the details of 
+this Active Event and its possibilities";
                     a.StripInput = false;
 
                     Action.ActionParams ro = new Action.ActionParams();
@@ -1477,74 +1478,6 @@ read values and store result into";
                     m.Value = "Marvin";
                     m.TypeName = typeof(string).FullName;
                     a.Params.Add(m);
-
-                    a.Save();
-                }
-
-                if (Action.CountWhere(
-                    Criteria.Eq("Name", "Magix.DynamicEvent.MultiAction")) == 0)
-                {
-                    Action a = new Action();
-
-                    a.Name = "Magix.DynamicEvent.MultiAction";
-                    a.EventName = "Magix.Common.MultiAction";
-                    a.Description = @"Will raise several Actions consecutively, in the order they're defined
-in the 'Actions' node. Each Action needs a 'Name' and its own set of parameters through its 'Params' node.
-All 'Params' nodes will be copied into the root node before every event is raised. This means that your
-Root node will become VERY large after subsequent actions. Be warned ...";
-                    a.StripInput = false;
-
-                    Action.ActionParams m = new Action.ActionParams();
-                    m.Name = "Actions";
-                    a.Params.Add(m);
-
-                    Action.ActionParams ar = new Action.ActionParams();
-                    ar.Name = "act-1";
-                    m.Children.Add(ar);
-
-                    Action.ActionParams m2 = new Action.ActionParams();
-                    m2.Name = "ActionName";
-                    m2.Value = "Magix.DynamicEvent.ShowMessage";
-                    m2.TypeName = typeof(string).FullName;
-                    ar.Children.Add(m2);
-
-                    m2 = new Action.ActionParams();
-                    m2.Name = "Params";
-                    ar.Children.Add(m2);
-
-                    Action.ActionParams m3 = new Action.ActionParams();
-                    m3.Name = "Message";
-                    m3.Value = @"Sure Marvin can MultiTask, I can talk and dance at the SAME TIME! Watch Marvin go; JAZZ !! ;)";
-                    m2.Children.Add(m3);
-
-                    m3 = new Action.ActionParams();
-                    m3.Name = "Milliseconds";
-                    m3.Value = "5000";
-                    m3.TypeName = typeof(int).FullName;
-                    m2.Children.Add(m3);
-
-                    m3 = new Action.ActionParams();
-                    m3.Name = "Header";
-                    m3.Value = "Blame it on the Boogie ... !! ;)";
-                    m2.Children.Add(m3);
-
-                    ar = new Action.ActionParams();
-                    ar.Name = "act-2";
-                    m.Children.Add(ar);
-
-                    m2 = new Action.ActionParams();
-                    m2.Name = "ActionName";
-                    m2.Value = "Magix.DynamicEvent.PlaySound";
-                    ar.Children.Add(m2);
-
-                    m2 = new Action.ActionParams();
-                    m2.Name = "Params";
-                    ar.Children.Add(m2);
-
-                    m3 = new Action.ActionParams();
-                    m3.Name = "File";
-                    m3.Value = "media/Cool-Breeze.oga";
-                    m2.Children.Add(m3);
 
                     a.Save();
                 }

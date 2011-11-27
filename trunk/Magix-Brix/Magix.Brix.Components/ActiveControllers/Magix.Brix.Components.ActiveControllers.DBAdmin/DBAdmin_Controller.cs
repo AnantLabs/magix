@@ -17,7 +17,7 @@ using Magix.Brix.Components.ActiveTypes;
 namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 {
     /**
-     * Level2: Contains the logic for the DBAdmin module(s), which is also the Grid/CRUD-Foundation
+     * Level2: Contains the logic for the DBAdmin module(s), which is also the Grid/CRUD-foundation
      * system in Magix. Contains many useful methods and ActiveEvents for displaying
      * either Grids or editing Single Instances of Objects. Can react 100% 
      * transparently on ActiveTypes. Has support for Meta Types, meaning types where
@@ -27,23 +27,21 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
     public class DBAdmin_Controller : ActiveController
     {
         /**
-         * Level2: Loads up the DBAdmin BrowserClasses interface. Pass in a node for
-         * positioning and such
+         * Level2: Loads up the DBAdmin BrowserClasses interface. @modulepositioning
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewClasses")]
         protected void DBAdmin_Form_ViewClasses(object sender, ActiveEventArgs e)
         {
             if (e.Params == null)
                 e.Params = new Node();
-            
-            Node node = e.Params;
-            string container = node["Container"].Get<string>();
+
+            string container = e.Params["Container"].Get<string>("child");
 
             // TODO: Replace with Tree module ...
             LoadModule(
                 "Magix.Brix.Components.ActiveModules.DBAdmin.BrowseClasses",
                 container,
-                node);
+                e.Params);
         }
 
         /**
@@ -80,8 +78,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Level2: Will show all the objects of type 'FullTypeName' by using the passed in
-         * node for settings in regards to positioning and such
+         * Level2: Will show all the objects of type 'FullTypeName'. @modulepositioning
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewClass")]
         protected void DBAdmin_Form_ViewClass(object sender, ActiveEventArgs e)
@@ -191,7 +188,8 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Level2: Will show either a Child object or a List of children depending upon the 'IsList' parameter
+         * Level2: Will show either a Child object or a List of children depending upon the 
+         * 'IsList' parameter. @modulepositioning
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewListOrComplexPropertyValue")]
         protected void DBAdmin_Form_ViewListOrComplexPropertyValue(object sender, ActiveEventArgs e)
@@ -227,7 +225,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
 
                 LoadModule(
                     "Magix.Brix.Components.ActiveModules.DBAdmin.ViewListOfObjects",
-                    (e.Params.Contains("Container") ? e.Params["Container"].Get<string>() :  "child"),
+                    (e.Params.Contains("Container") ? e.Params["Container"].Get<string>() : "child"),
                     node);
             }
             else
@@ -239,7 +237,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                     node);
                 LoadModule(
                     "Magix.Brix.Components.ActiveModules.DBAdmin.ViewSingleObject",
-                    "child",
+                    (e.Params.Contains("Container") ? e.Params["Container"].Get<string>() : "child"),
                     node);
             }
         }
@@ -319,7 +317,7 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
         }
 
         /**
-         * Level2: Will show one Complex object with the 'ID' and 'FullTypeName'
+         * Level2: Will show one Complex object with the 'ID' and 'FullTypeName'. @modulepositioning
          */
         [ActiveEvent(Name = "DBAdmin.Form.ViewComplexObject")]
         protected void DBAdmin_ShowComplexObject(object sender, ActiveEventArgs e)
@@ -559,7 +557,8 @@ model while trying to create object, and it was never created for some reasons."
         /**
          * Level2: Will show a list of objects of type 'FullTypeName' and allow the user
          * to pick one to append into 'ParentID' 'ParentPropertyName' with the given
-         * 'ParentFullTypeName'
+         * 'ParentFullTypeName'. If 'ReUseNode' is true, then you can position the 
+         * module. @modulepositioning
          */
         [ActiveEvent(Name = "DBAdmin.Form.AppendObject")]
         protected void DBAdmin_Form_AppendObject(object sender, ActiveEventArgs e)
@@ -699,7 +698,8 @@ collection you're removing it from.</p>";
         }
 
         /**
-         * Level2: Will show the 'Change Single-Object Reference' form to the end user
+         * Level2: Will show the 'Change Single-Object Reference' form to the end user. If
+         * 'ReUseNode' is true, then Module positioning parameters can be applied. @modulepositioning
          */
         [ActiveEvent(Name = "DBAdmin.Form.ChangeObject")]
         protected void DBAdmin_Form_ChangeObject(object sender, ActiveEventArgs e)
@@ -708,7 +708,14 @@ collection you're removing it from.</p>";
             int parentId = e.Params["ParentID"].Get<int>();
             string parentPropertyName = e.Params["ParentPropertyName"].Get<string>();
             string parentFullTypeName = e.Params["ParentFullTypeName"].Get<string>();
+
             Node node = new Node();
+
+            if (e.Params != null && e.Params["ReUseNode"].Get<bool>())
+            {
+                node = e.Params;
+            }
+
             node["IsSelect"].Value = true;
             node["IsList"].Value = false;
             node["ParentID"].Value = parentId;

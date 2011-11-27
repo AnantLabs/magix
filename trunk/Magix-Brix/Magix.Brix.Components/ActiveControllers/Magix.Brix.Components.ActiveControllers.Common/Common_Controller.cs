@@ -11,15 +11,16 @@ using Magix.Brix.Types;
 namespace Magix.Brix.Components.ActiveControllers.Common
 {
     /**
-     * Level2: Contains some common things and common control helpers. For instance loading of 
-     * a color picker dialogue
+     * Level2: Contains some common helpers and logic that doesn't belong at one particular place.
+     * For instance loading of a color picker dialogue
      */
     [ActiveController]
     public class Common_Controller : ActiveController
     {
         /**
          * Level2: Will load up a Color Picker dialogue such that the end user can pick a color 
-         * or image for using as e.g. background color/textures
+         * or image for using as e.g. background color/textures. See the PickColorOrImage module
+         * for details about every configurable parameter
          */
         [ActiveEvent(Name = "Magix.Core.PickColorOrImage")]
         protected void Magix_Core_PickColorOrImage(object sender, ActiveEventArgs e)
@@ -37,7 +38,7 @@ namespace Magix.Brix.Components.ActiveControllers.Common
         }
 
         /**
-         * Level2: Will launch the File Explorer to allow the end user to pick and image 
+         * Level2: Will launch the File Explorer to allow the end user to pick an image 
          * for rendering as e.g. background textures for widgets etc
          */
         [ActiveEvent(Name = "Magix.Core.FilePicker.SelectFileInsteadOfColor")]
