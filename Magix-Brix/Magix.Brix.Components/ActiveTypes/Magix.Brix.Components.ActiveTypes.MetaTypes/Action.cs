@@ -12,6 +12,7 @@ using Magix.Brix.Loader;
 using System.Web.Caching;
 using System.Web.UI;
 using System.Web;
+using System.Collections.Generic;
 
 namespace Magix.Brix.Components.ActiveTypes.MetaTypes
 {
@@ -25,7 +26,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
      * property.
      */
     [ActiveType]
-    public class Action : ActiveType<Action>
+    public class Action : ActiveTypeCached<Action>
     {
         /**
          * Level2: Used to encapsulate one Action 'parameter' in Magix. Every Action can send
@@ -34,7 +35,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
          * this logic
          */
         [ActiveType]
-        public class ActionParams : ActiveType<ActionParams>
+        public class ActionParams : ActiveTypeCached<ActionParams>
         {
             public ActionParams()
             {
@@ -169,22 +170,6 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
          */
         [ActiveField]
         public DateTime Created { get; set; }
-
-        /**
-         * Returns the first action from your data storage which are true
-         * for the given criterias. Pass nothing () if no criterias are needed.
-         */
-        public static new Action SelectFirst(params Criteria[] args)
-        {
-            string key = "action_";
-            foreach (Criteria idx in args)
-            {
-                key += idx.PropertyName;
-                if (idx.Value != null)
-                    key += idx.Value.GetHashCode().ToString();
-            }
-            return ActiveType<Action>.SelectFirst(args);
-        }
 
         /**
          * Overridden to make sure name is unique, among other things

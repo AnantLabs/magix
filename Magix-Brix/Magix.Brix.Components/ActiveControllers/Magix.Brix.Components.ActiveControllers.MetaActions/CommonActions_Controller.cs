@@ -61,7 +61,9 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Will add the given 'Value' with the given 'Key' to the Caching.Cache Page object
+         * Level2: Will add the given 'Value' with the given 'Key' to the Caching.Cache Page object. If
+         * the Value of 'Value' contains anything but null or '' it will be serialized as JSON, otherwise
+         * the Value object of the given node will be serialized
          */
         [ActiveEvent(Name = "Magix.Common.AddToCache")]
         protected void Magix_Common_AddToCache(object sender, ActiveEventArgs e)
@@ -69,7 +71,16 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             if (!e.Params.Contains("Key") && !e.Params.Contains("Value"))
                 throw new ArgumentException("You need to specify what 'Key' and 'Value' you wish to add ...");
 
-            Page.Cache[e.Params["Key"].Get<string>()] = Node.FromJSONString(e.Params["Value"].ToJSONString());
+            if (!string.IsNullOrEmpty(e.Params["Value"].Get<string>()))
+            {
+                // Some funky object attempted being added
+                Page.Cache[e.Params["Key"].Get<string>()] = e.Params["Value"].Value;
+            }
+            else
+            {
+                // Assuming serialization of entire node structure ...
+                Page.Cache[e.Params["Key"].Get<string>()] = Node.FromJSONString(e.Params["Value"].ToJSONString());
+            }
         }
 
         /**
@@ -88,7 +99,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 object tmp = Page.Cache.Get(e.Params["Key"].Get<string>());
                 if (tmp != null)
-                    e.Params["Value"].Value = tmp;
+                {
+                    if (tmp is string)
+                    {
+                        e.Params["Value"].Value = Node.FromJSONString(tmp as string);
+                    }
+                    else
+                        e.Params["Value"].Value = tmp;
+                }
             }
             else
             {
@@ -97,7 +115,13 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 {
                     if (enume.Key.ToString().Contains(e.Params["Contains"].Get<string>()))
                     {
-                        e.Params["Value"].Value = enume.Value;
+                        e.Params["Key"].Value = enume.Key;
+                        if (enume.Value is string)
+                        {
+                            e.Params["Value"].Value = Node.FromJSONString(enume.Value as string);
+                        }
+                        else
+                            e.Params["Value"].Value = enume.Value;
                         return;
                     }
                 }
@@ -106,18 +130,18 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
         /**
          * Level2: Will remove the given 'Key' item from your Caching. Cache object 
-         * associated with the Page object. Or 'Contains' to remove all with the given key.
+         * associated with the Page object. If 'Key' is a direct hit, it will only remove 
+         * one entry, if not, it will remove everything containing 'Key' from its cache
          */
         [ActiveEvent(Name = "Magix.Common.RemoveFromCache")]
         protected void Magix_Common_RemoveFromCache(object sender, ActiveEventArgs e)
         {
-            if (!e.Params.Contains("Key") && !e.Params.Contains("Contains"))
+            if (!e.Params.Contains("Key"))
                 throw new ArgumentException("You need to specify what 'Key' you wish to remove ...");
 
-            if (e.Params.Contains("Key"))
+            if (Page.Cache.Get(e.Params["Key"].Get<string>()) != null)
             {
-                if (Page.Cache.Get(e.Params["Key"].Get<string>()) != null)
-                    Page.Cache.Remove(e.Params["Key"].Get<string>());
+                Page.Cache.Remove(e.Params["Key"].Get<string>());
             }
             else
             {
@@ -259,7 +283,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
 
         /**
          * Level2: Executes the given node recursively. This is the Magix Turing Executor which 
-         * allows dfor logic to be implemented without having to code. @executor
+         * allows for logic to be implemented without having to code. The Magix Turing Executor 
+         * can modify code at its instruction pointer if you wish. You can create selfmodifiable 
+         * code which changes the code as it is being executed almost. Make sure you understand
+         * Expressions to get the most out of this Active Event. @executor
          */
         [ActiveEvent(Name = "Magix.System.execute")]
         protected void Magix_System_execute(object sender, ActiveEventArgs e)
@@ -267,7 +294,8 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             List<string> keyWords = new List<string>();
             List<string> buffer = new List<string>();
             bool hasFound = false;
-            for (int idxNo = 0; idxNo < e.Params.Count; idxNo ++)
+            int length = e.Params.Count;
+            for (int idxNo = 0; idxNo < length; idxNo ++)
             {
                 Node idx = e.Params[idxNo];
                 keyWords.Add(idx.Name);
@@ -371,6 +399,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         }
                         break;
                 }
+                length = e.Params.Count;
             }
         }
 

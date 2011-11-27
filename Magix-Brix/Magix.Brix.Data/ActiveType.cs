@@ -13,6 +13,7 @@ using System.Data.Common;
 using System.Configuration;
 using System.Collections.Generic;
 using Magix.Brix.Data.Internal;
+using System.Diagnostics;
 
 namespace Magix.Brix.Data
 {

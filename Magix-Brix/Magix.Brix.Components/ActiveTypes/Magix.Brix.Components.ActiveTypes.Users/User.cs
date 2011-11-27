@@ -49,7 +49,7 @@ namespace Magix.Brix.Components.ActiveTypes.Users
      * really entirely stable quite yet ...! ]
      */
     [ActiveType(TableName = "docMagix.Brix.Components.ActiveTypes.Users.UserBase")]
-    public class UserBase : ActiveType<UserBase>
+    public class UserBase : ActiveTypeCached<UserBase>
     {
         public UserBase()
         {

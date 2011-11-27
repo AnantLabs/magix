@@ -194,6 +194,11 @@ namespace Magix.Brix.Data
         {
             return new CritRange(start, end, sortColumn, ascending);
         }
+
+        public override int GetHashCode()
+        {
+            return ((this.PropertyName ?? "") + (this.Value ?? "")).GetHashCode().ToString().GetHashCode();
+        }
     }
 
     /*
@@ -228,6 +233,11 @@ namespace Magix.Brix.Data
         {
             get { return _ascending; }
         }
+
+        public override int GetHashCode()
+        {
+            return ((this.PropertyName ?? "") + (this.Value ?? "") + _ascending).GetHashCode().ToString().GetHashCode();
+        }
     }
 
     public class CritRange : Criteria
@@ -244,6 +254,11 @@ namespace Magix.Brix.Data
             _end = end;
             _sortColumn = sortColumn;
             _ascending = ascending;
+        }
+
+        public override int GetHashCode()
+        {
+            return ((this.PropertyName ?? "") + (this.Value ?? "") + _ascending.ToString() + _sortColumn.ToString() + _start.ToString() + "|" + _end.ToString()).GetHashCode().ToString().GetHashCode();
         }
 
         public int Start
@@ -288,6 +303,11 @@ namespace Magix.Brix.Data
         }
 
         public bool Reversed { get; set; }
+
+        public override int GetHashCode()
+        {
+            return ((this.PropertyName ?? "") + (this.Value ?? "") + Reversed).GetHashCode().ToString().GetHashCode();
+        }
     }
 
     /*
