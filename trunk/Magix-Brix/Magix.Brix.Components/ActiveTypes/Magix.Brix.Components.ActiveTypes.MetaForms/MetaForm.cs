@@ -11,6 +11,7 @@ using Magix.Brix.Types;
 using System.Globalization;
 using System.Web.UI;
 using System.Web;
+using Magix.Brix.Loader;
 
 namespace Magix.Brix.Components.ActiveTypes.MetaForms
 {
@@ -18,7 +19,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
      * Level3: Encapsulates the logic for serializing and storing Meta Forms objects
      */
     [ActiveType]
-    public class MetaForm : ActiveType<MetaForm>
+    public class MetaForm : ActiveTypeCached<MetaForm>
     {
         /**
          * Level3: Encapsulates a serialized Node item
@@ -282,22 +283,6 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
             Name = name;
 
             base.Save();
-        }
-
-        /**
-         * Returns the first action from your data storage which are true
-         * for the given criterias. Pass nothing () if no criterias are needed.
-         */
-        public static new MetaForm SelectFirst(params Criteria[] args)
-        {
-            string key = "form_";
-            foreach (Criteria idx in args)
-            {
-                key += idx.PropertyName;
-                if (idx.Value != null)
-                    key += idx.Value.GetHashCode().ToString();
-            }
-            return ActiveType<MetaForm>.SelectFirst(args);
         }
 
         /**

@@ -56,6 +56,10 @@
       <Project>{1973DB85-87D5-4844-83AD-D3C9E3CD7DDE}</Project>
       <Name>Magix.Brix.Components.ActiveModules.Users</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
+      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
+      <Name>Magix.Brix.Components %28Brix\Magix.Brix.Components\Helpers\Magix.Brix.Components%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Magix.Brix.Components.ActiveTypes.Publishing\Magix.Brix.Components.ActiveTypes.Publishing.csproj">
       <Project>{175455B9-43D0-4190-A2AE-8033BD3D62A1}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.Publishing</Name>

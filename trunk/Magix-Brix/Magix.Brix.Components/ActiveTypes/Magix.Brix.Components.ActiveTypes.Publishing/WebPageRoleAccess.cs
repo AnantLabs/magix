@@ -24,7 +24,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
      * Mother page, unless the child page itself starts granting and denying access to specific pages
      */
     [ActiveType]
-    public class WebPageRoleAccess : ActiveType<WebPageRoleAccess>
+    public class WebPageRoleAccess : ActiveTypeCached<WebPageRoleAccess>
     {
         /**
          * Role to grant users belonging to that role access to the Page in this object. All other roles, 

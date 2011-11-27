@@ -21,7 +21,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
      * using Magix, without being imposed onto an existing data-structure in any ways
      */
     [ActiveType]
-    public class MetaObject : ActiveType<MetaObject>
+    public class MetaObject : ActiveTypeCached<MetaObject>
     {
         /**
          * Encapsulates one 'property' or 'field' for a MetaObject. Every MetaObject have

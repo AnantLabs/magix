@@ -34,7 +34,7 @@ namespace Magix.Brix.Components.ActiveTypes.Publishing
      * opening it
      */
     [ActiveType]
-    public class WebPage : ActiveType<WebPage>
+    public class WebPage : ActiveTypeCached<WebPage>
     {
         public WebPage ()
 	    {

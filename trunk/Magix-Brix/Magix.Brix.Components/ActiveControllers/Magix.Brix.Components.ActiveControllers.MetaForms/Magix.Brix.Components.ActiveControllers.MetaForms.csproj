@@ -74,6 +74,10 @@
       <Project>{E1BAF1A9-58D0-4B95-8855-8D4008EAE918}</Project>
       <Name>Magix.Brix.Components.ActiveTypes.MetaTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Helpers\Magix.Brix.Components.csproj">
+      <Project>{C38BEB2B-CBC6-4280-9D02-1AE52B0DB47B}</Project>
+      <Name>Magix.Brix.Components %28Brix\Magix.Brix.Components\Helpers\Magix.Brix.Components%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
