@@ -57,6 +57,8 @@ namespace Magix.Brix.Loader
             // Checking to see if assmebly is already loaded...
             foreach (Assembly idx in PluginLoader.PluginAssemblies)
             {
+                if (idx.GlobalAssemblyCache)
+                    continue;
                 if (idx.CodeBase.Substring(idx.CodeBase.LastIndexOf("/") + 1).ToLower() ==
                     assemblyName.ToLower())
                 {

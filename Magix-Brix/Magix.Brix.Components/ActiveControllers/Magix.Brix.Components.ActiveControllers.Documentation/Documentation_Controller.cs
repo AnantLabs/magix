@@ -96,7 +96,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
             string n = e.Params["ActiveEventName"].Get<string>();
             if (!string.IsNullOrEmpty(n))
             {
-                n = n.Replace(".", "_");
+                n = n.Replace(".", "_").Replace("-", "_");
                 foreach (Class idx in Docs.GetAllClasses())
                 {
                     foreach (Method idxM in idx.GetMethods(2))
@@ -111,7 +111,7 @@ namespace Magix.Brix.Components.ActiveControllers.Documentation
                         }
                     }
                     if (e.Params.Contains("Result"))
-                        e.Params["Result"].Value = e.Params["Result"].Get<string>().Trim();
+                        e.Params["Result"].Value = e.Params["Result"].Get<string>().Trim('|');
                 }
             }
         }
@@ -569,13 +569,20 @@ protected void PittyPatty()
                 {
                     foreach (Assembly idxA in Loader.PluginLoader.PluginAssemblies)
                     {
-                        foreach (System.Type idxT in idxA.GetTypes())
+                        try
                         {
-                            if (idxT.FullName == cls.FullName)
+                            foreach (System.Type idxT in idxA.GetTypes())
                             {
-                                eh = idxT;
-                                break;
+                                if (idxT.FullName == cls.FullName)
+                                {
+                                    eh = idxT;
+                                    break;
+                                }
                             }
+                        }
+                        catch
+                        {
+                            ; // Some throws ...
                         }
                     }
                 }
@@ -1196,20 +1203,9 @@ protected void PittyPatty()
                             }
                         }
                     }
-                    catch (Exception err)
+                    catch
                     {
-                        Node xx = new Node();
-
-                        xx["Message"].Value =
-                            "<p>File: " + idx.FullName + "</p>" + 
-                            "<p>Message: " + err.Message + "</p>" +
-                            "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
-
-                        xx["IsError"].Value = true;
-
-                        RaiseEvent(
-                            "Magix.Core.ShowMessage",
-                            xx);
+                        ; // Some will throw ...
                     }
                 }
                 int idxNo = 1;

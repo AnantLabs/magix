@@ -345,9 +345,16 @@ namespace Magix.Brix.Components.ActiveControllers.DBAdmin
                 if (pars != null && pars.Length > 0)
                     node["Criteria"].Value = pars;
 
+                string evtName = "DBAdmin.Data.GetContentsOfClass";
+                if (node.Contains("GetContentsEventName"))
+                    evtName = node["GetContentsEventName"].Get<string>();
+                else if (node.Contains("GetObjectsEvent"))
+                    evtName = node["GetObjectsEvent"].Get<string>();
+                if (node.Contains("Handled"))
+                    node["Handled"].UnTie();
                 ActiveEvents.Instance.RaiseActiveEvent(
                     this,
-                    "DBAdmin.DynamicType.GetObjectsNode",
+                    evtName,
                     node);
             }
             else
