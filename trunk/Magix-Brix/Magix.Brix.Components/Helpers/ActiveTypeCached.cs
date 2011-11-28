@@ -28,9 +28,7 @@ namespace Magix.Brix.Components
             string key = typeof(T).FullName;
             foreach (Criteria idx in args)
             {
-                key += idx.PropertyName;
-                if (idx.Value != null)
-                    key += idx.Value.GetHashCode().ToString();
+                key += idx.GetHashCode().ToString();
             }
             Node n = new Node();
             n["Key"].Value = key;
@@ -82,8 +80,7 @@ namespace Magix.Brix.Components
                 string key = typeof(T[]).FullName;
                 foreach (Criteria idx in args)
                 {
-                    if (idx != null)
-                        key += idx.GetHashCode().ToString();
+                    key += idx.GetHashCode().ToString();
                 }
                 Node n = new Node();
                 n["Key"].Value = key;

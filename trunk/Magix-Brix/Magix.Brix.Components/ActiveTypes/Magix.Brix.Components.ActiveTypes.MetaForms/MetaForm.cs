@@ -283,6 +283,18 @@ namespace Magix.Brix.Components.ActiveTypes.MetaForms
             Name = name;
 
             base.Save();
+
+            Magix.Brix.Types.Node n = new Magix.Brix.Types.Node();
+            n["Key"].Value = typeof(MetaForm.Node).FullName;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Common.RemoveFromCache",
+                n);
+            n["Key"].Value = typeof(MetaForm.Node[]).FullName;
+            ActiveEvents.Instance.RaiseActiveEvent(
+                this,
+                "Magix.Common.RemoveFromCache",
+                n);
         }
 
         /**

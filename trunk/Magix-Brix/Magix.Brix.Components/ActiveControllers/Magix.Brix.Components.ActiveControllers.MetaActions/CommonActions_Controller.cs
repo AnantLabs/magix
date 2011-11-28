@@ -232,9 +232,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             {
                 string exp = evtName.Split('(')[1].Split(')')[0];
                 evtName = evtName.Substring(0, evtName.IndexOf('(')).Trim();
+                Node pre = node;
                 node = CommonActions_Controller.GetExpressionValue(exp, node) as Node;
                 if (node == null)
-                    throw new ArgumentException("Sorry, but your Node expression didn't evaluate to a valid Node: " + exp);
+                    throw new ArgumentException("Sorry, but your Node expression didn't evaluate to a valid Node: '" + exp + "', current node: " + pre.Name);
             }
             RaiseEvent(
                 evtName,
@@ -283,6 +284,29 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
+         * Level2: Loops as long as expression is true somehow, through all nodes in expression 
+         * and raises 'execute' with every one as a 'this' instance. @executor
+         */
+        [ActiveEvent(Name = "Magix.System.while")]
+        protected void Magix_System_while(object sender, ActiveEventArgs e)
+        {
+            bool res = ObjectWhenExpressionIsTrue(e.Params.Get<string>(), e.Params);
+
+            while (res)
+            {
+                RaiseEvent(
+                    "Magix.System.execute",
+                    e.Params);
+                res = ObjectWhenExpressionIsTrue(e.Params.Get<string>(), e.Params);
+            }
+        }
+
+        private bool ObjectWhenExpressionIsTrue(string exp, Node node)
+        {
+            return new Expression(exp, node).Compute();
+        }
+
+        /**
          * Level2: Executes the given node recursively. This is the Magix Turing Executor which 
          * allows for logic to be implemented without having to code. The Magix Turing Executor 
          * can modify code at its instruction pointer if you wish. You can create selfmodifiable 
@@ -307,6 +331,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             "Magix.System.execute",
                             idx);
                         break;
+                    case "clean":
+                        RaiseEvent(
+                            "Magix.System.untie",
+                            idx);
+                        break;
                     case "set":
                         RaiseEvent(
                             "Magix.System.set",
@@ -318,7 +347,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             idx);
                         break;
                     case "if":
-                        if (CheckStatement(idx.Get<string>(), e.Params))
+                        if (CheckStatement(idx.Get<string>(), idx))
                         {
                             hasFound = true;
                             RaiseEvent(
@@ -334,7 +363,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             if (keyWords[keyWords.Count - 2] == "if" ||
                                 keyWords[keyWords.Count - 2] == "else if")
                             {
-                                if (CheckStatement(idx.Get<string>(), e.Params))
+                                if (CheckStatement(idx.Get<string>(), idx))
                                 {
                                     hasFound = true;
                                     RaiseEvent(
@@ -379,6 +408,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                             "Magix.System.foreach",
                             idx);
                         break;
+                    case "when":
+                        RaiseEvent(
+                            "Magix.System.when",
+                            idx);
+                        break;
                     default:
                         if (idx.Name.StartsWith("@"))
                         {
@@ -401,6 +435,10 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         break;
                 }
                 length = e.Params.Count;
+            }
+            if (e.Params.Name == "execute")
+            {
+                e.Params.UnTie();
             }
         }
 
@@ -493,7 +531,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                 if (components.Count == 0)
                     return false;
                 if (components.Count == 1)
-                    return components.Equals("True");
+                    return components != null;
                 if (components.Count == 3)
                 {
                     switch (components[1])
@@ -529,6 +567,46 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         private bool CheckStatement(string expr, Node node)
         {
             return new Expression(expr, node).Compute();
+        }
+
+        /**
+         * Level2: Will untie the current Node. Can also be given 
+         * an Epression that returns a Node list, at which it will 
+         * untie that node. Afterwards, all child nodes will become 
+         * executed, but only if no Expression is given. Which creates 
+         * a useful way to start exeution paths, on their own temporary data, 
+         * which does not mess up the DataSource node structure of your Module, etc
+         */
+        [ActiveEvent(Name = "Magix.System.untie")]
+        protected void Magix_System_untie(object sender, ActiveEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Params.Get<string>()))
+            {
+                Node n = CommonActions_Controller.GetExpressionValue(
+                    e.Params.Get<string>(), 
+                    e.Params) 
+                    as Node;
+                if (n == null)
+                    throw new ArgumentException(
+                        "untie given a null expression; '" + 
+                        e.Params.Get<string>() + 
+                        "', with node; " + 
+                        e.Params.Name);
+                if(n.Parent == null)
+                    throw new ArgumentException(
+                        "untie given an expression without parent; '" +
+                        e.Params.Get<string>() +
+                        "', with node; " +
+                        e.Params.Name);
+                n.UnTie();
+            }
+            else
+            {
+                e.Params.UnTie();
+                RaiseEvent(
+                    "Magix.System.execute",
+                    e.Params);
+            }
         }
 
         /**
@@ -1260,6 +1338,7 @@ can only contain numerical characters to be legal",
 
             Transform(expr, e.Params, retVal);
 
+            retVal.SetParent(e.Params);
             e.Params["Expression"] = retVal;
         }
 

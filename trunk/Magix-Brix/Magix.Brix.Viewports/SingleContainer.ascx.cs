@@ -67,7 +67,7 @@ namespace Magix.Brix.Viewports
             base.CreateChildControls();
             CreateChildContainers();
             ReCreateDebugControls();
-            DebuggingEvents = new List<Tuple<string, Node>>();
+            DebuggingEvents = new List<Tuple<string, Tuple<Node, string>>>();
         }
 
         private void ReCreateDebugControls()
@@ -76,14 +76,17 @@ namespace Magix.Brix.Viewports
             {
                 int idxNo = 0;
 
-                foreach (Tuple<string, Node> idx in DebuggingEvents)
+                foreach (Tuple<string, Tuple<Node, string>> idx in DebuggingEvents)
                 {
                     LinkButton b = new LinkButton();
                     b.Text = idx.Left;
                     b.ID = "bb-" + idxNo;
                     b.CssClass = "clear-both span-6";
-                    b.ToolTip = idx.Right == null ? "" : idx.Right.ToJSONString();
-                    Tuple<string, Node> tmp = idx;
+                    b.ToolTip = 
+                        (idx.Right.Left == null ? 
+                            "" :
+                            (idx.Right.Right.Split(new string[] { "|:|" }, StringSplitOptions.RemoveEmptyEntries)[0] + idx.Right.Left.ToJSONString()));
+                    Tuple<string, Tuple<Node, string>> tmp = idx;
 
                     b.Click += delegate(object sender, EventArgs e)
                     {
@@ -91,7 +94,15 @@ namespace Magix.Brix.Viewports
                         Node node = new Node();
 
                         node["EventName"].Value = tmp.Left;
-                        node["EventNode"].Value = tmp.Right;
+                        node["EventNode"].Value = tmp.Right.Left;
+                        Node ddd = new Node();
+                        if(tmp.Right.Right.Contains("|:|"))
+                            ddd = Node.FromJSONString(tmp.Right.Right.Split(new string[] { "|:|" }, StringSplitOptions.RemoveEmptyEntries)[1]);
+                        node["RawNode"].Value = ddd;
+                        ddd = new Node();
+                        if (tmp.Right.Right.Split(new string[] { "|:|" }, StringSplitOptions.RemoveEmptyEntries).Length >= 3)
+                            ddd = Node.FromJSONString(tmp.Right.Right.Split(new string[] { "|:|" }, StringSplitOptions.RemoveEmptyEntries)[2]);
+                        node["RawNodeAfter"].Value = ddd;
 
                         RaiseSafeEvent(
                             "Magix.Core.EventClickedWhileDebugging",
@@ -104,13 +115,25 @@ namespace Magix.Brix.Viewports
             }
         }
 
-        private List<Tuple<string, Node>> DebuggingEvents
+        private string GetPath(Node node)
+        {
+            string r = "";
+            while (node != null)
+            {
+                r = (node.Name ?? "[null]") + "/" + r;
+                node = node.Parent;
+            }
+            r = r.Trim('/') + "\r\n";
+            return r;
+        }
+
+        private List<Tuple<string, Tuple<Node, string>>> DebuggingEvents
         {
             get
             {
                 if (Session["Magix.Brix.DebuggingEvents"] == null)
-                    Session["Magix.Brix.DebuggingEvents"] = new List<Tuple<string, Node>>();
-                return Session["Magix.Brix.DebuggingEvents"] as List<Tuple<string, Node>>;
+                    Session["Magix.Brix.DebuggingEvents"] = new List<Tuple<string, Tuple<Node, string>>>();
+                return Session["Magix.Brix.DebuggingEvents"] as List<Tuple<string, Tuple<Node, string>>>;
             }
             set
             {
@@ -128,21 +151,37 @@ namespace Magix.Brix.Viewports
         {
             if (IsDebug())
             {
-                Node before = e.Params.Clone();
+                if (e.Params == null)
+                    e.Params = new Node();
+                Node before = e.Params;
                 e.Params["Handled"].Value = true;
 
+                Node oldRoot = e.Params.RootNode();
+
+                string path = GetPath(e.Params) + "|:|" + e.Params.RootNode().ToJSONString() + "|:|";
+
                 // Maybe looks funny, but needed since otherwise Active Events won't show up in the order they're raised ...
-                DebuggingEvents.Add(new Tuple<string, Node>(e.Name, before /*Defaults to pre Node, in case of exception*/));
+                DebuggingEvents.Add(
+                    new Tuple<string, Tuple<Node, string>>(
+                        e.Name, 
+                        new Tuple<Node, string>(before, path) /*Defaults to pre Node, in case of exception*/));
                 int length = DebuggingEvents.Count;
                 RaiseEvent(
                     e.Name,
                     e.Params);
+                path += oldRoot.ToJSONString() + "|:|";
                 e.Params["Handled"].UnTie();
                 Node after = e.Params.Clone();
 
                 // If Active event is successful, and doen't choke on us, we save the Node in the post active event mode ...
                 DebuggingEvents.RemoveAt(length - 1);
-                DebuggingEvents.Insert(length - 1, new Tuple<string, Node>(e.Name, after));
+                DebuggingEvents.Insert(
+                    length - 1, 
+                    new Tuple<string, Tuple<Node, string>>(
+                        e.Name, 
+                        new Tuple<Node, string>(
+                            after, 
+                            path)));
             }
             else
             {
