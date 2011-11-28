@@ -224,6 +224,15 @@ namespace Magix.Brix.Types
         }
 
         /**
+         * Level3: Assigns a Parent to the current node. Useful for 
+         * moving nodes around
+         */
+        public void SetParent(Node n)
+        {
+            _parent = n;
+        }
+
+        /**
          * Level3: Returns the name of the node
          */
         public string Name

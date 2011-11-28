@@ -1410,6 +1410,10 @@ Deleting it may break these parts.</p>";
                 Action a = new Action();
                 a.EventName = eventName;
                 a.Name = "Debug-Copy-" + eventName;
+                a.Description = 
+                    e.Params["RawNode"].Get<Node>().ToJSONString() + 
+                    "\r\n\r\n\r\n\r\n" +
+                    e.Params["RawNodeAfter"].Get<Node>().ToJSONString();
 
                 FillActionParams(eventNode, a.Params);
 

@@ -35,7 +35,7 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
          * this logic
          */
         [ActiveType]
-        public class ActionParams : ActiveTypeCached<ActionParams>
+        public class ActionParams : ActiveType<ActionParams>
         {
             public ActionParams()
             {
@@ -82,6 +82,18 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
                     TypeName = "System.String";
 
                 base.Save();
+
+                Node n = new Node();
+                n["Key"].Value = typeof(Action.ActionParams).FullName;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Common.RemoveFromCache",
+                    n);
+                n["Key"].Value = typeof(Action.ActionParams[]).FullName;
+                ActiveEvents.Instance.RaiseActiveEvent(
+                    this,
+                    "Magix.Common.RemoveFromCache",
+                    n);
             }
 
             /**
