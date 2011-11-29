@@ -25,6 +25,9 @@ namespace Magix.Brix.Components
     {
         public static new T SelectFirst(params Criteria[] args)
         {
+            if (args == null)
+                args = new Criteria[] { };
+
             string key = typeof(T).FullName;
             foreach (Criteria idx in args)
             {
@@ -49,6 +52,9 @@ namespace Magix.Brix.Components
 
         public static new IEnumerable<T> Select(params Criteria[] args)
         {
+            if (args == null)
+                args = new Criteria[] { };
+
             bool hasId = false;
             if (args != null && args.Length > 0)
             {

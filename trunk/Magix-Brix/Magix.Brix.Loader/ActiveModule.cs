@@ -123,16 +123,13 @@ namespace Magix.Brix.Loader
             }
             catch (Exception err)
             {
-                Exception tmp = err;
-
-                while (tmp.InnerException != null)
-                    tmp = tmp.InnerException;
+                Exception tmp = err.GetBaseException();
 
                 Node m = new Node();
 
                 m["Message"].Value = 
                     "<p>" + tmp.Message + "</p>" + 
-                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
+                    "<p class='mux-err-stack-trace'>" + tmp.StackTrace + "</p>";
 
                 m["Milliseconds"].Value = 10000;
                 m["IsError"].Value = true;
@@ -255,19 +252,18 @@ namespace Magix.Brix.Loader
             }
             catch (Exception err)
             {
-                while (err.InnerException != null)
-                    err = err.InnerException;
+                Exception tmp = err.GetBaseException();
 
                 Node node = new Node();
 
                 node["Message"].Value =
                     "<p>" + string.Format(msg, args) + "</p>" +
                     "<p>Message from Server; </p>" +
-                    "<p>" + err.Message + "</p>" +
+                    "<p>" + tmp.Message + "</p>" +
                     "<p>Stack Trace; </p>" +
-                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
+                    "<p class='mux-err-stack-trace'>" + tmp.StackTrace + "</p>";
 
-                node["Header"].Value = err.GetType().FullName;
+                node["Header"].Value = tmp.GetType().FullName;
                 node["IsError"].Value = true;
 
                 RaiseEvent(

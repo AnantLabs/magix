@@ -42,7 +42,14 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         {
             foreach (Action idx in Action.Select(Criteria.Sort("Overrides", true)))
             {
-                if (idx.Overrides.EndsWith("!"))
+                if (string.IsNullOrEmpty(idx.Overrides))
+                    continue;
+
+                if (idx.Overrides == "!")
+                {
+                    ActiveEvents.Instance.CreateEventMapping("", "Magix.MetaAction.RaiseOverriddenAction");
+                }
+                else if (idx.Overrides.EndsWith("!"))
                 {
                     // If the Event Name ends with a '!', the original event handlers are 'punctured' ...
                     string name = idx.Overrides.Trim('!').Trim('.');

@@ -283,6 +283,7 @@
     <Content Include="media\images\RaLogo32x32.png" />
     <Content Include="media\images\RaLogo64x64.png" />
     <Content Include="media\images\RaLogo800x800.png" />
+    <Content Include="media\images\screenshots\actions-screen.png" />
     <Content Include="media\images\spectrum.png" />
     <Content Include="media\images\Textures\bumpy-black.png" />
     <Content Include="media\images\Textures\bumpy-white.png" />
