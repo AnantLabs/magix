@@ -158,7 +158,14 @@ namespace Magix.Brix.Components.ActiveTypes.MetaTypes
          * that means that the action will override the existing event handlers, such that the original handlers 
          * cannot be called, unless you explicitly somehow makes sure that Overrides + '-Action-Overridden' somehow
          * is raised. If it does not contain a '!' at the end, it will not leave these existing event handlers in 
-         * oblivion, but also make sure these are called, though after the EventName has been raised
+         * oblivion, but also make sure these are called, though after the EventName has been raised.
+         * If your Overrides property value contains only '!', the override is considered to be a NULL event
+         * handler, meaning it will handlde every single active event in your system, meaning unless you 
+         * raise the inner events yourself, your entire system falls apart. Useful for logging and especially
+         * handling some events, just remember to forward the original event, since otherwise it will never 
+         * be raised, unless choking the event is your intention. Though do NOT choke ALL events, this will
+         * crash your system. If this has occured, you need to manually enter your database and change 
+         * the value
          */
         [ActiveField]
         public string Overrides { get; set; }

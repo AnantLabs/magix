@@ -59,16 +59,16 @@ namespace Magix.Brix.Loader
             }
             catch (Exception err)
             {
-                err = err.GetBaseException(); // TODO: Implement this all over the place ...
+                Exception tmp = err.GetBaseException(); // TODO: Implement this all over the place ...
 
                 Node node = new Node();
 
                 node["Message"].Value =
                     "<p>" + string.Format(msg, args) + "</p>" +
                     "<p>Message from Server; </p>" +
-                    "<p>" + err.Message + "</p>" +
+                    "<p>" + tmp.Message + "</p>" +
                     "<p>Stack Trace; </p>" +
-                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
+                    "<p class='mux-err-stack-trace'>" + tmp.StackTrace + "</p>";
 
                 node["Header"].Value = err.GetType().FullName;
                 node["IsError"].Value = true;

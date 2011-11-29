@@ -123,16 +123,13 @@ namespace Magix.Brix.ApplicationPool
             }
             catch (Exception err)
             {
-                Exception tmp = err;
-
-                while (tmp.InnerException != null)
-                    tmp = tmp.InnerException;
+                Exception tmp = err.GetBaseException();
 
                 Node m = new Node();
 
                 m["Message"].Value =
                     "<p>" + tmp.Message + "</p>" +
-                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
+                    "<p class='mux-err-stack-trace'>" + tmp.StackTrace + "</p>";
 
                 m["Milliseconds"].Value = 10000;
                 m["IsError"].Value = true;

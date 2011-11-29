@@ -317,7 +317,7 @@ protected void PittyPatty()
             {
                 string name = idx.Name;
                 string evt = idx.EventName;
-                string description = idx.Description.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "").Replace("\n", "");
+                string description = (idx.Description ?? "").Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "").Replace("\n", "");
                 string shortName = name;
                 if (shortName.IndexOf('.') != -1)
                 {
@@ -395,7 +395,9 @@ protected void PittyPatty()
             }
             allHtml += "<codebig>" + cls.FullName + "</codebig>";
 
-            allHtml += "<p2>Description: </p2><p>" + cls.Description + "</p>";
+            allHtml += "<p2>Description: </p2><p>" +
+                (cls.Description ?? "").Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "").Replace("\n", "").Replace("|||", "</p><p>") +
+                "</p>";
 
             if (cls.BaseTypes != null && cls.BaseTypes.Count > 0)
             {
@@ -614,7 +616,7 @@ protected void PittyPatty()
                     }
                     catch
                     {
-                        // silently catching since some methods might have the same names
+                        ;// silently catching since some methods might have the same names
                         // at which point they're NOT Event Handlers. That's for sure ... ;)
                     }
                 }
@@ -636,7 +638,9 @@ protected void PittyPatty()
                 }
                 allHtml += ")";
                 allHtml += "</codenomargs><br/>";
-                allHtml += "<p>" + idx.Description + "</p><br /><br />";
+                allHtml += "<p>" +
+                    (idx.Description ?? "").Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\r\n", "").Replace("\n", "").Replace("|||", "</p><p>") +
+                    "</p><br /><br />";
             }
             if (!string.IsNullOrEmpty(allHtml))
                 allHtml = "<sec>Methods</sec>" + allHtml;

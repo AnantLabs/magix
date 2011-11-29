@@ -371,12 +371,14 @@ or a list of comma separated IDs. Empty string removes any existing filters.";
                             {
                                 Node node = new Node();
 
+                                Exception tmp = err.GetBaseException();
+
                                 node["Message"].Value =
                                     "<p>Something went wrong</p>" +
                                     "<p>Message from Server; </p>" +
-                                    "<p>" + err.Message + "</p>" +
+                                    "<p>" + tmp.Message + "</p>" +
                                     "<p>Stack Trace; </p>" +
-                                    "<p class='mux-err-stack-trace'>" + err.StackTrace + "</p>";
+                                    "<p class='mux-err-stack-trace'>" + tmp.StackTrace + "</p>";
 
                                 node["IsError"].Value = true;
 

@@ -179,139 +179,11 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
         }
 
         /**
-         * Level2: Branching according to statement contained within 'if' Value node. @executor
-         */
-        [ActiveEvent(Name = "Magix.System.if")]
-        protected void Magix_System_if(object sender, ActiveEventArgs e)
-        {
-            ExecuteNode(e.Params);
-        }
-
-        /**
-         * Level2: Expects two values, the first parameter must must be an expression, the 
-         * second parameter might either be an expression or a fixed static value. The two 
-         * parameters are separated by '=' and expected to be found in the Value of the current
-         * 'set' node. Warning, this will create the left hand parameter node path if not 
-         * existing, and it will also set the value of that path to null of no right hand side
-         * value is found
-         */
-        [ActiveEvent(Name = "Magix.System.set")]
-        protected void Magix_System_set(object sender, ActiveEventArgs e)
-        {
-            CheckStatement(e.Params.Get<string>(), e.Params);
-        }
-
-        /**
-         * Level2: Branching according to statement contained within 'if' Value node. @executor
-         */
-        [ActiveEvent(Name = "Magix.System.else if")]
-        protected void Magix_System_else_if(object sender, ActiveEventArgs e)
-        {
-            ExecuteNode(e.Params);
-        }
-
-        /**
-         * Level2: Branching according to statement contained within 'if' or 'else if' 
-         * Value node of previous node. @executor
-         */
-        [ActiveEvent(Name = "Magix.System.else")]
-        protected void Magix_System_else(object sender, ActiveEventArgs e)
-        {
-            ExecuteNode(e.Params);
-        }
-
-        /**
-         * Level2: Raises the Active Event defined in the Value of the node. @executor
-         */
-        [ActiveEvent(Name = "Magix.System.raise")]
-        protected void Magix_System_raise(object sender, ActiveEventArgs e)
-        {
-            string evtName = e.Params.Get<string>();
-            Node node = e.Params;
-            if (evtName.Contains("("))
-            {
-                string exp = evtName.Split('(')[1].Split(')')[0];
-                evtName = evtName.Substring(0, evtName.IndexOf('(')).Trim();
-                Node pre = node;
-                node = CommonActions_Controller.GetExpressionValue(exp, node) as Node;
-                if (node == null)
-                    throw new ArgumentException("Sorry, but your Node expression didn't evaluate to a valid Node: '" + exp + "', current node: " + pre.Name);
-            }
-            RaiseEvent(
-                evtName,
-                node);
-        }
-
-        /**
-         * Level2: Raises an ApplicationException with the error message of the exception being 
-         * the Value of the node. @executor
-         */
-        [ActiveEvent(Name = "Magix.System.throw")]
-        protected void Magix_System_throw(object sender, ActiveEventArgs e)
-        {
-            throw new ApplicationException(e.Params.Get<string>());
-        }
-
-        /**
-         * Level2: Loops through all nodes in expression and raises 'execute' with every one as 
-         * a 'this' instance. @executor
-         */
-        [ActiveEvent(Name = "Magix.System.foreach")]
-        protected void Magix_System_foreach(object sender, ActiveEventArgs e)
-        {
-            Node node = CommonActions_Controller.GetExpressionValue(e.Params.Get<string>(), e.Params) as Node;
-
-            foreach (Node idx in node)
-            {
-                object tmp = null;
-                if (e.Params.Contains("idx"))
-                    tmp = e.Params["idx"].Value;
-                e.Params["idx"].Value = idx;
-                try
-                {
-                    RaiseEvent(
-                        "Magix.System.execute",
-                        e.Params);
-                }
-                finally
-                {
-                    if (tmp != null)
-                        e.Params["idx"].Value = tmp;
-                    else
-                        e.Params["idx"].UnTie();
-                }
-            }
-        }
-
-        /**
-         * Level2: Loops as long as expression is true somehow, through all nodes in expression 
-         * and raises 'execute' with every one as a 'this' instance. @executor
-         */
-        [ActiveEvent(Name = "Magix.System.while")]
-        protected void Magix_System_while(object sender, ActiveEventArgs e)
-        {
-            bool res = ObjectWhenExpressionIsTrue(e.Params.Get<string>(), e.Params);
-
-            while (res)
-            {
-                RaiseEvent(
-                    "Magix.System.execute",
-                    e.Params);
-                res = ObjectWhenExpressionIsTrue(e.Params.Get<string>(), e.Params);
-            }
-        }
-
-        private bool ObjectWhenExpressionIsTrue(string exp, Node node)
-        {
-            return new Expression(exp, node).Compute();
-        }
-
-        /**
          * Level2: Executes the given node recursively. This is the Magix Turing Executor which 
          * allows for logic to be implemented without having to code. The Magix Turing Executor 
          * can modify code at its instruction pointer if you wish. You can create selfmodifiable 
          * code which changes the code as it is being executed almost. Make sure you understand
-         * Expressions to get the most out of this Active Event. @executor
+         * Expressions to get the most out of the Magix Turing Executor. @executor
          */
         [ActiveEvent(Name = "Magix.System.execute")]
         protected void Magix_System_execute(object sender, ActiveEventArgs e)
@@ -320,7 +192,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
             List<string> buffer = new List<string>();
             bool hasFound = false;
             int length = e.Params.Count;
-            for (int idxNo = 0; idxNo < length; idxNo ++)
+            for (int idxNo = 0; idxNo < length; idxNo++)
             {
                 Node idx = e.Params[idxNo];
                 keyWords.Add(idx.Name);
@@ -330,6 +202,7 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                         RaiseEvent(
                             "Magix.System.execute",
                             idx);
+                        idx.UnTie();
                         break;
                     case "clean":
                         RaiseEvent(
@@ -416,30 +289,190 @@ namespace Magix.Brix.Components.ActiveControllers.MetaTypes
                     default:
                         if (idx.Name.StartsWith("@"))
                         {
-                            bool found = false;
-                            foreach (char idxC in idx.Name)
-                            {
-                                if (("abcdefghijklmnopqrstuvwxyz ").IndexOf(idxC) == -1)
-                                {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (!found)
-                            {
-                                RaiseEvent(
-                                    "Magix.Dynamic.Evaluate." + idx.Name,
-                                    idx);
-                            }
+                            RaiseEvent(
+                                "Magix.Dynamic.Evaluate." + idx.Name,
+                                idx);
                         }
                         break;
                 }
                 length = e.Params.Count;
             }
-            if (e.Params.Name == "execute")
+        }
+
+        /**
+         * Level2: Expects two values, the first parameter must must be an expression, the 
+         * second parameter might either be an expression or a fixed static value. The two 
+         * parameters are separated by '=' and expected to be found in the Value of the current
+         * 'set' node. Warning, this will create the left hand parameter node path if not 
+         * existing, and it will also set the value of that path to null of no right hand side
+         * value is found. The left hand side of your component expression can be either 
+         * '.Value', '.Name' or a resulting Node list. If the left hand side is a Node list
+         * Expression, then all previous nodes in the Expression result, if any, will 
+         * be removed, and all nodes from the right hand side result will be 
+         * cloned [deep copy] and put into the left hand side's Node list
+         */
+        [ActiveEvent(Name = "Magix.System.set")]
+        protected void Magix_System_set(object sender, ActiveEventArgs e)
+        {
+            CheckStatement(e.Params.Get<string>(), e.Params);
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'if' Value node.
+         * 'if' can take either one or three components. If one components is given, the if will
+         * evaluate to true if the components contains anything but "" and null. If 3 components are
+         * given, it will evaluate to true depending upon the comparison operator 
+         * that must be the second components. Legal operators are '&gt;', '&lt;', 
+         * '==', '!=', '&gt;=' and '&lt;='. The quotes are not a parts of the components, 
+         * and only here for illustrative purposes. All comparisons are done as if both sides were
+         * strings, meaning 4 will be evaluated more than 33. So numbers cannot be correctly 
+         * compared without additional logic on your behalf for instance. 'if' will if it 
+         * evaluates to true work like an 'execute' scope, except it will not untie itself in
+         * any ways after execution
+         */
+        [ActiveEvent(Name = "Magix.System.if")]
+        protected void Magix_System_if(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'else if' Value node.
+         * 'else if' can take either one or three components. If one components is given, the else if will
+         * evaluate to true if the components contains anything but "" and null. If 3 components are
+         * given, it will evaluate to true depending upon the comparison operator 
+         * that must be the second components. Legal operators are '&gt;', '&lt;', 
+         * '==', '!=', '&gt;=' and '&lt;='. The quotes are not a parts of the components, 
+         * and only here for illustrative purposes. All comparisons are done as if both sides were
+         * strings, meaning 4 will be evaluated more than 33. So numbers cannot be correctly 
+         * compared without additional logic on your behalf for instance. 'else if' must directly 
+         * follow either another 'else if' or an 'if'. the 'else if' will only be tried if 
+         * none of the previous 'if' and 'else if' did not evaluate to true. 'else if' will if it 
+         * evaluates to true work like an 'execute' scope, except it will not untie itself in
+         * any ways after execution
+         */
+        [ActiveEvent(Name = "Magix.System.else if")]
+        protected void Magix_System_else_if(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
+         * Level2: Branching according to statement contained within previous 'if' or 'else if'.
+         * The 'else' will only be evaluated if none of the previous 'else if' or 'if' evaluated 
+         * to true. 'else' will if it 
+         * is being executed work like an 'execute' scope, except it will not untie itself in
+         * any ways after execution
+         */
+        [ActiveEvent(Name = "Magix.System.else")]
+        protected void Magix_System_else(object sender, ActiveEventArgs e)
+        {
+            ExecuteNode(e.Params);
+        }
+
+        /**
+         * Level2: Raises the Active Event defined in the Value of the node. If you 
+         * concatenate an Expression inside of normal parantheses, e.g.; 
+         * 'Magix.Core.ShowMessage({root[MessageNode]})', then the given 
+         * value Node list of your Expression, inside of your parantheses, will be
+         * passed in instead of the default which is the 'raise' node itself
+         */
+        [ActiveEvent(Name = "Magix.System.raise")]
+        protected void Magix_System_raise(object sender, ActiveEventArgs e)
+        {
+            string evtName = e.Params.Get<string>();
+            Node node = e.Params;
+            if (evtName.Contains("("))
             {
-                e.Params.UnTie();
+                string exp = evtName.Split('(')[1].Split(')')[0];
+                evtName = evtName.Substring(0, evtName.IndexOf('(')).Trim();
+                Node pre = node;
+                node = CommonActions_Controller.GetExpressionValue(exp, node) as Node;
+                if (node == null)
+                    throw new ArgumentException("Sorry, but your Node expression didn't evaluate to a valid Node: '" + exp + "', current node: " + pre.Name);
             }
+            RaiseEvent(
+                evtName,
+                node);
+        }
+
+        /**
+         * Level2: Raises an ApplicationException with the error message of the exception being 
+         * the Value of the node. Will instantly stop execution of everything, unwind the stack, 
+         * probably log some error message, and return control back to the caller
+         */
+        [ActiveEvent(Name = "Magix.System.throw")]
+        protected void Magix_System_throw(object sender, ActiveEventArgs e)
+        {
+            throw new ApplicationException(e.Params.Get<string>());
+        }
+
+        /**
+         * Level2: Loops through all nodes in Expression and raises 'execute' with every one as 
+         * a 'this' instance. 'foreach' needs an Expression, which must return a Node list,
+         * in its Value part. This node list will be iterated upon, and the content of the 'foreach'
+         * will function as an execute block, though without any untie, once for every single node in
+         * your result set of the Expression within the 'foreach' Value. The current iterator object 
+         * of your foreach iteration can be de-referenced using 'idx', e.g. '{idx[Name].Value}'
+         */
+        [ActiveEvent(Name = "Magix.System.foreach")]
+        protected void Magix_System_foreach(object sender, ActiveEventArgs e)
+        {
+            Node node = CommonActions_Controller.GetExpressionValue(e.Params.Get<string>(), e.Params) as Node;
+
+            foreach (Node idx in node)
+            {
+                object tmp = null;
+                if (e.Params.Contains("idx"))
+                    tmp = e.Params["idx"].Value;
+                e.Params["idx"].Value = idx;
+                try
+                {
+                    RaiseEvent(
+                        "Magix.System.execute",
+                        e.Params);
+                }
+                finally
+                {
+                    if (tmp != null)
+                        e.Params["idx"].Value = tmp;
+                    else
+                        e.Params["idx"].UnTie();
+                }
+            }
+        }
+
+        /**
+         * Level2: Branching according to statement contained within 'while' Value node.
+         * 'while' can take either one or three components. If one components is given, the while will
+         * evaluate to true if the components contains anything but "" and null. If 3 components are
+         * given, it will evaluate to true depending upon the comparison operator 
+         * that must be the second components. Legal operators are '&gt;', '&lt;', 
+         * '==', '!=', '&gt;=' and '&lt;='. The quotes are not a parts of the components, 
+         * and only here for illustrative purposes. All comparisons are done as if both sides were
+         * strings, meaning 4 will be evaluated more than 33. So numbers cannot be correctly 
+         * compared without additional logic on your behalf for instance. 'while' will if it 
+         * evaluates to true work like an 'execute' scope, except it will not untie itself in
+         * any ways after execution. When it is done executing, it will re-evaluate its Value 
+         * Expression and start all over again if the Expression still evaluates to true
+         */
+        [ActiveEvent(Name = "Magix.System.while")]
+        protected void Magix_System_while(object sender, ActiveEventArgs e)
+        {
+            bool res = ObjectWhenExpressionIsTrue(e.Params.Get<string>(), e.Params);
+
+            while (res)
+            {
+                RaiseEvent(
+                    "Magix.System.execute",
+                    e.Params);
+                res = ObjectWhenExpressionIsTrue(e.Params.Get<string>(), e.Params);
+            }
+        }
+
+        private bool ObjectWhenExpressionIsTrue(string exp, Node node)
+        {
+            return new Expression(exp, node).Compute();
         }
 
         private void ExecuteNode(Node node)
