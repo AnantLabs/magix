@@ -26,6 +26,14 @@ namespace Magix.UX.Widgets
     public class SelectList : BaseWebControlListFormElement
     {
         /**
+         * Raised whenever the selected value of your select list is changed.
+         * You can also set the selected value in code through using for instance
+         * the SelectedIndex property. Whenever a user changes the actively selected
+         * item of your select list, this event will be raised.
+         */
+        public event EventHandler SelectedIndexChanged;
+
+        /**
          * If this property is anything higher than 1, which is the default value,
          * the select list will no longer be a 'drop down' type of multiple
          * choices widget, but will show as a 'panel' showing all the choices and making
@@ -71,6 +79,39 @@ namespace Magix.UX.Widgets
             if (Size != -1)
                 el.AddAttribute("size", Size.ToString());
             base.AddAttributes(el);
+        }
+
+        protected void RaiseChange(int set)
+        {
+            SelectedIndex = set;
+            if (SelectedIndexChanged != null)
+                SelectedIndexChanged(this, new EventArgs());
+        }
+
+        public override void RaiseEvent(string name)
+        {
+            switch (name)
+            {
+                case "change":
+                    if (SelectedIndexChanged != null)
+                        SelectedIndexChanged(this, new EventArgs());
+                    break;
+                default:
+                    base.RaiseEvent(name);
+                    break;
+            }
+        }
+
+        protected override string GetEventsRegisterScript()
+        {
+            string evts = base.GetEventsRegisterScript();
+            if (SelectedIndexChanged != null)
+            {
+                if (evts.Length != 0)
+                    evts += ",";
+                evts += "['change']";
+            }
+            return evts;
         }
     }
 }

@@ -1911,14 +1911,15 @@ input[type=text].mux-color-value:focus
 
 .mux-wheel
 {
-	width:250px;
-	height:100px;
 	background-image:
 	  -webkit-gradient(linear, 0% 0%, 0% 100%, 
 	    from(rgba(45, 45, 45, 1)), 
 	    to(rgba(45, 45, 45, 1)), 
 	    color-stop(.45,rgba(245, 245, 245, 1)),
 	    color-stop(.55,rgba(245, 245, 245, 1)));
+	background-image:-moz-linear-gradient(top, rgba(45, 45, 45, 1) 0%, rgba(245, 245, 245, 1) 45%, rgba(245, 245, 245, 1) 55%, rgba(45, 45, 45, 1) 100%);
+    cursor:n-resize;
+    overflow:hidden;
 }
 
 .mux-wheel .mux-item
@@ -1927,6 +1928,7 @@ input[type=text].mux-color-value:focus
 	text-align:center;
 }
 
-
-
+.mux-wheel .mux-first
+{
+}
 

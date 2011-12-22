@@ -21,14 +21,6 @@ namespace Magix.UX.Widgets.Core
         private ListItemCollection _listItems;
         private string _selectedItemValue;
 
-        /**
-         * Raised whenever the selected value of your select list is changed.
-         * You can also set the selected value in code through using for instance
-         * the SelectedIndex property. Whenever a user changes the actively selected
-         * item of your select list, this event will be raised.
-         */
-        public event EventHandler SelectedIndexChanged;
-
         public BaseWebControlListFormElement()
         {
             _listItems = new ListItemCollection(this);
@@ -120,9 +112,14 @@ namespace Magix.UX.Widgets.Core
                 }
                 if (IsTrackingViewState)
                 {
-                    SetJsonGeneric("value", _selectedItemValue);
+                    SetValue();
                 }
             }
+        }
+
+        protected virtual void SetValue222222()
+        {
+            SetJsonGeneric("value", _selectedItemValue);
         }
 
         protected override void TrackViewState()
@@ -154,32 +151,6 @@ namespace Magix.UX.Widgets.Core
             string newVal = Page.Request.Params[ClientID];
             if (newVal != null)
                 _selectedItemValue = newVal;
-        }
-
-        public override void RaiseEvent(string name)
-        {
-            switch (name)
-            {
-                case "change":
-                    if (SelectedIndexChanged != null)
-                        SelectedIndexChanged(this, new EventArgs());
-                    break;
-                default:
-                    base.RaiseEvent(name);
-                    break;
-            }
-        }
-
-        protected override string GetEventsRegisterScript()
-        {
-            string evts = base.GetEventsRegisterScript();
-            if (SelectedIndexChanged != null)
-            {
-                if (evts.Length != 0)
-                    evts += ",";
-                evts += "['change']";
-            }
-            return evts;
         }
 
         public void SetSelectedItemAccordingToValue(string val)

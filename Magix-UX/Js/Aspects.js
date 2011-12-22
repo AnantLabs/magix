@@ -467,24 +467,6 @@
       return false;
     },
 
-    onMouseUp: function(event) {
-      if (!this._caption || !this.options.enabled) {
-        return;
-      }
-      delete this._caption;
-      delete this._beginPtrPos;
-      var x = parseInt(this.parent.element.getStyle('left'), 10) || 0;
-      var y = parseInt(this.parent.element.getStyle('top'), 10) || 0;
-      if (this.options.callback) {
-        var dummy = new MUX.Ajax({
-          args: '__MUX_CONTROL_CALLBACK=' + this.id + '&__MUX_EVENT=Moved' + '&x=' + x + '&y=' + y,
-          onSuccess: this.onFinishedRequest,
-          onError: this.onFailedRequest,
-          callingContext: this
-        });
-      }
-    },
-
     onMouseMove: function(event) {
       if (this._caption && this.options.enabled) {
         var ptrPos = this.pointer(event);
@@ -505,6 +487,24 @@
         this.parent.element.setStyles({
           left: delX + 'px',
           top: delY + 'px'
+        });
+      }
+    },
+
+    onMouseUp: function(event) {
+      if (!this._caption || !this.options.enabled) {
+        return;
+      }
+      delete this._caption;
+      delete this._beginPtrPos;
+      var x = parseInt(this.parent.element.getStyle('left'), 10) || 0;
+      var y = parseInt(this.parent.element.getStyle('top'), 10) || 0;
+      if (this.options.callback) {
+        var dummy = new MUX.Ajax({
+          args: '__MUX_CONTROL_CALLBACK=' + this.id + '&__MUX_EVENT=Moved' + '&x=' + x + '&y=' + y,
+          onSuccess: this.onFinishedRequest,
+          onError: this.onFailedRequest,
+          callingContext: this
         });
       }
     },
