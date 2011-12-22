@@ -327,6 +327,10 @@ control, which you can use as a fancy Select List";
             e.Params["Controls"]["Wheel"]["Properties"]["Items"]["Description"].Value = @"The 
 different Values of the Wheel";
 
+            e.Params["Controls"]["Wheel"]["Properties"]["SelectedIndex"].Value = typeof(int).FullName;
+            e.Params["Controls"]["Wheel"]["Properties"]["SelectedIndex"]["Description"].Value = @"The 
+selected index of the selected value";
+
             e.Params["Controls"]["Wheel"]["Events"]["SelectedIndexChanged"].Value = true;
             e.Params["Controls"]["Wheel"]["Events"]["SelectedIndexChanged"]["Description"].Value = @"Raised when 
 the selected value has been updated by the user";
@@ -1872,9 +1876,15 @@ focus, or clicking the widget with his mouse or touch screen";
                     StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (!idx.Contains("|"))
-                        throw new ArgumentException("You need to defined your collection as; 'thomas|123456||john|234567', with || between items and | between value and text ...");
-                    ListItem l = new ListItem(idx.Split('|')[0], idx.Split('|')[1]);
-                    r.Add(l);
+                    {
+                        ListItem l = new ListItem(idx, idx);
+                        r.Add(l);
+                    }
+                    else
+                    {
+                        ListItem l = new ListItem(idx.Split('|')[0], idx.Split('|')[1]);
+                        r.Add(l);
+                    }
                 }
             }
             return r;

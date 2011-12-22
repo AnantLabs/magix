@@ -12,97 +12,79 @@
 
   MUX.extend(MUX.Wheel.prototype, {
     init: function(el, opt) {
-      this._fileCount = 0;
       this.initControl(el, opt);
-      var b = MUX.$(document.body);
-      b.observe('dragover', this.onDragOver, this);
-      b.observe('dragleave', this.onDragLeave, this);
-      b.observe('drop', this.onDrop, this);
+      this.options = MUX.extend({
+      }, this.options || {});
+
+      var el = this.element;
+      if (el.firstChild) {
+        MUX.$(el.firstChild);
+        var b = MUX.$(document.body);
+        el.observe('touchstart', this.onTouchstart, this);
+        el.observe('mousedown', this.onTouchstart, this);
+
+        b.observe('touchmove', this.onTouchmove, this);
+        b.observe('mousemove', this.onTouchmove, this);
+
+        b.observe('touchend', this.onTouchend, this);
+        b.observe('mouseup', this.onTouchend, this);
+      }
     },
 
-    onDragOver: function(evt){
-      MUX.$(this.element.id + '_ul').innerHTML = '';
-      this.element.setStyle('display', 'block');
-      evt.stopPropagation();
-      evt.preventDefault();
-      return false;
+    onTouchstart: function(evt){
+      this._beginPtrPos = this.pointer(evt);
+      this._beginY = parseInt(this.element.firstChild.getStyle('marginTop'), 10) || 0;
+      this._hasLock = true;
     },
 
-    onDragLeave: function(evt){
-      this.element.setStyle('display', 'none');
-    },
-
-    onDrop: function(evt){
-      evt.stopPropagation();
-      evt.preventDefault();
-      this.postFiles(evt);
-      return false;
-    },
-
-    postFiles: function(evt){
-      var files = evt.dataTransfer.files;
-      if(files.length > 0) {
-        this._fileCount = files.length;
-        var ih = '';
-        for (var i = 0, f; f = files[i]; i++) {
-          ih += '<li id="' + this.element.id + '_li' + i + '">' + f.name + '</li>';
+    onTouchmove: function(evt){
+      if (this._hasLock) {
+        var ptrPos = this.pointer(evt);
+        var delY = this._beginY + ptrPos.y - this._beginPtrPos.y;
+        delY -= delY % 18;
+        delY = Math.min(delY, 36);
+        if ((-delY) > (this.element.childNodes.length - 3) * 18) {
+          delY = -((this.element.childNodes.length - 3) * 18);
         }
-        MUX.$(this.element.id + '_ul').innerHTML = ih;
-
-
-        var idxNo = 0;
-        for (var i = 0, f; f = files[i]; i++) {
-          var reader = new FileReader();
-
-          var T = this;
-          reader.onload = (function(idxF) {
-            return function(e) {
-              var img = e.target.result;
-              var ul = MUX.$(T.element.id + '_ul');
-              MUX.$(ul.children[0]).addClassName('mux-Wheel-processing');
-              var x = new MUX.Ajax({
-                args: '__MUX_CONTROL_CALLBACK=' + T.element.id + 
-                  '&__MUX_EVENT=uploaded' + 
-                  '&__MUX_TOTAL=' + files.length +
-                  '&__MUX_CURRENT=' + (idxNo++) + 
-                  '&__FILE=' + encodeURIComponent(img) + 
-                  '&__FILENAME=' + encodeURIComponent(idxF.name),
-                onSuccess: T.onFinishedUploading,
-                onError: T.onFinishedUploadingError,
-                callingContext: T
-              });
-            };
-          })(f);
-          // Read in the image file as a data URL.
-          reader.readAsDataURL(f);
-        }
-      }
-      else {
-        this.element.setStyle('display', 'none');
+        this.element.firstChild.setStyle('marginTop', delY + 'px');
       }
     },
 
-    onFinishedUploadingError: function(error) {
-      this.element.setStyle('display', 'none');
+    onTouchend: function(evt){
+      if (this._hasLock) {
+        this._hasLock = false;
+        this.callback();
+      }
     },
 
-    onFinishedUploading: function(response) {
-      this.onFinishedRequest(response);
-      this._fileCount -= 1;
-      if(this._fileCount == 0) {
-        this.element.setStyle('display', 'none');
-      } else {
-        var ul = MUX.$(this.element.id + '_ul');
-        ul.removeChild(ul.children[0]);
-        MUX.$(ul.children[0]).addClassName('mux-Wheel-processing');
-      }
+    callback: function() {
+      this._beginY = parseInt(this.element.firstChild.getStyle('marginTop') || 0, 10);
+      var x = new MUX.Ajax({
+        args: '__MUX_CONTROL_CALLBACK=' + this.element.id + '&__MUX_EVENT=selectedChanged&__sel='+((-this._beginY / 18) + 2),
+        onSuccess: this.onFinishedRequest,
+        callingContext: this
+      });
+    },
+
+    pointer: function(event) {
+      return {
+        x: event.pageX ||
+          (event.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft)),
+        y: event.pageY ||
+          (event.clientY + (document.documentElement.scrollTop || document.body.scrollTop))
+      };
     },
 
     destroyThis: function() {
+      var el = this.element;
       var b = MUX.$(document.body);
-      b.stopObserving('dragover', this.onDragOver, this);
-      b.stopObserving('dragleave', this.onDragLeave, this);
-      b.stopObserving('drop', this.onDrop, this);
+
+      el.stopObserving('touchstart', this.onTouchstart, this);
+      el.stopObserving('mousedown', this.onTouchstart, this);
+      b.stopObserving('touchmove', this.onTouchmove, this);
+      b.stopObserving('mousemove', this.onTouchmove, this);
+      b.stopObserving('touchend', this.onTouchend, this);
+      b.stopObserving('mouseup', this.onTouchend, this);
       this._destroyThisControl();
     }
   });
